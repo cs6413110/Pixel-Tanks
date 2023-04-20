@@ -4,17 +4,13 @@ import {MongoClient} from 'mongodb';
 import Filter from 'bad-words';
 import TokenGenerator from 'uuid-token-generator';
 import jsonpack from 'jsonpack';
-
+import { Multiplayer } from './pixel-tanks/ffa-server.mjs';
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
 const filter = new Filter();
 const tokgen = new TokenGenerator(256, TokenGenerator.BASE62);
-const Server = new HyperExpress.Server({
-  fast_buffers: true,
-  key_file_name: 'key.pm',
-  cert_file_name: 'cert.pm',
-});
+const Server = new HyperExpress.Server({fast_buffers: true});
 const Router = new HyperExpress.Router();
-var db, tokens = [], sockets = [];
+var db, tokens = [], sockets = [], encode = () => {var x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}, decode = () => {var a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")};
 
 (async() => {
   await client.connect();
@@ -23,14 +19,18 @@ var db, tokens = [], sockets = [];
 
 Router.ws('/', {idle_timeout: Infinity}, (socket) => {
   sockets.push(socket);
-  socket.originalSend = socket.send;
-  socket.send = function(data) {this.originalSend(A.en(jsonpack.pack(data)))}.bind(socket);
-  socket.on('message', async (data) => {
-    try {data = jsonpack.unpack(A.de(data))} catch(e) {return socket.destroy()};
+  socket._send = socket.send;
+  socket.send = function(data) {this._send(encode(jsonpack.pack(data)))}.bind(socket);
+  socket.on('message', async(data) => {
+    try {
+      data = jsonpack.unpack(A.de(data));
+    } catch(e) {
+      return socket.destroy();
+    };
     if (!socket.username) socket.username = data.username;
     if (data.op === 'auth') {
       if (data.username === '' || !data.username || data.username.includes(' ') || data.username.includes(':')) return socket.send({status: 'error', message: 'Invalid username.'});
-      if (data.username !== filter.clean(data.username)) socket.send({status: 'error', message: 'Username contains inappropriate word.'});
+      if (data.username !== filter.clean(data.username)) return socket.send({status: 'error', message: 'Username contains inappropriate word.'});
       var item = await db.findOne({username: data.username}), token = tokgen.generate();
       if (data.type === 'signup') {if (item === null) {if (await db.insertOne({username: data.username, password: data.password, playerdata: '{}'})) {socket.send({status: 'success', token: token})} else return socket.send({status: 'error', message: 'Error creating account.'})} else return socket.send({status: 'error', message: 'This account already exists.'})} else if (data.type === 'login') {if (item === null) {return socket.send({status: 'error', message: 'This account does not exist.'})} else {if (item.password === data.password) {socket.send({status: 'success', token: token})} else return socket.send({status: 'error', message: 'Incorrect password.'})};
       } else return socket.destroy();
@@ -53,7 +53,7 @@ Server.use((req, res, next) => {
 });
 
 Server.get('/verify', (req, res) => {
-  res.end(A.each(tokens, function(d) {if (this.token === d.token) return true}, {key: 'username', value: req.query.username}, {token: req.query.token}) ? 'true' : 'false');
+  res.end(typeof tokens.find(t => t.token === req.query.token && t.username === req.query.username) === 'object');
 });
 
 Server.get('/*', (req, res) => {
@@ -71,50 +71,6 @@ Server.get('/*', (req, res) => {
   if (file.cached) return res.send(file.content); else return file.stream().pipe(res);
 });
 
-class A {
-    static each(arr, func, filter, param) {
-      var l = 0;
-      while (l<arr.length) {
-        if ((filter === undefined || filter === null) ? true : (arr[l][filter.key] === filter.value)) {
-          var r = undefined;
-          if (typeof func === 'string') {
-            r = arr[l][func](param);
-          } else {
-            r = func.bind(arr[l])({ ...param, i: l });
-          }
-          if (r !== undefined) return r;
-        }
-        l++;
-      }
-    }
-
-    static search(arr, filter) {
-      var l = 0;
-      while (l<arr.length) {
-        if (arr[l][filter.key] === filter.value) {
-          return arr[l];
-        }
-        l++;
-      }
-    }
-
-    static collider(rect1, rect2) {
-      if ((rect1.x > rect2.x || rect1.x+rect1.w > rect2.x) && (rect1.x < rect2.x+rect2.w || rect1.x+rect1.w < rect2.x+rect2.w) && (rect1.y > rect2.y || rect1.y+rect1.h > rect2.y) && (rect1.y < rect2.y+rect2.h || rect1.y+rect1.h < rect2.y+rect2.h)) return true;
-      return false;
-    }
-
-    static assign(obj, keys, values) {
-      A.each(keys, function(d) {obj[this] = d.values[d.i]}, null, {values: values});
-    }
-
-    static en(c) {var x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}
-
-    static de(b) {var a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")}
-  }
-
 Server.use(Router);
-
-import { Multiplayer } from './pixel-tanks/ffa-server.mjs';
 Server.use(Multiplayer);
-
-Server.listen(443);
+Server.listen(80);
