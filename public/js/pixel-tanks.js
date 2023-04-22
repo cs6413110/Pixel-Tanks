@@ -201,7 +201,7 @@
       this.total++;
       this.core[id] = new Image();
       this.core[id].onload = this.onload.bind(this);
-      this.core[id].src = source;
+      this.core[id].src = 'https://cs6413110.github.io/Pixel-Tanks/public'+source;
     }
 
     static onload() {
@@ -815,7 +815,7 @@
           },
           customOnLoad: () => {
             if (!Menus.menus.multiplayer.gamemode) Menus.menus.multiplayer.gamemode = 'ffa';
-            if (Menus.menus.multiplayer.ip === undefined) Menus.menus.multiplayer.ip = 'pixeltanks.ga/ffa';
+            if (Menus.menus.multiplayer.ip === undefined) Menus.menus.multiplayer.ip = '141.148.128.231/ffa';
             GUI.drawText(Menus.menus.multiplayer.ip, 800, 276, 50, '#FFFFFF', 0.5);
           }
         },
@@ -1329,7 +1329,7 @@
         Menus.menus[property].id = property;
       }
 
-      PixelTanks.socket = new MegaSocket('wss://' + window.location.hostname, {});
+      PixelTanks.socket = new MegaSocket('ws://141.148.128.231', {});
     }
 
     static launch() {
