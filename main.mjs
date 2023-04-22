@@ -43,32 +43,12 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
   });
 });
 
-const settings = {static: false, watcher: {awaitWriteFinish: {stabilityThreshold: 100, pollInterval: 100}}, cache: {max_file_count: 250, max_file_size: 1024 * 1024}}
-const PixelTanks = new LiveDirectory('./pixel-tanks/', settings);
-const Kingdoms = new LiveDirectory('./kingdoms/', settings);
-
-Server.use((req, res, next) => {
-  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate').header('Expires', '-1').header('Pragma', 'no-cache');
-  next();
-});
-
 Server.get('/verify', (req, res) => {
   res.end(typeof tokens.find(t => t.token === req.query.token && t.username === req.query.username) === 'object');
 });
 
 Server.get('/*', (req, res) => {
-  var path = req.path, file, key = {
-    'html': 'text/html',
-    'js': 'application/javascript',
-    'png': 'image/png',
-    'json': 'application/json',
-  }
-  if (path === '/') path = '/index.html';
-  if (!path.includes('.')) path += '.html';
-  if (req.hostname.includes('king')) file = Kingdoms.get(path); else file = PixelTanks.get(path);
-  res.header('Content-Type', key[path.split('.')[1]]);
-  if (file === undefined) return res.status(404).end('404');
-  if (file.cached) return res.send(file.content); else return file.stream().pipe(res);
+  res.end('Unable to accept request.');
 });
 
 Server.use(Router);
