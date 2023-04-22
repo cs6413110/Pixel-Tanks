@@ -4,7 +4,7 @@ import {MongoClient} from 'mongodb';
 import Filter from 'bad-words';
 import TokenGenerator from 'uuid-token-generator';
 import jsonpack from 'jsonpack';
-import { Multiplayer } from './ffa-server.mjs';
+//import { Multiplayer } from './ffa-server.mjs';
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
 const filter = new Filter();
 const tokgen = new TokenGenerator(256, TokenGenerator.BASE62);
@@ -52,5 +52,5 @@ Server.get('/*', (req, res) => {
 });
 
 Server.use(Router);
-Server.use(Multiplayer);
+//Server.use(Multiplayer);
 Server.listen(80);
