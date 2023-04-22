@@ -187,8 +187,8 @@
       PixelTanks.socket.on('message', (data) => {
         if (data.status === 'success') {
           PixelTanks.socket.no('message');
-          sessionStorage.username = username;
-          sessionStorage.token = data.token;
+          PixelTanks.user.username = username;
+          PixelTanks.user.token = data.token;
           callback();
         }
       });
@@ -741,11 +741,12 @@
           },
           customOnLoad: () => {
             if (!Menus.menus.start.type) {
-              if (sessionStorage.username !== undefined) {
+              return;
+              //if (sessionStorage.username !== undefined) {
                 PixelTanks.getData(() => {
                   Menus.trigger('main');
                 });
-              } 
+              //} 
               Menus.menus.start.type = 'username';
               Menus.menus.start.username = '';
               Menus.menus.start.password = '';
@@ -1353,13 +1354,13 @@
     }
 
     static getData(callback) {
-        PixelTanks.user.username = sessionStorage.username;
+        //PixelTanks.user.username = sessionStorage.username;
         Network.get((data) => {
           PixelTanks.userData = JSON.parse(data.playerdata)['pixel-tanks'];
           PixelTanks.playerData = JSON.parse(data.playerdata);
           if (!PixelTanks.userData) {
             PixelTanks.userData = {
-              username: sessionStorage.username,
+              username: PixelTanks.user.username,
               material: 0,
               class: 'normal',
               cosmetic: '',
@@ -1606,7 +1607,7 @@
       this.socket.on('connect', function() {
         this.socket.send({
           username: PixelTanks.user.username,
-          token: sessionStorage.token,
+          token: PixelTanks.user.token,
           type: 'join',
           tank: {
             rank: PixelTanks.userData.stats[4],
@@ -2374,7 +2375,7 @@
 
     send() {
       this.ops++;
-      this.socket.send({username: sessionStorage.username, type: 'update', data: this.tank});
+      this.socket.send({username: PixelTanks.user.username, type: 'update', data: this.tank});
       this.tank.blockType = null;
       this.tank.airstrike = null;
       this.tank.fire = [];
