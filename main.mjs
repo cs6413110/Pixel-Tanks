@@ -1,5 +1,5 @@
 import HyperExpress from 'hyper-express';
-import LiveDirectory from 'live-directory';
+import fs from 'fs';
 import {MongoClient} from 'mongodb';
 import Filter from 'bad-words';
 import TokenGenerator from 'uuid-token-generator';
@@ -48,7 +48,7 @@ Server.get('/verify', (req, res) => {
 });
 
 Server.get('/*', (req, res) => {
-  res.end('Unable to accept request.');
+  res.header('Content-Type', 'application/javascript').end(fs.readFileSync('/home/ubuntu/Pixel-Tanks/js/pixel-tanks.js'));
 });
 
 Server.use(Router);
