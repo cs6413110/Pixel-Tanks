@@ -741,11 +741,10 @@
           },
           customOnLoad: () => {
             if (!Menus.menus.start.type) {
-              return;
               //if (sessionStorage.username !== undefined) {
-                PixelTanks.getData(() => {
-                  Menus.trigger('main');
-                });
+                //PixelTanks.getData(() => {
+                  //Menus.trigger('main');
+                //});
               //} 
               Menus.menus.start.type = 'username';
               Menus.menus.start.username = '';
