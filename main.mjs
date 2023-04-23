@@ -48,7 +48,7 @@ Server.get('/verify', (req, res) => {
 });
 
 Server.get('/*', (req, res) => {
-  res.header('Content-Type', 'application/javascript').end(fs.readFileSync('/home/ubuntu/Pixel-Tanks/js/pixel-tanks.js'));
+  res.header('Content-Type', 'application/javascript').end(fs.readFileSync('/home/ubuntu/Pixel-Tanks/public/js/pixel-tanks.js'));
 });
 
 Server.use(Router);
