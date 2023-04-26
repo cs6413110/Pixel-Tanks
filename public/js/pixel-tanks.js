@@ -584,7 +584,7 @@
       this.callstack = {open: [], close: [], message: []};
       this.options.keepAlive = options.keepAlive === undefined ? true : options.keepAlive;
       this.options.autoconnect = options.autoconnect === undefined ? true : options.autoconnect;
-      this.options.reconnect = options.reconnect === undefined ? true : options.reconnect;
+      this.options.reconnect = options.reconnect === undefined ? false : options.reconnect;
       if (this.options.autoconnect) {
         this.status = 'connecting';
         this.connect();
