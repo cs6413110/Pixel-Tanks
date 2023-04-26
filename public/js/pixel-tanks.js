@@ -615,7 +615,8 @@
         }
         A.each(this.callstack.message, function(d) {this(d.data)}, null, {data: data});
       }.bind(this);
-      this.socket.onclose = function() {
+      this.socket.onclose = function(e) {
+	console.log(e.code+':'+e,reason+':'+e.wasClean);
         clearInterval(this.socket.keepAlive);
         this.status = 'disconnected';
         A.each(this.callstack.close, function() {this()});
