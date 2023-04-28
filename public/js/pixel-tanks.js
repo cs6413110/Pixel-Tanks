@@ -843,7 +843,22 @@
       GUI.canvas.style = 'background-color: black;';
       GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
       GUI.drawText('Loading Font', 800, 500, 50, '#fffff', 0.5);
-      window.oncontextmenu = () => {return false}
+      document.body.innerHTML += `
+      <style>
+        html, body {
+	  margin: 0;
+	  max-height: 100vh;
+	  max-width: 100vw;
+	  padding: 0;
+	  overflow: hidden;
+	  text-align: center;
+	}
+	canvas {
+	  display: inline;
+	}
+      </style>
+      `;
+      window.oncontextmenu = () => {return false};
       window.addEventListener('resize', GUI.resize);
     }
 
