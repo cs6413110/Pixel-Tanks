@@ -13,7 +13,7 @@ const SETTINGS = {
   export: true,
 }
 
-import https from 'https';
+import http from 'http';
 import HyperExpress from 'hyper-express';
 import jsonpack from 'jsonpack';
 import Filter from 'bad-words';
@@ -102,7 +102,7 @@ Multiplayer.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (soc
             setTimeout(function() {this.destroy()}.bind(socket));
             return true;
           }, 'username', socket.username, socket)) return;
-          https.get('http://141.148.128.231/verify?username='+socket.username+'&token='+token, function(res) {
+          http.get('http://141.148.128.231/verify?username='+socket.username+'&token='+token, function(res) {
             var c = [];
             res.on('data', function(chunk) {c.push(chunk)}.bind(this));
             res.on('end', function() {
