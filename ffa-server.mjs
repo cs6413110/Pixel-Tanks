@@ -102,7 +102,7 @@ Multiplayer.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (soc
             setTimeout(function() {this.destroy()}.bind(socket));
             return true;
           }, 'username', socket.username, socket)) return;
-          https.get('https://pixeltanks.ga/verify?username='+socket.username+'&token='+token, function(res) {
+          https.get('http://141.148.128.231/verify?username='+socket.username+'&token='+token, function(res) {
             var c = [];
             res.on('data', function(chunk) {c.push(chunk)}.bind(this));
             res.on('end', function() {
