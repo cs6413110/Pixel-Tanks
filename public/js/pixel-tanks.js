@@ -1557,7 +1557,7 @@
       this.showChat = false;
       this.msg = '';
       this.gamemode = gamemode;
-      this.socket = new MegaSocket('wss://'+ip, {keepAlive: false, reconnect: false, autoconnect: true});
+      this.socket = new MegaSocket('ws://'+ip, {keepAlive: false, reconnect: false, autoconnect: true});
       this.tank = {use: [], fire: [], r: 0};
       this.reset();
 
