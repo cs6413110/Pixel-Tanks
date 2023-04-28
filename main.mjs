@@ -10,7 +10,7 @@ const filter = new Filter();
 const tokgen = new TokenGenerator(256, TokenGenerator.BASE62);
 const Server = new HyperExpress.Server({fast_buffers: true});
 const Router = new HyperExpress.Router();
-var db, tokens = [], sockets = [], encode = (c) => {var x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}, decode = (b) => {var a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")};
+var db, tokens = [], sockets = [], auth = (token, username) {return typeof tokens.find(t => t.token === token && t.username === username) === 'object'}, encode = (c) => {var x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}, decode = (b) => {var a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")};
 
 (async() => {
   await client.connect();
@@ -37,14 +37,14 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
       tokens.push({username: data.username, token: token});
     } else if (data.op === 'database') {
       if (!data.token) return socket.send({status: 'error', message: 'No token.'});
-      if (A.each(tokens, function(d) {if (this.token === d.token) return true}, {key: 'username', value: data.username}, {token: data.token}) ? false : true) return socket.send({status: 'error', message: 'Invalid token.'});
+      if (auth(data.token, data.username)) return socket.send({status: 'error', message: 'Invalid token.'});
       if (data.type === 'get') try {socket.send({status: 'success', type: 'get', data: await db.findOne({username: data.username}, (name, value) => {if (name === 'password') return undefined; else return value})})} catch(e) {socket.send({status: 'error', message: 'Error getting: '+e})} else if (data.type === 'set') try {db.updateOne({username: data.username}, {$set: Object.defineProperty(await db.findOne({username: data.username}), data.key, {value: data.value})})} catch(e) {socket.send({status: 'error', message: 'Error setting: '+e})} else socket.send({status: 'error', message: 'Invalid or no task.'});
     } else socket.send({status: 'error', message: 'Invalid or no operation.'});
   });
 });
 
 Server.get('/verify', (req, res) => {
-  res.end(typeof tokens.find(t => t.token === req.query.token && t.username === req.query.username) === 'object');
+  res.end(auth(req.query.token, req.query.username);
 });
 
 Server.get('/*', (req, res) => {
