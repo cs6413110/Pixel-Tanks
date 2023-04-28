@@ -162,7 +162,7 @@
 
   class Network {
     static get(callback) {
-      PixelTanks.socket.send({op: 'database', type: 'get', username: sessionStorage.username, token: sessionStorage.token});
+      PixelTanks.socket.send({op: 'database', type: 'get', username: PixelTanks.user.username, token: PixelTanks.user.token});
       PixelTanks.socket.on('message', (data) => {
         if (data.status === 'success' && data.type === 'get') {
           PixelTanks.socket.no('message');
@@ -173,7 +173,7 @@
 
     static update(key, value) {
       try {
-        PixelTanks.socket.send({op: 'database', type: 'set', username: sessionStorage.username, token: sessionStorage.token, key: key, value: value});
+        PixelTanks.socket.send({op: 'database', type: 'set', username: PixelTanks.user.username, token: PixelTanks.user.token, key: key, value: value});
         PixelTanks.socket.on('message', function(data) {
           if (data.success) {
             PixelTanks.socket.no('message');
@@ -742,11 +742,6 @@
           },
           customOnLoad: () => {
             if (!Menus.menus.start.type) {
-              //if (sessionStorage.username !== undefined) {
-                //PixelTanks.getData(() => {
-                  //Menus.trigger('main');
-                //});
-              //} 
               Menus.menus.start.type = 'username';
               Menus.menus.start.username = '';
               Menus.menus.start.password = '';
@@ -771,7 +766,7 @@
           ],
           exec: [
             [580, 360, 440, 100, 'alert("Singleplayer is coming in PixelTanks beta.");'],
-            [320, 920, 80, 80, `(() => {sessionStorage.token = undefined; sessionStorage.username = undefined; Menus.trigger('start');})();`],
+            [320, 920, 80, 80, `(() => {PixelTanks.user.token = undefined; PixelTanks.user.username = undefined; Menus.trigger('start');})();`],
           ],
           listeners: {},
           customOnLoad: () => {
@@ -1354,7 +1349,6 @@
     }
 
     static getData(callback) {
-        //PixelTanks.user.username = sessionStorage.username;
         Network.get((data) => {
           PixelTanks.userData = JSON.parse(data.playerdata)['pixel-tanks'];
           PixelTanks.playerData = JSON.parse(data.playerdata);
