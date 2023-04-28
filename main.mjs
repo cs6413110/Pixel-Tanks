@@ -25,7 +25,10 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
     try {
       data = jsonpack.unpack(decode(data));
     } catch(e) {
-      console.log('invalid jsonpack stuffs :(');
+      console.log(data);
+      console.log(decode(data));
+      console.log(decode);
+      console.log('e');
       return socket.destroy();
     };
     if (!socket.username) socket.username = data.username;
