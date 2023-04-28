@@ -44,7 +44,7 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
 });
 
 Server.get('/verify', (req, res) => {
-  res.end(auth(req.query.token, req.query.username);
+  res.end(auth(req.query.token, req.query.username));
 });
 
 Server.get('/*', (req, res) => {
