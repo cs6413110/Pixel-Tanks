@@ -23,7 +23,7 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
   socket.send = function(data) {this._send(encode(jsonpack.pack(data)))}.bind(socket);
   socket.on('message', async(data) => {
     try {
-      data = jsonpack.unpack(A.de(data));
+      data = jsonpack.unpack(decode(data));
     } catch(e) {
       return socket.destroy();
     };
