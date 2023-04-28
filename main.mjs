@@ -37,6 +37,7 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
       tokens.push({username: data.username, token: token});
     } else if (data.op === 'database') {
       if (!data.token) return socket.send({status: 'error', message: 'No token.'});
+      console.log(data);
       if (auth(data.token, data.username)) return socket.send({status: 'error', message: 'Invalid token.'});
       if (data.type === 'get') try {socket.send({status: 'success', type: 'get', data: await db.findOne({username: data.username}, (name, value) => {if (name === 'password') return undefined; else return value})})} catch(e) {socket.send({status: 'error', message: 'Error getting: '+e})} else if (data.type === 'set') try {db.updateOne({username: data.username}, {$set: Object.defineProperty(await db.findOne({username: data.username}), data.key, {value: data.value})})} catch(e) {socket.send({status: 'error', message: 'Error setting: '+e})} else socket.send({status: 'error', message: 'Invalid or no task.'});
     } else socket.send({status: 'error', message: 'Invalid or no operation.'});
