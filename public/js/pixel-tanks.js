@@ -834,15 +834,6 @@
     }
 
     static setup() {
-      GUI.canvas = document.createElement('CANVAS');
-      GUI.draw = GUI.canvas.getContext('2d');
-      document.body.appendChild(GUI.canvas);
-      PixelTanks.resizer = window.innerHeight/1000;
-      GUI.canvas.height = window.innerHeight;
-      GUI.canvas.width = window.innerHeight*1.6;
-      GUI.canvas.style = 'background-color: black;';
-      GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
-      GUI.drawText('Loading Font', 800, 500, 50, '#fffff', 0.5);
       document.body.innerHTML += `
       <style>
         html, body {
@@ -858,6 +849,15 @@
 	}
       </style>
       `;
+      GUI.canvas = document.createElement('CANVAS');
+      GUI.draw = GUI.canvas.getContext('2d');
+      document.body.appendChild(GUI.canvas);
+      PixelTanks.resizer = window.innerHeight/1000;
+      GUI.canvas.height = window.innerHeight;
+      GUI.canvas.width = window.innerHeight*1.6;
+      GUI.canvas.style = 'background-color: black;';
+      GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
+      GUI.drawText('Loading Font', 800, 500, 50, '#fffff', 0.5);
       window.oncontextmenu = () => {return false};
       window.addEventListener('resize', GUI.resize);
     }
