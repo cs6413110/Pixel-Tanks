@@ -59,8 +59,8 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
   });
 });
 
-Server.get('/verify', (req, res) => res.end(auth(req.query.token, req.query.username).toString())});
-Server.get('/*', (req, res) => res.header('Content-Type', 'application/javascript').end(fs.readFileSync('/home/ubuntu/Pixel-Tanks/public/js/pixel-tanks.js'))});
+Server.get('/verify', (req, res) => res.end(auth(req.query.token, req.query.username).toString()));
+Server.get('/*', (req, res) => res.header('Content-Type', 'application/javascript').end(fs.readFileSync('/home/ubuntu/Pixel-Tanks/public/js/pixel-tanks.js')));
 Server.use(Router);
 Server.use(Multiplayer);
 Server.listen(80);
