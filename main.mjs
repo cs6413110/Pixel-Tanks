@@ -19,7 +19,9 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
   socket._send = socket.send;
   socket.send = function(data) {this._send(encode(jsonpack.pack(data)))}.bind(socket);
   socket.on('message', async(data) => {
-    try data = jsonpack.unpack(decode(data)) catch(e) return socket.destroy();
+    try {
+      data = jsonpack.unpack(decode(data)) 
+    } catch(e) return socket.destroy();
     if (!socket.username) socket.username = data.username;
     if (data.op === 'auth') {
       if (data.username === '' || !data.username || data.username.includes(' ') || data.username.includes(':')) return socket.send({status: 'error', message: 'Invalid username.'});
