@@ -21,7 +21,9 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
   socket.on('message', async(data) => {
     try {
       data = jsonpack.unpack(decode(data)) 
-    } catch(e) return socket.destroy();
+    } catch(e) {
+      return socket.destroy();
+    }
     if (!socket.username) socket.username = data.username;
     if (data.op === 'auth') {
       if (data.username === '' || !data.username || data.username.includes(' ') || data.username.includes(':')) return socket.send({status: 'error', message: 'Invalid username.'});
@@ -50,7 +52,9 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
         } else if (data.type === 'set') {
           db.updateOne({username: data.username}, {$set: Object.defineProperty(await db.findOne({username: data.username}), data.key, {value: data.value})});
         } else socket.send({status: 'error', message: 'Invalid or no task.'});
-      } catch(e) socket.send({status: 'error', message: 'Error getting: '+e});
+      } catch(e) {
+        socket.send({status: 'error', message: 'Error getting: '+e});
+      }
     } else socket.send({status: 'error', message: 'Invalid or no operation.'});
   });
 });
