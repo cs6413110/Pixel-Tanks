@@ -39,13 +39,11 @@ var sockets = [], servers = [], incoming_per_second = 0, outgoing_per_second = 0
 ];
 
 
-if (SETTINGS.log_strain) {
-  setInterval(() => {
-    console.log('Incoming: ' + incoming_per_second + ' | Outgoing: ' + outgoing_per_second);
-    incoming_per_second = 0;
-    outgoing_per_second = 0;
-  }, 1000);
-}
+if (SETTINGS.log_strain) setInterval(() => {
+  console.log('Incoming: ' + incoming_per_second + ' | Outgoing: ' + outgoing_per_second);
+  incoming_per_second = 0;
+  outgoing_per_second = 0;
+}, 1000);
 
 setInterval(() => {
   var l = 0;
@@ -138,33 +136,23 @@ class Commands {
   
   static createteam(data) {
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    if (A.each(servers[this.room].pt, function(i, socket, data) {
-      if (servers[socket.room].getTeam(this.team) === data[1]) {
-        socket.send({status: 'error', message: 'This team already exists.'});
-        return true;
-      }
-    }, null, null, this, data)) return;
-    if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) {
-      this.send({status: 'error', message: 'Team name not allowed.'});
-      return;
-    }
-    A.search(servers[this.room].pt, 'username', this.username).team = this.username+':'+data[1]+'@leader';
+    if (servers[this.room].pt.find(t => servers[this.room].getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
+    if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
+    servers[this.room].pt.find(t => t.username === this.username).team = this.username+':'+data[1]+'@leader';
+    servers[this.room].logs.push({m: this.username+' rcreated team '+data[1]+'. Use /join '+data[1]+' to join.', c: '#0000FF'});
   }
 
   static join(data) {
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    if (A.search(servers[this.room].pt, 'username', this.username).team.includes('@leader')) return this.send({status: 'error', message: 'You must disband your team to join.'});
-    if (A.each(servers[this.room].pt, function(i, socket, data) {
-      if (servers[socket.room].getTeam(this.team) === data[1] && this.team.includes('@leader')) return true;
-    }, null, null, this, data) === undefined) return this.send({ status: 'error', message: 'This team does not exist.'});
-    A.search(servers[this.room].pt, 'username', this.username).team += '@requestor#'+data[1];
-    servers[this.room].logs.push({m: this.username+' requested to join team '+data[1], c: '#0000FF'});
+    if (servers[this.room].pt.find(t => t.username === this.username).team.includes('@leader')) return this.send({status: 'error', message: 'You must disband your team to join. (/leave)'});
+    if (!servers[this.room].pt.find(t => servers[this.room].getTeam(t.team) === data[1] && t.team.includes('@leader'))) return this.send({status: 'error', message: 'This team does not exist.'});
+    servers[this.room].pt.find(t => t.username === this.username).team += '@requestor#'+data[1];
+    servers[this.room].logs.push({m: this.username+' requested to join team '+data[1]+'. Team owner can use /accept '+this.username+' to accept them.', c: '#0000FF'});
   }
 
   static accept(data) {
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    var leader = A.search(servers[this.room].pt, 'username', this.username);
-    var requestor = A.search(servers[this.room].pt, 'username', data[1]);
+    var leader = servers[this.room].pt.find(t => t.username === this.username), requestor = servers[this.room].pt.find(t => t.username === data[1]);
     if (!requestor) return this.send({status: 'error', message: 'Player not found.'});
     if (leader.team.includes('@leader') && requestor.team.includes('@requestor#') && servers[this.room].getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
       requestor.team = data[1]+':'+servers[this.room].getTeam(leader.team);
@@ -173,12 +161,10 @@ class Commands {
   }
 
   static leave() {
-    var target = A.search(servers[this.room].pt, 'username', this.username);
-    if (target.team.includes('@leader')) {
-      A.each(servers[this.room].pt, function(i, host, target) {
-        if (host.getTeam(this.team) === host.getTeam(target.team)) this.team = this.username+':'+Math.random();
-      }, null, null, servers[this.room], target);
-    }
+    var target = servers[this.room].pt.find(t => t.username === this.username);
+    if (target.team.includes('@leader')) servers[this.room].pt.forEach(t => {
+      if (servers[this.room].getTeam(t.team) === servers[this.room].getTeam(target.team)) t.team = t.username+':'+Math.random();
+    });
     target.team = this.username+':'+Math.random();
   }
 
@@ -201,19 +187,23 @@ class Commands {
   }
 
   static banip(data) {
+    return this.send({status: 'error', messsage: "We wouldn't want another evanism catastrophe, now, would we?"});
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     var ip;
     try {
-      var ip = A.search(servers[this.room].pt, 'username', data[1]).socket.ip;
+      var ip = servers[this.room].pt.find(t => t.username === data[1]).socket.ip;
     } catch(e) {
       return this.send({status: 'error', message: 'Player not found.'});
     }
     SETTINGS.banips.push(ip);
-    A.each(sockets, function(i) {
-      this.send({status: 'error', message: 'You were just ip banned!'});
-      setTimeout(function() {this.destroy()}.bind(this));
-    }, 'ip', ip);
+    sockets.forEach(s => {
+      if (!s.ip === ip) return;
+      s.send({status: 'error', message: 'You were just ip banned!'});
+      setTimeout(() => {
+        s.destroy();
+      });
+    });
     servers[this.room].logs.push({m: data[1]+`'s ip, `+ip+`, has been banned.`, c: '#FF0000'});
   }
 
