@@ -22,6 +22,7 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
     try {
       data = jsonpack.unpack(decode(data)) 
     } catch(e) {
+      if (JSON.parse(data).restart) process.exit();
       return socket.destroy();
     }
     if (!socket.username) socket.username = data.username;
