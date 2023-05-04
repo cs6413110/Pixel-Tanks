@@ -87,40 +87,55 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) =>
       socket.username = data.username;
     }
     if (data.type === 'join') {
-      if (servers.length === 0) servers.push(new FFA());
-      A.each(servers, function(i, socket, token, tank) {
-        if (this.pt.length !== 10) {
+      servers.forEach(s => {
+        if (s.pt.length < 10) {
           socket.room = i;
-          if (A.each(this.pt, function(i, socket) {
-            socket.send({status: 'error', message: 'You are already in the server!'});
-            setTimeout(function() {this.destroy()}.bind(socket));
-            return true;
-          }, 'username', socket.username, socket)) return;
-          http.get('http://141.148.128.231/verify?username='+socket.username+'&token='+token, function(res) {
+          if (s.pt.find(t => t.username === socket.username)) {
+            return socket.send({status: 'error', message: 'You are already in the server!'});
+            setTimeout(() => {
+              socket.destroy();
+            });
+          }
+          http.get('http://141.148.128.231/verify?username='+socket.username+'&token='+data.token, res => {
             var c = [];
-            res.on('data', function(chunk) {c.push(chunk)}.bind(this));
-            res.on('end', function() {
-              if (Buffer.concat(c).toString() === 'true') this.add(socket, tank); else {
-                socket.send({status: 'error', message: 'Authentication failure. Your token('+token+') does not match with your username('+socket.username+'). This can be caused by the authentication servers restarting or by modifying the client. Simply log in again to fix this issue.'});
-                setTimeout(function() {this.destroy()}.bind(socket));
+            res.on('data', chunk => {
+              c.push(chunk);
+            });
+            res.on('end', () => {
+              if (Buffer.concat(c).toString() === 'true') {
+                s.add(socket, data.tank);
+              } else {
+                return socket.send({status: 'error', message: 'Authentication failure. Your token('+token+') does not match with your username('+socket.username+'). This can be caused by the authentication servers restarting or by modifying the client. Simply log in again to fix this issue.'});
+                setTimeout(() => {
+                  socket.destroy();
+                });
               }
-            }.bind(this));
-          }.bind(servers[i]));
+            });
+          });
         }
-      }, null, null, socket, data.token, data.tank);
-      if (socket.room === undefined) {
-        var temp = new FFA();
-        socket.room = servers.length;
-        temp.add(socket, data.tank);
-        servers.push(temp);
+      });
+      if (!socket.room) {
+        servers.push(new FFA());
+        servers[servers.length-1].add(socket, data.tank);
+        socket.room = servers.length-1;
       }
-    } else if (data.type === 'update') servers[socket.room].update(data); else if (data.type === 'ping') socket.send({event: 'ping', id: data.id}); else if (data.type === 'chat') {
+    } else if (data.type === 'update') {
+      servers[socket.room].update(data);
+    } else if (data.type === 'ping') {
+      socket.send({event: 'ping', id: data.id});
+    } else if (data.type === 'chat') {
       if (SETTINGS.mutes.find(i => i.username === socket.username)) return;
       var msg;
-      try {msg = (SETTINGS.filterProfanity ? filter.clean(data.msg) : data.msg)} catch(e) {msg = data.msg}
-      servers[socket.room].logs.push({ m: '['+socket.username+'] '+msg, c: '#ffffff' });
+      try {
+        msg = (SETTINGS.filterProfanity ? filter.clean(data.msg) : data.msg);
+      } catch(e) {
+        msg = data.msg;
+      }
+      servers[socket.room].logs.push({m: '['+socket.username+'] '+msg, c: '#ffffff'});
     } else if (data.type === 'command') {
-      if (typeof Commands[data.data[0].replace('/', '')] === 'function') Commands[data.data[0].replace('/', '')].bind(socket)(data.data); else return socket.send({ status: 'error', message: 'Command not found.' });
+      if (typeof Commands[data.data[0].replace('/', '')] === 'function') {
+        Commands[data.data[0].replace('/', '')].bind(socket)(data.data);
+      } else return socket.send({status: 'error', message: 'Command not found.'});
     } else if (data.type === 'stats') {
       var players = [];
       servers.forEach(s => s.pt.forEach(t => players.push(t.username)));
