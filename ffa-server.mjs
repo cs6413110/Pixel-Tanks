@@ -114,7 +114,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) =>
           });
         }
       });
-      if (!socket.room) {
+      if (socket.room === undefined) {
         servers.push(new FFA());
         servers[servers.length-1].add(socket, data.tank);
         socket.room = servers.length-1;
