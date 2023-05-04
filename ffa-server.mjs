@@ -89,7 +89,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) =>
     if (data.type === 'join') {
       servers.forEach(s => {
         if (s.pt.length < 10) {
-          socket.room = i;
+          socket.room = servers.indexOf(s);
           if (s.pt.find(t => t.username === socket.username)) {
             return socket.send({status: 'error', message: 'You are already in the server!'});
             setTimeout(() => {
