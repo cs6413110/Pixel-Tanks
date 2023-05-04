@@ -19,7 +19,7 @@ import jsonpack from 'jsonpack';
 import Filter from 'bad-words';
 
 const filter = new Filter();
-export const Multiplayer = new HyperExpress.Router();
+export const Core = new HyperExpress.Router();
 const Server = new HyperExpress.Server({fast_buffers: true});
 
 var sockets = [], servers = [], incoming_per_second = 0, outgoing_per_second = 0, ffaLevels = [
@@ -66,7 +66,7 @@ setInterval(() => {
   }
 }, 60000);
 
-Multiplayer.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) => {
+Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) => {
   sockets.push(socket);
   socket.originalSend = socket.send;
   socket.send = function(data) {this.originalSend(A.en(jsonpack.pack(data)))}.bind(socket);
@@ -1262,7 +1262,7 @@ class DUELS extends Engine {
 
 }
 
-Server.use(Multiplayer);
+Server.use(Core);
 if (!SETTINGS.export) {
   Server.get('*', (req, res) => {res.end('This is a Pixel Tanks FFA Server. Connect using WebSocket.')});
   Server.listen(SETTINGS.port); //  default tanks server ip 15132
