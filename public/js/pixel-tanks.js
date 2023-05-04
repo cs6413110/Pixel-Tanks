@@ -2587,7 +2587,7 @@
     }
 
     mousedown(e) {
-      this.fire(e.button, true);
+      this.fire(e.button);
       clearInterval(this.fireInterval);
       this.fireInterval = setInterval(this.fire.bind(this), this.fireType === 1 ? 200 : 600, e.button);
     }
@@ -2596,21 +2596,18 @@
       clearInterval(this.fireInterval);
     }
 
-    fire(type, call) {
-      var fireType = ['grapple', 'megamissle', 'dynamite', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? (PixelTanks.userData.class === 'medic' ? 'healmissle' : 'powermissle') : type;
-      if (['powermissle', 'healmissle'].includes(type) && this.canPowermissle) {
+    fire(type) {
+      if (type === 2 && this.canPowermissle) {
         this.canPowermissle = false;
         this.timers.powermissle = Date.now();
-        setTimeout(function() {this.canPowermissle = true}.bind(this), 10000);
-      } else if (['powermissle', 'healmissle', 0].includes(type)) {
-        if (!this.canFire && call) return;
-        type = this.fireType === 1 ? 'bullet' : 'shotgun';
-        fireType = type === 'bullet' ? 1 : 2;
+	setTimeout(() => {
+	  this.canPowermissle = true;
+	}, 10000);
+      } else if (type === 0) {
         this.canFire = false;
         setTimeout(function(){this.canFire = true}.bind(this), this.fireType === 1 ? 200 : 600);
-      } // OPTIMIZE fix this if statement
-
-      var l = fireType === 1 ? 0 : -10;
+      }
+      var fireType = ['grapple', 'megamissle', 'dynamite', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? (PixelTanks.userData.class === 'medic' ? 'healmissle' : 'powermissle') : (type === 0 ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
       while (l<(fireType === 1 ? 1 : 15)) {
         this.tank.fire.push({...this.toPoint(this.tank.r+l), type: type, r: this.tank.r+l});
         l += 5;
