@@ -2587,7 +2587,7 @@
     }
 
     mousedown(e) {
-      this.fire(e.button);
+      if (this.canFire) this.fire(e.button);
       clearInterval(this.fireInterval);
       this.fireInterval = setInterval(this.fire.bind(this), this.fireType === 1 ? 200 : 600, e.button);
     }
@@ -2597,7 +2597,8 @@
     }
 
     fire(type) {
-      if (type === 2 && this.canPowermissle) {
+      if (type === 2) {
+        if (!this.canPowermissle) return;
         this.canPowermissle = false;
         this.timers.powermissle = Date.now();
 	setTimeout(() => {
