@@ -10,7 +10,44 @@ const filter = new Filter();
 const tokgen = new TokenGenerator(256, TokenGenerator.BASE62);
 const Server = new HyperExpress.Server({fast_buffers: true});
 const Router = new HyperExpress.Router();
-var db, tokens = [], sockets = [], auth = (token, username) => {return typeof tokens.find(t => t.token === token && t.username === username) === 'object'}, encode = (c) => {var x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}, decode = (b) => {var a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")};
+var db, tokens = [], sockets = [], auth = (token, username) => {
+  return typeof tokens.find(t => t.token === token && t.username === username) === 'object'}, encode = (c) => {var x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("");
+}, decode = (b) => {
+  var a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("");
+}, routes = {
+  auth: (data, socket) => {
+    if (data.username === '' || !data.username || data.username.includes(' ') || data.username.includes(':')) return socket.send({status: 'error', message: 'Invalid username.'});
+    if (data.username !== filter.clean(data.username)) return socket.send({status: 'error', message: 'Username contains inappropriate word.'});
+    var item = await db.findOne({username: data.username}), token = tokgen.generate();
+    if (data.type === 'signup') {
+      if (item !== null) return socket.send({status: 'error', message: 'This account already exists.'});
+      if (await db.insertOne({username: data.username, password: data.password, playerdata: '{}'})) {
+        socket.send({status: 'success', token: token});
+      } else return socket.send({status: 'error', message: 'Error creating account.'});
+    } else if (data.type === 'login') {
+      if (item === null) return socket.send({status: 'error', message: 'This account does not exist.'});
+      if (item.password === data.password) {
+        socket.send({status: 'success', token: token});
+      } else return socket.send({status: 'error', message: 'Incorrect password.'});
+    } else return socket.destroy();
+    tokens.push({username: data.username, token: token});
+  },
+  database: (data, socket) => {
+    if (!data.token) return socket.send({status: 'error', message: 'No token.'});
+    if (!auth(data.token, data.username)) return socket.send({status: 'error', message: 'Invalid token.'});
+    try {
+      if (data.type === 'get') {
+        socket.send({status: 'success', type: 'get', data: await db.findOne({username: data.username}, (name, value) => {
+          return name === 'password' ? undefined : value;
+        })});
+      } else if (data.type === 'set') {
+        db.updateOne({username: data.username}, {$set: Object.defineProperty(await db.findOne({username: data.username}), data.key, {value: data.value})});
+      } else socket.send({status: 'error', message: 'Invalid or no task.'});
+    } catch(e) {
+      socket.send({status: 'error', message: 'Error getting: '+e});
+    }
+  },
+};
 
 client.connect().then(async() => db = await client.db('data').collection('data'));
 
@@ -20,43 +57,16 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
   socket.send = function(data) {this._send(encode(jsonpack.pack(data)))}.bind(socket);
   socket.on('message', async(data) => {
     try {
-      data = jsonpack.unpack(decode(data)) 
+      data = jsonpack.unpack(decode(data));
     } catch(e) {
-      if (JSON.parse(data).restart) process.exit();
       return socket.destroy();
     }
     if (!socket.username) socket.username = data.username;
-    if (data.op === 'auth') {
-      if (data.username === '' || !data.username || data.username.includes(' ') || data.username.includes(':')) return socket.send({status: 'error', message: 'Invalid username.'});
-      if (data.username !== filter.clean(data.username)) return socket.send({status: 'error', message: 'Username contains inappropriate word.'});
-      var item = await db.findOne({username: data.username}), token = tokgen.generate();
-      if (data.type === 'signup') {
-        if (item !== null) return socket.send({status: 'error', message: 'This account already exists.'});
-        if (await db.insertOne({username: data.username, password: data.password, playerdata: '{}'})) {
-          socket.send({status: 'success', token: token});
-        } else return socket.send({status: 'error', message: 'Error creating account.'});
-      } else if (data.type === 'login') {
-        if (item === null) return socket.send({status: 'error', message: 'This account does not exist.'});
-        if (item.password === data.password) {
-          socket.send({status: 'success', token: token});
-        } else return socket.send({status: 'error', message: 'Incorrect password.'});
-      } else return socket.destroy();
-      tokens.push({username: data.username, token: token});
-    } else if (data.op === 'database') {
-      if (!data.token) return socket.send({status: 'error', message: 'No token.'});
-      if (!auth(data.token, data.username)) return socket.send({status: 'error', message: 'Invalid token.'});
-      try {
-        if (data.type === 'get') {
-          socket.send({status: 'success', type: 'get', data: await db.findOne({username: data.username}, (name, value) => {
-            return name === 'password' ? undefined : value;
-          })});
-        } else if (data.type === 'set') {
-          db.updateOne({username: data.username}, {$set: Object.defineProperty(await db.findOne({username: data.username}), data.key, {value: data.value})});
-        } else socket.send({status: 'error', message: 'Invalid or no task.'});
-      } catch(e) {
-        socket.send({status: 'error', message: 'Error getting: '+e});
-      }
-    } else socket.send({status: 'error', message: 'Invalid or no operation.'});
+    try {
+      routes[data.op](data, socket);
+    } catch(e) {
+      return socket.send({status: 'error', message: 'Invalid or no operation.'});
+    }
   });
 });
 
