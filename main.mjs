@@ -21,14 +21,11 @@ var db, tokens = [], sockets = [], auth = (token, username) => {
     var item = await db.findOne({username: data.username}), token = tokgen.generate();
     if (data.type === 'signup') {
       if (item !== null) return socket.send({status: 'error', message: 'This account already exists.'});
-      if (await db.insertOne({username: data.username, password: data.password, playerdata: '{}'})) {
-        socket.send({status: 'success', token: token});
-      } else return socket.send({status: 'error', message: 'Error creating account.'});
+      await db.insertOne({username: data.username, password: data.password, playerdata: '{}'})
+      socket.send({status: 'success', token: token});
     } else if (data.type === 'login') {
       if (item === null) return socket.send({status: 'error', message: 'This account does not exist.'});
-      if (item.password === data.password) {
-        socket.send({status: 'success', token: token});
-      } else return socket.send({status: 'error', message: 'Incorrect password.'});
+      return socket.send(item.password === data.password ? {status: 'success', token: token} : {status: 'error', message: 'Incorrect password.'});
     } else return socket.destroy();
     tokens.push({username: data.username, token: token});
   },
