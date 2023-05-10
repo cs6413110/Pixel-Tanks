@@ -27,7 +27,7 @@ var db, tokens = [], sockets = [], auth = (token, username) => {
       if (item === null) return socket.send({status: 'error', message: 'This account does not exist.'});
       if (item.password === data.password) {
         socket.send({status: 'success', token: token});
-      cket.send({status: 'error', message: 'Incorrect password.'});
+      } else return socket.send({status: 'error', message: 'Incorrect password.'});
     } else return socket.destroy();
     tokens.push({username: data.username, token: token});
   },
