@@ -15,7 +15,7 @@ var db, tokens = [], sockets = [], auth = (token, username) => {
 }, decode = (b) => {
   var a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("");
 }, routes = {
-  auth: (data, socket) => {
+  auth: async (data, socket) => {
     if (data.username === '' || !data.username || data.username.includes(' ') || data.username.includes(':')) return socket.send({status: 'error', message: 'Invalid username.'});
     if (data.username !== filter.clean(data.username)) return socket.send({status: 'error', message: 'Username contains inappropriate word.'});
     var item = await db.findOne({username: data.username}), token = tokgen.generate();
@@ -29,7 +29,7 @@ var db, tokens = [], sockets = [], auth = (token, username) => {
     } else return socket.destroy();
     tokens.push({username: data.username, token: token});
   },
-  database: (data, socket) => {
+  database: async (data, socket) => {
     if (!data.token) return socket.send({status: 'error', message: 'No token.'});
     if (!auth(data.token, data.username)) return socket.send({status: 'error', message: 'Invalid token.'});
     try {
@@ -52,7 +52,7 @@ Router.ws('/', {idle_timeout: Infinity}, (socket) => {
   sockets.push(socket);
   socket._send = socket.send;
   socket.send = function(data) {this._send(encode(jsonpack.pack(data)))}.bind(socket);
-  socket.on('message', async(data) => {
+  socket.on('message', (data) => {
     try {
       data = jsonpack.unpack(decode(data));
     } catch(e) {
