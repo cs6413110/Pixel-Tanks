@@ -641,7 +641,7 @@ class Engine {
         var a = [];
         this.pt.forEach(tank => {
           if (this.getTeam(tank.team) === this.getTeam(t.team)) a.push(username);
-        }});
+        });
         t.healing = a[(a.indexOf(t.healing)+1)%a.length]; //lots of brain cells died for this line of code <R.I.P>
       }
       if (data.use.includes('mine')) this.b.push(new Block(t.x, t.y, 0, 'mine', t.team, this));
