@@ -533,13 +533,16 @@ class Engine {
       t.emote = data.emote;
       t.invis = data.invis;
       t.baseFrame = data.baseFrame;
+      t.x = data.x;
+      t.y = data.y;
+      t.r = data.r;
       if (t.ded) return;
       if (t.immune && t.class === 'fire') {
         var team = this.parseTeamExtras(t.team), type = 'fire';
-        if ((tank.x+80)%100>80 && [45, 90, 135].includes(t.baseRotation)) this.b.push(new Block(Math.floor(tank.x/100)*100+100, Math.floor(tank.y/100)*100, 100, type, team, this));
-        if ((tank.x)%100<20 && [225, 270, 315].includes(t.baseRotation)) this.b.push(new Block(Math.floor(tank.x/100)*100-100, Math.floor(tank.y/100)*100, 100, type, team, this));
-        if ((tank.y+80)%100>80 && [135, 180, 225].includes(t.baseRotation)) this.b.push(new Block(Math.floor(tank.x/100)*100, Math.floor(tank.y/100)*100+100, 100, type, team, this));
-        if ((tank.y)%100<20 && [315, 0, 45].includes(t.baseRotation)) this.b.push(new Block(Math.floor(tank.x/100)*100, Math.floor(tank.y/100)*100-100, 100, type, team, this));
+        if ((data.x+80)%100>80 && [45, 90, 135].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100+100, Math.floor(t.y/100)*100, 100, type, team, this));
+        if ((data.x)%100<20 && [225, 270, 315].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100-100, Math.floor(t.y/100)*100, 100, type, team, this));
+        if ((data.y+80)%100>80 && [135, 180, 225].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100, Math.floor(t.y/100)*100+100, 100, type, team, this));
+        if ((data.y)%100<20 && [315, 0, 45].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100, Math.floor(t.y/100)*100-100, 100, type, team, this));
       } else if (t.immune && t.class === 'builder') { // OPTIMIZE fire boost 
         this.b.forEach(b => {
           if (!Math.sqrt(Math.pow(t.x-b.x, 2)+Math.pow(t.y-b.y, 2)) < 100) return;
