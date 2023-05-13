@@ -192,7 +192,7 @@ const Comands = {
     servers[this.room].pt.forEach(t => {
       t.x = servers[this.room].spawn.x;
       t.y = servers[this.room].spawn.y;
-      t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', t.y}]});
+      t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
     });
   },
   banip: data => {
