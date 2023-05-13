@@ -523,9 +523,9 @@ class Engine {
   }
 
   update(data) {
-    data = data.data;
     this.pt.forEach(t => {
       if (t.username !== data.username) return;
+      data = data.data;
       if ((t.emote !== data.emote || t.r !== data.r || t.baseFrame !== data.baseFrame || data.use.length || data.fire.length) || (!t.grapple && (t.x !== data.x || t.y !== data.y))) t.deathsPerMovement = 0;
       t.baseRotation = data.baseRotation;
       t.immune = data.immune;
