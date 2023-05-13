@@ -146,26 +146,22 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) =>
     if (socket.room !== undefined) servers[socket.room].disconnect(socket, code, reason);
   });
 });
-
-class Commands {
-  
-  static createteam(data) {
+const Comands = {
+  createteam: data => {
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     if (servers[this.room].pt.find(t => servers[this.room].getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
     if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
     servers[this.room].pt.find(t => t.username === this.username).team = this.username+':'+data[1]+'@leader';
     servers[this.room].logs.push({m: this.username+' rcreated team '+data[1]+'. Use /join '+data[1]+' to join.', c: '#0000FF'});
-  }
-
-  static join(data) {
+  },
+  join: data => {
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     if (servers[this.room].pt.find(t => t.username === this.username).team.includes('@leader')) return this.send({status: 'error', message: 'You must disband your team to join. (/leave)'});
     if (!servers[this.room].pt.find(t => servers[this.room].getTeam(t.team) === data[1] && t.team.includes('@leader'))) return this.send({status: 'error', message: 'This team does not exist.'});
     servers[this.room].pt.find(t => t.username === this.username).team += '@requestor#'+data[1];
     servers[this.room].logs.push({m: this.username+' requested to join team '+data[1]+'. Team owner can use /accept '+this.username+' to accept them.', c: '#0000FF'});
-  }
-
-  static accept(data) {
+  },
+  accept: data => {
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     var leader = servers[this.room].pt.find(t => t.username === this.username), requestor = servers[this.room].pt.find(t => t.username === data[1]);
     if (!requestor) return this.send({status: 'error', message: 'Player not found.'});
@@ -173,35 +169,33 @@ class Commands {
       requestor.team = data[1]+':'+servers[this.room].getTeam(leader.team);
       servers[this.room].logs.push({ m: data[1]+' has joined team '+servers[this.room].getTeam(leader.team), c: '#40C4FF' });
     }
-  }
-
-  static leave() {
+  },
+  leave: () => {
     var target = servers[this.room].pt.find(t => t.username === this.username);
     if (target.team.includes('@leader')) servers[this.room].pt.forEach(t => {
       if (servers[this.room].getTeam(t.team) === servers[this.room].getTeam(target.team)) t.team = t.username+':'+Math.random();
     });
     target.team = this.username+':'+Math.random();
-  }
-
-  static pay(data) {
+  },
+  pay: data => {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
-    if (data.length !== 3) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    A.each(servers[this.room].pt, function(i, c) {this.socket.send({event: 'pay', amount: c})}, 'username', data[1], data[2]);
+    if (data.length !== 3 || new Number(data[2]) === NaN) return this.send({status: 'error', message: 'Command has invalid arguments.'});
+    servers[this.room].pt.forEach(t => {
+      if (t.username === data[1]) this.socket.send({event: 'pay', amount: new Number(data[2])});
+    });
     servers[this.room].logs.push({m: data[1]+' was paid '+data[2]+' by '+this.username, c: '#FFFF20'});
-  }
-
-  static newmap(data) {
+  },
+  newmap: data => {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     servers[this.room].b = [];
     servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
-    A.each(servers[this.room].pt, function(i, host) {
-      this.x = host.spawn.x;
-      this.y = host.spawn.y;
-      this.socket.send({event: 'override', data: [{key: 'x', value: host.spawn.x}, {key: 'y', value: host.spawn.y}]});
-    }, null, null, servers[this.room]);
-  }
-
-  static banip(data) {
+    servers[this.room].pt.forEach(t => {
+      t.x = servers[this.room].spawn.x;
+      t.y = servers[this.room].spawn.y;
+      t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', t.y}]});
+    });
+  },
+  banip: data => {
     return this.send({status: 'error', messsage: "We wouldn't want another evanism catastrophe, now, would we?"});
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
@@ -220,16 +214,14 @@ class Commands {
       });
     });
     servers[this.room].logs.push({m: data[1]+`'s ip, `+ip+`, has been banned.`, c: '#FF0000'});
-  }
-
-  static unbanip(data) {
+  },
+  unbanip: data => {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     if (SETTINGS.banips.indexOf(data[1]) !== -1) SETTINGS.banips.splice(SETTINGS.banips.indexOf(data[1]), 1);
     servers[this.room].logs.push({m: data[1]+' ip has been unbanned.', c: '#0000FF'});
-  }
-
-  static ban(data) {
+  },
+  ban: data => {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length < 4 || isNaN(data[2])) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     if (SETTINGS.admins.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
@@ -240,13 +232,15 @@ class Commands {
     }
     SETTINGS.bans.push({ username: data[1], by: this.username, time: data[2], reason: reason });
     server.logs.push({ m: this.username+' banned '+data[1]+' for '+data[2]+' minutes because "'+reason+'"', c: '#FF0000' });
-    A.each(sockets, function() {
-      this.send({status: 'error', message: 'You were just banned!'});
-      setTimeout(function() {this.destroy()}.bind(this));
-    }, 'username', data[1]);
-  }
-
-  static bans(data) {
+    sockets.forEach(s => {
+      if (s.username !== data[1]) return;
+      s.send({status: 'error', message: 'You were just banned!'});
+      setTimeout(() => {
+        s.destroy();
+      });
+    });
+  },
+  bans: data => {
     if (!SETTINGS.admins.includes(this.username)) return this.send({ status: 'error', message: 'You are not a server admin!' });
     if (data[1]) {
       if (!A.each(SETTINGS.bans, function(i, server) {
@@ -258,16 +252,14 @@ class Commands {
       A.each(SETTINGS.bans, function(i, p) {p.push(this.username)}, null, players);
       servers[this.room].logs = servers[this.room].logs.concat([{m: 'Bans Info:', c: '#FFFF22'}, {m: 'All Banned Players: '+players, c: '#FFFF22'}]);
     }
-  }
-
-  static unban(data) {
+  },
+  unban: data => {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 2) return this.send({ status: 'error', message: 'Command has invalid arguments.' });
     A.each(SETTINGS.bans, function(i) {SETTINGS.bans.splice(i, 1)}, 'username', data[1]);
     servers[this.room].logs.push({m: data[1]+' is unbanned.', c: '#0000FF'});
-  }
-
-  static mute(data) {
+  },
+  mute: data => {
     if (!SETTINGS.admins.includes(this.username)) {
       this.send({ status: 'error', message: 'You are not a server admin!' });
       return;
@@ -282,9 +274,8 @@ class Commands {
       time: data[2],
     });
     servers[this.room].logs.push({m: data[1]+' was muted for '+data[2]+' minutes by '+this.username, c: '#FFFF22'});
-  }
-
-  static mutes(data) {
+  },
+  mutes: data => {
     if (!SETTINGS.admins.includes(this.username)) {
       this.send({ status: 'error', message: 'You are not a server admin!' });
       return;
@@ -299,16 +290,14 @@ class Commands {
       A.each(SETTINGS.mutes, function(i, p) {p.push(this.username)}, null, null, players);
       servers[this.room].logs = servers[this.room].logs.concat([{m: 'Mutes Info:', c: '#FFFF22'}, {m: 'All Muted Players: '+players, c: '#FFFF22'}]);
     }
-  }
-
-  static unmute(data) {
+  },
+  unmute: data => {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     A.each(SETTINGS.mutes, function(i) {SETTINGS.mutes.splice(i, 1)}, 'username', data[1]);
     servers[this.room].logs.push({m: data[1]+' is unmuted.', c: '#0000FF'});
-  }
-
-  static kick(data) {
+  },
+  kick: data => {
     if (!SETTINGS.admins.includes(this.username)) return this.send({ status: 'error', message: 'You are not a server admin!' });
     if (data.length != 2) return this.send({ status: 'error', message: 'Command has invalid arguments.' });
     A.each(sockets, function(i, socket, data) {
@@ -317,34 +306,19 @@ class Commands {
         setTimeout(function() {this.destroy()}.bind(this));
       }
     }, null, null, this, data);
-  }
-
-  static kill(data) {
+  },
+  kill: data => {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length != 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     A.each(servers, function(i) {A.each(this.pt, function(i) {this.ded = true}, 'username', data[1])}, null, null, data);
-  }
-
-  static nuke(data) {
-    if (!SETTINGS.admins.includes(this.username)) return this.send({ status: 'error', message: 'You are not a server admin!' });
-    var l = 0;
-    while (l<30) {
-      var q = 0;
-      while (q<30) {
-        servers[this.room].b.push(new Block(l*300, q*300, Infinity, 'airstrike', 'Chinese Air Balloon:ADMIN', servers[this.room]));
-        q++;
-      }
-      l++;
-    }
-  }
-
-  static cosmetic(data) {
+  },
+  cosmetic: data => {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 3) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     var pt = A.search(servers[this.room].pt, 'username', data[1]);
     if (pt === undefined) return this.send({status: 'error', message: 'Player Not Found.'}); else pt.cosmetic = data[2].replaceAll('_', ' ');
   }
-}
+};
 
 class A {
   static each(arr, func, key, value, ...param) {
@@ -549,129 +523,115 @@ class Engine {
   }
 
   update(data) {
-    var tank = data.data;
-    var l = 0;
-    while (l<this.pt.length) {
-      if (this.pt[l].username === data.username) {
-        var doTankUpdate = false;
-        this.pt[l].baseRotation = tank.baseRotation;
-        this.pt[l].immune = tank.immune;
-        this.pt[l].animation = tank.animation;
-        if (this.pt[l].emote !== tank.emote) {
-          this.pt[l].emote = tank.emote;
-          doTankUpdate = true;
+    data = data.data;
+    this.pt.forEach(t => {
+      if (t.username !== data.username) return;
+      if ((t.emote !== data.emote || t.r !== data.r || t.baseFrame !== data.baseFrame || data.use.length || data.fire.length) || (!t.grapple && (t.x !== data.x || t.y !== data.y))) t.deathsPerMovement = 0;
+      t.baseRotation = data.baseRotation;
+      t.immune = data.immune;
+      t.animation = data.animation;
+      t.emote = data.emote;
+      t.invis = data.invis;
+      t.baseFrame = data.baseFrame;
+      if (t.ded) return;
+      if (t.immune && t.class === 'fire') {
+        var team = this.parseTeamExtras(t.team), type = 'fire';
+        if ((tank.x+80)%100>80 && [45, 90, 135].includes(t.baseRotation)) this.b.push(new Block(Math.floor(tank.x/100)*100+100, Math.floor(tank.y/100)*100, 100, type, team, this));
+        if ((tank.x)%100<20 && [225, 270, 315].includes(t.baseRotation)) this.b.push(new Block(Math.floor(tank.x/100)*100-100, Math.floor(tank.y/100)*100, 100, type, team, this));
+        if ((tank.y+80)%100>80 && [135, 180, 225].includes(t.baseRotation)) this.b.push(new Block(Math.floor(tank.x/100)*100, Math.floor(tank.y/100)*100+100, 100, type, team, this));
+        if ((tank.y)%100<20 && [315, 0, 45].includes(t.baseRotation)) this.b.push(new Block(Math.floor(tank.x/100)*100, Math.floor(tank.y/100)*100-100, 100, type, team, this));
+      } else if (t.immune && t.class === 'builder') { // OPTIMIZE fire boost 
+        this.b.forEach(b => {
+          if (!Math.sqrt(Math.pow(t.x-b.x, 2)+Math.pow(t.y-b.y, 2)) < 100) return;
+          b.hp = Math.min(b.maxHp, b.hp+10);
+          b.s = true;
+          clearTimeout(b.bar);
+          b.bar = setTimeout(() => {
+            b.s = false;
+          }, 3000);
+        });
+      }
+      if (data.use.includes('dynamite')) {
+        this.s.forEach(s => {
+          if (!this.getUsername(s.team) === t.username || s.type !== 'dynamite') return;
+          this.d.push(new Damage(s.x-100, s.y-100, 200, 200, 100, s.team, this));
+          setTimeout(s.destroy);
+        });
+      }
+      if (data.user.includes('toolkit')) {
+        if (t.healInterval) {
+          t.healInterval = clearInterval(t.healInterval);
+          clearTimeout(t.healTimeout);
+        } else {
+          t.healInterval = setInterval(() => {
+            t.hp = Math.min(t.maxHp, t.hp+1);
+            this.ai.forEach(a => {
+              if (this.getUsername(a.team) === t.username) a.hp = Math.min(600, a.hp+1);
+            });
+          }, 100);
+          t.healTimeout = setTimeout(() => {
+            t.hp = t.maxHp;
+            this.ai.forEach(a => {
+              if (this.getUsername(a.team) === t.username) a.hp = Math.min(600, a.hp+1);
+            });
+            t.healInterval = clearInterval(t.healInterval);
+          }, 7500);
         }
-        this.pt[l].invis = tank.invis;
-        if (!this.pt[l].grapple) {
-          if (this.pt[l].x !== tank.x) {
-            this.pt[l].x = tank.x;
-            doTankUpdate = true;
-          }
-          if (this.pt[l].y !== tank.y) {
-            this.pt[l].y = tank.y;
-            doTankUpdate = true;
-          }
-        }
-        if (this.pt[l].r !== tank.r) {
-          this.pt[l].r = tank.r;
-          doTankUpdate = true;
-        }
-        if (!this.pt[l].ded) {
-          if (tank.immune && this.pt[l].class === 'fire') {
-            var team = this.parseTeamExtras(this.pt[l].team), type = 'fire';
-            if ((tank.x+80)%100>80 && [45, 90, 135].includes(tank.baseRotation)) this.b.push(new Block(Math.floor(tank.x/100)*100+100, Math.floor(tank.y/100)*100, 100, type, team, this));
-            if ((tank.x)%100<20 && [225, 270, 315].includes(tank.baseRotation)) this.b.push(new Block(Math.floor(tank.x/100)*100-100, Math.floor(tank.y/100)*100, 100, type, team, this));
-            if ((tank.y+80)%100>80 && [135, 180, 225].includes(tank.baseRotation)) this.b.push(new Block(Math.floor(tank.x/100)*100, Math.floor(tank.y/100)*100+100, 100, type, team, this));
-            if ((tank.y)%100<20 && [315, 0, 45].includes(tank.baseRotation)) this.b.push(new Block(Math.floor(tank.x/100)*100, Math.floor(tank.y/100)*100-100, 100, type, team, this));
-          }
-          if (tank.immune && this.pt[l].class === 'builder') {
-            A.each(this.b, function(i, pt) {
-              if (Math.sqrt(Math.pow(pt.x-this.x, 2)+Math.pow(pt.y-this.y, 2)) < 100) {
-                this.hp = Math.min(this.maxHp, this.hp-1000);
-                this.s = true;
-                clearTimeout(this.bar);
-                this.bar = setTimeout(function() {
-                  this.s = false;
-                }.bind(this), 3000);
-              }
-            }, null, null, this.pt[l]);
-          }
-          if (this.pt[l].baseFrame !== tank.baseFrame) {
-            this.pt[l].baseFrame = tank.baseFrame;
-            doTankUpdate = true;
-          }
-          if (tank.use.includes('dynamite')) { // dynamite
-            A.each(this.s, function(i, t, host) {
-              if (host.getUsername(this.team) === t.username) {
-                host.d.push(new Damage(this.x-100, this.y-100, 200, 200, 100, this.team, host));
-                this.destroy();
-                i--;
-              }
-            }, 'type', 'dynamite', this.pt[l], this);
-          }
-          if (tank.fire.length > 0) {
-            this.pt[l].pushback = -6;
-            var q = 0;
-            while (q<tank.fire.length) {
-              this.s.push(new Shot(this.pt[l].x+40, this.pt[l].y+40, tank.fire[q].x, tank.fire[q].y, tank.fire[q].type, tank.fire[q].r, tank.fire[q].type === 'grapple' ? this.pt[l].username : this.parseTeamExtras(this.pt[l].team), this));
-              q++;
-            }
-            doTankUpdate = true;
-          }
-          if (tank.use.includes('toolkit')) {
-            if (!this.pt[l].healInterval) {
-              this.pt[l].healInterval = setInterval(function(host) {
-                this.hp = Math.min(this.maxHp, this.hp+1);
-                A.each(host.ai, function(i, t) {if (this.host.getUsername(this.team) === t.username) this.hp = Math.min(600, this.hp+1)}, null, null, this);
-              }.bind(this.pt[l]), 100, this);
-              this.pt[l].healTimeout = setTimeout(function(host) {
-                this.hp = this.maxHp;
-                A.each(host.ai, function(i, t) {if (this.host.getUsername(this.team) === t.username) this.hp = 600}, null, null, this);
-                clearInterval(this.healInterval);
-                this.healInterval = undefined;
-              }.bind(this.pt[l]), 7500, this);
-            } else {
-              clearInterval(this.pt[l].healInterval);
-              clearTimeout(this.pt[l].healTimeout);
-              this.pt[l].healInterval = undefined;
-            }
-            doTankUpdate = true;
-          }
-          if (tank.use.includes('tape')) {
-            this.pt[l].hp = Math.min(this.pt[l].maxHp, this.pt[l].hp+this.pt[l].maxHp/4);
-            A.each(this.ai, function(i, t) {if (this.host.getUsername(this.team) === t.username) this.hp = Math.min(600, this.hp+150)}, null, null, this.pt[l]);
-          }
-          if (tank.use.includes('glu')) {
-            clearInterval(this.pt[l].gluInterval);
-            clearTimeout(this.pt[l].gluTimeout);
-            this.pt[l].gluInterval = setInterval(function(host) {
-              this.hp = Math.min(this.maxHp, this.hp+3);
-              A.each(host.ai, function(i, t) {if (this.host.getUsername(this.team) === t.username) this.hp = Math.min(600, this.hp+3)}, null, null, this);
-            }.bind(this.pt[l]), 100, this);
-            this.pt[l].gluTimeout = setTimeout(function() {clearInterval(this.gluInterval)}.bind(this.pt[l]), 5000);
-          }
-          if (tank.use.includes('block')) {
-            var key = {strong: 200, weak: 100, gold: 300, mine: 0, spike: 0, fortress: 400}, team = this.pt[l].team;
-            if (tank.r >= 337.5 || tank.r < 22.5) this.b.push(new Block(this.pt[l].x-10, this.pt[l].y+80, key[tank.blockType], tank.blockType, team, this));
-            if (tank.r >= 22.5 && tank.r < 67.5) this.b.push(new Block(this.pt[l].x-100, this.pt[l].y+80, key[tank.blockType], tank.blockType, team, this));
-            if (tank.r >= 67.5 && tank.r < 112.5) this.b.push(new Block(this.pt[l].x-100, this.pt[l].y-10, key[tank.blockType], tank.blockType, team, this));
-            if (tank.r >= 112.5 && tank.r < 157.5) this.b.push(new Block(this.pt[l].x-100, this.pt[l].y-100, key[tank.blockType], tank.blockType, team, this));
-            if (tank.r >= 157.5 && tank.r < 202.5) this.b.push(new Block(this.pt[l].x-10, this.pt[l].y-100, key[tank.blockType], tank.blockType, team, this));
-            if (tank.r >= 202.5 && tank.r < 247.5) this.b.push(new Block(this.pt[l].x+80, this.pt[l].y-100, key[tank.blockType], tank.blockType, team, this));
-            if (tank.r >= 247.5 && tank.r < 292.5) this.b.push(new Block(this.pt[l].x+80, this.pt[l].y-10, key[tank.blockType], tank.blockType, team, this));
-            if (tank.r >= 292.5 && tank.r < 337.5) this.b.push(new Block(this.pt[l].x+80, this.pt[l].y+80, key[tank.blockType], tank.blockType, team, this));
-            var b = this.b[this.b.length-1];
-            doTankUpdate = true;
-          }
-          if (tank.use.includes('flashbang')) {
-            A.each(this.pt, function(i, t) {
-              if (A.collider(this.x-860, this.y-560, 1800, 1200, t.x, t.y, 80, 80)) {
-                if (this.username !== t.username) this.flashbanged = true;
-                clearTimeout(this.flashbangTimeout);
-                this.flashbangTimeout = setTimeout(function() {this.flashbanged = false}.bind(this), 1000);
-              }
-            }, null, null, this.pt[l]);
-          }
+      }
+      if (data.use.includes('tape')) {
+        t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
+        this.ai.forEach(a => {
+          if (this.getUsername(a.team) === t.username) a.hp = Math.min(600, a.hp+150);
+        });
+      }
+      if (data.use.includes('glu')) {
+        clearInterval(t.gluInterval);
+        clearTimeout(t.gluTimeout);
+        t.gluInterval = setInterval(() => {
+          t.hp = Math.min(t.maxHp, t.hp+3);
+          this.ai.forEach(a => {
+            if (this.getUsername(a.team) === t.username) a.hp = Math.min(600, a.hp+3);
+          });
+        }, 100);
+        t.gluTimeout = setTimeout(() => {
+          clearInterval(t.gluInterval);
+        }, 5000);
+      }
+      if (data.use.includes('block')) {
+        var key = {strong: 200, weak: 100, gold: 300, mine: 0, spike: 0, fortress: 400}, team = t.team;
+        if (data.r >= 337.5 || data.r < 22.5) this.b.push(new Block(t.x-10, t.y+80, key[data.blockType], data.blockType, team, this));
+        if (data.r >= 22.5 && data.r < 67.5) this.b.push(new Block(t.x-100, t.y+80, key[data.blockType], data.blockType, team, this));
+        if (data.r >= 67.5 && data.r < 112.5) this.b.push(new Block(t.x-100, t.y-10, key[data.blockType], data.blockType, team, this));
+        if (data.r >= 112.5 && data.r < 157.5) this.b.push(new Block(t.x-100, t.y-100, key[data.blockType], data.blockType, team, this));
+        if (data.r >= 157.5 && data.r < 202.5) this.b.push(new Block(t.x-10, t.y-100, key[data.blockType], data.blockType, team, this));
+        if (data.r >= 202.5 && data.r < 247.5) this.b.push(new Block(t.x+80, t.y-100, key[data.blockType], data.blockType, team, this));
+        if (data.r >= 247.5 && data.r < 292.5) this.b.push(new Block(t.x+80, t.y-10, key[data.blockType], data.blockType, team, this));
+        if (data.r >= 292.5 && data.r < 337.5) this.b.push(new Block(t.x+80, t.y+80, key[data.blockType], data.blockType, team, this));
+      }
+      if (data.use.includes('flashbang')) {
+        this.pt.forEach(tank => {
+          if (!A.collider(tank.x-860, tank.y-560, 1800, 1200, t.x, t.y, 80, 80) || tank.username === t.username) return;
+          tank.flashbanged = true;
+          clearTimeout(tank.flashbangTimeout);
+          tank.flashbangTimeout = setTimeout(() => {
+            tank.flashbanged = false;
+          }, 1000);
+        });
+      }
+      if (data.use.includes('bomb')) {
+        this.b.forEach(b => {
+          if (A.collider(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) 
+        });
+      }
+      if (data.fire.length) {
+        t.pushback = -6;
+        data.fire.forEach(s => {
+          this.s.push(new Shot(t.x+40, t.y+40, s.x, s.y, s.type, s.r, s.type === 'grapple' ? t.username : this.parseTeamExtras(t.team), this));
+        });
+      }
+      
+    });
+
           if (tank.use.includes('bomb')) {
             A.each(this.b, function(i, t) {if (A.collider(t.x, t.y, 80, 80, this.x, this.y, 100, 100)) setTimeout(this.destroy.bind(this))}, null, null, this.pt[l]);
             doTankUpdate = true;
