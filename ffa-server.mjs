@@ -133,8 +133,8 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) =>
       }
       servers[socket.room].logs.push({m: '['+socket.username+'] '+msg, c: '#ffffff'});
     } else if (data.type === 'command') {
-      if (typeof Commands[data.data[0].replace('/', '')] === 'function') {
-        Commands[data.data[0].replace('/', '')].bind(socket)(data.data);
+      if (typeof Comands[data.data[0].replace('/', '')] === 'function') {
+        Comands[data.data[0].replace('/', '')].bind(socket)(data.data);
       } else return socket.send({status: 'error', message: 'Command not found.'});
     } else if (data.type === 'stats') {
       var players = [];
