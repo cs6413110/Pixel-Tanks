@@ -558,7 +558,7 @@ class Engine {
           setTimeout(s.destroy);
         });
       }
-      if (data.user.includes('toolkit')) {
+      if (data.use.includes('toolkit')) {
         if (t.healInterval) {
           t.healInterval = clearInterval(t.healInterval);
           clearTimeout(t.healTimeout);
@@ -650,7 +650,7 @@ class Engine {
         this.logs.push({c: '#ffffff', m: 'attempt airstrike at '+data.airstrike.x+', '+data.airstrike.y});
         this.b.push(new Block(data.airstrike.x, data.airstrike.y, Infinity, 'airstrike', this.parseTeamExtras(t.team), this));
       }
-      if (data.fire.length) {
+      if (data.fire.length > 0) {
         t.pushback = -6;
         data.fire.forEach(s => {
           this.s.push(new Shot(t.x+40, t.y+40, s.x, s.y, s.type, s.r, s.type === 'grapple' ? t.username : this.parseTeamExtras(t.team), this));
