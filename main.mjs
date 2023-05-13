@@ -16,19 +16,17 @@ var db, tokens = [], sockets = [], auth = (token, username) => {
   var a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("");
 }, routes = {
   auth: async (data, socket) => {
-    if (data.username === '' || !data.username || data.username.includes(' ') || data.username.includes(':')) return socket.send({status: 'error', message: 'Invalid username.'});
+    if (['', ' ', undefined].includes(data.username) || data.username.includes(' ') || data.username.includes(':')) return socket.send({status: 'error', message: 'Invalid username.'});
     if (data.username !== filter.clean(data.username)) return socket.send({status: 'error', message: 'Username contains inappropriate word.'});
     var item = await db.findOne({username: data.username}), token = tokgen.generate();
     if (data.type === 'signup') {
       if (item !== null) return socket.send({status: 'error', message: 'This account already exists.'});
-      await db.insertOne({username: data.username, password: data.password, playerdata: '{}'})
-      socket.send({status: 'success', token: token});
+      await db.insertOne({username: data.username, password: data.password, playerdata: '{}'});
     } else if (data.type === 'login') {
       if (item === null) return socket.send({status: 'error', message: 'This account does not exist.'});
-      if (item.password === data.password) {
-        socket.send({status: 'success', token: token});
-      } else return socket.send({status: 'error', message: 'Incorrect password.'});
+      if (item.password !== data.password) return socket.send({status: 'error', message: 'Incorrect password.'});
     } else return socket.destroy();
+    socket.send({status: 'success', token: token});
     tokens.push({username: data.username, token: token});
   },
   database: async (data, socket) => {
