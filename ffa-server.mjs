@@ -620,53 +620,43 @@ class Engine {
       }
       if (data.use.includes('bomb')) {
         this.b.forEach(b => {
-          if (A.collider(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) 
+          if (A.collider(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) setTimeout(b.destroy);
         });
+      }
+      if (data.use.includes('turret')) {
+        this.ai.forEach(a => {
+          if (this.getUsername(a.team) === t.username) setTimeout(() => {
+            this.ai.splice(this.ai.indexOf(a), 1);
+          });
+          this.ai.push(new Ai(t.x, t.y, 0, t.team, this));
+        });
+      }
+      if (data.use.includes('buff')) {
+        t.buff = true;
+        setTimeout(() => {
+          t.buff = false;
+        }, 10000);
+      }
+      if (data.use.includes('healSwitch')) {
+        var a = [];
+        this.pt.forEach(tank => {
+          if (this.getTeam(tank.team) === this.getTeam(t.team)) a.push(username);
+        }});
+        t.healing = a[(a.indexOf(t.healing)+1)%a.length]; //lots of brain cells died for this line of code <R.I.P>
+      }
+      if (data.use.includes('mine')) this.b.push(new Block(t.x, t.y, 0, 'mine', t.team, this));
+      if (data.use.includes('shield')) t.shields = Math.min(500, t.shields+100);
+      if (data.airstrike) {
+        this.logs.push({c: '#ffffff', m: 'attempt airstrike at '+data.airstrike.x+', '+data.airstrike.y});
+        this.b.push(new Block(data.airstrike.x, data.airstrike.y, Infinity, 'airstrike', this.parseTeamExtras(t.team), this));
       }
       if (data.fire.length) {
         t.pushback = -6;
         data.fire.forEach(s => {
           this.s.push(new Shot(t.x+40, t.y+40, s.x, s.y, s.type, s.r, s.type === 'grapple' ? t.username : this.parseTeamExtras(t.team), this));
         });
-      }
-      
+      }   
     });
-
-          if (tank.use.includes('bomb')) {
-            A.each(this.b, function(i, t) {if (A.collider(t.x, t.y, 80, 80, this.x, this.y, 100, 100)) setTimeout(this.destroy.bind(this))}, null, null, this.pt[l]);
-            doTankUpdate = true;
-          }
-          if (tank.use.includes('turret')) {
-            A.each(this.ai, function(i, t) {
-              if (this.host.getUsername(this.team) === t.username) {
-                this.host.ai.splice(i, 1);
-                i--;
-              }
-            }, null, null, this.pt[l]);
-            this.ai.push(new Ai(this.pt[l].x, this.pt[l].y, 0, this.pt[l].team, this));
-          }
-          if (tank.use.includes('buff')) {
-            this.pt[l].buff = true;
-            setTimeout(function() {this.buff = false}.bind(this.pt[l]), 10000);
-          }
-          if (tank.use.includes('healSwitch')) {
-            var a = [];
-            A.each(this.pt, function(i, t, host, a) {if (host.getTeam(this.team) === host.getTeam(t.team)) a.push(this.username)}, null, null, this.pt[l], this, a);
-            this.pt[l].healing = a[(a.indexOf(this.pt[l].healing)+1)%a.length]; //lots of brain cells died for this line of code <R.I.P>
-          }
-          if (tank.use.includes('mine')) {
-            this.b.push(new Block(this.pt[l].x, this.pt[l].y, 0, 'mine', this.pt[l].team, this));
-          }
-          if (tank.use.includes('shield')) this.pt[l].shields = Math.min(500, this.pt[l].shields+100);
-          if (tank.airstrike) {
-            this.logs.push({c: '#ffffff', m: 'attempt airstrike at '+tank.airstrike.x+', '+tank.airstrike.y});
-            this.b.push(new Block(tank.airstrike.x, tank.airstrike.y, Infinity, 'airstrike', this.parseTeamExtras(this.pt[l].team), this));
-          }
-        }
-        if (doTankUpdate) this.pt[l].deathsPerMovement = 0;
-      }
-      l++;
-    }
   }
 
   send() {
