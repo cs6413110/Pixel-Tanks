@@ -601,15 +601,13 @@ class Engine {
         }, 5000);
       }
       if (data.use.includes('block')) {
-        var key = {strong: 200, weak: 100, gold: 300, mine: 0, spike: 0, fortress: 400}, team = t.team;
-        if (data.r >= 337.5 || data.r < 22.5) this.b.push(new Block(t.x-10, t.y+80, key[data.blockType], data.blockType, team, this));
-        if (data.r >= 22.5 && data.r < 67.5) this.b.push(new Block(t.x-100, t.y+80, key[data.blockType], data.blockType, team, this));
-        if (data.r >= 67.5 && data.r < 112.5) this.b.push(new Block(t.x-100, t.y-10, key[data.blockType], data.blockType, team, this));
-        if (data.r >= 112.5 && data.r < 157.5) this.b.push(new Block(t.x-100, t.y-100, key[data.blockType], data.blockType, team, this));
-        if (data.r >= 157.5 && data.r < 202.5) this.b.push(new Block(t.x-10, t.y-100, key[data.blockType], data.blockType, team, this));
-        if (data.r >= 202.5 && data.r < 247.5) this.b.push(new Block(t.x+80, t.y-100, key[data.blockType], data.blockType, team, this));
-        if (data.r >= 247.5 && data.r < 292.5) this.b.push(new Block(t.x+80, t.y-10, key[data.blockType], data.blockType, team, this));
-        if (data.r >= 292.5 && data.r < 337.5) this.b.push(new Block(t.x+80, t.y+80, key[data.blockType], data.blockType, team, this));
+        const coordinates = [{r: [337.5, 360], dx: -10, dy: 80}, {r: [0, 22.5], dx: -10, dy: 80}, {r: [22.5, 67.5], dx: -100, dy: 80}, {r: [67.5, 112.5], dx: -100, dy: -10}, {r: [112.5, 157.5], dx: -100, dy: -100}, {r: [157.5, 202.5], dx: -10, dy: -100}, {r: [202.5, 247.5], dx: 80, dy: -100}, {r: [247.5, 292.5], dx: 80, dy: -10}, {r: [292.5, 337.5], dx: 80, dy: 80}];
+        for (const coord of coordinates) {
+          if (data.r >= coord.r[0] || data.r < coord.r[1]) {
+            this.b.push(new Block(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, mine: 0, spike: 0, fortress: 400}[data.blockType], data.blockType, t.team, this));
+            break;
+          }
+        }
       }
       if (data.use.includes('flashbang')) {
         this.pt.forEach(tank => {
@@ -629,7 +627,7 @@ class Engine {
       if (data.use.includes('turret')) {
         this.ai.forEach(a => {
           if (this.getUsername(a.team) === t.username) setTimeout(() => {
-            this.ai.splice(this.ai.indexOf(a), 1);
+            this.ai.delete(a);
           });
           this.ai.push(new Ai(t.x, t.y, 0, t.team, this));
         });
@@ -663,32 +661,36 @@ class Engine {
   }
 
   send() {
-    A.each(this.pt, function(i, host) {
+    const view = {x: -860, y: -560, w: 1880, h: 1280};
+    this.pt.forEach(t => {
       outgoing_per_second++;
-      var message = {};
-        message.blocks = [];
-        A.each(host.b, function(i, b, t) {
-          if (A.collider(this.x, this.y, 100, 100, t.x-860, t.y-560, 1880, 1280)) b.push(JSON.parse(JSON.stringify(this, (key, value) => {return ['host', 'bar', 'sd'].includes(key) ? undefined : value})));
-        }, null, null, message.blocks, this);
-        message.tanks = [];
-        A.each(host.pt, function(i, pt, t) {
-          if (A.collider(this.x, this.y, 80, 80, t.x-860, t.y-560, 1880, 1280)) pt.push(JSON.parse(JSON.stringify(this, (key, value) => {return ['updates', 'socket', 'render', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluInterval', 'gluTimeout', 'fireTimeout', 'fireInterval'].includes(key) ? undefined : value})));
-        }, null, null, message.tanks, this);
-        message.ai = [];
-        A.each(host.ai, function(i, ai, t) {
-          if (A.collider(this.x, this.y, 80, 80, t.x-860, t.y-560, 1880, 1280)) ai.push(JSON.parse(JSON.stringify(this, (key, value) => {return ['team', 'host', 'canFire', 'target'].includes(key) ? undefined : value})));
-        }, null, null, message.ai, this);
-        message.bullets = [];
-        A.each(host.s, function(i, s, t) {
-          if (A.collider(this.x, this.y, 10, 10, t.x-860, t.y-560, 1880, 1280)) s.push(JSON.parse(JSON.stringify(this, (key, value) => {return ['host', 'd', 'damage', 'ra', 'target', 'offset', 'settings', 'md'].includes(key) ? undefined: value})));
-        }, null, null, message.bullets, this);
-        message.explosions = [];
-        A.each(host.d, function(i, d, t) {
-          if (A.collider(this.x, this.y, this.w, this.h, t.x-860, t.y-560, 1880, 1280)) d.push({...this, host: 'x', a: 'x', c: 'x'});
-        }, null, null, message.explosions, this);
-        message.logs = host.logs;
-      if (Object.values(message).length > 0) this.socket.send({...message, event: 'hostupdate'});
-    }, null, null, this);
+      const message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, event: 'hostupdate'};
+      const key = {'Block': 100, 'Shot': 10, 'object'}
+      [...this.b, ...this.pt, ...this.ai, ...this.s, ...this.d].forEach(e => {
+        
+      });
+      this.b.forEach(b => {
+        if (A.collider(b.x, b.y, 100, 100, t.x, t.y, b.x, b.y, view)) message.blocks.push(b);
+      });
+
+      this.pt.forEach(pt => {
+        if (A.collider(pt.x, pt.y, 80, 80, t.x, t.y, pt.x, pt.y, view)) message.tanks.push(pt);
+      });
+
+      this.ai.forEach(ai => {
+        if (A.collider(ai.x, ai.y, 80, 80, t.x, t.y, ai.x, ai.y, view)) message.ai.push(ai);
+      });
+
+      this.s.forEach(s => {
+        if (A.collider(s.x, s.y, 10, 10, t.x, t.y, s.x, s.y, view)) message.bullets.push(s);
+      });
+
+      this.d.forEach(d => {
+        if (A.collider(d.x, d.y, d.w, d.h, t.x, t.y, d.x, d.y, view)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
+      });
+
+      this.socket.send(message);
+    });
   }
 
   damagePlayer(victim, damage) {
