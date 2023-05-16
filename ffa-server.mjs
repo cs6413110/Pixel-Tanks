@@ -443,52 +443,31 @@ class Engine {
   }
 
   grapple(t) {
-    var mpf = 20;
-    var d = Math.sqrt(Math.pow((t.grapple.target.x + ((t.grapple.target.username !== undefined) ? 40 : 50)) - (t.x + 40), 2) + Math.pow((t.grapple.target.y + ((t.grapple.target.username !== undefined) ? 40 : 50)) - (t.y + 40), 2));
-    var x = t.x + ((t.grapple.target.x + ((t.grapple.target.username !== undefined) ? 40 : 50)) - (t.x + 40)) * (mpf / d);
-    var y = t.y + ((t.grapple.target.y + ((t.grapple.target.username !== undefined) ? 40 : 50)) - (t.y + 40)) * (mpf / d);
-    if (d < mpf) {
-      x = (t.grapple.target.x + ((t.grapple.target.username !== undefined) ? 40 : 50)) - 40;
-      y = (t.grapple.target.y + ((t.grapple.target.username !== undefined) ? 40 : 50)) - 40;
+    const target = t.grapple.target;
+    const dx = target.x - t.x;
+    const dy = target.y - t.y;
+    const distance = Math.sqrt(dx*dx+dy*dy);
+
+    if (distance > mpf) {
+      const angle = Math.atan2(dy, dx);
+      const mx = Math.cos(angle)*mpf;
+      const my = Math.sin(angle)*mpf;
+
+      if (collision(t.x+mx, t.y)) t.x += mx;
+      if (collision(t.x, t.y+my)) t.y += my;
+      t.grapple.bullet.sx = t.x + 40;
+      t.grapple.bullet.sy = t.y + 40;
+      t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
+      if (!collision(t.x+mx, t.y) && !collision(t.x, t.y+my)) {
+        t.grapple.bullet.destroy();
+        t.grapple = false;
+      }
     }
-    var mx = false, my = false;
-    if (!this.collision(x, t.y)) {
-      x = t.x;
-      mx = true;
-    }
-    if (!this.collision(t.x, y)) {
-      y = t.y;
-      my = true;
-    }
-    if (Math.round(x + 40) === Math.round((t.grapple.target.x + ((t.grapple.target.username !== undefined) ? 40 : 50)))) {
-      mx = true;
-    }
-    if (Math.round(y + 40) === Math.round((t.grapple.target.y + ((t.grapple.target.username !== undefined) ? 40 : 50)))) {
-      my = true;
-    }
-    t.x = x;
-    t.y = y;
-    t.grapple.bullet.sx = t.x + 40;
-    t.grapple.bullet.sy = t.y + 40;
-    if (mx && my) {
-      t.grapple.bullet.destroy();
-      t.grapple = false;
-    }
-    t.socket.send({
-      event: 'override',
-      data: [{
-        key: 'x',
-        value: x,
-      }, {
-        key: 'y',
-        value: y,
-      }],
-    });
-  } // OPTIMIZE fix plz future me ;D
+  }
 
   collision(x, y) {
     if (x < 0 || y < 0 || x+80 > 3000 || y+80 > 3000) return false;
-    return A.each(this.b, function(i, x, y) {if (A.collider(x, y, 80, 80, this.x, this.y, 100, 100) && this.c) return false}, null, null, x, y) === undefined ? true : false;
+    return A.each(this.b, function(i, x, y) {if (A.collider(x, y, 80, 80, this.x, this.y, 100, 100) && this.c) return false}, null, null, x, y) === undefined;
   }
 
   levelReader(level) {
