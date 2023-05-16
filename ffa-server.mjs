@@ -665,27 +665,27 @@ class Engine {
       outgoing_per_second++;
       var message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, event: 'hostupdate'};
       this.b.forEach(b => {
-        if (A.collider(b.x, b.y, 100, 100, t.x, t.y, b.x, b.y, view)) message.blocks.push(JSON.parse(JSON.stringify(b, (key, value) => {
+        if (A.collider(b.x, b.y, 100, 100, t.x+view.x, t.y+view.y, view.w, view.h)) message.blocks.push(JSON.parse(JSON.stringify(b, (key, value) => {
           return ['host', 'bar', 'sd'].includes(key) ? undefined : value;
         })));
       });
       this.pt.forEach(pt => {
-        if (A.collider(pt.x, pt.y, 80, 80, t.x, t.y, pt.x, pt.y, view)) message.tanks.push(JSON.parse(JSON.stringify(pt, (key, value) => {
+        if (A.collider(pt.x, pt.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.tanks.push(JSON.parse(JSON.stringify(pt, (key, value) => {
           return ['updates', 'socket', 'render', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluInterval', 'gluTimeout', 'fireTimeout', 'fireInterval'].includes(key) ? undefined : value;
         })));
       });
       this.ai.forEach(ai => {
-        if (A.collider(ai.x, ai.y, 80, 80, t.x, t.y, ai.x, ai.y, view)) message.ai.push(JSON.parse(JSON.stringify(ai, (key, value) => {
+        if (A.collider(ai.x, ai.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.ai.push(JSON.parse(JSON.stringify(ai, (key, value) => {
           return ['team', 'host', 'canFire', 'target'].includes(key) ? undefined : value;
         })));
       });
       this.s.forEach(s => {
-        if (A.collider(s.x, s.y, 10, 10, t.x, t.y, s.x, s.y, view)) message.bullets.push(JSON.parse(JSON.stringify(s, (key, value) => {
+        if (A.collider(s.x, s.y, 10, 10, t.x+view.x, t.y+view.y, view.w, view.h)) message.bullets.push(JSON.parse(JSON.stringify(s, (key, value) => {
           return ['host', 'd', 'damage', 'ra', 'target', 'offset', 'settings', 'md'].includes(key) ? undefined : value;
         })));
       });
       this.d.forEach(d => {
-        if (A.collider(d.x, d.y, d.w, d.h, t.x, t.y, d.x, d.y, view)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
+        if (A.collider(d.x, d.y, d.w, d.h, t.x+view.x, t.y+view.y, view.w, view.h)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
       });
       t.socket.send(message);
     });
