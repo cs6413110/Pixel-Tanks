@@ -38,6 +38,39 @@ var sockets = [], servers = [], incoming_per_second = 0, outgoing_per_second = 0
   ['                      ### #   ','      ####       # ##         ','   #      ## #  ##        #  #','#        ###  ######      # # ','     ###            ##     ## ','   ##                ##  ###  ','  #              #            ',' #      #   #       ###   #  #','#     ##         ##   ##      ','      #                       ','           #### #       #    #','  #       #      #         # #','  ###  ##      #  #     #    #','    #  #       #   #        # ','    ### #      #         ## # ','    # #        #  #         # ','     ##  #     #         #    ','     ##  #     #         #    ','     ##   #    #        #  #  ','      ##     #         #  ##  ','        # #    #     ##   #   ',' # ###  #   #     #       #   ',' #      ##   #   #      ###  #',' #      # #  ###  ### ##     #','       #      # #####       # ','  ####        #            ## ','  #   ##                 ##   ',' ##    #   # ## #        #    ','  #           ##              ','                              '],
 ];
 
+function removeCircular(obj) {
+  const cache = new Set();
+
+  function replacer(key, value) {
+    if (typeof value === 'object' && value !== null) {
+      if (cache.has(value)) {
+        // Circular reference found, remove the property
+        return undefined;
+      }
+      cache.add(value);
+    }
+    return value;
+  }
+
+  function reviver(key, value) {
+    if (typeof value === 'object' && value !== null) {
+      if (Array.isArray(value)) {
+        value.forEach((element, index) => {
+          value[index] = reviver(index, element);
+        });
+      } else {
+        Object.keys(value).forEach((key) => {
+          value[key] = reviver(key, value[key]);
+        });
+      }
+    }
+    return value;
+  }
+
+  const serialized = JSON.stringify(obj, replacer);
+  return JSON.parse(serialized, reviver);
+}
+
 if (SETTINGS.log_strain) setInterval(() => {
   console.log('Incoming: ' + incoming_per_second + ' | Outgoing: ' + outgoing_per_second);
   incoming_per_second = 0;
@@ -679,15 +712,7 @@ class Engine {
       this.d.forEach(d => {
         if (A.collider(d.x, d.y, d.w, d.h, t.x, t.y, d.x, d.y, view)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
       });
-      for (const property in message) {
-        if (typeof message[property] === 'object') message[property].forEach(e => {
-          e = {...e}
-          for (const prop in e) {
-            if (['host', 'bar', 'sd', 'updates', 'socket', 'render', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluInterval', 'gluTimeout', 'fireTimeout', 'fireInterval', 'team', 'host', 'canFire', 'target', 'host', 'd', 'damage', 'ra', 'target', 'offset', 'settings', 'md', 'a', 'c'].includes(prop)) delete e[prop];
-          }
-        });
-      }
-      t.socket.send(message);
+      t.socket.send(removeCircular(message));
     });
   }
 
