@@ -38,18 +38,6 @@ var sockets = [], servers = [], incoming_per_second = 0, outgoing_per_second = 0
   ['                      ### #   ','      ####       # ##         ','   #      ## #  ##        #  #','#        ###  ######      # # ','     ###            ##     ## ','   ##                ##  ###  ','  #              #            ',' #      #   #       ###   #  #','#     ##         ##   ##      ','      #                       ','           #### #       #    #','  #       #      #         # #','  ###  ##      #  #     #    #','    #  #       #   #        # ','    ### #      #         ## # ','    # #        #  #         # ','     ##  #     #         #    ','     ##  #     #         #    ','     ##   #    #        #  #  ','      ##     #         #  ##  ','        # #    #     ##   #   ',' # ###  #   #     #       #   ',' #      ##   #   #      ###  #',' #      # #  ###  ### ##     #','       #      # #####       # ','  ####        #            ## ','  #   ##                 ##   ',' ##    #   # ## #        #    ','  #           ##              ','                              '],
 ];
 
-function removeTimers(obj) {
-  for (const prop in obj) {
-    if (typeof obj[prop] === 'object' && obj[prop] !== null) {
-      removeTimers(obj[prop]); // Recursively process nested objects
-    } else if (obj[prop] instanceof setInterval || obj[prop] instanceof setTimeout || prop === 'host') {
-      clearTimeout(obj[prop]);
-      delete obj[prop];
-    }
-  }
-  return obj;
-}
-
 if (SETTINGS.log_strain) setInterval(() => {
   console.log('Incoming: ' + incoming_per_second + ' | Outgoing: ' + outgoing_per_second);
   incoming_per_second = 0;
@@ -691,7 +679,14 @@ class Engine {
       this.d.forEach(d => {
         if (A.collider(d.x, d.y, d.w, d.h, t.x, t.y, d.x, d.y, view)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
       });
-      t.socket.send(removeTimers(message));
+      for (const property of message) {
+        message[property].forEach(e => {
+          for (const prop of e) {
+            if (['host', 'bar', 'sd', 'updates', 'socket', 'render', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluInterval', 'gluTimeout', 'fireTimeout', 'fireInterval', 'team', 'host', 'canFire', 'target', 'host', 'd', 'damage', 'ra', 'target', 'offset', 'settings', 'md', 'a', 'c'].includes(prop)) delete e[prop];
+          }
+        });
+      }
+      t.socket.send(message);
     });
   }
 
