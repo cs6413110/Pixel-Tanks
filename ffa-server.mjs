@@ -448,20 +448,23 @@ class Engine {
     const dy = target.y - t.y;
     const distance = Math.sqrt(dx*dx+dy*dy);
 
-    if (distance > 20) {
+    if (distance > 40) {
       const angle = Math.atan2(dy, dx);
-      const mx = Math.cos(angle)*20;
-      const my = Math.sin(angle)*20;
+      const mx = Math.cos(angle)*40;
+      const my = Math.sin(angle)*40;
 
       if (this.collision(t.x+mx, t.y)) t.x += mx;
       if (this.collision(t.x, t.y+my)) t.y += my;
-      t.grapple.bullet.sx = t.x + 40;
-      t.grapple.bullet.sy = t.y + 40;
+      t.grapple.bullet.sx = t.x+40;
+      t.grapple.bullet.sy = t.y+40;
       t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
       if (!this.collision(t.x+mx, t.y) && !this.collision(t.x, t.y+my)) {
         t.grapple.bullet.destroy();
         t.grapple = false;
       }
+    } else {
+      t.grapple.bullet.destroy();
+      t.grapple = false;
     }
   }
 
