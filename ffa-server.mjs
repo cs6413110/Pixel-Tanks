@@ -42,7 +42,7 @@ function removeTimers(obj) {
   for (const prop in obj) {
     if (typeof obj[prop] === 'object' && obj[prop] !== null) {
       removeTimers(obj[prop]); // Recursively process nested objects
-    } else if (obj[prop] instanceof setInterval || obj[prop] instanceof setTimeout) {
+    } else if (obj[prop] instanceof setInterval || obj[prop] instanceof setTimeout || prop === 'host') {
       clearTimeout(obj[prop]);
       delete obj[prop];
     }
