@@ -468,8 +468,11 @@ class Engine {
   }
 
   collision(x, y) {
-    if (x < 0 || y < 0 || x+80 > 3000 || y+80 > 3000) return false;
-    return A.each(this.b, function(i, x, y) {if (A.collider(x, y, 80, 80, this.x, this.y, 100, 100) && this.c) return false}, null, null, x, y) === undefined;
+    var output = !(x < 0 || y < 0 || x+80 > 3000 || y+80 > 3000);
+    this.b.forEach(b => {
+      if (A.collider(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) output = false;
+    });
+    return output;
   }
 
   levelReader(level) {
