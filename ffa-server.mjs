@@ -680,7 +680,7 @@ class Engine {
         if (A.collider(d.x, d.y, d.w, d.h, t.x, t.y, d.x, d.y, view)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
       });
       for (const property in message) {
-        message[property].forEach(e => {
+        if (typeof message[property] === 'object') message[property].forEach(e => {
           for (const prop in e) {
             if (['host', 'bar', 'sd', 'updates', 'socket', 'render', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluInterval', 'gluTimeout', 'fireTimeout', 'fireInterval', 'team', 'host', 'canFire', 'target', 'host', 'd', 'damage', 'ra', 'target', 'offset', 'settings', 'md', 'a', 'c'].includes(prop)) delete e[prop];
           }
