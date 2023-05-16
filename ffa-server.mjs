@@ -665,30 +665,21 @@ class Engine {
     this.pt.forEach(t => {
       outgoing_per_second++;
       const message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, event: 'hostupdate'};
-      const key = {'Block': 100, 'Shot': 10, 'object'}
-      [...this.b, ...this.pt, ...this.ai, ...this.s, ...this.d].forEach(e => {
-        
-      });
       this.b.forEach(b => {
-        if (A.collider(b.x, b.y, 100, 100, t.x, t.y, b.x, b.y, view)) message.blocks.push(b);
+        if (this.collider(b.x, b.y, 100, 100, t.x, t.y, b.x, b.y, view)) message.blocks.push(b);
       });
-
       this.pt.forEach(pt => {
-        if (A.collider(pt.x, pt.y, 80, 80, t.x, t.y, pt.x, pt.y, view)) message.tanks.push(pt);
+        if (this.collider(pt.x, pt.y, 80, 80, t.x, t.y, pt.x, pt.y, view)) message.tanks.push(pt);
       });
-
       this.ai.forEach(ai => {
-        if (A.collider(ai.x, ai.y, 80, 80, t.x, t.y, ai.x, ai.y, view)) message.ai.push(ai);
+        if (this.collider(ai.x, ai.y, 80, 80, t.x, t.y, ai.x, ai.y, view)) message.ai.push(ai);
       });
-
       this.s.forEach(s => {
-        if (A.collider(s.x, s.y, 10, 10, t.x, t.y, s.x, s.y, view)) message.bullets.push(s);
+        if (this.collider(s.x, s.y, 10, 10, t.x, t.y, s.x, s.y, view)) message.bullets.push(s);
       });
-
       this.d.forEach(d => {
-        if (A.collider(d.x, d.y, d.w, d.h, t.x, t.y, d.x, d.y, view)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
+        if (this.collider(d.x, d.y, d.w, d.h, t.x, t.y, d.x, d.y, view)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
       });
-
       this.socket.send(message);
     });
   }
