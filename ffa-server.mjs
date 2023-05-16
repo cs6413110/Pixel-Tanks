@@ -663,7 +663,7 @@ class Engine {
     const view = {x: -860, y: -560, w: 1880, h: 1280};
     this.pt.forEach(t => {
       outgoing_per_second++;
-      const message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, event: 'hostupdate'};
+      var message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, event: 'hostupdate'};
       this.b.forEach(b => {
         if (A.collider(b.x, b.y, 100, 100, t.x, t.y, b.x, b.y, view)) message.blocks.push(b);
       });
@@ -679,6 +679,7 @@ class Engine {
       this.d.forEach(d => {
         if (A.collider(d.x, d.y, d.w, d.h, t.x, t.y, d.x, d.y, view)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
       });
+      message = {...message};
       for (const property in message) {
         if (typeof message[property] === 'object') message[property].forEach(e => {
           for (const prop in e) {
