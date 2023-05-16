@@ -680,7 +680,7 @@ class Engine {
       this.d.forEach(d => {
         if (A.collider(d.x, d.y, d.w, d.h, t.x, t.y, d.x, d.y, view)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
       });
-      this.socket.send(message);
+      t.socket.send(message);
     });
   }
 
