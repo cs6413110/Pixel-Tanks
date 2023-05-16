@@ -448,10 +448,10 @@ class Engine {
     const dy = target.y - t.y;
     const distance = Math.sqrt(dx*dx+dy*dy);
 
-    if (distance > mpf) {
+    if (distance > 20) {
       const angle = Math.atan2(dy, dx);
-      const mx = Math.cos(angle)*mpf;
-      const my = Math.sin(angle)*mpf;
+      const mx = Math.cos(angle)*20;
+      const my = Math.sin(angle)*20;
 
       if (collision(t.x+mx, t.y)) t.x += mx;
       if (collision(t.x, t.y+my)) t.y += my;
