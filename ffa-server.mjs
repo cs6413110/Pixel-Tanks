@@ -447,7 +447,7 @@ class Engine {
     const dx = target.x - t.x;
     const dy = target.y - t.y;
 
-    if (Math.sqrt(dx*dx+dy*dy) > 60) {
+    if (Math.sqrt(dx*dx+dy*dy) > 80) {
       const angle = Math.atan2(dy, dx);
       const mx = Math.cos(angle)*40;
       const my = Math.sin(angle)*40;
