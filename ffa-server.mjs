@@ -77,16 +77,15 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) =>
       socket.username = data.username;
     }
     if (data.type === 'join') {
+      let joinedServer = false;
       servers.forEach(s => {
-        if (s.pt.length < 10) {
+        if (s.pt.length < 10 && !joinedServer) {
           socket.room = servers.indexOf(s);
           if (s.pt.find(t => t.username === socket.username)) {
-            return socket.send({status: 'error', message: 'You are already in the server!'});
-            setTimeout(() => {
-              socket.destroy();
-            });
+            socket.send({ status: 'error', message: 'You are already in the server!' });
+            return setTimeout(() => { socket.destroy(); });
           }
-          http.get('http://141.148.128.231/verify?username='+socket.username+'&token='+data.token, res => {
+          http.get('http://141.148.128.231/verify?username=' + socket.username + '&token=' + data.token, res => {
             var c = [];
             res.on('data', chunk => {
               c.push(chunk);
@@ -95,19 +94,21 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) =>
               if (Buffer.concat(c).toString() === 'true') {
                 s.add(socket, data.tank);
               } else {
-                return socket.send({status: 'error', message: 'Authentication failure. Your token('+token+') does not match with your username('+socket.username+'). This can be caused by the authentication servers restarting or by modifying the client. Simply log in again to fix this issue.'});
-                setTimeout(() => {
-                  socket.destroy();
+                socket.send({
+                  status: 'error',
+                  message: 'Authentication failure. Your token (' + token + ') does not match with your username (' + socket.username + '). This can be caused by the authentication servers restarting or by modifying the client. Simply log in again to fix this issue.'
                 });
+                setTimeout(() => { socket.destroy(); });
               }
             });
           });
+          joinedServer = true;
         }
       });
       if (socket.room === undefined) {
         servers.push(new FFA());
-        servers[servers.length-1].add(socket, data.tank);
-        socket.room = servers.length-1;
+        servers[servers.length - 1].add(socket, data.tank);
+        socket.room = servers.length - 1;
       }
     } else if (data.type === 'update') {
       servers[socket.room].update(data);
@@ -123,12 +124,15 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) =>
       }
       servers[socket.room].logs.push({m: '['+socket.username+'] '+msg, c: '#ffffff'});
     } else if (data.type === 'command') {
-      if (typeof Commands[data.data[0].replace('/', '')] === 'function') {
-        Commands[data.data[0].replace('/', '')].bind(socket)(data.data);
-      } else return socket.send({status: 'error', message: 'Command not found.'});
+      const commandName = data.data[0].replace('/', '');
+      if (typeof Commands[commandName] === 'function') {
+        Commands[commandName].bind(socket)(data.data);
+      } else socket.send({ status: 'error', message: 'Command not found.' });
     } else if (data.type === 'stats') {
-      var players = [];
-      servers.forEach(s => s.pt.forEach(t => players.push(t.username)));
+      const players = servers.reduce((arr, s) => {
+         arr.push(...s.pt.map(t => t.username));
+         return arr;
+       }, []);
       socket.send({event: 'stats', totalRooms: servers.length, totalPlayers: players.length, players: players, bans: SETTINGS.bans, mutes: SETTINGS.mutes, admins: SETTINGS.admins, out: outgoing_per_second, in: incoming_per_second, sockets: sockets.length});
     } else setTimeout(function() {this.destroy()}.bind(socket));
   });
