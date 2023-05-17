@@ -507,8 +507,10 @@ class Engine {
       t.emote = data.emote;
       t.invis = data.invis;
       t.baseFrame = data.baseFrame;
-      t.x = data.x;
-      t.y = data.y;
+      if (!t.grapple) {
+        t.x = data.x;
+        t.y = data.y;
+      }
       t.r = data.r;
       if (t.ded) return;
       if (t.immune && t.class === 'fire') {
