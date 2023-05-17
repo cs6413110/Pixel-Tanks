@@ -767,34 +767,32 @@ class Block {
     this.type = type;
     this.host = host;
     this.s = false; // show health bar
-    this.c = true; // collision
+    this.c = !['spike', 'mine', 'fire', 'airstrike'].includes(type); // collision
     this.team = team;
-    if (type === 'spike' || type === 'mine' || type === 'fire' || type === 'airstrike') this.c = false;
-    if (['spike', 'mine', 'fire'].includes(type)) this.sd = setTimeout(function() {this.destroy()}.bind(this), type === 'fire' ? 5000 : 30000);
+    if (['spike', 'mine', 'fire'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 5000 : 30000);
     if (type === 'airstrike') {
-      var l = 0;
-      while (l<20) {
-        setTimeout(function() {
-          this.host.d.push(new Damage(this.x+Math.random()*200, this.y+Math.random()*200, 200, 200, 200, this.team, this.host));
-        }.bind(this), 5000+Math.random()*500);
+      for (let i = 0; i < 20; i++) {
+        setTimeout(() => {
+          this.host.d.push(new Damage(this.x + Math.random() * 200, this.y + Math.random() * 200, 200, 200, 200, this.team, this.host));
+        }, 5000 + Math.random() * 500);
         setTimeout(this.destroy.bind(this), 6000);
-        l++;
       }
-    }
-    if (type === 'mine') {
+    } else if (type === 'mine') {
       this.a = false; // armed or not
-      setTimeout(() => {this.a = true}, 3000);
+      setTimeout(() => {
+        this.a = true;
+      }, 3000);
     }
   }
 
   damage(d) {
-    this.hp = Math.min(this.hp-d, this.maxHp);
+    this.hp = Math.max(this.hp - d, 0);
     if (this.hp !== Infinity) {
       this.s = true;
       clearTimeout(this.bar);
-      this.bar = setTimeout(function() {
+      this.bar = setTimeout(() => {
         this.s = false;
-      }.bind(this), 3000);
+      }, 3000);
     }
     if (this.hp <= 0) this.destroy();
   }
@@ -802,7 +800,8 @@ class Block {
   destroy() {
     clearTimeout(this.sd);
     if (this.type === 'mine') this.host.d.push(new Damage(this.x, this.y, 100, 100, 50, this.team, this.host));
-    if (this.host.b.indexOf(this) !== -1) this.host.b.splice(this.host.b.indexOf(this), 1);
+    const index = this.host.b.indexOf(this);
+    if (index !== -1) this.host.b.splice(index, 1);
   }
 }
 
@@ -849,27 +848,16 @@ class Shot {
   }
 
   static calc(x, y, xm, ym) {
-    var sgn, x, y;
-    if (((ym / xm) * -20 - (ym / xm) * 20) < 0) {
-      sgn = -1;
-    } else {
-      sgn = 1;
-    }
-    var x1 = ((20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20) + sgn * -40 * Math.sqrt(1000 * (Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20)) * Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20))) - ((20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * (20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20)))) / (Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20)) * Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20)));
-    var x2 = ((20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20) - sgn * -40 * Math.sqrt(1000 * (Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20)) * Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20))) - ((20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * (20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20)))) / (Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20)) * Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20)));
-    var y1 = (-(20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * -40 + Math.abs(((ym / xm) * -20 - (ym / xm) * 20)) * Math.sqrt(1000 * (Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20)) * Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20))) - ((20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * (20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20)))) / (Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20)) * Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20)));
-    var y2 = (-(20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * -40 - Math.abs(((ym / xm) * -20 - (ym / xm) * 20)) * Math.sqrt(1000 * (Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20)) * Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20))) - ((20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * (20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20)))) / (Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20)) * Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20)));
-    if (ym >= 0) {
-      x = x1*2 + x;
-      y = y1*2 + y;
-    } else {
-      x = x2*2 + x;
-      y = y2*2 + y;
-    }
-    return {
-      x: x,
-      y: y,
-    };
+    const sgn = ((ym / xm) * -20 - (ym / xm) * 20) < 0 ? -1 : 1;
+    const sqrtVal = Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20));
+    const sqrtTerm = Math.sqrt(1000 * (sqrtVal * sqrtVal) - ((20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * (20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20)));
+
+    const x1 = ((20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20) + sgn * -40 * sqrtTerm) / (sqrtVal * sqrtVal);
+    const x2 = ((20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20) - sgn * -40 * sqrtTerm) / (sqrtVal * sqrtVal);
+    const y1 = (-(20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * -40 + Math.abs(((ym / xm) * -20 - (ym / xm) * 20)) * sqrtTerm) / (sqrtVal * sqrtVal);
+    const y2 = (-(20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * -40 - Math.abs(((ym / xm) * -20 - (ym / xm) * 20)) * sqrtTerm) / (sqrtVal * sqrtVal);
+
+    return {x: ym >= 0 ? x1 * 2 + x : x2 * 2 + x, y: ym >= 0 ? y1 * 2 + y : y2 * 2 + y};
   }
 
   collision() {
@@ -960,20 +948,21 @@ class Shot {
   }
 
   update() {
-    this.x = (Date.now()-this.e)/15*this.xm+this.sx;
-    this.y = (Date.now()-this.e)/15*this.ym+this.sy;
-    /*A.assign(this, 'x', (Date.now()-this.e)/15*this.xm+this.sx, 'y', (Date.now()-this.e)/15*this.ym+this.sy);*/
-    this.d = Math.sqrt(Math.pow(this.x-this.sx, 2)+Math.pow(this.y-this.sy, 2));
+    const time = (Date.now() - this.e) / 15;
+    this.x = time * this.xm + this.sx;
+    this.y = time * this.ym + this.sy;
+    this.d = Math.sqrt(Math.pow(this.x - this.sx, 2) + Math.pow(this.y - this.sy, 2));
     if (this.type === 'shotgun') {
-      this.damage = this.md-(this.d/300)*this.md;
-      if (this.d >= 300) return this.destroy();
+      this.damage = this.md - (this.d / 300) * this.md;
+      if (this.d >= 300) this.destroy();
     }
     if (this.type === 'dynamite') this.r += 5;
-    if (this.collision()) return this.destroy();
+    if (this.collision()) this.destroy();
   }
 
   destroy() {
-    if (this.host.s.indexOf(this) !== -1) this.host.s.splice(this.host.s.indexOf(this), 1);
+    const index = this.host.s.indexOf(this);
+    if (index !== -1) this.host.s.splice(index, 1);
   }
 }
 
@@ -997,7 +986,8 @@ class Damage {
   }
 
   destroy() {
-    if (this.host.d.indexOf(this) !== -1) this.host.d.splice(this.host.d.indexOf(this), 1);
+    const index = this.host.d.indexOf(this);
+    if (index !== -1) this.host.d.splice(index, 1);
   }
 }
 
@@ -1212,7 +1202,4 @@ class DUELS extends Engine {
 }
 
 Server.use(Core);
-if (!SETTINGS.export) {
-  Server.get('*', (req, res) => {res.end('This is a Pixel Tanks FFA Server. Connect using WebSocket.')});
-  Server.listen(SETTINGS.port); //  default tanks server ip 15132
-}
+if (!SETTINGS.export) Server.listen(SETTINGS.port);
