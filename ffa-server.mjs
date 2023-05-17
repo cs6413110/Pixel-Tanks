@@ -45,24 +45,15 @@ if (SETTINGS.log_strain) setInterval(() => {
 }, 1000);
 
 setInterval(() => {
-  var l = 0;
-  while (l<SETTINGS.bans.length) {
-    SETTINGS.bans[l].time--;
-    if (SETTINGS.bans[l].time <= 0) {
-      SETTINGS.bans.splice(l, 1);
-      l--;
-    }
-    l++;
-  }
-  var l = 0;
-  while (l<SETTINGS.mutes.length) {
-    SETTINGS.mutes[l].time--;
-    if (SETTINGS.mutes[l].time <= 0) {
-      SETTINGS.mutes.splice(l, 1);
-      l--;
-    }
-    l++;
-  }
+  SETTINGS.bans = SETTINGS.bans.filter(ban => {
+    ban.time--;
+    return ban.time > 0;
+  });
+
+  SETTINGS.mutes = SETTINGS.mutes.filter(mute => {
+    mute.time--;
+    return mute.time > 0;
+  });
 }, 60000);
 
 Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) => {
@@ -447,7 +438,7 @@ class Engine {
     const dx = target.x - t.x;
     const dy = target.y - t.y;
 
-    if (Math.sqrt(dx*dx+dy*dy) > 120) {
+    if (Math.sqrt(dx*dx+dy*dy) > 40) {
       const angle = Math.atan2(dy, dx);
       const mx = Math.cos(angle)*40;
       const my = Math.sin(angle)*40;
@@ -457,7 +448,7 @@ class Engine {
       t.grapple.bullet.sx = t.x+40;
       t.grapple.bullet.sy = t.y+40;
       t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
-      if (!this.collision(t.x+mx, t.y) && !this.collision(t.x, t.y+my)) {
+      if ((!this.collision(t.x+mx, t.y) || mx === 0) && (!this.collision(t.x, t.y+my) || my === 0)) {
         t.grapple.bullet.destroy();
         t.grapple = false;
       }
