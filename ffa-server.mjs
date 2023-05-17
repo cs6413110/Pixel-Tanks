@@ -448,7 +448,7 @@ class Engine {
       t.grapple.bullet.sx = t.x+40;
       t.grapple.bullet.sy = t.y+40;
       t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
-      if ((!this.collision(t.x+mx, t.y) || mx === 0) && (!this.collision(t.x, t.y+my) || my === 0)) {
+      if ((!this.collision(t.x+mx, t.y) || Math.abs(mx) < 2) && (!this.collision(t.x, t.y+my) || Math.abs(my) < 2)) {
         t.grapple.bullet.destroy();
         t.grapple = false;
       }
