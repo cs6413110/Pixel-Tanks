@@ -538,7 +538,9 @@ class Engine {
         this.s.forEach(s => {
           if (!this.getUsername(s.team) === t.username || s.type !== 'dynamite') return;
           this.d.push(new Damage(s.x-100, s.y-100, 200, 200, 100, s.team, this));
-          setTimeout(s.destroy);
+          setTimeout(() => {
+            s.destroy();
+          });
         });
       }
       if (data.use.includes('toolkit')) {
