@@ -21,7 +21,7 @@ const client = new MongoClient(connectionString);
   db = client.db('data').collection('data');
 })();
 
-const valid = (token, username) => typeof db.tokens.find((t) => t.token === token && t.username === username) === 'object';
+const valid = (token, username) => typeof tokens.find((t) => t.token === token && t.username === username) === 'object';
 const encode = (c) => {
   var x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("");
 }
@@ -42,7 +42,7 @@ const routes = {
       if (item.password !== password) return socket.send({status: 'error', message: 'Incorrect password.'});
     } else return socket.destroy();
     socket.send({status: 'success', token});
-    db.tokens.push({username, token});
+    tokens.push({username, token});
   },
 
   database: async ({ token, username, type, key, value }, socket) => {
@@ -71,7 +71,7 @@ const routes = {
 };
 
 Router.ws('/', { idle_timeout: Infinity }, (socket) => {
-  db.sockets.push(socket);
+  sockets.push(socket);
   socket._send = socket.send;
   socket.send = function (data) {
     this._send(encode(jsonpack.pack(data)));
