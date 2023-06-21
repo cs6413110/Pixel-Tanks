@@ -848,7 +848,7 @@
 	  display: inline;
 	}
         @font-face {
-	  font: 'Font';
+	  font-family: 'Font';
           src: url('https://cs6413110.github.io/Pixel-Tanks/public/fonts/PixelOperator.ttf') format('truetype');
 	}
       </style>
