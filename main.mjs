@@ -9,12 +9,17 @@ import { Core } from './ffa-server.mjs';
 const connectionString = 'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority';
 const port = 80;
 
-const tokens = [], sockets = [];
+let tokens = [], sockets = [], db;
 const HyperExpressServer = new HyperExpress.Server({fast_buffers: true});
 const Router = new HyperExpress.Router();
 const filter = new Filter();
 const tokgen = new TokenGenerator(256, TokenGenerator.BASE62);
 const client = new MongoClient(connectionString);
+
+(async () => {
+  await client.connect();
+  db = client.db('data').collection('data');
+})();
 
 const valid = (token, username) => typeof db.tokens.find((t) => t.token === token && t.username === username) === 'object';
 const encode = (c) => {
