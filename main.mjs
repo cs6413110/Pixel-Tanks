@@ -9,9 +9,9 @@ import { Core } from './ffa-server.mjs';
 const connectionString = 'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority';
 const port = 80;
 
+const tokens = [], sockets = [];
 const HyperExpressServer = new HyperExpress.Server({fast_buffers: true});
 const Router = new HyperExpress.Router();
-const db = {tokens: [], sockets: []};
 const filter = new Filter();
 const tokgen = new TokenGenerator(256, TokenGenerator.BASE62);
 const client = new MongoClient(connectionString);
