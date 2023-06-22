@@ -1,7 +1,7 @@
 import {Server, Router} from 'hyper-express';
 import {promises as fs} from 'fs';
 import {MongoClient} from 'mongodb';
-import {clean } from 'bad-words';
+import Filter from 'bad-words';
 import {v4 as uuidv4} from 'uuid';
 import msgpack from 'jsonpack';
 import {Core} from './ffa-server.mjs';
@@ -9,7 +9,7 @@ import {Core} from './ffa-server.mjs';
 const connectionString =
   'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = 80;
 
-const HyperExpressServer = new Server({fast_buffers: true}),  router = new Router(), client = new MongoClient(connectionString);
+const HyperExpressServer = new Server({fast_buffers: true}), router = new Router(), client = new MongoClient(connectionString), clean = new Filter().clean;
 let tokens = new Set(), sockets = [], db;
 
 const valid = (token, username) => tokens.has(`${token}:${username}`);
