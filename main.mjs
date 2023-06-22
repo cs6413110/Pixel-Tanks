@@ -9,7 +9,7 @@ import {Core} from './ffa-server.mjs';
 const connectionString =
   'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = 80;
 
-const HyperExpressServer = new Server({fast_buffers: true}),  Router = new Router(), client = new MongoClient(connectionString);
+const HyperExpressServer = new Server({fast_buffers: true}),  router = new Router(), client = new MongoClient(connectionString);
 let tokens = new Set(), sockets = [], db;
 
 const valid = (token, username) => tokens.has(`${token}:${username}`);
@@ -44,7 +44,7 @@ const routes = {
   },
 };
 
-Router.ws('/', {idle_timeout: Infinity}, (socket) => {
+router.ws('/', {idle_timeout: Infinity}, (socket) => {
   sockets.push(socket);
   socket._send = socket.send;
   socket.send = (data) => {
@@ -69,6 +69,6 @@ HyperExpressServer.get('/verify', (req, res) => res.end(valid(req.query.token, r
 HyperExpressServer.get('/*', async(req, res) => {
   res.header('Content-Type', 'application/javascript').end(await fs.readFile('/home/ubuntu/Pixel-Tanks/public/js/pixel-tanks.js'));
 });
-HyperExpressServer.use(Router);
+HyperExpressServer.use(router);
 HyperExpressServer.use(Core);
 HyperExpressServer.listen(port);
