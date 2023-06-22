@@ -52,7 +52,7 @@ router.ws('/', {idle_timeout: Infinity}, (socket) => {
   };
   socket.on('message', (data) => {
     try {
-      data = msgpack.unpack(data);
+      data = msgpack.unpack(decode(data));
     } catch (e) {
       return socket.destroy();
     }
