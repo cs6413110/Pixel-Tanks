@@ -2,14 +2,14 @@ import {Server, Router} from 'hyper-express';
 import {promises as fs} from 'fs';
 import {MongoClient} from 'mongodb';
 import Filter from 'bad-words';
-import {v4 as uuidv4} from 'uuid';
+import TokenGenerator from 'uuid-token-generator';
 import msgpack from 'jsonpack';
 import {Core} from './ffa-server.mjs';
 
 const connectionString =
   'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = 80;
 
-const HyperExpressServer = new Server({fast_buffers: true}), router = new Router(), client = new MongoClient(connectionString), clean = new Filter().clean;
+const HyperExpressServer = new Server({fast_buffers: true}), router = new Router(), client = new MongoClient(connectionString), clean = new Filter().clean, tokgen = new TokenGenerator(256, TokenGenerator.BASE62);
 let tokens = new Set(), sockets = [], db;
 
 const valid = (token, username) => tokens.has(`${token}:${username}`);
@@ -18,7 +18,7 @@ const routes = {
   auth: async ({ username, type, password }, socket) => {
     if (['', ' ', undefined].includes(username) || username.includes(' ') || username.includes(':')) return socket.send({ status: 'error', message: 'Invalid username.'});
     if (username !== clean(username)) return socket.send({status: 'error', message: 'Username contains inappropriate word.'});
-    const item = await db.findOne({username}), token = uuidv4();
+    const item = await db.findOne({username}), token = tokgen.generate();
     if (type === 'signup') {
       if (item !== null) return socket.send({status: 'error', message: 'This account already exists.'});
       await db.insertOne({username, password, playerdata: '{}'});
