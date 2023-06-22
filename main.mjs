@@ -1,29 +1,24 @@
-import HyperExpress from 'hyper-express';
-import fs from 'fs';
+import {Server, Router} from 'hyper-express';
+import {promises as fs} from 'fs';
 import {MongoClient} from 'mongodb';
-import Filter from 'bad-words';
-import TokenGenerator from 'uuid-token-generator';
-import jsonpack from 'jsonpack';
+import {clean } from 'bad-words';
+import {v4 as uuidv4} from 'uuid';
+import msgpack from 'jsonpack';
 import {Core} from './ffa-server.mjs';
 
-const connectionString = 'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = 80;
+const connectionString =
+  'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = 80;
 
-let tokens = [], sockets = [], db;
-const HyperExpressServer = new HyperExpress.Server({fast_buffers: true}), Router = new HyperExpress.Router(), filter = new Filter(), tokgen = new TokenGenerator(256, TokenGenerator.BASE62), client = new MongoClient(connectionString);
+const HyperExpressServer = new Server({fast_buffers: true}),  Router = new Router(), client = new MongoClient(connectionString);
+let tokens = new Set(), sockets = [], db;
 
-(async () => {
-  await client.connect();
-  db = client.db('data').collection('data');
-})();
+const valid = (token, username) => tokens.has(`${token}:${username}`);
 
-const valid = (token, username) => typeof tokens.find((t) => t.token === token && t.username === username) === 'object';
-const encode = (c) => {var x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}
-const decode = (b) => {var a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")}
 const routes = {
-  auth: async ({username, type, password}, socket) => {
-    if (['', ' ', undefined].includes(username) || username.includes(' ') || username.includes(':')) return socket.send({status: 'error', message: 'Invalid username.'});
-    if (username !== filter.clean(username)) return socket.send({status: 'error', message: 'Username contains inappropriate word.'});
-    var item = await db.findOne({username}), token = tokgen.generate();
+  auth: async ({ username, type, password }, socket) => {
+    if (['', ' ', undefined].includes(username) || username.includes(' ') || username.includes(':')) return socket.send({ status: 'error', message: 'Invalid username.'});
+    if (username !== clean(username)) return socket.send({status: 'error', message: 'Username contains inappropriate word.'});
+    const item = await db.findOne({username}), token = uuidv4();
     if (type === 'signup') {
       if (item !== null) return socket.send({status: 'error', message: 'This account already exists.'});
       await db.insertOne({username, password, playerdata: '{}'});
@@ -32,33 +27,32 @@ const routes = {
       if (item.password !== password) return socket.send({status: 'error', message: 'Incorrect password.'});
     } else return socket.destroy();
     socket.send({status: 'success', token});
-    tokens.push({username, token});
+    tokens.add(`${token}:${username}`);
   },
-  database: async ({token, username, type, key, value}, socket) => {
-    if (!token) return socket.send({ status: 'error', message: 'No token.' });
-    if (!valid(token, username)) return socket.send({ status: 'error', message: 'Invalid token.' });
+  database: async ({ token, username, type, key, value }, socket) => {
+    if (!token) return socket.send({status: 'error', message: 'No token.'});
+    if (!valid(token, username)) return socket.send({status: 'error', message: 'Invalid token.'});
     try {
       if (type === 'get') {
-        socket.send({status: 'success', type: 'get', data: await db.findOne({ username }, (name, value) => {return name === 'password' ? undefined : value})});
+        socket.send({status: 'success', type: 'get', data: await db.findOne({username}, {projection: {password: 0}})});
       } else if (type === 'set') {
-        await db.findOneAndUpdate({username}, {$set: Object.defineProperty(await db.findOne({username}), key, {value})});
+        await db.findOneAndUpdate({username}, {$set: {[key]: value}});
       } else socket.send({status: 'error', message: 'Invalid or no task.'});
     } catch (e) {
-      socket.send({ status: 'error', message: 'Error getting: ' + e });
+      socket.send({status: 'error', message: 'Error getting: '+e});
     }
   },
 };
 
-Router.ws('/', { idle_timeout: Infinity }, (socket) => {
+Router.ws('/', {idle_timeout: Infinity}, (socket) => {
   sockets.push(socket);
   socket._send = socket.send;
   socket.send = (data) => {
-    socket._send(encode(jsonpack.pack(data)));
-  }
-
+    socket._send(msgpack.pack(data));
+  };
   socket.on('message', (data) => {
     try {
-      data = jsonpack.unpack(decode(data));
+      data = msgpack.unpack(data);
     } catch (e) {
       return socket.destroy();
     }
@@ -66,14 +60,14 @@ Router.ws('/', { idle_timeout: Infinity }, (socket) => {
     try {
       routes[data.op](data, socket);
     } catch (e) {
-      return socket.send({ status: 'error', message: 'Invalid or no operation.' });
+      return socket.send({status: 'error', message: 'Invalid or no operation.'});
     }
   });
 });
 
 HyperExpressServer.get('/verify', (req, res) => res.end(valid(req.query.token, req.query.username).toString()));
-HyperExpressServer.get('/*', async (req, res) => {
-  res.header('Content-Type', 'application/javascript').end(await readFileAsync('/home/ubuntu/Pixel-Tanks/public/js/pixel-tanks.js'));
+HyperExpressServer.get('/*', async(req, res) => {
+  res.header('Content-Type', 'application/javascript').end(await fs.readFile('/home/ubuntu/Pixel-Tanks/public/js/pixel-tanks.js'));
 });
 HyperExpressServer.use(Router);
 HyperExpressServer.use(Core);
