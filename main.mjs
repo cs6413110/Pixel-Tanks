@@ -11,6 +11,10 @@ const connectionString =
 
 const HyperExpressServer = new Server({fast_buffers: true}), router = new Router(), client = new MongoClient(connectionString), filter = new Filter(), tokgen = new TokenGenerator(256, TokenGenerator.BASE62);
 let tokens = new Set(), sockets = [], db;
+(async () => {
+  await client.connect();
+  db = client.db('data').collection('data');
+})();
 
 const valid = (token, username) => tokens.has(`${token}:${username}`);
 const encode = (c) => {var x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}
