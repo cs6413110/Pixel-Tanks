@@ -66,49 +66,50 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) =>
   }
   socket.on('message', (data) => {
     incoming_per_second++;
-    try {data = jsonpack.unpack(A.de(data))} catch(e) {socket.destroy()};
+    try {
+      data = jsonpack.unpack(A.de(data));
+    } catch(e) {
+      return socket.destroy();
+    }
     if (!socket.username) {
       if (data.username.includes(' ') || data.username.includes(':')) return socket.destroy();
-      var ban = SETTINGS.bans.find(i => i.username === data.username);
+      const ban = SETTINGS.bans.find(i => i.username === data.username);
       if (ban) {
-        setTimeout(() => {socket.destroy()});
-        return socket.send({status: 'error', message: 'You are banned. Banned by '+ban.by+' for '+ban.reason+'. You are banned for '+ban.time+' more minutes or until an admin unbans you. You were banned by an admin on this server, not the entire game, so you can join other servers.'});
+        setTimeout(() => socket.destroy());
+        return socket.send({status: 'error', message: `You are banned. Banned by ${ban.by} for ${ban.reason}. You are banned for ${ban.time} more minutes or until an admin unbans you. You were banned by an admin on this server, not the entire game, so you can join other servers.`});
       }
       socket.username = data.username;
     }
     if (data.type === 'join') {
       let joinedServer = false;
-      servers.forEach(s => {
+      servers.forEach((s, i) => {
         if (s.pt.length < 10 && !joinedServer) {
-          socket.room = servers.indexOf(s);
-          if (s.pt.find(t => t.username === socket.username)) {
-            socket.send({ status: 'error', message: 'You are already in the server!' });
-            return setTimeout(() => { socket.destroy(); });
+          socket.room = i;
+          if (s.pt.some(t => t.username === socket.username)) {
+            socket.send({status: 'error', message: 'You are already in the server!'});
+            return setTimeout(() => socket.destroy());
           }
-          http.get('http://141.148.128.231/verify?username=' + socket.username + '&token=' + data.token, res => {
-            var c = [];
+          http.get(`http://141.148.128.231/verify?username=${socket.username}&token=${data.token}`, res => {
+            let body = '';
             res.on('data', chunk => {
-              c.push(chunk);
+              body += chunk;
             });
             res.on('end', () => {
-              if (Buffer.concat(c).toString() === 'true') {
+              if (body === 'true') {
                 s.add(socket, data.tank);
               } else {
-                socket.send({
-                  status: 'error',
-                  message: 'Authentication failure. Your token (' + token + ') does not match with your username (' + socket.username + '). This can be caused by the authentication servers restarting or by modifying the client. Simply log in again to fix this issue.'
-                });
-                setTimeout(() => { socket.destroy(); });
+                socket.send({status: 'error', message: `Authentication failure. Your token (${data.token}) does not match with your username (${socket.username}). This can be caused by the authentication servers restarting or by modifying the client. Simply log in again to fix this issue.`});
+                setTimeout(() => socket.destroy());
               }
             });
           });
           joinedServer = true;
         }
       });
-      if (socket.room === undefined) {
+      if (!joinedServer) {
         servers.push(new FFA());
-        servers[servers.length - 1].add(socket, data.tank);
-        socket.room = servers.length - 1;
+        servers[servers.length-1].add(socket, data.tank);
+        socket.room = servers.length-1;
       }
     } else if (data.type === 'update') {
       servers[socket.room].update(data);
@@ -116,25 +117,20 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) =>
       socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
       if (SETTINGS.mutes.find(i => i.username === socket.username)) return;
-      var msg;
+      let msg = data.msg;
       try {
-        msg = (SETTINGS.filterProfanity ? filter.clean(data.msg) : data.msg);
-      } catch(e) {
-        msg = data.msg;
-      }
+        msg = (SETTINGS.filterProfanity ? filter.clean(msg) : msg);
+      } catch(e) {}
       servers[socket.room].logs.push({m: '['+socket.username+'] '+msg, c: '#ffffff'});
     } else if (data.type === 'command') {
-      const commandName = data.data[0].replace('/', '');
+      const [commandName, ...args] = data.data;
       if (typeof Commands[commandName] === 'function') {
-        Commands[commandName].bind(socket)(data.data);
-      } else socket.send({ status: 'error', message: 'Command not found.' });
+        Commands[commandName].bind(socket)(args);
+      } else socket.send({status: 'error', message: 'Command not found.'});
     } else if (data.type === 'stats') {
-      const players = servers.reduce((arr, s) => {
-         arr.push(...s.pt.map(t => t.username));
-         return arr;
-       }, []);
+      const players = servers.reduce((arr, s) => [...arr, ...s.pt.map(t => t.username)], []);
       socket.send({event: 'stats', totalRooms: servers.length, totalPlayers: players.length, players: players, bans: SETTINGS.bans, mutes: SETTINGS.mutes, admins: SETTINGS.admins, out: outgoing_per_second, in: incoming_per_second, sockets: sockets.length});
-    } else setTimeout(function() {this.destroy()}.bind(socket));
+    } else setTimeout(() => socket.destroy());
   });
   socket.on('close', (code, reason) => {
     if (socket.room !== undefined) servers[socket.room].disconnect(socket, code, reason);
