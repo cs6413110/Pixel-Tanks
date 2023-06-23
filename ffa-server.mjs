@@ -361,84 +361,97 @@ class Engine {
   constructor(id, levels) {
     this.sockets = [];
     this.spawn = {x: 0, y: 0};
-    this.id = id; // may remove
+    this.id = id;
     this.logs = [];
-    this.ai = []; // ai
-    this.b = []; // blocks
-    this.s = []; // bullets
-    this.pt = []; // players
-    this.d = []; // damage entities
+    this.ai = [];
+    this.b = [];
+    this.s = [];
+    this.pt = [];
+    this.d = [];
     this.i = [];
     this.t = [];
     this.levels = levels;
-    this.levelReader(this.levels[Math.floor(Math.random() * this.levels.length)]);
-    if (!SETTINGS.fps_boost) this.i.push(setInterval(this.send.bind(this), 1000/SETTINGS.UPS));
-    this.i.push(setInterval(this.tick.bind(this), 1000/60));
+    this.levelReader(this.levels[Math.floor(Math.random()*this.levels.length)]);
+    if (!SETTINGS.fps_boost) this.i.push(setInterval(() => this.send(), 1000/SETTINGS.UPS));
+    this.i.push(setInterval(() => this.tick(), 1000/60));
   }
 
   tick() {
-    A.each(this.ai.concat(this.s), 'update'); // update ai and bullets
+    this.ai.concat(this.s).forEach(e => e.update());
 
-    A.each(this.pt, function(i, host) {
-      if (this.dedEffect) this.dedEffect.time = Date.now()-this.dedEffect.start;
-      if (this.class === 'medic' && this.healing !== this.username && !this.ded) {
-        var tank = A.search(host.pt, 'username', this.healing);
-        if (Math.sqrt(Math.pow(this.x-tank.x, 2)+Math.pow(this.y-tank.y, 2)) < 500) tank.hp = Math.min(tank.hp+.25, tank.maxHp);
+    this.pt.forEach(t => {
+      if (t.dedEffect) t.dedEffect.time = Date.now()-t.dedEffect.start;
+      if (t.class === 'medic' && this.healing !== this.username && !this.ded) {
+        const tank = this.pt.find(tank => tank.username === t.healing);
+        if ((t.x-tank.x)**2+(t.y-tank.y)**2 < 250000) tank.hp = Math.min(tank.hp+25, tank.maxHp);
       }
-      if (this.fire && host.getTeam(this.fire.team) !== host.getTeam(this.team)) host.damagePlayer(this, {x: this.x, y: this.y, u: host.getUsername(this.fire.team), a: .5});
-      A.each(host.pt, function(i, t) {
-        if (A.collider(t.x, t.y, 80, 80, this.x, this.y, 80, 80) && this.immune && this.class === 'warrior' && t.username !== this.username && t.canBashed) {
-          t.hp -= 50;
-          t.canBashed = false;
-          setTimeout(function() {this.canBashed = true}.bind(t), 800);
-        } else if (A.collider(t.x, t.y, 80, 80, this.x, this.y, 80, 80) && this.immune && this.class === 'medic' && t.canBashed) {
-          t.hp = Math.min(t.hp+50, t.maxHp);
-          t.canBashed = false;
-          setTimeout(function() {this.canBashed = true}.bind(t), 800);
+      if (t.fire && this.getTeam(t.fire.team) !== this.getTeam(t.team)) this.damagePlayer(t, {x: this.x, y: this.y, u: this.getUsername(t.fire.team), a: .5});
+      this.pt.forEach(tank => {
+        if (A.collider(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) {
+          if (t.immune && tank.canBashed) {
+            if (t.class === 'warrior' && t.username !== tank.username) {
+              tank.hp -= 50;
+            } else if (t.class == 'medic') {
+              tank.hp = Math.min(tank.hp+50, tank.maxHp);
+            }
+            tank.canBashed = false;
+            setTimeout(() => {
+              tank.canBashed = true;
+            }, 800);
+          }
         }
-      }, null, null, this); // warrior collision
-      if (this.pushback !== 0) this.pushback += 0.5;
-      A.each(host.b, function(i, t, host) {
-        if (A.collider(t.x, t.y, 80, 80, this.x, this.y, 100, 100) && !t.ded && !t.immune) {
-          if (this.type === 'mine' && this.a) {
-            this.destroy();
-            i--;
-          } else if (this.type === 'fire') {
+      });
+      this.b.forEach(b => {
+        if (A.collider(t.x, t.y, 80, 80, b.x, b.y, 100, 100) && !t.ded && !t.immune) {
+          if (b.type === 'mine' && b.a) {
+            setTimeout(() => b.destroy());
+          } else if (b.type === 'fire') {
             if (t.fire) {
               clearTimeout(t.fireTimeout);
               t.fire = {team: this.team, frame: t.fire.frame};
             } else {
               t.fire = {team: this.team, frame: 0};
-              t.fireInterval = setInterval(function() {this.fire.frame = this.fire.frame === 0 ? 1 : 0}.bind(t), 50);
+              t.fireInterval = setInterval(() => {
+                t.fire.frame = t.fire.frame === 0 ? 1 : 0;
+              }, 50);
             }
-            t.fireTimeout = setTimeout(function() {
-              clearInterval(this.fireInterval);
-              this.fire = false;
-            }.bind(t), 2000);
+            t.fireTimeout = setTimeout(() => {
+              clearInterval(t.fireInterval);
+              t.fire = false;
+            }, 2000);
+          } else if (b.type === 'spike') {
+            this.damagePlayer(t, {a: 1, x: t.x, y: t.y, u: this.getUsername(b.team)});
           }
         }
-      }, null, null, this, host);
-      A.each(host.b, function(i, t, host) {if (A.collider(t.x, t.y, 80, 80, this.x, this.y, 100, 100) && this.type === 'spike' && host.getTeam(this.team) !== host.getTeam(t.team)) return host.damagePlayer(t, {a: 1, x: t.x, y: t.y, u: host.getUsername(this.team)})}, null, null, this, host);
-      A.each(this.damage, function(i, host) {
-        this.y -= 2;
-      }, null, null, host);
-      if (this.grapple) host.grapple(this);
-    }, null, null, this);
+      });
+      t.damage.each(d => {
+        d.y -= 4;
+      });
+      if (t.grapple) this.grapple(t);
+    });
 
-    A.each(this.d, function(i, host) {
-      A.each(host.pt, function(i, d, host) {if (A.collider(d.x, d.y, d.w, d.h, this.x, this.y, 80, 80) && ((d.a > 0 && host.getTeam(d.team) !== host.getTeam(this.team)) || (d.a < 0 && host.getUsername(d.team) !== host.getUsername(this.team)))) host.damagePlayer(this, Object.defineProperty({...d}, 'u', {value: host.getUsername(d.team)}))}, null, null, this, host);
-      A.each(host.b, function(i, d) {if (A.collider(d.x, d.y, d.w, d.h, this.x, this.y, 100, 100)) {setTimeout(this.damage.bind(this, d.a))}}, null, null, this);
-      A.each(host.ai, function(i, d, host) {if (A.collider(d.x, d.y, d.w, d.h, this.x, this.y, 80, 80) && host.getTeam(this.team) !== host.getTeam(d.team)) this.damage(d.a)}, null, null, this, host);
-      this.c = false;
-    }, 'c', true, this);
+    this.d.forEach(d => {
+      if (!d.c) return;
+      this.pt.forEach(t => {
+        if (A.collider(d.x, d.y, d.w, d.h, t.x, t.y, 80, 80) && ((d.a > 0 && this.getTeam(d.team) !== this.getTeam(t.team)) || (d.a < 0 && this.getTeam(d.team) === this.getTeam(t.team)))) {
+          this.damagePlayer(t, Object.defineProperty({...d}, 'u', {value: this.getUsername(d.team)}));
+        }
+      });
+      this.b.forEach(b => {
+        if (A.collider(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) b.damage(d.a);
+      });
+      this.ai.forEach(ai => {
+        if (A.collider(d.x, d.y, d.w, d.h, this.x, this.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) ai.damage(d.a);
+      });
+      d.c = false;
+    });
   }
 
   grapple(t) {
-    const target = t.grapple.target;
-    const dx = target.x - t.x;
-    const dy = target.y - t.y;
+    const dx = t.grapple.target.x-t.x;
+    const dy = t.grapple.target.y-t.y;
 
-    if (Math.sqrt(dx*dx+dy*dy) > 20) {
+    if (dx**2+dy**2 > 400) {
       const angle = Math.atan2(dy, dx);
       const mx = Math.cos(angle)*20;
       const my = Math.sin(angle)*20;
@@ -459,31 +472,21 @@ class Engine {
   }
 
   collision(x, y) {
-    var output = !(x < 0 || y < 0 || x+80 > 3000 || y+80 > 3000);
-    this.b.forEach(b => {
-      if (A.collider(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) output = false;
-    });
-    return output;
+    if (x < 0 || y < 0 || x+80 > 3000 || y+80 > 3000) return false;
+    for (const b of this.b) if (A.collider(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) return false;
+    return true;
   }
 
   levelReader(level) {
-    var l, q;
+    let l, q, key = {'=': ['void', Infinity], '#': ['barrier', Infinity], '2': ['strong', 200], '1': ['weak', 100], '0': ['spike', 0], '3': ['gold', 300]};
     for (l = 0; l < level.length; l++) {
       for (q = 0; q < level[l].split('').length; q++) {
-        var p = level[l].split(''); // Block key: # = invincible, 1 = weak, 2 = strong, @ = player, A = ai
-        if (p[q] === '=') {
-          this.b.push(new Block(q * 100, l * 100, Infinity, 'void', 'MapGenerator[]:3', this));
-        } else if (p[q] === '#') {
-          this.b.push(new Block(q * 100, l * 100, Infinity, 'barrier', 'MapGenerator[]:3', this));
-        } else if (p[q] === '2') {
-          this.b.push(new Block(q * 100, l * 100, 200, 'strong', 'MapGenerator[]:3', this));
-        } else if (p[q] === '1') {
-          this.b.push(new Block(q * 100, l * 100, 100, 'weak', 'MapGenerator[]:3', this));
-        } else if (p[q] === '0') {
-          this.b.push(new Block(q * 100, l * 100, 0, 'spike', 'MapGenerator[]:3', this));
-        } else if (p[q] === 'U') {
-          this.b.push(new Block(q * 100, l * 100, 400, 'fortress', 'MapGenerator[]:3', this));
-        } else if (p[q] == '@') this.spawn = {x: q*100, y: l*100};
+        const p = level[l].split('');
+        if (p[q] === '@') {
+          this.spawn = {x: q*100, y: l*100};
+        } else if (key[p[q]]) {
+          this.b.push(new Block(q*100, l*100, key[p[q][1]], key[p[q]][0], '_default_:_placeholder_', this));
+        }
       }
     }
   }
