@@ -644,7 +644,6 @@ class Engine {
   send() {
     const view = {x: -860, y: -560, w: 1880, h: 1280};
     this.pt.forEach(t => {
-      outgoing_per_second++;
       var message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, event: 'hostupdate'};
       this.b.forEach(b => {
         if (A.collider(b.x, b.y, 100, 100, t.x+view.x, t.y+view.y, view.w, view.h)) message.blocks.push(JSON.parse(JSON.stringify(b, (key, value) => {
@@ -670,33 +669,43 @@ class Engine {
         if (A.collider(d.x, d.y, d.w, d.h, t.x+view.x, t.y+view.y, view.w, view.h)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
       });
       t.socket.send(message);
+      outgoing_per_second++;
     });
   }
 
   damagePlayer(victim, damage) {
     if (victim.immune || victim.ded) return;
-    if (victim.shields > 0 && damage.a > 0) {
-      victim.shields -= damage.a;
-      victim.shields = Math.max(victim.shields, 0);
-      return;
-    }
+    if (victim.shields > 0 && damage.a > 0) return victim.shields -= damage.a;
     if (victim.buff) damage.a *= .75;
-
     victim.hp = Math.min(victim.maxHp, victim.hp-damage.a);
-
-    if (victim.damage) {
-      clearTimeout(victim.damage.ti);
-      A.assign(victim.damage, 'd', victim.damage.d+damage.a, 'x', damage.x, 'y', damage.y, 'ti', setTimeout(function() {this.damage = false}.bind(victim), 1000)); 
-    } else victim.damage = {d: damage.a, x: damage.x, y: damage.y, ti: setTimeout(function() {this.damage = false}.bind(victim), 1000)};
-    if (victim.hp <= 0 && this.ondeath) this.ondeath(victim, A.each(this.pt, function() {return this}, 'username', damage.u));
+    if (victim.damage) clearTimeout(victim.damage.ti);
+    victim.damage = {d: (victim.damage ? victim.damage.d : 0)+damage.a, x: damage.x, y: damage.y, ti: setTimeout(() => {victim.damage = false}, 1000)};
+    if (victim.hp <= 0 && this.ondeath) this.ondeath(victim, this.pt.find(t => t.username === damage.u));
   }
 
   deathMsg(victim, killer) {
-    var junk = ['{VICTIM} was killed by {KILLER}', '{VICTIM} was put out of their misery by {KILLER}', '{VICTIM} was assasinated by {KILLER}', '{VICTIM} got comboed by {KILLER}', '{VICTIM} got eliminated by {KILLER}', '{VICTIM} was crushed by {KILLER}', '{VICTIM} had a skill issue while fighting {KILLER}', '{VICTIM} was sniped by {KILLER}', '{VICTIM} was exploded by {KILLER}', '{VICTIM} was executed by {KILLER}', '{VICTIM} was deleted by {KILLER}', '{VICTIM} was killed by THE PERSON WITH KILLSTREAK ---> {KILLER}', '{VICTIM} got buffed, but get nerfed harder by {KILLER}', '{VICTIM} got flung into space by {KILLER}', '{VICTIM} was pound into paste by {KILLER}', '{VICTIM} was fed a healty dose of explosives by {KILLER}', "{VICTIM} became another number in {KILLER}'s kill streak", "{VICTIM} got wrekt by {KILLER}", "{VICTIM} got hit by a steamroller driven by {KILLER}"];
-    if (killer === 'DIO') return victim+' got hit by a steamroller driven by DIO';
-    if (killer === 'Jotaro_Kujo') return Math.random() < .5 ? 'Jotaro_Kujo ORA ORA ORAed '+victim : 'Jotaro_Kugo found '+victim+'unworthy of a stand';
-    if (victim === 'Jotaro_Kugo') return 'Jotaro_Kugo has died';
-    return junk[Math.floor(Math.random() * junk.length)].replace('{VICTIM}', victim).replace('{KILLER}', killer);
+    const deathMessages = [
+      `${victim} was killed by ${killer}`,
+      `${victim} was put out of their misery by ${killer}`,
+      `${victim} was assassinated by ${killer}`,
+      `${victim} got comboed by ${killer}`,
+      `${victim} got eliminated by ${killer}`,
+      `${victim} was crushed by ${killer}`,
+      `${victim} had a skill issue while fighting ${killer}`,
+      `${victim} was sniped by ${killer}`,
+      `${victim} was exploded by ${killer}`,
+      `${victim} was executed by ${killer}`,
+      `${victim} was deleted by ${killer}`,
+      `${victim} was killed by THE PERSON WITH KILLSTREAK ---> ${killer}`,
+      `${victim} got buffed, but get nerfed harder by ${killer}`,
+      `${victim} got flung into space by ${killer}`,
+      `${victim} was pound into paste by ${killer}`,
+      `${victim} was fed a healthy dose of explosives by ${killer}`,
+      `${victim} became another number in ${killer}'s kill streak`,
+      `${victim} got wrecked by ${killer}`,
+      `${victim} got hit by a steamroller driven by DIO`
+    ];
+    return deathMessages[Math.floor(Math.random()*messages.length)];
   }
 
   joinMsg(player) {
@@ -717,7 +726,7 @@ class Engine {
   }
 
   rageMsg(player) {
-    var junk = [
+    var rageMessage = [
       '{IDOT}.exe is unresponsive',
       '{IDOT} left the game',
       '{IDOT} ragequit',
@@ -732,7 +741,7 @@ class Engine {
   }
 
   parseTeamExtras(s) {
-    return s.includes('@requestor#') ? s.split('@requestor#')[0].replace('@leader', '') : s.replace('@leader', '');
+    return s.replace('@leader', '').split('@requestor#')[0];
   }
 
   getUsername(s) {
