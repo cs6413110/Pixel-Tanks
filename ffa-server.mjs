@@ -819,21 +819,18 @@ class Block {
 class Shot {
   constructor(x, y, xm, ym, type, rotation, team, host) {
     this.settings = {damage: {bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -300, dynamite: 0, fire: 0}, speed: {bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9}};
-
     this.damage = 0;
     this.team = team;
     this.r = rotation;
     this.type = type;
     this.host = host;
     this.e = Date.now();
-
     var d = 18;
     this.xm = xm*(d/Math.sqrt(xm*xm+ym*ym));
     this.ym = ym*(d/Math.sqrt(xm*xm+ym*ym));
     var data = Shot.calc(x, y, xm, ym);
     this.x = data.x;
     this.y = data.y;
-
     if (xm == 0 && ym == 1) {
       this.x = x;
       this.y = 35+y;
@@ -849,7 +846,6 @@ class Shot {
     }
     this.sx = this.x;
     this.sy = this.y;
-    
     var pt = A.search(this.host.pt, 'username', this.host.getUsername(this.team));
     if (!pt) this.destroy();
     this.damage = this.settings.damage[this.type]/500*pt.maxHp*(pt.buff ? 1.5 : 1);
@@ -862,12 +858,10 @@ class Shot {
     const sgn = ((ym / xm) * -20 - (ym / xm) * 20) < 0 ? -1 : 1;
     const sqrtVal = Math.sqrt(-40 * -40 + ((ym / xm) * -20 - (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20));
     const sqrtTerm = Math.sqrt(1000 * (sqrtVal * sqrtVal) - ((20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * (20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20)));
-
     const x1 = ((20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20) + sgn * -40 * sqrtTerm) / (sqrtVal * sqrtVal);
     const x2 = ((20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * ((ym / xm) * -20 - (ym / xm) * 20) - sgn * -40 * sqrtTerm) / (sqrtVal * sqrtVal);
     const y1 = (-(20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * -40 + Math.abs(((ym / xm) * -20 - (ym / xm) * 20)) * sqrtTerm) / (sqrtVal * sqrtVal);
     const y2 = (-(20 * (ym / xm) * -20 - (-20) * (ym / xm) * 20) * -40 - Math.abs(((ym / xm) * -20 - (ym / xm) * 20)) * sqrtTerm) / (sqrtVal * sqrtVal);
-
     return {x: ym >= 0 ? x1 * 2 + x : x2 * 2 + x, y: ym >= 0 ? y1 * 2 + y : y2 * 2 + y};
   }
 
@@ -906,14 +900,15 @@ class Shot {
       }
     }, null, null, this, this.host, key);
     if (r !== undefined) return r;
-
     var r = A.each(this.host.ai, function(i, s, host, key) {
       if (A.collider(this.x, this.y, 80, 80, s.x, s.y, 10, 10)) {
         if (s.type === 'dynamite') {
-          A.assign(s, 'target', this, 'offset', [this.x-s.x, this.y-s.y], 'update', function() {
-            this.x = this.target.x-this.offset[0];
-            this.y = this.target.y-this.offset[1];
-          });
+          s.target = this;
+          s.offset = [this.x-s.x, this.y-s.y];
+          s.update = () => {
+            s.x = s.target.x-s.offset[0];
+            s.y = s.target.y-s.offset[1];
+          }
           return false;
         } else {
           if (key[s.type]) host.d.push(new Damage(s.x-key[s.type]/2+10, s.y-key[s.type]/2+10, key[s.type], key[s.type], s.damage, s.team, host)); else if (host.getTeam(this.team) !== host.getTeam(s.team)) this.damage(s.damage);

@@ -73,7 +73,7 @@ router.ws('/', {idle_timeout: Infinity}, (socket) => {
 
 HyperExpressServer.get('/verify', (req, res) => res.end(valid(req.query.token, req.query.username)));
 HyperExpressServer.get('/*', async(req, res) => {
-  res.header('Content-Type', 'application/javascript').end(await fs.readFile('/home/ubuntu/Pixel-Tanks/public/js/pixel-tanks.js'));
+  res.header('Content-Type', 'application/javascript').end(await fs.readFile('./public/js/pixel-tanks.js'));
 });
 HyperExpressServer.use(router);
 HyperExpressServer.use(Core);
