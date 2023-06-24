@@ -2390,6 +2390,9 @@
     }
 
     frame() {
+      if (!this.hostupdate.length) {
+        return GUI.draw.fillText('Loading Terrain....', 100, 100, 30);
+      }
       GUI.clear();
       this.render = requestAnimationFrame(this.frame.bind(this));
       this.fps++;
