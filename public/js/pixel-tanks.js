@@ -2390,11 +2390,12 @@
     }
 
     frame() {
-      if (this.hostupdate.logs === undefined) {
-        return GUI.draw.fillText('Loading Terrain...', 100, 100);
-      }
       GUI.clear();
       this.render = requestAnimationFrame(this.frame.bind(this));
+      if (this.hostupdate.logs === undefined) {
+        GUI.draw.fillStyle = '#000000';
+        return GUI.draw.fillText('Loading Terrain...', 100, 100);
+      }
       this.fps++;
       var t = this.hostupdate.tanks, b = this.hostupdate.blocks, s = this.hostupdate.bullets, a = this.hostupdate.ai, e = this.hostupdate.explosions;
       if (this.dx) {
