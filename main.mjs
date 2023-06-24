@@ -22,7 +22,7 @@ const encode = (c) => {let x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256
 const decode = (b) => {let a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")}
 const routes = {
   auth: async ({ username, type, password }, socket) => {
-    if (['', ' ', undefined].includes(username) || username.includes(' ') || username.includes(':')) return socket.send({ status: 'error', message: 'Invalid username.'});
+    if (!username.trim() || username.includes(' ') || username.includes(':')) return socket.send({ status: 'error', message: 'Invalid username.'});
     if (username !== filter.clean(username)) return socket.send({status: 'error', message: 'Username contains inappropriate word.'});
     const item = await db.findOne({username}), token = tokgen.generate();
     if (type === 'signup') {
