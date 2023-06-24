@@ -1923,7 +1923,7 @@
         Menus.menus[property].id = property;
       }
 
-      PixelTanks.socket = new MegaSocket('ws://141.148.128.231', {});
+      PixelTanks.socket = new MegaSocket('ws://141.148.128.231', {keepAlive: false, reconnect: false, autoconnect: true});
     }
 
     static launch() {
