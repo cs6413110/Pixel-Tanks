@@ -2390,7 +2390,7 @@
     }
 
     frame() {
-      if (!this.hostupdate.logs) {
+      if (this.hostupdate.logs.length > 0) {
         return GUI.draw.fillText('Loading Terrain...', 100, 100);
       }
       GUI.clear();
