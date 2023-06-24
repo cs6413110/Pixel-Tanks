@@ -2390,8 +2390,8 @@
     }
 
     frame() {
-      if (!this.hostupdate.length) {
-        return GUI.draw.fillText('Loading Terrain....', 100, 100, 30);
+      if (!this.hostupdate.logs) {
+        return GUI.draw.fillText('Loading Terrain...', 100, 100);
       }
       GUI.clear();
       this.render = requestAnimationFrame(this.frame.bind(this));
