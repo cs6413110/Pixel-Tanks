@@ -150,8 +150,8 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
           setImmediate(() => socket.destroy());
         }
       } catch(e) {
-        socket.send({status: 'error', message: 'Cannot verify token.'});
-        console.log('Cannot connect to authentication servers!');
+        socket.send({status: 'error', message: 'Cannot verify token. '+e});
+        console.log('Cannot connect to authentication servers! '+e);
         return setImmediate(() => socket.destroy());
       }
     } else if (data.type === 'update') {
