@@ -13,7 +13,6 @@ const SETTINGS = {
   export: true,
 }
 
-import http from 'http';
 import HyperExpress from 'hyper-express';
 import jsonpack from 'jsonpack';
 import Filter from 'bad-words';
@@ -21,7 +20,53 @@ import Filter from 'bad-words';
 const filter = new Filter();
 export const Core = new HyperExpress.Router();
 const Server = new HyperExpress.Server({fast_buffers: true});
-
+const encode = (c) => {let x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}
+const decode = (b) => {let a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")}
+const deathMessages = [
+  `{victim} was killed by {killer}`,
+  `{victim} was put out of their misery by {killer}`,
+  `{victim} was assassinated by {killer}`,
+  `{victim} got comboed by {killer}`,
+  `{victim} got eliminated by {killer}`,
+  `{victim} was crushed by {killer}`,
+  `{victim} had a skill issue while fighting {killer}`,
+  `{victim} was sniped by {killer}`,
+  `{victim} was exploded by {killer}`,
+  `{victim} was executed by {killer}`,
+  `{victim} was deleted by {killer}`,
+  `{victim} was killed by THE PERSON WITH KILLSTREAK ---> {killer}`,
+  `{victim} got buffed, but get nerfed harder by {killer}`,
+  `{victim} got flung into space by {killer}`,
+  `{victim} was pound into paste by {killer}`,
+  `{victim} was fed a healthy dose of explosives by {killer}`,
+  `{victim} became another number in {killer}'s kill streak`,
+  `{victim} got wrecked by {killer}`,
+  `{victim} got hit by a steamroller driven by DIO`
+];
+const joinMessages = [
+  `{idot} joined the game`,
+  `{idot} spawned`,
+  `{idot} joined`,
+  `{idot} wants a killsteak`,
+  `{idot} exists`,
+  `{idot} has been summoned`,
+  `{idot} is back`,
+  `a wild {idot} spawned`,
+  `{idot} is here to kill them all`,
+  `{idot} doesn't have anything better to do`,
+  `{idot} is here to fight to the death`,
+];
+const rageMessages = [
+  `{idot}.exe is unresponsive`,
+  `{idot} left the game`,
+  `{idot} ragequit`,
+  `{idot} stopped existing`,
+  `{idot} got away`,
+  `wild {idot} fled`,
+  `{idot} disconnected`,
+  `{idot} lost internet connection`,
+  `{idot} is not found`,
+];
 var sockets = [], servers = [], incoming_per_second = 0, outgoing_per_second = 0, ffaLevels = [
   ['22 2 =2222222222222222222222=1','22 = == ===================21=','    =      # # #           122','2=   = #   #   # ## ## #  1 =2','  = @= ##  ## ##         1  =2','=  ==  2## #   # #      1   =2','2=    222### # # #     1  # =2','2  ##22222##   #      1     =2','2=  ##22222##  # #   1      =2','2=   ##22222##      1       =2','2= #  ##22222##    1  #   # =2','2= ##  ##22222##  1         =2','2= ###  ##222221 1  # ##### =2','2= # ##  ##222111   #     # =2','2= # ###  ##211111#  #  # # =2','2= #   ##  #111112##  #   # =2','2= # #   #   111222##  #  # =2','2= ##### #  1 122222##  # # =2','2=         1  ##22222##  ## =2','2= #   #  1    ##22222##  # =2','2=       1      ##22222##   =2','2=      1   # # ###22222##  =2','2=     1      #   ##22222##  2','2= #  1     # # # ###222    =2','2=   1      # # # # ##2  ==  =','2=  1         # # #  ## =  =  ','2= 1  # ## ## # # #   # =   =2','221           #   #      =    ','=12=================== =  = 22','1=2222222222222222222222= 2 22'],
   ['2     =    #     #  #  =     2', ' ==2=    # #  #  #  #    =2== ', ' =  = =  #    #     #  = =  = ', ' 2 == =  #### # #####  = == 2 ', ' ==== =  #    #     #  = ==== ', '      1  # #     #  #  1      ', '= ===11  # # ### # ##  11=== =', '         # #     #  #         ', '  222#   ############         ', ' 22222#                ###### ', ' 22222#   2  2222  2   #  # # ', ' 22222#                #  # # ', ' 22222#     # 11 #     # ## # ', ' 22222#   2  1111  2   #    # ', ' 22222#   2 11@ 11 2   # ## # ', ' 22222#   2 11  11 2   #  # # ', ' 22222#   2  1111  2   #  # # ', ' 22222#     # 11 #     #### # ', ' 22222#                     # ', ' 22222#   2  2222  2   ## # # ', ' 22222#                #  # # ', '  222#   ############  ###### ', '         #    ##    #         ', '= ===11  # #      # #  11=== =', '      1  #    ##    #  1      ', ' ==== =  #    ##    #  = ==== ', ' 2 == =  #    ##    #  = == 2 ', ' =  = =  #    ##    #  = =  = ', ' ==2=    # #      # #    =2== ', '2     =  #    ##       =     2'],
@@ -56,60 +101,56 @@ setInterval(() => {
   });
 }, 60000);
 
-Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) => {
+Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
   sockets.push(socket);
-  socket.originalSend = socket.send;
-  socket.send = function(data) {this.originalSend(A.en(jsonpack.pack(data)))}.bind(socket);
+  socket._send = socket.send;
+  socket.send = (data) => {
+    socket._send(jsonpack.pack(encode(data)));
+  };
   if (SETTINGS.banips.includes(socket.ip)) {
     socket.send({status: 'error', message: 'Your ip has been banned!'});
-    return setTimeout(() => {socket.destroy()});
+    return setImmediate(() => socket.destroy());
   }
-  socket.on('message', (data) => {
+  socket.on('message', async (data) => {
     incoming_per_second++;
     try {
-      data = jsonpack.unpack(A.de(data));
+      data = jsonpack.unpack(decode(data));
     } catch(e) {
       return socket.destroy();
     }
     if (!socket.username) {
-      if (data.username.includes(' ') || data.username.includes(':')) return socket.destroy();
+      if (/\s|:/.test(data.username)) return socket.destroy();
       const ban = SETTINGS.bans.find(i => i.username === data.username);
       if (ban) {
-        setTimeout(() => socket.destroy());
-        return socket.send({status: 'error', message: `You are banned. Banned by ${ban.by} for ${ban.reason}. You are banned for ${ban.time} more minutes or until an admin unbans you. You were banned by an admin on this server, not the entire game, so you can join other servers.`});
+        socket.send({status: 'error', message: `You are banned. Banned by ${ban.by} for ${ban.reason}. You are banned for ${ban.time} more minutes or until an admin unbans you. You were banned by an admin on this server, not the entire game, so you can join other servers.`});
+        return setImmediate(() => socket.destroy());
       }
       socket.username = data.username;
     }
     if (data.type === 'join') {
-      let joinedServer = false;
-      servers.forEach((s, i) => {
-        if (s.pt.length < 10 && !joinedServer) {
-          socket.room = i;
-          if (s.pt.some(t => t.username === socket.username)) {
-            socket.send({status: 'error', message: 'You are already in the server!'});
-            return setTimeout(() => socket.destroy());
-          }
-          http.get(`http://141.148.128.231/verify?username=${socket.username}&token=${data.token}`, res => {
-            let body = '';
-            res.on('data', chunk => {
-              body += chunk;
-            });
-            res.on('end', () => {
-              if (body === 'true') {
-                s.add(socket, data.tank);
-              } else {
-                socket.send({status: 'error', message: `Authentication failure. Your token (${data.token}) does not match with your username (${socket.username}). This can be caused by the authentication servers restarting or by modifying the client. Simply log in again to fix this issue.`});
-                setTimeout(() => socket.destroy());
-              }
-            });
-          });
-          joinedServer = true;
+      const joinable = servers.filter(s => s.pt.length < SETTINGS.ppm).sort((a, b) => a.pt.length-b.pt.length);
+      if (joinable.length === 0) {
+        joinable[0] = new FFA();
+        servers.push(joinable[0]);
+      } else if (joinable[0].pt.some(t => t.username === socket.username)) {
+        socket.send({status: 'error', message: 'You are already in the server!'});
+        return setImmediate(() => socket.destroy());
+      }
+      const { username, token, tank } = data;
+      try {
+        const res = await fetch(`http://141.148.128.231/verify?username=${username}&token=${token}`);
+        const body = await res.text();
+        if (body === 'true') {
+          joinable[0].add(socket, tank);
+          socket.room = servers.indexOf(joinable[0]);
+        } else {
+          socket.send({status: 'error', message: 'Invalid Token.'});
+          setImmediate(() => socket.destroy());
         }
-      });
-      if (!joinedServer) {
-        servers.push(new FFA());
-        servers[servers.length-1].add(socket, data.tank);
-        socket.room = servers.length-1;
+      } catch(e) {
+        socket.send({status: 'error', message: 'Cannot verify token.'});
+        console.log('Cannot connect to authentication servers!');
+        return setImmediate(() => socket.destroy());
       }
     } else if (data.type === 'update') {
       servers[socket.room].update(data);
@@ -119,13 +160,13 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) =>
       if (SETTINGS.mutes.find(i => i.username === socket.username)) return;
       let msg = data.msg;
       try {
-        msg = (SETTINGS.filterProfanity ? filter.clean(msg) : msg);
+        msg = SETTINGS.filterProfanity ? filter.clean(msg) : msg;
       } catch(e) {}
-      servers[socket.room].logs.push({m: '['+socket.username+'] '+msg, c: '#ffffff'});
+      servers[socket.room].logs.push({m: `[${socket.username}] ${msg}`, c: '#ffffff'});
     } else if (data.type === 'command') {
-      const [commandName, ...args] = data.data;
-      if (typeof Commands[commandName] === 'function') {
-        Commands[commandName].bind(socket)(args);
+      const [commandName, ...args] = data.data, func = Commands[commandName];
+      if (typeof func === 'function') {
+        func.bind(socket)(args);
       } else socket.send({status: 'error', message: 'Command not found.'});
     } else if (data.type === 'stats') {
       const players = servers.reduce((arr, s) => [...arr, ...s.pt.map(t => t.username)], []);
@@ -133,7 +174,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, (socket) =>
     } else setTimeout(() => socket.destroy());
   });
   socket.on('close', (code, reason) => {
-    if (socket.room !== undefined) servers[socket.room].disconnect(socket, code, reason);
+    if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
   });
 });
 const Commands = {
@@ -350,10 +391,6 @@ class A {
       l+=2;
     }
   }
-
-  static en(c) {var x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}
-
-  static de(b) {var a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")}
 }
 
 class Engine {
@@ -685,60 +722,15 @@ class Engine {
   }
 
   deathMsg(victim, killer) {
-    const deathMessages = [
-      `${victim} was killed by ${killer}`,
-      `${victim} was put out of their misery by ${killer}`,
-      `${victim} was assassinated by ${killer}`,
-      `${victim} got comboed by ${killer}`,
-      `${victim} got eliminated by ${killer}`,
-      `${victim} was crushed by ${killer}`,
-      `${victim} had a skill issue while fighting ${killer}`,
-      `${victim} was sniped by ${killer}`,
-      `${victim} was exploded by ${killer}`,
-      `${victim} was executed by ${killer}`,
-      `${victim} was deleted by ${killer}`,
-      `${victim} was killed by THE PERSON WITH KILLSTREAK ---> ${killer}`,
-      `${victim} got buffed, but get nerfed harder by ${killer}`,
-      `${victim} got flung into space by ${killer}`,
-      `${victim} was pound into paste by ${killer}`,
-      `${victim} was fed a healthy dose of explosives by ${killer}`,
-      `${victim} became another number in ${killer}'s kill streak`,
-      `${victim} got wrecked by ${killer}`,
-      `${victim} got hit by a steamroller driven by DIO`
-    ];
-    return deathMessages[Math.floor(Math.random()*messages.length)];
+    return deathMessages[Math.floor(Math.random()*deathMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
   }
 
   joinMsg(player) {
-    var junk = [
-      '{IDOT} joined the game',
-      '{IDOT} spawned',
-      '{IDOT} joined',
-      '{IDOT} wants a killsteak',
-      '{IDOT} exists',
-      "{IDOT} has been summoned",
-      "{IDOT} is back",
-      "a wild {IDOT} spawned",
-      "{IDOT} is here to kill them all",
-      "{IDOT} doesn't have anything better to do",
-      "{IDOT} is here to fight to the death",
-    ];
-    return junk[Math.floor(Math.random() * junk.length)].replace('{IDOT}', player);
+    return joinMessages[Math.floor(Math.random()*joinMessages.length)].replace('{idot}', player);
   }
 
   rageMsg(player) {
-    var rageMessage = [
-      '{IDOT}.exe is unresponsive',
-      '{IDOT} left the game',
-      '{IDOT} ragequit',
-      '{IDOT} stopped existing',
-      '{IDOT} got away',
-      'wild {IDOT} fled',
-      "{IDOT} disconnected",
-      "{IDOT} lost internet connection",
-      "{IDOT} is not found",
-    ];
-    return junk[Math.floor(Math.random() * junk.length)].replace('{IDOT}', player);
+    return rageMessages[Math.floor(Math.random()*rageMessages.length)].replace('{idot}', player);
   }
 
   parseTeamExtras(s) {
