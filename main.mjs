@@ -71,7 +71,7 @@ router.ws('/', {idle_timeout: Infinity}, (socket) => {
   });
 });
 
-HyperExpressServer.get('/verify', (req, res) => res.end(valid(req.query.token, req.query.username)));
+HyperExpressServer.get('/verify', (req, res) => res.end(valid(req.query.token, req.query.username).toString()));
 HyperExpressServer.get('/*', async(req, res) => {
   res.header('Content-Type', 'application/javascript').end(await fs.readFile('./public/js/pixel-tanks.js'));
 });
