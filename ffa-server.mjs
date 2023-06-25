@@ -464,7 +464,7 @@ class Engine {
           }
         }
       });
-      if (t.damage) t.damage.y -= 4;
+      if (t.damage) t.damage.y--;
       if (t.grapple) this.grapple(t);
     });
 
