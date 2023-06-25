@@ -575,7 +575,8 @@ class Engine {
       } else {
         t.healInterval = setInterval(() => {
           t.hp = Math.min(t.maxHp, t.hp+1);
-          this.ai.find(a => this.getUsername(a.team) === t.username).hp = Math.min(600, a.hp+1);
+          const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
+          ai = Math.min(600, ai.hp+1);
         }, 100);
         t.healTimeout = setTimeout(() => {
           t.hp = t.maxHp;
@@ -586,14 +587,16 @@ class Engine {
     }
     if (use.includes('tape')) {
       t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
-      this.ai.find(a => this.getUsername(a.team) === t.username).hp = Math.min(600, a.hp+150);
+      const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
+      ai.hp = Math.min(600, ai.hp+150);
     }
     if (use.includes('glu')) {
       clearInterval(t.gluInterval);
       clearTimeout(t.gluTimeout);
       t.gluInterval = setInterval(() => {
         t.hp = Math.min(t.maxHp, t.hp+3);
-        this.ai.find(a => this.getUsername(a.team) === t.username).hp = Math.min(600, a.hp+3);
+        const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
+        ai.hp = Math.min(600, ai.hp+3);
       }, 100);
       t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
     }
