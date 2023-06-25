@@ -425,7 +425,7 @@ class Engine {
         if ((t.x-tank.x)**2+(t.y-tank.y)**2 < 250000) tank.hp = Math.min(tank.hp+25, tank.maxHp);
       }
       if (t.pushback !== 0) t.pushback += 0.5;
-      if (t.fire && this.getTeam(t.fire.team) !== this.getTeam(t.team)) this.damagePlayer(t, {x: this.x, y: this.y, u: this.getUsername(t.fire.team), a: .5});
+      if (t.fire && this.getTeam(t.fire.team) !== this.getTeam(t.team)) this.damagePlayer(t, {x: t.x, y: t.y, u: this.getUsername(t.fire.team), a: .5});
       this.pt.forEach(tank => {
         if (A.collider(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) {
           if (t.immune && tank.canBashed) {
