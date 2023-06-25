@@ -448,9 +448,9 @@ class Engine {
           } else if (b.type === 'fire') {
             if (t.fire) {
               clearTimeout(t.fireTimeout);
-              t.fire = {team: this.team, frame: t.fire.frame};
+              t.fire = {team: b.team, frame: t.fire.frame};
             } else {
-              t.fire = {team: this.team, frame: 0};
+              t.fire = {team: b.team, frame: 0};
               t.fireInterval = setInterval(() => {
                 t.fire.frame = t.fire.frame === 0 ? 1 : 0;
               }, 50);
