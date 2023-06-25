@@ -464,9 +464,7 @@ class Engine {
           }
         }
       });
-      if (t.damage) t.damage.forEach(d => {
-        d.y -= 4;
-      });
+      if (t.damage) t.damage.y -= 4;
       if (t.grapple) this.grapple(t);
     });
 
