@@ -128,21 +128,29 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
       socket.username = data.username;
     }
     if (data.type === 'join') {
-      const joinable = servers.filter(s => s.pt.length < SETTINGS.ppm).sort((a, b) => a.pt.length-b.pt.length);
+      let joinable = servers.filter(s => s.pt.length < SETTINGS.ppm).sort((a, b) => a.pt.length-b.pt.length);
+      console.log(joinable.length);
+      console.log(joinable);
       if (joinable.length === 0) {
         joinable[0] = new FFA();
+        console.log(joinable.length);
         servers.push(joinable[0]);
+        console.log(servers.length);
       } else if (joinable[0].pt.some(t => t.username === socket.username)) {
         socket.send({status: 'error', message: 'You are already in the server!'});
         return setImmediate(() => socket.destroy());
       }
       const { username, token, tank } = data;
       try {
+        console.log('sending http request for token')
         const res = await fetch(`http://141.148.128.231/verify?username=${username}&token=${token}`);
+        console.log('request recieved');
         const body = await res.text();
+        console.log('received body')
         if (body === 'true') {
           joinable[0].add(socket, tank);
           socket.room = servers.indexOf(joinable[0]);
+          console.log('added socket room which is'+socket.room);
         } else {
           socket.send({status: 'error', message: 'Invalid Token.'});
           setImmediate(() => socket.destroy());
