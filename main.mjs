@@ -54,7 +54,7 @@ router.ws('/', {idle_timeout: Infinity}, (socket) => {
   sockets.push(socket);
   socket._send = socket.send;
   socket.send = (data) => {
-    socket._send(jsonpack.pack(encode(data)));
+    socket._send(encode(jsonpack.pack(data)));
   };
   socket.on('message', (data) => {
     try {
