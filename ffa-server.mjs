@@ -395,138 +395,16 @@ class A {
   }
 }
 
-class Engine {
-
-  constructor(id, levels) {
+class Multiplayer extends Engine {
+  constructor(levels) {
+    super(levels);
     this.sockets = [];
-    this.spawn = {x: 0, y: 0};
-    this.id = id;
     this.logs = [];
-    this.ai = [];
-    this.b = [];
-    this.s = [];
-    this.pt = [];
-    this.d = [];
-    this.i = [];
-    this.t = [];
-    this.levels = levels;
-    this.levelReader(this.levels[Math.floor(Math.random()*this.levels.length)]);
     if (!SETTINGS.fps_boost) this.i.push(setInterval(() => this.send(), 1000/SETTINGS.UPS));
-    this.i.push(setInterval(() => this.tick(), 1000/60));
   }
 
-  tick() {
-    this.ai.concat(this.s).forEach(e => e.update());
-
-    this.pt.forEach(t => {
-      if (t.dedEffect) t.dedEffect.time = Date.now()-t.dedEffect.start;
-      if (t.class === 'medic' && this.healing !== this.username && !this.ded) {
-        const tank = this.pt.find(tank => tank.username === t.healing);
-        if ((t.x-tank.x)**2+(t.y-tank.y)**2 < 250000) tank.hp = Math.min(tank.hp+25, tank.maxHp);
-      }
-      if (t.pushback !== 0) t.pushback += 0.5;
-      if (t.fire && this.getTeam(t.fire.team) !== this.getTeam(t.team)) this.damagePlayer(t, {x: t.x, y: t.y, u: this.getUsername(t.fire.team), a: .5});
-      this.pt.forEach(tank => {
-        if (A.collider(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) {
-          if (t.immune && tank.canBashed) {
-            if (t.class === 'warrior' && t.username !== tank.username) {
-              tank.hp -= 50;
-            } else if (t.class == 'medic') {
-              tank.hp = Math.min(tank.hp+50, tank.maxHp);
-            }
-            tank.canBashed = false;
-            setTimeout(() => {
-              tank.canBashed = true;
-            }, 800);
-          }
-        }
-      });
-      this.b.forEach(b => {
-        if (A.collider(t.x, t.y, 80, 80, b.x, b.y, 100, 100) && !t.ded && !t.immune) {
-          if (b.type === 'mine' && b.a) {
-            setTimeout(() => b.destroy());
-          } else if (b.type === 'fire') {
-            if (t.fire) {
-              clearTimeout(t.fireTimeout);
-              t.fire = {team: b.team, frame: t.fire.frame};
-            } else {
-              t.fire = {team: b.team, frame: 0};
-              t.fireInterval = setInterval(() => {
-                t.fire.frame = t.fire.frame === 0 ? 1 : 0;
-              }, 50);
-            }
-            t.fireTimeout = setTimeout(() => {
-              clearInterval(t.fireInterval);
-              t.fire = false;
-            }, 2000);
-          } else if (b.type === 'spike') {
-            this.damagePlayer(t, {a: 1, x: t.x, y: t.y, u: this.getUsername(b.team)});
-          }
-        }
-      });
-      if (t.damage) t.damage.y--;
-      if (t.grapple) this.grapple(t);
-    });
-
-    this.d.forEach(d => {
-      if (!d.c) return;
-      this.pt.forEach(t => {
-        if (A.collider(d.x, d.y, d.w, d.h, t.x, t.y, 80, 80) && ((d.a > 0 && this.getTeam(d.team) !== this.getTeam(t.team)) || (d.a < 0 && this.getTeam(d.team) === this.getTeam(t.team)))) {
-          this.damagePlayer(t, Object.defineProperty({...d}, 'u', {value: this.getUsername(d.team)}));
-        }
-      });
-      this.b.forEach(b => {
-        if (A.collider(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) b.damage(d.a);
-      });
-      this.ai.forEach(ai => {
-        if (A.collider(d.x, d.y, d.w, d.h, this.x, this.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) ai.damage(d.a);
-      });
-      d.c = false;
-    });
-  }
-
-  grapple(t) {
-    const dx = t.grapple.target.x-t.x;
-    const dy = t.grapple.target.y-t.y;
-
-    if (dx**2+dy**2 > 400) {
-      const angle = Math.atan2(dy, dx);
-      const mx = Math.cos(angle)*20;
-      const my = Math.sin(angle)*20;
-
-      if (this.collision(t.x+mx, t.y)) t.x += mx;
-      if (this.collision(t.x, t.y+my)) t.y += my;
-      t.grapple.bullet.sx = t.x+40;
-      t.grapple.bullet.sy = t.y+40;
-      t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
-      if ((!this.collision(t.x+mx, t.y) || Math.abs(mx) < 2) && (!this.collision(t.x, t.y+my) || Math.abs(my) < 2)) {
-        t.grapple.bullet.destroy();
-        t.grapple = false;
-      }
-    } else {
-      t.grapple.bullet.destroy();
-      t.grapple = false;
-    }
-  }
-
-  collision(x, y) {
-    if (x < 0 || y < 0 || x+80 > 3000 || y+80 > 3000) return false;
-    for (const b of this.b) if (A.collider(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) return false;
-    return true;
-  }
-
-  levelReader(level) {
-    let l, q, key = {'=': ['void', Infinity], '#': ['barrier', Infinity], '2': ['strong', 200], '1': ['weak', 100], '0': ['spike', 0], '3': ['gold', 300]};
-    for (l = 0; l < level.length; l++) {
-      for (q = 0; q < level[l].split('').length; q++) {
-        const p = level[l].split('');
-        if (p[q] === '@') {
-          this.spawn = {x: q*100, y: l*100};
-        } else if (key[p[q]]) {
-          this.b.push(new Block(q*100, l*100, key[p[q]][1], key[p[q]][0], '_default_:_placeholder_', this));
-        }
-      }
-    }
+  override(t, d) {
+    t.socket.send({message: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
   }
 
   add(socket, data) {
@@ -685,40 +563,6 @@ class Engine {
     });
   }
 
-  damagePlayer(victim, damage) {
-    if (victim.immune || victim.ded) return;
-    if (victim.shields > 0 && damage.a > 0) return victim.shields -= damage.a;
-    if (victim.buff) damage.a *= .75;
-    victim.hp = Math.min(victim.maxHp, victim.hp-damage.a);
-    if (victim.damage) clearTimeout(victim.damage.ti);
-    victim.damage = {d: (victim.damage ? victim.damage.d : 0)+damage.a, x: damage.x, y: damage.y, ti: setTimeout(() => {victim.damage = false}, 1000)};
-    if (victim.hp <= 0 && this.ondeath) this.ondeath(victim, this.pt.find(t => t.username === damage.u));
-  }
-
-  deathMsg(victim, killer) {
-    return deathMessages[Math.floor(Math.random()*deathMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
-  }
-
-  joinMsg(player) {
-    return joinMessages[Math.floor(Math.random()*joinMessages.length)].replace('{idot}', player);
-  }
-
-  rageMsg(player) {
-    return rageMessages[Math.floor(Math.random()*rageMessages.length)].replace('{idot}', player);
-  }
-
-  parseTeamExtras(s) {
-    return s.replace('@leader', '').split('@requestor#')[0];
-  }
-
-  getUsername(s) {
-    return this.parseTeamExtras(s).split(':')[0];
-  }
-
-  getTeam(s) {
-    return this.parseTeamExtras(s).split(':')[1];
-  }
-
   disconnect(socket, code, reason) {
     this.sockets.splice(this.sockets.indexOf(socket), 1);
     A.each(this.pt, function(i, pt) {pt.splice(i, 1)}, 'username', socket.username, this.pt);
@@ -732,6 +576,169 @@ class Engine {
       return;
     }
     this.logs.push({m: this.rageMsg(socket.username), c: '#E10600'});
+  }
+
+  deathMsg(victim, killer) {
+    return deathMessages[Math.floor(Math.random()*deathMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
+  }
+
+  joinMsg(player) {
+    return joinMessages[Math.floor(Math.random()*joinMessages.length)].replace('{idot}', player);
+  }
+
+  rageMsg(player) {
+    return rageMessages[Math.floor(Math.random()*rageMessages.length)].replace('{idot}', player);
+  }
+}
+
+class Engine {
+  constructor(levels) {
+    this.spawn = {x: 0, y: 0};
+    this.ai = [];
+    this.b = [];
+    this.s = [];
+    this.pt = [];
+    this.d = [];
+    this.i = [];
+    this.t = [];
+    this.levelReader(levels[Math.floor(Math.random()*levels.length)]);
+    this.i.push(setInterval(() => this.tick(), 1000/60));
+  }
+
+  tick() {
+    this.ai.concat(this.s).forEach(e => e.update());
+
+    this.pt.forEach(t => {
+      if (t.dedEffect) t.dedEffect.time = Date.now()-t.dedEffect.start;
+      if (t.class === 'medic' && this.healing !== this.username && !this.ded) {
+        const tank = this.pt.find(tank => tank.username === t.healing);
+        if ((t.x-tank.x)**2+(t.y-tank.y)**2 < 250000) tank.hp = Math.min(tank.hp+25, tank.maxHp);
+      }
+      if (t.pushback !== 0) t.pushback += 0.5;
+      if (t.fire && this.getTeam(t.fire.team) !== this.getTeam(t.team)) this.damagePlayer(t, {x: t.x, y: t.y, u: this.getUsername(t.fire.team), a: .5});
+      this.pt.forEach(tank => {
+        if (A.collider(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) {
+          if (t.immune && tank.canBashed) {
+            if (t.class === 'warrior' && t.username !== tank.username) {
+              this.damagePlayer(tank, {x: tank.x, y: tank.y, u: t.username, a: 50});
+            } else if (t.class == 'medic') {
+              tank.hp = Math.min(tank.hp+50, tank.maxHp);
+            }
+            tank.canBashed = false;
+            setTimeout(() => {
+              tank.canBashed = true;
+            }, 800);
+          }
+        }
+      });
+      this.b.forEach(b => {
+        if (A.collider(t.x, t.y, 80, 80, b.x, b.y, 100, 100) && !t.ded && !t.immune) {
+          if (b.type === 'mine' && b.a) {
+            setTimeout(() => b.destroy());
+          } else if (b.type === 'fire') {
+            if (t.fire) {
+              clearTimeout(t.fireTimeout);
+              t.fire = {team: b.team, frame: t.fire.frame};
+            } else {
+              t.fire = {team: b.team, frame: 0};
+              t.fireInterval = setInterval(() => {
+                t.fire.frame = t.fire.frame === 0 ? 1 : 0;
+              }, 50);
+            }
+            t.fireTimeout = setTimeout(() => {
+              clearInterval(t.fireInterval);
+              t.fire = false;
+            }, 2000);
+          } else if (b.type === 'spike') {
+            this.damagePlayer(t, {a: 1, x: t.x, y: t.y, u: this.getUsername(b.team)});
+          }
+        }
+      });
+      if (t.damage) t.damage.y--;
+      if (t.grapple) this.grapple(t);
+    });
+
+    this.d.forEach(d => {
+      if (!d.c) return;
+      this.pt.forEach(t => {
+        if (A.collider(d.x, d.y, d.w, d.h, t.x, t.y, 80, 80) && ((d.a > 0 && this.getTeam(d.team) !== this.getTeam(t.team)) || (d.a < 0 && this.getTeam(d.team) === this.getTeam(t.team)))) {
+          this.damagePlayer(t, {...d, u: this.getUsername(d.team)});
+        }
+      });
+      this.b.forEach(b => {
+        if (A.collider(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) setTimeout(() => b.damage(d.a));
+      });
+      this.ai.forEach(ai => {
+        if (A.collider(d.x, d.y, d.w, d.h, this.x, this.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) setTimeout(() => ai.damage(d.a));
+      });
+      d.c = false;
+    });
+  }
+
+  grapple(t) {
+    const dx = t.grapple.target.x-t.x;
+    const dy = t.grapple.target.y-t.y;
+
+    if (dx**2+dy**2 > 400) {
+      const angle = Math.atan2(dy, dx);
+      const mx = Math.cos(angle)*20;
+      const my = Math.sin(angle)*20;
+
+      if (this.collision(t.x+mx, t.y)) t.x += mx;
+      if (this.collision(t.x, t.y+my)) t.y += my;
+      t.grapple.bullet.sx = t.x+40;
+      t.grapple.bullet.sy = t.y+40;
+      this.override(t, [{key: 'x', value: t.x}, {key: 'y', value: t.y}]);
+      if ((!this.collision(t.x+mx, t.y) || Math.abs(mx) < 2) && (!this.collision(t.x, t.y+my) || Math.abs(my) < 2)) {
+        t.grapple.bullet.destroy();
+        t.grapple = false;
+      }
+    } else {
+      t.grapple.bullet.destroy();
+      t.grapple = false;
+    }
+  }
+
+  collision(x, y) {
+    if (x < 0 || y < 0 || x+80 > 3000 || y+80 > 3000) return false;
+    for (const b of this.b) if (A.collider(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) return false;
+    return true;
+  }
+
+  levelReader(level) {
+    let l, q, key = {'=': ['void', Infinity], '#': ['barrier', Infinity], '2': ['strong', 200], '1': ['weak', 100], '0': ['spike', 0], '3': ['gold', 300]};
+    for (l = 0; l < level.length; l++) {
+      for (q = 0; q < level[l].split('').length; q++) {
+        const p = level[l].split('');
+        if (p[q] === '@') {
+          this.spawn = {x: q*100, y: l*100};
+        } else if (key[p[q]]) {
+          this.b.push(new Block(q*100, l*100, key[p[q]][1], key[p[q]][0], '_default_:_placeholder_', this));
+        }
+      }
+    }
+  }
+
+  damagePlayer(victim, damage) {
+    if (victim.immune || victim.ded) return;
+    if (victim.shields > 0 && damage.a > 0) return victim.shields -= damage.a;
+    if (victim.buff) damage.a *= .75;
+    victim.hp = Math.min(victim.maxHp, victim.hp-damage.a);
+    if (victim.damage) clearTimeout(victim.damage.ti);
+    victim.damage = {d: (victim.damage ? victim.damage.d : 0)+damage.a, x: damage.x, y: damage.y, ti: setTimeout(() => {victim.damage = false}, 1000)};
+    if (victim.hp <= 0 && this.ondeath) this.ondeath(victim, this.pt.find(t => t.username === damage.u));
+  }
+
+  parseTeamExtras(s) {
+    return s.replace('@leader', '').split('@requestor#')[0];
+  }
+
+  getUsername(s) {
+    return this.parseTeamExtras(s).split(':')[0];
+  }
+
+  getTeam(s) {
+    return this.parseTeamExtras(s).split(':')[1];
   }
 }
 
@@ -1088,28 +1095,10 @@ class Ai {
   }
 }
 
-class FFA extends Engine {
-  constructor(ip) {
-    super(ip, ffaLevels);
-  }
-
-  add(socket, data) {
-    /*
-      onjoin
-    */
-    super.add(socket, data);
-  }
-
-  update(data) {
-    /*
-      on update
-    */
-    super.update(data);
-  }  
-
-  disconnect(socket, code, reason) {
-    super.disconnect(socket, code, reason);
-  }
+class FFA extends Multiplayer {
+  constructor() {
+    super(ffaLevels);
+  } 
 
   ondeath(t, m) {
     t.ded = true;
@@ -1142,7 +1131,7 @@ class FFA extends Engine {
   ontick() {}
 }
 
-class DUELS extends Engine {
+/*class DUELS extends Engine {
   constructor(ip) {
     super(ip, duelsLevels);
     this.mode = 0; // 0 -> waiting for players to join, 1 -> waiting for second player to join, 2 -> 10 second ready timer, 3 -> match active, 4 -> gameover and server shutdown
@@ -1171,7 +1160,7 @@ class DUELS extends Engine {
 
   }
 
-}
+}*/
 
 Server.use(Core);
 if (!SETTINGS.export) Server.listen(SETTINGS.port);
