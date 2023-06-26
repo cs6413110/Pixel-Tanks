@@ -580,7 +580,8 @@ class Engine {
         }, 100);
         t.healTimeout = setTimeout(() => {
           t.hp = t.maxHp;
-          this.ai.find(a => this.getUsername(a.team) === t.username).hp = 600;
+          const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
+          if (ai) ai.hp = 600;
           clearInterval(t.healInterval);
         }, 7500);
       }
