@@ -395,202 +395,6 @@ class A {
   }
 }
 
-class Multiplayer extends Engine {
-  constructor(levels) {
-    super(levels);
-    this.sockets = [];
-    this.logs = [];
-    if (!SETTINGS.fps_boost) this.i.push(setInterval(() => this.send(), 1000/SETTINGS.UPS));
-  }
-
-  override(t, d) {
-    t.socket.send({message: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
-  }
-
-  add(socket, data) {
-    this.sockets.push(socket);
-    data = {...data, damage: false, maxHp: data.material*50+300, hp: data.material*50+300, deathsPerMovement: 0, socket: socket, canBashed: true, shields: 0, team: data.username+':'+Math.random(), x: this.spawn.x, y: this.spawn.y, r: 0, pushback: 0, baseRotation: 0, baseFrame: 0, fire: false, healing: data.username};
-    socket.send({event: 'override', data: [{key: 'x', value: this.spawn.x}, {key: 'y', value: this.spawn.y}]});
-    this.pt.push(data);
-    this.logs.push({m: this.joinMsg(data.username), c: '#66FF00'});
-  }
-
-  update(data) {
-    const t = this.pt.find(t => t.username === data.username);
-    data = data.data;
-    const {emote, r, baseFrame, use, x, y} = data;
-    if ((t.emote !== emote || t.r !== r || t.baseFrame !== baseFrame || use.length || data.fire.length) || (!t.grapple && (t.x !== data.x || t.y !== data.y))) t.deathsPerMovement = 0;
-    t.baseRotation = data.baseRotation;
-    t.immune = data.immune;
-    t.animation = data.animation;
-    t.emote = emote;
-    t.invis = data.invis;
-    t.baseFrame = baseFrame;
-    if (!t.grapple) {
-      t.x = x;
-      t.y = y;
-    }
-    t.r = r;
-    if (t.ded) return;
-    if (t.immune && t.class === 'fire' || t.class === 'builder') {
-      const team = this.parseTeamExtras(t.team), type = t.class === 'fire' ? 'fire' : 'weak';
-      if ((t.x+80)%100>80 && [45, 90, 135].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100+100, Math.floor(t.y/100)*100, 100, type, team, this));
-      if (t.x%100<20 && [225, 270, 315].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100-100, Math.floor(t.y/100)*100, 100, type, team, this));
-      if ((t.y+80)%100>80 && [135, 180, 225].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100, Math.floor(t.y/100)*100+100, 100, type, team, this));
-      if (t.y%100<20 && [315, 0, 45].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100, Math.floor(t.y/100)*100-100, 100, type, team, this));
-    }
-    if (use.includes('dynamite')) {
-      this.s.forEach(s => {
-        if (this.getUsername(s.team) !== t.username || s.type !== 'dynamite') return;
-        this.d.push(new Damage(s.x-100, s.y-100, 200, 200, 100, s.team, this));
-        setTimeout(() => s.destroy());
-      });
-    }
-    if (use.includes('toolkit')) {
-      if (t.healInterval) {
-        clearInterval(t.healInterval);
-        clearTimeout(t.healTimeout);
-      } else {
-        t.healInterval = setInterval(() => {
-          t.hp = Math.min(t.maxHp, t.hp+1);
-          const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
-          if (ai) ai.hp = Math.min(600, ai.hp+1);
-        }, 100);
-        t.healTimeout = setTimeout(() => {
-          t.hp = t.maxHp;
-          const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
-          if (ai) ai.hp = 600;
-          clearInterval(t.healInterval);
-        }, 7500);
-      }
-    }
-    if (use.includes('tape')) {
-      t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
-      const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
-      if (ai) ai.hp = Math.min(600, ai.hp+150);
-    }
-    if (use.includes('glu')) {
-      clearInterval(t.gluInterval);
-      clearTimeout(t.gluTimeout);
-      t.gluInterval = setInterval(() => {
-        t.hp = Math.min(t.maxHp, t.hp+3);
-        const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
-        if (ai) ai.hp = Math.min(600, ai.hp+3);
-      }, 100);
-      t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
-    }
-    if (use.includes('block')) {
-      const coordinates = [{r: [337.5, 360], dx: -10, dy: 80}, {r: [0, 22.5], dx: -10, dy: 80}, {r: [22.5, 67.5], dx: -100, dy: 80}, {r: [67.5, 112.5], dx: -100, dy: -10}, {r: [112.5, 157.5], dx: -100, dy: -100}, {r: [157.5, 202.5], dx: -10, dy: -100}, {r: [202.5, 247.5], dx: 80, dy: -100}, {r: [247.5, 292.5], dx: 80, dy: -10}, {r: [292.5, 337.5], dx: 80, dy: 80}];
-      for (const coord of coordinates) {
-        if (r >= coord.r[0] && r < coord.r[1]) {
-          this.b.push(new Block(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, mine: 0, spike: 0, fortress: 400}[data.blockType], data.blockType, t.team, this));
-          break;
-        }
-      }
-    }
-    if (use.includes('flashbang')) {
-      this.pt.forEach(tank => {
-        if (!A.collider(tank.x-860, tank.y-560, 1800, 1200, t.x, t.y, 80, 80) || tank.username === t.username) return;
-        tank.flashbanged = true;
-        clearTimeout(tank.flashbangTimeout);
-        tank.flashbangTimeout = setTimeout(() => {
-          tank.flashbanged = false;
-        }, 1000);
-      });
-    }
-    if (use.includes('bomb')) {
-      this.b.forEach(b => {
-        if (A.collider(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) setTimeout(b.destroy);
-      });
-    }
-    if (use.includes('turret')) {
-      this.ai.splice(this.ai.indexOf(this.ai.find(a => this.getUsername(a.team) === t.username)), 1);
-      this.ai.push(new Ai(t.x, t.y, 0, t.team, this));
-    }
-    if (use.includes('buff')) {
-      t.buff = true;
-      setTimeout(() => {
-        t.buff = false;
-      }, 10000);
-    }
-    if (use.includes('healSwitch')) {
-      const a = this.pt.filter(tank => this.getTeam(tank.team) === this.getTeam(t.team));
-      t.healing = a[(a.indexOf(t.healing)+1)%a.length]; //lots of brain cells died for this line of code <R.I.P>
-    }
-    if (use.includes('mine')) this.b.push(new Block(t.x, t.y, 0, 'mine', t.team, this));
-    if (use.includes('shield')) t.shields = Math.min(500, t.shields+100);
-    if (data.airstrike) {
-      this.logs.push({c: '#ffffff', m: 'attempt airstrike at '+data.airstrike.x+', '+data.airstrike.y});
-      this.b.push(new Block(data.airstrike.x, data.airstrike.y, Infinity, 'airstrike', this.parseTeamExtras(t.team), this));
-    }
-    if (data.fire.length > 0) {
-      t.pushback = -6;
-      data.fire.forEach(s => {
-        this.s.push(new Shot(t.x+40, t.y+40, s.x, s.y, s.type, s.r, s.type === 'grapple' ? t.username : this.parseTeamExtras(t.team), this));
-      });
-    }
-  }
-
-  send() {
-    const view = {x: -860, y: -560, w: 1880, h: 1280};
-    this.pt.forEach(t => {
-      var message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, event: 'hostupdate'};
-      this.b.forEach(b => {
-        if (A.collider(b.x, b.y, 100, 100, t.x+view.x, t.y+view.y, view.w, view.h)) message.blocks.push(JSON.parse(JSON.stringify(b, (key, value) => {
-          return ['host', 'bar', 'sd'].includes(key) ? undefined : value;
-        })));
-      });
-      this.pt.forEach(pt => {
-        if (A.collider(pt.x, pt.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.tanks.push(JSON.parse(JSON.stringify(pt, (key, value) => {
-          return ['updates', 'socket', 'render', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluInterval', 'gluTimeout', 'fireTimeout', 'fireInterval'].includes(key) ? undefined : value;
-        })));
-      });
-      this.ai.forEach(ai => {
-        if (A.collider(ai.x, ai.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.ai.push(JSON.parse(JSON.stringify(ai, (key, value) => {
-          return ['team', 'host', 'canFire', 'target'].includes(key) ? undefined : value;
-        })));
-      });
-      this.s.forEach(s => {
-        if (A.collider(s.x, s.y, 10, 10, t.x+view.x, t.y+view.y, view.w, view.h)) message.bullets.push(JSON.parse(JSON.stringify(s, (key, value) => {
-          return ['host', 'd', 'damage', 'ra', 'target', 'offset', 'settings', 'md'].includes(key) ? undefined : value;
-        })));
-      });
-      this.d.forEach(d => {
-        if (A.collider(d.x, d.y, d.w, d.h, t.x+view.x, t.y+view.y, view.w, view.h)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
-      });
-      t.socket.send(message);
-      outgoing_per_second++;
-    });
-  }
-
-  disconnect(socket, code, reason) {
-    this.sockets.splice(this.sockets.indexOf(socket), 1);
-    A.each(this.pt, function(i, pt) {pt.splice(i, 1)}, 'username', socket.username, this.pt);
-    A.each(this.ai, function(i, ai, host, username) {
-      if (host.getUsername(this.team) === username) ai.splice(i, 1);
-    }, null, null, this.ai, this, socket.username);
-    if (this.pt.length === 0) {
-      A.each(this.i, function() {clearInterval(this)});
-      A.each(this.t, function() {clearTimeout(this)});
-      if (servers.length - 1 === servers.indexOf(this)) servers = []; else servers[servers.indexOf(this)] = new FFA();
-      return;
-    }
-    this.logs.push({m: this.rageMsg(socket.username), c: '#E10600'});
-  }
-
-  deathMsg(victim, killer) {
-    return deathMessages[Math.floor(Math.random()*deathMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
-  }
-
-  joinMsg(player) {
-    return joinMessages[Math.floor(Math.random()*joinMessages.length)].replace('{idot}', player);
-  }
-
-  rageMsg(player) {
-    return rageMessages[Math.floor(Math.random()*rageMessages.length)].replace('{idot}', player);
-  }
-}
-
 class Engine {
   constructor(levels) {
     this.spawn = {x: 0, y: 0};
@@ -1092,6 +896,202 @@ class Ai {
     if (this.hp <= 0) {
       this.host.ai.splice(this.host.ai.indexOf(this), 1);
     }
+  }
+}
+
+class Multiplayer extends Engine {
+  constructor(levels) {
+    super(levels);
+    this.sockets = [];
+    this.logs = [];
+    if (!SETTINGS.fps_boost) this.i.push(setInterval(() => this.send(), 1000/SETTINGS.UPS));
+  }
+
+  override(t, d) {
+    t.socket.send({message: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
+  }
+
+  add(socket, data) {
+    this.sockets.push(socket);
+    data = {...data, damage: false, maxHp: data.material*50+300, hp: data.material*50+300, deathsPerMovement: 0, socket: socket, canBashed: true, shields: 0, team: data.username+':'+Math.random(), x: this.spawn.x, y: this.spawn.y, r: 0, pushback: 0, baseRotation: 0, baseFrame: 0, fire: false, healing: data.username};
+    socket.send({event: 'override', data: [{key: 'x', value: this.spawn.x}, {key: 'y', value: this.spawn.y}]});
+    this.pt.push(data);
+    this.logs.push({m: this.joinMsg(data.username), c: '#66FF00'});
+  }
+
+  update(data) {
+    const t = this.pt.find(t => t.username === data.username);
+    data = data.data;
+    const {emote, r, baseFrame, use, x, y} = data;
+    if ((t.emote !== emote || t.r !== r || t.baseFrame !== baseFrame || use.length || data.fire.length) || (!t.grapple && (t.x !== data.x || t.y !== data.y))) t.deathsPerMovement = 0;
+    t.baseRotation = data.baseRotation;
+    t.immune = data.immune;
+    t.animation = data.animation;
+    t.emote = emote;
+    t.invis = data.invis;
+    t.baseFrame = baseFrame;
+    if (!t.grapple) {
+      t.x = x;
+      t.y = y;
+    }
+    t.r = r;
+    if (t.ded) return;
+    if (t.immune && t.class === 'fire' || t.class === 'builder') {
+      const team = this.parseTeamExtras(t.team), type = t.class === 'fire' ? 'fire' : 'weak';
+      if ((t.x+80)%100>80 && [45, 90, 135].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100+100, Math.floor(t.y/100)*100, 100, type, team, this));
+      if (t.x%100<20 && [225, 270, 315].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100-100, Math.floor(t.y/100)*100, 100, type, team, this));
+      if ((t.y+80)%100>80 && [135, 180, 225].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100, Math.floor(t.y/100)*100+100, 100, type, team, this));
+      if (t.y%100<20 && [315, 0, 45].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100, Math.floor(t.y/100)*100-100, 100, type, team, this));
+    }
+    if (use.includes('dynamite')) {
+      this.s.forEach(s => {
+        if (this.getUsername(s.team) !== t.username || s.type !== 'dynamite') return;
+        this.d.push(new Damage(s.x-100, s.y-100, 200, 200, 100, s.team, this));
+        setTimeout(() => s.destroy());
+      });
+    }
+    if (use.includes('toolkit')) {
+      if (t.healInterval) {
+        clearInterval(t.healInterval);
+        clearTimeout(t.healTimeout);
+      } else {
+        t.healInterval = setInterval(() => {
+          t.hp = Math.min(t.maxHp, t.hp+1);
+          const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
+          if (ai) ai.hp = Math.min(600, ai.hp+1);
+        }, 100);
+        t.healTimeout = setTimeout(() => {
+          t.hp = t.maxHp;
+          const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
+          if (ai) ai.hp = 600;
+          clearInterval(t.healInterval);
+        }, 7500);
+      }
+    }
+    if (use.includes('tape')) {
+      t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
+      const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
+      if (ai) ai.hp = Math.min(600, ai.hp+150);
+    }
+    if (use.includes('glu')) {
+      clearInterval(t.gluInterval);
+      clearTimeout(t.gluTimeout);
+      t.gluInterval = setInterval(() => {
+        t.hp = Math.min(t.maxHp, t.hp+3);
+        const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
+        if (ai) ai.hp = Math.min(600, ai.hp+3);
+      }, 100);
+      t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
+    }
+    if (use.includes('block')) {
+      const coordinates = [{r: [337.5, 360], dx: -10, dy: 80}, {r: [0, 22.5], dx: -10, dy: 80}, {r: [22.5, 67.5], dx: -100, dy: 80}, {r: [67.5, 112.5], dx: -100, dy: -10}, {r: [112.5, 157.5], dx: -100, dy: -100}, {r: [157.5, 202.5], dx: -10, dy: -100}, {r: [202.5, 247.5], dx: 80, dy: -100}, {r: [247.5, 292.5], dx: 80, dy: -10}, {r: [292.5, 337.5], dx: 80, dy: 80}];
+      for (const coord of coordinates) {
+        if (r >= coord.r[0] && r < coord.r[1]) {
+          this.b.push(new Block(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, mine: 0, spike: 0, fortress: 400}[data.blockType], data.blockType, t.team, this));
+          break;
+        }
+      }
+    }
+    if (use.includes('flashbang')) {
+      this.pt.forEach(tank => {
+        if (!A.collider(tank.x-860, tank.y-560, 1800, 1200, t.x, t.y, 80, 80) || tank.username === t.username) return;
+        tank.flashbanged = true;
+        clearTimeout(tank.flashbangTimeout);
+        tank.flashbangTimeout = setTimeout(() => {
+          tank.flashbanged = false;
+        }, 1000);
+      });
+    }
+    if (use.includes('bomb')) {
+      this.b.forEach(b => {
+        if (A.collider(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) setTimeout(b.destroy);
+      });
+    }
+    if (use.includes('turret')) {
+      this.ai.splice(this.ai.indexOf(this.ai.find(a => this.getUsername(a.team) === t.username)), 1);
+      this.ai.push(new Ai(t.x, t.y, 0, t.team, this));
+    }
+    if (use.includes('buff')) {
+      t.buff = true;
+      setTimeout(() => {
+        t.buff = false;
+      }, 10000);
+    }
+    if (use.includes('healSwitch')) {
+      const a = this.pt.filter(tank => this.getTeam(tank.team) === this.getTeam(t.team));
+      t.healing = a[(a.indexOf(t.healing)+1)%a.length]; //lots of brain cells died for this line of code <R.I.P>
+    }
+    if (use.includes('mine')) this.b.push(new Block(t.x, t.y, 0, 'mine', t.team, this));
+    if (use.includes('shield')) t.shields = Math.min(500, t.shields+100);
+    if (data.airstrike) {
+      this.logs.push({c: '#ffffff', m: 'attempt airstrike at '+data.airstrike.x+', '+data.airstrike.y});
+      this.b.push(new Block(data.airstrike.x, data.airstrike.y, Infinity, 'airstrike', this.parseTeamExtras(t.team), this));
+    }
+    if (data.fire.length > 0) {
+      t.pushback = -6;
+      data.fire.forEach(s => {
+        this.s.push(new Shot(t.x+40, t.y+40, s.x, s.y, s.type, s.r, s.type === 'grapple' ? t.username : this.parseTeamExtras(t.team), this));
+      });
+    }
+  }
+
+  send() {
+    const view = {x: -860, y: -560, w: 1880, h: 1280};
+    this.pt.forEach(t => {
+      var message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, event: 'hostupdate'};
+      this.b.forEach(b => {
+        if (A.collider(b.x, b.y, 100, 100, t.x+view.x, t.y+view.y, view.w, view.h)) message.blocks.push(JSON.parse(JSON.stringify(b, (key, value) => {
+          return ['host', 'bar', 'sd'].includes(key) ? undefined : value;
+        })));
+      });
+      this.pt.forEach(pt => {
+        if (A.collider(pt.x, pt.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.tanks.push(JSON.parse(JSON.stringify(pt, (key, value) => {
+          return ['updates', 'socket', 'render', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluInterval', 'gluTimeout', 'fireTimeout', 'fireInterval'].includes(key) ? undefined : value;
+        })));
+      });
+      this.ai.forEach(ai => {
+        if (A.collider(ai.x, ai.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.ai.push(JSON.parse(JSON.stringify(ai, (key, value) => {
+          return ['team', 'host', 'canFire', 'target'].includes(key) ? undefined : value;
+        })));
+      });
+      this.s.forEach(s => {
+        if (A.collider(s.x, s.y, 10, 10, t.x+view.x, t.y+view.y, view.w, view.h)) message.bullets.push(JSON.parse(JSON.stringify(s, (key, value) => {
+          return ['host', 'd', 'damage', 'ra', 'target', 'offset', 'settings', 'md'].includes(key) ? undefined : value;
+        })));
+      });
+      this.d.forEach(d => {
+        if (A.collider(d.x, d.y, d.w, d.h, t.x+view.x, t.y+view.y, view.w, view.h)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
+      });
+      t.socket.send(message);
+      outgoing_per_second++;
+    });
+  }
+
+  disconnect(socket, code, reason) {
+    this.sockets.splice(this.sockets.indexOf(socket), 1);
+    A.each(this.pt, function(i, pt) {pt.splice(i, 1)}, 'username', socket.username, this.pt);
+    A.each(this.ai, function(i, ai, host, username) {
+      if (host.getUsername(this.team) === username) ai.splice(i, 1);
+    }, null, null, this.ai, this, socket.username);
+    if (this.pt.length === 0) {
+      A.each(this.i, function() {clearInterval(this)});
+      A.each(this.t, function() {clearTimeout(this)});
+      if (servers.length - 1 === servers.indexOf(this)) servers = []; else servers[servers.indexOf(this)] = new FFA();
+      return;
+    }
+    this.logs.push({m: this.rageMsg(socket.username), c: '#E10600'});
+  }
+
+  deathMsg(victim, killer) {
+    return deathMessages[Math.floor(Math.random()*deathMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
+  }
+
+  joinMsg(player) {
+    return joinMessages[Math.floor(Math.random()*joinMessages.length)].replace('{idot}', player);
+  }
+
+  rageMsg(player) {
+    return rageMessages[Math.floor(Math.random()*rageMessages.length)].replace('{idot}', player);
   }
 }
 
