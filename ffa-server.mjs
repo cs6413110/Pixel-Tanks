@@ -144,7 +144,6 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
         if (body === 'true') {
           joinable[0].add(socket, tank);
           socket.room = servers.indexOf(joinable[0]);
-          console.log('added socket room which is'+socket.room);
         } else {
           socket.send({status: 'error', message: 'Invalid Token.'});
           setImmediate(() => socket.destroy());
@@ -685,7 +684,7 @@ class Shot {
     }
 
     for (const b of blocks) {
-      if (!A.collider(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
+      if (!b.c || !A.collider(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
       if (type === 'grapple') {
         const t = this.host.pt.find(t => t.username === host.getUsername(this.team));
         if (t.grapple) t.grapple.bullet.destroy();
@@ -710,9 +709,9 @@ class Shot {
           } else {
             b.damage(s.damage);
           }
-          return true;
+          return false;
         }
-        return false;
+        return true;
       }
     }
 
