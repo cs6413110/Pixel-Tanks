@@ -685,7 +685,7 @@ class Shot {
     }
 
     for (const b of blocks) {
-      if (!b.c || !A.collider(b.x, b.y, 100, 100, x, x, 10, 10)) continue;
+      if (!b.c || !A.collider(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
       if (type === 'grapple') {
         const t = this.host.pt.find(t => t.username === host.getUsername(this.team));
         if (t.grapple) t.grapple.bullet.destroy();
