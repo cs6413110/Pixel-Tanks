@@ -2284,9 +2284,9 @@
         GUI.draw.lineWidth = 10;
         GUI.draw.beginPath();
         GUI.draw.fillStyle = '#A9A9A9';
-        GUI.draw.moveTo(s.x+40, s.y+40);
+        GUI.draw.moveTo(s.x, s.y);
         const t = this.hostupdate.tanks.find(t => t.username === s.team.split(':')[0]);
-        if (t) GUI.draw.lineTo(t.x, t.y);
+        if (t) GUI.draw.lineTo(t.x+40, t.y+40);
         GUI.draw.stroke();
       } else if (s.type === 'dynamite') {
         GUI.drawImage(PixelTanks.images.bullets[PixelTanks.texturepack].dynamite, s.x, s.y, 10, 40, 1, 5, 5, 0, 0, s.r+180);
