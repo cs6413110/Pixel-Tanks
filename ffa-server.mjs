@@ -635,6 +635,7 @@ class Shot {
       if (type === 'grapple') {
         if (t.grapple) t.grapple.bullet.destroy();
         t.grapple = {target: host.pt.find(tank => tank.username === host.getUsername(this.team)), bullet: this};
+        this.target = t;
         this.offset = [t.x-x, t.y-y];
         this.update = () => {
           this.x = this.target.x-this.offset[0];
