@@ -2281,6 +2281,13 @@
         GUI.drawImage(PixelTanks.images.bullets[PixelTanks.texturepack].shotgun, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+180);
       } else if (s.type === 'grapple') {
         GUI.drawImage(PixelTanks.images.bullets[PixelTanks.texturepack].grapple, s.x, s.y, 45, 45, 1, 22.5, 22.5, 0, 0, s.r+180);
+        GUI.draw.lineWidth = 10;
+        GUI.draw.beginPath();
+        GUI.draw.fillStyle = '#A9A9A9';
+        GUI.draw.moveTo(s.x, s.y);
+        const t = this.hostupdate.tanks.find(t => t.username === s.team.split(':')[0]);
+        if (t) GUI.draw.lineTo(t.x, t.y);
+        GUI.draw.stroke();
       } else if (s.type === 'dynamite') {
         GUI.drawImage(PixelTanks.images.bullets[PixelTanks.texturepack].dynamite, s.x, s.y, 10, 40, 1, 5, 5, 0, 0, s.r+180);
       } else if (s.type === 'fire') {
