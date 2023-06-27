@@ -664,7 +664,7 @@ class Shot {
       }
     };
 
-    for (const ai of ai) {
+    for (const ai of ais) {
       if (A.collider(ai.x, ai.y, 80, 80, x, y, 10, 10)) continue;
       if (type === 'dynamite') {
         this.target = ai;
