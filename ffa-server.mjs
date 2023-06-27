@@ -900,7 +900,7 @@ class Multiplayer extends Engine {
   }
 
   override(t, d) {
-    t.socket.send({message: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
+    t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
   }
 
   add(socket, data) {
