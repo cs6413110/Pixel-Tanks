@@ -596,7 +596,7 @@ class Shot {
   constructor(x, y, xm, ym, type, rotation, team, host) {
     const settings = {damage: {bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -300, dynamite: 0, fire: 0}, speed: {bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9}};
     const t = host.pt.find(t => t.username === host.getUsername(team));
-    this.damage = settings.damage[type]/500*t.maxHp*t.buff ? 1.5 : 1;
+    this.damage = settings.damage[type]/500*t.maxHp*(t.buff ? 1.5 : 1);
     this.team = team;
     this.r = rotation;
     this.type = type;
@@ -703,13 +703,11 @@ class Shot {
         host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
         return true;
       } else {
-        if (!['fortress', 'mine'].includes(b.type) && host.getTeam(b.team) === host.getTeam(this.team)) {
-          if (key[type]) {
-            host.d.push(new Damage(x-key[type]/2+10, y-key[type]/2+10, key[type], key[type], this.damage, this.team, host));
-          } else {
-            b.damage(s.damage);
-          }
-          return false;
+        if (['fortress', 'mine'].includes(b.type) && host.getTeam(b.team) === host.getTeam(this.team)) return false;
+        if (key[type]) {
+          host.d.push(new Damage(x-key[type]/2+10, y-key[type]/2+10, key[type], key[type], this.damage, this.team, host));
+        } else {
+          b.damage(s.damage);
         }
         return true;
       }
