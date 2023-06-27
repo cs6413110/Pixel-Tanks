@@ -470,10 +470,10 @@ class Engine {
         }
       });
       this.b.forEach(b => {
-        if (A.collider(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) setTimeout(() => b.damage(d.a));
+        if (A.collider(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) b.damage(d.a);
       });
       this.ai.forEach(ai => {
-        if (A.collider(d.x, d.y, d.w, d.h, this.x, this.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) setTimeout(() => ai.damage(d.a));
+        if (A.collider(d.x, d.y, d.w, d.h, this.x, this.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) ai.damage(d.a);
       });
       d.c = false;
     });
@@ -554,7 +554,7 @@ class Block {
     this.hp = health;
     this.type = type;
     this.host = host;
-    this.s = false; // show health bar
+    this.s = false;
     this.c = !['spike', 'mine', 'fire', 'airstrike'].includes(type); // collision
     this.team = team;
     if (['spike', 'mine', 'fire'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 5000 : 30000);
@@ -563,10 +563,10 @@ class Block {
         setTimeout(() => {
           this.host.d.push(new Damage(this.x + Math.random() * 200, this.y + Math.random() * 200, 200, 200, 200, this.team, this.host));
         }, 5000 + Math.random() * 500);
-        setTimeout(this.destroy.bind(this), 6000);
+        setTimeout(() => this.destroy(), 6000);
       }
     } else if (type === 'mine') {
-      this.a = false; // armed or not
+      this.a = false;
       setTimeout(() => {
         this.a = true;
       }, 3000);
@@ -574,7 +574,7 @@ class Block {
   }
 
   damage(d) {
-    this.hp = Math.max(this.hp - d, 0);
+    this.hp = Math.max(this.hp-d, 0);
     if (this.hp !== Infinity) {
       this.s = true;
       clearTimeout(this.bar);
@@ -582,7 +582,7 @@ class Block {
         this.s = false;
       }, 3000);
     }
-    if (this.hp <= 0) this.destroy();
+    if (this.hp <= 0) setTimeout(() => this.destroy());
   }
 
   destroy() {
@@ -595,37 +595,22 @@ class Block {
 
 class Shot {
   constructor(x, y, xm, ym, type, rotation, team, host) {
-    this.settings = {damage: {bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -300, dynamite: 0, fire: 0}, speed: {bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9}};
-    this.damage = 0;
+    const settings = {damage: {bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -300, dynamite: 0, fire: 0}, speed: {bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9}};
+    const t = host.pt.find(t => t.username === host.getUsername(team));
+    this.damage = settings.damage[type]/500*t.maxHp*t.buff ? 1.5 : 1;
     this.team = team;
     this.r = rotation;
     this.type = type;
     this.host = host;
     this.e = Date.now();
-    var d = 18;
-    this.xm = xm*(d/Math.sqrt(xm*xm+ym*ym));
-    this.ym = ym*(d/Math.sqrt(xm*xm+ym*ym));
-    var data = Shot.calc(x, y, xm, ym);
+    const factor = 18/Math.sqrt(xm**2+ym**2);
+    this.xm = xm*factor;
+    this.ym = ym*factor;
+    const data = Shot.calc(x, y, xm, ym);
     this.x = data.x;
     this.y = data.y;
-    if (xm == 0 && ym == 1) {
-      this.x = x;
-      this.y = 35+y;
-    } else if (xm == -1 && ym == 0) {
-      this.x = -35+x;
-      this.y = y;
-    } else if (xm == 0 && ym == -1) {
-      this.x = x;
-      this.y = -35+y;
-    } else if (xm == 1 && ym == 0) {
-      this.x = 35+x;
-      this.y = y;
-    }
     this.sx = this.x;
     this.sy = this.y;
-    var pt = A.search(this.host.pt, 'username', this.host.getUsername(this.team));
-    if (!pt) this.destroy();
-    this.damage = this.settings.damage[this.type]/500*pt.maxHp*(pt.buff ? 1.5 : 1);
     this.md = this.damage;
     this.xm *= this.settings.speed[this.type];
     this.ym *= this.settings.speed[this.type];
@@ -643,87 +628,102 @@ class Shot {
   }
 
   collision() {
-    var key = {bullet: false, shotgun: false, powermissle: 100, megamissle: 150, healmissle: 100, fire: false};
+    const key = {bullet: false, shotgun: false, powermissle: 100, megamissle: 150, healmissle: 100, fire: false};
+    const {host, x, y, type} = this;
+    const {pt, ai} = host;
+    const blocks = this.host.b;
+    for (const t of pt) {
+      if (t.ded || !A.collider(x, y, 10, 10, t.x, t.y, 80, 80)) continue;
+      if (type === 'grapple') {
+        if (t.grapple) t.grapple.bullet.destroy();
+        t.grapple = {target: host.pt.find(tank => tank.username === host.getUsername(this.team)), bullet: this};
+        this.update = () => {};
+        return false;
+      } else if (type === 'dynamite') {
+        this.target = t;
+        this.offset = [t.x-x, t.y-y];
+        this.update = () => {
+          this.x = this.target.x-this.offset[0];
+          this.y = this.target.y-this.offset[1];
+        }
+        return false;
+      } else if (type === 'fire') {
+        if (t.fire) clearTimeout(t.fireTimeout);
+        t.fire = {team: this.team, frame: t.fire?.frame || 0};
+        t.fireInterval ??= setInterval(() => t.fire.frame ^= 1, 50);
+        t.fireTimeout = setTimeout(() => {
+          clearInterval(t.fireInterval);
+          t.fire = false;
+        }, 2000);
+      } else {
+        if (key[type]) {
+          host.d.push(new Damage(x-key[type]/2+10, y-key[type]/2+10, key[type], key[type], this.damage, this.team, host));
+        } else if (host.getTeam(t.team) !== host.getTeam(this.team)) {
+          host.damagePlayer(t, {a: this.damage, x: x, y: y, u: host.getUsername(this.team)});
+        }
+        return true;
+      }
+    };
 
-    var r = A.each(this.host.pt, function(i, s, host, key) {
-      if (A.collider(this.x, this.y, 80, 80, s.x, s.y, 10, 10) && !this.ded) {
-        if (s.type === 'grapple') {
-          if (this.grapple) this.grapple.bullet.destroy();
-          this.grapple = {target: A.search(host.pt, 'username', host.getUsername(s.team)), bullet: s};
-          s.update = () => {};
-          return false;
-        } else if (s.type === 'dynamite') {
-          A.assign(s, 'target', this, 'offset', [this.x-s.x, this.y-s.y], 'update', function() {
-            this.x = this.target.x-this.offset[0];
-            this.y = this.target.y-this.offset[1];
-          });
-          return false;
-        } else if (s.type === 'fire') {
-          if (this.fire) {
-            clearTimeout(this.fireTimeout);
-            this.fire = {team: s.team, frame: this.fire.frame};
+    for (const ai of ai) {
+      if (A.collider(ai.x, ai.y, 80, 80, x, y, 10, 10)) continue;
+      if (type === 'dynamite') {
+        this.target = ai;
+        this.offset = [ai.x-x, ai.y-y];
+        this.update = () => {
+          this.x = this.target.x-this.offset[0];
+          this.y = this.target.y-this.offset[1];
+        }
+        return false;
+      } else {
+        if (key[type]) {
+          host.d.push(new Damage(x-key[type]/2+10, y-key[type]/2+10, key[type], key[type], this.damage, this.team, host));
+        } else if (host.getTeam(ai.team) !== host.getTeam(this.team)) {
+          ai.damage(this.damage);
+        }
+        return true;
+      }
+    }
+
+    for (const b of blocks) {
+      if (b.c && A.collider(b.x, b.y, 100, 100, x, x, 10, 10)) continue;
+      if (type === 'grapple') {
+        const t = this.host.pt.find(t => t.username === host.getUsername(this.team));
+        if (t.grapple) t.grapple.bullet.destroy();
+        t.grapple = {target: b, bullet: this};
+        this.update = () => {};
+        return false;
+      } else if (type === 'dynamite') {
+        this.target = b;
+        this.offset = [b.x-x, b.y-y];
+        this.update = () => {
+          this.x = this.target.x-this.offset[0];
+          this.y = this.target.y-this.offset[1];
+        }
+        return false;
+      } else if (type === 'fire') {
+        host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
+        return true;
+      } else {
+        if (!['fortress', 'mine'].includes(b.type) && host.getTeam(b.team) === host.getTeam(this.team)) {
+          if (key[type]) {
+            host.d.push(new Damage(x-key[type]/2+10, y-key[type]/2+10, key[type], key[type], this.damage, this.team, host));
           } else {
-            this.fire = {team: s.team, frame: 0};
-            this.fireInterval = setInterval(function() {this.fire.frame = this.fire.frame === 0 ? 1 : 0}.bind(this), 50);
+            b.damage(s.damage);
           }
-          this.fireTimeout = setTimeout(function() {
-            clearInterval(this.fireInterval);
-            this.fire = false;
-          }.bind(this), 2000);
-        } else {
-          if (key[s.type]) host.d.push(new Damage(s.x-key[s.type]/2+10, s.y-key[s.type]/2+10, key[s.type], key[s.type], s.damage, s.team, host)); else if (host.getTeam(this.team) !== host.getTeam(s.team)) host.damagePlayer(this, {a: s.damage, x: s.x, y: s.y, u: host.getUsername(s.team)});
           return true;
         }
+        return false;
       }
-    }, null, null, this, this.host, key);
-    if (r !== undefined) return r;
-    var r = A.each(this.host.ai, function(i, s, host, key) {
-      if (A.collider(this.x, this.y, 80, 80, s.x, s.y, 10, 10)) {
-        if (s.type === 'dynamite') {
-          s.target = this;
-          s.offset = [this.x-s.x, this.y-s.y];
-          s.update = () => {
-            s.x = s.target.x-s.offset[0];
-            s.y = s.target.y-s.offset[1];
-          }
-          return false;
-        } else {
-          if (key[s.type]) host.d.push(new Damage(s.x-key[s.type]/2+10, s.y-key[s.type]/2+10, key[s.type], key[s.type], s.damage, s.team, host)); else if (host.getTeam(this.team) !== host.getTeam(s.team)) this.damage(s.damage);
-          return true;
-        }
-      }
-    }, null, null, this, this.host, key);
-    if (r !== undefined) return r;
+    }
 
-    var r = A.each(this.host.b, function(i, s, host, key) {
-      if (A.collider(this.x, this.y, 100, 100, s.x, s.y, 10, 10) && this.c) {
-        if (s.type === 'grapple') {
-          var pt = A.search(host.pt, 'username', host.getUsername(s.team));
-          if (pt.grapple) pt.grapple.bullet.destroy();
-          pt.grapple = {target: this, bullet: s};
-        } else if (s.type === 'dynamite') {
-          A.assign(s, 'target', this, 'offset', [this.x-s.x, this.y-s.y], 'update', function() {
-            this.x = this.target.x-this.offset[0];
-            this.y = this.target.y-this.offset[1];
-          });
-          return false;
-        } else if (s.type === 'fire') {
-          host.b.push(new Block(this.x, this.y, Infinity, 'fire', s.team, host));
-          return true;
-        } else {
-          if ((this.type === 'fortress' || this.type === 'mine') && host.getTeam(this.team) === host.getTeam(s.team)) return;
-          if (key[s.type]) host.d.push(new Damage(s.x-key[s.type]/2+10, s.y-key[s.type]/2+10, key[s.type], key[s.type], s.damage, s.team, host)); else this.damage(s.damage);
-          return true;
-        }
-      }
-    }, null, null, this, this.host, key);
-    if (r !== undefined) return r;
-
-    if (this.x < 0 || this.x > 3000 || this.y < 0 || this.y > 3000) {
-      if (this.type === 'grapple') {
-        var pt = A.search(this.host.pt, 'username', this.host.getUsername(this.team));
-        if (pt.grapple) pt.grapple.bullet.destroy();
-        pt.grapple = {target: {x: this.x, y: this.y}, bullet: this};
+    if (x < 0 || x > 3000 || y < 0 || y > 3000) {
+      if (type === 'grapple') {
+        const t = host.pt.find(t => t.username === host.getUsername(this.team));
+        if (t.grapple) t.grapple.bullet.destroy();
+        t.grapple = {target: {x: x, y: y}, bullet: this};
+        this.update = () => {};
+        return false;
       }
       return true;
     }
@@ -731,12 +731,12 @@ class Shot {
   }
 
   update() {
-    const time = (Date.now() - this.e) / 15;
-    this.x = time * this.xm + this.sx;
-    this.y = time * this.ym + this.sy;
-    this.d = Math.sqrt(Math.pow(this.x - this.sx, 2) + Math.pow(this.y - this.sy, 2));
+    const time = (Date.now()-this.e)/15;
+    this.x = time*this.xm+this.sx;
+    this.y = time*this.ym+this.sy;
+    this.d = Math.sqrt((this.x-this.sx)**2+(this.y-this.sy)**2);
     if (this.type === 'shotgun') {
-      this.damage = this.md - (this.d / 300) * this.md;
+      this.damage = this.md-(this.d/300)*this.md;
       if (this.d >= 300) this.destroy();
     }
     if (this.type === 'dynamite') this.r += 5;
@@ -757,15 +757,11 @@ class Damage {
     this.h = h;
     this.a = a;
     this.team = team;
-    this.c = true;
     this.host = host;
+    this.c = true;
     this.f = 0;
-    setInterval(function() {
-      this.f++;
-    }.bind(this), 18);
-    setTimeout(function() {
-      this.destroy();
-    }.bind(this), 200);
+    setInterval(() => this.f++, 18);
+    setTimeout(this.destroy.bind(this), 200);
   }
 
   destroy() {
@@ -894,7 +890,7 @@ class Ai {
   damage(d) {
     this.hp -= d;
     if (this.hp <= 0) {
-      this.host.ai.splice(this.host.ai.indexOf(this), 1);
+      setTimeout(() => this.host.ai.splice(this.host.ai.indexOf(this), 1));
     }
   }
 }
