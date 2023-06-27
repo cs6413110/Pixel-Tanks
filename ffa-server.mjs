@@ -1001,7 +1001,7 @@ class Multiplayer extends Engine {
     }
     if (use.includes('bomb')) {
       this.b.forEach(b => {
-        if (A.collider(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) setTimeout(b.destroy);
+        if (A.collider(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) setTimeout(() => b.destroy());
       });
     }
     if (use.includes('turret')) {
