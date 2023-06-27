@@ -612,8 +612,8 @@ class Shot {
     this.sx = this.x;
     this.sy = this.y;
     this.md = this.damage;
-    this.xm *= this.settings.speed[this.type];
-    this.ym *= this.settings.speed[this.type];
+    this.xm *= settings.speed[this.type];
+    this.ym *= settings.speed[this.type];
   }
 
   static calc(x, y, xm, ym) {
