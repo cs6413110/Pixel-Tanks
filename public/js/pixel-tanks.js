@@ -2284,7 +2284,7 @@
         GUI.draw.lineWidth = 10;
         GUI.draw.beginPath();
         GUI.draw.fillStyle = '#A9A9A9';
-        GUI.draw.moveTo(s.x, s.y);
+        GUI.draw.moveTo(s.x+40, s.y+40);
         const t = this.hostupdate.tanks.find(t => t.username === s.team.split(':')[0]);
         if (t) GUI.draw.lineTo(t.x, t.y);
         GUI.draw.stroke();
