@@ -630,8 +630,7 @@ class Shot {
   collision() {
     const key = {bullet: false, shotgun: false, powermissle: 100, megamissle: 150, healmissle: 100, fire: false};
     const {host, x, y, type} = this;
-    const {pt, ai} = host;
-    const blocks = this.host.b;
+    const blocks = this.host.b, ais = this.host.ai, pt = this.host.pt;
     for (const t of pt) {
       if (t.ded || !A.collider(x, y, 10, 10, t.x, t.y, 80, 80)) continue;
       if (type === 'grapple') {
