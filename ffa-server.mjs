@@ -635,7 +635,11 @@ class Shot {
       if (type === 'grapple') {
         if (t.grapple) t.grapple.bullet.destroy();
         t.grapple = {target: host.pt.find(tank => tank.username === host.getUsername(this.team)), bullet: this};
-        this.update = () => {};
+        this.offset = [t.x-x, t.y-y];
+        this.update = () => {
+          this.x = this.target.x-this.offset[0];
+          this.y = this.target.y-this.offset[1];
+        };
         return false;
       } else if (type === 'dynamite') {
         this.target = t;
