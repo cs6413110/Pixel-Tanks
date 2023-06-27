@@ -608,6 +608,8 @@ class Shot {
     const data = Shot.calc(x, y, xm, ym);
     this.x = data.x;
     this.y = data.y;
+    this.sx = this.x;
+    this.sy = this.y;
     this.md = this.damage;
     this.xm *= settings.speed[this.type];
     this.ym *= settings.speed[this.type];
