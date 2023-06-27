@@ -707,7 +707,7 @@ class Shot {
         if (key[type]) {
           host.d.push(new Damage(x-key[type]/2+10, y-key[type]/2+10, key[type], key[type], this.damage, this.team, host));
         } else {
-          b.damage(s.damage);
+          b.damage(this.damage);
         }
         return true;
       }
