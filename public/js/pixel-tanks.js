@@ -2873,8 +2873,6 @@
               }.bind(this), 40000);
             }
           } else if (PixelTanks.userData.class === 'warrior') {
-alert('This class is know to the state of california to cause cancer');
-		  return;
             if (this.canBuff) {
               this.canBuff = false;
               this.buffed = true;
