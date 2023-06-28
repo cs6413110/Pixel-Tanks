@@ -933,7 +933,7 @@ class Multiplayer extends Engine {
     }
     t.r = r;
     if (t.ded) return;
-    if (t.immune && t.class === 'fire' || t.class === 'builder') {
+    if (t.immune && (t.class === 'fire' || t.class === 'builder')) {
       const team = this.parseTeamExtras(t.team), type = t.class === 'fire' ? 'fire' : 'weak';
       if ((t.x+80)%100>80 && [45, 90, 135].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100+100, Math.floor(t.y/100)*100, 100, type, team, this));
       if (t.x%100<20 && [225, 270, 315].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x/100)*100-100, Math.floor(t.y/100)*100, 100, type, team, this));
