@@ -583,47 +583,50 @@
       this.url = url;
       this.options = {};
       this.callstack = {open: [], close: [], message: []};
-      this.options.keepAlive = options.keepAlive === undefined ? true : options.keepAlive;
-      this.options.autoconnect = options.autoconnect === undefined ? true : options.autoconnect;
-      this.options.reconnect = options.reconnect === undefined ? false : options.reconnect;
+      const {keepAlive = true, autoconnect = true, reconnect = false} = options;
+
+      this.options.keepAlive = keepAlive;
+      this.options.autoconnect = autoconnect;
+      this.options.reconnect = reconnect;
       if (this.options.autoconnect) {
         this.status = 'connecting';
         this.connect();
       } else {
         this.status = 'idle';
-        window.addEventListener('offline', function() {this.socket.close(); this.socket.onclose()}.bind(this));
-        if (this.options.reconnect) window.addEventListener('online', function() {this.connect()}.bind(this));
+        window.addEventListener('offline', () => {
+          this.socket.close();
+          this.socket.onclose();
+        });
+        if (this.options.reconnect) window.addEventListener('online', this.connect.bind(this));
       }
     }
+
     connect() {
-      try {
-        this.socket = new WebSocket(this.url);
-      } catch (e) {console.error('WebSocket had trouble connecting to ' + this.url)}
-      this.socket.onopen = function() {
+      this.socket = new WebSocket(this.url);
+      this.socket.onopen = () => {
         this.status = 'connected';
-        if (this.options.keepAlive) this.socket.keepAlive = setInterval(function() {this.socket.send('|')}.bind(this), 50000);
-        A.each(this.callstack.open, function() {this()});
-      }.bind(this);
-      this.socket.onmessage = function(data) {
+        if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => {
+          this.socket.send('|');
+        }, 50000);
+        this.callstack.open.forEach(f => f());
+      }
+      this.socket.onmessage = data => {
         try {
           data = window.jsonpack.unpack(A.de(data.data));
-        } catch (e) {
-          alert('Error converting jsonpack from websocket message: ' + A.de(data.data));
+        } catch(e) {
+          alert('Socket Encryption Error: ' + A.de(data.data));
         }
-        if (data.status === 'error') {
-          alert(data.message);
-          return;
-        }
-        A.each(this.callstack.message, function(d) {this(d.data)}, null, {data: data});
-      }.bind(this);
-      this.socket.onclose = function(e) {
-	console.log(e.code+':'+e.reason+':'+e.wasClean);
+        if (data.status === 'error') return alert(data.message);
+        this.callstack.message.forEach(f => f(data.data));
+      }
+      this.socket.onclose = e => {
         clearInterval(this.socket.keepAlive);
         this.status = 'disconnected';
-        A.each(this.callstack.close, function() {this()});
+        this.callstack.close.forEach(f => f());
         if (this.options.reconnect) this.connect();
-      }.bind(this);
+      }
     }
+
     on(event, operation) {
       if (event === 'connect') this.callstack.open.push(operation);
       if (event === 'message') this.callstack.message.push(operation);
@@ -688,14 +691,8 @@
       this.draw = draw.bind(this);
       this.element = element;
       this.listeners = listeners;
-      if (context) {
-        for (let property in this.listeners) {
-          this.listeners[property] = this.listeners[property].bind(context);
-        }
-      } else {
-        for (let property in this.listeners) {
-          this.listeners[property] = this.listeners[property].bind(this);
-        }
+      for (const property in this.listeners) {
+        this.listeners[property] = this.listeners[property].bind(context ? context : this);
       }
     }
 
@@ -704,6 +701,7 @@
         this.element.addEventListener(property, this.listeners[property]);
       }
     }
+
     removeListeners() {
       for (let property in this.listeners) {
         this.element.removeEventListener(property, this.listeners[property]);
@@ -713,9 +711,7 @@
 
   class Menus {
     static trigger(name) {
-      if (Menus.current !== undefined) {
-        Menus.menus[Menus.current].removeListeners();
-      }
+      if (Menus.current) Menus.menus[Menus.current].removeListeners();
       Menus.current = name;
       GUI.clear();
       Menus.menus[Menus.current].draw();
@@ -723,10 +719,9 @@
     }
 
     static onclick(e) {
-      var x = (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer;
-      var y = e.clientY/PixelTanks.resizer;
-      A.each(this.data.buttons, function() {if (A.collider({x: x, y: y, w: 0, h: 0}, {x: this[0], y: this[1], w: this[2], h: this[3]})) Menus.trigger(this[4])});
-      A.each(this.data.exec, function() {if (A.collider({x: x, y: y, w: 0, h: 0}, {x: this[0], y: this[1], w: this[2], h: this[3]})) eval(this[4])});
+      const x = (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer, y = e.clientY/PixelTanks.resizer;
+      for (const b of this.data.buttons) if (A.collider({x: x, y: y, w: 0, h: 0}, {x: b[0], y: b[1], w: b[2], h: b[3]})) return Menus.trigger(b[4]);
+      for (const e of this.data.exec) if (A.collider({x: x, y: y, w: 0, h: 0}, {x: e[0], y: e[1], w: e[2], h: e[3]})) eval(e[4])
     }
 
     static redraw() {
@@ -741,8 +736,9 @@
 
   class Network {
     static get(callback) {
-      PixelTanks.socket.send({op: 'database', type: 'get', username: PixelTanks.user.username, token: PixelTanks.user.token});
-      PixelTanks.socket.on('message', (data) => {
+      const {username, token} = PixelTanks.user;
+      PixelTanks.socket.send({op: 'database', type: 'get', username, token});
+      PixelTanks.socket.on('message', data => {
         if (data.status === 'success' && data.type === 'get') {
           PixelTanks.socket.no('message');
           callback(data.data);
@@ -751,20 +747,16 @@
     }
 
     static update(key, value) {
-      try {
-        PixelTanks.socket.send({op: 'database', type: 'set', username: PixelTanks.user.username, token: PixelTanks.user.token, key: key, value: value});
-        PixelTanks.socket.on('message', function(data) {
-          if (data.success) {
-            PixelTanks.socket.no('message');
-            console.log('Saved Game Successfully!');
-          }
-        });
-      } catch (e) {}
+      const {username, token} = PixelTanks.user;
+      PixelTanks.socket.send({op: 'database', type: 'set', username, token, key, value});
+      PixelTanks.socket.on('message', data => {
+        if (data.success) PixelTanks.socket.no('message');
+      });
     }
 
     static auth(username, password, type, callback) {
-      PixelTanks.socket.send({op: 'auth', type: type, username: username, password: password});
-      PixelTanks.socket.on('message', (data) => {
+      PixelTanks.socket.send({op: 'auth', type, username, password});
+      PixelTanks.socket.on('message', data => {
         if (data.status === 'success') {
           PixelTanks.socket.no('message');
           PixelTanks.user.username = username;
@@ -780,7 +772,7 @@
     static add(id, source) {
       this.total++;
       this.core[id] = new Image();
-      this.core[id].onload = this.onload.bind(this);
+      this.core[id].onload = this.onload;
       this.core[id].src = 'https://cs6413110.github.io/Pixel-Tanks/public'+source;
     }
 
@@ -807,7 +799,11 @@
         GUI.draw.rotate(a*Math.PI/180);
       }
       GUI.draw.globalAlpha = t;
-      if (cx || cy || cy || ch) GUI.draw.drawImage(image, cx, cy, cw, ch, x, y, w, h); else GUI.draw.drawImage(image, a ? -px+bx : x, a ? -py+by : y, w, h);
+      if (cx || cy || cy || ch) {
+        GUI.draw.drawImage(image, cx, cy, cw, ch, x, y, w, h);
+      } else {
+        GUI.draw.drawImage(image, a ? -px+bx : x, a ? -py+by : y, w, h);
+      }
       GUI.draw.globalAlpha = 1;
       if (a) {
         GUI.draw.rotate(-a*Math.PI/180);
@@ -816,7 +812,7 @@
     }
 
     static drawText(message, x, y, size, color, anchor) {
-      GUI.draw.font = size+'px Font';
+      GUI.draw.font = `${size}px Font`;
       GUI.draw.fillStyle = color;
       GUI.draw.fillText(message, x-GUI.draw.measureText(message).width*anchor, y+size*.8*(1-anchor));
     }
@@ -1923,7 +1919,7 @@
         Menus.menus[property].id = property;
       }
 
-      PixelTanks.socket = new MegaSocket('ws://141.148.128.231', {keepAlive: false, reconnect: false, autoconnect: true});
+      PixelTanks.socket = new MegaSocket('ws://141.148.128.231', {keepAlive: true, reconnect: true, autoconnect: true});
     }
 
     static launch() {
