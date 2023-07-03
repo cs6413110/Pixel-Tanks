@@ -617,7 +617,7 @@
           alert('Socket Encryption Error: ' + A.de(data.data));
         }
         if (data.status === 'error') return alert(data.message);
-        this.callstack.message.forEach(f => f(data.data));
+        this.callstack.message.forEach(f => f(data));
       }
       this.socket.onclose = e => {
         clearInterval(this.socket.keepAlive);
