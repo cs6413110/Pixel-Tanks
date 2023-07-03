@@ -577,7 +577,7 @@
 		window.jsonpack = jsonpack;
 } : define);
 
-//(() => {
+(() => {
   class MegaSocket {
     constructor(url, options) {
       this.url = url;
@@ -791,7 +791,7 @@
       const promises = [];
       for (const t in key) {
         for (const i in key[t]) {
-          if (!i.includes('_')) promises.push(this.loadImage(key[t][i], t, i));
+          if (!i.endsWith('_')) promises.push(this.loadImage(key[t][i], t, i));
         }
       }
       await Promise.all(promises);
@@ -2751,4 +2751,4 @@
   }
 
   window.onload = PixelTanks.start;
-//})();
+})();
