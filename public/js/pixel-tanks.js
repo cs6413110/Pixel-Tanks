@@ -577,7 +577,7 @@
 		window.jsonpack = jsonpack;
 } : define);
 
-(() => {
+//(() => {
   class MegaSocket {
     constructor(url, options) {
       this.url = url;
@@ -2751,4 +2751,4 @@
   }
 
   window.onload = PixelTanks.start;
-})();
+//})();
