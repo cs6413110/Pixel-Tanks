@@ -769,18 +769,35 @@
 
   class Loader {
 
-    static add(id, source) {
+    static loadImage(source, t, i) {
       this.total++;
-      this.core[id] = new Image();
-      this.core[id].onload = this.onload;
-      this.core[id].src = 'https://cs6413110.github.io/Pixel-Tanks/public'+source;
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => {
+          this.loaded++;
+          PixelTanks.updateBootProgress(Math.round(this.loaded/this.total*100)/100);
+          resolve(image);
+        }
+        image.onerror = () => reject(new Error(`Failed to load image: ${source}`));
+        image.src = `https://cs6413110.github.io/Pixel-Tanks/public/images${source}.png`;
+        this.key[t][i] = image;
+      });
     }
-
-    static onload() {
-      this.loaded++;
-      PixelTanks.updateBootProgress(Math.round(this.loaded/this.total*100)/100);
-      if (this.loaded === this.total) PixelTanks.launch();
+  
+    static async loadImages(key) {
+      Loader.key = key;
+      Loader.loaded = 0;
+      Loader.total = 0;
+      const promises = [];
+      for (const t in key) {
+        for (const i in key[t]) {
+          if (!i.includes('_')) promises.push(this.loadImage(key[t][i], t, i));
+        }
+      }
+      await Promise.all(promises);
+      PixelTanks.launch();
     }
+  
   }
 
   class GUI {
@@ -868,449 +885,261 @@
     }
 
     static boot() {
-      PixelTanks.texturepack = 'default';
       PixelTanks.user = {};
-      Loader.total = 0;
-      Loader.loaded = 0;
-      Loader.core = {};
 
-      PixelTanks.images = { // mapping
+      PixelTanks.images = {
         blocks: {
-          default: {
-            barrier: '/images/blocks/default/barrier.png',
-            strong: '/images/blocks/default/strong.png',
-            weak: '/images/blocks/default/weak.png',
-            spike: '/images/blocks/default/spike.png',
-            floor: '/images/blocks/default/floor.png',
-            void: '/images/blocks/default/void.png',
-            gold: '/images/blocks/default/gold.png',
-            heal: '/images/blocks/default/heal.png',
-            mine: '/images/blocks/default/mine.png',
-            fire: '/images/blocks/default/flame.png',
-            airstrike: '/images/blocks/default/airstrike.png',
-            fortress: '/images/blocks/default/fortress.png',
-          },
+          barrier: '/blocks/barrier',
+          strong: '/blocks/strong',
+          weak: '/blocks/weak',
+          spike: '/blocks/spike',
+          floor: '/blocks/floor',
+          void: '/blocks/void',
+          gold: '/blocks/gold',
+          heal: '/blocks/heal',
+          mine: '/blocks/mine',
+          fire: '/blocks/fire',
+          airstrike: '/blocks/airstrike',
+          fortress: '/blocks/fortress',
         },
         bullets: {
-          default: {
-            // normal: '/images/bullets/default/normal.png', no image yet :(
-            shotgun: '/images/bullets/default/shotgun.png',
-            powermissle: '/images/bullets/default/powermissle.png',
-            megamissle: '/images/bullets/default/megamissle.png',
-            grapple: '/images/bullets/default/grapple.png',
-            explosion: '/images/bullets/default/explosion.png',
-            dynamite: '/images/bullets/default/dynamite.png',
-            fire: '/images/bullets/default/fire.png',
-          },
+          //normal: '/bullets/default/normal', no image yet :(
+          shotgun: '/bullets/shotgun',
+          powermissle: '/bullets/powermissle',
+          megamissle: '/bullets/megamissle',
+          grapple: '/bullets/grapple',
+          dynamite: '/bullets/dynamite',
+          fire: '/bullets/fire',
         },
         tanks: {
-          default: {
-            other: {
-              buff: '/images/tanks/default/other/buff.png',
-              base: '/images/tanks/default/red/base.png',
-              destroyed: '/images/tanks/default/other/destroyed.png',
-            },
-            red: {
-              top: '/images/tanks/default/red/top.png',
-              bottom: ['/images/tanks/default/red/bottom.png', '/images/tanks/default/red/bottom2.png'],
-            },
-            steel: {
-              top: '/images/tanks/default/iron/top.png',
-              bottom: ['/images/tanks/default/iron/bottom.png', '/images/tanks/default/iron/bottom2.png'],
-            },
-            crystal: {
-              top: '/images/tanks/default/diamond/top.png',
-              bottom: ['/images/tanks/default/diamond/bottom.png', '/images/tanks/default/diamond/bottom2.png'],
-            },
-            dark: {
-              top: '/images/tanks/default/dark/top.png',
-              bottom: ['/images/tanks/default/dark/bottom.png', '/images/tanks/default/dark/bottom2.png'],
-            },
-            light: {
-              top: '/images/tanks/default/light/top.png',
-              bottom: ['/images/tanks/default/light/bottom.png', '/images/tanks/default/light/bottom2.png'],
-            },
-            cosmetics: {
-              'DarkMemeGod': 'meme',
-              'Aaron': 'aaron',
-              'Astronaut': 'astronaut',
-              'Onfire': 'onfire',
-              'Assassin': 'assassin',
-              'Redsus': 'redsus',
-              'Venom': 'venom',
-              'Blue Tint': 'blue_tint',
-              'Purple Flower': 'purple_flower',
-              'Leaf': 'leaf',
-              'Basketball': 'basketball',
-              'Purple Top Hat': 'purple_top_hat',
-              'Terminator': 'terminator',
-              'Dizzy': 'dizzy',
-              'Knife': 'knife',
-              'Scared': 'scared',
-              'Laff': 'laff',
-              'Hacker Hoodie': 'hacker_hoodie',
-              'Error': 'error',
-              'Purple Grad Hat': 'purple_grad_hat',
-              'Bat Wings': 'bat_wings',
-              'Back Button': 'back',
-              'Fisher Hat': 'fisher_hat',
-              'Kill = Ban': 'ban',
-              'Blue Ghost': 'blue_ghost',
-              'Pumpkin Face': 'pumpkin_face',
-              'Pumpkin Hat': 'pumpkin_hat',
-              'Red Ghost': 'red_ghost',
-              'Candy Corn': 'candy_corn',
-              'Yellow Pizza': 'yellow_pizza',
-              'Orange Ghost': 'orange_ghost',
-              'Pink Ghost': 'pink_ghost',
-              'Paleontologist': 'paleontologist',
-              'Yellow Hoodie': 'yellow_hoodie',
-              'X': 'x',
-              'Sweat': 'sweat',
-              'Spirals': 'spirals',
-              'Spikes': 'spikes',
-              'Rudolph': 'rudolph',
-              'Reindeer Hat': 'reindeer_hat',
-              'Red Hoodie': 'red_hoodie',
-              'Question Mark': 'question_mark',
-              'Purple-Pink Hoodie': 'purplepink_hoodie',
-              'Purple Hoodie': 'purple_hoodie',
-              'Pumpkin': 'pumpkin',
-              'Pickle': 'pickle',
-              'Orange Hoodie': 'orange_hoodie',
-              'Helment': 'helment',
-              'Green Hoodie': 'green_hoodie',
-              'Exclaimation Point': 'exclaimation_point',
-              'Eggplant': 'eggplant',
-              'Devil Wings': 'devils_wings',
-              'Christmas Tree': 'christmas_tree',
-              'Christmas Lights': 'christmas_lights',
-              'Checkmark': 'checkmark',
-              'Cat Hat': 'cat_hat',
-              'Blueberry': 'blueberry',
-              'Blue Hoodie': 'blue_hoodie',
-              'Blue Helment': 'blue_helment',
-              'Banana': 'bannana',
-              'Aqua Helment': 'aqua_helment',
-              'Apple': 'apple',
-              'Hoodie': 'hoodie',
-              'Purple Helment': 'purple_helment',
-              'Angel Wings': 'angel_wings',
-              'Boost': 'boost',
-              'Bunny Ears': 'bunny_ears',
-              'Cake': 'cake',
-              'Cancelled': 'cancelled',
-              'Candy Cane': 'candy_cane',
-              'Cat Ears': 'cat_ears',
-              'Christmas Hat': 'christmas_hat',
-              'Controller': 'controller',
-              'Deep Scratch': 'deep_scratch',
-              'Devil Horns': 'devil_horn',
-              'Headphones': 'earmuffs',
-              'Eyebrows': 'eyebrows',
-              'First Aid': 'first_aid',
-              'Flag': 'flag',
-              'Halo': 'halo',
-              'Hax': 'hax',
-              'Low Battery': 'low_battery',
-              'Mini Tank': 'mini_tank',
-              'MLG Glasses': 'mlg_glasses',
-              'Money Eyes': 'money_eyes',
-              'No Mercy': 'no_mercy',
-              'Peace': 'peace',
-              'Police': 'police',
-              'Question Mark': 'question_mark',
-              'Rage': 'rage',
-              'Small Scratch': 'small_scratch',
-              'Speaker': 'speaker',
-              'Swords': 'swords',
-              'Tools': 'tools',
-              'Top Hat': 'top_hat',
-              'Uno Reverse': 'uno_reverse',
-              'Mask': 'victim',
-            },
-          },
-          // more texture packs
+          buff: '/tanks/buff',
+          base: '/tanks/base',
+          destroyed: '/tanks/destroyed',
+          top: '/tanks/top',
+          bottom: '/tanks/bottom',
+          bottom2: '/tanks/bottom2',
+        },
+        cosmetics: {
+              'DarkMemeGod': '/cosmetics/meme',
+              'Aaron': '/cosmetics/aaron',
+              'Astronaut': '/cosmetics/astronaut',
+              'Onfire': '/cosmetics/onfire',
+              'Assassin': '/cosmetics/assassin',
+              'Redsus': '/cosmetics/redsus',
+              'Venom': '/cosmetics/venom',
+              'Blue Tint': '/cosmetics/blue_tint',
+              'Purple Flower': '/cosmetics/purple_flower',
+              'Leaf': '/cosmetics/leaf',
+              'Basketball': '/cosmetics/basketball',
+              'Purple Top Hat': '/cosmetics/purple_top_hat',
+              'Terminator': '/cosmetics/terminator',
+              'Dizzy': '/cosmetics/dizzy',
+              'Knife': '/cosmetics/knife',
+              'Scared': '/cosmetics/scared',
+              'Laff': '/cosmetics/laff',
+              'Hacker Hoodie': '/cosmetics/hacker_hoodie',
+              'Error': '/cosmetics/error',
+              'Purple Grad Hat': '/cosmetics/purple_grad_hat',
+              'Bat Wings': '/cosmetics/bat_wings',
+              'Back Button': '/cosmetics/back',
+              'Fisher Hat': '/cosmetics/fisher_hat',
+              'Kill = Ban': '/cosmetics/ban',
+              'Blue Ghost': '/cosmetics/blue_ghost',
+              'Pumpkin Face': '/cosmetics/pumpkin_face',
+              'Pumpkin Hat': '/cosmetics/pumpkin_hat',
+              'Red Ghost': '/cosmetics/red_ghost',
+              'Candy Corn': '/cosmetics/candy_corn',
+              'Yellow Pizza': '/cosmetics/yellow_pizza',
+              'Orange Ghost': '/cosmetics/orange_ghost',
+              'Pink Ghost': '/cosmetics/pink_ghost',
+              'Paleontologist': '/cosmetics/paleontologist',
+              'Yellow Hoodie': '/cosmetics/yellow_hoodie',
+              'X': '/cosmetics/x',
+              'Sweat': '/cosmetics/sweat',
+              'Spirals': '/cosmetics/spirals',
+              'Spikes': '/cosmetics/spikes',
+              'Rudolph': '/cosmetics/rudolph',
+              'Reindeer Hat': '/cosmetics/reindeer_hat',
+              'Red Hoodie': '/cosmetics/red_hoodie',
+              'Question Mark': '/cosmetics/question_mark',
+              'Purple-Pink Hoodie': '/cosmetics/purplepink_hoodie',
+              'Purple Hoodie': '/cosmetics/purple_hoodie',
+              'Pumpkin': '/cosmetics/pumpkin',
+              'Pickle': '/cosmetics/pickle',
+              'Orange Hoodie': '/cosmetics/orange_hoodie',
+              'Helment': '/cosmetics/helment',
+              'Green Hoodie': '/cosmetics/green_hoodie',
+              'Exclaimation Point': '/cosmetics/exclaimation_point',
+              'Eggplant': '/cosmetics/eggplant',
+              'Devil Wings': '/cosmetics/devils_wings',
+              'Christmas Tree': '/cosmetics/christmas_tree',
+              'Christmas Lights': '/cosmetics/christmas_lights',
+              'Checkmark': '/cosmetics/checkmark',
+              'Cat Hat': '/cosmetics/cat_hat',
+              'Blueberry': '/cosmetics/blueberry',
+              'Blue Hoodie': '/cosmetics/blue_hoodie',
+              'Blue Helment': '/cosmetics/blue_helment',
+              'Banana': '/cosmetics/bannana',
+              'Aqua Helment': '/cosmetics/aqua_helment',
+              'Apple': '/cosmetics/apple',
+              'Hoodie': '/cosmetics/hoodie',
+              'Purple Helment': '/cosmetics/purple_helment',
+              'Angel Wings': '/cosmetics/angel_wings',
+              'Boost': '/cosmetics/boost',
+              'Bunny Ears': '/cosmetics/bunny_ears',
+              'Cake': '/cosmetics/cake',
+              'Cancelled': '/cosmetics/cancelled',
+              'Candy Cane': '/cosmetics/candy_cane',
+              'Cat Ears': '/cosmetics/cat_ears',
+              'Christmas Hat': '/cosmetics/christmas_hat',
+              'Controller': '/cosmetics/controller',
+              'Deep Scratch': '/cosmetics/deep_scratch',
+              'Devil Horns': '/cosmetics/devil_horn',
+              'Headphones': '/cosmetics/earmuffs',
+              'Eyebrows': '/cosmetics/eyebrows',
+              'First Aid': '/cosmetics/first_aid',
+              'Flag': '/cosmetics/flag',
+              'Halo': '/cosmetics/halo',
+              'Hax': '/cosmetics/hax',
+              'Low Battery': '/cosmetics/low_battery',
+              'Mini Tank': '/cosmetics/mini_tank',
+              'MLG Glasses': '/cosmetics/mlg_glasses',
+              'Money Eyes': '/cosmetics/money_eyes',
+              'No Mercy': '/cosmetics/no_mercy',
+              'Peace': '/cosmetics/peace',
+              'Police': '/cosmetics/police',
+              'Question Mark': '/cosmetics/question_mark',
+              'Rage': '/cosmetics/rage',
+              'Small Scratch': '/cosmetics/small_scratch',
+              'Speaker': '/cosmetics/speaker',
+              'Swords': '/cosmetics/swords',
+              'Tools': '/cosmetics/tools',
+              'Top Hat': '/cosmetics/top_hat',
+              'Uno Reverse': '/cosmetics/uno_reverse',
+              'Mask': '/cosmetics/victim',
         },
         menus: {
-          default: {
-            ui: '/images/menus/default/ui.png',
-            start: '/images/menus/default/start.png',
-            main: '/images/menus/default/main.png',
-            multiplayer: '/images/menus/default/multiplayer.png',
-            crate: '/images/menus/default/crate.png',
-            settings: '/images/menus/default/settings.png',
-            keybinds: '/images/menus/default/keybinds.png',
-            inventory: '/images/menus/default/inventory.png',
-            classTab: '/images/menus/default/classTab.png',
-            healthTab: '/images/menus/default/healthTab.png',
-            itemTab: '/images/menus/default/itemTab.png',
-            cosmeticTab: '/images/menus/default/cosmeticTab.png',
-            deathEffectsTab: '/images/menus/default/cosmeticTab.png',
-            shop_armor: '/images/menus/default/shop_armor.png',
-            shop_class: '/images/menus/default/shop_class.png',
-            shop_items: '/images/menus/default/shop_items.png',
-            shop_kits: '/images/menus/default/shop_kits.png',
-            broke: '/images/menus/default/broke.png',
-            htp1: '/images/menus/default/htp1.png',
-            htp2: '/images/menus/default/htp2.png',
-            htp3: '/images/menus/default/htp3.png',
-            htp4: '/images/menus/default/htp4.png',
-          },
+          ui: '/menus/default/ui',
+          start: '/menus/default/start',
+          main: '/menus/default/main',
+          multiplayer: '/menus/default/multiplayer',
+          crate: '/menus/default/crate',
+          settings: '/menus/default/settings',
+          keybinds: '/menus/default/keybinds',
+          inventory: '/menus/default/inventory',
+          classTab: '/menus/default/classTab',
+          healthTab: '/menus/default/healthTab',
+          itemTab: '/menus/default/itemTab',
+          cosmeticTab: '/menus/default/cosmeticTab',
+          deathEffectsTab: '/menus/default/cosmeticTab',
+          shop_armor: '/menus/default/shop_armor',
+          shop_class: '/menus/default/shop_class',
+          shop_items: '/menus/default/shop_items',
+          shop_kits: '/menus/default/shop_kits',
+          broke: '/menus/default/broke',
+          htp1: '/menus/default/htp1',
+          htp2: '/menus/default/htp2',
+          htp3: '/menus/default/htp3',
+          htp4: '/menus/default/htp4',
         },
         emotes: { // type: 0=loop 1=play once 2=static
-          speech: {image: '/images/emotes/speech.png', speed: 50},
-          mlg: {
-            image: '/images/emotes/mlg.png',
-            type: 1,
-            frames: 13,
-            speed: 50,
-          },
-          wink: {
-            image: '/images/emotes/wink.png',
-            type: 2,
-            speed: 50,
-          },
-          confuzzled: {
-            image: '/images/emotes/confuzzled.png',
-            type: 2,
-            speed: 50,
-          },
-          surrender: {
-            image: '/images/emotes/surrender.png',
-            type: 2,
-            speed: 50,
-          },
-          anger: {
-            image: '/images/emotes/anger.png',
-            type: 0,
-            frames: 4,
-            speed: 50,
-          },
-          ded: {
-            image: '/images/emotes/ded.png',
-            type: 2,
-            speed: 50,
-          },
-          mercy: {
-            image: '/images/emotes/mercy.png',
-            type: 0,
-            frames: 1,
-            speed: 50,
-          },
-          suffocation: {
-            image: '/images/emotes/suffocation.png',
-            type: 0,
-            frames: 3,
-            speed: 50,
-          },
-          nomercy: {
-            image: '/images/emotes/nomercy.png',
-            type: 0,
-            frames: 1,
-            speed: 50,
-          },
-          idea: {
-            image: '/images/emotes/idea.png',
-            type: 1,
-            frames: 6,
-            speed: 50,
-          },
-          scared: {
-            image: '/images/emotes/scared.png',
-            type: 2,
-            speed: 50,
-          },
-          crying: {
-            image: '/images/emotes/crying.png',
-            type: 0,
-            frames: 5,
-            speed: 50,
-          },
-          flat: {
-            image: '/images/emotes/flat.png',
-            type: 0,
-            frames: 1,
-            speed: 50,
-          },
-          noflat: {
-            image: '/images/emotes/noflat.png',
-            type: 0,
-            frames: 1,
-            speed: 50,
-          },
-          rage: {
-            image: '/images/emotes/rage.png',
-            type: 0,
-            frames: 5,
-            speed: 50,
-          },
-          sad: {
-            image: '/images/emotes/sad.png',
-            type: 0,
-            frames: 2,
-            speed: 50,
-          },
-          sweat: {
-            image: '/images/emotes/sweat.png',
-            type: 0,
-            frames: 10,
-            speed: 50,
-          },
-          teamedon: {
-            image: '/images/emotes/miss.png',
-            type: 1,
-            frames: 28,
-            speed: 75,
-          },
-          evanism: {
-            image: '/images/emotes/evanism.png',
-            type: 1,
-            frames: 45,
-            speed: 100,
-          },
-          miss: {
-            image: '/images/emotes/teamedon.png',
-            type: 0,
-            frames: 12,
-            speed: 50,
-          }
-        }, // REVISE make loader more optimized (fix repeating /images/emotes/)
+          speech: '/emotes/speech',
+          speech_: {speed: 50},
+          mlg: '/emotes/mlg',
+          mlg_: {type: 1, frames: 13, speed: 50},
+          wink: '/emotes/wink',
+          wink_: {type: 2, speed: 50},
+          confuzzled: '/emotes/confuzzled',
+          confuzzled_: {type: 2, speed: 50},
+          surrender: '/emotes/surrender',
+          surrender_: {type: 2, speed: 50},
+          anger: '/emotes/anger',
+          anger_: {type: 0, frames: 4, speed: 50},
+          ded: '/emotes/ded',
+          ded_: {type: 2, speed: 50},
+          mercy: '/emotes/mercy',
+          mercy_: {type: 0, frames: 1, speed: 50},
+          suffocation: '/emotes/suffocation',
+          suffocation_: {type: 0, frames: 3, speed: 50},
+          nomercy: '/emotes/nomercy',
+          nomercy_: {type: 0, frames: 1, speed: 50},
+          idea: '/emotes/idea',
+          idea_: {type: 1, frames: 6, speed: 50},
+          scared: '/emotes/scared',
+          scared_: {type: 2, speed: 50},
+          crying: '/emotes/crying',
+          crying_: {type: 0, frames: 5, speed: 50},
+          flat: '/emotes/flat',
+          flat_: {type: 0, frames: 1, speed: 50},
+          noflat: '/emotes/noflat',
+          noflat_: {type: 0, frames: 1, speed: 50},
+          rage: '/emotes/rage',
+          rage_: {type: 0, frames: 5, speed: 50},
+          sad: '/emotes/sad',
+          sad_: {type: 0, frames: 2, speed: 50},
+          sweat: '/emotes/sweat',
+          sweat_: {type: 0, frames: 10, speed: 50},
+          teamedon: '/emotes/miss',
+          teamedon_: {type: 1, frames: 28, speed: 75},
+          evanism: '/emotes/evanism',
+          evanism_: {type: 1, frames: 45, speed: 100},
+          miss: '/emotes/teamedon',
+          miss_: {type: 0, frames: 12, speed: 50},
+        },
         animations: {
-          tape: {
-            image: '/images/animations/tape.png',
-            frames: 17,
-            speed: 50,
-          },
-          toolkit: {
-            image: '/images/animations/toolkit.png',
-            frames: 16,
-            speed: 50,
-          },
-          glu: {
-            image: '/images/animations/glu.png',
-            frames: 45,
-            speed: 50,
-          },
-          fire: {
-            image: '/images/animations/fire.png',
-            frames: 1,
-            speed: 50,
-          }
+          tape: '/animations/tape',
+          tape_: {frames: 17, speed: 50},
+          toolkit: '/animations/toolkit',
+          toolkit_: {frames: 16, speed: 50},
+          glu: '/animations/glu',
+          glu_: {frames: 45, speed: 50},
+          fire: '/animations/fire',
+          fire_: {frames: 1, speed: 50},
+          explosion: '/animations/explosion',
         },
         deathEffects: {
-          explode: {
-            image: '/images/animations/explode.png',
-            frames: 17,
-            speed: 75,
-            kill: 8,
-            type: 1,
-          },
-          clicked: {
-            image: '/images/animations/clicked.png',
-            frames: 29,
-            speed: 75,
-            kill: 28,
-            type: 2,
-          },
-          amogus: {
-            image: '/images/animations/amogus.png',
-            frames: 47,
-            speed: 75,
-            kill: 21,
-            type: 1,
-          },
-          nuke: {
-            image: '/images/animations/nuke.png',
-            frames: 26,
-            speed: 75,
-            kill: 12,
-            type: 1,
-          },
-          error: {
-            image: '/images/animations/error.png',
-            frames: 10,
-            speed: 250,
-            kill: 10,
-            type: 2,
-          },
-          magic: {
-            image: '/images/animations/magic.png',
-            frames: 69,
-            speed: 75,
-            kill: 51,
-            type: 2,
-          },
-          /*securly: {
-            image: '/images/animations/securly.png',
-            frames: 1,
-            speed: 9900,
-            kill: 1,
-            type: 3,
-          },*/
-          anvil: {
-            image: '/images/animations/anvil.png',
-            frames: 22,
-            speed: 75,
-            kill: 6,
-            type: 1,
-          },
-          insta: {
-            image: '/images/animations/insta.png',
-            frames: 22,
-            speed: 75,
-            kill: 21,
-            type: 1,
-          },
-          crate: {
-            image: '/images/animations/crate.png',
-            frames: 31,
-            speed: 75,
-            kill: 21,
-            type: 2,
-          },
-          battery: {
-            image: '/images/animations/battery.png',
-            frames: 55,
-            speed: 75,
-            kill: 54,
-            type: 2,
-          },
-          evan: {
-            image: '/images/animations/evan.png',
-            frames: 8,
-            speed: 500,
-            kill: 7,
-            type: 1,
-          },
-          minecraft: {
-            image: '/images/animations/minecraft.png',
-            frames: 22,
-            speed: 100,
-            kill: 15,
-            type: 2,
-          },
-          enderman: {
-            image: '/images/animations/enderman.png',
-            frames: 4,
-            speed: 500,
-            kill: 3,
-            type: 2,
-          }
+          explode: '/animations/explode',
+          explode_: {frames: 17, speed: 75, kill: 8, type: 1},
+          clicked: '/animations/clicked',
+          clicked_: {frames: 29, speed: 75, kill: 28, type: 2},
+          amogus: '/animations/amogus',
+          amogus_: {frames: 47, speed: 75, kill: 21, type: 1},
+          nuke: '/animations/nuke',
+          nuke_: {frames: 26, speed: 75, kill: 12, type: 1},
+          error: '/animations/error',
+          error_: {frames: 10, speed: 250, kill: 10, type: 2},
+          magic: '/animations/magic',
+          magic_: {frames: 69, speed: 75, kill: 51, type: 2},
+          /*securly: '/animations/securly',
+          securly_: {frames: 1, speed: 9900, kill: 1, type: 3},*/
+          anvil: '/animations/anvil',
+          anvil_: {frames: 22, speed: 75, kill: 6, type: 1},
+          insta: '/animations/insta',
+          insta_: {frames: 22, speed: 75, kill: 21, type: 1},
+          crate: '/animations/crate',
+          crate_: {frames: 31, speed: 75, kill: 21, type: 2},
+          battery: '/animations/battery',
+          battery_: {frames: 55, speed: 75, kill: 54, type: 2},
+          evan: '/animations/evan',
+          evan_: {frames: 8, speed: 500, kill: 7, type: 1},
+          minecraft: '/animations/minecraft',
+          minecraft_: {frames: 22, speed: 100, kill: 15, type: 2},
+          enderman: '/animations/enderman',
+          enderman_: {frames: 4, speed: 500, kill: 3, type: 2},
         },
         items: {
-          airstrike: '/images/items/airstrike.png',
-          duck_tape: '/images/items/duck-tape.png',
-          super_glu: '/images/items/super-glu.png',
-          shield: '/images/items/shield.png',
-          flashbang: '/images/items/flashbang.png',
-          bomb: '/images/items/bomb.png',
-          dynamite: '/images/items/dynamite.png',
-          weak: '/images/items/weak.png',
-          strong: '/images/items/strong.png',
-          spike: '/images/items/spike.png',
-          mine: '/images/items/mine.png',
-          fortress: '/images/items/fortress.png',
+          airstrike: '/items/airstrike',
+          duck_tape: '/items/duck-tape',
+          super_glu: '/items/super-glu',
+          shield: '/items/shield',
+          flashbang: '/items/flashbang',
+          bomb: '/items/bomb',
+          dynamite: '/items/dynamite',
+          weak: '/items/weak',
+          strong: '/items/strong',
+          spike: '/items/spike',
+          mine: '/items/mine',
+          fortress: '/items/fortress',
         }
       };
 
@@ -1367,10 +1196,10 @@
             PixelTanks.save();
 
             var key = ['red', 'steel', 'crystal', 'dark', 'light'];
-            GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack][key[PixelTanks.userData.material]].bottom[0], 800, 800, 80, 80, 1);
-            GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack][key[PixelTanks.userData.material]].top, 800, 800, 80, 90, 1);
+            GUI.drawImage(PixelTanks.images.tanks.bottom, 800, 800, 80, 80, 1);
+            GUI.drawImage(PixelTanks.images.tanks.top, 800, 800, 80, 90, 1);
             try {
-              if (PixelTanks.userData.cosmetic != '' || PixelTanks.userData.cosmetic != undefined) GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack].cosmetics[PixelTanks.userData.cosmetic], 800, 800, 80, 90, 1);
+              if (PixelTanks.userData.cosmetic != '' || PixelTanks.userData.cosmetic != undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 800, 800, 80, 90, 1);
             } catch(e) {}
             GUI.drawText(PixelTanks.user.username, 900, 840, 50, '#ffffff', 0.5)
 
@@ -1623,15 +1452,15 @@
             GUI.draw.fillStyle = PixelTanks.userData.color;
             GUI.draw.fillRect(1116, 264, 40, 40);
             GUI.drawText(Menus.menus.inventory.color, 1052, 256, 20, PixelTanks.userData.color, 0);
-            GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack][key[PixelTanks.userData.material]].top, 1064, 458, 88, 88, 1);
+            GUI.drawImage(PixelTanks.images.tanks.top, 1064, 458, 88, 88, 1);
             GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[0]], 402, 816, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[1]], 490, 816, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[2]], 578, 816, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[3]], 666, 816, 80, 80, 1);
 
-            GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack][key[PixelTanks.userData.material]].bottom[0], 680, 380, 240, 240, 1);
-            GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack][key[PixelTanks.userData.material]].top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(Menus.menus.inventory.target.x, Menus.menus.inventory.target.y)*180/Math.PI+360)%360);
-            if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack].cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(Menus.menus.inventory.target.x, Menus.menus.inventory.target.y)*180/Math.PI+360)%360);
+            GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
+            GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(Menus.menus.inventory.target.x, Menus.menus.inventory.target.y)*180/Math.PI+360)%360);
+            if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(Menus.menus.inventory.target.x, Menus.menus.inventory.target.y)*180/Math.PI+360)%360);
 
             if (Menus.menus.inventory.healthTab || Menus.menus.inventory.classTab || Menus.menus.inventory.itemTab || Menus.menus.inventory.cosmeticTab || Menus.menus.inventory.deathEffectsTab)  {
               GUI.draw.fillStyle = '#000000';
@@ -1639,27 +1468,27 @@
               GUI.draw.fillRect(0, 0, 1600, 1600);
             }
             if (Menus.menus.inventory.healthTab) {
-              GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].healthTab, 742, 226, 116, 548, 1);
+              GUI.drawImage(PixelTanks.images.menus.healthTab, 742, 226, 116, 548, 1);
               GUI.draw.strokeStyle = '#FFFF00';
               GUI.draw.lineWidth = 10;
               GUI.draw.strokeRect(754, [240, 348, 456, 564, 672][PixelTanks.userData.material], 88, 88);
             } else if (Menus.menus.inventory.classTab) {
-              GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].classTab, 688, 334, 224, 332, 1);
+              GUI.drawImage(PixelTanks.images.menus.classTab, 688, 334, 224, 332, 1);
               GUI.draw.strokeStyle = '#FFFF00';
               GUI.draw.lineWidth = 10;
               if (PixelTanks.userData.class === 'tactical') GUI.draw.strokeRect(701, 348, 88, 88); else if (PixelTanks.userData.class === 'fire') GUI.draw.strokeRect(701, 456, 88, 88); else if (PixelTanks.userData.class === 'medic') GUI.draw.strokeRect(701, 565, 88, 88); else if (PixelTanks.userData.class === 'stealth') GUI.draw.strokeRect(814, 348, 88, 88); else if (PixelTanks.userData.class === 'builder') GUI.draw.strokeRect(814, 456, 88, 88); else if (PixelTanks.userData.class === 'warrior') GUI.draw.strokeRect(814, 565, 88, 88);
             } else if (Menus.menus.inventory.itemTab) {
-              GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].itemTab, 580, 334, 440, 332, 1);
+              GUI.drawImage(PixelTanks.images.menus.itemTab, 580, 334, 440, 332, 1);
               var key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], fortress: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], mine: [904, 570]};
               for (var property in key) GUI.drawImage(PixelTanks.images.items[property], key[property][0], key[property][1], 80, 80, 1);
             } else if (Menus.menus.inventory.cosmeticTab) {
               var crop = 0;
               if (Menus.menus.inventory.cosmeticMenu === 0) crop++;
               if (Menus.menus.inventory.cosmeticMenu === Math.ceil(PixelTanks.userData.cosmetics.length/16)-1) crop++;
-              GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].cosmeticTab, 518+(Menus.menus.inventory.cosmeticMenu === 0 ? 62 : 0), 280, 564-62*crop, 440, 1, 0, 0, 0, 0, 0, (Menus.menus.inventory.cosmeticMenu === 0 ? 31 : 0), 0, 282-31*crop, 220);
+              GUI.drawImage(PixelTanks.images.menus.cosmeticTab, 518+(Menus.menus.inventory.cosmeticMenu === 0 ? 62 : 0), 280, 564-62*crop, 440, 1, 0, 0, 0, 0, 0, (Menus.menus.inventory.cosmeticMenu === 0 ? 31 : 0), 0, 282-31*crop, 220);
               var l = Menus.menus.inventory.cosmeticMenu*16, end = l+16;
               while (l<Math.min(end, PixelTanks.userData.cosmetics.length)) {
-                GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack].cosmetics[PixelTanks.userData.cosmetics[l]], 598+(l%4)*108, 298+Math.floor((l%16)/4)*108, 88, 88, 1);
+                GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetics[l]], 598+(l%4)*108, 298+Math.floor((l%16)/4)*108, 88, 88, 1);
                 if (PixelTanks.userData.cosmetics[l] === PixelTanks.userData.cosmetic) {
                   GUI.draw.strokeStyle = '#FFFF22';
                   GUI.draw.lineWidth = 10;
@@ -1671,10 +1500,10 @@
               var crop = 0;
               if (Menus.menus.inventory.deathEffectsMenu === 0) crop++;
               if (Menus.menus.inventory.deathEffectsMenu === Math.ceil(PixelTanks.userData.deathEffects.length/16)-1) crop++;
-              GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].deathEffectsTab, 518+(Menus.menus.inventory.deathEffectsMenu === 0 ? 62 : 0), 280, 564-62*crop, 440, 1, 0, 0, 0, 0, 0, (Menus.menus.inventory.deathEffectsMenu === 0 ? 31 : 0), 0, 282-31*crop, 220);
+              GUI.drawImage(PixelTanks.images.menus.deathEffectsTab, 518+(Menus.menus.inventory.deathEffectsMenu === 0 ? 62 : 0), 280, 564-62*crop, 440, 1, 0, 0, 0, 0, 0, (Menus.menus.inventory.deathEffectsMenu === 0 ? 31 : 0), 0, 282-31*crop, 220);
               var l = Menus.menus.inventory.deathEffectsMenu*16, end = l+16;
               while (l<Math.min(end, PixelTanks.userData.deathEffects.length)) {
-                GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[l]].image, 598+(l%4)*108, 298+Math.floor((l%16)/4)*108, 88, 88, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-Menus.menus.inventory.time)/PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[l]].speed)%PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[l]].frames)*200, 0, 200, 200);
+                GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[l]].image, 598+(l%4)*108, 298+Math.floor((l%16)/4)*108, 88, 88, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-Menus.menus.inventory.time)/PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[l]+'_'].speed)%PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[l]+'_'].frames)*200, 0, 200, 200);
                 if (PixelTanks.userData.deathEffects[l] === PixelTanks.userData.deathEffect) {
                   GUI.draw.strokeStyle = '#FFFF22';
                   GUI.draw.lineWidth = 10;
@@ -1814,75 +1643,26 @@
           },
           customOnLoad: () => {
             if (Menus.menus.shop.tab === undefined) Menus.menus.shop.tab = 'armor';
-            GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack]['shop_'+Menus.menus.shop.tab], 0, 0, 1600, 1000, 1);
+            GUI.drawImage(PixelTanks.images.menus['shop_'+Menus.menus.shop.tab], 0, 0, 1600, 1000, 1);
             GUI.drawText(PixelTanks.userData.stats[0]+' coinage', 800, 350, 50, 0x000000, 0.5);
             if (Menus.menus.shop.tab === 'items') {
               var items = ['airstrike', 'super_glue', 'duck_tape', 'shield', 'flashbang', 'bomb', 'dynamite', 'weak', 'strong', 'spike', 'mine', 'fortress'];
               
             } else if (Menus.menus.shop.tab === 'armor') {
-              if (!PixelTanks.userData.armors[0] && PixelTanks.userData.stats[0] < 10000) GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].broke, 424, 460, 160, 160, 1);
-              if (!PixelTanks.userData.armors[1] && PixelTanks.userData.stats[0] < 50000) GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].broke, 624, 460, 160, 160, 1);
-              if (!PixelTanks.userData.armors[2] && PixelTanks.userData.stats[0] < 100000) GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].broke, 824, 460, 160, 160, 1);
-              if (!PixelTanks.userData.armors[3] && PixelTanks.userData.stats[0] < 150000) GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].broke, 1024, 460, 160, 160, 1);
+              if (!PixelTanks.userData.armors[0] && PixelTanks.userData.stats[0] < 10000) GUI.drawImage(PixelTanks.images.menus.broke, 424, 460, 160, 160, 1);
+              if (!PixelTanks.userData.armors[1] && PixelTanks.userData.stats[0] < 50000) GUI.drawImage(PixelTanks.images.menus.broke, 624, 460, 160, 160, 1);
+              if (!PixelTanks.userData.armors[2] && PixelTanks.userData.stats[0] < 100000) GUI.drawImage(PixelTanks.images.menus.broke, 824, 460, 160, 160, 1);
+              if (!PixelTanks.userData.armors[3] && PixelTanks.userData.stats[0] < 150000) GUI.drawImage(PixelTanks.images.menus.broke, 1024, 460, 160, 160, 1);
             } else if (Menus.menus.shop.tab === 'class') {
-              if (!PixelTanks.userData.classes[0] && PixelTanks.userData.stats[0] < 70000) GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].broke, 504, 416, 176, 176, 1);
-              if (!PixelTanks.userData.classes[1] && PixelTanks.userData.stats[0] < 30000) GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].broke, 720, 416, 176, 176, 1);
-              if (!PixelTanks.userData.classes[4] && PixelTanks.userData.stats[0] < 50000) GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].broke, 936, 416, 176, 176, 1);
-              if (!PixelTanks.userData.classes[2] && PixelTanks.userData.stats[0] < 70000) GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].broke, 504, 632, 176, 176, 1);
-              if (!PixelTanks.userData.classes[6] && PixelTanks.userData.stats[0] < 70000) GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].broke, 720, 632, 176, 176, 1);
-              if (!PixelTanks.userData.classes[3] && PixelTanks.userData.stats[0] < 50000) GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].broke, 936, 632, 176, 176, 1);
+              if (!PixelTanks.userData.classes[0] && PixelTanks.userData.stats[0] < 70000) GUI.drawImage(PixelTanks.images.menus.broke, 504, 416, 176, 176, 1);
+              if (!PixelTanks.userData.classes[1] && PixelTanks.userData.stats[0] < 30000) GUI.drawImage(PixelTanks.images.menus.broke, 720, 416, 176, 176, 1);
+              if (!PixelTanks.userData.classes[4] && PixelTanks.userData.stats[0] < 50000) GUI.drawImage(PixelTanks.images.menus.broke, 936, 416, 176, 176, 1);
+              if (!PixelTanks.userData.classes[2] && PixelTanks.userData.stats[0] < 70000) GUI.drawImage(PixelTanks.images.menus.broke, 504, 632, 176, 176, 1);
+              if (!PixelTanks.userData.classes[6] && PixelTanks.userData.stats[0] < 70000) GUI.drawImage(PixelTanks.images.menus.broke, 720, 632, 176, 176, 1);
+              if (!PixelTanks.userData.classes[3] && PixelTanks.userData.stats[0] < 50000) GUI.drawImage(PixelTanks.images.menus.broke, 936, 632, 176, 176, 1);
             } else {}
           },
         },
-      }
-
-      for (var property in PixelTanks.images.blocks) {
-        for (var blok in PixelTanks.images.blocks[property]) {
-          Loader.add('blocks:'+property+':'+blok, PixelTanks.images.blocks[property][blok]);
-        }
-      }
-      
-      for (var property in PixelTanks.images.bullets) {
-        for (var bullet in PixelTanks.images.bullets[property]) {
-          Loader.add('bullets:'+property+':'+bullet, PixelTanks.images.bullets[property][bullet]);
-        }
-      }
-
-      for (var property in PixelTanks.images.tanks) {
-        for (var tank in PixelTanks.images.tanks[property]) {
-          if (tank != 'cosmetics' && tank != 'other') {
-            Loader.add('tanks:'+property+':'+tank+':top', PixelTanks.images.tanks[property][tank].top);
-            Loader.add('tanks:'+property+':'+tank+':bottom:'+0, PixelTanks.images.tanks[property][tank].bottom[0]);
-            Loader.add('tanks:'+property+':'+tank+':bottom:'+1, PixelTanks.images.tanks[property][tank].bottom[1]);
-          }
-        }
-        for (var cosmetic in PixelTanks.images.tanks[property].cosmetics){
-          var src = PixelTanks.images.tanks[property].cosmetics[cosmetic];
-          Loader.add('tanks:'+property+':cosmetics:'+cosmetic, '/images/tanks/'+property+'/cosmetics/'+src+'.png');
-        }
-        for (var item in PixelTanks.images.tanks[property].other) {
-          Loader.add('tanks:'+property+':other:'+item, PixelTanks.images.tanks[property].other[item]);
-        }
-      }
-
-      for (var property in PixelTanks.images.menus) {
-        for (var menu in PixelTanks.images.menus[property]) {
-          Loader.add('menus:'+property+':'+menu, PixelTanks.images.menus[property][menu]);
-        }
-      }
-
-      for (var property in PixelTanks.images.emotes) Loader.add('emotes:'+property+':image', PixelTanks.images.emotes[property].image);
-
-      for (var property in PixelTanks.images.animations) {
-        Loader.add('animations:'+property+':image', PixelTanks.images.animations[property].image);
-      }
-
-      for (var property in PixelTanks.images.deathEffects) {
-        Loader.add('deathEffects:'+property+':image', PixelTanks.images.deathEffects[property].image);
-      }
-
-      for (var property in PixelTanks.images.items) {
-        Loader.add('items:'+property, PixelTanks.images.items[property]);
       }
 
       for (var property in Menus.menus) {
@@ -1908,7 +1688,7 @@
         }
         var data = Menus.menus[property];
         Menus.menus[property] = new Menu(function() { // No arrow function here
-          if (PixelTanks.images.menus[PixelTanks.texturepack][this.id]) GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack][this.id], 0, 0, 1600, 1000, 1);
+          if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], 0, 0, 1600, 1000, 1);
           this.data.customOnLoad = this.data.customOnLoad.bind(this);
           this.data.customOnLoad();
         }, {
@@ -1919,19 +1699,13 @@
         Menus.menus[property].id = property;
       }
 
+      Loader.loadImages(PixelTanks.images);
+
       PixelTanks.socket = new MegaSocket('ws://141.148.128.231', {keepAlive: true, reconnect: true, autoconnect: true});
     }
 
     static launch() {
-      for (var dump in Loader.core) {
-        var l = 0, ref = '';
-        while (l<dump.split(':').length) {
-          ref += '["'+dump.split(':')[l]+'"]';
-          l++;
-        }
-        eval('PixelTanks.images'+ref+' = Loader.core["'+dump+'"];');
-      }
-      setTimeout(function() {Menus.trigger('start')}, 200);
+      setTimeout(() => Menus.trigger('start'), 200);
     }
 
     static save() {
@@ -2028,13 +1802,13 @@
       }
 
       var number = Math.floor(Math.random()*(crate[rarity].length)), d;
-      for (var deathEffect in this.images.deathEffects) {if (deathEffect === crate[rarity][number]) d = this.images.deathEffects[deathEffect].image}
+      for (var deathEffect in this.images.deathEffects) {if (deathEffect === crate[rarity][number]) d = this.images.deathEffects[deathEffect]}
       if (d === undefined) document.write('Game Crash!<br>Crashed while trying to give you cosmetic id "'+crate[rarity][number]+'". Report this to cs641311, bradley, or Celestial.');
       Menus.removeListeners();
       var start = Date.now();
       var render = setInterval(function() {
         GUI.clear();
-        GUI.drawImage(d, 600, 400, 400, 400, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-start)/PixelTanks.images.deathEffects[crate[rarity][number]].speed)%PixelTanks.images.deathEffects[crate[rarity][number]].frames)*200, 0, 200, 200);
+        GUI.drawImage(d, 600, 400, 400, 400, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-start)/PixelTanks.images.deathEffects[crate[rarity][number]+'_'].speed)%PixelTanks.images.deathEffects[crate[rarity][number]+'_'].frames)*200, 0, 200, 200);
         GUI.drawText('You Got', 800, 200, 100, '#ffffff', 0.5);
         GUI.drawText(crate[rarity][number], 800, 800, 50, '#ffffff', 0.5);
         GUI.drawText(rarity, 800, 900, 30, {
@@ -2086,7 +1860,7 @@
       }
 
       var number = Math.floor(Math.random()*(crate[rarity].length)), c;
-      for (var cosmetic in this.images.tanks[PixelTanks.texturepack].cosmetics) {if (cosmetic === crate[rarity][number]) c = this.images.tanks[PixelTanks.texturepack].cosmetics[cosmetic]}
+      for (var cosmetic in this.images.cosmetics) {if (cosmetic === crate[rarity][number]) c = this.images.cosmetics[cosmetic]}
       if (c === undefined) document.write('Game Crash!<br>Crashed while trying to give you cosmetic id "'+crate[rarity][number]+'". Report this to cs641311, bradley, or Celestial.');
       GUI.clear();
       GUI.drawImage(c, 600, 400, 400, 400, 1);
@@ -2115,10 +1889,6 @@
         summoner: [['classes', 5], 100000],
         fire: [['classes', 6], 70000],
         ice: [['classes', 7], 70000],
-        steel: [['armors', 0], 10000],
-        crystal: [['armors', 1], 50000],
-        dark: [['armors', 2], 100000],
-        light: [['armors', 3], 150000],
       }
       if (key[stat] === undefined) alert('The ['+stat+'] item is not registered. Scream at me to add it.');
       if (PixelTanks.userData[key[stat][0][0]][key[stat][0][1]]) {
@@ -2262,7 +2032,7 @@
     }
 
     drawBlock(b) {
-      GUI.drawImage(PixelTanks.images.blocks[PixelTanks.texturepack][b.type], b.x, b.y, b.type === 'airstrike' ? 200 : 100, b.type === 'airstrike' ? 200 : 100, (b.type === 'mine' && A.search(this.hostupdate.tanks, {key: 'username', value: PixelTanks.user.username}).team.split(':')[1].replace('@leader', '') !== b.team.split(':')[1].replace('@leader', '')) ? .03 : 1);
+      GUI.drawImage(PixelTanks.images.blocks[b.type], b.x, b.y, b.type === 'airstrike' ? 200 : 100, b.type === 'airstrike' ? 200 : 100, (b.type === 'mine' && A.search(this.hostupdate.tanks, {key: 'username', value: PixelTanks.user.username}).team.split(':')[1].replace('@leader', '') !== b.team.split(':')[1].replace('@leader', '')) ? .03 : 1);
     }
 
     drawShot(s) {
@@ -2270,13 +2040,13 @@
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(s.x, s.y, 10, 10);
       } else if (['powermissle', 'healmissle'].includes(s.type)) {
-        GUI.drawImage(PixelTanks.images.bullets[PixelTanks.texturepack].powermissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+180);
+        GUI.drawImage(PixelTanks.images.bullets.powermissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+180);
       } else if (s.type === 'megamissle') {
-        GUI.drawImage(PixelTanks.images.bullets[PixelTanks.texturepack].megamissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+180);
+        GUI.drawImage(PixelTanks.images.bullets.megamissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+180);
       } else if (s.type === 'shotgun') {
-        GUI.drawImage(PixelTanks.images.bullets[PixelTanks.texturepack].shotgun, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+180);
+        GUI.drawImage(PixelTanks.images.bullets.shotgun, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+180);
       } else if (s.type === 'grapple') {
-        GUI.drawImage(PixelTanks.images.bullets[PixelTanks.texturepack].grapple, s.x, s.y, 45, 45, 1, 22.5, 22.5, 0, 0, s.r+180);
+        GUI.drawImage(PixelTanks.images.bullets.grapple, s.x, s.y, 45, 45, 1, 22.5, 22.5, 0, 0, s.r+180);
         GUI.draw.lineWidth = 10;
         GUI.draw.beginPath();
         GUI.draw.fillStyle = '#A9A9A9';
@@ -2285,20 +2055,20 @@
         if (t) GUI.draw.lineTo(t.x+40, t.y+40);
         GUI.draw.stroke();
       } else if (s.type === 'dynamite') {
-        GUI.drawImage(PixelTanks.images.bullets[PixelTanks.texturepack].dynamite, s.x, s.y, 10, 40, 1, 5, 5, 0, 0, s.r+180);
+        GUI.drawImage(PixelTanks.images.bullets.dynamite, s.x, s.y, 10, 40, 1, 5, 5, 0, 0, s.r+180);
       } else if (s.type === 'fire') {
-        GUI.drawImage(PixelTanks.images.bullets[PixelTanks.texturepack].fire, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+180);
+        GUI.drawImage(PixelTanks.images.bullets.fire, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+180);
       }
     }
 
     drawExplosion(e) {
-      GUI.drawImage(PixelTanks.images.bullets[PixelTanks.texturepack].explosion, e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, 0, e.f*50, 0, 50, 50);
+      GUI.drawImage(PixelTanks.images.animations.explosion, e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, 0, e.f*50, 0, 50, 50);
     }
 
     drawAi(a) {
-      GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack].other.base, a.x, a.y, 80, 80, 1);
-      GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack].red.top, a.x, a.y, 80, 90, 1, 40, 40, 0, a.p, a.r);
-      if (a.cosmetic) GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack].cosmetics[a.cosmetic], a.x, a.y, 80, 90, 1, 40, 40, 0, a.p, a.r);
+      GUI.drawImage(PixelTanks.images.tanks.base, a.x, a.y, 80, 80, 1);
+      GUI.drawImage(PixelTanks.images.tanks.top, a.x, a.y, 80, 90, 1, 40, 40, 0, a.p, a.r);
+      if (a.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[a.cosmetic], a.x, a.y, 80, 90, 1, 40, 40, 0, a.p, a.r);
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(a.x, a.y+100, 80, 10);
       GUI.draw.fillStyle = '#00FF00';
@@ -2309,10 +2079,10 @@
       var key = ['red', 'steel', 'crystal', 'dark', 'light'], a = 1;
       if (t.invis && t.username !== PixelTanks.user.username) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
       if ((t.invis && t.username === PixelTanks.user.username) || t.ded) a = .5;
-      GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack][key[t.material]].bottom[t.baseFrame ? 0 : 1], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
-      if (t.fire) GUI.drawImage(PixelTanks.images.animations.fire.image, t.x, t.y, 80, 80, 1, 0, 0, 0, 0, 0, t.fire.frame*29, 0, 29, 29);
-      GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack][key[t.material]].top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
-      if (t.cosmetic) GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack].cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
+      GUI.drawImage(PixelTanks..tanks['bottom'+t.baseFrame ? '' : '2'], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
+      if (t.fire) GUI.drawImage(PixelTanks.images.animations.fire, t.x, t.y, 80, 80, 1, 0, 0, 0, 0, 0, t.fire.frame*29, 0, 29, 29);
+      GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
+      if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.invis && t.username !== PixelTanks.user.username) return;
 
       if (!t.ded) {
@@ -2331,7 +2101,7 @@
         username += ' ['+t.team.split(':')[1]+']';
       }
 
-      //GUI.drawImage(PixelTanks.images.blocks[PixelTanks.texturepack].void, t.x-style.width/2+40, t.y-style.height/2-25, style.width, 50, 0.5);
+      //GUI.drawImage(PixelTanks.images.blocks.void, t.x-style.width/2+40, t.y-style.height/2-25, style.width, 50, 0.5);
       GUI.drawText(username, t.x+40, t.y-25, 50, t.color, 0.5);
 
       if (t.shields > 0 && !t.invis) {
@@ -2343,7 +2113,7 @@
         GUI.draw.globalAlpha = 1;
       }
 
-      if (t.buff) GUI.drawImage(PixelTanks.images.tanks.default.other.buff, t.x-5, t.y-5, 80, 80, .2);
+      if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
 
       GUI.draw.globalAlpha = 1;
       
@@ -2360,22 +2130,22 @@
       }
       
       if (t.emote) {
-        GUI.drawImage(PixelTanks.images.emotes.speech.image, t.x+90, t.y-15, 100, 100, 1);
-        GUI.drawImage(PixelTanks.images.emotes[t.emote.a].image, t.x+90, t.y-15, 100, 100, 1, 0, 0, 0, 0, 0, t.emote.f*50, 0, 50, 50);
+        GUI.drawImage(PixelTanks.images.emotes.speech, t.x+90, t.y-15, 100, 100, 1);
+        GUI.drawImage(PixelTanks.images.emotes[t.emote.a], t.x+90, t.y-15, 100, 100, 1, 0, 0, 0, 0, 0, t.emote.f*50, 0, 50, 50);
       }
 
-      if (t.dedEffect && t.dedEffect.time/PixelTanks.images.deathEffects[t.dedEffect.id].speed <= PixelTanks.images.deathEffects[t.dedEffect.id].frames) {
-        if (t.dedEffect.time/PixelTanks.images.deathEffects[t.dedEffect.id].speed < PixelTanks.images.deathEffects[t.dedEffect.id].kill) {
-        GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack][key[t.material]].bottom[0], t.dedEffect.x, t.dedEffect.y, 80, 80, 1, 40, 40, 0, 0, 0);
-        GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack][key[t.material]].top, t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
-        GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack].other.destroyed, t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
-      if (t.cosmetic) GUI.drawImage(PixelTanks.images.tanks[PixelTanks.texturepack].cosmetics[t.cosmetic], t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
+      if (t.dedEffect && t.dedEffect.time/PixelTanks.images.deathEffects[t.dedEffect.id+'_'].speed <= PixelTanks.images.deathEffects[t.dedEffect.id+'_'].frames) {
+        if (t.dedEffect.time/PixelTanks.images.deathEffects[t.dedEffect.id+'_'].speed < PixelTanks.images.deathEffects[t.dedEffect.id+'_'].kill) {
+        GUI.drawImage(PixelTanks.images.tanks.bottom, t.dedEffect.x, t.dedEffect.y, 80, 80, 1, 40, 40, 0, 0, 0);
+        GUI.drawImage(PixelTanks.images.tanks.top, t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
+        GUI.drawImage(PixelTanks.images.tanks.destroyed, t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
+      if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
         }
-        GUI.drawImage(PixelTanks.images.deathEffects[t.dedEffect.id].image, t.dedEffect.x-60, t.dedEffect.y-60, 200, 200, 1, 0, 0, 0, 0, 0, Math.floor(t.dedEffect.time/PixelTanks.images.deathEffects[t.dedEffect.id].speed)*200, 0, 200, 200);
+        GUI.drawImage(PixelTanks.images.deathEffects[t.dedEffect.id], t.dedEffect.x-60, t.dedEffect.y-60, 200, 200, 1, 0, 0, 0, 0, 0, Math.floor(t.dedEffect.time/PixelTanks.images.deathEffects[t.dedEffect.id+'_'].speed)*200, 0, 200, 200);
       }
 
       if (t.animation) {
-        GUI.drawImage(PixelTanks.images.animations[t.animation.id].image, t.x, t.y, 80, 90, 1, 0, 0, 0, 0, 0, t.animation.frame*40, 0, 40, 45);
+        GUI.drawImage(PixelTanks.images.animations[t.animation.id], t.x, t.y, 80, 90, 1, 0, 0, 0, 0, 0, t.animation.frame*40, 0, 40, 45);
       }
 
       if (t.healing && t.class === 'medic' && !t.ded) {
@@ -2427,7 +2197,7 @@
         GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-this.x+760)*PixelTanks.resizer, (-this.y+460)*PixelTanks.resizer);
       }, {key: 'username', value: PixelTanks.user.username}, {t: this.tank});
 
-      GUI.drawImage(PixelTanks.images.blocks[PixelTanks.texturepack].floor, 0, 0, 3000, 3000, 1);
+      GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
 
       var l = 0;
       while (l<b.length) {
@@ -2471,7 +2241,7 @@
       }
       
       GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
-      GUI.drawImage(PixelTanks.images.menus[PixelTanks.texturepack].ui, 0, 0, 1600, 1000, 1);
+      GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
       GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[0]], 500, 900, 100, 100, 1);
       GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[1]], 666, 900, 100, 100, 1);
       GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[2]], 832, 900, 100, 100, 1);
@@ -2654,11 +2424,11 @@
       this.tank.animation = {id: id, frame: 0};
       clearInterval(this.animationInterval);
       this.animationInterval = setInterval(function() {
-        if (this.tank.animation.frame === PixelTanks.images.animations[id].frames) {
+        if (this.tank.animation.frame === PixelTanks.images.animations[id+'_'].frames) {
           clearInterval(this.animationInterval);
-          setTimeout(function() {this.tank.animation = false}.bind(this), PixelTanks.images.animations[id].speed);
+          setTimeout(function() {this.tank.animation = false}.bind(this), PixelTanks.images.animations[id+'_'].speed);
         } else this.tank.animation.frame++;
-      }.bind(this), PixelTanks.images.animations[id].speed);
+      }.bind(this), PixelTanks.images.animations[id+'_'].speed);
     }
 
     item(id, slot) {
@@ -2934,10 +2704,10 @@
     emote(id) {
       clearInterval(this.emoteAnimation);
       clearTimeout(this.emoteTimeout);
-      if (PixelTanks.images.emotes[id].type === 0) { // loop emote
+      if (PixelTanks.images.emotes[id+'_'].type === 0) { // loop emote
         this.tank.emote = {a: id, f: 0};
         this.emoteAnimation = setInterval(function() {
-          if (this.tank.emote.f != PixelTanks.images.emotes[id].frames) {
+          if (this.tank.emote.f != PixelTanks.images.emotes[id+'_'].frames) {
             this.tank.emote.f++;
           } else {
             this.tank.emote.f = 0;
@@ -2947,10 +2717,10 @@
           clearInterval(this.emoteAnimation);
           this.tank.emote = null;
         }.bind(this), 5000);
-      } else if (PixelTanks.images.emotes[id].type === 1) { // single run emote
+      } else if (PixelTanks.images.emotes[id+'_'].type === 1) { // single run emote
         this.tank.emote = {a: id, f: 0};
         this.emoteAnimation = setInterval(function() {
-          if (this.tank.emote.f != PixelTanks.images.emotes[id].frames) {
+          if (this.tank.emote.f != PixelTanks.images.emotes[id+'_'].frames) {
             this.tank.emote.f++;
           } else {
             clearInterval(this.emoteAnimation);
