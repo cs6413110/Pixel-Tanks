@@ -596,8 +596,7 @@ class Shot {
   constructor(x, y, xm, ym, type, rotation, team, host) {
     const settings = {damage: {bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -300, dynamite: 0, fire: 0}, speed: {bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9}};
     const t = host.pt.find(t => t.username === host.getUsername(team));
-    console.log(t.rank);
-    this.damage = (.6*settings.damage[type]+settings.damage[type]*.4*t.rank/20)*(t.buff ? 1.5 : 1);
+    this.damage = settings.damage[type]*t.maxHp/500*(t.buff ? 1.5 : 1);
     this.team = team;
     this.r = rotation;
     this.type = type;
