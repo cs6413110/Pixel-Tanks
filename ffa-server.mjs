@@ -910,7 +910,7 @@ class Multiplayer extends Engine {
 
   add(socket, data) {
     this.sockets.push(socket);
-    data = {...data, damage: false, maxHp: data.material*50+300, hp: data.material*50+300, deathsPerMovement: 0, socket: socket, canBashed: true, shields: 0, team: data.username+':'+Math.random(), x: this.spawn.x, y: this.spawn.y, r: 0, pushback: 0, baseRotation: 0, baseFrame: 0, fire: false, healing: data.username};
+    data = {...data, damage: false, maxHp: data.rank*10+300, hp: data.rank*10+300, deathsPerMovement: 0, socket: socket, canBashed: true, shields: 0, team: data.username+':'+Math.random(), x: this.spawn.x, y: this.spawn.y, r: 0, pushback: 0, baseRotation: 0, baseFrame: 0, fire: false, healing: data.username};
     socket.send({event: 'override', data: [{key: 'x', value: this.spawn.x}, {key: 'y', value: this.spawn.y}]});
     this.pt.push(data);
     this.logs.push({m: this.joinMsg(data.username), c: '#66FF00'});
