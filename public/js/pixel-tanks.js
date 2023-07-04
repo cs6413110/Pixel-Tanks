@@ -848,23 +848,21 @@
 
     static setup() {
       document.body.innerHTML += `
-      <style>
         html, body {
-	  margin: 0;
-	  max-height: 100vh;
-	  max-width: 100vw;
-	  padding: 0;
-	  overflow: hidden;
-	  text-align: center;
-	}
-	canvas {
-	  display: inline;
-	}
+          margin: 0;
+          max-height: 100vh;
+          max-width: 100vw;
+          padding: 0;
+          overflow: hidden;
+          text-align: center;
+        }
+        canvas {
+          display: inline;
+        }
         @font-face {
-	  font-family: 'Font';
+          font-family: 'Font';
           src: url('https://cs6413110.github.io/Pixel-Tanks/public/fonts/PixelOperator.ttf') format('truetype');
-	}
-      </style>
+        }
       `;
       GUI.canvas = document.createElement('CANVAS');
       GUI.draw = GUI.canvas.getContext('2d');
@@ -878,7 +876,7 @@
       window.oncontextmenu = () => {return false};
       window.addEventListener('resize', GUI.resize);
     }
-
+  
     static updateBootProgress(progress) {
       GUI.clear();
       GUI.drawText(Math.round(progress*100)+'%', 800, 500, 50, '#ffffff', 0.5);
@@ -1143,6 +1141,8 @@
         }
       };
 
+      Loader.loadImages(PixelTanks.images);
+
       Menus.menus = {
         start: {
           buttons: [],
@@ -1188,30 +1188,19 @@
             [620, 920, 80, 80, 'htp1']
           ],
           exec: [
-            [580, 360, 440, 100, 'alert("Singleplayer is coming in PixelTanks beta.");'],
+            [580, 360, 440, 100, 'alert("Singleplayer is coming soon!");'],
             [320, 920, 80, 80, `(() => {PixelTanks.user.token = undefined; PixelTanks.user.username = undefined; Menus.trigger('start');})();`],
           ],
           listeners: {},
           customOnLoad: () => {
             PixelTanks.save();
-
-            var key = ['red', 'steel', 'crystal', 'dark', 'light'];
             GUI.drawImage(PixelTanks.images.tanks.bottom, 800, 800, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.tanks.top, 800, 800, 80, 90, 1);
-            try {
-              if (PixelTanks.userData.cosmetic != '' || PixelTanks.userData.cosmetic != undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 800, 800, 80, 90, 1);
-            } catch(e) {}
+            if (PixelTanks.userData.cosmetic !== '' || PixelTanks.userData.cosmetic !== undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 800, 800, 80, 90, 1);
             GUI.drawText(PixelTanks.user.username, 900, 840, 50, '#ffffff', 0.5)
-
-            var xpToLevelUp = Math.ceil(Math.pow(1.6, PixelTanks.userData.stats[4]-1)+20*(PixelTanks.userData.stats[4]-1));
-            while (PixelTanks.userData.stats[3] >= xpToLevelUp) {
-              PixelTanks.userData.stats[3] -= xpToLevelUp;
-              PixelTanks.userData.stats[4] += 1;
-              xpToLevelUp = Math.ceil(Math.pow(1.6, PixelTanks.userData.stats[4]-1)+20*(PixelTanks.userData.stats[4]-1));
-            }
             GUI.drawText('Rank: '+PixelTanks.userData.stats[4], 900, 880, 50, '#ffffff', 0);
-            GUI.drawText('XP - '+PixelTanks.userData.stats[3]+'/'+xpToLevelUp, 900, 920, 50, '#ffffff', 0);
-            GUI.drawText(PixelTanks.userData.coins, 900, 960, 50, '#ffffff', 0);
+            GUI.drawText('XP - '+PixelTanks.userData.stats[3]+'/'+(PixelTanks.userData.stats[4]+1)*100+' Level Cost: N/a', 900, 920, 50, '#ffffff', 0);
+            GUI.drawText('Coins: '+PixelTanks.userData.coins, 900, 960, 50, '#ffffff', 0);
           },
         },
         multiplayer: {
@@ -1638,10 +1627,7 @@
               var items = ['airstrike', 'super_glue', 'duck_tape', 'shield', 'flashbang', 'bomb', 'dynamite', 'weak', 'strong', 'spike', 'mine', 'fortress'];
               
             } else if (Menus.menus.shop.tab === 'armor') {
-              if (!PixelTanks.userData.armors[0] && PixelTanks.userData.stats[0] < 10000) GUI.drawImage(PixelTanks.images.menus.broke, 424, 460, 160, 160, 1);
-              if (!PixelTanks.userData.armors[1] && PixelTanks.userData.stats[0] < 50000) GUI.drawImage(PixelTanks.images.menus.broke, 624, 460, 160, 160, 1);
-              if (!PixelTanks.userData.armors[2] && PixelTanks.userData.stats[0] < 100000) GUI.drawImage(PixelTanks.images.menus.broke, 824, 460, 160, 160, 1);
-              if (!PixelTanks.userData.armors[3] && PixelTanks.userData.stats[0] < 150000) GUI.drawImage(PixelTanks.images.menus.broke, 1024, 460, 160, 160, 1);
+
             } else if (Menus.menus.shop.tab === 'class') {
               if (!PixelTanks.userData.classes[0] && PixelTanks.userData.stats[0] < 70000) GUI.drawImage(PixelTanks.images.menus.broke, 504, 416, 176, 176, 1);
               if (!PixelTanks.userData.classes[1] && PixelTanks.userData.stats[0] < 30000) GUI.drawImage(PixelTanks.images.menus.broke, 720, 416, 176, 176, 1);
@@ -1649,7 +1635,7 @@
               if (!PixelTanks.userData.classes[2] && PixelTanks.userData.stats[0] < 70000) GUI.drawImage(PixelTanks.images.menus.broke, 504, 632, 176, 176, 1);
               if (!PixelTanks.userData.classes[6] && PixelTanks.userData.stats[0] < 70000) GUI.drawImage(PixelTanks.images.menus.broke, 720, 632, 176, 176, 1);
               if (!PixelTanks.userData.classes[3] && PixelTanks.userData.stats[0] < 50000) GUI.drawImage(PixelTanks.images.menus.broke, 936, 632, 176, 176, 1);
-            } else {}
+            }
           },
         },
       }
@@ -1688,8 +1674,6 @@
         Menus.menus[property].id = property;
       }
 
-      Loader.loadImages(PixelTanks.images);
-
       PixelTanks.socket = new MegaSocket('ws://141.148.128.231', {keepAlive: true, reconnect: true, autoconnect: true});
     }
 
@@ -1699,16 +1683,19 @@
 
     static save() {
       try {
-        var temp = PixelTanks.playerData;
+        const temp = PixelTanks.playerData;
         temp['pixel-tanks'] = PixelTanks.userData;
         Network.update('playerdata', JSON.stringify(temp));
-      } catch (e) {console.log('User Not Logged In?: ERR->' + e)}
+      } catch (e) {
+        alert('Save Error:' + e)
+      }
     }
 
     static getData(callback) {
-        Network.get((data) => {
-          PixelTanks.userData = JSON.parse(data.playerdata)['pixel-tanks'];
-          PixelTanks.playerData = JSON.parse(data.playerdata);
+        Network.get(data => {
+          const {'pixel-tanks': userData, ...playerData} = JSON.parse(data.playerdata);
+          PixelTanks.userData = userData;
+          PixelTanks.playerData = playerData;
           if (!PixelTanks.userData) {
             PixelTanks.userData = {
               username: PixelTanks.user.username,
@@ -1723,7 +1710,7 @@
                 0, // crates
                 1, // level
                 0, // xp
-                1, // rank
+                0, // rank
               ],
               classes: [
                 false, // tactical
@@ -1734,12 +1721,6 @@
                 false, // summoner
                 false, // fire
                 false, // ice
-              ],
-              armors: [
-                false, // steel
-                false, // crystal
-                false, // dark
-                false, // light
               ],
               items: ['duck_tape', 'weak', 'bomb', 'flashbang'],
               keybinds: {
@@ -1756,16 +1737,11 @@
       if (!Menus.menus.inventory.healthTab && !Menus.menus.inventory.classTab && !Menus.menus.inventory.itemTab && !Menus.menus.inventory.cosmeticTab) Menus.menus.inventory[id] = true;
       if (n) Menus.menus.inventory.currentItem = n;
       Menus.redraw();
-    }
+    } // OPTIMIZE
 
     static openDeath() {
-      if (PixelTanks.userData.stats[1] < 5) {
-        alert('Your broke boi!');
-        return;
-      }
-      PixelTanks.userData.stats[1] -= 5;
-
-      var crate = {
+      const {userData, images} = PixelTanks;
+      const rand = Math.floor(Math.random()*1001), crate = {
         common: ['explode', 'nuke', 'evan'],
         uncommon: ['anvil', 'insta'],
         rare: ['amogus', 'minecraft', 'magic'],
@@ -1773,8 +1749,11 @@
         legendary: ['error', 'enderman'],
         mythic: ['clicked'],
       }
+      let rarity;
 
-      var rarity;
+      if (userData.stats[1] < 5) return alert('Your broke boi!');
+      userData.stats[1] -= 5;
+
       if (Math.floor(Math.random() * (1001)) < 1) { // .1%
         rarity = 'mythic';
       } else if (Math.floor(Math.random() * (1001)) < 10) { // .9%
@@ -1893,7 +1872,6 @@
 
   class MultiPlayerTank {
     constructor(ip, gamemode) {
-
       this.xp = 0;
       this.crates = 0;
       this.kills = 0;
@@ -1909,46 +1887,58 @@
       this.showChat = false;
       this.msg = '';
       this.gamemode = gamemode;
-      this.socket = new MegaSocket('ws://'+ip, {keepAlive: false, reconnect: false, autoconnect: true});
+      this.socket = new MegaSocket(`ws://${ip}`, {keepAlive: false, reconnect: false, autoconnect: true});
       this.tank = {use: [], fire: [], r: 0};
       this.reset();
 
-      this.socket.on('message', function(data) {
+      this.socket.on('message', data => {
         this.ups++;
         if (this.paused) return;
-        if (data.event === 'hostupdate') {
-          for (var property in data) this.hostupdate[property] = data[property];
-          if (data.logs) this.hostupdate.logs = data.logs.reverse();
-        } else if (data.event === 'ded') this.reset(); else if (data.event == 'gameover') {
-          // #
-        } else if (data.event === 'pay') {
-          this.coins += new Number(data.amount);
-          PixelTanks.userData.stats[0] += new Number(data.amount);
-          PixelTanks.save();
-        } else if (data.event == 'override') {
-          A.each(data.data, function(d) {d.t[this.key] = this.value}, null, {t: this.tank});
-          // trigger interpolation update
-          if (this.dx) {
-            this.dx.t = Date.now();
-            this.dx.o = this.tank.x;
-          }
-          if (this.dy) {
-            this.dy.t = Date.now();
-            this.dy.o = this.tank.y;
-          }
-        } else if (data.event == 'kill') {
-          this.kills++;
-          var crates = Math.floor(Math.random() * (2) + 1);
-          var coins = Math.floor(Math.random()*1000);
-          this.xp += 10;
-          this.crates += crates;
-          this.coins += coins;
-          PixelTanks.userData.stats[1] += crates;
-          PixelTanks.userData.stats[3] += 10;
-          PixelTanks.userData.stats[0] += coins;
-          PixelTanks.save();
-        } else if (data.event == 'ping') this.ping = new Date().getTime()-this.pingStart;
-      }.bind(this));
+        switch (data.event) {
+          case 'hostupdate':
+            if (data.logs) data.logs.reverse();
+            for (const property in data) this.hostupdate[property] = data[property];
+            break;
+          case 'ded':
+            this.reset();
+            break;
+          case 'gameover':
+            break;
+          case 'pay':
+            const amount = Number(data.amount);
+            this.coins += amount;
+            PixelTanks.userData.stats[0] += amount;
+            PixelTanks.save();
+            break;
+          case 'override':
+            data.data.forEach(d => {
+              this.tank[d.key] = d.value;
+            });
+            if (this.dx) {
+              this.dx.t = Date.now();
+              this.dx.o = this.tank.x;
+            }
+            if (this.dy) {
+              this.dy.t = Date.now();
+              this.dy.o = this.tank.y;
+            }
+            break;
+          case 'kill':
+            const crates = Math.floor(Math.random()*2)+1, coins = Math.floor(Math.random()*1000);
+            this.kills++;
+            this.xp += 10;
+            this.crates += crates;
+            this.coins += coins;
+            PixelTanks.userData.stats[1] += crates;
+            PixelTanks.userData.stats[3] += 10;
+            PixelTanks.userData.stats[0] += coins;
+            PixelTanks.save();
+            break;
+          case 'ping':
+            this.ping = new Date().getTime()-this.pingStart;
+            break;
+        }
+      });
 
       this.socket.on('connect', function() {
         this.socket.send({
