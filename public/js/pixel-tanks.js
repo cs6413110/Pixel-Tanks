@@ -1380,13 +1380,7 @@
           listeners: {
             mousedown: (e) => {
               var m = {x: (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer, y: e.clientY/PixelTanks.resizer};
-              if (Menus.menus.inventory.healthTab) {
-                if (m.x < 742 || m.x > 858 || m.y < 226 || m.y > 774) {
-                  Menus.menus.inventory.healthTab = false;
-                  return Menus.redraw();
-                }
-                A.each([240, 344, 456, 564, 672], function(d) {if (A.collider(d.m, {x: 754, y: this, w: 88, h: 88})) d.i === 0 ? PixelTanks.userData.material = 0 : (PixelTanks.userData.armors[d.i-1] ? PixelTanks.userData.material = d.i : alert('You need to buy this first!'))}, null, {m: m});
-              }
+              if (Menus.menus.inventory.healthTab) {}
               if (Menus.menus.inventory.classTab) {
                 if (m.x < 688 || m.x > 912 || m.y < 334 || m.y > 666) {
                   Menus.menus.inventory.classTab = false;
@@ -1467,12 +1461,7 @@
               GUI.draw.globalAlpha = .7;
               GUI.draw.fillRect(0, 0, 1600, 1600);
             }
-            if (Menus.menus.inventory.healthTab) {
-              GUI.drawImage(PixelTanks.images.menus.healthTab, 742, 226, 116, 548, 1);
-              GUI.draw.strokeStyle = '#FFFF00';
-              GUI.draw.lineWidth = 10;
-              GUI.draw.strokeRect(754, [240, 348, 456, 564, 672][PixelTanks.userData.material], 88, 88);
-            } else if (Menus.menus.inventory.classTab) {
+            if (Menus.menus.inventory.healthTab) {} else if (Menus.menus.inventory.classTab) {
               GUI.drawImage(PixelTanks.images.menus.classTab, 688, 334, 224, 332, 1);
               GUI.draw.strokeStyle = '#FFFF00';
               GUI.draw.lineWidth = 10;
@@ -1723,7 +1712,6 @@
           if (!PixelTanks.userData) {
             PixelTanks.userData = {
               username: PixelTanks.user.username,
-              material: 0,
               class: 'normal',
               cosmetic: '',
               cosmetics: [],
@@ -1973,7 +1961,6 @@
             class: PixelTanks.userData.class,
             cosmetic: PixelTanks.userData.cosmetic,
             deathEffect: PixelTanks.userData.deathEffect,
-            material: PixelTanks.userData.material,
             color: PixelTanks.userData.color,
           },
         });
