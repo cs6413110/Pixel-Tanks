@@ -848,6 +848,7 @@
 
     static setup() {
       document.body.innerHTML += `
+      <style>
         html, body {
           margin: 0;
           max-height: 100vh;
@@ -863,7 +864,7 @@
           font-family: 'Font';
           src: url('https://cs6413110.github.io/Pixel-Tanks/public/fonts/PixelOperator.ttf') format('truetype');
         }
-      `;
+      </style>`;
       GUI.canvas = document.createElement('CANVAS');
       GUI.draw = GUI.canvas.getContext('2d');
       document.body.appendChild(GUI.canvas);
