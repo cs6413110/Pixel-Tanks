@@ -1197,7 +1197,7 @@
             PixelTanks.save();
             GUI.drawImage(PixelTanks.images.tanks.bottom, 800, 800, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.tanks.top, 800, 800, 80, 90, 1);
-            if (PixelTanks.userData.cosmetic !== '' || PixelTanks.userData.cosmetic !== undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 800, 800, 80, 90, 1);
+            if (PixelTanks.userData.cosmetic !== '' && PixelTanks.userData.cosmetic !== undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 800, 800, 80, 90, 1);
             GUI.drawText(PixelTanks.user.username, 900, 840, 50, '#ffffff', 0.5)
             GUI.drawText('Rank: '+PixelTanks.userData.stats[4], 900, 880, 50, '#ffffff', 0);
             GUI.drawText('XP - '+PixelTanks.userData.stats[3]+'/'+(PixelTanks.userData.stats[4]+1)*100+' Level Cost: N/a', 900, 920, 50, '#ffffff', 0);
