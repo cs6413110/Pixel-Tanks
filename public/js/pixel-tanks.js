@@ -724,7 +724,6 @@
         } else {
           b[5] = Math.max(b[5]-1, 0);
         }
-        GUI.drawImage(PixelTanks.images.animations.fire, t.x, t.y, 80, 80, 1, 0, 0, 0, 0, 0, t.fire.frame*29, 0, 29, 29);
         GUI.drawImage(PixelTanks.images.menus[this.id], b[0]-b[5], b[1]-b[5], b[2]+b[5]*2, b[3]+b[5]*2, 1, 0, 0, 0, 0, 0, b[0]/2, b[1]/2, b[2]/2, b[3]/2);
       }
       this.cdraw();
