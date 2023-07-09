@@ -687,49 +687,85 @@
   }
 
   class Menu {
-    constructor(draw, listeners, element, context) {
-      this.draw = draw.bind(this);
-      this.element = element;
+    constructor(data, id) {
+      const {buttons, listeners, cdraw} = data;
+      this.id = id;
+      this.buttons = buttons;
       this.listeners = listeners;
-      for (const property in this.listeners) {
-        this.listeners[property] = this.listeners[property].bind(context ? context : this);
-      }
+      this.cdraw = cdraw.bind(this);
+      for (const l of this.listeners) l = l.bind(this);
+      for (const b of this.buttons) b.frame = 0;
+      this.listeners.onclick = this.onclick;
     }
-
+    
     addListeners() {
-      for (let property in this.listeners) {
-        this.element.addEventListener(property, this.listeners[property]);
+      for (const l in this.listeners) window.addEventListener(l, this.listeners[l]);
+    }
+    
+    removeListeners() {
+      for (const l in this.listeners) window.removeEventListener(l, this.listeners[l]);
+    }
+    
+    onclick() {
+      for (const b of this.buttons) {
+        if (A.collider({x: Menus.x, y: Menus.y, w: 0, h: 0}, {x: b[0], y: b[1], w: b[2], h: b[3]})) {
+          if (typeof b[4] === 'function') {
+            return b[4]();
+          } else return Menus.trigger(b[4]);
+        }
       }
     }
-
-    removeListeners() {
-      for (let property in this.listeners) {
-        this.element.removeEventListener(property, this.listeners[property]);
+    
+    draw() {
+      if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], 0, 0, 1600, 1000, 1);
+      for (const b of this.buttons) {
+      if (A.collider(b, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
+        b.frame = Math.min(b.frame+1, 20);
+      } else {
+        b.frame = Math.max(b.frame-1, 0);
       }
+        GUI.drawImage(PixelTanks.images.menus[this.id], b.x-b.frame, b.y-b.frame, b.w+b.frame*2, b.h+b.frame*2, 1, 0, 0, 0, 0, 0, b.x, b.y, b.w, b.h);
+      }
+      this.cdraw();
     }
   }
-
+    
   class Menus {
+    static start() {
+      Menus.renderer = requestAnimationFrame(Menus.render);
+      window.addEventListener('mousemove', Menus.mouseLog);
+    }
+  
+    static render() {
+      requestAnimationFrame(Menus.render);
+      Menus.redraw();
+    }
+  
+    static mouseLog(e) {
+      Menus.x = (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer;
+      Menus.y = e.clientY/PixelTanks.resizer;
+    }
+  
+    static stop() {
+      cancelAnimationFrame(Menus.renderer);
+      window.removeEventListener('mousemove', Menus.mouseLog);
+    }
+  
     static trigger(name) {
       if (Menus.current) Menus.menus[Menus.current].removeListeners();
+      if (!Menus.renderer) Menus.start();
       Menus.current = name;
-      GUI.clear();
-      Menus.menus[Menus.current].draw();
       Menus.menus[Menus.current].addListeners();
     }
-
-    static onclick(e) {
-      const x = (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer, y = e.clientY/PixelTanks.resizer;
-      for (const b of this.data.buttons) if (A.collider({x: x, y: y, w: 0, h: 0}, {x: b[0], y: b[1], w: b[2], h: b[3]})) return Menus.trigger(b[4]);
-      for (const e of this.data.exec) if (A.collider({x: x, y: y, w: 0, h: 0}, {x: e[0], y: e[1], w: e[2], h: e[3]})) eval(e[4])
-    }
-
+  
     static redraw() {
+      if (!Menus.current) return;
       GUI.clear();
-      if (Menus.current) Menus.menus[Menus.current].draw();
+      Menus.menus[Menus.current].draw();
     }
-
+  
     static removeListeners() {
+      Menus.stop();
       Menus.menus[Menus.current].removeListeners();
     }
   }
@@ -1146,8 +1182,7 @@
 
       Menus.menus = {
         start: {
-          buttons: [],
-          exec: [
+          buttons: [
             [580, 740, 200, 100, `Network.auth(Menus.menus.start.username, Menus.menus.start.password, 'login', () => {PixelTanks.getData(() => {Menus.trigger('main');});});`],
             [820, 740, 200, 100, `Network.auth(Menus.menus.start.username, Menus.menus.start.password, 'signup', () => {PixelTanks.getData(() => {Menus.trigger('htp1');});});`],
             [580, 480, 440, 60, `Menus.menus.start.type = 'username';`],
@@ -1164,7 +1199,7 @@
               Menus.redraw();
             }
           },
-          customOnLoad: () => {
+          cdraw: () => {
             if (!Menus.menus.start.type) {
               Menus.menus.start.type = 'username';
               Menus.menus.start.username = '';
@@ -1187,21 +1222,19 @@
             [420, 920, 80, 80, 'inventory'],
             [528, 896, 80, 80, 'crate'],
             [620, 920, 80, 80, 'htp1']
-          ],
-          exec: [
             [580, 360, 440, 100, 'alert("Singleplayer is coming soon!");'],
             [320, 920, 80, 80, `(() => {PixelTanks.user.token = undefined; PixelTanks.user.username = undefined; Menus.trigger('start');})();`],
           ],
           listeners: {},
-          customOnLoad: () => {
+          cdraw: () => {
             PixelTanks.save();
             GUI.drawImage(PixelTanks.images.tanks.bottom, 800, 800, 80, 80, 1);
-            GUI.drawImage(PixelTanks.images.tanks.top, 800, 800, 80, 90, 1);
+            GUI.drawImage(xl.images.tanks.top, 800, 800, 80, 90, 1);
             if (PixelTanks.userData.cosmetic !== '' && PixelTanks.userData.cosmetic !== undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 800, 800, 80, 90, 1);
             GUI.drawText(PixelTanks.user.username, 900, 840, 50, '#ffffff', 0.5)
             GUI.drawText('Rank: '+PixelTanks.userData.stats[4], 900, 880, 50, '#ffffff', 0);
             GUI.drawText('XP - '+PixelTanks.userData.stats[3]+'/'+(PixelTanks.userData.stats[4]+1)*100+' Level Cost: N/a', 900, 920, 50, '#ffffff', 0);
-            GUI.drawText('Coins: '+PixelTanks.userData.coins, 900, 960, 50, '#ffffff', 0);
+            GUI.drawText('Coins: '+PixelTanks.userData.stats[0], 900, 960, 50, '#ffffff', 0);
           },
         },
         multiplayer: {
@@ -1222,7 +1255,7 @@
               Menus.redraw();
             }
           },
-          customOnLoad: () => {
+          cdraw: () => {
             if (!Menus.menus.multiplayer.gamemode) Menus.menus.multiplayer.gamemode = 'ffa';
             if (Menus.menus.multiplayer.ip === undefined) Menus.menus.multiplayer.ip = '141.148.128.231/ffa';
             GUI.drawText(Menus.menus.multiplayer.ip, 800, 276, 50, '#FFFFFF', 0.5);
@@ -1232,7 +1265,7 @@
           buttons: [[418, 112, 106, 106, 'main'], [1076, 114, 106, 106, 'cosmetic']],
           exec: [[625, 324, 564, 564, 'PixelTanks.openCrate()'], [0, 324, 564, 564, 'PixelTanks.openDeath()']],
           listeners: {},
-          customOnLoad: () => {
+          cdraw: () => {
             GUI.drawText('Crates: ' + PixelTanks.userData.stats[1], 800, 260, 30, '#ffffff', 0.5);
           }
         },
@@ -1243,7 +1276,7 @@
           ],
           exec: [],
           listeners: {},
-          customOnLoad: () => {}
+          cdraw: () => {}
         },
         htp1: {
           buttons: [
@@ -1254,7 +1287,7 @@
           ],
           exec: [],
           listeners: {},
-          customOnLoad: () => {}
+          cdraw: () => {}
         },
         htp2: {
           buttons: [
@@ -1265,7 +1298,7 @@
           ],
           exec: [],
           listeners: {},
-          customOnLoad: () => {}
+          cdraw: () => {}
         },
         htp3: {
           buttons: [
@@ -1276,7 +1309,7 @@
           ],
           exec: [],
           listeners: {},
-          customOnLoad: () => {}
+          cdraw: () => {}
         },
         htp4: {
           buttons: [
@@ -1287,7 +1320,7 @@
           ],
           exec: [],
           listeners: {},
-          customOnLoad: () => {}
+          cdraw: () => {}
         },
         keybinds: {
           buttons: [
@@ -1327,7 +1360,7 @@
               Menus.redraw();
             },
           },
-          customOnLoad: () => {
+          cdraw: () => {
             GUI.draw.strokeStyle = '#ffffff';
             GUI.draw.lineWidth = 5;
             switch (Menus.menus.keybinds.keybind) {
@@ -1422,7 +1455,7 @@
               Menus.redraw();
             }
           },
-          customOnLoad: () => {
+          cdraw: () => {
             if (!PixelTanks.userData.color) PixelTanks.userData.color = '#A9A9A9';
             if (!Menus.menus.inventory.time) Menus.menus.inventory.time = Date.now();
             if (!Menus.menus.inventory.color) Menus.menus.inventory.color = PixelTanks.userData.color;
@@ -1620,7 +1653,7 @@
               }
             }
           },
-          customOnLoad: () => {
+          cdraw: () => {
             if (Menus.menus.shop.tab === undefined) Menus.menus.shop.tab = 'armor';
             GUI.drawImage(PixelTanks.images.menus['shop_'+Menus.menus.shop.tab], 0, 0, 1600, 1000, 1);
             GUI.drawText(PixelTanks.userData.stats[0]+' coinage', 800, 350, 50, 0x000000, 0.5);
@@ -1641,40 +1674,7 @@
         },
       }
 
-      for (var property in Menus.menus) {
-        if (property.includes('levelSelect')) {
-          var menuNum = property.replace('levelSelect', '');
-          if (menuNum == '') menuNum = 1;
-          menuNum = new Number(menuNum);
-          var y = 0;
-          while (y < 4) {
-            var x = 0;
-            while (x < 3) {
-              Menu.menus[property].exec.push({
-                x: 89 * x + 140,
-                y: 88 * y + 94,
-                w: 44,
-                h: 44,
-                ref: `(() => { PixelTanks.user.world = new World(); PixelTanks.user.world.level = ` + (12 * (menuNum - 1) + (x + y * 3) + 1) + `; Menus.removeListeners(); PixelTanks.user.world.init();})();`,
-              });
-              x++;
-            }
-            y++;
-          }
-        }
-        var data = Menus.menus[property];
-        Menus.menus[property] = new Menu(function() { // No arrow function here
-          if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], 0, 0, 1600, 1000, 1);
-          this.data.customOnLoad = this.data.customOnLoad.bind(this);
-          this.data.customOnLoad();
-        }, {
-          click: Menus.onclick,
-          ...data.listeners,
-        }, window);
-        Menus.menus[property].data = data;
-        Menus.menus[property].id = property;
-      }
-
+      for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
       PixelTanks.socket = new MegaSocket('ws://141.148.128.231', {keepAlive: true, reconnect: true, autoconnect: true});
     }
 
