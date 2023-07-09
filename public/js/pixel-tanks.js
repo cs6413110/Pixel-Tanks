@@ -1248,7 +1248,7 @@
             [340, 532, 416, 116, `Menus.menus.multiplayer.gamemode = 'duels'`],
             [340, 688, 416, 116, `Menus.menus.multiplayer.gamemode = 'tdm'`],
             [340, 844, 416, 116, `Menus.menus.multiplayer.gamemode = 'juggernaut'`],
-            [868, 848, 368, 88, `PixelTanks.user.joiner = new MultiPlayerTank(Menus.menus.multiplayer.ip, Menus.menus.multiplayer.gamemode); Menus.removeListeners()`],
+            [868, 848, 368, 88, () => {PixelTanks.user.joiner = new MultiPlayerTank(Menus.menus.multiplayer.ip, Menus.menus.multiplayer.gamemode); Menus.removeListeners();}],
           ],
           listeners: {
             keydown: (e) => {
