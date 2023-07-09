@@ -1186,10 +1186,22 @@
       Menus.menus = {
         start: {
           buttons: [
-            [580, 740, 200, 100, `Network.auth(Menus.menus.start.username, Menus.menus.start.password, 'login', () => {PixelTanks.getData(() => {Menus.trigger('main');});});`],
-            [820, 740, 200, 100, `Network.auth(Menus.menus.start.username, Menus.menus.start.password, 'signup', () => {PixelTanks.getData(() => {Menus.trigger('htp1');});});`],
-            [580, 480, 440, 60, `Menus.menus.start.type = 'username';`],
-            [580, 580, 440, 60, `Menus.menus.start.type = 'password';`],
+            [580, 740, 200, 100, () => {
+              Network.auth(Menus.menus.start.username, Menus.menus.start.password, 'login', () => {
+                PixelTanks.getData(() => Menus.trigger('main'));
+              });
+            }],
+            [820, 740, 200, 100, () => {
+              Network.auth(Menus.menus.start.username, Menus.menus.start.password, 'signup', () => {
+                PixelTanks.getData(() => Menus.trigger('htp1'));
+              });
+            }],
+            [580, 480, 440, 60, () => {
+              Menus.menus.start.type = 'username';
+            }],
+            [580, 580, 440, 60, () => {
+              Menus.menus.start.type = 'password';
+            }],
           ],
           listeners: {
             keydown: (e) => {
