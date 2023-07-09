@@ -1224,7 +1224,7 @@
             [580, 640, 440, 100, 'shop'],
             [420, 920, 80, 80, 'inventory'],
             [528, 896, 80, 80, 'crate'],
-            [620, 920, 80, 80, 'htp1']
+            [620, 920, 80, 80, 'htp1'],
             [580, 360, 440, 100, 'alert("Singleplayer is coming soon!");'],
             [320, 920, 80, 80, `(() => {PixelTanks.user.token = undefined; PixelTanks.user.username = undefined; Menus.trigger('start');})();`],
           ],
