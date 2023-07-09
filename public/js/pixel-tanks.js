@@ -724,7 +724,8 @@
         } else {
           b[5] = Math.max(b[5]-1, 0);
         }
-        GUI.drawImage(PixelTanks.images.menus[this.id], b[0]+Math.random()*10-b[5], b[1]-b[5], b[2]+b[5]*2, b[3]+b[5]*2, 1, 0, 0, 0, 0, 0, b[0], b[1], b[2], b[3]);
+        GUI.drawImage(PixelTanks.images.animations.fire, t.x, t.y, 80, 80, 1, 0, 0, 0, 0, 0, t.fire.frame*29, 0, 29, 29);
+        GUI.drawImage(PixelTanks.images.menus[this.id], b[0]-b[5], b[1]-b[5], b[2]+b[5]*2, b[3]+b[5]*2, 1, 0, 0, 0, 0, 0, b[0]/2, b[1]/2, b[2]/2, b[3]/2);
       }
       this.cdraw();
     }
@@ -1208,7 +1209,6 @@
               } else if (e.keyCode === 8) {
                 start[start.type] = start[start.type].slice(0, -1);
               }
-              Menus.redraw();
             }
           },
           cdraw: () => {
@@ -1241,7 +1241,7 @@
           cdraw: () => {
             PixelTanks.save();
             GUI.drawImage(PixelTanks.images.tanks.bottom, 800, 800, 80, 80, 1);
-            GUI.drawImage(xl.images.tanks.top, 800, 800, 80, 90, 1);
+            GUI.drawImage(PixelTanks.images.tanks.top, 800, 800, 80, 90, 1);
             if (PixelTanks.userData.cosmetic !== '' && PixelTanks.userData.cosmetic !== undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 800, 800, 80, 90, 1);
             GUI.drawText(PixelTanks.user.username, 900, 840, 50, '#ffffff', 0.5)
             GUI.drawText('Rank: '+PixelTanks.userData.stats[4], 900, 880, 50, '#ffffff', 0);
