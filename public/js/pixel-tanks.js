@@ -695,7 +695,7 @@
       this.cdraw = cdraw.bind(this);
       this.listeners.click = this.onclick;
       for (const l in this.listeners) this.listeners[l] = this.listeners[l].bind(this);
-      for (const b of this.buttons) b[5] = 30;
+      for (const b of this.buttons) b[5] = 0;
     }
     
     addListeners() {
@@ -719,11 +719,15 @@
     draw() {
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], 0, 0, 1600, 1000, 1);
       for (const b of this.buttons) {
-        if (A.collider({x: b[0], y: b[1], w: b[2], h: b[3]}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
-          b[5] = Math.min(b[5]+1, 20);
-        } else {
-          b[5] = Math.max(b[5]-1, 0);
-        }
+        if (typeof b[4] !== 'function') {
+          if (A.collider({x: b[0], y: b[1], w: b[2], h: b[3]}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
+            GUI.draw.strokeStyle = '#ffffff';
+            GUI.lineWidth = 5;
+            GUI.draw.strokeRect(b[0]-b[5], b[1]-b[5], b[2]+b[5]*2, b[3]+b[5]*2);
+            Math.min(b[5]+1, 10);
+          } else {
+            Math.max(b[5]-1, 0);
+          }
         GUI.drawImage(PixelTanks.images.menus[this.id], b[0]-b[5], b[1]-b[5], b[2]+b[5]*2, b[3]+b[5]*2, 1, 0, 0, 0, 0, 0, b[0]/1600*700, b[1]/1000*438, b[2]/1600*700, b[3]/1000*438);
       }
       this.cdraw();
@@ -1251,8 +1255,6 @@
         multiplayer: {
           buttons: [
             [424, 28, 108, 108, 'main'],
-          ],
-          exec: [
             [340, 376, 416, 116, `Menus.menus.multiplayer.gamemode = 'ffa'`],
             [340, 532, 416, 116, `Menus.menus.multiplayer.gamemode = 'duels'`],
             [340, 688, 416, 116, `Menus.menus.multiplayer.gamemode = 'tdm'`],
@@ -1273,8 +1275,7 @@
           }
         },
         crate: {
-          buttons: [[418, 112, 106, 106, 'main'], [1076, 114, 106, 106, 'cosmetic']],
-          exec: [[625, 324, 564, 564, 'PixelTanks.openCrate()'], [0, 324, 564, 564, 'PixelTanks.openDeath()']],
+          buttons: [[418, 112, 106, 106, 'main'], [1076, 114, 106, 106, 'cosmetic'], [625, 324, 564, 564, 'PixelTanks.openCrate()'], [0, 324, 564, 564, 'PixelTanks.openDeath()']],
           listeners: {},
           cdraw: () => {
             GUI.drawText('Crates: ' + PixelTanks.userData.stats[1], 800, 260, 30, '#ffffff', 0.5);
@@ -1285,7 +1286,6 @@
             [59, 56, 53, 53, 'main'],
             [397, 65, 38, 35, 'keybinds'],
           ],
-          exec: [],
           listeners: {},
           cdraw: () => {}
         },
@@ -1296,7 +1296,6 @@
             [804, 224, 320, 80, 'htp3'],
             [1132, 224, 320, 80, 'htp4']
           ],
-          exec: [],
           listeners: {},
           cdraw: () => {}
         },
@@ -1307,7 +1306,6 @@
             [804, 224, 320, 80, 'htp3'],
             [1132, 224, 320, 80, 'htp4']
           ],
-          exec: [],
           listeners: {},
           cdraw: () => {}
         },
@@ -1318,7 +1316,6 @@
             [476, 224, 320, 80, 'htp2'],
             [1132, 224, 320, 80, 'htp4']
           ],
-          exec: [],
           listeners: {},
           cdraw: () => {}
         },
@@ -1329,7 +1326,6 @@
             [476, 224, 320, 80, 'htp2'],
             [804, 224, 320, 80, 'htp3']
           ],
-          exec: [],
           listeners: {},
           cdraw: () => {}
         },
@@ -1337,7 +1333,6 @@
           buttons: [
             [40, 40, 120, 120, 'main'],
           ],
-          exec: [],
           listeners: {
             keydown: (e) => {
               if (Menus.menus.keybinds.keybind !== undefined) {
@@ -1409,8 +1404,7 @@
           },
         },
         inventory: {
-          buttons: [[424, 28, 108, 108, 'main']],
-          exec: [[1064, 458, 88, 88, `PixelTanks.switchTab('healthTab');`], [1112, 814, 88, 88, `PixelTanks.switchTab('classTab');`], [400, 814, 88, 88, `PixelTanks.switchTab('itemTab', 1);`], [488, 814, 88, 88, `PixelTanks.switchTab('itemTab', 2);`], [576, 814, 88, 88, `PixelTanks.switchTab('itemTab', 3);`], [664, 814, 88, 88, `PixelTanks.switchTab('itemTab', 4);`], [756, 220, 88, 88, `PixelTanks.switchTab('cosmeticTab');`], [556, 220, 88, 88, `PixelTanks.switchTab('deathEffectsTab');`]],
+          buttons: [[424, 28, 108, 108, 'main'], [1064, 458, 88, 88, `PixelTanks.switchTab('healthTab');`], [1112, 814, 88, 88, `PixelTanks.switchTab('classTab');`], [400, 814, 88, 88, `PixelTanks.switchTab('itemTab', 1);`], [488, 814, 88, 88, `PixelTanks.switchTab('itemTab', 2);`], [576, 814, 88, 88, `PixelTanks.switchTab('itemTab', 3);`], [664, 814, 88, 88, `PixelTanks.switchTab('itemTab', 4);`], [756, 220, 88, 88, `PixelTanks.switchTab('cosmeticTab');`], [556, 220, 88, 88, `PixelTanks.switchTab('deathEffectsTab');`]],
           listeners: {
             mousedown: (e) => {
               var m = {x: (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer, y: e.clientY/PixelTanks.resizer};
@@ -1540,8 +1534,6 @@
         shop: {
           buttons: [
             [424, 28, 108, 108, 'main'],
-          ],
-          exec: [
             [88, 212, 328, 64, '(() => {Menus.menus.shop.tab="items"; Menus.redraw()})();'],
             [456, 212, 328, 64, '(() => {Menus.menus.shop.tab="armor"; Menus.redraw()})();'],
             [824, 212, 328, 64, '(() => {Menus.menus.shop.tab="class"; Menus.redraw()})();'],
