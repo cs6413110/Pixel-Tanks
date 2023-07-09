@@ -693,9 +693,9 @@
       this.buttons = buttons;
       this.listeners = listeners;
       this.cdraw = cdraw.bind(this);
-      for (const l in this.listeners) this.listeners[l] = this.listeners[l].bind(this);
-      for (const b of this.buttons) b[5] = 0;
       this.listeners.onclick = this.onclick;
+      for (const l in this.listeners) this.listeners[l] = this.listeners[l].bind(this);
+      for (const b of this.buttons) b[5] = 30;
     }
     
     addListeners() {
@@ -708,7 +708,6 @@
     
     onclick() {
       for (const b of this.buttons) {
-        console.log(b);
         if (A.collider({x: Menus.x, y: Menus.y, w: 0, h: 0}, {x: b[0], y: b[1], w: b[2], h: b[3]})) {
           if (typeof b[4] === 'function') {
             return b[4]();
@@ -725,8 +724,6 @@
         } else {
           b[5] = Math.max(b[5]-1, 0);
         }
-        GUI.draw.fillStyle = '#ffffff';
-        GUI.draw.fillRect(b[0], b[1], b[2], b[3]);
         GUI.drawImage(PixelTanks.images.menus[this.id], b[0]+Math.random()*10-b[5], b[1]-b[5], b[2]+b[5]*2, b[3]+b[5]*2, 1, 0, 0, 0, 0, 0, b[0], b[1], b[2], b[3]);
       }
       this.cdraw();
