@@ -694,7 +694,7 @@
       this.listeners = listeners;
       this.cdraw = cdraw.bind(this);
       for (const l in this.listeners) this.listeners[l] = this.listeners[l].bind(this);
-      for (const b of this.buttons) b.frame = 0;
+      for (const b of this.buttons) b.push(0);
       this.listeners.onclick = this.onclick;
     }
     
