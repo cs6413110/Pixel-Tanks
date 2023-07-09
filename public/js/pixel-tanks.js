@@ -724,9 +724,9 @@
             GUI.draw.strokeStyle = '#ffffff';
             GUI.lineWidth = 5;
             GUI.draw.strokeRect(b[0]-b[6], b[1]-b[6], b[2]+b[6]*2, b[3]+b[6]*2);
-            Math.min(b[6]+1, 10);
+            b[6] = Math.min(b[6]+1, 10);
           } else {
-            Math.max(b[6]-1, 0);
+            b[6] = Math.max(b[6]-1, 0);
           }
         }
         GUI.drawImage(PixelTanks.images.menus[this.id], b[0]-b[6], b[1]-b[6], b[2]+b[6]*2, b[3]+b[6]*2, 1, 0, 0, 0, 0, 0, b[0]/1600*700, b[1]/1000*438, b[2]/1600*700, b[3]/1000*438);
