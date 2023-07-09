@@ -695,7 +695,7 @@
       this.cdraw = cdraw.bind(this);
       this.listeners.click = this.onclick;
       for (const l in this.listeners) this.listeners[l] = this.listeners[l].bind(this);
-      for (const b of this.buttons) b[5] = 0;
+      for (const b of this.buttons) b[6] = 0;
     }
     
     addListeners() {
@@ -719,17 +719,17 @@
     draw() {
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], 0, 0, 1600, 1000, 1);
       for (const b of this.buttons) {
-        if (typeof b[4] !== 'function') {
+        if (b[5]) {
           if (A.collider({x: b[0], y: b[1], w: b[2], h: b[3]}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
             GUI.draw.strokeStyle = '#ffffff';
             GUI.lineWidth = 5;
-            GUI.draw.strokeRect(b[0]-b[5], b[1]-b[5], b[2]+b[5]*2, b[3]+b[5]*2);
-            Math.min(b[5]+1, 10);
+            GUI.draw.strokeRect(b[0]-b[6], b[1]-b[6], b[2]+b[6]*2, b[3]+b[6]*2);
+            Math.min(b[6]+1, 10);
           } else {
-            Math.max(b[5]-1, 0);
+            Math.max(b[6]-1, 0);
           }
         }
-        GUI.drawImage(PixelTanks.images.menus[this.id], b[0]-b[5], b[1]-b[5], b[2]+b[5]*2, b[3]+b[5]*2, 1, 0, 0, 0, 0, 0, b[0]/1600*700, b[1]/1000*438, b[2]/1600*700, b[3]/1000*438);
+        GUI.drawImage(PixelTanks.images.menus[this.id], b[0]-b[6], b[1]-b[6], b[2]+b[6]*2, b[3]+b[6]*2, 1, 0, 0, 0, 0, 0, b[0]/1600*700, b[1]/1000*438, b[2]/1600*700, b[3]/1000*438);
       }
       this.cdraw();
     }
@@ -1188,22 +1188,10 @@
       Menus.menus = {
         start: {
           buttons: [
-            [580, 740, 200, 100, () => {
-              Network.auth(Menus.menus.start.username, Menus.menus.start.password, 'login', () => {
-                PixelTanks.getData(() => Menus.trigger('main'));
-              });
-            }],
-            [820, 740, 200, 100, () => {
-              Network.auth(Menus.menus.start.username, Menus.menus.start.password, 'signup', () => {
-                PixelTanks.getData(() => Menus.trigger('htp1'));
-              });
-            }],
-            [580, 480, 440, 60, () => {
-              Menus.menus.start.type = 'username';
-            }],
-            [580, 580, 440, 60, () => {
-              Menus.menus.start.type = 'password';
-            }],
+            [580, 740, 200, 100, () => Network.auth(Menus.menus.start.username, Menus.menus.start.password, 'login', () => PixelTanks.getData(() => Menus.trigger('main'))), true],
+            [820, 740, 200, 100, () => Network.auth(Menus.menus.start.username, Menus.menus.start.password, 'signup', () => PixelTanks.getData(() => Menus.trigger('htp1'))), true],
+            [580, 480, 440, 60, () => {Menus.menus.start.type = 'username';}, false],
+            [580, 580, 440, 60, () => {Menus.menus.start.type = 'password';}, false],
           ],
           listeners: {
             keydown: (e) => {
@@ -1232,13 +1220,13 @@
         },
         main: {
           buttons: [
-            [1180, 920, 80, 80, 'keybinds'],
-            [580, 500, 440, 100, 'multiplayer'],
-            [580, 640, 440, 100, 'shop'],
-            [420, 920, 80, 80, 'inventory'],
-            [528, 896, 80, 80, 'crate'],
-            [620, 920, 80, 80, 'htp1'],
-            [580, 360, 440, 100, 'alert("Singleplayer is coming soon!");'],
+            [1180, 920, 80, 80, 'keybinds', true],
+            [580, 500, 440, 100, 'multiplayer', true],
+            [580, 640, 440, 100, 'shop', true],
+            [420, 920, 80, 80, 'inventory', true],
+            [528, 896, 80, 80, 'crate', true],
+            [620, 920, 80, 80, 'htp1', true],
+            [580, 360, 440, 100, 'alert("Singleplayer is coming soon!");', true],
             [320, 920, 80, 80, `(() => {PixelTanks.user.token = undefined; PixelTanks.user.username = undefined; Menus.trigger('start');})();`],
           ],
           listeners: {},
