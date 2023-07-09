@@ -708,6 +708,7 @@
     
     onclick() {
       for (const b of this.buttons) {
+        console.log(b);
         if (A.collider({x: Menus.x, y: Menus.y, w: 0, h: 0}, {x: b[0], y: b[1], w: b[2], h: b[3]})) {
           if (typeof b[4] === 'function') {
             return b[4]();
@@ -718,7 +719,8 @@
     
     draw() {
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], 0, 0, 1600, 1000, 1);
-      for (const b of Menus.menus[this.id].buttons) {
+      console.log(this.buttons)
+      for (const b of this.buttons) {
         if (A.collider({x: b[0], y: b[1], w: b[2], h: b[3]}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
           b[5] = Math.min(b[5]+1, 20);
         } else {
