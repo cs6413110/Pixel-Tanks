@@ -17,8 +17,8 @@ import fetch from 'node-fetch';
 import HyperExpress from 'hyper-express';
 import jsonpack from 'jsonpack';
 import Filter from 'bad-words';
-import Engine from './public/js/engine.js';
-console.log(Engine);
+import {Engine} from './public/js/engine.js';
+
 const filter = new Filter();
 export const Core = new HyperExpress.Router();
 const Server = new HyperExpress.Server({fast_buffers: true});
