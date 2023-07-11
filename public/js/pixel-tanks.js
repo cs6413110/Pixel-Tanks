@@ -725,9 +725,6 @@
       for (const b of this.buttons) {
         if (b[5]) {
           if (A.collider({x: b[0], y: b[1], w: b[2], h: b[3]}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
-            GUI.draw.strokeStyle = '#ffffff';
-            GUI.lineWidth = 5;
-            GUI.draw.strokeRect(b[0]-b[6], b[1]-b[6], b[2]+b[6]*2, b[3]+b[6]*2);
             b[6] = Math.min(b[6]+1, 10);
           } else {
             b[6] = Math.max(b[6]-1, 0);
