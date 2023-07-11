@@ -739,7 +739,7 @@
         Menus.scaler.height = b[3]*PixelTanks.resizer;
         Menus.scaler.getContext('2d').setTransform(1, 0, 0, 1, -b[0]*PixelTanks.resizer, -b[1]*PixelTanks.resizer);
         Menus.scaler.getContext('2d').drawImage(GUI.canvas, 0, 0);
-        //GUI.drawImage(GUI.draw, (b[0]-b[6])*PixelTanks.resizer, (b[1]-b[6])*PixelTanks.resizer, (b[2]+b[6]*2)*PixelTanks.resizer, (b[3]+b[6]*2)*PixelTanks.resizer, 1);
+        GUI.drawImage(Menus.scaler, (b[0]-b[6])*PixelTanks.resizer, (b[1]-b[6])*PixelTanks.resizer, (b[2]+b[6]*2)*PixelTanks.resizer, (b[3]+b[6]*2)*PixelTanks.resizer, 1);
       }
     }
   }
