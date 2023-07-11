@@ -13,6 +13,7 @@ class Engine {
   }
 
   add(data) {
+    console.log(JSON.stringify(data))
     data = {...data, damage: false, maxHp: data.rank*10+300, hp: data.rank*10+300, deathsPerMovement: 0, canBashed: true, shields: 0, team: data.username+':'+Math.random(), x: this.spawn.x, y: this.spawn.y, r: 0, pushback: 0, baseRotation: 0, baseFrame: 0, fire: false, healing: data.username};
     this.pt.push(data);
     this.override(data);
@@ -20,8 +21,6 @@ class Engine {
 
   update(data) {
     const t = this.pt.find(t => t.username === data.username);
-    console.log(t.rank);
-    console.log(t);
     data = data.data;
     const {emote, r, baseFrame, use, x, y} = data;
     if ((t.emote !== emote || t.r !== r || t.baseFrame !== baseFrame || use.length || data.fire.length) || (!t.grapple && (t.x !== data.x || t.y !== data.y))) t.deathsPerMovement = 0;
