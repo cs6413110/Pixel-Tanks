@@ -1352,7 +1352,7 @@
                 if (x < 688 || x > 912 || y < 334 || y > 666) return this.classTab = false;
                 for (let xm = 0; xm < 2; xm++) {
                   for (let ym = 0; ym < 3; ym++) {
-                    if (A.collider({x, y, w: 0, h: 0}, {x: [702, 816][xm], y: [348, 456, 564][ym], w: 88, h: 88}) {
+                    if (A.collider({x, y, w: 0, h: 0}, {x: [702, 816][xm], y: [348, 456, 564][ym], w: 88, h: 88})) {
                     if (PixelTanks.userData.classes[[[0, 6, 3], [1, 4, 2]][xm][ym]]) {
                       PixelTanks.userData.class = [['tactical', 'fire', 'medic'], ['stealth', 'builder', 'warrior']][xm][ym];
                     } else {
