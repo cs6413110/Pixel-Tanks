@@ -740,7 +740,7 @@
         Menus.scaler.getContext('2d').putImageData(data, 0, 0);
         const image = new Image();
         image.src = Menus.scaler.toDataURL();
-        image.onload = () => GUI.drawImage(image, (b[0]-b[6])*PixelTanks.resizer, (b[1]-b[6])*PixelTanks.resizer, (b[2]+b[6]*2)*PixelTanks.resizer, (b[3]+b[6]*2)*PixelTanks.resizer);
+        image.onload = () => GUI.drawImage(image, (b[0]-b[6])*PixelTanks.resizer, (b[1]-b[6])*PixelTanks.resizer, (b[2]+b[6]*2)*PixelTanks.resizer, (b[3]+b[6]*2)*PixelTanks.resizer, 1);
       }
     }
   }
