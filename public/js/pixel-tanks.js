@@ -696,7 +696,7 @@
       this.listeners.click = this.onclick;
       for (const l in this.listeners) this.listeners[l] = this.listeners[l].bind(this);
       for (const b of this.buttons) {
-        b[4] = b[4].bind(this);
+        if (typeof b[4] === 'function') b[4] = b[4].bind(this);
         b[6] = 0;
       }
     }
