@@ -1,583 +1,12 @@
-/*
- Copyright (c) 2013, Rodrigo González, Sapienlab All Rights Reserved.
- Available via MIT LICENSE. See https://github.com/roro89/jsonpack/blob/master/LICENSE.md for details.
- */
-(function(define) {
-
-	define([], function() {
-
-		var TOKEN_TRUE = -1;
-		var TOKEN_FALSE = -2;
-		var TOKEN_NULL = -3;
-		var TOKEN_EMPTY_STRING = -4;
-		var TOKEN_UNDEFINED = -5;
-
-		var pack = function(json, options) {
-
-			// Canonizes the options
-			options = options || {};
-
-			// A shorthand for debugging
-			var verbose = options.verbose || false;
-
-			verbose && console.log('Normalize the JSON Object');
-
-			// JSON as Javascript Object (Not string representation)
-			json = typeof json === 'string' ? this.JSON.parse(json) : json;
-
-			verbose && console.log('Creating a empty dictionary');
-
-			// The dictionary
-			var dictionary = {
-				strings : [],
-				integers : [],
-				floats : []
-			};
-
-			verbose && console.log('Creating the AST');
-
-			// The AST
-			var ast = (function recursiveAstBuilder(item) {
-
-				verbose && console.log('Calling recursiveAstBuilder with ' + this.JSON.stringify(item));
-
-				// The type of the item
-				var type = typeof item;
-
-				// Case 7: The item is null
-				if (item === null) {
-					return {
-						type : 'null',
-						index : TOKEN_NULL
-					};
-				}
-				
-				//add undefined 
-				if (typeof item === 'undefined') {
-					return {
-						type : 'undefined',
-						index : TOKEN_UNDEFINED
-					};
-				}
-
-				// Case 1: The item is Array Object
-				if ( item instanceof Array) {
-
-					// Create a new sub-AST of type Array (@)
-					var ast = ['@'];
-
-					// Add each items
-					for (var i in item) {
-						
-						if (!item.hasOwnProperty(i)) continue;
-
-						ast.push(recursiveAstBuilder(item[i]));
-					}
-
-					// And return
-					return ast;
-
-				}
-
-				// Case 2: The item is Object
-				if (type === 'object') {
-
-					// Create a new sub-AST of type Object ($)
-					var ast = ['$'];
-
-					// Add each items
-					for (var key in item) {
-
-						if (!item.hasOwnProperty(key))
-							continue;
-
-						ast.push(recursiveAstBuilder(key));
-						ast.push(recursiveAstBuilder(item[key]));
-					}
-
-					// And return
-					return ast;
-
-				}
-
-				// Case 3: The item empty string
-				if (item === '') {
-					return {
-						type : 'empty',
-						index : TOKEN_EMPTY_STRING
-					};
-				}
-
-				// Case 4: The item is String
-				if (type === 'string') {
-
-					// The index of that word in the dictionary
-					var index = _indexOf.call(dictionary.strings, item);
-
-					// If not, add to the dictionary and actualize the index
-					if (index == -1) {
-						dictionary.strings.push(_encode(item));
-						index = dictionary.strings.length - 1;
-					}
-
-					// Return the token
-					return {
-						type : 'strings',
-						index : index
-					};
-				}
-
-				// Case 5: The item is integer
-				if (type === 'number' && item % 1 === 0) {
-
-					// The index of that number in the dictionary
-					var index = _indexOf.call(dictionary.integers, item);
-
-					// If not, add to the dictionary and actualize the index
-					if (index == -1) {
-						dictionary.integers.push(_base10To36(item));
-						index = dictionary.integers.length - 1;
-					}
-
-					// Return the token
-					return {
-						type : 'integers',
-						index : index
-					};
-				}
-
-				// Case 6: The item is float
-				if (type === 'number') {
-					// The index of that number in the dictionary
-					var index = _indexOf.call(dictionary.floats, item);
-
-					// If not, add to the dictionary and actualize the index
-					if (index == -1) {
-						// Float not use base 36
-						dictionary.floats.push(item);
-						index = dictionary.floats.length - 1;
-					}
-
-					// Return the token
-					return {
-						type : 'floats',
-						index : index
-					};
-				}
-
-				// Case 7: The item is boolean
-				if (type === 'boolean') {
-					return {
-						type : 'boolean',
-						index : item ? TOKEN_TRUE : TOKEN_FALSE
-					};
-				}
-
-				// Default
-				throw new Error('Unexpected argument of type ' + typeof (item));
-
-			})(json);
-
-			// A set of shorthands proxies for the length of the dictionaries
-			var stringLength = dictionary.strings.length;
-			var integerLength = dictionary.integers.length;
-			var floatLength = dictionary.floats.length;
-
-			verbose && console.log('Parsing the dictionary');
-
-			// Create a raw dictionary
-			var packed = dictionary.strings.join('|');
-			packed += '^' + dictionary.integers.join('|');
-			packed += '^' + dictionary.floats.join('|');
-
-			verbose && console.log('Parsing the structure');
-
-			// And add the structure
-			packed += '^' + (function recursiveParser(item) {
-
-				verbose && console.log('Calling a recursiveParser with ' + this.JSON.stringify(item));
-
-				// If the item is Array, then is a object of
-				// type [object Object] or [object Array]
-				if ( item instanceof Array) {
-
-					// The packed resulting
-					var packed = item.shift();
-
-					for (var i in item) {
-						
-						if (!item.hasOwnProperty(i)) 
-							continue;
-						
-						packed += recursiveParser(item[i]) + '|';
-					}
-
-					return (packed[packed.length - 1] === '|' ? packed.slice(0, -1) : packed) + ']';
-
-				}
-
-				// A shorthand proxies
-				var type = item.type, index = item.index;
-
-				if (type === 'strings') {
-					// Just return the base 36 of index
-					return _base10To36(index);
-				}
-
-				if (type === 'integers') {
-					// Return a base 36 of index plus stringLength offset
-					return _base10To36(stringLength + index);
-				}
-
-				if (type === 'floats') {
-					// Return a base 36 of index plus stringLength and integerLength offset
-					return _base10To36(stringLength + integerLength + index);
-				}
-
-				if (type === 'boolean') {
-					return item.index;
-				}
-
-				if (type === 'null') {
-					return TOKEN_NULL;
-				}
-
-				if (type === 'undefined') {
-					return TOKEN_UNDEFINED;
-				}
-
-				if (type === 'empty') {
-					return TOKEN_EMPTY_STRING;
-				}
-
-				throw new TypeError('The item is alien!');
-
-			})(ast);
-
-			verbose && console.log('Ending parser');
-
-			// If debug, return a internal representation of dictionary and stuff
-			if (options.debug)
-				return {
-					dictionary : dictionary,
-					ast : ast,
-					packed : packed
-				};
-
-			return packed;
-
-		};
-
-		var unpack = function(packed, options) {
-
-			// Canonizes the options
-			options = options || {};
-
-			// A raw buffer
-			var rawBuffers = packed.split('^');
-
-			// Create a dictionary
-			options.verbose && console.log('Building dictionary');
-			var dictionary = [];
-
-			// Add the strings values
-			var buffer = rawBuffers[0];
-			if (buffer !== '') {
-				buffer = buffer.split('|');
-				options.verbose && console.log('Parse the strings dictionary');
-				for (var i=0, n=buffer.length; i<n; i++){
-					dictionary.push(_decode(buffer[i]));
-				}
-			}
-
-			// Add the integers values
-			buffer = rawBuffers[1];
-			if (buffer !== '') {
-				buffer = buffer.split('|');
-				options.verbose && console.log('Parse the integers dictionary');
-				for (var i=0, n=buffer.length; i<n; i++){
-					dictionary.push(_base36To10(buffer[i]));
-				}
-			}
-
-			// Add the floats values
-			buffer = rawBuffers[2];
-			if (buffer !== '') {
-				buffer = buffer.split('|')
-				options.verbose && console.log('Parse the floats dictionary');
-				for (var i=0, n=buffer.length; i<n; i++){
-					dictionary.push(parseFloat(buffer[i]));
-				}
-			}
-			// Free memory
-			buffer = null;
-
-			options.verbose && console.log('Tokenizing the structure');
-
-			// Tokenizer the structure
-			var number36 = '';
-			var tokens = [];
-			var len=rawBuffers[3].length;
-			for (var i = 0; i < len; i++) {
-				var symbol = rawBuffers[3].charAt(i);
-				if (symbol === '|' || symbol === '$' || symbol === '@' || symbol === ']') {
-					if (number36) {
-						tokens.push(_base36To10(number36));
-						number36 = '';
-					}
-					symbol !== '|' && tokens.push(symbol);
-				} else {
-					number36 += symbol;
-				}
-			}
-
-			// A shorthand proxy for tokens.length
-			var tokensLength = tokens.length;
-
-			// The index of the next token to read
-			var tokensIndex = 0;
-
-			options.verbose && console.log('Starting recursive parser');
-
-			return (function recursiveUnpackerParser() {
-
-				// Maybe '$' (object) or '@' (array)
-				var type = tokens[tokensIndex++];
-
-				options.verbose && console.log('Reading collection type ' + (type === '$' ? 'object' : 'Array'));
-
-				// Parse an array
-				if (type === '@') {
-
-					var node = [];
-
-					for (; tokensIndex < tokensLength; tokensIndex++) {
-						var value = tokens[tokensIndex];
-						options.verbose && console.log('Read ' + value + ' symbol');
-						if (value === ']')
-							return node;
-						if (value === '@' || value === '$') {
-							node.push(recursiveUnpackerParser());
-						} else {
-							switch(value) {
-								case TOKEN_TRUE:
-									node.push(true);
-									break;
-								case TOKEN_FALSE:
-									node.push(false);
-									break;
-								case TOKEN_NULL:
-									node.push(null);
-									break;
-								case TOKEN_UNDEFINED:
-									node.push(undefined);
-									break;
-								case TOKEN_EMPTY_STRING:
-									node.push('');
-									break;
-								default:
-									node.push(dictionary[value]);
-							}
-
-						}
-					}
-
-					options.verbose && console.log('Parsed ' + this.JSON.stringify(node));
-
-					return node;
-
-				}
-
-				// Parse a object
-				if (type === '$') {
-					var node = {};
-
-					for (; tokensIndex < tokensLength; tokensIndex++) {
-
-						var key = tokens[tokensIndex];
-
-						if (key === ']')
-							return node;
-
-						if (key === TOKEN_EMPTY_STRING)
-							key = '';
-						else
-							key = dictionary[key];
-
-						var value = tokens[++tokensIndex];
-
-						if (value === '@' || value === '$') {
-							node[key] = recursiveUnpackerParser();
-						} else {
-							switch(value) {
-								case TOKEN_TRUE:
-									node[key] = true;
-									break;
-								case TOKEN_FALSE:
-									node[key] = false;
-									break;
-								case TOKEN_NULL:
-									node[key] = null;
-									break;
-								case TOKEN_UNDEFINED:
-									node[key] = undefined;
-									break;
-								case TOKEN_EMPTY_STRING:
-									node[key] = '';
-									break;
-								default:
-									node[key] = dictionary[value];
-							}
-
-						}
-					}
-
-					options.verbose && console.log('Parsed ' + this.JSON.stringify(node));
-
-					return node;
-				}
-
-				throw new TypeError('Bad token ' + type + ' isn\'t a type');
-
-			})();
-
-		}
-		/**
-		 * Get the index value of the dictionary
-		 * @param {Object} dictionary a object that have two array attributes: 'string' and 'number'
-		 * @param {Object} data
-		 */
-		var _indexOfDictionary = function(dictionary, value) {
-
-			// The type of the value
-			var type = typeof value;
-
-			// If is boolean, return a boolean token
-			if (type === 'boolean')
-				return value ? TOKEN_TRUE : TOKEN_FALSE;
-
-			// If is null, return a... yes! the null token
-			if (value === null)
-				return TOKEN_NULL;
-
-			//add undefined
-			if (typeof value === 'undefined')
-				return TOKEN_UNDEFINED;
-
-
-			if (value === '') {
-				return TOKEN_EMPTY_STRING;
-			}
-
-			if (type === 'string') {
-				value = _encode(value);
-				var index = _indexOf.call(dictionary.strings, value);
-				if (index === -1) {
-					dictionary.strings.push(value);
-					index = dictionary.strings.length - 1;
-				}
-			}
-
-			// If has an invalid JSON type (example a function)
-			if (type !== 'string' && type !== 'number') {
-				throw new Error('The type is not a JSON type');
-			};
-
-			if (type === 'string') {// string
-				value = _encode(value);
-			} else if (value % 1 === 0) {// integer
-				value = _base10To36(value);
-			} else {// float
-
-			}
-
-			// If is number, "serialize" the value
-			value = type === 'number' ? _base10To36(value) : _encode(value);
-
-			// Retrieve the index of that value in the dictionary
-			var index = _indexOf.call(dictionary[type], value);
-
-			// If that value is not in the dictionary
-			if (index === -1) {
-				// Push the value
-				dictionary[type].push(value);
-				// And return their index
-				index = dictionary[type].length - 1;
-			}
-
-			// If the type is a number, then add the '+'  prefix character
-			// to differentiate that they is a number index. If not, then
-			// just return a 36-based representation of the index
-			return type === 'number' ? '+' + index : index;
-
-		};
-
-		var _encode = function(str) {
-			if ( typeof str !== 'string')
-				return str;
-
-			return str.replace(/[\+ \|\^\%]/g, function(a) {
-				return ({
-				' ' : '+',
-				'+' : '%2B',
-				'|' : '%7C',
-				'^' : '%5E',
-				'%' : '%25'
-				})[a]
-			});
-		};
-
-		var _decode = function(str) {
-			if ( typeof str !== 'string')
-				return str;
-
-			return str.replace(/\+|%2B|%7C|%5E|%25/g, function(a) {
-				return ({
-				'+' : ' ',
-				'%2B' : '+',
-				'%7C' : '|',
-				'%5E' : '^',
-				'%25' : '%'
-				})[a]
-			})
-		};
-
-		var _base10To36 = function(number) {
-			return Number.prototype.toString.call(number, 36).toUpperCase();
-		};
-
-		var _base36To10 = function(number) {
-			return parseInt(number, 36);
-		};
-
-		var _indexOf = Array.prototype.indexOf ||
-		function(obj, start) {
-			for (var i = (start || 0), j = this.length; i < j; i++) {
-				if (this[i] === obj) {
-					return i;
-				}
-			}
-			return -1;
-		};
-
-		return {
-			JSON : JSON,
-			pack : pack,
-			unpack : unpack
-		};
-
-	});
-
-})( typeof define == 'undefined' || !define.amd ? function(deps, factory) {
-	var jsonpack = factory();
-	if ( typeof exports != 'undefined')
-		for (var key in jsonpack)
-		exports[key] = jsonpack[key];
-	else
-		window.jsonpack = jsonpack;
-} : define);
-
-//(() => {
+const json = document.createElement('SCRIPT');
+json.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/json.js';
+json.onload = () => {
+  const engine = document.createElement('SCRIPT');
+  engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
+  engine.onload = game();
+}
+document.head.appendChild(json);
+const game = () => {
   class MegaSocket {
     constructor(url, options) {
       this.url = url;
@@ -1251,7 +680,7 @@
             [340, 688, 416, 116, function() {this.gamemode = 'tdm'}, false],
             [340, 844, 416, 116, function() {this.gamemode = 'juggernaut'}, false],
             [868, 848, 368, 88, function() {
-              PixelTanks.user.joiner = new MultiPlayerTank(this.ip, this.gamemode); 
+              PixelTanks.user.joiner = new Tank(this.ip, true); 
               Menus.removeListeners();
             }],
           ],
@@ -1713,8 +1142,8 @@
     }
   }
 
-  class MultiPlayerTank {
-    constructor(ip, gamemode) {
+  class Tank {
+    constructor(ip, multiplayer) {
       this.xp = 0;
       this.crates = 0;
       this.kills = 0;
@@ -1725,100 +1154,105 @@
       this.key = [];
       this.left = null;
       this.up = null;
-      this.grapples = 1;
       this.canGrapple = true;
       this.showChat = false;
       this.msg = '';
-      this.gamemode = gamemode;
-      this.socket = new MegaSocket(`ws://${ip}`, {keepAlive: false, reconnect: false, autoconnect: true});
+      this.multiplayer = multiplayer;
       this.tank = {use: [], fire: [], r: 0};
       this.reset();
 
-      this.socket.on('message', data => {
-        this.ups++;
-        if (this.paused) return;
-        switch (data.event) {
-          case 'hostupdate':
-            if (data.logs) data.logs.reverse();
-            for (const property in data) this.hostupdate[property] = data[property];
-            break;
-          case 'ded':
-            this.reset();
-            break;
-          case 'gameover':
-            break;
-          case 'pay':
-            const amount = Number(data.amount);
-            this.coins += amount;
-            PixelTanks.userData.stats[0] += amount;
-            PixelTanks.save();
-            break;
-          case 'override':
-            data.data.forEach(d => {
-              this.tank[d.key] = d.value;
-            });
-            if (this.dx) {
-              this.dx.t = Date.now();
-              this.dx.o = this.tank.x;
-            }
-            if (this.dy) {
-              this.dy.t = Date.now();
-              this.dy.o = this.tank.y;
-            }
-            break;
-          case 'kill':
-            const crates = Math.floor(Math.random()*2)+1, coins = Math.floor(Math.random()*1000);
-            this.kills++;
-            this.xp += 10;
-            this.crates += crates;
-            this.coins += coins;
-            PixelTanks.userData.stats[1] += crates;
-            PixelTanks.userData.stats[3] += 10;
-            PixelTanks.userData.stats[0] += coins;
-            PixelTanks.save();
-            break;
-          case 'ping':
-            this.ping = new Date().getTime()-this.pingStart;
-            break;
-        }
-      });
-
-      this.socket.on('connect', function() {
-        this.socket.send({
+      const joinData = {
+        username: PixelTanks.user.username,
+        token: PixelTanks.user.token,
+        type: 'join',
+        tank: {
+          rank: PixelTanks.userData.stats[4],
           username: PixelTanks.user.username,
-          token: PixelTanks.user.token,
-          type: 'join',
-          tank: {
-            rank: PixelTanks.userData.stats[4],
-            username: PixelTanks.user.username,
-            class: PixelTanks.userData.class,
-            cosmetic: PixelTanks.userData.cosmetic,
-            deathEffect: PixelTanks.userData.deathEffect,
-            color: PixelTanks.userData.color,
-          },
+          class: PixelTanks.userData.class,
+          cosmetic: PixelTanks.userData.cosmetic,
+          deathEffect: PixelTanks.userData.deathEffect,
+          color: PixelTanks.userData.color,
+        },
+      }
+
+      if (multiplayer) {
+        this.socket = new MegaSocket(`ws://${ip}`, {keepAlive: false, reconnect: false, autoconnect: true});
+        this.socket.on('message', data => {
+          this.ups++;
+          if (this.paused) return;
+          switch (data.event) {
+            case 'hostupdate':
+              if (data.logs) data.logs.reverse();
+              for (const property in data) this.hostupdate[property] = data[property];
+              break;
+            case 'ded':
+              this.reset();
+              break;
+            case 'gameover':
+              break;
+            case 'pay':
+              const amount = Number(data.amount);
+              this.coins += amount;
+              PixelTanks.userData.stats[0] += amount;
+              PixelTanks.save();
+              break;
+            case 'override':
+              data.data.forEach(d => {
+                this.tank[d.key] = d.value;
+              });
+              if (this.dx) {
+                this.dx.t = Date.now();
+                this.dx.o = this.tank.x;
+              }
+              if (this.dy) {
+                this.dy.t = Date.now();
+                this.dy.o = this.tank.y;
+              }
+              break;
+            case 'kill':
+              const crates = Math.floor(Math.random()*2)+1, coins = Math.floor(Math.random()*1000);
+              this.kills++;
+              this.xp += 10;
+              this.crates += crates;
+              this.coins += coins;
+              PixelTanks.userData.stats[1] += crates;
+              PixelTanks.userData.stats[3] += 10;
+              PixelTanks.userData.stats[0] += coins;
+              PixelTanks.save();
+              break;
+            case 'ping':
+              this.ping = new Date().getTime()-this.pingStart;
+              break;
+          }
         });
 
-        this.pinger = setInterval(function() {
-          this.pingId = Math.random();
-          this.pingStart = Date.now();
-          this.socket.send({type: 'ping', id: this.pingId});
-          this.ops = 0;
-          this.ups = 0;
-          this.fps = 0;
-        }.bind(this), 1000);
-        setInterval(this.send.bind(this), 1000/60);
-        this.render = requestAnimationFrame(this.frame.bind(this));
-      }.bind(this));
+        this.socket.on('connect', () => {
+          this.socket.send(joinData);
+          this.pinger = setInterval(() =>  {
+            this.pingId = Math.random();
+            this.pingStart = Date.now();
+            this.socket.send({type: 'ping', id: this.pingId});
+            this.ops = 0;
+            this.ups = 0;
+            this.fps = 0;
+          }, 1000);
+        });
+      } else {
+        this.world = new Singleplayer();
+        this.world.add(joinData.tank);
+      }
 
       document.addEventListener('keydown', this.keydown.bind(this));
       document.addEventListener('keyup', this.keyup.bind(this));
       document.addEventListener('mousemove', this.mousemove.bind(this));
       document.addEventListener('mousedown', this.mousedown.bind(this));
-      document.addEventListener('mouseup', this.mouseup.bind(this))
+      document.addEventListener('mouseup', this.mouseup.bind(this));
+      setInterval(this.send.bind(this), 1000/60);
+      this.render = requestAnimationFrame(this.frame.bind(this));
     }
 
     reset() {
-      var time = new Date('Nov 28 2006').getTime();
+      const time = new Date('Nov 28 2006').getTime();
       this.timers = {
         boost: time,
         powermissle: time,
@@ -1846,13 +1280,13 @@
       this.canItem2 = true;
       this.canItem3 = true;
       this.canChangePaused = true;
-      this.grapples = 1;
       this.canGrapple = true;
       this.kills = 0;
     }
 
     drawBlock(b) {
-      GUI.drawImage(PixelTanks.images.blocks[b.type], b.x, b.y, b.type === 'airstrike' ? 200 : 100, b.type === 'airstrike' ? 200 : 100, (b.type === 'mine' && A.search(this.hostupdate.tanks, {key: 'username', value: PixelTanks.user.username}).team.split(':')[1].replace('@leader', '') !== b.team.split(':')[1].replace('@leader', '')) ? .03 : 1);
+      const size = b.type === 'airstrike' ? 200 : 100;
+      GUI.drawImage(PixelTanks.images.blocks[b.type], b.x, b.y, size, size, (b.type === 'mine' && this.hostupdate.tanks.find(t => t.username === PixelTanks.user.username).team.split(':')[1].replace('@leader', '') !== b.team.split(':')[1].replace('@leader', '')) ? .03 : 1);
     }
 
     drawShot(s) {
@@ -1896,9 +1330,10 @@
     }
 
     drawTank(t) {
-      var key = ['red', 'steel', 'crystal', 'dark', 'light'], a = 1;
-      if (t.invis && t.username !== PixelTanks.user.username) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
-      if ((t.invis && t.username === PixelTanks.user.username) || t.ded) a = .5;
+      const p = t.username === PixelTanks.user.username;
+      let a = 1;
+      if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
+      if ((t.invis && p) || t.ded) a = .5;
       GUI.drawImage(PixelTanks.images.tanks['bottom'+(t.baseFrame ? '' : '2')], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
       if (t.fire) GUI.drawImage(PixelTanks.images.animations.fire, t.x, t.y, 80, 80, 1, 0, 0, 0, 0, 0, t.fire.frame*29, 0, 29, 29);
       GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
@@ -1921,10 +1356,9 @@
         username += ' ['+t.team.split(':')[1]+']';
       }
 
-      //GUI.drawImage(PixelTanks.images.blocks.void, t.x-style.width/2+40, t.y-style.height/2-25, style.width, 50, 0.5);
       GUI.drawText(username, t.x+40, t.y-25, 50, t.color, 0.5);
 
-      if (t.shields > 0 && !t.invis) {
+      if (t.shields > 0 && (!t.invis || (t.invis && p))) {
         GUI.draw.beginPath();
         GUI.draw.fillStyle = '#7DF9FF';
         GUI.draw.globalAlpha = .2;
@@ -1934,18 +1368,10 @@
       }
 
       if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
-
-      GUI.draw.globalAlpha = 1;
-      
-      if (t.d !== false) {
-        var msg = (Math.round(t.damage.d) < 0) ? '+' : '-';
-        msg += Math.round(t.damage.d);
-        if (PixelTanks.user.username === t.u) {
-          GUI.drawText(msg, t.damage.x, t.damage.y, Math.round(t.damage.d/10)+20, '#FFFFFF', 0.5);
-          GUI.drawText(msg, t.damage.x, t.damage.y, Math.round(t.damage.d/10)+15, '#FF0000', 0.5);
-        } else {
-          GUI.drawText(msg, t.damage.x, t.damage.y, Math.round(t.damage.d/10)+20, '#FFFFFF', 0.5);
-          GUI.drawText(msg, t.damage.x, t.damage.y, Math.round(t.damage.d/10)+15, '#0000FF', 0.5);
+      if (t.d) {
+        const {x, y, d} = t.damage;
+        for (let i = 0; i < 2; i++) {
+          GUI.drawText((d < 0 ? '+' : '-')+Math.round(d), x, y, Math.round(d/5)+[20, 15][i], [0xffffff, PixelTanks.user.username === t.u ? 0xff0000 : 0x0000ff][i], 0.5);
         }
       }
       
@@ -1954,43 +1380,40 @@
         GUI.drawImage(PixelTanks.images.emotes[t.emote.a], t.x+90, t.y-15, 100, 100, 1, 0, 0, 0, 0, 0, t.emote.f*50, 0, 50, 50);
       }
 
-      if (t.dedEffect && t.dedEffect.time/PixelTanks.images.deathEffects[t.dedEffect.id+'_'].speed <= PixelTanks.images.deathEffects[t.dedEffect.id+'_'].frames) {
-        if (t.dedEffect.time/PixelTanks.images.deathEffects[t.dedEffect.id+'_'].speed < PixelTanks.images.deathEffects[t.dedEffect.id+'_'].kill) {
+      if (t.dedEffect) {
+        const {speed, frames, kill} = PixelTanks.images.deathEffects[t.dedEffect.id+'_'];
+        if (t.dedEffect.time/speed > frames) return;
+        if (t.dedEffect.time/speed < kill) {
         GUI.drawImage(PixelTanks.images.tanks.bottom, t.dedEffect.x, t.dedEffect.y, 80, 80, 1, 40, 40, 0, 0, 0);
-        GUI.drawImage(PixelTanks.images.tanks.top, t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
         GUI.drawImage(PixelTanks.images.tanks.destroyed, t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
       if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
         }
-        GUI.drawImage(PixelTanks.images.deathEffects[t.dedEffect.id], t.dedEffect.x-60, t.dedEffect.y-60, 200, 200, 1, 0, 0, 0, 0, 0, Math.floor(t.dedEffect.time/PixelTanks.images.deathEffects[t.dedEffect.id+'_'].speed)*200, 0, 200, 200);
+        GUI.drawImage(PixelTanks.images.deathEffects[t.dedEffect.id], t.dedEffect.x-60, t.dedEffect.y-60, 200, 200, 1, 0, 0, 0, 0, 0, Math.floor(t.dedEffect.time/speed)*200, 0, 200, 200);
       }
 
-      if (t.animation) {
-        GUI.drawImage(PixelTanks.images.animations[t.animation.id], t.x, t.y, 80, 90, 1, 0, 0, 0, 0, 0, t.animation.frame*40, 0, 40, 45);
-      }
+      if (t.animation) GUI.drawImage(PixelTanks.images.animations[t.animation.id], t.x, t.y, 80, 90, 1, 0, 0, 0, 0, 0, t.animation.frame*40, 0, 40, 45);
 
       if (t.healing && t.class === 'medic' && !t.ded) {
-        A.each(this.hostupdate.tanks, function(d) {
-          if (Math.sqrt(Math.pow(this.x-d.t.x, 2)+Math.pow(this.y-d.t.y, 2)) > 500) return;
-          /*GUI.draw.beginPath();
-
-          GUI.draw.lineStyle(10, 0x00FF00, .7);
-          GUI.draw.moveTo(t.x+40, t.y+40);
-          GUI.draw.lineTo(this.x+40, this.y+40);
-          GUI.draw.endFill();
-          GUI.draw.lineStyle(0, 0x000000, 1);*/ //fix heal tether graphics
-        }, {key: 'username', value: t.healing}, {t: t})
+        const target = this.hostupdate.tanks.find(tank => tank.username === t.healing);
+         if (Math.sqrt(Math.pow(this.x-d.t.x, 2)+Math.pow(this.y-d.t.y, 2)) > 500) return;
+        GUI.draw.beginPath();
+        GUI.draw.lineStyle(10, 0x00FF00, .7);
+        GUI.draw.moveTo(t.x+40, t.y+40);
+        GUI.draw.lineTo(this.x+40, this.y+40);
+        GUI.draw.endFill();
+        GUI.draw.lineStyle(0, 0x000000, 1);
       }
     }
 
     frame() {
-      GUI.clear();
       this.render = requestAnimationFrame(this.frame.bind(this));
+      GUI.clear();
       if (this.hostupdate.logs === undefined) {
         GUI.draw.fillStyle = '#000000';
         return GUI.draw.fillText('Loading Terrain...', 100, 100);
       }
       this.fps++;
-      var t = this.hostupdate.tanks, b = this.hostupdate.blocks, s = this.hostupdate.bullets, a = this.hostupdate.ai, e = this.hostupdate.explosions;
+      const t = this.hostupdate.tanks, b = this.hostupdate.blocks, s = this.hostupdate.bullets, a = this.hostupdate.ai, e = this.hostupdate.explosions;
       if (this.dx) {
         var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : (this.buffed ? 1.5 : 1));
         if (this.collision(x, this.tank.y)) {
@@ -2012,71 +1435,43 @@
       if (this.b) this.tank.baseFrame = ((this.b.o ? 0 : 1)+Math.floor((Date.now()-this.b.t)/60))%2;
       this.tank.baseRotation = (this.left === null) ? (this.up ? 180 : 0) : (this.left ? (this.up === null ? 90 : (this.up ? 135 : 45)) : (this.up === null ? 270 : (this.up ? 225: 315)));
 
-      A.each(t, function(d) {
-        A.assign(this, ['x', 'y', 'r', 'baseRotation', 'baseFrame'], [d.t.x, d.t.y, d.t.r, d.t.baseRotation, d.t.baseFrame]);
-        GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-this.x+760)*PixelTanks.resizer, (-this.y+460)*PixelTanks.resizer);
-      }, {key: 'username', value: PixelTanks.user.username}, {t: this.tank});
+      const player = t.find(tank => tank.username === PixelTanks.user.username);
+      player.x = this.tank.x;
+      player.y = this.tank.y;
+      player.r = this.tank.r;
+      player.baseRotation = this.tank.baseRotation;
+      player.baseFrame = this.tank.baseFrame;
+      GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-tank.x+760)*PixelTanks.resizer, (-this.y+460)*PixelTanks.resizer);
 
       GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
 
-      var l = 0;
-      while (l<b.length) {
-        this.drawBlock(b[l]);
-        l++;
-      }
-
-      var l = 0;
-      while (l<s.length) {
-        this.drawShot(s[l]);
-        l++;
-      }
-
-      var l = 0;
-      while (l<a.length) {
-        this.drawAi(a[l]);
-        l++;
-      }
-
-      var l = 0;
-      while (l<t.length) {
-        this.drawTank(t[l]);
-        l++;
-      }
-
-      var l = 0;
-      while (l<b.length) {
-        if (b[l].s) {
+      b.forEach(block => this.drawBlock(block));
+      s.forEach(shot => this.drawShot(shot));
+      a.forEach(ai => this.drawAi(ai));
+      t.forEach(tank => this.drawTank(tank));
+      for (const block of b) {
+        if (b.s) {
           GUI.draw.fillStyle = '#000000';
           GUI.draw.fillRect(b[l].x-2, b[l].y+108, 104, 11);
           GUI.draw.fillStyle = '#0000FF';
           GUI.draw.fillRect(b[l].x, b[l].y+110, 100*b[l].hp/b[l].maxHp, 5);
         }
-        l++;
       }
-
-      var l = 0;
-      while (l<e.length) {
-        this.drawExplosion(e[l]);
-        l++;
-      }
+      e.forEach(e => this.drawExplosion(e));
       
       GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
       GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
-      GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[0]], 500, 900, 100, 100, 1);
-      GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[1]], 666, 900, 100, 100, 1);
-      GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[2]], 832, 900, 100, 100, 1);
-      GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[3]], 998, 900, 100, 100, 1);
-
       GUI.draw.fillStyle = PixelTanks.userData.color;
       GUI.draw.globalAlpha = 0.5;
-      GUI.draw.fillRect(500, 900+(Math.min((Date.now()-this.timers.items[0].time)/this.timers.items[0].cooldown, 1))*100, 100, 100);
-      GUI.draw.fillRect(666, 900+(Math.min((Date.now()-this.timers.items[1].time)/this.timers.items[1].cooldown, 1))*100, 100, 100);
-      GUI.draw.fillRect(832, 900+(Math.min((Date.now()-this.timers.items[2].time)/this.timers.items[2].cooldown, 1))*100, 100, 100);
-      GUI.draw.fillRect(998, 900+(Math.min((Date.now()-this.timers.items[3].time)/this.timers.items[3].cooldown, 1))*100, 100, 100);
-      GUI.draw.fillRect(348, 950+(Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1))*50, 50, 50);
-      GUI.draw.fillRect(418, 950+(Math.min((Date.now()-this.timers.powermissle)/10000, 1))*50, 50, 50);
-      GUI.draw.fillRect(1132, 950+(Math.min((Date.now()-this.timers.toolkit)/30000, 1))*50, 50, 50);
-      GUI.draw.fillRect(1212, 950+(Math.min((Date.now()-this.timers.boost)/5000, 1))*50, 50, 50);
+      for (let i = 0; i < 4; i++) {
+        const c = [500, 666, 832, 998];
+        GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], c[i], 900, 100, 100, 1);
+        GUI.draw.fillRect(c[i], 900+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*100, 100, 100);
+      }
+      for (let i = 0; i < 3; i++) {
+        GUI.draw.fillRect([418, 1132, 1212][i], 950+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost'][i]])/[10000, 30000, 5000][i], 1)*50, 50, 50);
+      }
+      GUI.draw.fillRect(348, 950+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*50, 50, 50);
       GUI.draw.globalAlpha = 1;
 
       GUI.draw.fillStyle = '#000000';
@@ -2106,31 +1501,19 @@
         GUI.drawText(this.msg, 0, 830, 30, '#ffffff', 0);
       }
 
-      var l = 0;
-      while (l<t.length) {
-        if (t[l].username == PixelTanks.user.username && t[l].flashbanged) {
-          GUI.draw.fillStyle = '#FFFFFF';
-          GUI.draw.fillRect(0, 0, 1600, 1000);
-        }
-        l++;
+      
+      if (player.flashbanged) {
+        GUI.draw.fillStyle = '#FFFFFF';
+        GUI.draw.fillRect(0, 0, 1600, 1000);
       }
     }
 
-    chat(e) { // OPTIMIZE
-      if (e.key.length === 1) this.msg += e.key; else if (e.keyCode === 8) this.msg = this.msg.slice(0, -1); else if (e.keyCode === 13) {
+    chat(e) {
+      if (e.key.length === 1) this.msg += e.key;
+      if (e.keyCode === 8) this.msg = this.msg.slice(0, -1);
+      if (e.keyCode === 13) {
         if (this.msg !== '') {
-          if (this.msg.split('')[0] === '/') {
-            var command = this.msg.split(' ')[0];
-            if (command === '/emote') {
-              if (this.msg.split(' ')[1] === 'set') {
-                var data = this.msg.split(' ')[2].split('-');
-                if (isNaN(data[0]) || !['1', '2', '3', '4', '5', '6'].includes(data[0])) return alert('Invalid Emote Number');
-                if (PixelTanks.images.emotes[data[1]] === undefined) return alert('Invalid Emote Name.');
-                if (PixelTanks.userData.emotes === undefined) PixelTanks.userData.emotes = [];
-                PixelTanks.userData.emotes[data[0]-1] = data[1];
-              } else this.emote(this.msg.split(' ')[1]);
-            } else this.socket.send({type: 'command', data: this.msg.split(' ')});
-          } else this.socket.send({type: 'chat', msg: this.msg});
+          this.socket.send(this.msg.charAt(0) === '/' ? {type: 'command', data: this.msg.split(' ')} : {type: 'chat', msg: this.msg});
           this.msg = '';
         }
         this.showChat = false;
@@ -2139,7 +1522,7 @@
 
     keydown(e) {
       e.preventDefault();
-      if (this.key[e.keyCode] === undefined) {
+      if (!this.key[e.keyCode]) {
         if (this.showChat) return this.chat(e);
         this.keyStart(e);
         this.keyLoop(e);
@@ -2150,7 +1533,7 @@
     keyup(e) {
       e.preventDefault();
       clearInterval(this.key[e.keyCode]);
-      this.key[e.keyCode] = undefined;
+      this.key[e.keyCode] = false;
       if (e.keyCode == 65 || e.keyCode == 68) this.left = null;
       if (e.keyCode == 87 || e.keyCode == 83) this.up = null;
       if (this.dx && (e.keyCode === 65 && this.dx.a < 0 || e.keyCode === 68 && this.dx.a > 0)) this.dx = false;
@@ -2165,12 +1548,9 @@
     }
 
     mousemove(e) {
-      var x = e.clientX;
-      var y = e.clientY;
-      var targetX = x - window.innerWidth/2, targetY = y - window.innerHeight/2;
-      var rotation = this.toAngle(targetX, targetY);
-      this.tank.r = Math.round(rotation);
-      this.mouse = {x: targetX, y: targetY};
+      const x = e.clientX-window.innerWidth/2, y = e.clientY-window.innerHeight/2;
+      this.tank.r = this.toAngle(x, y);
+      this.mouse = {x, y};
     }
 
     toAngle(x, y) {
@@ -2178,13 +1558,8 @@
     }
 
     toPoint(angle) {
-      var theta = (-angle)*Math.PI/180;
-      var y = Math.cos(theta);
-      var x = Math.sin(theta);
-      return {
-        x: x/Math.abs(x),
-        y: y/Math.abs(x),
-      };
+      const theta = (-angle)*Math.PI/180, y = Math.cos(theta), x = Math.sin(theta);
+      return {x: x/Math.abs(x), y: y/Math.abs(x)};
     }
 
     mousedown(e) {
@@ -2202,9 +1577,9 @@
         if (!this.canPowermissle) return;
         this.canPowermissle = false;
         this.timers.powermissle = Date.now();
-	setTimeout(() => {
-	  this.canPowermissle = true;
-	}, 10000);
+      setTimeout(() => {
+        this.canPowermissle = true;
+      }, 10000);
       } else if (type === 0) {
         this.canFire = false;
         setTimeout(function(){this.canFire = true}.bind(this), this.fireType === 1 ? 200 : 600);
@@ -2252,41 +1627,41 @@
     }
 
     item(id, slot) {
-      var key = {
-        duck_tape: [function() {
+      const key = {
+        duck_tape: [() => {
           this.tank.use.push('tape');
           this.playAnimation('tape');
         }, 30000, false],
-        super_glu: [function() {
+        super_glu: [() => {
           this.tank.use.push('glu');
           this.playAnimation('glu');
         }, 40000, false],
-        shield: [function() {
+        shield: [() => {
           this.tank.use.push('shield');
         }, 30000, false],
-        weak: [function() {
+        weak: [() => {
           this.tank.use.push('block');
           this.tank.blockType = PixelTanks.userData.class === 'builder' ? 'strong' : 'weak';
         }, 3000, false],
-        strong: [function() {
+        strong: [() => {
           this.tank.use.push('block');
           this.tank.blockType = PixelTanks.userData.class === 'builder' ? 'gold' : 'strong';
         }, 7000, false],
-        spike: [function() {
+        spike: [() => {
           this.tank.use.push('block');
           this.tank.blockType = 'spike';
         }, 10000, false],
-        flashbang: [function() {
+        flashbang: [() => {
           this.tank.use.push('flashbang');
         }, 40000, false],
-        bomb: [function() {
+        bomb: [() => {
           this.tank.use.push('bomb');
         }, 5000, false],
-        mine: [function() {
+        mine: [() => {
           this.tank.use.push('block');
           this.tank.blockType = 'mine';
         }, 1000, false],
-        dynamite: [function() {
+        dynamite: [() => {
           if (!this['canItem'+slot]) {
             this.tank.use.push('dynamite');
           } else {
@@ -2299,10 +1674,10 @@
             }.bind(this), 25000);
           }
         }, 25000, true],
-        airstrike: [function() {
-          this.tank.airstrike = {x: this.mouse.x/PixelTanks.resizer-this.x+1460, y: this.mouse.y/PixelTanks.resizer-this.y+860};
+        airstrike: [() => {
+          this.tank.airstrike = {x: this.mouse.x/PixelTanks.resizer-this.tank.x+1460, y: this.mouse.y/PixelTanks.resizer-this.tank.y+860};
         }, 40000, false],
-        fortress: [function() {
+        fortress: [() => {
           this.tank.use.push('block');
           this.tank.blockType = 'fortress';
         }, 30000, false],
@@ -2311,11 +1686,7 @@
     }
 
     useItem(enable, cooldown, slot, c) {
-      if (c) {
-        enable = enable.bind(this);
-        enable();
-        return;
-      }
+      if (c) return enable();
       if (this['canItem'+slot]) {
         enable = enable.bind(this);
         enable();
@@ -2330,239 +1701,138 @@
 
     keyStart(e) {
       if (this.paused && e.keyCode !== 22) return;
-      switch (e.keyCode) {
-        case 65:
-        case 68:
-          this.dx = {o: this.tank.x, t: Date.now(), a: e.keyCode === 65 ? -1 : 1, b: false};
-          this.b = {o: this.tank.baseFrame, t: Date.now()};
-        break;
-        case 83:
-        case 87:
-          this.dy = {o: this.tank.y, t: Date.now(), a: e.keyCode === 87 ? -1 : 1, b: false};
-          this.b = {o: this.tank.ba, t: Date.now()};
-        break;
-        case PixelTanks.userData.keybinds.items[0]:
-          this.item(PixelTanks.userData.items[0], 0);
-          break;
-        case PixelTanks.userData.keybinds.items[1]:
-          this.item(PixelTanks.userData.items[1], 1);
-          break;
-        case PixelTanks.userData.keybinds.items[2]:
-          this.item(PixelTanks.userData.items[2], 2);
-          break;
-        case PixelTanks.userData.keybinds.items[3]:
-          this.item(PixelTanks.userData.items[3], 3);
-          break;
-        case PixelTanks.userData.keybinds.emotes[0]:
-          this.emote(PixelTanks.userData.emotes[0]);
-          break;
-        case PixelTanks.userData.keybinds.emotes[1]:
-          this.emote(PixelTanks.userData.emotes[1]);
-          break;
-        case PixelTanks.userData.keybinds.emotes[2]:
-          this.emote(PixelTanks.userData.emotes[2]);
-          break;
-        case PixelTanks.userData.keybinds.emotes[3]:
-          this.emote(PixelTanks.userData.emotes[3]);
-          break;
-        case PixelTanks.userData.keybinds.emotes[4]:
-          this.emote(PixelTanks.userData.emotes[4]);
-          break;
-        case PixelTanks.userData.keybinds.emotes[5]:
-          this.emote(PixelTanks.userData.emotes[5]);
-          break;
-        case 13:
-          this.showChat = true;
-          break;
-        case 18:
-          document.write(JSON.stringify(PixelTanks.user.joiner.hostupdate));
-          break;
-        case false: //PixelTanks.userData.settings.fire1:
-          this.fireType = 1;
-          clearInterval(this.fireInterval);
-          break;
-        case false: //PixelTanks.userData.settings.fire2:
-          this.fireType = 2;
-          clearInterval(this.fireInterval);
-          break;
-        case 9:
-          if (this.fireType === 2) {
-            this.fireType = 1;
-          } else {
-            this.fireType++;
-          }
-          clearInterval(this.fireInterval);
-          break;
-        case 82:
-          if (this.grapples > 0) {
-              this.fire('grapple');
-              this.grapples--;
-              this.canGrapple = false;
-              setTimeout(function() {this.canGrapple = true}.bind(this), 200)
-              if (this.grapples === 0) {
-               setTimeout(function() {this.grapples = 1}.bind(this), 5000);
-              }
-          }
-          break;
-        case 81:
-          if (this.canToolkit) {
-            if (this.halfSpeed) {
-              this.tank.use.push('toolkit');
-              this.halfSpeed = false;
-            } else {
-              this.halfSpeed = true;
-              setTimeout(function() {this.halfSpeed = false}.bind(this), PixelTanks.userData.class === 'medic' ? 5000 : 7500);
-              this.tank.use.push('toolkit');
-              this.canToolkit = false;
-              this.timers.toolkit = new Date();
-              setTimeout(function() {this.canToolkit = true}.bind(this), 0);
-              this.playAnimation('toolkit');
-            }
-          }
-          break;
-        case 70:
-          if (PixelTanks.userData.class === 'stealth') {
-            if (this.canInvis && !this.tank.invis) {
-              this.tank.invis = true;
-              this.canInvis = false;
-              this.timers.class.time = Date.now();
-              this.timers.class.cooldown = 30000;
-              clearTimeout(this.invis);
-              this.invis = setTimeout(function() {
-                this.tank.invis = false;
-                this.invis = setTimeout(function() {this.canInvis = true}.bind(this), 30000);
-              }.bind(this), 30000);
-            } else if (this.tank.invis) {
+      const k = e.keyCode;
+      if ([65, 68].includes(k)) {
+        this.dx = {o: this.tank.x, t: Date.now(), a: k === 65 ? -1 : 1, b: false};
+        this.b = {o: this.tank.baseFrame, t: Date.now()};
+      } else if ([83, 87].includes(k)) {
+        this.dy = {o: this.tank.y, t: Date.now(), a: k === 87 ? -1 : 1, b: false};
+        this.b = {o: this.tank.baseFrame, t: Date.now()};
+      }
+      for (let i = 0; i < 4; i++) {
+        if (k === PixelTanks.userData.keybinds.items[i]) this.item(PixelTanks.userData.items[i], i);
+      }
+      for (let i = 0; i < 6; i++) {
+        if (k === PixelTanks.userData.keybinds.emotes[i]) this.emote(Pixel.userData.emotes[i]);
+      }
+      if (k === 14) this.showChat = true;
+      if (k === 9) {
+        this.fireType = this.fireType < 2 ? 2 : 1;
+        clearInterval(this.fireInterval);
+      } else if (k === 82 && this.canGrapple) {
+        this.fire('grapple');
+        this.canGrapple = false;
+        setTimeout(() => {this.canGrapple = true}, 5000);
+      } else if (k === 81) {
+        if (this.halfSpeed || this.canToolkit) {
+          this.tank.use.push('toolkit');
+          this.halfSpeed = !this.halfSpeed;
+        }
+        if (this.canToolkit) {
+          this.canToolkit = false;
+          this.timers.toolkit = new Date();
+          setTimeout(() => {this.canToolkit = true}, 40000);
+          setTimeout(() => {this.halfSpeed = false}, PixelTanks.userData.class === 'medic' ? 5000 : 7500);
+          this.playAnimation('toolkit');
+        }
+      } else if (k === 70) {
+        const c = PixelTanks.userData.class;
+        if (c === 'stealth') {
+          if (this.tank.invis || this.canInvis) this.tank.invis = !this.tank.invis;
+          if (this.canInvis)  {
+            this.canInvis = false;
+            this.timers.class = {time: Date.now(), cooldown: 30000};
+            this.invis = setTimeout(() => {
               this.tank.invis = false;
-              setTimeout(function() {this.canInvis = true}.bind(this), 30000-(Date.now()-this.timers.class.time));
-            }
-          } else if (PixelTanks.userData.class === 'normal') {
-            // add sheidls ehre for idots
-          } else if (PixelTanks.userData.class == 'tactical') {
-            if (this.canMegamissle) {
-              this.fire('megamissle');
-              this.canMegamissle = false;
-              this.timers.class.time = Date.now();
-              this.timers.class.cooldown = 30000;
-              setTimeout(function() {
-                this.canMegamissle = true;
-              }.bind(this), 30000);
-            }
-          } else if (PixelTanks.userData.class == 'builder') {
-            if (this.canTurret) {
-              this.canTurret = false;
-              this.tank.use.push('turret');
-              this.timers.class.time = Date.now();
-              this.timers.class.cooldown = 40000;
-              setTimeout(function() {
-                this.canTurret = true;
-              }.bind(this), 40000);
-            }
-          } else if (PixelTanks.userData.class === 'warrior') {
-            if (this.canBuff) {
-              this.canBuff = false;
-              this.buffed = true;
-              setTimeout(function() {this.buffed = false}.bind(this), 10000);
-              this.tank.use.push('buff');
-              this.timers.class.time = Date.now();
-              this.timers.class.cooldown = 40000;
-              setTimeout(function() {
-                this.canBuff = true;
-              }.bind(this), 40000);
-            }
-          } else if (PixelTanks.userData.class === 'medic') {
-            this.tank.use.push('healSwitch');
-            this.timers.class.time = Date.now();
-            this.timers.class.cooldown = 0;
-          } else if (PixelTanks.userData.class === 'fire') {
-            if (this.canFlame) {
-              this.canFlame = false;
-              this.timers.class.time = Date.now();
-              this.timers.class.cooldown = 10000;
-              var l = -30;
-              while (l<30) {
-                this.tank.fire.push({...this.toPoint(this.tank.r+l), type: 'fire', r: this.tank.r+l});
-                l+=5;
-              }
-              setTimeout(function() {this.canFlame = true}.bind(this), 10000);
-            }
+              this.invis = setTimeout(() => {
+                this.canInvis = true;
+              }, 30000);  
+            }, 30000);
+          } else if (this.tank.invis) {
+            setTimeout(() => {
+              this.canInvis = true;
+            }, 30000-(Date.now()-this.timers.class.time));
           }
-          break;
-        case 27:
-          this.paused = !this.paused;
-          if (this.paused) {
-            GUI.draw.fillStyle = '#000000';
-            GUI.draw.fillRect(0, 0, 1600, 1000);
-          } else {
-            Menus.removeListeners();
-          }
-          break;
+        } else if (c === 'tactical' && this.canMegamissle) {
+          this.fire('megamissle');
+          this.canMegamissle = false;
+          this.timers.class = {time: Date.now(), cooldown: 30000};
+          setTimeout(() => {this.canMegamissle = true}, 30000);
+        } else if (c === 'builder' && this.canTurret) {
+          this.canTurret = false;
+          this.tank.use.push('turret');
+          this.timers.class = {time: Date.now(), cooldown: 40000};
+          setTimeout(() => {this.canTurret = true}, 40000);
+        } else if (c === 'warrior' && this.canBuff) {
+          this.tank.use.push('buff');
+          this.canBuff = false;
+          this.timers.class = {time: Date.now(), cooldown: 40000};
+          setTimeout(() => {this.canBuff = true}, 40000);
+        } else if (c === 'medic') {
+          this.tank.use.push('healSwitch');
+          this.timers.class = {time: Date.now(), cooldown: 0};
+        } else if (c === 'fire' && this.canFlame) {
+          this.canFlame = false;
+          this.timers.class = {time: Date.now(), cooldown: 10000};
+          for (let i = -30; i < 30; i += 5) this.tank.fire.push({...this.toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
+          setTimeout(() => {this.canFlame = true}, 10000);
+        }
+      } else if (k === 27) {
+        this.paused = !this.paused;
+        if (this.paused) {
+         GUI.draw.fillStyle = '#000000';
+          GUI.draw.fillRect(0, 0, 1600, 1000);
+        } else {
+          Menus.removeListeners()
+        }
       }
     }
 
     keyLoop(e) {
-      switch (e.keyCode) {
-        case 16:
-          if (this.canBoost) {
-            this.speed = 16;
-            this.canBoost = false;
-            this.tank.immune = true;
-            this.timers.boost = Date.now();
+      if (e.keyCode === 16) {
+        if (this.canBoost) {
+          this.speed = 16;
+          this.canBoost = false;
+          this.tank.immune = true;
+          this.timers.boost = Date.now();
+          if (PixelTanks.userData.class === 'tactical') this.tank.use.push('mine');
+          setTimeout(() => {
+            this.speed = 4;
+            this.tank.immune = false;
             if (PixelTanks.userData.class === 'tactical') this.tank.use.push('mine');
-            setTimeout(function() {
-              this.speed = 4;
-              this.tank.immune = false;
-              if (PixelTanks.userData.class === 'tactical') this.tank.use.push('mine');
-              if (PixelTanks.userData.class === 'stealth') this.tank.use.push('bomb');
-            }.bind(this), 500);
-            setTimeout(function() {this.canBoost = true}.bind(this), 5000);
-          }
-        break;
+            if (PixelTanks.userData.class === 'stealth') this.tank.use.push('bomb');
+          }, 500);
+          setTimeout(() => {this.canBoost = true}, 5000);
+        }
       }
     }
 
     emote(id) {
       clearInterval(this.emoteAnimation);
       clearTimeout(this.emoteTimeout);
-      if (PixelTanks.images.emotes[id+'_'].type === 0) { // loop emote
-        this.tank.emote = {a: id, f: 0};
-        this.emoteAnimation = setInterval(function() {
-          if (this.tank.emote.f != PixelTanks.images.emotes[id+'_'].frames) {
-            this.tank.emote.f++;
-          } else {
-            this.tank.emote.f = 0;
-          }
-        }.bind(this), 50);
-        this.emoteTimeout = setTimeout(function() {
-          clearInterval(this.emoteAnimation);
-          this.tank.emote = null;
-        }.bind(this), 5000);
-      } else if (PixelTanks.images.emotes[id+'_'].type === 1) { // single run emote
-        this.tank.emote = {a: id, f: 0};
-        this.emoteAnimation = setInterval(function() {
-          if (this.tank.emote.f != PixelTanks.images.emotes[id+'_'].frames) {
-            this.tank.emote.f++;
-          } else {
-            clearInterval(this.emoteAnimation);
-            setTimeout(function() {
-              this.tank.emote = null;
-            }.bind(this), 1500);
-          }
-        }.bind(this), 50);
-      } else {
-        this.tank.emote = {
-          a: id,
-          f: 0,
+      const {type, frames} = PixelTanks.images.emotes[id+'_'];
+      this.tank.emote = {a: id, f: 0};
+      if (type !== 2) this.emoteAnimation = setInterval(() => {
+        if (this.tank.emote.f !== frames) {
+          this.tank.emote.f++;
+        } else if (type === 0) {
+          this.tank.emote.f = 0;
         }
-        this.emoteTimeout = setTimeout(function() {
-          this.tank.emote = null;
-        }.bind(this), 5000);
-      }
+      }, 50);
+      this.emoteTimeout = setTimeout(() => {
+        clearInterval(this.emoteAnimation);
+        this.tank.emote = null;
+      }, type < 2 ? 5000 : 1500+50*frames);
     }
 
     send() {
-      this.ops++;
-      this.socket.send({username: PixelTanks.user.username, type: 'update', data: this.tank});
+      const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank}
+      if (this.multiplayer) {
+        this.ops++;
+        this.socket.send(updateData);
+      } else {
+         this.world.update(updateData);
+      }
       this.tank.blockType = null;
       this.tank.airstrike = null;
       this.tank.fire = [];
@@ -2571,4 +1841,4 @@
   }
 
   window.onload = PixelTanks.start;
-//})();
+};
