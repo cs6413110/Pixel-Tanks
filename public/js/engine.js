@@ -1,46 +1,4 @@
-class A {
-  static each(arr, func, key, value, ...param) {
-    var l = 0;
-    while (l<arr.length) {
-      if ((key === undefined || key === null) ? true : (arr[l][key] === value)) {
-        var r;
-        if (typeof func === 'string') {
-          r = arr[l][func].apply(arr[l], param);
-        } else {
-          param.unshift(l);
-          r = func.apply(arr[l], param);
-          param.shift();
-        }
-        if (r !== undefined) return r;
-      }
-      l++;
-    }
-  }
-
-  static search(arr, key, value) {
-    var l = 0;
-    while (l<arr.length) {
-      if (arr[l][key] === value) {
-        return arr[l];
-      }
-      l++;
-    }
-  }
-
-  static collider(x, y, w, h, x2, y2, w2, h2) {
-    return ((x > x2 || x+w > x2) && (x < x2+w2 || x+w < x2+w2) && (y > y2 || y+h > y2) && (y < y2+h2 || y+h < y2+h2)) ? true: false;
-  }
-
-  static assign(...param) {
-    var l = 1;
-    while (l<param.length-1) {
-      param[0][param[l]] = param[l+1];
-      l+=2;
-    }
-  }
-}
-
-class Engine {
+export class Engine {
   constructor(levels) {
     this.spawn = {x: 0, y: 0};
     this.ai = [];

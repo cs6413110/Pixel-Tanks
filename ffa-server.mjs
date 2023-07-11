@@ -17,7 +17,7 @@ import fetch from 'node-fetch';
 import HyperExpress from 'hyper-express';
 import jsonpack from 'jsonpack';
 import Filter from 'bad-words';
-import './public/js/engine.js';
+import {Engine} from './public/js/engine.js';
 
 const filter = new Filter();
 export const Core = new HyperExpress.Router();
@@ -352,6 +352,48 @@ const Commands = {
     if (pt === undefined) return this.send({status: 'error', message: 'Player Not Found.'}); else pt.cosmetic = data[2].replaceAll('_', ' ');
   }
 };
+
+class A {
+  static each(arr, func, key, value, ...param) {
+    var l = 0;
+    while (l<arr.length) {
+      if ((key === undefined || key === null) ? true : (arr[l][key] === value)) {
+        var r;
+        if (typeof func === 'string') {
+          r = arr[l][func].apply(arr[l], param);
+        } else {
+          param.unshift(l);
+          r = func.apply(arr[l], param);
+          param.shift();
+        }
+        if (r !== undefined) return r;
+      }
+      l++;
+    }
+  }
+
+  static search(arr, key, value) {
+    var l = 0;
+    while (l<arr.length) {
+      if (arr[l][key] === value) {
+        return arr[l];
+      }
+      l++;
+    }
+  }
+
+  static collider(x, y, w, h, x2, y2, w2, h2) {
+    return ((x > x2 || x+w > x2) && (x < x2+w2 || x+w < x2+w2) && (y > y2 || y+h > y2) && (y < y2+h2 || y+h < y2+h2)) ? true: false;
+  }
+
+  static assign(...param) {
+    var l = 1;
+    while (l<param.length-1) {
+      param[0][param[l]] = param[l+1];
+      l+=2;
+    }
+  }
+}
 
 class Multiplayer extends Engine {
   constructor(levels) {
