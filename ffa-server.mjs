@@ -143,7 +143,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
         const res = await fetch(`http://141.148.128.231/verify?username=${username}&token=${token}`);
         const body = await res.text();
         if (body === 'true') {
-          joinable[0].add(tank);
+          joinable[0].add(socket, tank);
           socket.room = servers.indexOf(joinable[0]);
         } else {
           socket.send({status: 'error', message: 'Invalid Token.'});
