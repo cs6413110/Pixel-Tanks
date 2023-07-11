@@ -733,8 +733,8 @@
             b[6] = Math.max(b[6]-1, 0);
           }
         }
-        const data = GUI.draw.getImageData(b[0]/1600*700, b[1]/1000*438, b[2]/1600*700, b[3]/1000*438);
-        GUI.draw.putImageData(data, (b[0]-b[6])*PixelTanks.resizer, (b[1]-b[6])*PixelTanks.resizer); //, b[2]+b[6]*2, b[3]+b[6]*2);
+        const data = GUI.draw.getImageData(b[0], b[1], b[2], b[3]);
+        GUI.draw.putImageData(data, b[0]-b[6], b[1]-b[6], b[2]+b[6]*2, b[3]+b[6]*2);
       }
     }
   }
@@ -1201,7 +1201,7 @@
           listeners: {
             keydown: function(e) {
               if (e.key.length === 1) this[this.type] += e.key;
-              if (e.keyCode === 8) this[this.type].splice(0, -1);
+              if (e.keyCode === 8) this[this.type] = this[this.type].slice(0, -1);
               if (e.keyCode === 13) PixelTanks.auth(this.username, this.password, 'login');
             }
           },
@@ -1256,7 +1256,7 @@
           listeners: {
             keydown: function(e) {
               if (e.key.length === 1) this.ip += e.key;
-              if (e.keyCode === 8) this.ip.splice(0, -1);
+              if (e.keyCode === 8) this.ip = this.ip.slice(0, -1);
             }
           },
           cdraw: function() {
@@ -1407,7 +1407,7 @@
             },
             keydown: function(e) {
               if (e.key.length === 1) this.color += e.key;
-              if (e.keyCode === 8) this.color.splice(0, -1);
+              if (e.keyCode === 8) this.color = this.color.slice(0, -1);
               if (this.cosmeticTab) {
                 if (e.keyCode === 37 && this.cosmeticMenu > 0) this.cosmeticMenu--;
                 if (e.keyCode === 39 && this.cosmeticMenu+1 !== Math.ceil(PixelTanks.userData.cosmetics.length/16)) this.cosmeticMenu++;
