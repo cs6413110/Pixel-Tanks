@@ -1577,9 +1577,9 @@ const game = () => {
         if (!this.canPowermissle) return;
         this.canPowermissle = false;
         this.timers.powermissle = Date.now();
-      setTimeout(() => {
-        this.canPowermissle = true;
-      }, 10000);
+        setTimeout(() => {
+          this.canPowermissle = true;
+        }, 10000);
       } else if (type === 0) {
         this.canFire = false;
         setTimeout(function(){this.canFire = true}.bind(this), this.fireType === 1 ? 200 : 600);
