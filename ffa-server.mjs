@@ -155,7 +155,6 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
         return setImmediate(() => socket.destroy());
       }
     } else if (data.type === 'update') {
-      console.log(servers, socket.room, data);
       servers[socket.room].update(data);
     } else if (data.type === 'ping') {
       socket.send({event: 'ping', id: data.id});
@@ -409,10 +408,13 @@ class Multiplayer extends Engine {
   }
 
   add(socket, data) {
+    console.log('Running Engine.add');
     super.add(data);
+    console.log(this.pt.length);
     this.pt[this.pt.length-1].socket = socket;
     this.sockets.push(socket);
     this.logs.push({m: this.joinMsg(data.username), c: '#66FF00'});
+    console.log(this.sockets);
   }
 
   update(data) {
