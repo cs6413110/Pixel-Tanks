@@ -916,7 +916,6 @@
         }
       </style>`;
       Menus.scaler = document.createElement('CANVAS');
-      document.body.appendChild(Menus.scaler);
       GUI.canvas = document.createElement('CANVAS');
       GUI.draw = GUI.canvas.getContext('2d');
       document.body.appendChild(GUI.canvas);
