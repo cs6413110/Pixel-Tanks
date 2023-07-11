@@ -13,7 +13,7 @@ class Engine {
   }
 
   add(data) {
-    data = {...data, damage: false, maxHp: data.rank*10+300, hp: data.rank*10+300, deathsPerMovement: 0, socket: socket, canBashed: true, shields: 0, team: data.username+':'+Math.random(), x: this.spawn.x, y: this.spawn.y, r: 0, pushback: 0, baseRotation: 0, baseFrame: 0, fire: false, healing: data.username};
+    data = {...data, damage: false, maxHp: data.rank*10+300, hp: data.rank*10+300, deathsPerMovement: 0, canBashed: true, shields: 0, team: data.username+':'+Math.random(), x: this.spawn.x, y: this.spawn.y, r: 0, pushback: 0, baseRotation: 0, baseFrame: 0, fire: false, healing: data.username};
     this.pt.push(data);
     this.override(data);
   }
