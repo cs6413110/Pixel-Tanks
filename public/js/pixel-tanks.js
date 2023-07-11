@@ -734,7 +734,7 @@
           }
         }
         const data = GUI.draw.getImageData(b[0], b[1], b[2], b[3]);
-        GUI.draw.putImageData(data, b[0]-b[6], b[1]-b[6], b[2]+b[6]*2, b[3]+b[6]*2);
+        GUI.draw.putImageData(data, b[0]-b[6], b[1]-b[6])//, b[2]+b[6]*2, b[3]+b[6]*2);
       }
     }
   }
