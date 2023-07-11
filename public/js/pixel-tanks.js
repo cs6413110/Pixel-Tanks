@@ -734,7 +734,6 @@
           }
         }
         
-        const data = GUI.draw.getImageData(b[0]*PixelTanks.resizer, b[1]*PixelTanks.resizer, b[2]*PixelTanks.resizer, b[3]*PixelTanks.resizer);
         Menus.scaler.width = b[2]*PixelTanks.resizer;
         Menus.scaler.height = b[3]*PixelTanks.resizer;
         Menus.scaler.getContext('2d').setTransform(1, 0, 0, 1, -b[0]*PixelTanks.resizer, -b[1]*PixelTanks.resizer);
