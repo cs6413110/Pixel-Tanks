@@ -414,6 +414,10 @@ class Multiplayer extends Engine {
     this.logs.push({m: this.joinMsg(data.username), c: '#66FF00'});
   }
 
+  update(data) {
+    super.update(data);
+  }
+
   send() {
     const view = {x: -860, y: -560, w: 1880, h: 1280};
     this.pt.forEach(t => {
