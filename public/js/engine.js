@@ -622,4 +622,4 @@ class Ai {
   }
 }
 
-export {Engine};
+module.exports = {Engine};
