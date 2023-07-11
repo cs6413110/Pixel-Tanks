@@ -1193,19 +1193,19 @@
       Menus.menus = {
         start: {
           buttons: [
-            [580, 740, 200, 100, () => PixelTanks.auth(this.username, this.password, 'login'), true],
-            [820, 740, 200, 100, () => PixelTanks.auth(this.username, this.password, 'signup'), true],
-            [580, 480, 440, 60, () => {this.type = 'username'}, false],
-            [580, 580, 440, 60, () => {this.type = 'password'}, false],
+            [580, 740, 200, 100, function() {PixelTanks.auth(this.username, this.password, 'login')}, true],
+            [820, 740, 200, 100, function() {PixelTanks.auth(this.username, this.password, 'signup')}, true],
+            [580, 480, 440, 60, function() {this.type = 'username'}, false],
+            [580, 580, 440, 60, function() {this.type = 'password'}, false],
           ],
           listeners: {
-            keydown: (e) => {
+            keydown: function(e) {
               if (e.key.length === 1) this[this.type] += e.key;
               if (e.keyCode === 8) this[this.type].splice(0, -1);
               if (e.keyCode === 13) PixelTanks.auth(this.username, this.password, 'login');
             }
           },
-          cdraw: () => {
+          cdraw: function() {
             if (!this.type) {
               this.type = 'username';
               this.username = '';
@@ -1223,15 +1223,15 @@
             [420, 920, 80, 80, 'inventory', true],
             [528, 896, 80, 80, 'crate', true],
             [620, 920, 80, 80, 'htp1', true],
-            [580, 360, 440, 100, () => alert('Singleplayer is coming soon!'), true],
-            [320, 920, 80, 80, () => {
+            [580, 360, 440, 100, function() {alert('Singleplayer is coming soon!')}, true],
+            [320, 920, 80, 80, function() {
               PixelTanks.user.token = undefined;
               PixelTanks.user.username = undefined;
               Menus.trigger('start');
             }],
           ],
           listeners: {},
-          cdraw: () => {
+          cdraw: function() {
             GUI.drawImage(PixelTanks.images.tanks.bottom, 800, 800, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.tanks.top, 800, 800, 80, 90, 1);
             if (PixelTanks.userData.cosmetic !== '' && PixelTanks.userData.cosmetic !== undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 800, 800, 80, 90, 1);
@@ -1244,22 +1244,22 @@
         multiplayer: {
           buttons: [
             [424, 28, 108, 108, 'main'],
-            [340, 376, 416, 116, () => {this.gamemode = 'ffa'}, false],
-            [340, 532, 416, 116, () => {this.gamemode = 'duels'}, false],
-            [340, 688, 416, 116, () => {this.gamemode = 'tdm'}, false],
-            [340, 844, 416, 116, () => {this.gamemode = 'juggernaut'}, false],
-            [868, 848, 368, 88, () => {
+            [340, 376, 416, 116, function() {this.gamemode = 'ffa'}, false],
+            [340, 532, 416, 116, function() {this.gamemode = 'duels'}, false],
+            [340, 688, 416, 116, function() {this.gamemode = 'tdm'}, false],
+            [340, 844, 416, 116, function() {this.gamemode = 'juggernaut'}, false],
+            [868, 848, 368, 88, function() {
               PixelTanks.user.joiner = new MultiPlayerTank(this.ip, this.gamemode); 
               Menus.removeListeners();
             }],
           ],
           listeners: {
-            keydown: (e) => {
+            keydown: function(e) {
               if (e.key.length === 1) this.ip += e.key;
               if (e.keyCode === 8) this.ip.splice(0, -1);
             }
           },
-          cdraw: () => {
+          cdraw: function() {
             if (!this.gamemode) {
               this.gamemode = 'ffa';
               this.ip = '141.148.128.231/ffa';
@@ -1271,11 +1271,11 @@
           buttons: [
             [418, 112, 106, 106, 'main', true],
             [1076, 114, 106, 106, 'cosmetic', true],
-            [625, 324, 564, 564, () => PixelTanks.openCrate(), false],
-            [0, 324, 564, 564, () => PixelTanks.openDeath(), false],
+            [625, 324, 564, 564, function() {PixelTanks.openCrate()}, false],
+            [0, 324, 564, 564, function() {PixelTanks.openDeath()}, false],
           ],
           listeners: {},
-          cdraw: () => {
+          cdraw: function() {
             GUI.drawText('Crates: ' + PixelTanks.userData.stats[1], 800, 260, 30, '#ffffff', 0.5);
           }
         },
@@ -1285,7 +1285,7 @@
             [397, 65, 38, 35, 'keybinds', true],
           ],
           listeners: {},
-          cdraw: () => {}
+          cdraw: function() {},
         },
         htp1: {
           buttons: [
@@ -1295,7 +1295,7 @@
             [1132, 224, 320, 80, 'htp4', true],
           ],
           listeners: {},
-          cdraw: () => {},
+          cdraw: function() {},
         },
         htp2: {
           buttons: [
@@ -1305,7 +1305,7 @@
             [1132, 224, 320, 80, 'htp4', true],
           ],
           listeners: {},
-          cdraw: () => {}
+          cdraw: function() {},
         },
         htp3: {
           buttons: [
@@ -1315,7 +1315,7 @@
             [1132, 224, 320, 80, 'htp4', true],
           ],
           listeners: {},
-          cdraw: () => {}
+          cdraw: function() {},
         },
         htp4: {
           buttons: [
@@ -1325,29 +1325,29 @@
             [804, 224, 320, 80, 'htp3', true],
           ],
           listeners: {},
-          cdraw: () => {}
+          cdraw: function() {},
         },
         keybinds: {
           buttons: [
             [40, 40, 120, 120, 'main', true],
           ],
           listeners: {},
-          cdraw: () => {},
+          cdraw: function() {},
         },
         inventory: {
           buttons: [
             [424, 28, 108, 108, 'main', true],
-            [1064, 458, 88, 88, () => PixelTanks.switchTab('healthTab'), true],
-            [1112, 814, 88, 88, () => PixelTanks.switchTab('classTab'), true],
-            [400, 814, 88, 88, () => PixelTanks.switchTab('itemTab', 1), true],
-            [488, 814, 88, 88, () => PixelTanks.switchTab('itemTab', 2), true],
-            [576, 814, 88, 88, () => PixelTanks.switchTab('itemTab', 3), true],
-            [664, 814, 88, 88, () => PixelTanks.switchTab('itemTab', 4), true],
-            [756, 220, 88, 88, () => PixelTanks.switchTab('cosmeticTab'), true],
-            [556, 220, 88, 88, () => PixelTanks.switchTab('deathEffectsTab'), true],
+            [1064, 458, 88, 88, function() {PixelTanks.switchTab('healthTab')}, true],
+            [1112, 814, 88, 88, function() {PixelTanks.switchTab('classTab')}, true],
+            [400, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 1)}, true],
+            [488, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 2)}, true],
+            [576, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 3)}, true],
+            [664, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 4)}, true],
+            [756, 220, 88, 88, function() {PixelTanks.switchTab('cosmeticTab')}, true],
+            [556, 220, 88, 88, function() {PixelTanks.switchTab('deathEffectsTab')}, true],
           ],
           listeners: {
-            mousedown: e => {
+            mousedown: function(e) {
               const {x, y} = Menus;
               if (this.classTab) {
                 if (x < 688 || x > 912 || y < 334 || y > 666) return this.classTab = false;
@@ -1402,10 +1402,10 @@
                 }
               }
             },
-            mousemove: (e) => {
+            mousemove: function(e) {
               this.target = {x: e.clientX-window.innerWidth/2, y: e.clientY-window.innerHeight/2};
             },
-            keydown: (e) => {
+            keydown: function(e) {
               if (e.key.length === 1) this.color += e.key;
               if (e.keyCode === 8) this.color.splice(0, -1);
               if (this.cosmeticTab) {
@@ -1415,7 +1415,7 @@
               PixelTanks.userData.color = this.color;
             }
           },
-          cdraw: () => {
+          cdraw: function() {
             if (!this.target) {
               this.time = Date.now();
               this.color = PixelTanks.userData.color;
@@ -1477,13 +1477,13 @@
         shop: {
           buttons: [
             [424, 28, 108, 108, 'main', true],
-            [88, 212, 328, 64, () => {this.tab='items'}, true],
-            [456, 212, 328, 64, () => alert('removed'), false],
-            [824, 212, 328, 64, () => {this.tab='class'}, true],
-            [1192, 212, 328, 64, () => {this.tab='kits'}, true],
+            [88, 212, 328, 64, function() {this.tab='items'}, true],
+            [456, 212, 328, 64, function() {alert('removed')}, false],
+            [824, 212, 328, 64, function() {this.tab='class'}, true],
+            [1192, 212, 328, 64, function() {this.tab='kits'}, true],
           ],
           listeners: {
-            mousedown: () => {
+            mousedown: function() {
               if (this.tab === 'class') {
                 for (let i = 0; i < 6; i++) {
                   if (A.collider({x: Menus.x, y: Menus.t, w: 0, h: 0}, {x: [504, 720, 936][i%3], y: [416, 632][Math.floor(i/3)], w: 176, h: 176})) PixelTanks.purchase(['tactical', 'stealth', 'builder', 'warrior', 'fire', 'medic'][i]);
@@ -1491,7 +1491,7 @@
               }
             }
           },
-          cdraw: () => {
+          cdraw: function() {
             if (!this.tab) this.tab = 'armor';
             GUI.drawImage(PixelTanks.images.menus['shop_'+this.tab], 0, 0, 1600, 1000, 1);
             GUI.drawText(PixelTanks.userData.stats[0]+' coinage', 800, 350, 50, 0x000000, 0.5);
