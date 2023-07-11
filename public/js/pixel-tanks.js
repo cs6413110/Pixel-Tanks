@@ -735,12 +735,8 @@
         }
         
         const data = GUI.draw.getImageData(b[0]*PixelTanks.resizer, b[1]*PixelTanks.resizer, b[2]*PixelTanks.resizer, b[3]*PixelTanks.resizer);
-        Menus.scaler.width = b[2];
-        Menus.scaler.height = b[3];
-        Menus.scaler.getContext('2d').putImageData(data, 0, 0);
-        const image = new Image();
-        image.src = Menus.scaler.getContext('2d').toDataURL();
-        image.onload = () => GUI.drawImage(image, (b[0]-b[6])*PixelTanks.resizer, (b[1]-b[6])*PixelTanks.resizer, (b[2]+b[6]*2)*PixelTanks.resizer, (b[3]+b[6]*2)*PixelTanks.resizer, 1);
+        Menus.scaler.drawImage(GUI.draw, b[0], b[1], b[2], b[3]);
+        //GUI.drawImage(GUI.draw, (b[0]-b[6])*PixelTanks.resizer, (b[1]-b[6])*PixelTanks.resizer, (b[2]+b[6]*2)*PixelTanks.resizer, (b[3]+b[6]*2)*PixelTanks.resizer, 1);
       }
     }
   }
@@ -918,6 +914,7 @@
         }
       </style>`;
       Menus.scaler = document.createElement('CANVAS');
+      document.body.appendChild(Menus.scaler);
       GUI.canvas = document.createElement('CANVAS');
       GUI.draw = GUI.canvas.getContext('2d');
       document.body.appendChild(GUI.canvas);
