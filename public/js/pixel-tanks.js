@@ -733,8 +733,8 @@
             b[6] = Math.max(b[6]-1, 0);
           }
         }
-        const data = GUI.draw.getImageData(b[0], b[1], b[2], b[3]);
-        GUI.draw.putImageData(data, b[0]-b[6], b[1]-b[6])//, b[2]+b[6]*2, b[3]+b[6]*2);
+        const data = GUI.draw.getImageData(b[0]*PixelTanks.resizer, b[1]*PixelTanks.resizer, b[2]*PixelTanks.resizer, b[3]*PixelTanks.resizer);
+        GUI.draw.putImageData(data, (b[0]-b[6])*PixelTanks.resizer, (b[1]-b[6])*PixelTanks.resizer)//, b[2]+b[6]*2, b[3]+b[6]*2);
       }
     }
   }
