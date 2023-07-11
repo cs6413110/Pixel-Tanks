@@ -1353,12 +1353,13 @@
                 for (let xm = 0; xm < 2; xm++) {
                   for (let ym = 0; ym < 3; ym++) {
                     if (A.collider({x, y, w: 0, h: 0}, {x: [702, 816][xm], y: [348, 456, 564][ym], w: 88, h: 88})) {
-                    if (PixelTanks.userData.classes[[[0, 6, 3], [1, 4, 2]][xm][ym]]) {
-                      PixelTanks.userData.class = [['tactical', 'fire', 'medic'], ['stealth', 'builder', 'warrior']][xm][ym];
-                    } else {
-                      alert('You need to buy this first!');
+                      if (PixelTanks.userData.classes[[[0, 6, 3], [1, 4, 2]][xm][ym]]) {
+                        PixelTanks.userData.class = [['tactical', 'fire', 'medic'], ['stealth', 'builder', 'warrior']][xm][ym];
+                      } else {
+                        alert('You need to buy this first!');
+                      }
+                      return;
                     }
-                    return;
                   }
                 }
               } else if (this.itemTab) {
@@ -1425,7 +1426,7 @@
             GUI.draw.fillRect(1116, 264, 40, 40);
             GUI.drawText(this.color, 1052, 256, 20, this.color, 0);
             GUI.drawImage(PixelTanks.images.tanks.top, 1064, 458, 88, 88, 1);
-            for (let = 0; i < 4; i++) {
+            for (let i = 0; i < 4; i++) {
               GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[0]], [402, 490, 578, 666][i], 816, 80, 80, 1);
             }
             GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
@@ -1447,7 +1448,7 @@
               const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], fortress: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], mine: [904, 570]};
               for (const item in key) GUI.drawImage(PixelTanks.images.items[item], key[item][0], key[item][1], 80, 80, 1);
             } else if (this.cosmeticTab) {
-              const a = this.cosmeticMenu === 0, b = this.cosmeticMenu === Math.floor(PixelTanks.userData.cosmetics.length/16;
+              const a = this.cosmeticMenu === 0, b = this.cosmeticMenu === Math.floor(PixelTanks.userData.cosmetics.length/16);
               GUI.drawImage(PixelTanks.images.menus.cosmeticTab, 518+(a ? 62 : 0), 280, 564-(a ? 62 : 0)-(b ? 62 : 0), 440, 1, 0, 0, 0, 0, 0, (a ? 31 : 0), 0, 282-(a ? 31 : 0)-(b ? 31 : 0), 220);
               for (let i = this.cosmeticMenu*16; i < Math.min((this.cosmeticMenu+1)*16, PixelTanks.userData.cosmetics.length); i++) {
                 GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetics[i]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88, 1);
@@ -1458,11 +1459,11 @@
                 }
               }
             } else if (this.deathEffectsTab) {
-              const a = this.deathEffectsMenu === 0, b = this.deathEffectsMenu === Math.floor(PixelTanks.userData.deathEffects.length)/16;
+              const a = this.deathEffectsMenu === 0, b = this.deathEffectsMenu === Math.floor(PixelTanks.userData.deathEffects.length/16);
               GUI.drawImage(PixelTanks.images.menus.deathEffectsTab, 518+(a ? 62 : 0), 280, 564-(a ? 62 : 0)-(b ? 62 : 0), 440, 1, 0, 0, 0, 0, 0, (a ? 31 : 0), 0, 282-(a ? 31 : 0)-(b ? 31 : 0), 220);
               for (let i = this.deathEffectsMenu*16; i < Math.min((this.deathEffectsMenu+1)*16, PixelTanks.userData.deathEffects.length); i++) {
                 const d = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[i]+'_'];
-                GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[i]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-this.time)/d.speed)%d.frames*200, 0, 200, 200);
+                GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[i]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-this.time)/d.speed)%d.frames)*200, 0, 200, 200);
                 if (PixelTanks.userData.deathEffects[i] === PixelTanks.userData.deathEffect) {
                   GUI.draw.strokeStyle = 0xffff22;
                   GUI.draw.lineWidth = 10;
