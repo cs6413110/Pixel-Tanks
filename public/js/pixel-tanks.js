@@ -696,7 +696,7 @@
       this.listeners.click = this.onclick;
       for (const l in this.listeners) this.listeners[l] = this.listeners[l].bind(this);
       for (const b of this.buttons) {
-        b[4] = b[4].bind(this);
+        b[4] = () => b[4]();
         b[6] = 0;
       }
     }
@@ -818,6 +818,7 @@
       this.total++;
       return new Promise((resolve, reject) => {
         const image = new Image();
+        image.crossOrigin = 'Anonymous';
         image.onload = () => {
           this.loaded++;
           PixelTanks.updateBootProgress(Math.round(this.loaded/this.total*100)/100);
