@@ -695,7 +695,10 @@
       this.cdraw = cdraw.bind(this);
       this.listeners.click = this.onclick;
       for (const l in this.listeners) this.listeners[l] = this.listeners[l].bind(this);
-      for (const b of this.buttons) b[6] = 0;
+      for (const b of this.buttons) {
+        b[4] = b[4].bind(this);
+        b[6] = 0;
+      }
     }
     
     addListeners() {
@@ -718,6 +721,7 @@
     
     draw() {
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], 0, 0, 1600, 1000, 1);
+      this.cdraw();
       for (const b of this.buttons) {
         if (b[5]) {
           if (A.collider({x: b[0], y: b[1], w: b[2], h: b[3]}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
@@ -729,9 +733,9 @@
             b[6] = Math.max(b[6]-1, 0);
           }
         }
-        GUI.drawImage(PixelTanks.images.menus[this.id], b[0]-b[6], b[1]-b[6], b[2]+b[6]*2, b[3]+b[6]*2, 1, 0, 0, 0, 0, 0, b[0]/1600*700, b[1]/1000*438, b[2]/1600*700, b[3]/1000*438);
+        const data = GUI.draw.getImageData(b[0]/1600*700, b[1]/1000*438, b[2]/1600*700, b[3]/1000*438);
+        GUI.draw.putImageData(b[0]-b[6], b[1]-b[6], b[2]+b[6]*2, b[3]+b[6]*2);
       }
-      this.cdraw();
     }
   }
     
@@ -1188,34 +1192,26 @@
       Menus.menus = {
         start: {
           buttons: [
-            [580, 740, 200, 100, () => Network.auth(Menus.menus.start.username, Menus.menus.start.password, 'login', () => PixelTanks.getData(() => Menus.trigger('main'))), true],
-            [820, 740, 200, 100, () => Network.auth(Menus.menus.start.username, Menus.menus.start.password, 'signup', () => PixelTanks.getData(() => Menus.trigger('htp1'))), true],
-            [580, 480, 440, 60, () => {Menus.menus.start.type = 'username';}, false],
-            [580, 580, 440, 60, () => {Menus.menus.start.type = 'password';}, false],
+            [580, 740, 200, 100, () => PixelTanks.auth(this.username, this.password, 'login'), true],
+            [820, 740, 200, 100, () => PixelTanks.auth(this.username, this.password, 'signup'), true],
+            [580, 480, 440, 60, () => {this.type = 'username'}, false],
+            [580, 580, 440, 60, () => {this.type = 'password'}, false],
           ],
           listeners: {
             keydown: (e) => {
-              var start = Menus.menus.start;
-              if (e.key.length === 1) {
-                start[start.type] += e.key;
-              } else if (e.keyCode === 8) {
-                start[start.type] = start[start.type].slice(0, -1);
-              }
+              if (e.key.length === 1) this[this.type] += e.key;
+              if (e.keyCode === 8) this[this.type].splice(0, -1);
+              if (e.keyCode === 13) PixelTanks.auth(this.username, this.password, 'login');
             }
           },
           cdraw: () => {
-            if (!Menus.menus.start.type) {
-              Menus.menus.start.type = 'username';
-              Menus.menus.start.username = '';
-              Menus.menus.start.password = '';
+            if (!this.type) {
+              this.type = 'username';
+              this.username = '';
+              this.password = '';
             }
-            GUI.drawText(Menus.menus.start.username, 580, 495, 30, '#ffffff', 0)
-            var l = 0, temp = '';
-            while (l < Menus.menus.start.password.length) {
-              temp += '*';
-              l++;
-            }
-            GUI.drawText(temp, 580, 595, 30, '#ffffff', 0);
+            GUI.drawText(this.username, 580, 495, 30, '#ffffff', 0);
+            GUI.drawText(this.password.replace(/./g, '•'), 580, 595, 30, '#ffffff', 0);
           },
         },
         main: {
@@ -1226,12 +1222,15 @@
             [420, 920, 80, 80, 'inventory', true],
             [528, 896, 80, 80, 'crate', true],
             [620, 920, 80, 80, 'htp1', true],
-            [580, 360, 440, 100, 'alert("Singleplayer is coming soon!");', true],
-            [320, 920, 80, 80, `(() => {PixelTanks.user.token = undefined; PixelTanks.user.username = undefined; Menus.trigger('start');})();`],
+            [580, 360, 440, 100, () => alert('Singleplayer is coming soon!'), true],
+            [320, 920, 80, 80, () => {
+              PixelTanks.user.token = undefined;
+              PixelTanks.user.username = undefined;
+              Menus.trigger('start');
+            }],
           ],
           listeners: {},
           cdraw: () => {
-            PixelTanks.save();
             GUI.drawImage(PixelTanks.images.tanks.bottom, 800, 800, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.tanks.top, 800, 800, 80, 90, 1);
             if (PixelTanks.userData.cosmetic !== '' && PixelTanks.userData.cosmetic !== undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 800, 800, 80, 90, 1);
@@ -1244,27 +1243,36 @@
         multiplayer: {
           buttons: [
             [424, 28, 108, 108, 'main'],
-            [340, 376, 416, 116, `Menus.menus.multiplayer.gamemode = 'ffa'`],
-            [340, 532, 416, 116, `Menus.menus.multiplayer.gamemode = 'duels'`],
-            [340, 688, 416, 116, `Menus.menus.multiplayer.gamemode = 'tdm'`],
-            [340, 844, 416, 116, `Menus.menus.multiplayer.gamemode = 'juggernaut'`],
-            [868, 848, 368, 88, () => {PixelTanks.user.joiner = new MultiPlayerTank(Menus.menus.multiplayer.ip, Menus.menus.multiplayer.gamemode); Menus.removeListeners();}],
+            [340, 376, 416, 116, () => {this.gamemode = 'ffa'}, false],
+            [340, 532, 416, 116, () => {this.gamemode = 'duels'}, false],
+            [340, 688, 416, 116, () => {this.gamemode = 'tdm'}, false],
+            [340, 844, 416, 116, () => {this.gamemode = 'juggernaut'}, false],
+            [868, 848, 368, 88, () => {
+              PixelTanks.user.joiner = new MultiPlayerTank(this.ip, this.gamemode); 
+              Menus.removeListeners();
+            }],
           ],
           listeners: {
             keydown: (e) => {
-              if (e.key.length === 1) Menus.menus.multiplayer.ip += e.key;
-              if (e.keyCode === 8) Menus.menus.multiplayer.ip = Menus.menus.multiplayer.ip.slice(0, -1);
-              Menus.redraw();
+              if (e.key.length === 1) this.ip += e.key;
+              if (e.keyCode === 8) this.ip.splice(0, -1);
             }
           },
           cdraw: () => {
-            if (!Menus.menus.multiplayer.gamemode) Menus.menus.multiplayer.gamemode = 'ffa';
-            if (Menus.menus.multiplayer.ip === undefined) Menus.menus.multiplayer.ip = '141.148.128.231/ffa';
-            GUI.drawText(Menus.menus.multiplayer.ip, 800, 276, 50, '#FFFFFF', 0.5);
+            if (!this.gamemode) {
+              this.gamemode = 'ffa';
+              this.ip = '141.148.128.231/ffa';
+            }
+            GUI.drawText(this.ip, 800, 276, 50, '#FFFFFF', 0.5);
           }
         },
         crate: {
-          buttons: [[418, 112, 106, 106, 'main'], [1076, 114, 106, 106, 'cosmetic'], [625, 324, 564, 564, 'PixelTanks.openCrate()'], [0, 324, 564, 564, 'PixelTanks.openDeath()']],
+          buttons: [
+            [418, 112, 106, 106, 'main', true],
+            [1076, 114, 106, 106, 'cosmetic', true],
+            [625, 324, 564, 564, () => PixelTanks.openCrate(), false],
+            [0, 324, 564, 564, () => PixelTanks.openDeath(), false],
+          ],
           listeners: {},
           cdraw: () => {
             GUI.drawText('Crates: ' + PixelTanks.userData.stats[1], 800, 260, 30, '#ffffff', 0.5);
@@ -1272,395 +1280,225 @@
         },
         settings: {
           buttons: [
-            [59, 56, 53, 53, 'main'],
-            [397, 65, 38, 35, 'keybinds'],
+            [59, 56, 53, 53, 'main', true],
+            [397, 65, 38, 35, 'keybinds', true],
           ],
           listeners: {},
           cdraw: () => {}
         },
         htp1: {
           buttons: [
-            [12, 12, 120, 120, 'main'],
-            [476, 224, 320, 80, 'htp2'],
-            [804, 224, 320, 80, 'htp3'],
-            [1132, 224, 320, 80, 'htp4']
+            [12, 12, 120, 120, 'main', true],
+            [476, 224, 320, 80, 'htp2', true],
+            [804, 224, 320, 80, 'htp3', true],
+            [1132, 224, 320, 80, 'htp4', true],
           ],
           listeners: {},
-          cdraw: () => {}
+          cdraw: () => {},
         },
         htp2: {
           buttons: [
-            [12, 12, 120, 120, 'main'],
-            [148, 224, 320, 80, 'htp1'],
-            [804, 224, 320, 80, 'htp3'],
-            [1132, 224, 320, 80, 'htp4']
+            [12, 12, 120, 120, 'main', true],
+            [148, 224, 320, 80, 'htp1', true],
+            [804, 224, 320, 80, 'htp3', true],
+            [1132, 224, 320, 80, 'htp4', true],
           ],
           listeners: {},
           cdraw: () => {}
         },
         htp3: {
           buttons: [
-            [12, 12, 120, 120, 'main'],
-            [148, 224, 320, 80, 'htp1'],
-            [476, 224, 320, 80, 'htp2'],
-            [1132, 224, 320, 80, 'htp4']
+            [12, 12, 120, 120, 'main', true],
+            [148, 224, 320, 80, 'htp1', true],
+            [476, 224, 320, 80, 'htp2', true],
+            [1132, 224, 320, 80, 'htp4', true],
           ],
           listeners: {},
           cdraw: () => {}
         },
         htp4: {
           buttons: [
-            [12, 12, 120, 120, 'main'],
-            [148, 224, 320, 80, 'htp1'],
-            [476, 224, 320, 80, 'htp2'],
-            [804, 224, 320, 80, 'htp3']
+            [12, 12, 120, 120, 'main', true],
+            [148, 224, 320, 80, 'htp1', true],
+            [476, 224, 320, 80, 'htp2', true],
+            [804, 224, 320, 80, 'htp3', true],
           ],
           listeners: {},
           cdraw: () => {}
         },
         keybinds: {
           buttons: [
-            [40, 40, 120, 120, 'main'],
+            [40, 40, 120, 120, 'main', true],
           ],
-          listeners: {
-            keydown: (e) => {
-              if (Menus.menus.keybinds.keybind !== undefined) {
-                PixelTanks.userData.settings[Menus.menus.keybinds.keybind] = e.keyCode;
-              }
-              Menus.redraw();
-              PixelTanks.save();
-            },
-            mousedown: (e) => {
-              var x = e.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - ((window.innerWidth-window.innerHeight*1.6)/2)*PixelTanks.resizer;
-              var y = e.clientY + document.body.scrollTop + document.documentElement.scrollTop;
-              x /= PixelTanks.resizer;
-              y /= PixelTanks.resizer;
-              if ((x > 40 && x < 280) && (y > 760 && y < 840)) {
-                Menus.menus.keybinds.keybind = 'item1';
-              } else if ((x > 360 && x < 500) && (y > 760 && y < 840)) {
-                Menus.menus.keybinds.keybind = 'item2';
-              } else if ((x > 680 && x < 920) && (y > 760 && y < 840)) {
-                Menus.menus.keybinds.keybind = 'item3';
-              } else if ((x > 1000 && x < 1240) && (y > 760 && y < 840)) {
-                Menus.menus.keybinds.keybind = 'item4';
-              } else if ((x > 1000 && x < 1240) && (y > 640 && y < 720)) {
-                Menus.menus.keybinds.keybind = 'shoot';
-              } else if ((x > 40 && x < 280) && (y > 880 && y < 960)) {
-                Menus.menus.keybinds.keybind = 'fire1';
-              } else if ((x > 260 && x < 340) && (y > 880 && y < 960)) {
-                Menus.menus.keybinds.keybind = 'fire2';
-              } else {
-                Menus.menus.keybinds.keybind = undefined;
-              }
-              Menus.redraw();
-            },
-          },
-          cdraw: () => {
-            GUI.draw.strokeStyle = '#ffffff';
-            GUI.draw.lineWidth = 5;
-            switch (Menus.menus.keybinds.keybind) {
-              case 'item1':
-                GUI.draw.strokeRect(70, 140, 80, 50);
-                break;
-              case 'item2':
-                GUI.draw.strokeRect(70, 200, 80, 50);
-                break;
-              case 'item3':
-                GUI.draw.strokeRect(70, 260, 80, 50);
-                break;
-              case 'item4':
-                GUI.draw.strokeRect(70, 320, 80, 50);
-                break;
-              case 'shoot':
-                GUI.draw.strokeRect(70, 380, 80, 50);
-                break;
-              case 'fire1':
-                GUI.draw.strokeRect(260, 140, 80, 50);
-                break;
-              case 'fire2':
-                GUI.draw.strokeRect(260, 200, 80, 50);
-                break;
-            }
-            GUI.draw.fillStyle = '#000000';
-            GUI.draw.font = '20px Font';
-            GUI.draw.fillText(PixelTanks.userData.settings.item1, 190, 170);
-            GUI.draw.fillText(PixelTanks.userData.settings.item2, 190, 230);
-            GUI.draw.fillText(PixelTanks.userData.settings.item3, 190, 290);
-            GUI.draw.fillText(PixelTanks.userData.settings.item4, 190, 350);
-            GUI.draw.fillText(PixelTanks.userData.settings.shoot, 190, 410);
-            GUI.draw.fillText(PixelTanks.userData.settings.fire1, 420, 150);
-            GUI.draw.fillText(PixelTanks.userData.settings.item5, 420, 210);
-          },
+          listeners: {},
+          cdraw: () => {},
         },
         inventory: {
-          buttons: [[424, 28, 108, 108, 'main'], [1064, 458, 88, 88, `PixelTanks.switchTab('healthTab');`], [1112, 814, 88, 88, `PixelTanks.switchTab('classTab');`], [400, 814, 88, 88, `PixelTanks.switchTab('itemTab', 1);`], [488, 814, 88, 88, `PixelTanks.switchTab('itemTab', 2);`], [576, 814, 88, 88, `PixelTanks.switchTab('itemTab', 3);`], [664, 814, 88, 88, `PixelTanks.switchTab('itemTab', 4);`], [756, 220, 88, 88, `PixelTanks.switchTab('cosmeticTab');`], [556, 220, 88, 88, `PixelTanks.switchTab('deathEffectsTab');`]],
+          buttons: [
+            [424, 28, 108, 108, 'main', true],
+            [1064, 458, 88, 88, () => PixelTanks.switchTab('healthTab'), true],
+            [1112, 814, 88, 88, () => PixelTanks.switchTab('classTab'), true],
+            [400, 814, 88, 88, () => PixelTanks.switchTab('itemTab', 1), true],
+            [488, 814, 88, 88, () => PixelTanks.switchTab('itemTab', 2), true],
+            [576, 814, 88, 88, () => PixelTanks.switchTab('itemTab', 3), true],
+            [664, 814, 88, 88, () => PixelTanks.switchTab('itemTab', 4), true],
+            [756, 220, 88, 88, () => PixelTanks.switchTab('cosmeticTab'), true],
+            [556, 220, 88, 88, () => PixelTanks.switchTab('deathEffectsTab'), true],
+          ],
           listeners: {
-            mousedown: (e) => {
-              var m = {x: (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer, y: e.clientY/PixelTanks.resizer};
-              if (Menus.menus.inventory.healthTab) {}
-              if (Menus.menus.inventory.classTab) {
-                if (m.x < 688 || m.x > 912 || m.y < 334 || m.y > 666) {
-                  Menus.menus.inventory.classTab = false;
-                  return Menus.redraw();
+            mousedown: e => {
+              const {x, y} = Menus;
+              if (this.classTab) {
+                if (x < 688 || x > 912 || y < 334 || y > 666) return this.classTab = false;
+                for (let xm = 0; xm < 2; xm++) {
+                  for (let ym = 0; ym < 3; ym++) {
+                    if (A.collider({x, y, w: 0, h: 0}, {x: [702, 816][xm], y: [348, 456, 564][ym], w: 88, h: 88}) {
+                    if (PixelTanks.userData.classes[[[0, 6, 3], [1, 4, 2]][xm][ym]]) {
+                      PixelTanks.userData.class = [['tactical', 'fire', 'medic'], ['stealth', 'builder', 'warrior']][xm][ym];
+                    } else {
+                      alert('You need to buy this first!');
+                    }
+                    return;
+                  }
                 }
-                A.each([348, 456, 564], function(d) {if (A.collider(d.m, {x: 702, y: this, w: 88, h: 88})) PixelTanks.userData.classes[[0, 6, 3][d.i]] ? PixelTanks.userData.class = ['tactical', 'fire', 'medic'][d.i] : alert('You need to buy this first!')}, null, {m: m});
-                A.each([348, 456, 564], function(d) {if (A.collider(d.m, {x: 816, y: this, w: 88, h: 88})) PixelTanks.userData.classes[[1, 4, 2][d.i]] ? PixelTanks.userData.class = ['stealth', 'builder', 'warrior'][d.i] : alert('You need to buy this first!')}, null, {m: m});
+              } else if (this.itemTab) {
+                if (x < 580 || x > 1020 || y < 334 || y > 666) return this.itemTab = false;
+                const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], fortress: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], mine: [904, 570]};
+                for (const item in key) {
+                  if (x > key[item][0] && x < key[item][0]+80 && y > key[item][1] && y < key[item][1]+80) {
+                    if (!PixelTanks.userData.items.includes(item)) {
+                  PixelTanks.userData.items[this.currentItem-1] = item;
+                    } else {
+                      alert('You are not allowed to have more than 1 of the same item');
+                    }
+                    return;
+                  }
+                }
+              } else if (this.cosmeticTab) {
+                if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.cosmeticTab = false;
+                for (let i = 0; i < 16; i++) {
+                  if (A.collider({x, y, w: 0, h: 0}, {x: 598+(l%4)*108, y: 298+Math.floor(l/4)*108, w: 88, h: 88})) {
+                    if (e.button === 0) {
+                      PixelTanks.userData.cosmetic = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
+                    } else {
+                      PixelTanks.userData.cosmetics.splice(this.cosmeticMenu*16+i, 1);
+                    }
+                    return;
+                  }
+                }
+              } else if (this.deathEffectsTab) {
+                if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.deathEffectsTab = false;
+                for (let i = 0; i < 16; i++) {
+                  if (A.collider({x, y, w: 0, h: 0}, {x: 598+(l%4)*108, y: 298+Math.floor(l/4)*108, w: 88, h: 88})) {
+                    if (e.button === 0) {
+                      PixelTanks.userData.deathEffect = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i];
+                    } else {
+                      PixelTanks.userData.deathEffects.splice(this.deathEffectsMenu*16+i, 1);
+                    }
+                    return;
+                  }
+                }
               }
-              if (Menus.menus.inventory.itemTab) {
-                if (m.x < 580 || m.x > 1020 || m.y < 334 || m.y > 666) {
-                  Menus.menus.inventory.itemTab = false;
-                  return Menus.redraw();
-                }
-                var key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], fortress: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], mine: [904, 570]};
-                for (var property in key) if (m.x > key[property][0] && m.x < key[property][0]+80 && m.y > key[property][1] && m.y < key[property][1]+80) if (!PixelTanks.userData.items.includes(property)) PixelTanks.userData.items[Menus.menus.inventory.currentItem-1] = property; else alert('You are not allowed to have more than 1 of the same item');
-              }
-              if (Menus.menus.inventory.cosmeticTab) {
-                if (m.x < 518 || m.x > 1082 || m.y < 280 || m.y > 720) {
-                  Menus.menus.inventory.cosmeticTab = false;
-                  return Menus.redraw();
-                }
-                var l = 0;
-                while (l<16) {
-                  if (A.collider({...m, w: 0, h: 0}, {x: 598+(l%4)*108, y: 298+Math.floor(l/4)*108, w: 88, h: 88})) if (e.button === 0) PixelTanks.userData.cosmetic = PixelTanks.userData.cosmetics[Menus.menus.inventory.cosmeticMenu*16+l]; else if (e.button === 2) PixelTanks.userData.cosmetics.splice(Menus.menus.inventory.cosmeticMenu*16+l, 1);
-                  l++;
-                }
-              }
-              if (Menus.menus.inventory.deathEffectsTab) {
-                if (m.x < 518 || m.x > 1082 || m.y < 280 || m.y > 720) {
-                  Menus.menus.inventory.deathEffectsTab = false;
-                  return Menus.redraw();
-                }
-                var l = 0;
-                while (l<16) {
-                  if (A.collider({...m, w: 0, h: 0}, {x: 598+(l%4)*108, y: 298+Math.floor(l/4)*108, w: 88, h: 88})) if (e.button === 0) PixelTanks.userData.deathEffect = PixelTanks.userData.deathEffects[Menus.menus.inventory.deathEffectsMenu*16+l]; else if (e.button === 2) PixelTanks.userData.deathEffects.splice(Menus.menus.inventory.deathEffectsMenu*16+l, 1);
-                  l++;
-                }
-              }
-              Menus.redraw();
-              PixelTanks.save();
             },
             mousemove: (e) => {
-              Menus.menus.inventory.target = {x: e.clientX-window.innerWidth/2, y: e.clientY-window.innerHeight/2};
-              Menus.redraw();
+              this.target = {x: e.clientX-window.innerWidth/2, y: e.clientY-window.innerHeight/2};
             },
             keydown: (e) => {
-              if (e.key.length === 1) Menus.menus.inventory.color += e.key; else if (e.keyCode === 8) Menus.menus.inventory.color = Menus.menus.inventory.color.slice(0, -1); else if (Menus.menus.inventory.cosmeticTab) {if (e.keyCode === 37 && Menus.menus.inventory.cosmeticMenu !== 0) Menus.menus.inventory.cosmeticMenu--; else if (e.keyCode === 39 && Menus.menus.inventory.cosmeticMenu+1 !== Math.ceil(PixelTanks.userData.cosmetics.length/16)) Menus.menus.inventory.cosmeticMenu++;}  
-              PixelTanks.userData.color = Menus.menus.inventory.color;
-              Menus.redraw();
+              if (e.key.length === 1) this.color += e.key;
+              if (e.keyCode === 8) this.color.splice(0, -1);
+              if (this.cosmeticTab) {
+                if (e.keyCode === 37 && this.cosmeticMenu > 0) this.cosmeticMenu--;
+                if (e.keyCode === 39 && this.cosmeticMenu+1 !== Math.ceil(PixelTanks.userData.cosmetics.length/16)) this.cosmeticMenu++;
+              }
+              PixelTanks.userData.color = this.color;
             }
           },
           cdraw: () => {
-            if (!PixelTanks.userData.color) PixelTanks.userData.color = '#A9A9A9';
-            if (!Menus.menus.inventory.time) Menus.menus.inventory.time = Date.now();
-            if (!Menus.menus.inventory.color) Menus.menus.inventory.color = PixelTanks.userData.color;
-            if (!Menus.menus.inventory.target) Menus.menus.inventory.target = {x: 0, y: 0};
-            if (!Menus.menus.inventory.cosmeticMenu) Menus.menus.inventory.cosmeticMenu = 0;
-            if (!Menus.menus.inventory.deathEffectsMenu) Menus.menus.inventory.deathEffectsMenu = 0;
-            if (!PixelTanks.userData.deathEffects) PixelTanks.userData.deathEffects = [];
-
-            var key = ['red', 'steel', 'crystal', 'dark', 'light'];
-
-            GUI.draw.fillStyle = PixelTanks.userData.color;
+            if (!this.target) {
+              this.time = Date.now();
+              this.color = PixelTanks.userData.color;
+              this.target = {x: 0, y: 0};
+              this.cosmeticMenu = 0;
+              this.deathEffectsMenu = 0;
+            }
+            GUI.draw.fillStyle = this.color;
             GUI.draw.fillRect(1116, 264, 40, 40);
-            GUI.drawText(Menus.menus.inventory.color, 1052, 256, 20, PixelTanks.userData.color, 0);
+            GUI.drawText(this.color, 1052, 256, 20, this.color, 0);
             GUI.drawImage(PixelTanks.images.tanks.top, 1064, 458, 88, 88, 1);
-            GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[0]], 402, 816, 80, 80, 1);
-            GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[1]], 490, 816, 80, 80, 1);
-            GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[2]], 578, 816, 80, 80, 1);
-            GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[3]], 666, 816, 80, 80, 1);
-
+            for (let = 0; i < 4; i++) {
+              GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[0]], [402, 490, 578, 666][i], 816, 80, 80, 1);
+            }
             GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
-            GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(Menus.menus.inventory.target.x, Menus.menus.inventory.target.y)*180/Math.PI+360)%360);
-            if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(Menus.menus.inventory.target.x, Menus.menus.inventory.target.y)*180/Math.PI+360)%360);
+            GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
+            if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
 
-            if (Menus.menus.inventory.healthTab || Menus.menus.inventory.classTab || Menus.menus.inventory.itemTab || Menus.menus.inventory.cosmeticTab || Menus.menus.inventory.deathEffectsTab)  {
+            if (this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.deathEffectsTab) {
               GUI.draw.fillStyle = '#000000';
               GUI.draw.globalAlpha = .7;
               GUI.draw.fillRect(0, 0, 1600, 1600);
             }
-            if (Menus.menus.inventory.healthTab) {} else if (Menus.menus.inventory.classTab) {
+            if (this.classTab) {
               GUI.drawImage(PixelTanks.images.menus.classTab, 688, 334, 224, 332, 1);
               GUI.draw.strokeStyle = '#FFFF00';
               GUI.draw.lineWidth = 10;
               if (PixelTanks.userData.class === 'tactical') GUI.draw.strokeRect(701, 348, 88, 88); else if (PixelTanks.userData.class === 'fire') GUI.draw.strokeRect(701, 456, 88, 88); else if (PixelTanks.userData.class === 'medic') GUI.draw.strokeRect(701, 565, 88, 88); else if (PixelTanks.userData.class === 'stealth') GUI.draw.strokeRect(814, 348, 88, 88); else if (PixelTanks.userData.class === 'builder') GUI.draw.strokeRect(814, 456, 88, 88); else if (PixelTanks.userData.class === 'warrior') GUI.draw.strokeRect(814, 565, 88, 88);
-            } else if (Menus.menus.inventory.itemTab) {
+            } else if (this.itemTab) {
               GUI.drawImage(PixelTanks.images.menus.itemTab, 580, 334, 440, 332, 1);
-              var key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], fortress: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], mine: [904, 570]};
-              for (var property in key) GUI.drawImage(PixelTanks.images.items[property], key[property][0], key[property][1], 80, 80, 1);
-            } else if (Menus.menus.inventory.cosmeticTab) {
-              var crop = 0;
-              if (Menus.menus.inventory.cosmeticMenu === 0) crop++;
-              if (Menus.menus.inventory.cosmeticMenu === Math.ceil(PixelTanks.userData.cosmetics.length/16)-1) crop++;
-              GUI.drawImage(PixelTanks.images.menus.cosmeticTab, 518+(Menus.menus.inventory.cosmeticMenu === 0 ? 62 : 0), 280, 564-62*crop, 440, 1, 0, 0, 0, 0, 0, (Menus.menus.inventory.cosmeticMenu === 0 ? 31 : 0), 0, 282-31*crop, 220);
-              var l = Menus.menus.inventory.cosmeticMenu*16, end = l+16;
-              while (l<Math.min(end, PixelTanks.userData.cosmetics.length)) {
-                GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetics[l]], 598+(l%4)*108, 298+Math.floor((l%16)/4)*108, 88, 88, 1);
-                if (PixelTanks.userData.cosmetics[l] === PixelTanks.userData.cosmetic) {
+              const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], fortress: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], mine: [904, 570]};
+              for (const item in key) GUI.drawImage(PixelTanks.images.items[item], key[item][0], key[item][1], 80, 80, 1);
+            } else if (this.cosmeticTab) {
+              const a = this.cosmeticMenu === 0, b = this.cosmeticMenu === Math.floor(PixelTanks.userData.cosmetics.length/16;
+              GUI.drawImage(PixelTanks.images.menus.cosmeticTab, 518+(a ? 62 : 0), 280, 564-(a ? 62 : 0)-(b ? 62 : 0), 440, 1, 0, 0, 0, 0, 0, (a ? 31 : 0), 0, 282-(a ? 31 : 0)-(b ? 31 : 0), 220);
+              for (let i = this.cosmeticMenu*16; i < Math.min((this.cosmeticMenu+1)*16, PixelTanks.userData.cosmetics.length); i++) {
+                GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetics[i]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88, 1);
+                if (PixelTanks.userData.cosmetics[i] === PixelTanks.userData.cosmetic) {
                   GUI.draw.strokeStyle = '#FFFF22';
                   GUI.draw.lineWidth = 10;
-                  GUI.draw.strokeRect(598+(l%4)*108, 298+Math.floor((l%16)/4)*108, 88, 88);
+                  GUI.draw.strokeRect(598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88);
                 }
-                l++;
               }
-            } else if (Menus.menus.inventory.deathEffectsTab) {
-              var crop = 0;
-              if (Menus.menus.inventory.deathEffectsMenu === 0) crop++;
-              if (Menus.menus.inventory.deathEffectsMenu === Math.ceil(PixelTanks.userData.deathEffects.length/16)-1) crop++;
-              GUI.drawImage(PixelTanks.images.menus.deathEffectsTab, 518+(Menus.menus.inventory.deathEffectsMenu === 0 ? 62 : 0), 280, 564-62*crop, 440, 1, 0, 0, 0, 0, 0, (Menus.menus.inventory.deathEffectsMenu === 0 ? 31 : 0), 0, 282-31*crop, 220);
-              var l = Menus.menus.inventory.deathEffectsMenu*16, end = l+16;
-              while (l<Math.min(end, PixelTanks.userData.deathEffects.length)) {
-                GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[l]].image, 598+(l%4)*108, 298+Math.floor((l%16)/4)*108, 88, 88, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-Menus.menus.inventory.time)/PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[l]+'_'].speed)%PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[l]+'_'].frames)*200, 0, 200, 200);
-                if (PixelTanks.userData.deathEffects[l] === PixelTanks.userData.deathEffect) {
-                  GUI.draw.strokeStyle = '#FFFF22';
+            } else if (this.deathEffectsTab) {
+              const a = this.deathEffectsMenu === 0, b = this.deathEffectsMenu === Math.floor(PixelTanks.userData.deathEffects.length)/16;
+              GUI.drawImage(PixelTanks.images.menus.deathEffectsTab, 518+(a ? 62 : 0), 280, 564-(a ? 62 : 0)-(b ? 62 : 0), 440, 1, 0, 0, 0, 0, 0, (a ? 31 : 0), 0, 282-(a ? 31 : 0)-(b ? 31 : 0), 220);
+              for (let i = this.deathEffectsMenu*16; i < Math.min((this.deathEffectsMenu+1)*16, PixelTanks.userData.deathEffects.length); i++) {
+                const d = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[i]+'_'];
+                GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[i]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-this.time)/d.speed)%d.frames*200, 0, 200, 200);
+                if (PixelTanks.userData.deathEffects[i] === PixelTanks.userData.deathEffect) {
+                  GUI.draw.strokeStyle = 0xffff22;
                   GUI.draw.lineWidth = 10;
-                  GUI.draw.strokeRect(598+(l%4)*108, 298+Math.floor((l%16)/4)*108, 88, 88);
+                  GUI.draw.strokeRect(598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88);
                 }
-                l++;
               }
             }
           },
         },
         shop: {
           buttons: [
-            [424, 28, 108, 108, 'main'],
-            [88, 212, 328, 64, '(() => {Menus.menus.shop.tab="items"; Menus.redraw()})();'],
-            [456, 212, 328, 64, '(() => {Menus.menus.shop.tab="armor"; Menus.redraw()})();'],
-            [824, 212, 328, 64, '(() => {Menus.menus.shop.tab="class"; Menus.redraw()})();'],
-            [1192, 212, 328, 64, '(() => {Menus.menus.shop.tab="kits"; Menus.redraw()})();']
+            [424, 28, 108, 108, 'main', true],
+            [88, 212, 328, 64, () => {this.tab='items'}, true],
+            [456, 212, 328, 64, () => alert('removed'), false],
+            [824, 212, 328, 64, () => {this.tab='class'}, true],
+            [1192, 212, 328, 64, () => {this.tab='kits'}, true],
           ],
           listeners: {
-            mousedown: (e) => {
-              var x = (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer;
-              var y = e.clientY/PixelTanks.resizer;
-              var m = {x: x, y: y, w: 0, h: 0};
-              if (Menus.menus.shop.tab === 'items') {} else if (Menus.menus.shop.tab === 'armor') {
-                var d = {w: 160, h: 160};
-                if (A.collider(m, {...d, x: 424, y: 460})) PixelTanks.purchase('steel');
-                if (A.collider(m, {...d, x: 624, y: 460})) !PixelTanks.userData.armors[0] ? alert('You need to buy steel tank first!') : PixelTanks.purchase('crystal');
-                if (A.collider(m, {...d, x: 824, y: 460})) !PixelTanks.userData.armors[1] ? alert('You need to buy crystal tank first!') : PixelTanks.purchase('dark');
-                if (A.collider(m, {...d, x: 1024, y: 460})) !PixelTanks.userData.armors[2] ? alert('You need to buy dark tank first!') : PixelTanks.purchase('light');
-              } else if (Menus.menus.shop.tab === 'class') {
-                var d = {w: 176, h: 176}
-                if (A.collider(m, {...d, x: 504, y: 416})) PixelTanks.purchase('tactical');
-                if (A.collider(m, {...d, x: 720, y: 416})) PixelTanks.purchase('stealth');
-                if (A.collider(m, {...d, x: 936, y: 416})) PixelTanks.purchase('builder');
-                if (A.collider(m, {...d, x: 504, y: 632})) PixelTanks.purchase('warrior');
-                if (A.collider(m, {...d, x: 720, y: 632})) PixelTanks.purchase('fire');
-                if (A.collider(m, {...d, x: 936, y: 632})) PixelTanks.purchase('medic');
-              } else {}
-            },
-            mousemove: (e) => {
-              Menus.redraw();
-              var x = (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer;
-              var y = e.clientY/PixelTanks.resizer;
-              var m = {x: x, y: y, w: 0, h: 0};
-              if (Menus.menus.shop.tab === 'items') {} else if (Menus.menus.shop.tab === 'armor') {
-                var d = {w: 160, h: 160};
-                if (A.collider(m, {...d, x: 424, y: 460})) {
-                  GUI.draw.fillStyle = '#000000';
-                  GUI.draw.fillRect(x, y, 320, 170);
-                  GUI.draw.fillStyle = '#FFFFFF';
-                  GUI.draw.fillRect(x+10, y+10, 300, 150);
-                  GUI.drawText('Steel Tank', x+160, y+50, 50, '#000000', .5);
-                  GUI.drawText('+50HP     10000 coins', x+160, y+110, 30, '#000000', .5);
-                } else if (A.collider(m, {...d, x: 624, y: 460})) {
-                  GUI.draw.fillStyle = '#000000';
-                  GUI.draw.fillRect(x, y, 320, 170);
-                  GUI.draw.fillStyle = '#FFFFFF';
-                  GUI.draw.fillRect(x+10, y+10, 300, 150);
-                  GUI.drawText('Crystal Tank', x+160, y+50, 50, '#000000', .5);
-                  GUI.drawText('+100HP    50000 coins', x+160, y+110, 30, '#000000', .5);
-                } else if (A.collider(m, {...d, x: 824, y: 460})) {
-                  GUI.draw.fillStyle = '#000000';
-                  GUI.draw.fillRect(x, y, 320, 170);
-                  GUI.draw.fillStyle = '#FFFFFF';
-                  GUI.draw.fillRect(x+10, y+10, 300, 150);
-                  GUI.drawText('Dark Tank', x+160, y+50, 50, '#000000', .5);
-                  GUI.drawText('+150HP   100000 coins', x+160, y+110, 30, '#000000', .5);
-                } else if (A.collider(m, {...d, x: 1024, y: 460})) {
-                  GUI.draw.fillStyle = '#000000';
-                  GUI.draw.fillRect(x, y, 320, 170);
-                  GUI.draw.fillStyle = '#FFFFFF';
-                  GUI.draw.fillRect(x+10, y+10, 300, 150);
-                  GUI.drawText('Light Tank', x+160, y+50, 50, '#000000', .5);
-                  GUI.drawText('+200HP   150000 coins', x+160, y+110, 30, '#000000', .5);
-                }
-              } else if (Menus.menus.shop.tab === 'class') {
-                var d = {w: 176, h: 176};
-                if (A.collider(m, {...d, x: 504, y: 416})) {
-                  GUI.draw.fillStyle = '#000000';
-                  GUI.draw.fillRect(x, y, 320, 270);
-                  GUI.draw.fillStyle = '#FFFFFF';
-                  GUI.draw.fillRect(x+10, y+10, 300, 250);
-                  GUI.drawText('Tactical', x+160, y+50, 50, '#000000', .5);
-                  GUI.drawText('Boost Ability: Mines', x+20, y+110, 30, '#000000', 0);
-                  GUI.drawText('F: Megamissle', x+20, y+160, 30, '#000000', 0);
-                  GUI.drawText('70000 coins', x+20, y+210, 30, '#000000', 0);
-                } else if (A.collider(m, {...d, x: 720, y: 416})) {
-                  GUI.draw.fillStyle = '#000000';
-                  GUI.draw.fillRect(x, y, 320, 270);
-                  GUI.draw.fillStyle = '#FFFFFF';
-                  GUI.draw.fillRect(x+10, y+10, 300, 250);
-                  GUI.drawText('Stealth', x+160, y+50, 50, '#000000', .5);
-                  GUI.drawText('Boost Ability: Ghost', x+20, y+110, 30, '#000000', 0);
-                  GUI.drawText('F: Invisibility', x+20, y+160, 30, '#000000', 0);
-                  GUI.drawText('30000 coins', x+20, y+210, 30, '#000000', 0);
-                } else if (A.collider(m, {...d, x: 936, y: 416})) {
-                  GUI.draw.fillStyle = '#000000';
-                  GUI.draw.fillRect(x, y, 320, 270);
-                  GUI.draw.fillStyle = '#FFFFFF';
-                  GUI.draw.fillRect(x+10, y+10, 300, 250);
-                  GUI.drawText('Builder', x+160, y+50, 50, '#000000', .5);
-                  GUI.drawText('Boost Ability: Blocks', x+20, y+110, 30, '#000000', 0);
-                  GUI.drawText('F: Turret', x+20, y+160, 30, '#000000', 0);
-                  GUI.drawText('50000 coins', x+20, y+210, 30, '#000000', 0);
-                } else if (A.collider(m, {...d, x: 504, y: 632})) {
-                  GUI.draw.fillStyle = '#000000';
-                  GUI.draw.fillRect(x, y, 320, 270);
-                  GUI.draw.fillStyle = '#FFFFFF';
-                  GUI.draw.fillRect(x+10, y+10, 300, 250);
-                  GUI.drawText('Warrior', x+160, y+50, 50, '#000000', .5);
-                  GUI.drawText('Boost Ability: Damage', x+20, y+110, 30, '#000000', 0);
-                  GUI.drawText('F: Buff Mode', x+20, y+160, 30, '#000000', 0);
-                  GUI.drawText('70000 coins', x+20, y+210, 30, '#000000', 0);
-                } else if (A.collider(m, {...d, x: 720, y: 632})) {
-                  GUI.draw.fillStyle = '#000000';
-                  GUI.draw.fillRect(x, y, 320, 270);
-                  GUI.draw.fillStyle = '#FFFFFF';
-                  GUI.draw.fillRect(x+10, y+10, 300, 250);
-                  GUI.drawText('Fire', x+160, y+50, 50, '#000000', .5);
-                  GUI.drawText('Boost Ability: Fire', x+20, y+110, 30, '#000000', 0);
-                  GUI.drawText('F: Flamethrower', x+20, y+160, 30, '#000000', 0);
-                  GUI.drawText('70000 coins', x+20, y+210, 30, '#000000', 0);
-                } else if (A.collider(m, {...d, x: 936, y: 632})) {
-                  GUI.draw.fillStyle = '#000000';
-                  GUI.draw.fillRect(x, y, 320, 270);
-                  GUI.draw.fillStyle = '#FFFFFF';
-                  GUI.draw.fillRect(x+10, y+10, 300, 250);
-                  GUI.drawText('Medic', x+160, y+50, 50, '#000000', .5);
-                  GUI.drawText('Boost Ability: Healing', x+20, y+110, 30, '#000000', 0);
-                  GUI.drawText('F: Heal Team', x+20, y+160, 30, '#000000', 0);
-                  GUI.drawText('50000 coins', x+20, y+210, 30, '#000000', 0);
+            mousedown: () => {
+              if (this.tab === 'class') {
+                for (let i = 0; i < 6; i++) {
+                  if (A.collider({x: Menus.x, y: Menus.t, w: 0, h: 0}, {x: [504, 720, 936][i%3], y: [416, 632][Math.floor(i/3)], w: 176, h: 176})) PixelTanks.purchase(['tactical', 'stealth', 'builder', 'warrior', 'fire', 'medic'][i]);
                 }
               }
             }
           },
           cdraw: () => {
-            if (Menus.menus.shop.tab === undefined) Menus.menus.shop.tab = 'armor';
-            GUI.drawImage(PixelTanks.images.menus['shop_'+Menus.menus.shop.tab], 0, 0, 1600, 1000, 1);
+            if (!this.tab) this.tab = 'armor';
+            GUI.drawImage(PixelTanks.images.menus['shop_'+this.tab], 0, 0, 1600, 1000, 1);
             GUI.drawText(PixelTanks.userData.stats[0]+' coinage', 800, 350, 50, 0x000000, 0.5);
-            if (Menus.menus.shop.tab === 'items') {
-              var items = ['airstrike', 'super_glue', 'duck_tape', 'shield', 'flashbang', 'bomb', 'dynamite', 'weak', 'strong', 'spike', 'mine', 'fortress'];
-              
-            } else if (Menus.menus.shop.tab === 'armor') {
-
-            } else if (Menus.menus.shop.tab === 'class') {
-              if (!PixelTanks.userData.classes[0] && PixelTanks.userData.stats[0] < 70000) GUI.drawImage(PixelTanks.images.menus.broke, 504, 416, 176, 176, 1);
-              if (!PixelTanks.userData.classes[1] && PixelTanks.userData.stats[0] < 30000) GUI.drawImage(PixelTanks.images.menus.broke, 720, 416, 176, 176, 1);
-              if (!PixelTanks.userData.classes[4] && PixelTanks.userData.stats[0] < 50000) GUI.drawImage(PixelTanks.images.menus.broke, 936, 416, 176, 176, 1);
-              if (!PixelTanks.userData.classes[2] && PixelTanks.userData.stats[0] < 70000) GUI.drawImage(PixelTanks.images.menus.broke, 504, 632, 176, 176, 1);
-              if (!PixelTanks.userData.classes[6] && PixelTanks.userData.stats[0] < 70000) GUI.drawImage(PixelTanks.images.menus.broke, 720, 632, 176, 176, 1);
-              if (!PixelTanks.userData.classes[3] && PixelTanks.userData.stats[0] < 50000) GUI.drawImage(PixelTanks.images.menus.broke, 936, 632, 176, 176, 1);
+            if (this.tab === 'class') {
+              for (let i = 0; i < 6; i++) {
+                if (!PixelTanks.userData.classes[i] && PixelTanks.userData.stats[0] < [70000, 30000, 70000, 50000, 50000, 70000][i]) {
+                  GUI.drawImage(PixelTanks.images.menus.broke, [504, 720, 504, 936, 936, 720][i], [416, 416, 632, 632, 416, 632][i], 176, 176, 1);
+                }
+              }
             }
           },
         },
@@ -1722,8 +1560,16 @@
               },
             };
           }
+          clearInterval(PixelTanks.autosave);
+          PixelTanks.autosave = setInterval(() => PixelTanks.save(), 5000);
           callback();
         });
+    }
+
+    static auth(u, p, t) {
+      Network.auth(u, p, t, () => {
+        PixelTanks.getData(() => Menus.trigger(t === 'login' ? 'main' : 'htp1'));
+      });
     }
 
     static switchTab(id, n) {
