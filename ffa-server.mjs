@@ -17,8 +17,7 @@ import fetch from 'node-fetch';
 import HyperExpress from 'hyper-express';
 import jsonpack from 'jsonpack';
 import Filter from 'bad-words';
-import Game from './public/js/engine.js';
-const {Engine} = Game;
+import Engine from './public/js/engine.js';
 
 const filter = new Filter();
 export const Core = new HyperExpress.Router();

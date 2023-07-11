@@ -1,4 +1,4 @@
-export class Engine {
+class Engine {
   constructor(levels) {
     this.spawn = {x: 0, y: 0};
     this.ai = [];
@@ -621,3 +621,5 @@ class Ai {
     }
   }
 }
+
+export Engine;
