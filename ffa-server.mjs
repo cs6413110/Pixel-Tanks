@@ -155,6 +155,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
         return setImmediate(() => socket.destroy());
       }
     } else if (data.type === 'update') {
+      console.log(servers, socket.room, data);
       servers[socket.room].update(data);
     } else if (data.type === 'ping') {
       socket.send({event: 'ping', id: data.id});
