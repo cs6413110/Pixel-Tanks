@@ -665,4 +665,4 @@ class A {
     }
   }
 
-module.exports = {Engine};
+if (module) module.exports = {Engine};
