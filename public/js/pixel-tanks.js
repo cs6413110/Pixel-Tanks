@@ -1442,7 +1442,7 @@ const game = () => {
       player.r = this.tank.r;
       player.baseRotation = this.tank.baseRotation;
       player.baseFrame = this.tank.baseFrame;
-      GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-tank.x+760)*PixelTanks.resizer, (-this.y+460)*PixelTanks.resizer);
+      GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-this.tank.x+760)*PixelTanks.resizer, (-this.tank.y+460)*PixelTanks.resizer);
 
       GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
 
