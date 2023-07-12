@@ -3,11 +3,11 @@ json.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/json.js';
 json.onload = () => {
   const engine = document.createElement('SCRIPT');
   engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
-  engine.onload = PixelTanks.start;
+  engine.onload = Game;
   document.head.appendChild(engine);
 }
 document.head.appendChild(json);
-//onst game = () => {
+function Game() {
   class MegaSocket {
     constructor(url, options) {
       this.url = url;
@@ -1871,4 +1871,4 @@ document.head.appendChild(json);
   }
 
   window.onload = PixelTanks.start;
-//};
+};
