@@ -1,5 +1,3 @@
-const { Engine } = require("./engine");
-
 const json = document.createElement('SCRIPT');
 json.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/json.js';
 json.onload = () => {
@@ -646,7 +644,7 @@ const game = () => {
               this.password = '';
             }
             GUI.drawText(this.username, 580, 495, 30, '#ffffff', 0);
-            GUI.drawText(this.password.replace(/./g, '•'), 580, 595, 30, '#ffffff', 0);
+            GUI.drawText(this.password.replace(/./g, '*'), 580, 595, 30, '#ffffff', 0);
           },
         },
         main: {
