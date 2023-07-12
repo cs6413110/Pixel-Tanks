@@ -408,13 +408,10 @@ class Multiplayer extends Engine {
   }
 
   add(socket, data) {
-    console.log('Running Engine.add');
-    super.add(data);
-    console.log(this.pt.length);
-    this.pt[this.pt.length-1].socket = socket;
+    data.socket = socket;
     this.sockets.push(socket);
     this.logs.push({m: this.joinMsg(data.username), c: '#66FF00'});
-    console.log(this.sockets);
+    super.add(data);
   }
 
   update(data) {
