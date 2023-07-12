@@ -1451,11 +1451,11 @@ const game = () => {
       a.forEach(ai => this.drawAi(ai));
       t.forEach(tank => this.drawTank(tank));
       for (const block of b) {
-        if (b.s) {
+        if (block.s) {
           GUI.draw.fillStyle = '#000000';
-          GUI.draw.fillRect(b[l].x-2, b[l].y+108, 104, 11);
+          GUI.draw.fillRect(block[l].x-2, block[l].y+108, 104, 11);
           GUI.draw.fillStyle = '#0000FF';
-          GUI.draw.fillRect(b[l].x, b[l].y+110, 100*b[l].hp/b[l].maxHp, 5);
+          GUI.draw.fillRect(block[l].x, block[l].y+110, 100*block[l].hp/block[l].maxHp, 5);
         }
       }
       e.forEach(e => this.drawExplosion(e));
