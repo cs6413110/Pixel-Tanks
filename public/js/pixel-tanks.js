@@ -1440,7 +1440,9 @@ const game = () => {
       this.tank.baseRotation = (this.left === null) ? (this.up ? 180 : 0) : (this.left ? (this.up === null ? 90 : (this.up ? 135 : 45)) : (this.up === null ? 270 : (this.up ? 225: 315)));
 
       const player = t.find(tank => tank.username === PixelTanks.user.username);
-      player.x = this.tank.x;
+      try {
+        player.x = this.tank.x;
+      } catch(e) {console.log(JSON.stringify(this.hostupdate))}
       player.y = this.tank.y;
       player.r = this.tank.r;
       player.baseRotation = this.tank.baseRotation;
