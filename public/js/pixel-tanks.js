@@ -3,7 +3,7 @@ json.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/json.js';
 json.onload = () => {
   const engine = document.createElement('SCRIPT');
   engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
-  engine.onload = game();
+  engine.onload = game;
   document.head.appendChild(engine);
 }
 document.head.appendChild(json);
