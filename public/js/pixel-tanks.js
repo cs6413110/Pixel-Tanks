@@ -1246,8 +1246,10 @@ const game = () => {
         this.world = new Singleplayer([
           ['                      ### #   ','      ####       # ##         ','   #      ## #  ##        #  #','#        ###  ######      # # ','     ###            ##     ## ','   ##                ##  ###  ','  #              #            ',' #      #   #       ###   #  #','#     ##         ##   ##      ','      #                       ','           #### #       #    #','  #       #      #         # #','  ###  ##      #  #     #    #','    #  #       #   #        # ','    ### #      #         ## # ','    # #        #  #         # ','     ##  #     #         #    ','     ##  #     #         #    ','     ##   #    #        #  #  ','      ##     #         #  ##  ','        # #    #     ##   #   ',' # ###  #   #     #       #   ',' #      ##   #   #      ###  #',' #      # #  ###  ### ##     #','       #      # #####       # ','  ####        #            ## ','  #   ##                 ##   ',' ##    #   # ## #        #    ','  #           ##              ','                              '],
         ]);
-        this.world.add(joinData.tank);
-        setInterval(this.send.bind(this), 1000/60);
+        setTimeout(() => {
+          this.world.add(joinData.tank);
+          setInterval(this.send.bind(this), 1000/60);
+        });
       }
 
       document.addEventListener('keydown', this.keydown.bind(this));
