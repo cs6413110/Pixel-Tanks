@@ -1409,7 +1409,7 @@ const game = () => {
     frame() {
       this.render = requestAnimationFrame(this.frame.bind(this));
       GUI.clear();
-      if (this.hostupdate.pt === undefined) {
+      if (this.hostupdate.tanks === undefined) {
         GUI.draw.fillStyle = '#000000';
         return GUI.draw.fillText('Loading Terrain...', 100, 100);
       }
