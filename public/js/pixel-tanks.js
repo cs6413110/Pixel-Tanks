@@ -1864,9 +1864,9 @@ function Game() {
       super(levels);
     }
 
-    override(t) {
-      PixelTanks.user.player.x = t.x;
-      PixelTanks.user.player.y = t.y;
+    override(data) {
+      PixelTanks.user.player.tank.x = data.x;
+      PixelTanks.user.player.tank.y = data.y;
     }
   }
 
