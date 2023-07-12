@@ -1848,7 +1848,7 @@ const game = () => {
           blocks: this.world.b,
           bullets: this.world.s,
           ai: this.world.ai,
-          explosions: this.world.explosions,
+          explosions: this.world.d,
         }
       }
       this.tank.blockType = null;
