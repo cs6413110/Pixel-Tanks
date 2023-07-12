@@ -654,7 +654,10 @@ const game = () => {
             [420, 920, 80, 80, 'inventory', true],
             [528, 896, 80, 80, 'crate', true],
             [620, 920, 80, 80, 'htp1', true],
-            [580, 360, 440, 100, function() {alert('Singleplayer is coming soon!')}, true],
+            [580, 360, 440, 100, function() {
+              Menus.removeListeners();
+              PixelTanks.user.player = new Tank(null, false);
+            }, true],
             [320, 920, 80, 80, function() {
               PixelTanks.user.token = undefined;
               PixelTanks.user.username = undefined;
