@@ -3,11 +3,11 @@ json.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/json.js';
 json.onload = () => {
   const engine = document.createElement('SCRIPT');
   engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
-  engine.onload = game;
+  engine.onload = PixelTanks.start;
   document.head.appendChild(engine);
 }
 document.head.appendChild(json);
-const game = () => {
+//onst game = () => {
   class MegaSocket {
     constructor(url, options) {
       this.url = url;
@@ -1393,9 +1393,9 @@ const game = () => {
         const {speed, frames, kill} = PixelTanks.images.deathEffects[t.dedEffect.id+'_'];
         if (t.dedEffect.time/speed > frames) return;
         if (t.dedEffect.time/speed < kill) {
-        GUI.drawImage(PixelTanks.images.tanks.bottom, t.dedEffect.x, t.dedEffect.y, 80, 80, 1, 40, 40, 0, 0, 0);
-        GUI.drawImage(PixelTanks.images.tanks.destroyed, t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
-      if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
+          GUI.drawImage(PixelTanks.images.tanks.bottom, t.dedEffect.x, t.dedEffect.y, 80, 80, 1, 40, 40, 0, 0, 0);
+          GUI.drawImage(PixelTanks.images.tanks.destroyed, t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
+          if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
         }
         GUI.drawImage(PixelTanks.images.deathEffects[t.dedEffect.id], t.dedEffect.x-60, t.dedEffect.y-60, 200, 200, 1, 0, 0, 0, 0, 0, Math.floor(t.dedEffect.time/speed)*200, 0, 200, 200);
       }
@@ -1871,4 +1871,4 @@ const game = () => {
   }
 
   window.onload = PixelTanks.start;
-};
+//};
