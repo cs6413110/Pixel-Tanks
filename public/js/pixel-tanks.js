@@ -1,3 +1,5 @@
+const { Engine } = require("./engine");
+
 const json = document.createElement('SCRIPT');
 json.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/json.js';
 json.onload = () => {
@@ -1243,7 +1245,7 @@ const game = () => {
           setInterval(this.send.bind(this), 1000/60);
         });
       } else {
-        this.world = new Engine([
+        this.world = new Singleplayer([
           ['                      ### #   ','      ####       # ##         ','   #      ## #  ##        #  #','#        ###  ######      # # ','     ###            ##     ## ','   ##                ##  ###  ','  #              #            ',' #      #   #       ###   #  #','#     ##         ##   ##      ','      #                       ','           #### #       #    #','  #       #      #         # #','  ###  ##      #  #     #    #','    #  #       #   #        # ','    ### #      #         ## # ','    # #        #  #         # ','     ##  #     #         #    ','     ##  #     #         #    ','     ##   #    #        #  #  ','      ##     #         #  ##  ','        # #    #     ##   #   ',' # ###  #   #     #       #   ',' #      ##   #   #      ###  #',' #      # #  ###  ### ##     #','       #      # #####       # ','  ####        #            ## ','  #   ##                 ##   ',' ##    #   # ## #        #    ','  #           ##              ','                              '],
         ]);
         this.world.add(joinData.tank);
@@ -1846,6 +1848,17 @@ const game = () => {
       this.tank.airstrike = null;
       this.tank.fire = [];
       this.tank.use = [];
+    }
+  }
+
+  class Singleplayer extends Engine {
+    constructor(levels) {
+      super(levels);
+    }
+
+    override(t) {
+      PixelTanks.user.player.x = t.x;
+      PixelTanks.user.player.y = t.y;
     }
   }
 
