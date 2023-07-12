@@ -1243,7 +1243,7 @@ const game = () => {
           setInterval(this.send.bind(this), 1000/60);
         });
       } else {
-        this.world = new Engine();
+        this.world = new Engine([]);
         this.world.add(joinData.tank);
         setInterval(this.send.bind(this), 1000/60);
       }
