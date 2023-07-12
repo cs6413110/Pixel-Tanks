@@ -1236,10 +1236,12 @@ const game = () => {
             this.ups = 0;
             this.fps = 0;
           }, 1000);
+          setInterval(this.send.bind(this), 1000/60);
         });
       } else {
         this.world = new Singleplayer();
         this.world.add(joinData.tank);
+        setInterval(this.send.bind(this), 1000/60);
       }
 
       document.addEventListener('keydown', this.keydown.bind(this));
@@ -1247,7 +1249,6 @@ const game = () => {
       document.addEventListener('mousemove', this.mousemove.bind(this));
       document.addEventListener('mousedown', this.mousedown.bind(this));
       document.addEventListener('mouseup', this.mouseup.bind(this));
-      setInterval(this.send.bind(this), 1000/60);
       this.render = requestAnimationFrame(this.frame.bind(this));
     }
 
@@ -1828,7 +1829,6 @@ const game = () => {
     send() {
       const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank}
       if (this.multiplayer) {
-        if (!this.socket.status === 'connected') return;
         this.ops++;
         this.socket.send(updateData);
       } else {
