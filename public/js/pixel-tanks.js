@@ -1843,6 +1843,13 @@ const game = () => {
         this.socket.send(updateData);
       } else {
         this.world.update(updateData);
+        this.hostupdate = {
+          tanks: this.world.pt,
+          blocks: this.world.b,
+          bullets: this.world.s,
+          ai: this.world.ai,
+          explosions: this.world.explosions,
+        }
       }
       this.tank.blockType = null;
       this.tank.airstrike = null;
