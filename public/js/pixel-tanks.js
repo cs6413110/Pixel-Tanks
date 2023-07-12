@@ -1827,11 +1827,11 @@ const game = () => {
 
     send() {
       const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank}
-      if (this.multiplayer) {
+      if (this.multiplayer && this.socket.status === 'connected') {
         this.ops++;
         this.socket.send(updateData);
       } else {
-         this.world.update(updateData);
+        this.world.update(updateData);
       }
       this.tank.blockType = null;
       this.tank.airstrike = null;
