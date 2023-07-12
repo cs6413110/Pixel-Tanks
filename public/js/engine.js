@@ -665,4 +665,6 @@ class A {
     }
   }
 
-if (module) module.exports = {Engine};
+try {
+  module.exports = {Engine};
+} catch(e) {}
