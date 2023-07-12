@@ -1827,7 +1827,8 @@ const game = () => {
 
     send() {
       const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank}
-      if (this.multiplayer && this.socket.status === 'connected') {
+      if (this.multiplayer) {
+        if (!this.socket.status === 'connected') return;
         this.ops++;
         this.socket.send(updateData);
       } else {
