@@ -497,99 +497,55 @@ class Damage {
   }
 }
 
-class Ai {
+class AI {
   constructor(x, y, type, team, host) {
-    /*
-      0 -> turret
-      1 -> normal
-      2 -> shotgun
+    /* AI Roles
+      1 -> turret
+      2 -> attack - rushes in quick and switches to shotgun. Meant to deal damage
+      3 -> support - uses normal shooting but doesn't switch to shotgun unless the player fights close range
+      4 -> defense - "Bonds" to another non-defense tank and follows it. Basically the backup. Will fire at it's partner's target.
+      5 -> sniper - Ranges enemies
     */
+    this.role = ['turret', 'attack', 'support', 'defense', 'sniper'][type];
     this.x = x;
     this.y = y;
     this.r = 0;
     this.team = team;
     this.host = host;
     this.hp = 600;
-    this.p = 0;
-    this.setup = false;
-    setTimeout(function() {
-      this.setup = true;
-    }.bind(this), 1000);
-    if (type === 0) {
-      this.turret = true;
-    } else {
-      this.turret = false;
-    }
+    this.pushback = 0;
     this.canFire = true;
-    var l = 0;
-    while (l < this.host.pt.length) {
-      if (this.host.pt[l].username === this.host.getUsername(this.team)) {
-        this.cosmetic = this.host.pt[l].cosmetic;
-      }
-      l++;
-    }
+    this.canItem = true;
+    this.canClass = true;
+    this.item = '';
+    this.class = '';
+    const t = this.host.pt.find(t => t.username === this.host.getUsername(this.team));
+    this.cosmetic = t ? t.cosmetic || '';
   }
 
   update() {
-    if (!this.setup) return;
-    if (!this.identify()) {
-      return
-    };
+    if (!this.identify()) return;
     this.aim();
     if (this.canFire) {
       this.fire();
       this.canFire = false;
-      setTimeout(function() {this.canFire = true}.bind(this), 300);
+      setTimeout(() => {this.canFire = true}, 300);
     }
     if (this.pushback !== 0) this.pushback += 0.5;
   }
 
   toAngle(x, y) {
-    var angle = Math.atan2(x, y) * 180 / Math.PI
-    angle = -angle //-90;
-    if (angle < 0) {
-      angle += 360;
-    }
-    if (angle >= 360) {
-      angle -= 360;
-    }
-    return angle;
+    return (-Math.atan2(x, y)*180/Math.PI+360)%360;
   }
 
   toPoint(angle) {
-    var theta = (-angle) * Math.PI / 180;
-    var y = Math.cos(theta);
-    var x = Math.sin(theta);
-    if (x < 0) {
-      if (y < 0) {
-        return {
-          x: -1,
-          y: Math.round(-Math.abs(y / x) * 1000) / 1000,
-        };
-      } else {
-        return {
-          x: -1,
-          y: Math.round(Math.abs(y / x) * 1000) / 1000,
-        };
-      }
-    } else {
-      if (y < 0) {
-        return {
-          x: 1,
-          y: Math.round(-Math.abs(y / x) * 1000) / 1000,
-        };
-      } else {
-        return {
-          x: 1,
-          y: Math.round(Math.abs(y / x) * 1000) / 1000,
-        };
-      }
-    }
+    const theta = (-angle)*Math.PI/180, y = Math.cos(theta), x = Math.sin(theta);
+    return {x: x/Math.abs(x), y: y/Math.abs(x)};
   }
 
   identify() {
     var targets = [];
-    A.each(this.host.pt, function(i, ai, host, targets) {if (host.getTeam(this.team) !== host.getTeam(ai.team) && !this.ded && (!this.invis || ai.hp !== 400)) targets.push({idot: this, distance: Math.sqrt(Math.pow(this.x-ai.x, 2)+Math.pow(this.y-ai.y, 2))})}, null, null, this, this.host, targets);
+    A.each(this.host.pt, function(i, ai, host, targets) {if (host.getTeam(this.team) !== host.getTeam(ai.team) && !this.ded && (!this.invis || ai.hp !== 600)) targets.push({idot: this, distance: Math.sqrt(Math.pow(this.x-ai.x, 2)+Math.pow(this.y-ai.y, 2))})}, null, null, this, this.host, targets);
     A.each(this.host.ai, function(i, ai, host, targets) {if (host.getTeam(this.team) !== host.getTeam(ai.team)) targets.push({idot: this, distance: Math.sqrt(Math.pow(this.x-ai.x, 2)+Math.pow(this.y-ai.y, 2))})}, null, null, this, this.host, targets);
     if (targets.length === 0) {
       this.r += 1;
@@ -609,16 +565,14 @@ class Ai {
   }
 
   fire() {
-    this.p = -3;
-    var data = this.toPoint(this.r);
-    this.host.s.push(new Shot(this.x + 40, this.y + 40, data.x, data.y, 'bullet', 0, this.team, this.host));
+    this.pushback = -3;
+    const {x, y} = this.toPoint(this.r);
+    this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, 'bullet', 0, this.team, this.host));
   }
 
   damage(d) {
     this.hp -= d;
-    if (this.hp <= 0) {
-      setTimeout(() => this.host.ai.splice(this.host.ai.indexOf(this), 1));
-    }
+    if (this.hp <= 0) setTimeout(() => this.host.ai.splice(this.host.ai.indexOf(this)));
   }
 }
 
