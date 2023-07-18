@@ -509,7 +509,7 @@ class AI {
     this.role = role;
     this.x = x;
     this.y = y;
-    this.r = 0;
+    this.r = 45;
     this.mode = 0;
     this.rank = rank;
     this.team = team;
