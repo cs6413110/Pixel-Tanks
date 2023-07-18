@@ -117,7 +117,7 @@ class Engine {
     }
     if (use.includes('turret')) {
       this.ai.splice(this.ai.indexOf(this.ai.find(a => this.getUsername(a.team) === t.username)), 1);
-      this.ai.push(new AI(t.x, t.y, 1, t.rank, t.team, this));
+      this.ai.push(new AI(Math.floor(t.x/100)+10, Math.floor(t.y/100)+10, 1, t.rank, t.team, this));
     }
     if (use.includes('buff')) {
       t.buff = true;
@@ -541,10 +541,10 @@ class AI {
   }
 
   move() {
+    if ((this.x-10)/100 === 0 && (this.y-10)/100 === 0) this.onBlock();
     const frames = Math.floor((Date.now()-this.path.t)/15);
     this.x = this.path.p[Math.floor(frames/25)][0]+4*frames%25;
     this.y = this.path.p[Math.floor(frames/25)][1]+4*frames%25;
-    if ((this.x-10)/100 === 0 && (this.y-10)/100 === 0) this.onBlock();
   }
 
   onBlock() {
