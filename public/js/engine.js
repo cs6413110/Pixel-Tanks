@@ -580,6 +580,7 @@ class AI {
       while (!this.path) {
         const paths = coords.slice(0, Math.min(5, coords.length))
         const r = Math.floor(Math.random()*paths.length);
+        console.log(sx, sy, x, y);
         const {x, y} = paths[r];
         const p = finder.findPath(sx, sy, x, y, map.clone());
         if (![2, 3].includes(p.length)) {
