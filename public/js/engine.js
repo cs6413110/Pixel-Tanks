@@ -527,7 +527,7 @@ class AI {
     this.item = '';
     this.class = '';
     const t = host.pt.find(t => t.username === host.getUsername(this.team));
-    this.cosmetic = t ? t.cosmetic || '';
+    this.cosmetic = t ? t.cosmetic : '';
   }
 
   update() {
