@@ -168,7 +168,7 @@ class Engine {
         }
       });
       this.b.forEach(b => {
-        if (A.collider(t.x, t.y, 80, 80, b.x, b.y, 100, 100) && !t.ded && !t.immune) {
+        if (collision(t.x, t.y, 80, 80, b.x, b.y, 100, 100) && !t.ded && !t.immune) {
           if (b.type === 'mine' && b.a) {
             setTimeout(() => b.destroy());
           } else if (b.type === 'fire') {
