@@ -549,6 +549,7 @@ class AI {
 
   onBlock() {
     if (!this.path) this.generatePath();
+    console.log(this.path);
     if (this.path.m !== this.mode) this.generatePath();
   }
 
