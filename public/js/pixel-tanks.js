@@ -1,10 +1,15 @@
 const json = document.createElement('SCRIPT');
 json.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/json.js';
 json.onload = () => {
-  const engine = document.createElement('SCRIPT');
-  engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
-  engine.onload = Game;
-  document.head.appendChild(engine);
+  const pathfinding = document.createElement('SCRIPT');
+  pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
+  pathfinding.onload = () => {
+    const engine = document.createElement('SCRIPT');
+    engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
+    engine.onload = Game;
+    document.head.appendChild(engine);
+  }
+  document.head.appendChild(pathfinding);
 }
 document.head.appendChild(json);
 function Game() {

@@ -1,8 +1,6 @@
 try {
   PF = require('pathfinding');
-} catch(e) {
-  console.log(e);
-}
+} catch(e) {}
 
 const finder = new PF.AStarFinder({allowDiagonal: true, dontCrossCorners: true});
 const collision = (x, y, w, h, x2, y2, w2, h2) => {
