@@ -1,5 +1,6 @@
 try {
   const PF = require('pathfinding');
+  console.log(PF);
 } catch(e) {
   console.log(e);
 }
