@@ -556,6 +556,7 @@ class AI {
   generatePath() {
     const grid = [...Array(30)].map(() => [...Array(30)].map(() => 0));
     for (const b of this.host.b) grid[Math.floor(b.y/100)][Math.floor(b.x/100)] = (b.x%100 === 0 && b.y%100 === 0) ? 1 : 0;
+    console.log(grid);
     const map = new PF.Grid(grid);
     const routes = [
       [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]], // Shotgun path, Defense Bond Path
@@ -575,7 +576,6 @@ class AI {
       }
       coords = coords.filter(c => !Array.isArray(c));
       coords.sort((a, b) => a.d - b.d);
-      console.log(coords);
       this.path = false;
       while (!this.path) {
         const paths = coords.slice(0, Math.min(5, coords.length))
