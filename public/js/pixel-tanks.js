@@ -2,7 +2,7 @@ const json = document.createElement('SCRIPT');
 json.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/json.js';
 json.onload = () => {
   const pathfinding = document.createElement('SCRIPT');
-  pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
+  pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
   pathfinding.onload = () => {
     const engine = document.createElement('SCRIPT');
     engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
