@@ -555,7 +555,7 @@ class AI {
 
   generatePath() {
     const grid = [...Array(30)].map(() => [...Array(30)].map(() => 0));
-    for (const b of this.host.blocks) grid[Math.floor(b.y)][Math.floor(b.x)] = b.x%100 === 0 && b.y%100 === 0 ? 1 : 0;
+    for (const b of this.host.b) grid[Math.floor(b.y)][Math.floor(b.x)] = b.x%100 === 0 && b.y%100 === 0 ? 1 : 0;
     const map = new PF.Grid(grid);
     const routes = [
       [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]], // Shotgun path, Defense Bond Path
