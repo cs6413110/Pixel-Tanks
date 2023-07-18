@@ -1,3 +1,12 @@
+try {
+  import PF from 'pathfinding';
+} catch(e) {}
+
+const finder = new PF.AStarFinder({allowDiagonal: true, dontCrossCorners: true});
+const collision = (x, y, w, h, x2, y2, w2, h2) => {
+  return (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
+};
+
 class Engine {
   constructor(levels) {
     this.spawn = {x: 0, y: 0};
@@ -21,8 +30,8 @@ class Engine {
   update(data) {
     const t = this.pt.find(t => t.username === data.username);
     data = data.data;
-    const {emote, r, baseFrame, use, x, y} = data;
-    if ((t.emote !== emote || t.r !== r || t.baseFrame !== baseFrame || use.length || data.fire.length) || (!t.grapple && (t.x !== data.x || t.y !== data.y))) t.deathsPerMovement = 0;
+    const {emote, r, baseFrame, use, x, y, fire, airstrike} = data;
+    if ((t.emote !== emote || t.r !== r || t.baseFrame !== baseFrame || use.length || fire.length) || (!t.grapple && (t.x !== x || t.y !== y))) t.deathsPerMovement = 0;
     t.baseRotation = data.baseRotation;
     t.immune = data.immune;
     t.animation = data.animation;
@@ -93,7 +102,7 @@ class Engine {
     }
     if (use.includes('flashbang')) {
       this.pt.forEach(tank => {
-        if (!A.collider(tank.x-860, tank.y-560, 1800, 1200, t.x, t.y, 80, 80) || tank.username === t.username) return;
+        if (!collision(tank.x-860, tank.y-560, 1800, 1200, t.x, t.y, 80, 80) || tank.username === t.username) return;
         tank.flashbanged = true;
         clearTimeout(tank.flashbangTimeout);
         tank.flashbangTimeout = setTimeout(() => {
@@ -103,7 +112,7 @@ class Engine {
     }
     if (use.includes('bomb')) {
       this.b.forEach(b => {
-        if (A.collider(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) setTimeout(() => b.destroy());
+        if (collision(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) setTimeout(() => b.destroy());
       });
     }
     if (use.includes('turret')) {
@@ -122,15 +131,13 @@ class Engine {
     }
     if (use.includes('mine')) this.b.push(new Block(t.x, t.y, 0, 'mine', t.team, this));
     if (use.includes('shield')) t.shields = Math.min(500, t.shields+100);
-    if (data.airstrike) {
-      this.logs.push({c: '#ffffff', m: 'attempt airstrike at '+data.airstrike.x+', '+data.airstrike.y});
-      this.b.push(new Block(data.airstrike.x, data.airstrike.y, Infinity, 'airstrike', this.parseTeamExtras(t.team), this));
+    if (airstrike) {
+      this.logs.push({c: '#ffffff', m: 'attempt airstrike at '+airstrike.x+', '+airstrike.y});
+      this.b.push(new Block(airstrike.x, airstrike.y, Infinity, 'airstrike', this.parseTeamExtras(t.team), this));
     }
-    if (data.fire.length > 0) {
+    if (fire.length > 0) {
       t.pushback = -6;
-      data.fire.forEach(s => {
-        this.s.push(new Shot(t.x+40, t.y+40, s.x, s.y, s.type, s.r, s.type === 'grapple' ? t.username : this.parseTeamExtras(t.team), this));
-      });
+      for (const s of fire) this.s.push(new Shot(t.x+40, t.y+40, s.x, s.y, s.type, s.r, s.type === 'grapple' ? t.username : this.parseTeamExtras(t.team), this));
     }
   }
 
@@ -146,7 +153,7 @@ class Engine {
       if (t.pushback !== 0) t.pushback += 0.5;
       if (t.fire && this.getTeam(t.fire.team) !== this.getTeam(t.team)) this.damagePlayer(t, {x: t.x, y: t.y, u: this.getUsername(t.fire.team), a: .5});
       this.pt.forEach(tank => {
-        if (A.collider(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) {
+        if (collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) {
           if (t.immune && tank.canBashed) {
             if (t.class === 'warrior' && t.username !== tank.username) {
               this.damagePlayer(tank, {x: tank.x, y: tank.y, u: t.username, a: 50});
@@ -190,15 +197,15 @@ class Engine {
     this.d.forEach(d => {
       if (!d.c) return;
       this.pt.forEach(t => {
-        if (A.collider(d.x, d.y, d.w, d.h, t.x, t.y, 80, 80) && ((d.a > 0 && this.getTeam(d.team) !== this.getTeam(t.team)) || (d.a < 0 && this.getTeam(d.team) === this.getTeam(t.team)))) {
+        if (collision(d.x, d.y, d.w, d.h, t.x, t.y, 80, 80) && ((d.a > 0 && this.getTeam(d.team) !== this.getTeam(t.team)) || (d.a < 0 && this.getTeam(d.team) === this.getTeam(t.team)))) {
           this.damagePlayer(t, {...d, u: this.getUsername(d.team)});
         }
       });
       this.b.forEach(b => {
-        if (A.collider(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) b.damage(d.a);
+        if (collision(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) b.damage(d.a);
       });
       this.ai.forEach(ai => {
-        if (A.collider(d.x, d.y, d.w, d.h, this.x, this.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) ai.damage(d.a);
+        if (collision(d.x, d.y, d.w, d.h, this.x, this.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) ai.damage(d.a);
       });
       d.c = false;
     });
@@ -230,7 +237,7 @@ class Engine {
 
   collision(x, y) {
     if (x < 0 || y < 0 || x+80 > 3000 || y+80 > 3000) return false;
-    for (const b of this.b) if (A.collider(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) return false;
+    for (const b of this.b) if (collision(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) return false;
     return true;
   }
 
@@ -357,7 +364,7 @@ class Shot {
     const {host, x, y, type} = this;
     const blocks = this.host.b, ais = this.host.ai, pt = this.host.pt;
     for (const t of pt) {
-      if (t.ded || !A.collider(x, y, 10, 10, t.x, t.y, 80, 80)) continue;
+      if (t.ded || !collision(x, y, 10, 10, t.x, t.y, 80, 80)) continue;
       if (type === 'grapple') {
         if (t.grapple) t.grapple.bullet.destroy();
         t.grapple = {target: host.pt.find(tank => tank.username === host.getUsername(this.team)), bullet: this};
@@ -395,7 +402,7 @@ class Shot {
     };
 
     for (const ai of ais) {
-      if (!A.collider(ai.x, ai.y, 80, 80, x, y, 10, 10)) continue;
+      if (!collision(ai.x, ai.y, 80, 80, x, y, 10, 10)) continue;
       if (type === 'dynamite') {
         this.target = ai;
         this.offset = [ai.x-x, ai.y-y];
@@ -415,7 +422,7 @@ class Shot {
     }
 
     for (const b of blocks) {
-      if (!b.c || !A.collider(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
+      if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
       if (type === 'grapple') {
         const t = this.host.pt.find(t => t.username === host.getUsername(this.team));
         if (t.grapple) t.grapple.bullet.destroy();
@@ -497,172 +504,165 @@ class Damage {
   }
 }
 
-class Ai {
-  constructor(x, y, type, team, host) {
-    /*
-      0 -> turret
-      1 -> normal
-      2 -> shotgun
-    */
+class AI {
+  constructor(x, y, role, rank, team, host) {
+    this.role = role;
     this.x = x;
     this.y = y;
     this.r = 0;
+    this.mode = 0;
+    this.rank = rank;
     this.team = team;
     this.host = host;
-    this.hp = 600;
-    this.p = 0;
-    this.setup = false;
-    setTimeout(function() {
-      this.setup = true;
-    }.bind(this), 1000);
-    if (type === 0) {
-      this.turret = true;
-    } else {
-      this.turret = false;
-    }
+    this.hp = rank*10+300;
+    this.maxHp = this.hp;
+    this.pushback = 0;
+    this.target = false;
+    this.bond = false;
+    this.path = false;
+    this.delay = false;
     this.canFire = true;
-    var l = 0;
-    while (l < this.host.pt.length) {
-      if (this.host.pt[l].username === this.host.getUsername(this.team)) {
-        this.cosmetic = this.host.pt[l].cosmetic;
-      }
-      l++;
-    }
+    this.canItem = true;
+    this.canClass = true;
+    this.item = '';
+    this.class = '';
+    const t = host.pt.find(t => t.username === host.getUsername(this.team));
+    this.cosmetic = t ? t.cosmetic || '';
   }
 
   update() {
-    if (!this.setup) return;
-    if (!this.identify()) {
-      return
-    };
-    this.aim();
-    if (this.canFire) {
-      this.fire();
-      this.canFire = false;
-      setTimeout(function() {this.canFire = true}.bind(this), 300);
+    this.identify();
+    if (this.role !== 0) this.move();
+    if (this.mode !== 0) {
+      this.r = this.toAngle(this.target.x-this.x, this.target.y-this.y);
+      if (this.canFire) this.fire();
     }
     if (this.pushback !== 0) this.pushback += 0.5;
   }
 
-  toAngle(x, y) {
-    var angle = Math.atan2(x, y) * 180 / Math.PI
-    angle = -angle //-90;
-    if (angle < 0) {
-      angle += 360;
-    }
-    if (angle >= 360) {
-      angle -= 360;
-    }
-    return angle;
+  move() {
+    const frames = Math.floor((Date.now()-this.path.t)/15);
+    this.x = this.path.p[Math.floor(frames/25)][0]+4*frames%25;
+    this.y = this.path.p[Math.floor(frames/25)][1]+4*frames%25;
+    if ((this.x-10)/100 === 0 && (this.y-10)/100 === 0) this.onBlock();
   }
 
-  toPoint(angle) {
-    var theta = (-angle) * Math.PI / 180;
-    var y = Math.cos(theta);
-    var x = Math.sin(theta);
-    if (x < 0) {
-      if (y < 0) {
-        return {
-          x: -1,
-          y: Math.round(-Math.abs(y / x) * 1000) / 1000,
-        };
-      } else {
-        return {
-          x: -1,
-          y: Math.round(Math.abs(y / x) * 1000) / 1000,
-        };
+  onBlock() {
+    if (!this.path) this.generatePath();
+    if (this.path.m !== this.mode) this.generatePath();
+  }
+
+  generatePath() {
+    const grid = [...Array(30)].map(() => [...Array(30)].map(() => 0));
+    for (const b of this.host.blocks) grid[Math.floor(b.y)][Math.floor(b.x)] = b.x%100 === 0 && b.y%100 === 0 ? 1 : 0;
+    const map = new PF.Grid(grid);
+    const routes = [
+      [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]], // Shotgun path, Defense Bond Path
+      [[0, -3], [1, -3], [2, -2], [3, -1], [3, 0], [3, 1], [2, 2], [1, 3], [0, 3], [-1, 3], [-2, 2], [-3, 1], [-3, 0], [-3, -1], [-2, -2], [-1, -3]], // Exploration path
+      [[0, -5], [1, -5], [2, -5], [3, -4], [4, -3], [5, -2], [5, -1], [5, 0], [5, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 5], [0, 5], [-1, 5], [-2, 5], [-3, 4], [-4, 3], [-5, 2], [-5, 1], [-5, 0], [-5, -1], [-5, -2], [-4, -3], [-3, -4], [-2, -5], [-1, -5]], // Support Attacking path
+      [[0, -8], [1, -8], [2, -8], [3, -8], [4, -7], [5, -6], [6, -5], [7, -4], [8, -3], [8, -2], [8, -1], [8, 0], [8, 1], [8, 2], [8, 3], [7, 4], [6, 5], [5, 6], [4, 7], [3, 8], [2, 8], [1, 8], [0, 8], [-1, 8], [-2, 8], [-3, 8], [-4, 7], [-5, 6], [-6, 5], [-7, 4], [-8, 3], [-8, 2], [-8, 1], [-8, 0], [-8, -1], [-8, -2], [-8, -3], [-7, -4], [-6, -5], [-5, -6], [-4, -7], [-3, -8], [-2, -8], [-1, -8]], // Sniper path
+    ];
+    const sx = (this.x-10)/100, sy = (this.y-10)/100;
+    if (this.role === 3 && this.bond) { // Defense tanks priority is to remain by their teammate.
+      const distance = Math.sqrt((sx-this.bond.x)**2+(sy-this.bond.y)**2);
+    } else if (this.mode === 0) {
+      let coords = [[0, -3], [1, -3], [2, -2], [3, -1], [3, 0], [3, 1], [2, 2], [1, 3], [0, 3], [-1, 3], [-2, 2], [-3, 1], [-3, 0], [-3, -1], [-2, -2], [-1, -3]];
+      const rp = this.toPoint(this.r);
+      for (const c of coords) {
+        const x = c[0]+sx, y = c[1]+sy;
+        if (x > 0 && y > 0 && x < 30 && y < 30) c = {x, y, d: Math.sqrt((x-rp.x)**2+(y-rp.y)**2)};
       }
-    } else {
-      if (y < 0) {
-        return {
-          x: 1,
-          y: Math.round(-Math.abs(y / x) * 1000) / 1000,
-        };
-      } else {
-        return {
-          x: 1,
-          y: Math.round(Math.abs(y / x) * 1000) / 1000,
-        };
+      coords = coords.filter(c => !Array.isArray(c));
+      coords.sort((a, b) => a.d - b.d);
+      this.path = false;
+      while (!this.path) {
+        const paths = coords.slice(0, Math.min(5, coords.length))
+        const r = Math.floor(Math.random()*paths.length);
+        const {x, y} = paths[r];
+        const p = finder.findPath(sx, sy, x, y, map.clone());
+        if (![2, 3].includes(p.length)) {
+          coords.splice(r, 1);
+          if (coords.length === 0) return this.path = {p: [], m: this.mode, t: Date.now()};
+        } else {
+          this.path = {p, m: this.mode, t: Date.now()};
+        }
       }
+    } else if (this.mode === 1) { // All tanks attack
+    } else if (this.mode === 2) { // All tanks but attack tanks retreat
+      
     }
+    const path = finder.findPath(Math.floor(sx/100), Math.floor(sy/100), Math.floor(this.target.x/100), Math.floor(this.target.y/100), grid);
+    this.path = {p: path, m: this.mode};
   }
 
   identify() {
-    var targets = [];
-    A.each(this.host.pt, function(i, ai, host, targets) {if (host.getTeam(this.team) !== host.getTeam(ai.team) && !this.ded && (!this.invis || ai.hp !== 400)) targets.push({idot: this, distance: Math.sqrt(Math.pow(this.x-ai.x, 2)+Math.pow(this.y-ai.y, 2))})}, null, null, this, this.host, targets);
-    A.each(this.host.ai, function(i, ai, host, targets) {if (host.getTeam(this.team) !== host.getTeam(ai.team)) targets.push({idot: this, distance: Math.sqrt(Math.pow(this.x-ai.x, 2)+Math.pow(this.y-ai.y, 2))})}, null, null, this, this.host, targets);
+    const {host, team} = this;
+    const tanks = host.pt.concat(host.ai), targets = [], allies = [];
+    for (const t of tanks) {
+      if (!t.ded && this.raycast(t)) {
+        if (host.getTeam(team) === host.getTeam(t.team)) {
+          allies.push({t, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
+        } else {
+          targets.push({t, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
+        }
+      }
+    }
+    allies.sort((a, b) => a.distance - b.distance);
+    targets.sort((a, b) => a.distance - b.distance);
+    if (this.role === 3 && !this.bond && allies.length > 0) {
+      this.bond = allies[0].t;
+      this.mode = 1;
+    }
     if (targets.length === 0) {
-      this.r += 1;
-      return false; // no idots :(
+      if (this.role === 0) this.r++;
+      if (this.target) {
+        this.target.s = false;
+        setTimeout(() => {
+          this.mode = 0;
+          this.target = false;
+        }, 10000);
+      }  
+      return;
     }
-    targets.sort((a, b) => {return a.distance - b.distance}); // sort array to closest target
-    if (targets[0].distance > 1000) {
-      this.r += 1;
-      return false; // out of range
-    }
-    this.target = targets[0].idot; // select closest idot
-    return true;
-  }
-
-  aim() {
-    this.r = this.toAngle(this.target.x - this.x, this.target.y - this.y);
+    if (this.target) clearTimeout(this.target.c);
+    const t = targets[0].t;
+    this.target = {t, x: t.x, y: t.y, s: true}; // x and y show last logged coords
+    if (this.bond) return;
+    this.mode = (this.hp < .3*this.maxHp && this.role !== 1) ? 2 : 1;
   }
 
   fire() {
-    this.p = -3;
-    var data = this.toPoint(this.r);
-    this.host.s.push(new Shot(this.x + 40, this.y + 40, data.x, data.y, 'bullet', 0, this.team, this.host));
+    const isShotgun = Math.sqrt((this.target.x-this.x)**2+(this.target.y-this.y)**2) < 150;
+    const {x, y} = this.toPoint(this.r);
+    this.pushback = -3;
+    this.host.s.push(new Shot(this.x+40, this.y+40, x, y, isShotgun ? 'bullet' : 'shotgun', 0, this.team, this.host));
+    this.canFire = false;
+    setTimeout(() => {this.canFire = true}, isShotgun ? 200 : 600);
   }
 
   damage(d) {
     this.hp -= d;
-    if (this.hp <= 0) {
-      setTimeout(() => this.host.ai.splice(this.host.ai.indexOf(this), 1));
+    if (this.hp <= 0) setTimeout(() => this.host.ai.splice(this.host.ai.indexOf(this)));
+  }
+
+  toAngle(x, y) {
+    return (-Math.atan2(x, y)*180/Math.PI+360)%360;
+  }
+
+  toPoint(angle) {
+    const theta = (-angle)*Math.PI/180, y = Math.cos(theta), x = Math.sin(theta);
+    return {x: x/Math.abs(x), y: y/Math.abs(x)};
+  }
+
+  raycast(t) {
+    const {x, y} = this;
+    for (const b of this.host.b) {
+      const left = b.x, right = b.x+80, top = b.y, bottom = b.y+80, slope = (t.y-y)/(t.x-x), yleft = slope*(left-x)+y, yright = slope*(right-x)+y, xtop = (top-y)/slope+x, xbottom = (bottom-y)/slope+x;
+      if ((yleft >= top && yleft <= bottom) || (yright >= top && yright <= bottom) || (xtop >= left && xtop <= right) || (xbottom >= left && xbottom <= right)) return false;
     }
+    return true;
   }
 }
-
-class A {
-    static each(arr, func, key, value, ...param) {
-      var l = 0;
-      while (l<arr.length) {
-        if ((key === undefined || key === null) ? true : (arr[l][key] === value)) {
-          var r;
-          if (typeof func === 'string') {
-            r = arr[l][func].apply(arr[l], param);
-          } else {
-            param.unshift(l);
-            r = func.apply(arr[l], param);
-            param.shift();
-          }
-          if (r !== undefined) return r;
-        }
-        l++;
-      }
-    }
-  
-    static search(arr, key, value) {
-      var l = 0;
-      while (l<arr.length) {
-        if (arr[l][key] === value) {
-          return arr[l];
-        }
-        l++;
-      }
-    }
-  
-    static collider(x, y, w, h, x2, y2, w2, h2) {
-      return ((x > x2 || x+w > x2) && (x < x2+w2 || x+w < x2+w2) && (y > y2 || y+h > y2) && (y < y2+h2 || y+h < y2+h2)) ? true: false;
-    }
-  
-    static assign(...param) {
-      var l = 1;
-      while (l<param.length-1) {
-        param[0][param[l]] = param[l+1];
-        l+=2;
-      }
-    }
-  }
 
 try {
   module.exports = {Engine};
