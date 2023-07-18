@@ -1,5 +1,5 @@
 try {
-  import PF from 'pathfinding';
+  const PF = require('pathfinding');
 } catch(e) {}
 
 const finder = new PF.AStarFinder({allowDiagonal: true, dontCrossCorners: true});
