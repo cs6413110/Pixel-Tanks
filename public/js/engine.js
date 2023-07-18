@@ -569,7 +569,7 @@ class AI {
     } else if (this.mode === 0) {
       let coords = [[0, -3], [1, -3], [2, -2], [3, -1], [3, 0], [3, 1], [2, 2], [1, 3], [0, 3], [-1, 3], [-2, 2], [-3, 1], [-3, 0], [-3, -1], [-2, -2], [-1, -3]];
       const rp = this.toPoint(this.r);
-      for (const c of coords) {
+      for (let c of coords) {
         const x = c[0]+sx, y = c[1]+sy;
         if (x > 0 && y > 0 && x < 30 && y < 30) c = {x, y, d: Math.sqrt((x-rp.x)**2+(y-rp.y)**2)};
       }
