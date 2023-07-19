@@ -549,10 +549,9 @@ class AI {
       if (this.path.p.length === 0) return;
       frames = (this.path.p.length-1)*25;
     }
-    console.log(frames);
     const f = Math.floor(frames/25), n = f+1 === this.path.p.length ? f : f+1;
-    const dirx = this.path.p[f][0]-this.path.p[n][0] < 0 ? 1 : -1;
-    const diry = this.path.p[f][1]-this.path.p[n][1] < 0 ? 1 : -1;
+    const dirx = this.x-this.path.p[n][0] < 0 ? 1 : -1;
+    const diry = this.y-this.path.p[n][1] < 0 ? 1 : -1;
     this.x = this.path.p[f][0]*100+10 + dirx * 4 * (frames%25);
     this.y = this.path.p[f][1]*100+10 + diry * 4 * (frames%25);
   }
