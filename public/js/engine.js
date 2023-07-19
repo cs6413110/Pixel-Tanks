@@ -559,6 +559,7 @@ class AI {
 
   onBlock() {
     if (!this.path) this.generatePath();
+    if (this.path.p.length === 0) this.generatePath();
     if (this.path.p.length !== 0) {
       const final = this.path.p[this.path.p.length-1]; 
       if ((this.x-10)/100 === final[0] && (this.y-10)/100 === final[1]) this.generatePath();
