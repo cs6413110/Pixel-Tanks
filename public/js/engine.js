@@ -545,7 +545,10 @@ class AI {
   move() {
     if ((this.x - 10) % 100 === 0 && (this.y - 10) % 100 === 0) this.onBlock();
     let frames = Math.floor((Date.now() - this.path.t) / 15);
-    if ((this.path.p.length-1)*25 < frames) frames = (this.path.p.length-1)*25;
+    if ((this.path.p.length-1)*25 < frames) {
+      if (this.path.p.length === 0) return;
+      frames = (this.path.p.length-1)*25;
+    }
     console.log(frames);
     const f = Math.floor(frames/25), n = f+1 === this.path.p.length ? f : f+1;
     const dirx = this.path.p[f][0]-this.path.p[n][0] < 0 ? 1 : -1;
