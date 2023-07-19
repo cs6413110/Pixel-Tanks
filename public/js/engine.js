@@ -358,7 +358,7 @@ class Shot {
     const x2 = -r * b * d / c ** 2;
     const y1 = Math.abs(r * a) * d / c ** 2;
     const y2 = -Math.abs(r * a) * d / c ** 2;
-    return { x: ym >= 0 ? x1 * 2 + x : x2 * 2 + x, y: ym >= 0 ? y1 * 2 + y : y2 * 2 + y };
+    return { x: ym < 0 ? x1 * 2 + x : x2 * 2 + x, y: ym < 0 ? y1 * 2 + y : y2 * 2 + y };
   }
 
   collision() {
@@ -545,6 +545,7 @@ class AI {
   move() {
     if ((this.x - 10) % 100 === 0 && (this.y - 10) % 100 === 0) this.onBlock();
     const frames = Math.floor((Date.now() - this.path.t) / 15);
+    console.log(frames);
     this.x = this.path.p[Math.floor(frames / 25)][0] + 4 * frames % 25;
     this.y = this.path.p[Math.floor(frames / 25)][1] + 4 * frames % 25;
   }
