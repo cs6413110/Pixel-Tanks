@@ -354,8 +354,8 @@ class Shot {
     const b = a > 0 ? -1 : 1;
     const c = Math.sqrt(r ** 2 + (r * a) ** 2);
     const d = Math.sqrt(1100 * c ** 2);
-    const x1 = r * b * d / c ** 2;
-    const x2 = -r * b * d / c ** 2;
+    const x1 = -r * b * d / c ** 2;
+    const x2 = r * b * d / c ** 2;
     const y1 = Math.abs(r * a) * d / c ** 2;
     const y2 = -Math.abs(r * a) * d / c ** 2;
     return { x: ym >= 0 ? x1 * 2 + x : x2 * 2 + x, y: ym >= 0 ? y1 * 2 + y : y2 * 2 + y };
