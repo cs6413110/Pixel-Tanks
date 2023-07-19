@@ -17,7 +17,7 @@ class Engine {
     this.d = [];
     this.i = [];
     this.t = [];
-    this.levelReader(levels[Math.floor(Math.random() * levels.length)]);
+    //this.levelReader(levels[Math.floor(Math.random() * levels.length)]);
     this.i.push(setInterval(() => this.tick(), 1000 / 60));
   }
 
