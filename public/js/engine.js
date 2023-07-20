@@ -553,7 +553,7 @@ class AI {
    const f = Math.floor(frames/25), n = f+1 === this.path.p.length ? f : f+1;
    const dirx = this.path.p[n][0]-this.path.p[f][0];
    const diry = this.path.p[n][1]-this.path.p[f][1];
-   this.r = [[45, 0, 315], [90, null, 270], [135, 180, 225]][diry+1][dirx+1];
+   this.r = [[135, 0, 225], [90, null, 270], [45, 0, 315]][diry+1][dirx+1];
    this.x = this.path.p[f][0]*100+10 + dirx * 4 * (frames%25);
    this.y = this.path.p[f][1]*100+10 + diry * 4 * (frames%25);
  }
