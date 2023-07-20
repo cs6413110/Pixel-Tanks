@@ -1336,7 +1336,7 @@ function Game() {
     drawAi(a) {
       GUI.drawImage(PixelTanks.images.tanks.base, a.x, a.y, 80, 80, 1);
       GUI.drawImage(PixelTanks.images.tanks.top, a.x, a.y, 80, 90, 1, 40, 40, 0, a.pushback, a.r);
-      if (a.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[a.cosmetic], a.x, a.y, 80, 90, 1, 40, 40, 0, a.p, a.r);
+      if (a.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[a.cosmetic], a.x, a.y, 80, 90, 1, 40, 40, 0, a.pushback, a.r);
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(a.x, a.y+100, 80, 10);
       GUI.draw.fillStyle = '#00FF00';
