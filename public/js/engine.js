@@ -591,7 +591,6 @@ class AI {
       }
       coords = coords.filter(c => !Array.isArray(c));
       coords.sort((a, b) => a.d - b.d);
-      console.log(coords);
       this.path = false;
       while (!this.path) {
         const paths = coords.slice(0, Math.min(5, coords.length));
@@ -609,7 +608,7 @@ class AI {
       const tx = (this.target.x - 10) / 100, ty = (this.target.y - 10) / 100;
       if (this.role === 1) {
         if (Math.abs(sx - tx) > 5 || Math.abs(sy - ty) > 5) {
-          const coords = [[0, -5], [1, -5], [2, -5], [3, -4], [4, -3], [5, -2], [5, -1], [5, 0], [5, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 5], [0, 5], [-1, 5], [-2, 5], [-3, 4], [-4, 3], [-5, 2], [-5, 1], [-5, 0], [-5, -1], [-5, -2], [-4, -3], [-3, -4], [-2, -5], [-1, -5]];
+          let coords = [[0, -5], [1, -5], [2, -5], [3, -4], [4, -3], [5, -2], [5, -1], [5, 0], [5, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 5], [0, 5], [-1, 5], [-2, 5], [-3, 4], [-4, 3], [-5, 2], [-5, 1], [-5, 0], [-5, -1], [-5, -2], [-4, -3], [-3, -4], [-2, -5], [-1, -5]];
           for (const i in coords) {
             const x = coords[i][0] + sx, y = coords[i][1] + sy;
             if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x - tx) ** 2 + (y - ty) ** 2) };
