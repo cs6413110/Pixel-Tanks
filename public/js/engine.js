@@ -553,7 +553,7 @@ class AI {
    const f = Math.floor(frames/25), n = f+1 === this.path.p.length ? f : f+1;
    const dirx = this.path.p[n][0]-this.path.p[f][0];
    const diry = this.path.p[n][1]-this.path.p[f][1];
-   this.r = [[135, 0, 225], [90, null, 270], [45, 0, 315]][diry+1][dirx+1];
+   this.r = [[135, 180, 225], [90, null, 270], [45, 0, 315]][diry+1][dirx+1];
    this.x = this.path.p[f][0]*100+10 + dirx * 4 * (frames%25);
    this.y = this.path.p[f][1]*100+10 + diry * 4 * (frames%25);
  }
@@ -586,7 +586,7 @@ class AI {
      const rp = this.toPoint(this.r);
      for (const i in coords) {
        const x = coords[i][0] + sx, y = coords[i][1] + sy;
-       if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x - rp.x) ** 2 + (y - rp.y) ** 2) };
+       if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt(rp.x**2+rp.y**2) };
      }
      coords = coords.filter(c => !Array.isArray(c));
      coords.sort((a, b) => a.d - b.d);
