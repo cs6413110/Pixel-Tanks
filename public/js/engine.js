@@ -586,7 +586,7 @@ class AI {
      const rp = this.toPoint(this.r);
      for (const i in coords) {
        const x = coords[i][0] + sx, y = coords[i][1] + sy;
-       if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x-(sx+rp).x)**2+(y-(sy+rp.y))**2) };
+       if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x-(sx+rp.x))**2+(y-(sy+rp.y))**2) };
      }
      coords = coords.filter(c => !Array.isArray(c));
      coords.sort((a, b) => a.d - b.d);
