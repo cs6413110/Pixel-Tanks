@@ -674,7 +674,7 @@ class AI {
   }
 
   fire() {
-    const isShotgun = Math.sqrt((this.target.x - this.x) ** 2 + (this.target.y - this.y) ** 2) < 150;
+    const isShotgun = false;//Math.sqrt((this.target.x - this.x) ** 2 + (this.target.y - this.y) ** 2) < 150;
     const { x, y } = this.toPoint(this.r);
     this.pushback = -3;
     this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, isShotgun ? 'bullet' : 'shotgun', 0, this.team, this.host));
