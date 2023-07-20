@@ -592,7 +592,7 @@ class AI {
      coords.sort((a, b) => a.d - b.d);
      this.path = false;
      while (!this.path) {
-       const paths = coords.slice(0, Math.min(5, coords.length))
+       const paths = coords.slice(0, Math.min(3, coords.length));
        const r = Math.floor(Math.random() * paths.length);
        const { x, y } = paths[r];
        const p = finder.findPath(sx, sy, x, y, map.clone());
