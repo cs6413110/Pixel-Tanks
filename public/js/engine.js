@@ -630,7 +630,7 @@ class AI {
        } else {
        }
      } else if ([2, 3].includes(this.role)) {
-     } else if (this.role === 4
+     } else if (this.role === 4) {}
    } else if (this.mode === 2) { // All tanks but attack tanks retreat
 
    }
