@@ -590,6 +590,7 @@ class AI {
      }
      coords = coords.filter(c => !Array.isArray(c));
      coords.sort((a, b) => a.d - b.d);
+     console.log(coords);
      this.path = false;
      while (!this.path) {
        const paths = coords.slice(0, Math.min(3, coords.length));
