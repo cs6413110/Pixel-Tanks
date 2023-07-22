@@ -605,7 +605,7 @@ class AI {
         }
       }
     } else if (this.mode === 1) { // All tanks attack
-      const tx = (this.target.x - 10) / 100, ty = (this.target.y - 10) / 100; // May be inaccurate
+      const tx = Math.floor((this.target.x+40)/100), ty = Math.floor((this.target.y+40)/100); // May be inaccurate
       if (this.role === 1) {
         if (Math.abs(sx - tx) > 5 || Math.abs(sy - ty) > 5) {
           let coords = [[0, -5], [1, -5], [2, -5], [3, -4], [4, -3], [5, -2], [5, -1], [5, 0], [5, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 5], [0, 5], [-1, 5], [-2, 5], [-3, 4], [-4, 3], [-5, 2], [-5, 1], [-5, 0], [-5, -1], [-5, -2], [-4, -3], [-3, -4], [-2, -5], [-1, -5]];
