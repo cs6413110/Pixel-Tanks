@@ -17,7 +17,7 @@ class Engine {
     this.d = [];
     this.i = [];
     this.t = [];
-    //this.levelReader(levels[Math.floor(Math.random() * levels.length)]);
+    this.levelReader(levels[Math.floor(Math.random() * levels.length)]);
     this.i.push(setInterval(() => this.tick(), 1000 / 60));
   }
 
@@ -571,7 +571,7 @@ class AI {
     const map = new PF.Grid(30, 30);
     for (const b of this.host.b) {
       if (b.x < 0 || b.y < 0 || b.x > 2900 || b.y > 2900) continue;
-      map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), b.x % 100 === 0 && b.y % 100 === 0);
+      if (b.x % 100 === 0 && b.y % 100 === 0) map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), false);
     }
     const routes = [
       [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]], // Shotgun path, Defense Bond Path
@@ -605,9 +605,53 @@ class AI {
         }
       }
     } else if (this.mode === 1) { // All tanks attack
-      const tx = (this.target.x - 10) / 100, ty = (this.target.y - 10) / 100;
+      const tx = (this.target.x - 10) / 100, ty = (this.target.y - 10) / 100; // May be inaccurate
       if (this.role === 1) {
-        if (Math.abs(sx - tx) > 5 || Math.abs(sy - ty) > 5 || true) {
+        if (Math.abs(sx - tx) > 5 || Math.abs(sy - ty) > 5) {
+          let coords = [[0, -5], [1, -5], [2, -5], [3, -4], [4, -3], [5, -2], [5, -1], [5, 0], [5, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 5], [0, 5], [-1, 5], [-2, 5], [-3, 4], [-4, 3], [-5, 2], [-5, 1], [-5, 0], [-5, -1], [-5, -2], [-4, -3], [-3, -4], [-2, -5], [-1, -5]];
+          for (const i in coords) {
+            const x = coords[i][0] + sx, y = coords[i][1] + sy;
+            if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x - tx) ** 2 + (y - ty) ** 2) };
+          }
+          coords = coords.filter(c => !Array.isArray(c));
+          coords.sort((a, b) => a.d - b.d);
+          this.path = false;
+          while (!this.path) {
+            const paths = coords.slice(0, Math.min(5, coords.length))
+            const r = Math.floor(Math.random() * paths.length);
+            const { x, y } = paths[r];
+            const p = finder.findPath(sx, sy, x, y, map.clone());
+            if (![5, 6].includes(p.length)) {
+              coords.splice(r, 1);
+              if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
+            } else {
+              this.path = { p, m: this.mode, t: Date.now() };
+            }
+          }
+        } else { // Shotgun pvp pathfinding
+          let coords = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
+          for (const i in coords) {
+            const x = coords[i][0] + tx, y = coords[i][1] + ty;
+            if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x - sx) ** 2 + (y - sy) ** 2) };
+          }
+          coords = coords.filter(c => !Array.isArray(c));
+          coords.sort((a, b) => a.d - b.d);
+          this.path = false;
+          while (!this.path) {
+            const paths = coords.slice(0, Math.min(5, coords.length));
+            const r = Math.floor(Math.random() * paths.length);
+            const { x, y } = paths[r];
+            const p = finder.findPath(sx, sy, x, y, map.clone());
+            if (p.length === 0 && p.length > 6) { // fix?
+              coords.splice(r, 1);
+              if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
+            } else {
+              this.path = { p, m: this.mode, t: Date.now() };
+            }
+          }
+        }
+      } else if ([2, 3].includes(this.role)) {
+        if (Math.abs(sx - tx) > 10 || Math.abs(sy - ty) > 10) {
           let coords = [[0, -5], [1, -5], [2, -5], [3, -4], [4, -3], [5, -2], [5, -1], [5, 0], [5, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 5], [0, 5], [-1, 5], [-2, 5], [-3, 4], [-4, 3], [-5, 2], [-5, 1], [-5, 0], [-5, -1], [-5, -2], [-4, -3], [-3, -4], [-2, -5], [-1, -5]];
           for (const i in coords) {
             const x = coords[i][0] + sx, y = coords[i][1] + sy;
@@ -629,11 +673,29 @@ class AI {
             }
           }
         } else {
+          let coords = [[0, -5], [1, -5], [2, -5], [3, -4], [4, -3], [5, -2], [5, -1], [5, 0], [5, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 5], [0, 5], [-1, 5], [-2, 5], [-3, 4], [-4, 3], [-5, 2], [-5, 1], [-5, 0], [-5, -1], [-5, -2], [-4, -3], [-3, -4], [-2, -5], [-1, -5]];
+          for (const i in coords) {
+            const x = coords[i][0] + tx, y = coords[i][1] + ty;
+            if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x - sx) ** 2 + (y - sy) ** 2) };
+          }
+          coords = coords.filter(c => !Array.isArray(c));
+          coords.sort((a, b) => a.d - b.d);
+          this.path = false;
+          while (!this.path) {
+            const paths = coords.slice(0, Math.min(5, coords.length));
+            const r = Math.floor(Math.random() * paths.length);
+            const { x, y } = paths[r];
+            const p = finder.findPath(sx, sy, x, y, map.clone());
+            if ([5, 6].includes(p.length)) {
+              coords.splice(r, 1);
+              if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
+            } else {
+              this.path = { p, m: this.mode, t: Date.now() };
+            }
+          }
         }
-      } else if ([2, 3].includes(this.role)) {
       } else if (this.role === 4) { }
     } else if (this.mode === 2) { // All tanks but attack tanks retreat
-
     }
   }
 
