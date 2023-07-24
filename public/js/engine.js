@@ -23,14 +23,14 @@ class Engine {
 
   add(data) {
     data = { ...data, damage: false, maxHp: data.rank * 10 + 300, hp: data.rank * 10 + 300, deathsPerMovement: 0, canBashed: true, shields: 0, team: data.username + ':' + Math.random(), x: this.spawn.x, y: this.spawn.y, r: 0, pushback: 0, baseRotation: 0, baseFrame: 0, fire: false, healing: data.username };
-    this.pt.push(data);
     this.override(data);
+    this.pt.push(data);
   }
 
   update(data) {
-    const t = this.pt.find(t => t.username === data.username);
     data = data.data;
-    const { emote, r, baseFrame, use, x, y, fire, airstrike } = data;
+    const { emote, r, baseFrame, use, x, y, fire, airstrike, username } = data;
+    const t = this.pt.find(t => t.username === username);
     if ((t.emote !== emote || t.r !== r || t.baseFrame !== baseFrame || use.length || fire.length) || (!t.grapple && (t.x !== x || t.y !== y))) t.deathsPerMovement = 0;
     t.baseRotation = data.baseRotation;
     t.immune = data.immune;
@@ -573,129 +573,69 @@ class AI {
       if (b.x < 0 || b.y < 0 || b.x > 2900 || b.y > 2900) continue;
       if (b.x % 100 === 0 && b.y % 100 === 0) map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), false);
     }
-    const routes = [
-      [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]], // Shotgun path, Defense Bond Path
-      [[0, -3], [1, -3], [2, -2], [3, -1], [3, 0], [3, 1], [2, 2], [1, 3], [0, 3], [-1, 3], [-2, 2], [-3, 1], [-3, 0], [-3, -1], [-2, -2], [-1, -3]], // Exploration path
-      [[0, -5], [1, -5], [2, -5], [3, -4], [4, -3], [5, -2], [5, -1], [5, 0], [5, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 5], [0, 5], [-1, 5], [-2, 5], [-3, 4], [-4, 3], [-5, 2], [-5, 1], [-5, 0], [-5, -1], [-5, -2], [-4, -3], [-3, -4], [-2, -5], [-1, -5]], // Support Attacking path
-      [[0, -8], [1, -8], [2, -8], [3, -8], [4, -7], [5, -6], [6, -5], [7, -4], [8, -3], [8, -2], [8, -1], [8, 0], [8, 1], [8, 2], [8, 3], [7, 4], [6, 5], [5, 6], [4, 7], [3, 8], [2, 8], [1, 8], [0, 8], [-1, 8], [-2, 8], [-3, 8], [-4, 7], [-5, 6], [-6, 5], [-7, 4], [-8, 3], [-8, 2], [-8, 1], [-8, 0], [-8, -1], [-8, -2], [-8, -3], [-7, -4], [-6, -5], [-5, -6], [-4, -7], [-3, -8], [-2, -8], [-1, -8]], // Sniper path
-    ];
+    const {mode, role, bond, target, toPoint, r} = this;
     const sx = (this.x - 10) / 100, sy = (this.y - 10) / 100;
-    if (this.role === 3 && this.bond) { // Defense tanks priority is to remain by their teammate.
-      const distance = Math.sqrt((sx - this.bond.x) ** 2 + (sy - this.bond.y) ** 2);
-    } else if (this.mode === 0) {
-      let coords = [[0, -3], [1, -3], [2, -2], [3, -1], [3, 0], [3, 1], [2, 2], [1, 3], [0, 3], [-1, 3], [-2, 2], [-3, 1], [-3, 0], [-3, -1], [-2, -2], [-1, -3]];
-      const rp = this.toPoint(this.r);
-      for (const i in coords) {
-        const x = coords[i][0] + sx, y = coords[i][1] + sy;
-        if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x - (sx + rp.x)) ** 2 + (y - (sy + rp.y)) ** 2) };
+    // coords, sort order, path length limiter, target point, epicenter point
+    let coords, sortAsc, limiter, ranged, tpx, tpy, epx, epy, tx, ty;
+    if ([1, 2].includes(mode)) {
+      tx = Math.floor((target.x+40)/100);
+      ty = Math.floor((target.y+40)/100);
+      ranged = Math.sqrt((sx-tx)**2+(sy-ty)**2) < 5+[1, 5, 5, 8][role-1];
+    }
+    if (role === 3 && bond) {
+      epx = Math.floor((bond.x+40)/100);
+      epy = Math.floor((bond.y+40)/100);
+    } else if (mode === 0 || (mode === 1 && ranged) || mode === 2) {
+      epx = sx;
+      epy = sy;
+    } else if (mode === 1 && !ranged) {
+      epx = tx;
+      epy = tx;
+    }
+    if ((role === 3 && bond) || (role === 1 && mode === 1 && !ranged)) {
+      coords = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
+    } else if (mode === 0) {
+      coords = [[0, -3], [1, -3], [2, -2], [3, -1], [3, 0], [3, 1], [2, 2], [1, 3], [0, 3], [-1, 3], [-2, 2], [-3, 1], [-3, 0], [-3, -1], [-2, -2], [-1, -3]];
+    } else if ((mode === 1 && (ranged || [2, 3].includes(role)))) {
+      coords = [[0, -5], [1, -5], [2, -5], [3, -4], [4, -3], [5, -2], [5, -1], [5, 0], [5, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 5], [0, 5], [-1, 5], [-2, 5], [-3, 4], [-4, 3], [-5, 2], [-5, 1], [-5, 0], [-5, -1], [-5, -2], [-4, -3], [-3, -4], [-2, -5], [-1, -5]];
+    } else if (role === 4 && !ranged) {
+      coords = [[0, -8], [1, -8], [2, -8], [3, -8], [4, -7], [5, -6], [6, -5], [7, -4], [8, -3], [8, -2], [8, -1], [8, 0], [8, 1], [8, 2], [8, 3], [7, 4], [6, 5], [5, 6], [4, 7], [3, 8], [2, 8], [1, 8], [0, 8], [-1, 8], [-2, 8], [-3, 8], [-4, 7], [-5, 6], [-6, 5], [-7, 4], [-8, 3], [-8, 2], [-8, 1], [-8, 0], [-8, -1], [-8, -2], [-8, -3], [-7, -4], [-6, -5], [-5, -6], [-4, -7], [-3, -8], [-2, -8], [-1, -8]];
+    }
+    if ((role === 3 && bond) || (mode === 1 && !ranged)) {
+      tpx = sx;
+      tpy = sy;
+    } else if (mode === 0) {
+      const d = toPoint(r);
+      tpx = d.x;
+      tpy = d.y;
+    } else if (mode === 2 || (mode === 1 && ranged)) {
+      tpx = tx;
+      tpy = ty;
+    }
+    if (role === 3 && bond) {
+      limiter = [1];
+    } else if (mode === 0) {
+      limiter = [3, 4];
+    } else limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    sortAsc = mode !== 2;
+    for (const i in coords) {
+      const x = coords[i][0] + epx, y = coords[i][1] + epy;
+      if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x-tpx)**2+(y-tpy)**2) };
+    }
+    coords = coords.filter(c => !Array.isArray(c));
+    coords.sort((a, b) => sortAsc ? a.d - b.d : b.d - a.d);
+    this.path = false;
+    while (!this.path) {
+      const paths = coords.slice(0, Math.min(5, coords.length));
+      const r = Math.floor(Math.random() * paths.length);
+      const { x, y } = paths[r];
+      const p = finder.findPath(sx, sy, x, y, map.clone());
+      if (!limiter.includes(p.length)) {
+        coords.splice(r, 1);
+        if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
+      } else {
+        this.path = { p, m: this.mode, t: Date.now() };
       }
-      coords = coords.filter(c => !Array.isArray(c));
-      coords.sort((a, b) => a.d - b.d);
-      this.path = false;
-      while (!this.path) {
-        const paths = coords.slice(0, Math.min(5, coords.length));
-        const r = Math.floor(Math.random() * paths.length);
-        const { x, y } = paths[r];
-        const p = finder.findPath(sx, sy, x, y, map.clone());
-        if (![3, 4].includes(p.length)) {
-          coords.splice(r, 1);
-          if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
-        } else {
-          this.path = { p, m: this.mode, t: Date.now() };
-        }
-      }
-    } else if (this.mode === 1) { // All tanks attack
-      const tx = Math.floor((this.target.x+40)/100), ty = Math.floor((this.target.y+40)/100); // May be inaccurate
-      if (this.role === 1) {
-        if (Math.abs(sx - tx) > 5 || Math.abs(sy - ty) > 5) {
-          let coords = [[0, -5], [1, -5], [2, -5], [3, -4], [4, -3], [5, -2], [5, -1], [5, 0], [5, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 5], [0, 5], [-1, 5], [-2, 5], [-3, 4], [-4, 3], [-5, 2], [-5, 1], [-5, 0], [-5, -1], [-5, -2], [-4, -3], [-3, -4], [-2, -5], [-1, -5]];
-          for (const i in coords) {
-            const x = coords[i][0] + sx, y = coords[i][1] + sy;
-            if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x - tx) ** 2 + (y - ty) ** 2) };
-          }
-          coords = coords.filter(c => !Array.isArray(c));
-          coords.sort((a, b) => a.d - b.d);
-          this.path = false;
-          while (!this.path) {
-            const paths = coords.slice(0, Math.min(5, coords.length))
-            const r = Math.floor(Math.random() * paths.length);
-            const { x, y } = paths[r];
-            const p = finder.findPath(sx, sy, x, y, map.clone());
-            if (![5, 6].includes(p.length)) {
-              coords.splice(r, 1);
-              if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
-            } else {
-              this.path = { p, m: this.mode, t: Date.now() };
-            }
-          }
-        } else { // Shotgun pvp pathfinding
-          let coords = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
-          for (const i in coords) {
-            const x = coords[i][0] + tx, y = coords[i][1] + ty;
-            if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x - sx) ** 2 + (y - sy) ** 2) };
-          }
-          coords = coords.filter(c => !Array.isArray(c));
-          coords.sort((a, b) => a.d - b.d);
-          this.path = false;
-          while (!this.path) {
-            const paths = coords.slice(0, Math.min(5, coords.length));
-            const r = Math.floor(Math.random() * paths.length);
-            const { x, y } = paths[r];
-            const p = finder.findPath(sx, sy, x, y, map.clone());
-            if (p.length === 0 && p.length > 6) { // fix?
-              coords.splice(r, 1);
-              if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
-            } else {
-              this.path = { p, m: this.mode, t: Date.now() };
-            }
-          }
-        }
-      } else if ([2, 3].includes(this.role)) {
-        if (Math.abs(sx - tx) > 10 || Math.abs(sy - ty) > 10) {
-          let coords = [[0, -5], [1, -5], [2, -5], [3, -4], [4, -3], [5, -2], [5, -1], [5, 0], [5, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 5], [0, 5], [-1, 5], [-2, 5], [-3, 4], [-4, 3], [-5, 2], [-5, 1], [-5, 0], [-5, -1], [-5, -2], [-4, -3], [-3, -4], [-2, -5], [-1, -5]];
-          for (const i in coords) {
-            const x = coords[i][0] + sx, y = coords[i][1] + sy;
-            if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x - tx) ** 2 + (y - ty) ** 2) };
-          }
-          coords = coords.filter(c => !Array.isArray(c));
-          coords.sort((a, b) => a.d - b.d);
-          this.path = false;
-          while (!this.path) {
-            const paths = coords.slice(0, Math.min(5, coords.length))
-            const r = Math.floor(Math.random() * paths.length);
-            const { x, y } = paths[r];
-            const p = finder.findPath(sx, sy, x, y, map.clone());
-            if (![5, 6].includes(p.length)) {
-              coords.splice(r, 1);
-              if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
-            } else {
-              this.path = { p, m: this.mode, t: Date.now() };
-            }
-          }
-        } else {
-          let coords = [[0, -5], [1, -5], [2, -5], [3, -4], [4, -3], [5, -2], [5, -1], [5, 0], [5, 1], [5, 2], [4, 3], [3, 4], [2, 5], [1, 5], [0, 5], [-1, 5], [-2, 5], [-3, 4], [-4, 3], [-5, 2], [-5, 1], [-5, 0], [-5, -1], [-5, -2], [-4, -3], [-3, -4], [-2, -5], [-1, -5]];
-          for (const i in coords) {
-            const x = coords[i][0] + tx, y = coords[i][1] + ty;
-            if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x - sx) ** 2 + (y - sy) ** 2) };
-          }
-          coords = coords.filter(c => !Array.isArray(c));
-          coords.sort((a, b) => a.d - b.d);
-          this.path = false;
-          while (!this.path) {
-            const paths = coords.slice(0, Math.min(5, coords.length));
-            const r = Math.floor(Math.random() * paths.length);
-            const { x, y } = paths[r];
-            const p = finder.findPath(sx, sy, x, y, map.clone());
-            if ([5, 6].includes(p.length)) {
-              coords.splice(r, 1);
-              if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
-            } else {
-              this.path = { p, m: this.mode, t: Date.now() };
-            }
-          }
-        }
-      } else if (this.role === 4) { }
-    } else if (this.mode === 2) { // All tanks but attack tanks retreat
     }
   }
 
