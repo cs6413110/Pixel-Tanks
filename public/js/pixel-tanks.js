@@ -1529,7 +1529,7 @@ function Game() {
       if (e.keyCode === 8) this.msg = this.msg.slice(0, -1);
       if (e.keyCode === 13) {
         if (this.msg !== '') {
-          this.socket.send(this.msg.charAt(0) === '/' ? {type: 'command', data: this.msg.split(' ')} : {type: 'chat', msg: this.msg});
+          this.socket.send(this.msg.charAt(0) === '/' ? {type: 'command', data: this.msg.replace('/', '').split(' ')} : {type: 'chat', msg: this.msg});
           this.msg = '';
         }
         this.showChat = false;
