@@ -706,10 +706,16 @@ class AI {
   }
 
   raycast(t) {
-    const { x, y } = this;
-    for (const b of this.host.b) {
-      const left = b.x, right = b.x + 80, top = b.y, bottom = b.y + 80, slope = (t.y - y) / (t.x - x), yleft = slope * (left - x) + y, yright = slope * (right - x) + y, xtop = (top - y) / slope + x, xbottom = (bottom - y) / slope + x;
-      if ((yleft >= top && yleft <= bottom) || (yright >= top && yright <= bottom) || (xtop >= left && xtop <= right) || (xbottom >= left && xbottom <= right)) return false;
+    const x = this.x+40, y = this.y+40;
+    const x2 = t.x+40, y2 = t.y+40;
+    const dx = x2-x, dy = y2-y;
+    const steps = Math.max(Math.abs(dx), Math.abs(dy));
+    const xm = dx / steps, ym = dy / steps;
+    const cx = x, cy = y;
+    for (let i = 0; i < steps; i++) {
+      cx += xm;
+      cy += ym;
+      for (const b of this.host.b) if (cx >= b.x && cx <= b.x+100 && cy >= b.y && cy <= b.y+100) return false;
     }
     return true;
   }
