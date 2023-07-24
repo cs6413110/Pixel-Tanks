@@ -653,22 +653,19 @@ class AI {
     }
     allies.sort((a, b) => a.distance - b.distance);
     targets.sort((a, b) => a.distance - b.distance);
-    if (this.role === 3 && !this.bond && allies.length > 0) {
-      this.bond = allies[0].t;
-      this.mode = 1;
-    }
+    if (this.role === 3 && !this.bond && allies.length > 0) this.bond = allies[0].t
     if (targets.length === 0) {
       if (this.role === 0) this.r++;
       if (this.target) {
         this.target.s = false;
-        setTimeout(() => {
+        if (!this.target.c) this.target.c = setTimeout(() => {
           this.mode = 0;
           this.target = false;
         }, 10000);
       }
       return;
     }
-    if (this.target) clearTimeout(this.target.c);
+    if (this.target) this.target.c = clearTimeout(this.target.c);
     const t = targets[0].t;
     this.target = { t, x: t.x, y: t.y, s: true }; // x and y show last logged coords
     if (this.bond) return;
