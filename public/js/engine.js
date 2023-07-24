@@ -262,7 +262,7 @@ class Engine {
     victim.hp = Math.min(victim.maxHp, victim.hp - damage.a);
     if (victim.damage) clearTimeout(victim.damage.ti);
     victim.damage = { d: (victim.damage ? victim.damage.d : 0) + damage.a, x: damage.x, y: damage.y, ti: setTimeout(() => { victim.damage = false }, 1000) };
-    if (victim.hp <= 0 && this.ondeath) this.ondeath(victim, this.pt.find(t => t.ousername === damage.u));
+    if (victim.hp <= 0 && this.ondeath) this.ondeath(victim, this.pt.find(t => t.username === damage.u));
   }
 
   parseTeamExtras(s) {
