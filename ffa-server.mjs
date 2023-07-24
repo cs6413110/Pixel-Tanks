@@ -166,7 +166,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
       } catch(e) {}
       servers[socket.room].logs.push({m: `[${socket.username}] ${msg}`, c: '#ffffff'});
     } else if (data.type === 'command') {
-      const func = Commands[data.data[0]], args = data.data.shift();
+      const func = Commands[data.data[0]], args = data.data;
       if (typeof func === 'function') {
         func.bind(socket)(args);
       } else socket.send({status: 'error', message: 'Command not found.'});
