@@ -1691,7 +1691,7 @@ function Game() {
           }
         }, 25000, true],
         airstrike: [() => {
-          this.tank.airstrike = {x: this.mouse.x/PixelTanks.resizer-this.tank.x+1460, y: this.mouse.y/PixelTanks.resizer-this.tank.y+860};
+          this.tank.airstrike = {x: this.mouse.x/PixelTanks.resizer+this.tank.x-1460, y: this.mouse.y/PixelTanks.resizer+this.tank.y-860};
         }, 40000, false],
         fortress: [() => {
           this.tank.use.push('block');
