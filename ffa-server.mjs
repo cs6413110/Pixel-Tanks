@@ -398,8 +398,6 @@ class A {
 class Multiplayer extends Engine {
   constructor(levels) {
     super(levels);
-    this.sockets = [];
-    this.logs = [];
     if (!SETTINGS.fps_boost) this.i.push(setInterval(() => this.send(), 1000/SETTINGS.UPS));
   }
 
@@ -409,7 +407,6 @@ class Multiplayer extends Engine {
 
   add(socket, data) {
     data.socket = socket;
-    this.sockets.push(socket);
     this.logs.push({m: this.joinMsg(data.username), c: '#66FF00'});
     super.add(data);
   }
@@ -451,7 +448,6 @@ class Multiplayer extends Engine {
   }
 
   disconnect(socket, code, reason) {
-    this.sockets.splice(this.sockets.indexOf(socket), 1);
     A.each(this.pt, function(i, pt) {pt.splice(i, 1)}, 'username', socket.username, this.pt);
     A.each(this.ai, function(i, ai, host, username) {
       if (host.getUsername(this.team) === username) ai.splice(i, 1);
