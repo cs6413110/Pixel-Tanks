@@ -638,7 +638,7 @@ class AI {
         this.path = { p, m: this.mode, t: Date.now() };
       }
     }
-    this.host.logs.push({m: 'c: '+Math.abs(coords[0][1])+' m: '+this.mode+' e is s '+(epx === sx && epy === sy)+' t is s: '+(epx === tx && epy === ty), c: '#ffffff'});
+    this.host.logs.push({m: 'c: '+JSON.stringify(coords)+' m: '+this.mode+' e is s '+(epx === sx && epy === sy)+' t is s: '+(epx === tx && epy === ty), c: '#ffffff'});
   }
 
   identify() {
