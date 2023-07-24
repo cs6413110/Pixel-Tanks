@@ -166,7 +166,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
       } catch(e) {}
       servers[socket.room].logs.push({m: `[${socket.username}] ${msg}`, c: '#ffffff'});
     } else if (data.type === 'command') {
-      const [commandName, ...args] = data.data, func = Commands[commandName];
+      const func = Commands[data.data[0]], args = data.data.shift();
       if (typeof func === 'function') {
         func.bind(socket)(args);
       } else socket.send({status: 'error', message: 'Command not found.'});
@@ -185,7 +185,7 @@ const Commands = {
     if (servers[this.room].pt.find(t => servers[this.room].getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
     if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
     servers[this.room].pt.find(t => t.username === this.username).team = this.username+':'+data[1]+'@leader';
-    servers[this.room].logs.push({m: this.username+' rcreated team '+data[1]+'. Use /join '+data[1]+' to join.', c: '#0000FF'});
+    servers[this.room].logs.push({m: this.username+' created team '+data[1]+'. Use /join '+data[1]+' to join.', c: '#0000FF'});
   },
   join: data => {
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
