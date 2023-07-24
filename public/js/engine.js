@@ -28,9 +28,9 @@ class Engine {
   }
 
   update(data) {
+    const t = this.pt.find(t => t.username === data.username);
     data = data.data;
-    const { emote, r, baseFrame, use, x, y, fire, airstrike, username } = data;
-    const t = this.pt.find(t => t.username === username);
+    const { emote, r, baseFrame, use, x, y, fire, airstrike} = data;
     if ((t.emote !== emote || t.r !== r || t.baseFrame !== baseFrame || use.length || fire.length) || (!t.grapple && (t.x !== x || t.y !== y))) t.deathsPerMovement = 0;
     t.baseRotation = data.baseRotation;
     t.immune = data.immune;
