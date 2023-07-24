@@ -710,6 +710,7 @@ class AI {
     const x2 = t.x+40, y2 = t.y+40;
     const dx = x2-x, dy = y2-y;
     const steps = Math.max(Math.abs(dx), Math.abs(dy));
+    if (steps === 0) return true;
     const xm = dx / steps, ym = dy / steps;
     const cx = x, cy = y;
     for (let i = 0; i < steps; i++) {
