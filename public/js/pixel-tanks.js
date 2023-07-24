@@ -777,7 +777,7 @@ function Game() {
         inventory: {
           buttons: [
             [424, 28, 108, 108, 'main', true],
-            [1064, 458, 88, 88, function() {PixelTanks.switchTab('healthTab')}, true],
+            [1064, 458, 88, 88, function() {alert('Not available since bradley didnt make menus')}, false],
             [1112, 814, 88, 88, function() {PixelTanks.switchTab('classTab')}, true],
             [400, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 1)}, true],
             [488, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 2)}, true],
@@ -868,7 +868,7 @@ function Game() {
             GUI.drawText(this.color, 1052, 256, 20, this.color, 0);
             GUI.drawImage(PixelTanks.images.tanks.top, 1064, 458, 88, 88, 1);
             for (let i = 0; i < 4; i++) {
-              GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[0]], [402, 490, 578, 666][i], 816, 80, 80, 1);
+              GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [402, 490, 578, 666][i], 816, 80, 80, 1);
             }
             GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
             GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
