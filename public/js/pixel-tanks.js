@@ -1731,7 +1731,7 @@ function Game() {
       for (let i = 0; i < 6; i++) {
         if (k === PixelTanks.userData.keybinds.emotes[i]) this.emote(Pixel.userData.emotes[i]);
       }
-      if (k === 14) this.showChat = true;
+      if (k === 13) this.showChat = true;
       if (k === 9) {
         this.fireType = this.fireType < 2 ? 2 : 1;
         clearInterval(this.fireInterval);
