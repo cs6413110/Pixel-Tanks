@@ -681,7 +681,7 @@ class AI {
     this.pushback = -3;
     this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, isShotgun ? 'shotgun' : 'bullet', 0, this.team, this.host));
     this.canFire = false;
-    setTimeout(() => { this.canFire = true }, isShotgun ? 200 : 600);
+    setTimeout(() => { this.canFire = true }, isShotgun ? 600 : 200);
   }
 
   damage(d) {
