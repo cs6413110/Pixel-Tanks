@@ -1,6 +1,6 @@
 ﻿try {
   PF = require('pathfinding');
-} catch (e) { }
+} catch (e) {}
 
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
 const collision = (x, y, w, h, x2, y2, w2, h2) => {
@@ -617,16 +617,9 @@ class AI {
       limiter = [1];
     } else if (mode === 0) {
       limiter = [3, 4];
-    } else limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    } else limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
     sortAsc = mode !== 2;
-    alert(`
-           s=(${sx}, ${sy})
-           t=(${tx}, ${ty})
-           c=${coords[0][1]}
-           m=${mode}
-           es=${epx === sx && epy === sy}
-           r=${ranged}
-           t=${Date.now()}`);
+    this.host.logs = [{m: `s=(${sx}, ${sy}) t=(${tx}, ${ty}) c=${coords[0][1]} m=${mode} es=${epx === sx && epy === sy} r=${ranged} t=${Date.now()}`, c: '#ffffff'}];
     for (const i in coords) {
       const x = coords[i][0] + epx, y = coords[i][1] + epy;
       if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x-tpx)**2+(y-tpy)**2) };
@@ -639,7 +632,7 @@ class AI {
       const r = Math.floor(Math.random() * paths.length);
       const { x, y } = paths[r];
       const p = finder.findPath(sx, sy, x, y, map.clone());
-      if (!limiter.includes(p.length)) {
+      if (!limiter.includes(p.length) || ) {
         coords.splice(r, 1);
         if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
       } else {
