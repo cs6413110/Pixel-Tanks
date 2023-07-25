@@ -1712,9 +1712,10 @@ function Game() {
         this.timers.items[slot].cooldown = cooldown;
         this.timers.items[slot].time = Date.now();
         this['canItem'+slot] = false;
-        setTimeout(function() {
+        clearTimeout(this['itemTimeout'+slot]);
+        this['itemTimeout'+slot] = setTimeout(() => {
           this['canItem'+slot] = true;
-        }.bind(this), cooldown);
+        }, cooldown);
       }
     }
 
