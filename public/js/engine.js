@@ -624,7 +624,7 @@ class AI {
            t=(${tx}, ${ty})
            c=${coords[0][1]}
            m=${mode}
-           es=${epx === sx && epy === sy)}
+           es=${epx === sx && epy === sy}
            r=${ranged}
            t=${Date.now()}`);
     for (const i in coords) {
