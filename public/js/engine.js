@@ -118,7 +118,7 @@ class Engine {
     }
     if (use.includes('turret')) {
       this.ai.splice(this.ai.indexOf(this.ai.find(a => this.getUsername(a.team) === t.username)), 1);
-      this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 1, t.rank, t.team+'L', this));
+      this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 2, t.rank, t.team+'L', this));
     }
     if (use.includes('buff')) {
       t.buff = true;
@@ -619,7 +619,7 @@ class AI {
       limiter = [3, 4];
     } else limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     sortAsc = mode !== 2;
-    this.host.logs.push({m: 'c='+coords[0][1]+' m='+mode+' es='+(epx === sx && epy === sy)+' t='+Date.now(), c: '#ffffff'});
+    this.host.logs.push({m: 'c='+coords[0][1]+' m='+mode+' es='+(epx === sx && epy === sy)+' r='+ranged+' t='+Date.now(), c: '#ffffff'});
     for (const i in coords) {
       const x = coords[i][0] + epx, y = coords[i][1] + epy;
       if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x-tpx)**2+(y-tpy)**2) };
