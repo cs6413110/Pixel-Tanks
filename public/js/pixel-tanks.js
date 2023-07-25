@@ -1857,7 +1857,7 @@ function Game() {
           bullets: this.world.s,
           ai: this.world.ai,
           explosions: this.world.d,
-          logs: this.world.logs,
+          logs: this.world.logs.reverse(),
         }
       }
       this.tank.blockType = null;
