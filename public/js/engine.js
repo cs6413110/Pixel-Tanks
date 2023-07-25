@@ -619,7 +619,7 @@ class AI {
       limiter = [3, 4];
     } else limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     sortAsc = mode !== 2;
-    this.host.logs.push({m: 'c='+coords[0][1]+' m='+mode+' es='+(epx === sx && epy === sy)+' r='+ranged+' t='+Date.now(), c: '#ffffff'});
+    alert({m: 'c='+coords[0][1]+' m='+mode+' es='+(epx === sx && epy === sy)+' r='+ranged+' t='+Date.now(), c: '#ffffff'});
     for (const i in coords) {
       const x = coords[i][0] + epx, y = coords[i][1] + epy;
       if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x-tpx)**2+(y-tpy)**2) };
