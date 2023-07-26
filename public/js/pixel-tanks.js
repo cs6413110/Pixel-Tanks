@@ -1338,12 +1338,12 @@ function Game() {
 
     drawAI(ai) {
       const {x, y, role, r, baseRotation, pushback, cosmetic, hp, maxHp} = ai;
-      GUI.drawImage(PixelTanks.images.tanks[role === 5 ? 'base' : 'bottom'], x, y, 80, 80, 1);
+      GUI.drawImage(PixelTanks.images.tanks[role === 5 ? 'base' : 'bottom'], x, y, 80, 80, 1, 40, 40, 0, 0, baseRotation);
       GUI.drawImage(PixelTanks.images.tanks.top, x, y, 80, 90, 1, 40, 40, 0, pushback, r);
       if (cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[cosmetic], x, y, 80, 90, 1, 40, 40, 0, pushback, r);
-      GUI.draw.fillStyle = 0x000000;
+      GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(x, y+100, 80, 10);
-      GUI.draw.fillStyle = 0x00FF00;
+      GUI.draw.fillStyle = '#00FF00';
       GUI.draw.fillRect(x+4, y+102, 72*hp/maxHp, 6);
     }
 
