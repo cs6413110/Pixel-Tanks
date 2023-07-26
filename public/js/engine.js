@@ -513,6 +513,7 @@ class AI {
     this.x = x;
     this.y = y;
     this.r = 0;
+    this.baseRotation = 0;
     this.mode = 0;
     this.rank = rank;
     this.team = team;
@@ -554,6 +555,7 @@ class AI {
     const dirx = this.path.p[n][0] - this.path.p[f][0];
     const diry = this.path.p[n][1] - this.path.p[f][1];
     this.r = [[135, 180, 225], [90, this.r, 270], [45, 0, 315]][diry + 1][dirx + 1];
+    this.baseRotation = this.r;
     this.x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25);
     this.y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
   }
@@ -617,7 +619,11 @@ class AI {
       limiter = [1];
     } else if (mode === 0) {
       limiter = [3, 4];
-    } else limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+    } else if (ranged) {
+      limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+    } else if (!ranged) {
+      limiter = [Math.abs(coords[0][1]), Math.abs(coords[0][1])+1];
+    }
     sortAsc = mode !== 2;
     this.host.logs = [{m: `s=(${sx}, ${sy}) t=(${tx}, ${ty}) c=${coords[0][1]} m=${mode} es=${epx === sx && epy === sy} r=${ranged} t=${Date.now()}`, c: '#ffffff'}];
     for (const i in coords) {
