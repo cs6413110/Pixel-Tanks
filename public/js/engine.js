@@ -554,8 +554,8 @@ class AI {
     const f = Math.floor(frames / 25), n = f + 1 === this.path.p.length ? f : f + 1;
     const dirx = this.path.p[n][0] - this.path.p[f][0];
     const diry = this.path.p[n][1] - this.path.p[f][1];
-    this.r = [[135, 180, 225], [90, this.r, 270], [45, 0, 315]][diry + 1][dirx + 1];
-    this.baseRotation = this.r;
+    this.baseRotation = [[135, 180, 225], [90, this.r, 270], [45, 0, 315]][diry + 1][dirx + 1];
+    if (this.mode === 0) this.r = this.baseRotation;
     this.x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25);
     this.y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
   }
@@ -681,7 +681,7 @@ class AI {
   }
 
   fire() {
-    const isShotgun = Math.sqrt((this.target.x - this.x) ** 2 + (this.target.y - this.y) ** 2) < 150;
+    const isShotgun = Math.sqrt((this.target.t.x - this.x) ** 2 + (this.target.t.y - this.y) ** 2) < 150;
     this.pushback = -3;
     let l = isShotgun ? -10 : 0;
     while (l<(isShotgun ? 15 : 1)) {
