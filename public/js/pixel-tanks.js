@@ -1467,7 +1467,7 @@ function Game() {
 
       b.forEach(block => this.drawBlock(block));
       s.forEach(shot => this.drawShot(shot));
-      a.forEach(ai => this.drawAi(ai));
+      a.forEach(ai => this.drawAI(ai));
       t.forEach(tank => this.drawTank(tank));
       for (const block of b) {
         if (block.s) {
