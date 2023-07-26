@@ -632,7 +632,7 @@ class AI {
       const r = Math.floor(Math.random() * paths.length);
       const { x, y } = paths[r];
       const p = finder.findPath(sx, sy, x, y, map.clone());
-      if (!limiter.includes(p.length) && false) {
+      if (!limiter.includes(p.length)) {
         coords.splice(r, 1);
         if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
       } else {
@@ -676,9 +676,13 @@ class AI {
 
   fire() {
     const isShotgun = Math.sqrt((this.target.x - this.x) ** 2 + (this.target.y - this.y) ** 2) < 150;
-    const { x, y } = this.toPoint(this.r);
     this.pushback = -3;
-    this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, isShotgun ? 'shotgun' : 'bullet', 0, this.team, this.host));
+    let l = isShotgun ? -10 : 0;
+    while (l<(isShotgun ? 15 : 1)) {
+      const { x, y } = this.toPoint(this.r+l);
+      this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, isShotgun ? 'shotgun' : 'bullet', 0, this.team, this.host));
+      l += 5;
+    }
     this.canFire = false;
     setTimeout(() => { this.canFire = true }, isShotgun ? 600 : 200);
   }
