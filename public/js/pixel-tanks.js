@@ -1336,14 +1336,15 @@ function Game() {
       GUI.drawImage(PixelTanks.images.animations.explosion, e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, 0, e.f*50, 0, 50, 50);
     }
 
-    drawAi(a) {
-      GUI.drawImage(PixelTanks.images.tanks.base, a.x, a.y, 80, 80, 1);
-      GUI.drawImage(PixelTanks.images.tanks.top, a.x, a.y, 80, 90, 1, 40, 40, 0, a.pushback, a.r);
-      if (a.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[a.cosmetic], a.x, a.y, 80, 90, 1, 40, 40, 0, a.pushback, a.r);
-      GUI.draw.fillStyle = '#000000';
-      GUI.draw.fillRect(a.x, a.y+100, 80, 10);
-      GUI.draw.fillStyle = '#00FF00';
-      GUI.draw.fillRect(a.x+4, a.y+102, 72*a.hp/600, 6);
+    drawAI(ai) {
+      const {x, y, role, r, baseRotation, pushback, cosmetic, hp, maxHp} = ai;
+      GUI.drawImage(PixelTanks.images.tanks[role === 5 ? 'base' : 'bottom'], x, y, 80, 80, 1);
+      GUI.drawImage(PixelTanks.images.tanks.top, x, y, 80, 90, 1, 40, 40, 0, pushback, r);
+      if (cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[cosmetic], x, y, 80, 90, 1, 40, 40, 0, pushback, r);
+      GUI.draw.fillStyle = 0x000000;
+      GUI.draw.fillRect(x, y+100, 80, 10);
+      GUI.draw.fillStyle = 0x00FF00;
+      GUI.draw.fillRect(x+4, y+102, 72*hp/maxHp, 6);
     }
 
     drawTank(t) {
