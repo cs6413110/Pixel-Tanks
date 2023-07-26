@@ -1342,9 +1342,9 @@ function Game() {
       GUI.drawImage(PixelTanks.images.tanks.top, x, y, 80, 90, 1, 40, 40, 0, pushback, r);
       if (cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[cosmetic], x, y, 80, 90, 1, 40, 40, 0, pushback, r);
       GUI.draw.fillStyle = '#000000';
-      GUI.draw.fillRect(x, y+100, 80, 10);
+      GUI.draw.fillRect(x-2, y+98, 84, 11);
       GUI.draw.fillStyle = '#00FF00';
-      GUI.draw.fillRect(x+4, y+102, 72*hp/maxHp, 6);
+      GUI.draw.fillRect(x, y+100, 80*hp/maxHp, 5);
     }
 
     drawTank(t) {
@@ -1361,7 +1361,7 @@ function Game() {
       if (!t.ded) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
-        GUI.draw.fillStyle = '#90EE90';
+        GUI.draw.fillStyle = '#00FF00';
         GUI.draw.fillRect(t.x, t.y+100, 80*t.hp/t.maxHp, 5);
       }
 
