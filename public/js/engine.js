@@ -533,6 +533,7 @@ class AI {
     this.class = '';
     const t = host.pt.find(t => t.username === host.getUsername(this.team));
     this.cosmetic = t ? t.cosmetic : '';
+    this.raw = {coords: [], epx: -100, epy: -100};
   }
 
   update() {
@@ -626,7 +627,7 @@ class AI {
       limiter = [Math.abs(coords[0][1]), Math.abs(coords[0][1])+1];
     }
     sortAsc = mode !== 2;
-    this.host.logs = [{m: `s=(${sx}, ${sy}) t=(${tx}, ${ty}) c=${coords[0][1]} m=${mode} es=${epx === sx && epy === sy} r=${ranged} t=${Date.now()}`, c: '#ffffff'}];
+    this.raw = {coords, epx, epy};
     for (const i in coords) {
       const x = coords[i][0] + epx, y = coords[i][1] + epy;
       if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x-tpx)**2+(y-tpy)**2) };
