@@ -1354,7 +1354,7 @@ function Game() {
       for (const c of raw.coords) {
         GUI.draw.pathTo(c[0]*100, c[1]*100);
         GUI.draw.fillRect(c[0]*100+25, c[1]*100+25, 25, 25);
-        GUI.draw.strokeRect((c[0]*100+25, c[1]*100+25, 25, 25);
+        GUI.draw.strokeRect(c[0]*100+25, c[1]*100+25, 25, 25);
         GUI.draw.moveTo(c[0]*100, c[1]*100);
       }
       GUI.draw.stroke();
