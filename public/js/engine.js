@@ -206,7 +206,7 @@ class Engine {
         if (collision(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) b.damage(d.a);
       });
       this.ai.forEach(ai => {
-        if (collision(d.x, d.y, d.w, d.h, this.x, this.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) ai.damage(d.a);
+        if (collision(d.x, d.y, d.w, d.h, ai.x, ai.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) ai.damage(d.a);
       });
       d.c = false;
     });
