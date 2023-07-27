@@ -1337,7 +1337,7 @@ function Game() {
     }
 
     drawAI(ai) {
-      const {x, y, role, r, baseRotation, baseFrame, pushback, cosmetic, hp, maxHp} = ai;
+      const {x, y, role, r, baseRotation, baseFrame, pushback, cosmetic, hp, maxHp, raw} = ai;
       GUI.drawImage(PixelTanks.images.tanks[role === 5 ? 'base' : 'bottom'+(baseFrame ? '' : '2')], x, y, 80, 80, 1, 40, 40, 0, 0, baseRotation);
       GUI.drawImage(PixelTanks.images.tanks.top, x, y, 80, 90, 1, 40, 40, 0, pushback, r);
       if (cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[cosmetic], x, y, 80, 90, 1, 40, 40, 0, pushback, r);
@@ -1345,6 +1345,21 @@ function Game() {
       GUI.draw.fillRect(x-2, y+98, 84, 11);
       GUI.draw.fillStyle = '#00FF00';
       GUI.draw.fillRect(x, y+100, 80*hp/maxHp, 5);
+      //debug path renderer
+      GUI.draw.fillStyle = '#00FF00';
+      GUI.draw.strokeStyle = '#000000';
+      GUI.draw.lineWidth = 5;
+      GUI.draw.beginPath();
+      GUI.draw.moveTo(raw.coords[0][0]*100, raw.coords[0][1]*100);
+      for (const c of raw.coords) {
+        GUI.draw.pathTo(c[0]*100, c[1]*100);
+        GUI.draw.fillRect(c[0]*100+25, c[1]*100+25, 25, 25);
+        GUI.draw.strokeRect((c[0]*100+25, c[1]*100+25, 25, 25);
+        GUI.draw.moveTo(c[0]*100, c[1]*100);
+      }
+      GUI.draw.stroke();
+      GUI.draw.fillStyle = '#FF0000';
+      GUI.draw.fillRect(raw.epx*100+25, raw.epy*100+25, 25, 25);
     }
 
     drawTank(t) {
