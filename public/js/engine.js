@@ -514,6 +514,7 @@ class AI {
     this.y = y;
     this.r = 0;
     this.baseRotation = 0;
+    this.baseFrame = 0;
     this.mode = 0;
     this.rank = rank;
     this.team = team;
