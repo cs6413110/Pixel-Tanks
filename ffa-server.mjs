@@ -5,7 +5,7 @@ const SETTINGS = {
   mutes: [],
   admins: ['cs641311', 'DIO', 'Celestial', 'bradley'],
   ppm: 5, // players per room
-  log_strain: true, // Show messages per second in logs
+  log_strain: false, // Show messages per second in logs
   ups_boost: false, // Can lag clients and servers. Recommened false.
   UPS: 60, // updates per second
   filterProfanity: true, // filter profanity
