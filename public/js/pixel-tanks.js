@@ -1345,8 +1345,8 @@ function Game() {
       GUI.draw.fillRect(x-2, y+98, 84, 11);
       GUI.draw.fillStyle = '#00FF00';
       GUI.draw.fillRect(x, y+100, 80*hp/maxHp, 5);
-      alert(JSON.stringify(raw))
       //debug path renderer
+      try {
       GUI.draw.strokeStyle = '#000000';
       GUI.draw.lineWidth = 5;
       GUI.draw.beginPath();
@@ -1369,6 +1369,7 @@ function Game() {
       GUI.draw.stroke();
       GUI.draw.fillStyle = '#0000FF';
       GUI.draw.fillRect(raw.epx*100+25, raw.epy*100+25, 25, 25);
+      } catch(e) {alert(e)}
     }
 
     drawTank(t) {
