@@ -636,7 +636,7 @@ class AI {
     coords = coords.filter(c => !Array.isArray(c));
     coords.sort((a, b) => sortAsc ? a.d - b.d : b.d - a.d);
     coords.forEach(c => {
-      if (!limiter.includes(finder.findPath(sx, sy, c.x, c.y, map.clone()))) this.raw.parsed.push(c);
+      if (!limiter.includes(finder.findPath(sx, sy, c.x, c.y, map.clone()).length)) this.raw.parsed.push(c);
     });
     this.path = false;
     while (!this.path) {
