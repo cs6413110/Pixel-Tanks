@@ -629,7 +629,7 @@ class AI {
     sortAsc = mode !== 2;
     for (const i in coords) {
       const x = coords[i][0] + epx, y = coords[i][1] + epy;
-      if (x > 0 && y > 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x-tpx)**2+(y-tpy)**2) };
+      if (x >= 0 && y >= 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x-tpx)**2+(y-tpy)**2) };
     }
     this.raw = {coords: coords, epx: epx, epy: epy};
     coords = coords.filter(c => !Array.isArray(c));
@@ -640,7 +640,7 @@ class AI {
       const r = Math.floor(Math.random() * paths.length);
       const { x, y } = paths[r];
       const p = finder.findPath(sx, sy, x, y, map.clone());
-      if (!limiter.includes(p.length)) {
+      if (!limiter.includes(p.length) && false) {
         coords.splice(r, 1);
         if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
       } else {
