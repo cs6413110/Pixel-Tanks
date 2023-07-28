@@ -128,6 +128,7 @@ class Engine {
     }
     if (use.includes('healSwitch')) {
       const a = this.pt.filter(tank => this.getTeam(tank.team) === this.getTeam(t.team));
+      a.forEach(a => a = a.username);
       t.healing = a[(a.indexOf(t.healing) + 1) % a.length].username; //lots of brain cells died for this line of code <R.I.P>
     }
     if (use.includes('mine')) this.b.push(new Block(t.x, t.y, 0, 'mine', t.team, this));
@@ -149,7 +150,7 @@ class Engine {
       if (t.dedEffect) t.dedEffect.time = Date.now() - t.dedEffect.start;
       if (t.class === 'medic' && this.healing !== this.username && !this.ded) {
         const tank = this.pt.find(tank => tank.username === t.healing);
-        if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + 25, tank.maxHp);
+        if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + 2, tank.maxHp);
       }
       if (t.pushback !== 0) t.pushback += 0.5;
       if (t.fire && this.getTeam(t.fire.team) !== this.getTeam(t.team)) this.damagePlayer(t, { x: t.x, y: t.y, u: this.getUsername(t.fire.team), a: .5 });
