@@ -1359,6 +1359,8 @@ function Game() {
           GUI.draw.moveTo(c.x*100+50, c.y*100+50);
         }
       }
+      GUI.draw.stroke();
+      GUI.draw.beginPath();
       for (const c of raw.parsed) {
         GUI.draw.fillStyle = '#FF0000';
         GUI.draw.lineTo(c.x*100+50, c.y*100+50);
