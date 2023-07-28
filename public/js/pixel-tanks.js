@@ -1345,6 +1345,7 @@ function Game() {
       GUI.draw.fillRect(x-2, y+98, 84, 11);
       GUI.draw.fillStyle = '#00FF00';
       GUI.draw.fillRect(x, y+100, 80*hp/maxHp, 5);
+      alert(JSON.stringify(raw))
       //debug path renderer
       GUI.draw.fillStyle = '#00FF00';
       GUI.draw.strokeStyle = '#000000';
