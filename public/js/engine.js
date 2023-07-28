@@ -635,6 +635,9 @@ class AI {
     this.raw = {coords, epx, epy, parsed: []};
     coords = coords.filter(c => !Array.isArray(c));
     coords.sort((a, b) => sortAsc ? a.d - b.d : b.d - a.d);
+    coords.forEach(c => {
+      if (!limiter.includes(finder.findPath(sx, sy, c.x, c.y, map.clone()))) this.raw.parsed.push(paths[r]);
+    });
     this.path = false;
     while (!this.path) {
       const paths = coords.slice(0, Math.min(5, coords.length));
@@ -642,7 +645,6 @@ class AI {
       const { x, y } = paths[r];
       const p = finder.findPath(sx, sy, x, y, map.clone());
       if (!limiter.includes(p.length)) {
-        this.raw.parsed.push(paths[r]);
         coords.splice(r, 1);
         if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
       } else {
