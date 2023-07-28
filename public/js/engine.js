@@ -640,7 +640,7 @@ class AI {
       const r = this.choosePath(paths.length);
       const { x, y } = paths[r];
       const p = finder.findPath(sx, sy, x, y, map.clone());
-      if (!limiter.includes(p.length)) {
+      if (!limiter.includes(p.length) && false) {
         coords.splice(r, 1);
         if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
       } else {
