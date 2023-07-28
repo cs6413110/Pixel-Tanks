@@ -595,7 +595,7 @@ class AI {
       epy = sy;
     } else if (mode === 1 && !ranged) {
       epx = tx;
-      epy = tx;
+      epy = ty;
     }
     if ((role === 3 && bond) || (role === 1 && mode === 1 && !ranged)) {
       coords = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
