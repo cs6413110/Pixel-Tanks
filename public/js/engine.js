@@ -539,7 +539,7 @@ class AI {
   update() {
     this.identify();
     if (this.role !== 0) this.move();
-    if (this.mode !== 0) {
+    if (this.mode !== 0 && this.target.s) { // line of sight required before firing
       this.r = this.toAngle(this.target.x - this.x, this.target.y - this.y);
       if (this.canFire) this.fire();
     }
@@ -556,7 +556,7 @@ class AI {
     const f = Math.floor(frames / 25), n = f + 1 === this.path.p.length ? f : f + 1;
     const dirx = this.path.p[n][0] - this.path.p[f][0];
     const diry = this.path.p[n][1] - this.path.p[f][1];
-    this.baseRotation = [[135, 180, 225], [90, this.r, 270], [45, 0, 315]][diry + 1][dirx + 1];
+    this.baseRotation = [[135, 180, 225], [90, this.baseRotation, 270], [45, 0, 315]][diry + 1][dirx + 1];
     if (this.mode === 0) this.r = this.baseRotation;
     this.x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25);
     this.y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
