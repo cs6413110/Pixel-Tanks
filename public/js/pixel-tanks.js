@@ -1366,10 +1366,18 @@ function Game() {
           GUI.draw.moveTo(c.x*100+50, c.y*100+50);
         }
       }
-      GUI.draw.stroke();
       GUI.draw.fillStyle = '#0000FF';
       GUI.draw.fillRect(raw.epx*100+25, raw.epy*100+25, 50, 50);
-      } catch(e) {alert(e)}
+      if (ai.path) {
+        GUI.draw.strokeStyle = '#ffffff';
+        GUI.draw.beginPath();
+        GUI.draw.moveTo(ai.path.p[0]*100+50, ai.path.p[1]*100+50);
+        for (const p of ai.path.p) {
+          GUI.draw.lineTo(p[0]*100+50, p[1]*100+50);
+          GUI.draw.moveTo(p[0]*100+50, p[1]*100+50);
+        }
+      }
+      GUI.draw.stroke();
     }
 
     drawTank(t) {
