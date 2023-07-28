@@ -1347,19 +1347,27 @@ function Game() {
       GUI.draw.fillRect(x, y+100, 80*hp/maxHp, 5);
       alert(JSON.stringify(raw))
       //debug path renderer
-      GUI.draw.fillStyle = '#00FF00';
       GUI.draw.strokeStyle = '#000000';
       GUI.draw.lineWidth = 5;
       GUI.draw.beginPath();
       GUI.draw.moveTo(raw.coords[0][0]*100, raw.coords[0][1]*100);
       for (const c of raw.coords) {
-        GUI.draw.pathTo(c[0]*100, c[1]*100);
-        GUI.draw.fillRect(c[0]*100+25, c[1]*100+25, 25, 25);
-        GUI.draw.strokeRect(c[0]*100+25, c[1]*100+25, 25, 25);
-        GUI.draw.moveTo(c[0]*100, c[1]*100);
+        if (typeof c === 'object') {
+          GUI.draw.fillStyle = '#FF0000';
+          GUI.draw.pathTo(c.x*100, c.y*100);
+          GUI.draw.fillRect(c.x*100+25, c.y*100+25, 25, 25);
+          GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 25, 25);
+          GUI.draw.moveTo(c.x*100, c.y*100);
+        } else {
+          GUI.draw.fillStyle = '#00FF00';
+          GUI.draw.pathTo(c[0]*100, c[1]*100);
+          GUI.draw.fillRect(c[0]*100+25, c[1]*100+25, 25, 25);
+          GUI.draw.strokeRect(c[0]*100+25, c[1]*100+25, 25, 25);
+          GUI.draw.moveTo(c[0]*100, c[1]*100);
+        }
       }
       GUI.draw.stroke();
-      GUI.draw.fillStyle = '#FF0000';
+      GUI.draw.fillStyle = '#0000FF';
       GUI.draw.fillRect(raw.epx*100+25, raw.epy*100+25, 25, 25);
     }
 
