@@ -1368,7 +1368,7 @@ function Game() {
       }
       GUI.draw.stroke();
       GUI.draw.fillStyle = '#0000FF';
-      GUI.draw.fillRect(raw.epx*100+25, raw.epy*100+25, 25, 25);
+      GUI.draw.fillRect(raw.epx*100+25, raw.epy*100+25, 50, 50);
       } catch(e) {alert(e)}
     }
 
