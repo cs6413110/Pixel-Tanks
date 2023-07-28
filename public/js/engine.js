@@ -637,15 +637,39 @@ class AI {
     this.path = false;
     while (!this.path) {
       const paths = coords.slice(0, Math.min(5, coords.length));
-      const r = Math.floor(Math.random() * paths.length);
+      const r = this.choosePath(paths.length);
       const { x, y } = paths[r];
       const p = finder.findPath(sx, sy, x, y, map.clone());
-      if (!limiter.includes(p.length) && false) {
+      if (!limiter.includes(p.length)) {
         coords.splice(r, 1);
         if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
       } else {
         this.path = { p, m: this.mode, t: Date.now() };
       }
+    }
+  }
+
+  choosePath(p) {
+    const r = Math.random();
+    if (p === 1) return 0;
+    if (p === 2) return r < .5 ? 0 : 1;
+    if (p === 3) {
+      if (r < .5) return 0;
+      if (r < .75) return 1;
+      return 2;
+    }
+    if (p === 4) {
+      if (r < .5) return 0;
+      if (r < .8) return 1;
+      if (r < .9) return 2;
+      return 3;
+    }
+    if (p === 5) {
+      if (r < .5) return 0;
+      if (r < .65) return 1;
+      if (r < .8) return 2;
+      if (r < .9) return 3;
+      return 4;
     }
   }
 
