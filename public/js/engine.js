@@ -612,8 +612,8 @@ class AI {
       tpy = sy;
     } else if (mode === 0) {
       const d = toPoint(r);
-      tpx = d.x;
-      tpy = d.y;
+      tpx = d.x+epx;
+      tpy = d.y+epy;
     } else if (mode === 2 || (mode === 1 && ranged)) {
       tpx = tx;
       tpy = ty;
