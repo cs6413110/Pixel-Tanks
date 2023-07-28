@@ -328,7 +328,7 @@ class Block {
 
 class Shot {
   constructor(x, y, xm, ym, type, rotation, team, host) {
-    const settings = { damage: { bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -300, dynamite: 0, fire: 0 }, speed: { bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9 } };
+    const settings = { damage: { bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -100, dynamite: 0, fire: 0 }, speed: { bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9 } };
     const t = host.pt.find(t => t.username === host.getUsername(team));
     this.damage = settings.damage[type] * t.maxHp / 500 * (t.buff ? 1.5 : 1);
     this.team = team;
@@ -732,7 +732,6 @@ class AI {
     const theta = (-angle) * Math.PI / 180;
     const y = Math.cos(theta);
     const x = Math.sin(theta);
-
     if (x === 0) {
       return { x: 0, y: y / Math.abs(y) };
     } else {
