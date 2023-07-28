@@ -1352,18 +1352,19 @@ function Game() {
       GUI.draw.moveTo(raw.coords[0][0]*100, raw.coords[0][1]*100);
       for (const c of raw.coords) {
         if (Array.isArray(c)) {
-          GUI.draw.fillStyle = '#FF0000';
-          GUI.draw.lineTo(c[0]*100+50, c[1]*100+50);
-          GUI.draw.fillRect(c[0]*100+25, c[1]*100+25, 50, 50);
-          GUI.draw.strokeRect(c[0]*100+25, c[1]*100+25, 50, 50);
-          GUI.draw.moveTo(c[0]*+50, c[1]*100+50);
-        } else {
           GUI.draw.fillStyle = '#00FF00';
           GUI.draw.lineTo(c.x*100+50, c.y*100+50);
           GUI.draw.fillRect(c.x*100+25, c.y*100+25, 50, 50);
           GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 50, 50);
           GUI.draw.moveTo(c.x*100+50, c.y*100+50);
         }
+      }
+      for (const c of raw.parsed) {
+        GUI.draw.fillStyle = '#FF0000';
+        GUI.draw.lineTo(c.x*100+50, c.y*100+50);
+        GUI.draw.fillRect(c.x*100+25, c.y*100+25, 50, 50);
+        GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 50, 50);
+        GUI.draw.moveTo(c.x*+50, c.y*100+50);
       }
       GUI.draw.fillStyle = '#0000FF';
       GUI.draw.fillRect(raw.epx*100+25, raw.epy*100+25, 50, 50);
@@ -1446,7 +1447,7 @@ function Game() {
 
       if (t.healing && t.class === 'medic' && !t.ded) {
         const target = this.hostupdate.tanks.find(tank => tank.username === t.healing);
-         if (Math.sqrt(Math.pow(this.x-d.t.x, 2)+Math.pow(this.y-d.t.y, 2)) > 500) return;
+        if (Math.sqrt(Math.pow(this.x-d.t.x, 2)+Math.pow(this.y-d.t.y, 2)) > 500) return;
         GUI.draw.beginPath();
         GUI.draw.lineStyle(10, 0x00FF00, .7);
         GUI.draw.moveTo(t.x+40, t.y+40);
