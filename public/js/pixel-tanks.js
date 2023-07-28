@@ -1353,17 +1353,17 @@ function Game() {
       GUI.draw.moveTo(raw.coords[0][0]*100, raw.coords[0][1]*100);
       for (const c of raw.coords) {
         if (typeof c === 'object') {
-          GUI.draw.fillStyle = '#FF0000';
-          GUI.draw.lineTo(c.x*100, c.y*100);
+          GUI.draw.fillStyle = '#00FF00';
+          GUI.draw.lineTo(c.x*100+25, c.y*100+25);
           GUI.draw.fillRect(c.x*100+25, c.y*100+25, 25, 25);
           GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 25, 25);
-          GUI.draw.moveTo(c.x*100, c.y*100);
+          GUI.draw.moveTo(c.x*100+25, c.y*100+25);
         } else {
-          GUI.draw.fillStyle = '#00FF00';
-          GUI.draw.lineTo(c[0]*100, c[1]*100);
+          GUI.draw.fillStyle = '#FF0000';
+          GUI.draw.lineTo(c[0]*100+25, c[1]*100+25);
           GUI.draw.fillRect(c[0]*100+25, c[1]*100+25, 25, 25);
           GUI.draw.strokeRect(c[0]*100+25, c[1]*100+25, 25, 25);
-          GUI.draw.moveTo(c[0]*100, c[1]*100);
+          GUI.draw.moveTo(c[0]*+25, c[1]*100+25);
         }
       }
       GUI.draw.stroke();
