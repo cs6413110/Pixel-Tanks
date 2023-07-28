@@ -622,10 +622,8 @@ class AI {
       limiter = [1];
     } else if (mode === 0) {
       limiter = [3, 4];
-    } else if (ranged) {
-      limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-    } else if (!ranged) {
-      limiter = [Math.abs(coords[0][1]), Math.abs(coords[0][1])+1, Math.abs(coords[0][1])+2];
+    } else {
+      limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     }
     sortAsc = mode !== 2;
     for (const i in coords) {
