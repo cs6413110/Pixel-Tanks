@@ -1351,7 +1351,7 @@ function Game() {
       GUI.draw.beginPath();
       GUI.draw.moveTo(raw.coords[0][0]*100, raw.coords[0][1]*100);
       for (const c of raw.coords) {
-        if (Array.isArray(c)) {
+        if (!Array.isArray(c)) {
           GUI.draw.fillStyle = '#00FF00';
           GUI.draw.lineTo(c.x*100+50, c.y*100+50);
           GUI.draw.fillRect(c.x*100+25, c.y*100+25, 50, 50);
