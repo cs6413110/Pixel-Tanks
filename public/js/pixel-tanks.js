@@ -1419,10 +1419,10 @@ function Game() {
       }
 
       if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
-      if (t.d) {
+      if (t.damage) {
         const {x, y, d} = t.damage;
         for (let i = 0; i < 2; i++) {
-          GUI.drawText((d < 0 ? '+' : '-')+Math.round(d), x, y, Math.round(d/5)+[20, 15][i], [0xffffff, PixelTanks.user.username === t.u ? 0xff0000 : 0x0000ff][i], 0.5);
+          GUI.drawText((d < 0 ? '+' : '-')+Math.round(d), x, y, Math.round(d/5)+[20, 15][i], ['#ffffff', PixelTanks.user.username === t.u ? '#ff0000' : '#0000ff'][i], 0.5);
         }
       }
       
