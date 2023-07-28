@@ -1367,6 +1367,7 @@ function Game() {
       }
       GUI.draw.fillStyle = '#0000FF';
       GUI.draw.fillRect(raw.epx*100+25, raw.epy*100+25, 50, 50);
+      GUI.draw.stroke();
       if (ai.path) {
         GUI.draw.strokeStyle = '#ffffff';
         GUI.draw.beginPath();
