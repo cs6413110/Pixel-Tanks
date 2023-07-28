@@ -1352,18 +1352,18 @@ function Game() {
       GUI.draw.beginPath();
       GUI.draw.moveTo(raw.coords[0][0]*100, raw.coords[0][1]*100);
       for (const c of raw.coords) {
-        if (typeof c === 'object') {
-          GUI.draw.fillStyle = '#00FF00';
-          GUI.draw.lineTo(c.x*100+25, c.y*100+25);
-          GUI.draw.fillRect(c.x*100+25, c.y*100+25, 25, 25);
-          GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 25, 25);
-          GUI.draw.moveTo(c.x*100+25, c.y*100+25);
-        } else {
+        if (Array.isArray(c)) {
           GUI.draw.fillStyle = '#FF0000';
-          GUI.draw.lineTo(c[0]*100+25, c[1]*100+25);
-          GUI.draw.fillRect(c[0]*100+25, c[1]*100+25, 25, 25);
-          GUI.draw.strokeRect(c[0]*100+25, c[1]*100+25, 25, 25);
-          GUI.draw.moveTo(c[0]*+25, c[1]*100+25);
+          GUI.draw.lineTo(c[0]*100+50, c[1]*100+50);
+          GUI.draw.fillRect(c[0]*100+25, c[1]*100+25, 50, 50);
+          GUI.draw.strokeRect(c[0]*100+25, c[1]*100+25, 50, 50);
+          GUI.draw.moveTo(c[0]*+50, c[1]*100+50);
+        } else {
+          GUI.draw.fillStyle = '#00FF00';
+          GUI.draw.lineTo(c.x*100+50, c.y*100+50);
+          GUI.draw.fillRect(c.x*100+25, c.y*100+25, 50, 50);
+          GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 50, 50);
+          GUI.draw.moveTo(c.x*100+50, c.y*100+50);
         }
       }
       GUI.draw.stroke();
