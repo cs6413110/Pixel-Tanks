@@ -118,7 +118,7 @@ class Engine {
     }
     if (use.includes('turret')) {
       this.ai.splice(this.ai.indexOf(this.ai.find(a => this.getUsername(a.team) === t.username)), 1);
-      this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 1, t.rank, t.team+'L', this));
+      this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 1, t.rank, t.team, this));
     }
     if (use.includes('buff')) {
       t.buff = true;
@@ -625,7 +625,7 @@ class AI {
     } else if (ranged) {
       limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
     } else if (!ranged) {
-      limiter = [Math.abs(coords[0][1]), Math.abs(coords[0][1])+1];
+      limiter = [Math.abs(coords[0][1]), Math.abs(coords[0][1])+1, Math.abs(coords[0][1])+2];
     }
     sortAsc = mode !== 2;
     for (const i in coords) {
