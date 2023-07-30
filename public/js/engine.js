@@ -540,7 +540,7 @@ class AI {
   update() {
     this.identify();
     if (this.role !== 0) this.move();
-    if (this.mode !== 0 && this.target.s) { // line of sight required before firing
+    if (this.mode !== 0) {
       this.r = this.toAngle(this.target.x - this.x, this.target.y - this.y);
       if (this.canFire) this.fire();
     }
