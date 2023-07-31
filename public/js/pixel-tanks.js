@@ -1888,7 +1888,7 @@ function Game() {
     }
 
     send() {
-      const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank}
+      const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank};
       if (this.multiplayer) {
         this.ops++;
         this.socket.send(updateData);
