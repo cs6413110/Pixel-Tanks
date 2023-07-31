@@ -3,9 +3,7 @@
 } catch (e) {}
 
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
-const collision = (x, y, w, h, x2, y2, w2, h2) => {
-  return (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
-};
+const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 
 class Engine {
   constructor(levels) {
@@ -127,8 +125,8 @@ class Engine {
       }, 10000);
     }
     if (use.includes('healSwitch')) {
-      const a = this.pt.filter(tank => this.getTeam(tank.team) === this.getTeam(t.team));
-      a.forEach(a => a = a.username);
+      let a = [];
+      this.pt.forEach(t => a.push(t.username));
       t.healing = a[(a.indexOf(t.healing) + 1) % a.length].username; //lots of brain cells died for this line of code <R.I.P>
     }
     if (use.includes('mine')) this.b.push(new Block(t.x, t.y, 0, 'mine', t.team, this));
