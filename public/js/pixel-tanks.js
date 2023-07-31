@@ -1448,13 +1448,15 @@ function Game() {
 
       if (t.healing && t.class === 'medic' && !t.ded) {
         const target = this.hostupdate.tanks.find(tank => tank.username === t.healing);
-        if (Math.sqrt(Math.pow(target.x-t.x, 2)+Math.pow(target.y-t.y, 2)) > 500) return;
+        if (Math.sqrt((target.x-t.x)**2+(target.y-t.y)**2) > 500) return;
         GUI.draw.beginPath();
-        GUI.draw.lineStyle(10, 0x00FF00, .7);
+        GUI.draw.lineWidth = 10;
+        GUI.draw.strokeStyle = '#00FF00';
+        GUI.draw.globalAlpha = .7;
         GUI.draw.moveTo(t.x+40, t.y+40);
         GUI.draw.lineTo(target.x+40, target.y+40);
-        GUI.draw.endFill();
-        GUI.draw.lineStyle(0, 0x000000, 1);
+        GUI.draw.stroke();
+        GUI.draw.globalAlpha = 1;
       }
     }
 
