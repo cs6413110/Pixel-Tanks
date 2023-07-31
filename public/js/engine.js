@@ -586,7 +586,7 @@ class AI {
     if ([1, 2].includes(mode)) {
       tx = Math.floor((target.x+40)/100);
       ty = Math.floor((target.y+40)/100);
-      ranged = Math.sqrt((sx-tx)**2+(sy-ty)**2) > 3+[1, 5, 5, 8][role-1];
+      ranged = Math.sqrt((sx-tx)**2+(sy-ty)**2) > [1, 5, 5, 8][role-1];
     }
     if (role === 3 && bond) {
       epx = Math.floor((bond.x+40)/100);
