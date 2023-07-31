@@ -620,10 +620,10 @@ class AI {
     }
     if (role === 3 && bond) {
       limiter = [2];
-    } else if (role === 1 && !ranged) {
-      limiter = [2, 3];
     } else if (([2, 3].includes(role) && !ranged) || [0, 2].includes(mode) || (mode === 1 && ranged)) {
       limiter = [2, 3, 4];
+    } else if (role === 1 && !ranged) {
+      limiter = [2, 3];
     } else {
       limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     }
