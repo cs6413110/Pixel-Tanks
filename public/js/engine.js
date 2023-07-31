@@ -623,7 +623,7 @@ class AI {
     } else if (role === 1 && !ranged) {
       limiter = [2, 3];
     } else if (([2, 3].includes(role) && !ranged) || [0, 2].includes(mode) || (mode === 1 && ranged)) {
-      limiter = [3, 4];
+      limiter = [2, 3, 4];
     } else {
       limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     }
@@ -654,6 +654,7 @@ class AI {
   }
 
   choosePath(p) {
+    return Math.floor(Math.random()*p);
     const r = Math.random();
     if (p === 1) return 0;
     if (p === 2) return r < .5 ? 0 : 1;
