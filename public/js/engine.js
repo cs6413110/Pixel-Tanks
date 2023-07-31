@@ -67,7 +67,7 @@ class Engine {
         t.healInterval = setInterval(() => {
           t.hp = Math.min(t.maxHp, t.hp + 1);
           const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
-          if (ai) ai.hp = Math.min(ai.maxHp, ai.hp + 1);
+          if (ai) ai.hp = Math.min(ai.maxHp, ai.hp + 1);`
         }, 100);
         t.healTimeout = setTimeout(() => {
           t.hp = t.maxHp;
@@ -619,8 +619,10 @@ class AI {
       tpy = ty;
     }
     if (role === 3 && bond) {
-      limiter = [1];
-    } else if (mode === 0) {
+      limiter = [2];
+    } else if (role === 1 && !ranged) {
+      limiter = [2, 3];
+    } else if (([2, 3].includes(role) && !ranged) || [0, 2].includes(mode) || (mode === 1 && ranged)) {
       limiter = [3, 4];
     } else {
       limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
