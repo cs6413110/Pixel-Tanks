@@ -639,6 +639,7 @@ class AI {
       if (!limiter.includes(finder.findPath(sx, sy, c.x, c.y, map.clone()).length)) this.raw.parsed.push(c);
     });
     this.path = false;
+    let i = 0;
     while (!this.path) {
       const paths = coords.slice(0, Math.min(5, coords.length));
       const r = this.choosePath(paths.length);
@@ -646,6 +647,8 @@ class AI {
       const p = finder.findPath(sx, sy, x, y, map.clone());
       if (!limiter.includes(p.length)) {
         coords.splice(r, 1);
+        i++;
+        if (i >= 5) return this.path = {p: finder.findPath(sx, sy, mode === 1 ? tx : sx+(tx-sx), mode === 1 ? sy+(ty-sy), map.clone()).slice(0, 5), m: this.mode, t: Date.now()};
         if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now() };
       } else {
         this.path = { p, m: this.mode, t: Date.now() };
