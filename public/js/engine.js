@@ -729,7 +729,12 @@ class AI {
 
   damage(d) {
     this.hp -= d;
-    if (this.hp <= 0) setTimeout(() => this.host.ai.splice(this.host.ai.indexOf(this)));
+    if (this.hp <= 0) setTimeout(() => this.destroy());
+  }
+
+  destroy() {
+    const index = this.host.ai.indexOf(this);
+    if (index !== -1) this.host.ai.splice(index, 1);
   }
 
   toAngle(x, y) {
