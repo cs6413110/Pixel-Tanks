@@ -1400,7 +1400,7 @@ function Game() {
         GUI.draw.fillRect(t.x, t.y+100, 80*t.hp/t.maxHp, 5);
       }
 
-      var username = '['+t.rank+'] '+t.username;
+      var username = '['+t.rank+'] '+t.username+'@'+t.healing;
       if (t.team.split(':')[1].includes('@leader')) {
         username += ' ['+t.team.split(':')[1].replace('@leader', '')+'] (Leader)'
       } else if (t.team.split(':')[1].includes('@requestor#')) {
