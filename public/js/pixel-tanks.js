@@ -1320,7 +1320,7 @@ function Game() {
         GUI.drawImage(PixelTanks.images.bullets.grapple, s.x, s.y, 45, 45, 1, 22.5, 22.5, 0, 0, s.r+180);
         GUI.draw.lineWidth = 10;
         GUI.draw.beginPath();
-        GUI.draw.fillStyle = '#A9A9A9';
+        GUI.draw.strokeStyle = '#A9A9A9';
         GUI.draw.moveTo(s.x, s.y);
         const t = this.hostupdate.tanks.find(t => t.username === s.team.split(':')[0]);
         if (t) GUI.draw.lineTo(t.x+40, t.y+40);
@@ -1355,11 +1355,11 @@ function Game() {
           GUI.draw.fillStyle = '#00FF00';
           GUI.draw.lineTo(c.x*100+50, c.y*100+50);
           GUI.draw.fillRect(c.x*100+25, c.y*100+25, 50, 50);
-          GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 50, 50);
           GUI.draw.moveTo(c.x*100+50, c.y*100+50);
         }
       }
       GUI.draw.stroke();
+      raw.coords.forEach(c => GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 50, 50));
       GUI.draw.beginPath();
       for (const c of raw.parsed) {
         GUI.draw.fillStyle = '#FF0000';
@@ -1368,11 +1368,12 @@ function Game() {
         GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 50, 50);
         GUI.draw.moveTo(c.x*+50, c.y*100+50);
       }
+      GUI.draw.stroke();
+      raw.parsed.forEach(c => GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 50, 50));
       GUI.draw.fillStyle = '#0000FF';
       GUI.draw.fillRect(raw.epx*100+25, raw.epy*100+25, 50, 50);
       GUI.draw.fillStyle = '#6A0F8E';
       GUI.draw.fillRect(raw.tpx*100+25, raw.tpy*100+25, 50, 50);
-      GUI.draw.stroke();
       if (ai.path) {
         GUI.draw.strokeStyle = '#ffffff';
         GUI.draw.beginPath();
@@ -1381,8 +1382,8 @@ function Game() {
           GUI.draw.lineTo(p[0]*100+50, p[1]*100+50);
           GUI.draw.moveTo(p[0]*100+50, p[1]*100+50);
         }
+        GUI.draw.stroke();
       }
-      GUI.draw.stroke();
     }
 
     drawTank(t) {
