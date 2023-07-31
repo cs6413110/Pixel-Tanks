@@ -1400,7 +1400,7 @@ function Game() {
         GUI.draw.fillRect(t.x, t.y+100, 80*t.hp/t.maxHp, 5);
       }
 
-      var username = '['+t.rank+'] '+t.username+'@'+t.healing;
+      var username = '['+t.rank+'] '+t.username;
       if (t.team.split(':')[1].includes('@leader')) {
         username += ' ['+t.team.split(':')[1].replace('@leader', '')+'] (Leader)'
       } else if (t.team.split(':')[1].includes('@requestor#')) {
@@ -1448,11 +1448,11 @@ function Game() {
 
       if (t.healing && t.class === 'medic' && !t.ded) {
         const target = this.hostupdate.tanks.find(tank => tank.username === t.healing);
-        if (Math.sqrt(Math.pow(this.x-d.t.x, 2)+Math.pow(this.y-d.t.y, 2)) > 500) return;
+        if (Math.sqrt(Math.pow(target.x-t.x, 2)+Math.pow(target.y-t.y, 2)) > 500) return;
         GUI.draw.beginPath();
         GUI.draw.lineStyle(10, 0x00FF00, .7);
         GUI.draw.moveTo(t.x+40, t.y+40);
-        GUI.draw.lineTo(this.x+40, this.y+40);
+        GUI.draw.lineTo(target.x+40, target.y+40);
         GUI.draw.endFill();
         GUI.draw.lineStyle(0, 0x000000, 1);
       }
