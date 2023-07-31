@@ -426,7 +426,7 @@ class Multiplayer extends Engine {
       });
       this.pt.forEach(pt => {
         if (A.collider(pt.x, pt.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.tanks.push(JSON.parse(JSON.stringify(pt, (key, value) => {
-          return ['updates', 'socket', 'render', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluInterval', 'gluTimeout', 'fireTimeout', 'fireInterval', 'healing'].includes(key) ? undefined : value;
+          return ['updates', 'socket', 'render', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluInterval', 'gluTimeout', 'fireTimeout', 'fireInterval'].includes(key) ? undefined : value;
         })));
       });
       this.ai.forEach(ai => {
