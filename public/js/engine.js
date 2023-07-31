@@ -127,7 +127,7 @@ class Engine {
     if (use.includes('healSwitch')) {
       let a = [];
       this.pt.forEach(t => a.push(t.username));
-      t.healing = a[(a.indexOf(t.healing) + 1) % a.length].username; //lots of brain cells died for this line of code <R.I.P>
+      t.healing = a[(a.indexOf(t.healing) + 1) % a.length]; //lots of brain cells died for this line of code <R.I.P>
     }
     if (use.includes('mine')) this.b.push(new Block(t.x, t.y, 0, 'mine', t.team, this));
     if (use.includes('shield')) t.shields = Math.min(500, t.shields + 100);
