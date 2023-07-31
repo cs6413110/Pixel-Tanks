@@ -963,7 +963,7 @@ function Game() {
         temp['pixel-tanks'] = PixelTanks.userData;
         Network.update('playerdata', JSON.stringify(temp));
       } catch (e) {
-        alert('Save Error:' + e)
+        console.error('Save Error:' + e)
       }
     }
 
