@@ -67,7 +67,7 @@ class Engine {
         t.healInterval = setInterval(() => {
           t.hp = Math.min(t.maxHp, t.hp + 1);
           const ai = this.ai.find(a => this.getUsername(a.team) === t.username);
-          if (ai) ai.hp = Math.min(ai.maxHp, ai.hp + 1);`
+          if (ai) ai.hp = Math.min(ai.maxHp, ai.hp + 1);
         }, 100);
         t.healTimeout = setTimeout(() => {
           t.hp = t.maxHp;
