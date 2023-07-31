@@ -1360,15 +1360,11 @@ function Game() {
       }
       GUI.draw.stroke();
       raw.coords.forEach(c => GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 50, 50));
-      GUI.draw.beginPath();
       for (const c of raw.parsed) {
         GUI.draw.fillStyle = '#FF0000';
-        GUI.draw.lineTo(c.x*100+50, c.y*100+50);
         GUI.draw.fillRect(c.x*100+25, c.y*100+25, 50, 50);
-        GUI.draw.moveTo(c.x*+50, c.y*100+50);
+        GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 50, 50)
       }
-      GUI.draw.stroke();
-      raw.parsed.forEach(c => GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 50, 50));
       GUI.draw.fillStyle = '#0000FF';
       GUI.draw.fillRect(raw.epx*100+25, raw.epy*100+25, 50, 50);
       GUI.draw.fillStyle = '#6A0F8E';
