@@ -146,7 +146,7 @@ class Engine {
 
     this.pt.forEach(t => {
       if (t.dedEffect) t.dedEffect.time = Date.now() - t.dedEffect.start;
-      if (t.class === 'medic' && t.healing !== t.username && !t.ded) {
+      if (t.class === 'medic' && !t.ded) {
         const tank = this.pt.find(tank => tank.username === t.healing);
         if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + 2, tank.maxHp);
       }
