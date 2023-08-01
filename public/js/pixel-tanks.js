@@ -1825,7 +1825,7 @@ function Game() {
         } else if (c === 'builder' && this.canTurret) {
           this.canTurret = false;
           this.tank.use.push('turret');
-          this.timers.class = {time: Date.now(), cooldown: 40000};
+          this.timers.class = {time: Date.now(), cooldown: 50};
           setTimeout(() => {this.canTurret = true}, 40000);
         } else if (c === 'warrior' && this.canBuff) {
           this.tank.use.push('buff');
