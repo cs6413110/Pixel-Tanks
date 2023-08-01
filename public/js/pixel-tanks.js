@@ -1605,9 +1605,8 @@ function Game() {
     }
 
     mousemove(e) {
-      const x = e.clientX-window.innerWidth/2, y = e.clientY-window.innerHeight/2;
-      this.tank.r = this.toAngle(x, y);
-      this.mouse = {x, y};
+      this.mouse = {x: (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer, y: e.clientY/PixelTanks.resizer};
+      this.r = this.toAngle(800-this.mouse.x, 500-this.mouse.y);
     }
 
     toAngle(x, y) {
@@ -1739,7 +1738,7 @@ function Game() {
           }
         }, 25000, true],
         airstrike: [() => {
-          this.tank.airstrike = {x: this.mouse.x/PixelTanks.resizer+this.tank.x-1460, y: this.mouse.y/PixelTanks.resizer+this.tank.y-860};
+          this.tank.airstrike = {x: this.mouse.x+this.tank.x-800, y: this.mouse.y+this.tank.y-500};
         }, 40000, false],
         fortress: [() => {
           this.tank.use.push('block');
