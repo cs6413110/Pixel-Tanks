@@ -1606,7 +1606,7 @@ function Game() {
 
     mousemove(e) {
       this.mouse = {x: (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer, y: e.clientY/PixelTanks.resizer};
-      this.r = this.toAngle(800-this.mouse.x, 500-this.mouse.y);
+      this.r = this.toAngle(this.mouse.x-800, this.mouse.y-500);
     }
 
     toAngle(x, y) {
