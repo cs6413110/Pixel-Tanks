@@ -567,8 +567,8 @@ class AI {
     const diry = this.path.p[n][1] - this.path.p[f][1];
     this.baseRotation = [[135, 180, 225], [90, this.baseRotation, 270], [45, 0, 315]][diry + 1][dirx + 1];
     this.r = this.baseRotation;
-    const x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25) + dirx * 4 * Math.floor((Date.now()-Math.max(this.immune, this.path.o))/15);
-    const y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25) + diry * 4 * Math.floor((Date.now()-Math.max(this.immune, this.path.o))/15);
+    const x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25);
+    const y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
     this.obstruction = this.collision(x, y);
     if (!this.obstruction) {
       if (this.canBoost) {
@@ -745,7 +745,7 @@ class AI {
   }
 
   fire(tx, ty, type) {
-    type = type || Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
+    if (!type) type = Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
     const cooldown = {powermissle: 0, shotgun: 600, bullet: 200}[type];
     this.pushback = -3;
     let l = type === 'shotgun' ? -10 : 0;
