@@ -23,7 +23,7 @@ function measureLag(i) {
   const start = process.hrtime();
   setTimeout(() => {
     const lag = process.hrtime(start)[0];
-    if (lag > 10) console.log('server_side_lag: '+lag);
+    console.log(i+':'+lag);
     setTimeout(() => measureLag(i+1), 1000);
   })
 }
