@@ -116,7 +116,7 @@ class Engine {
     }
     if (use.includes('turret')) {
       //this.ai.splice(this.ai.indexOf(this.ai.find(a => this.getUsername(a.team) === t.username)), 1);
-      this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 1, t.rank, t.team, this));
+      this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 4, t.rank, t.team, this));
     }
     if (use.includes('buff')) {
       t.buff = true;
@@ -594,10 +594,12 @@ class AI {
 
   onBlock() {
     if (!this.path) this.generatePath();
-    if (this.path.p.length === 0) this.generatePath();
+    if (this.path.p.length === 0) setTimeout(() => this.generatePath(), 300); // .3s delay for failed path generation
     if (this.path.p.length !== 0) {
       const final = this.path.p[this.path.p.length - 1];
-      if ((this.x - 10) / 100 === final[0] && (this.y - 10) / 100 === final[1]) this.generatePath();
+      if ((this.x - 10) / 100 === final[0] && (this.y - 10) / 100 === final[1]) {
+        setTimeout(() => this.generatePath(), [Math.floor(Math.random()*300)+50][this.mode]); // .1s delay for after path finished
+      }
     }
     if (this.path.m !== this.mode) this.generatePath();
   }
