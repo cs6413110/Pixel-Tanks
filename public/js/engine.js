@@ -530,6 +530,8 @@ class AI {
     this.canPowermissle = true;
     this.canItem = true;
     this.canClass = true;
+    this.canBoost = true;
+    this.immune = false;
     this.item = '';
     this.class = '';
     const t = host.pt.find(t => t.username === host.getUsername(this.team));
@@ -565,10 +567,16 @@ class AI {
     const diry = this.path.p[n][1] - this.path.p[f][1];
     this.baseRotation = [[135, 180, 225], [90, this.baseRotation, 270], [45, 0, 315]][diry + 1][dirx + 1];
     this.r = this.baseRotation;
-    const x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25);
-    const y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
+    const x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25) + dirx * 4 * (Date.now());
+    const y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25) + diry * 4 * (Date.now());
     this.obstruction = this.collision(x, y);
     if (!this.obstruction) {
+      if (this.canBoost) {
+        this.canBoost = false;
+        this.immune = Date.now();
+        setTimeout(() => {this.immune = false}, 800);
+        setTimeout(() => {this.canBoost = true}, 5000);
+      }
       this.x = x;
       this.y = y;
     } else {
