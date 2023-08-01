@@ -543,11 +543,10 @@ class AI {
     this.identify();
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
-      this.r = this.toAngle(this.obstruction.x-this.x, this.obstruction.y-this.y);
+      this.r = this.toAngle(this.obstruction.x-this.x+40, this.obstruction.y-this.y+40);
       if (this.canPowermissle) this.fire(this.obstruction.x, this.obstruction.y, 'powermissle');
       if (this.canFire) this.fire(this.obstruction.x, this.obstruction.y);
-    }
-    if (this.mode !== 0) {
+    } else if (this.mode !== 0) {
       this.r = this.toAngle(this.target.x - this.x, this.target.y - this.y);
       if (this.canPowermissle) this.fire(this.target.x, this.target.y, 'powermissle');
       if (this.canFire) this.fire(this.target.x, this.target.y);
