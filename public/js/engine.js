@@ -567,8 +567,8 @@ class AI {
     const diry = this.path.p[n][1] - this.path.p[f][1];
     this.baseRotation = [[135, 180, 225], [90, this.baseRotation, 270], [45, 0, 315]][diry + 1][dirx + 1];
     this.r = this.baseRotation;
-    const x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25) + dirx * 4 * (Date.now());
-    const y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25) + diry * 4 * (Date.now());
+    const x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25) + dirx * 4 * (Date.now()-Math.max(this.immune, this.path.o));
+    const y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25) + diry * 4 * (Date.now()-Math.max(this.immune, this.path.o));
     this.obstruction = this.collision(x, y);
     if (!this.obstruction) {
       if (this.canBoost) {
