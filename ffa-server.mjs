@@ -20,9 +20,9 @@ import Filter from 'bad-words';
 import {Engine} from './public/js/engine.js';
 
 function measureLag(i) {
-  const start = process.hrtime();
+  const start = Date.now();
   setTimeout(() => {
-    const lag = process.hrtime(start)[0];
+    const lag = Date.now()-start;
     console.log(i+':'+lag);
     setTimeout(() => measureLag(i+1), 1000);
   })
