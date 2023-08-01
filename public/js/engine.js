@@ -522,6 +522,7 @@ class AI {
     this.maxHp = this.hp;
     this.pushback = 0;
     this.target = false;
+    this.obstruction = false;
     this.bond = false;
     this.path = false;
     this.delay = false;
@@ -538,6 +539,10 @@ class AI {
   update() {
     this.identify();
     if (this.role !== 0) this.move();
+    if (this.obstruction && !this.target.s) {
+      this.r = this.toAngle(this.obstruction.x-this.x, this.obstruction.y-this.y);
+      if (this.canFire) this.fire();
+    }
     if (this.mode !== 0) {
       this.r = this.toAngle(this.target.x - this.x, this.target.y - this.y);
       if (this.canFire) this.fire();
@@ -557,8 +562,24 @@ class AI {
     const diry = this.path.p[n][1] - this.path.p[f][1];
     this.baseRotation = [[135, 180, 225], [90, this.baseRotation, 270], [45, 0, 315]][diry + 1][dirx + 1];
     this.r = this.baseRotation;
-    this.x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25);
-    this.y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
+    const x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25);
+    const y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
+    this.obstruction = this.collision(x, y);
+    if (!this.obstruction) {
+      this.x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25);
+      this.y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
+    } else {
+      this.path.t += Date.now()-this.obstruction.t;
+    }
+  }
+
+  collision(x, y) {
+    for (const b of this.host.blocks) {
+      if (collision(x, y, 80, 80, b.x, b.y, 100, 100) {
+        return {x: b.x, y: b.y, t: Date.now()};
+      }
+    }
+    return false;
   }
 
   onBlock() {
