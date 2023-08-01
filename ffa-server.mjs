@@ -22,8 +22,8 @@ import {Engine} from './public/js/engine.js';
 function measureLag(i) {
   const start = process.hrtime();
   setTimeout(() => {
-    const lag = process.hrtime(start);
-    console.log(`${i}:${lag} ms`)
+    const lag = process.hrtime(start)[0];
+    if (lag > 10) console.log('server_side_lag: '+lag);
     setTimeout(() => measureLag(i+1), 1000);
   })
 }
