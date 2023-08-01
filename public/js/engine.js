@@ -566,15 +566,15 @@ class AI {
     const y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
     this.obstruction = this.collision(x, y);
     if (!this.obstruction) {
-      this.x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25);
-      this.y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
+      this.x = x;
+      this.y = y;
     } else {
       this.path.t += Date.now()-this.obstruction.t;
     }
   }
 
   collision(x, y) {
-    for (const b of this.host.blocks) {
+    for (const b of this.host.b) {
       if (collision(x, y, 80, 80, b.x, b.y, 100, 100)) {
         return {x: b.x, y: b.y, t: Date.now()};
       }
