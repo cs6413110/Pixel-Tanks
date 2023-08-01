@@ -1826,7 +1826,7 @@ function Game() {
           this.canTurret = false;
           this.tank.use.push('turret');
           this.timers.class = {time: Date.now(), cooldown: 50};
-          setTimeout(() => {this.canTurret = true}, 40000);
+          setTimeout(() => {this.canTurret = true}, 40);
         } else if (c === 'warrior' && this.canBuff) {
           this.tank.use.push('buff');
           this.canBuff = false;
