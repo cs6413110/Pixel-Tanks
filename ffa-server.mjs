@@ -19,6 +19,16 @@ import jsonpack from 'jsonpack';
 import Filter from 'bad-words';
 import {Engine} from './public/js/engine.js';
 
+function measureLag(i) {
+  const start = process.hrtime();
+  setTimeout(() => {
+    const lag = process.hrtime(start);
+    console.log(`${i}:${lag} ms`)
+    setTimeout(() => measureLag(i+1), 1000);
+  })
+}
+measureLag(1)
+
 const filter = new Filter();
 export const Core = new HyperExpress.Router();
 const Server = new HyperExpress.Server({fast_buffers: true});
