@@ -541,11 +541,11 @@ class AI {
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
       this.r = this.toAngle(this.obstruction.x-this.x, this.obstruction.y-this.y);
-      if (this.canFire) this.fire();
+      if (this.canFire) this.fire(this.obstruction.x, this.obstruction.y);
     }
     if (this.mode !== 0) {
       this.r = this.toAngle(this.target.x - this.x, this.target.y - this.y);
-      if (this.canFire) this.fire();
+      if (this.canFire) this.fire(this.target.x, this.target.y);
     }
     if (this.pushback !== 0) this.pushback += 0.5;
   }
@@ -733,8 +733,8 @@ class AI {
     this.mode = (this.hp < .3 * this.maxHp && this.role !== 1) ? 2 : 1;
   }
 
-  fire() {
-    const isShotgun = Math.sqrt((this.target.t.x - this.x) ** 2 + (this.target.t.y - this.y) ** 2) < 150;
+  fire(tx, ty) {
+    const isShotgun = Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150;
     this.pushback = -3;
     let l = isShotgun ? -10 : 0;
     while (l<(isShotgun ? 15 : 1)) {
