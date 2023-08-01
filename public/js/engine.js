@@ -575,7 +575,7 @@ class AI {
 
   collision(x, y) {
     for (const b of this.host.blocks) {
-      if (collision(x, y, 80, 80, b.x, b.y, 100, 100) {
+      if (collision(x, y, 80, 80, b.x, b.y, 100, 100)) {
         return {x: b.x, y: b.y, t: Date.now()};
       }
     }
