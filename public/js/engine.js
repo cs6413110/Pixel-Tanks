@@ -6,7 +6,7 @@ const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true 
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 
 class Engine {
-  constructor(levels) {
+  constructor(levels) {                  
     this.spawn = { x: 0, y: 0 };
     this.ai = [];
     this.b = [];
@@ -527,6 +527,7 @@ class AI {
     this.path = false;
     this.delay = false;
     this.canFire = true;
+    this.canPowermissle = true;
     this.canItem = true;
     this.canClass = true;
     this.item = '';
@@ -541,10 +542,12 @@ class AI {
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
       this.r = this.toAngle(this.obstruction.x-this.x, this.obstruction.y-this.y);
+      if (this.canPowermissle) this.fire(this.obstruction.x, this.obstruction.y, 'powermissle');
       if (this.canFire) this.fire(this.obstruction.x, this.obstruction.y);
     }
     if (this.mode !== 0) {
       this.r = this.toAngle(this.target.x - this.x, this.target.y - this.y);
+      if (this.canPowermissle) this.fire(this.target.x, this.target.y, 'powermissle');
       if (this.canFire) this.fire(this.target.x, this.target.y);
     }
     if (this.pushback !== 0) this.pushback += 0.5;
@@ -576,7 +579,7 @@ class AI {
   collision(x, y) {
     for (const b of this.host.b) {
       if (collision(x, y, 80, 80, b.x, b.y, 100, 100)) {
-        return {x: b.x, y: b.y, t: this.obstruction ? this.obstruction.t : Date.now()};
+        return {x: b.x+50, y: b.y+50, t: this.obstruction ? this.obstruction.t : Date.now()};
       }
     }
     return false;
@@ -733,17 +736,23 @@ class AI {
     this.mode = (this.hp < .3 * this.maxHp && this.role !== 1) ? 2 : 1;
   }
 
-  fire(tx, ty) {
-    const isShotgun = Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150;
+  fire(tx, ty, type) {
+    type = type || Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
+    const cooldown = {powermissle: 0, shotgun: 600, bullet: 200}[type];
     this.pushback = -3;
-    let l = isShotgun ? -10 : 0;
-    while (l<(isShotgun ? 15 : 1)) {
+    let l = type === 'shotgun' ? -10 : 0;
+    while (l<(type === 'shotgun' ? 15 : 1)) {
       const { x, y } = this.toPoint(this.r+l);
-      this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, isShotgun ? 'shotgun' : 'bullet', 0, this.team, this.host));
+      this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, type, 0, this.team, this.host));
       l += 5;
     }
-    this.canFire = false;
-    setTimeout(() => { this.canFire = true }, isShotgun ? 600 : 200);
+    if (type === 'powermissle') {
+      this.canPowermissle = false;
+      setTimeout(() => { this.canPowermissle = true }, 10000);
+    } else {
+      this.canFire = false;
+      setTimeout(() => { this.canFire = true }, cooldown);
+    }
   }
 
   damage(d) {
