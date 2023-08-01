@@ -132,7 +132,6 @@ class Engine {
     if (use.includes('mine')) this.b.push(new Block(t.x, t.y, 0, 'mine', t.team, this));
     if (use.includes('shield')) t.shields = Math.min(500, t.shields + 100);
     if (airstrike) {
-      this.logs.push({ c: '#ffffff', m: 'attempt airstrike at ' + airstrike.x + ', ' + airstrike.y });
       this.b.push(new Block(airstrike.x, airstrike.y, Infinity, 'airstrike', this.parseTeamExtras(t.team), this));
     }
     if (fire.length > 0) {
