@@ -576,7 +576,7 @@ class AI {
   collision(x, y) {
     for (const b of this.host.b) {
       if (collision(x, y, 80, 80, b.x, b.y, 100, 100)) {
-        return {x: b.x, y: b.y, t: Date.now()};
+        return {x: b.x, y: b.y, t: this.obstruction ? this.obstruction.t : Date.now()};
       }
     }
     return false;
