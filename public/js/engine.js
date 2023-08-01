@@ -751,7 +751,7 @@ class AI {
     let l = type === 'shotgun' ? -10 : 0;
     while (l<(type === 'shotgun' ? 15 : 1)) {
       const { x, y } = this.toPoint(this.r+l);
-      this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, type, 0, this.team, this.host));
+      this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, type, this.r+l, this.team, this.host));
       l += 5;
     }
     if (type === 'powermissle') {
