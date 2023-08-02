@@ -817,21 +817,24 @@ class AI {
   raycast(t) {
     const x = this.x+40;
     const y = this.y+40;
-    const x2 = t.x;
-    const y2 = t.y
+    const x2 = t.x+40;
+    const y2 = t.y+40;
     const dx = x2 - x;
     const dy = y2 - y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
 
     for (let i = 0; i < this.host.b.length; i++) {
       const rect = this.host.b[i];
-      const xMin = rect.x;
-      const yMin = rect.y;
-      const xMax = rect.x + rect.width;
-      const yMax = rect.y + rect.height;
-      if (x < xMax && x2 > xMin && y < yMax && y2 > yMin) return false;
+
+      if (rect.x < x && rect.x + rect.width > x && rect.y < y && rect.y + rect.height > y) {
+        return false; // Line of sight blocked
+      }
+
+      const d = Math.abs(dy * rect.x - dx * rect.y + x2 * y - y2 * x + rect.x * y2 - rect.y * x2) / distance;
+      if (d < Math.sqrt(rect.width * rect.width + rect.height * rect.height)) {
+        return false; // Line of sight blocked
+      }
     }
-    return true;
-  }
 }
 
 try {
