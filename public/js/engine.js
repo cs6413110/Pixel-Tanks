@@ -826,12 +826,12 @@ class AI {
     for (let i = 0; i < this.host.b.length; i++) {
       const rect = this.host.b[i];
 
-      if (rect.x < x && rect.x + rect.width > x && rect.y < y && rect.y + rect.height > y) {
+      if (rect.x < x && rect.x + 100 > x && rect.y < y && rect.y + 100 > y) {
         return false; // Line of sight blocked
       }
 
       const d = Math.abs(dy * rect.x - dx * rect.y + x2 * y - y2 * x + rect.x * y2 - rect.y * x2) / distance;
-      if (d < Math.sqrt(rect.width * rect.width + rect.height * rect.height)) {
+      if (d < Math.sqrt(100 * 100 + 100 * 100)) {
         return false; // Line of sight blocked
       }
     }
