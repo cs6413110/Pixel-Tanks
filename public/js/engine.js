@@ -835,6 +835,7 @@ class AI {
         return false; // Line of sight blocked
       }
     }
+    return true;
   }
 }
 
