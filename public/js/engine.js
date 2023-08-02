@@ -730,7 +730,7 @@ class AI {
       if (host.getTeam(team) === host.getTeam(ai.team)) {
         allies.push({x: ai.x, y: ai.y, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
       } else {
-        targets.push({{x: ai.x, y: ai.y, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
+        targets.push({x: ai.x, y: ai.y, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
       }
     }
     targets.sort((a, b) => a.distance - b.distance);
