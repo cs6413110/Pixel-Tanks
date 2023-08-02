@@ -815,51 +815,20 @@ class AI {
   }
 
   raycast(t) {
-    const x = this.x+40, y = this.y+40;
-    const x2 = t.x+40, y2 = t.y+40;
-    const dx = x2-x, dy = y2-y;
-    /*
-    const minx, miny;
-    const topLeft = (a) => a < 0 ? Math.ceil(a) : Math.floor(a);
-    const bottomRight = (a) => a < 0 ? Math.floor(a) : Math.ceil(a);
-    if (topLeft(x/100) !== topLeft(x2/100)) {
-      minx = bottomRight((x > x2 ? x : x2)/100);
-      maxx = topLeft((x > x2 ? x2 : x)/100);
-    } else {
-      minx = 0;
-      maxx = -1;
-    }
-    if (topLeft(y/100) !== topLeft(y2/100)) {
-      miny = bottomRight((y > y2 ? y : y2)/100);
-      maxy = topLeft((y > y2 ? y2 : y)/100);
-    } else {
-      miny = 0;
-      maxy = -1;
-    }
-    const px = [];
-    const py = [];
-    for (const b of this.host.b) {
-      if (!collision(b.x, b.y, 100, 100, minx, miny, Math.max(dx, 1), Math.max(dy, 1)) continue;
-      if (b.x%100 !== 0) px.push(b.x);
-      if (b.y%100 !== 0) py.push(b.y);
-    }
-    for (let i = miny; i <= maxy, i++) py.push(i*100);
-    if (x === x2) {
-      for (const p of py) for (const b of this.host.b) if (x >= b.x && x <= b.x+100 && p >= b.y && p <= b.y+100) return false;
-    } else {
-      
-    }
-    return true;
-*/
-    
-    const steps = Math.max(Math.abs(dx), Math.abs(dy));
-    if (steps === 0) return true;
-    const xm = dx / steps, ym = dy / steps;
-    let cx = x, cy = y;
-    for (let i = 0; i < steps; i+=5) {
-      cx += xm;
-      cy += ym;
-      for (const b of this.host.b) if (cx >= b.x && cx <= b.x+100 && cy >= b.y && cy <= b.y+100) return false;
+    const x = this.x+40;
+    const y = this.y+40;
+    const x2 = t.x;
+    const y2 = t.y
+    const dx = x2 - x;
+    const dy = y2 - y;
+
+    for (let i = 0; i < b.length; i++) {
+      const rect = b[i];
+      const xMin = rect.x;
+      const yMin = rect.y;
+      const xMax = rect.x + rect.width;
+      const yMax = rect.y + rect.height;
+      if (x < xMax && x2 > xMin && y < yMax && y2 > yMin) return false;
     }
     return true;
   }
@@ -867,4 +836,4 @@ class AI {
 
 try {
   module.exports = { Engine };
-} catch (e) { }
+} catch (e) {}
