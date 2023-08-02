@@ -541,8 +541,9 @@ class AI {
   }
 
   update() {
-    this.identify();
-    if (this.role !== 0) setTimeout(() => {this.move()});
+    // the Math.random() if statements give a little bit of delay to AI and make them seem more human
+    if (Math.random() <= .2) this.identify();
+    if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
       this.r = this.toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
       if (this.canPowermissle) this.fire(this.obstruction.x, this.obstruction.y, 'powermissle');
@@ -715,20 +716,40 @@ class AI {
 
   identify() {
     const { host, team } = this;
-    const tanks = host.pt.concat(host.ai), targets = [], allies = [];
-    for (const t of tanks) {
-      if (!t.ded && this.raycast(t)) {
+    const targets = [], allies = [], target = false;
+    for (const t of host.pt) {
+      if (!t.ded) {
         if (host.getTeam(team) === host.getTeam(t.team)) {
-          allies.push({ t, distance: Math.sqrt((t.x - this.x) ** 2 + (t.y - this.y) ** 2) });
+          allies.push({x: t.x, y: t.y, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
         } else {
-          targets.push({ t, distance: Math.sqrt((t.x - this.x) ** 2 + (t.y - this.y) ** 2) });
+          targets.push({x: t.x, y: t.y, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
         }
       }
     }
-    allies.sort((a, b) => a.distance - b.distance);
+    for (const ai of host.ai) {
+      if (host.getTeam(team) === host.getTeam(ai.team)) {
+        allies.push({x: ai.x, y: ai.y, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
+      } else {
+        targets.push({{x: ai.x, y: ai.y, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
+      }
+    }
     targets.sort((a, b) => a.distance - b.distance);
-    if (this.role === 3 && !this.bond && allies.length > 0) this.bond = allies[0].t
-    if (targets.length === 0) {
+    for (const t of targets) {
+      if (this.raycast(t)) {
+        target = t;
+        break;
+      }
+    }
+    if (this.role === 3 && !this.bond && allies.length > 0) {
+      allies.sort((a, b) => a.distance - b.distance);
+      for (const a of allies) {
+        if (this.raycast(a)) {
+          this.bond = a;
+          break;
+        }
+      }
+    }
+    if (!target) {
       if (this.role === 0) this.r++;
       if (this.target) {
         this.target.s = false;
@@ -740,8 +761,8 @@ class AI {
       return;
     }
     if (this.target) this.target.c = clearTimeout(this.target.c);
-    const t = targets[0].t;
-    this.target = { t, x: t.x, y: t.y, s: true }; // x and y show last logged coords
+    target.s = true;
+    this.target = target;
     if (this.bond) return;
     this.mode = (this.hp < .3 * this.maxHp && this.role !== 1) ? 2 : 1;
   }
@@ -798,7 +819,7 @@ class AI {
     if (steps === 0) return true;
     const xm = dx / steps, ym = dy / steps;
     let cx = x, cy = y;
-    for (let i = 0; i < steps; i++) {
+    for (let i = 0; i < steps; i+=5) {
       cx += xm;
       cy += ym;
       for (const b of this.host.b) if (cx >= b.x && cx <= b.x+100 && cy >= b.y && cy <= b.y+100) return false;
