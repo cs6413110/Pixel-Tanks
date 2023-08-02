@@ -822,7 +822,7 @@ function Game() {
               } else if (this.cosmeticTab) {
                 if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.cosmeticTab = false;
                 for (let i = 0; i < 16; i++) {
-                  if (A.collider({x, y, w: 0, h: 0}, {x: 598+(l%4)*108, y: 298+Math.floor(l/4)*108, w: 88, h: 88})) {
+                  if (A.collider({x, y, w: 0, h: 0}, {x: 598+(i%4)*108, y: 298+Math.floor(i/4)*108, w: 88, h: 88})) {
                     if (e.button === 0) {
                       PixelTanks.userData.cosmetic = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
                     } else {
@@ -834,7 +834,7 @@ function Game() {
               } else if (this.deathEffectsTab) {
                 if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.deathEffectsTab = false;
                 for (let i = 0; i < 16; i++) {
-                  if (A.collider({x, y, w: 0, h: 0}, {x: 598+(l%4)*108, y: 298+Math.floor(l/4)*108, w: 88, h: 88})) {
+                  if (A.collider({x, y, w: 0, h: 0}, {x: 598+(i%4)*108, y: 298+Math.floor(i/4)*108, w: 88, h: 88})) {
                     if (e.button === 0) {
                       PixelTanks.userData.deathEffect = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i];
                     } else {
@@ -1739,7 +1739,7 @@ function Game() {
         }, 25000, true],
         airstrike: [() => {
           this.tank.airstrike = {x: this.mouse.x+this.tank.x-800, y: this.mouse.y+this.tank.y-500};
-        }, 40000, false],
+        }, 20000, false],
         fortress: [() => {
           this.tank.use.push('block');
           this.tank.blockType = 'fortress';
