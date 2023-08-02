@@ -115,8 +115,8 @@ class Engine {
       });
     }
     if (use.includes('turret')) {
-      this.ai.splice(this.ai.indexOf(this.ai.find(a => this.getUsername(a.team) === t.username)), 1);
-      this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
+      //this.ai.splice(this.ai.indexOf(this.ai.find(a => this.getUsername(a.team) === t.username)), 1);
+      this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 2, t.rank, t.team, this));
     }
     if (use.includes('buff')) {
       t.buff = true;
@@ -822,8 +822,8 @@ class AI {
     const dx = x2 - x;
     const dy = y2 - y;
 
-    for (let i = 0; i < b.length; i++) {
-      const rect = b[i];
+    for (let i = 0; i < this.host.b.length; i++) {
+      const rect = this.host.b[i];
       const xMin = rect.x;
       const yMin = rect.y;
       const xMax = rect.x + rect.width;
