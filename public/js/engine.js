@@ -716,7 +716,8 @@ class AI {
 
   identify() {
     const { host, team } = this;
-    const targets = [], allies = [], target = false;
+    const targets = [], allies = [];
+    let target = false;
     for (const t of host.pt) {
       if (!t.ded) {
         if (host.getTeam(team) === host.getTeam(t.team)) {
