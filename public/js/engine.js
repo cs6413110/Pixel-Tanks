@@ -843,6 +843,7 @@ class AI {
       if (b.y%100 !== 0) py.push(b.y);
     }
     for (let i = miny; i <= maxy; i++) py.push(i*100);
+    for (let i = minx; i <= maxx; i++) px.push(i*100);
     if (x === x2) {
       for (const p of py) for (const b of this.host.b) if (x >= b.x && x <= b.x+100 && p >= b.y && p <= b.y+100) return false;
     } else {
