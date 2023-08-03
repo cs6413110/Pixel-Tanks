@@ -539,7 +539,7 @@ class AI {
     this.class = '';
     const t = host.pt.find(t => t.username === host.getUsername(this.team));
     this.cosmetic = t ? t.cosmetic : '';
-    this.raw = {coords: [], epx: -100, epy: -100, parsed: [], points: []};
+    this.raw = {coords: [], epx: -100, epy: -100, parsed: [], points: [], mx: [], my: []};
   }
 
   update() {
@@ -667,7 +667,7 @@ class AI {
       const x = coords[i][0] + epx, y = coords[i][1] + epy;
       if (x >= 0 && y >= 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x-tpx)**2+(y-tpy)**2) };
     }
-    this.raw = {coords, epx, epy, tpx, tpy, parsed: [], points: []};
+    this.raw = {coords, epx, epy, tpx, tpy, parsed: [], points: [], mx: [], my: []};
     coords = coords.filter(c => !Array.isArray(c));
     coords.sort((a, b) => sortAsc ? a.d - b.d : b.d - a.d);
     coords.forEach(c => {
@@ -835,10 +835,12 @@ class AI {
       miny = 0;
       maxy = -1;
     }
+    this.raw.mx = [minx, maxx];
+    this.raw.my = [miny, maxy];
     const px = [];
     const py = [];
     for (const b of this.host.b) {
-      if (!collision(b.x, b.y, 100, 100, minx*100, miny*100, Math.max(dx, 1), Math.max(dy, 1))) continue;
+      if (!collision(b.x, b.y, 100, 100, minx*100, miny*100, Math.max(Math.abs(dx), 1), Math.max(Math.abs(dy), 1))) continue;
       if (b.x%100 !== 0) px.push(b.x);
       if (b.y%100 !== 0) py.push(b.y);
     }
