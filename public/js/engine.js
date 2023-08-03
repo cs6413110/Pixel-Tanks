@@ -252,7 +252,7 @@ class Engine {
         if (p[q] === '@') {
           this.spawn = { x: q * 100, y: l * 100 };
         } else if (key[p[q]]) {
-          this.b.push(new Block(q * 100, l * 100, key[p[q]][1], key[p[q]][0], '_default_:_placeholder_', this));
+          this.b.push(new Block(q * 100, l * 100, key[p[q]][1], key[p[q]][0], ':', this));
         }
       }
     }
