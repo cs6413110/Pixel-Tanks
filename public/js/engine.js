@@ -818,7 +818,7 @@ class AI {
     const x = this.x+40, y = this.y+40;
     const x2 = t.x+40, y2 = t.y+40;
     const dx = x2-x, dy = y2-y;
-    let minx, miny;
+    let minx, miny, maxx, maxy;
     const topLeft = (a) => a < 0 ? Math.ceil(a) : Math.floor(a);
     const bottomRight = (a) => a < 0 ? Math.floor(a) : Math.ceil(a);
     if (topLeft(x/100) !== topLeft(x2/100)) {
