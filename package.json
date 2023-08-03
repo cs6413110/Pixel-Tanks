@@ -22,7 +22,7 @@
   "dependencies": {
     "bad-words": "^3.0.4",
     "fs": "^0.0.2",
-    "hyper-express": "^6.7.1",
+    "hyper-express": "^6.7.2",
     "jsonpack": "^1.1.5",
     "mongodb": "^5.7.0",
     "node-fetch": "^3.3.1",
