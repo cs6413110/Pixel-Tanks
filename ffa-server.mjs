@@ -428,33 +428,43 @@ class Multiplayer extends Engine {
   send() {
     const view = {x: -860, y: -560, w: 1880, h: 1280};
     this.pt.forEach(t => {
-      var message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, event: 'hostupdate'};
-      this.b.forEach(b => {
-        if (A.collider(b.x, b.y, 100, 100, t.x+view.x, t.y+view.y, view.w, view.h)) message.blocks.push(JSON.parse(JSON.stringify(b, (key, value) => {
-          return ['host', 'bar', 'sd', 'c'].includes(key) ? undefined : (value === null ? undefined : value);
-        })));
-      });
-      this.pt.forEach(pt => {
-        if (A.collider(pt.x, pt.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.tanks.push(JSON.parse(JSON.stringify(pt, (key, value) => {
-          return ['updates', 'socket', 'render', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluInterval', 'gluTimeout', 'fireTimeout', 'fireInterval'].includes(key) ? undefined : (typeof value === 'number' ? Math.round(value) : value);
-        })));
-      });
-      this.ai.forEach(ai => {
-        if (A.collider(ai.x, ai.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.ai.push(JSON.parse(JSON.stringify(ai, (key, value) => {
-          return ['team', 'host', 'canFire', 'target'].includes(key) ? undefined : (typeof value === 'number' ? Math.round(value) : value);
-        })));
-      });
-      this.s.forEach(s => {
-        if (A.collider(s.x, s.y, 10, 10, t.x+view.x, t.y+view.y, view.w, view.h)) message.bullets.push(JSON.parse(JSON.stringify(s, (key, value) => {
-          return ['host', 'd', 'damage', 'ra', 'target', 'offset', 'settings', 'md'].includes(key) ? undefined : (typeof value === 'number' ? Math.round(value) : value);
-        })));
-      });
-      this.d.forEach(d => {
-        if (A.collider(d.x, d.y, d.w, d.h, t.x+view.x, t.y+view.y, view.w, view.h)) message.explosions.push({...d, host: 'x', a: 'x', c: 'x'});
-      });
+      const message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, event: 'hostupdate'};
+      for (const b of this.b) {
+        if (A.collider(b.x, b.y, 100, 100, t.x+view.x, t.y+view.y, view.w, view.h)) {
+          message.blocks.push(this.deepClone(b, ['host', 'bar', 'sd', 'c'], [Infinity]));
+        }
+      }
+      for (const pt of this.pt) {
+        if (A.collider(pt.x, pt.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) {
+          messages.tanks.push(this.deepClone(pt, ['updates', 'sockets', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluTimeout', 'fireTimeout', 'fireInterval'], []));
+        }
+      }
+      for (const ai of this.ai) {
+        if (A.collider(ai.x, ai.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) {
+          messages.ai.push(this.deepClone(ai, ['team', 'host', 'canFire', 'target'], []));
+        }
+      }
+      for (const s of this.s) {
+        if (A.collider(s.x, s.y, 10, 10, t.x+view.x, t.y+view.y, view.w, view.h)) {
+          messages.bullets.push(this.deepClone(s, ['host', 'd', 'damage', 'ra', 'target', 'offset', 'md'], []));
+        }
+      }
+      for (const d of this.d) {
+        if (A.collider(d.x, d.y, d.w, d.h, t.x+view.x, t.y+view.y, view.w, view.h)) {
+          message.explosions.push(this.deepClone(d, ['host', 'a', 'c'], []));
+        }
+      }
       t.socket.send(message);
       outgoing_per_second++;
     });
+  }
+
+  deepClone(a, b, c) {
+    return JSON.parse(JSON.stringify(a, (key, value) => {
+      if (b.includes(key) || c.includes(value)) return undefined;
+      if (Number.isSafeInteger(value)) return Math.round(value);
+      return value;
+    }
   }
 
   disconnect(socket, code, reason) {
