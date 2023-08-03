@@ -1346,6 +1346,13 @@ function Game() {
       GUI.draw.fillStyle = '#00FF00';
       GUI.draw.fillRect(x, y+100, 80*hp/maxHp, 5);
       // debug line of sight renderer
+      GUI.draw.beginPath();
+      GUI.draw.strokeStyle = '#000000';
+      if (raw.mx.length === 2) {
+        GUI.draw.moveTo(raw.mx[0], raw.my[0]);
+        GUI.draw.lineTo(raw.mx[1], raw.my[1]);
+      }
+      GUI.draw.stroke();
       GUI.draw.fillStyle = '#ffffff';
       for (const r of raw.points) GUI.draw.fillRect(r.x-5, r.y-5, 10, 10);
       return;
