@@ -431,7 +431,7 @@ class Multiplayer extends Engine {
       var message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, event: 'hostupdate'};
       this.b.forEach(b => {
         if (A.collider(b.x, b.y, 100, 100, t.x+view.x, t.y+view.y, view.w, view.h)) message.blocks.push(JSON.parse(JSON.stringify(b, (key, value) => {
-          return ['host', 'bar', 'sd', 'c', ].includes(key) ? undefined : (value !== null ? value : undefined);
+          return ['host', 'bar', 'sd', 'c'].includes(key) ? undefined : (value != null ? value : undefined);
         })));
       });
       this.pt.forEach(pt => {
