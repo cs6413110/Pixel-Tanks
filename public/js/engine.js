@@ -309,7 +309,7 @@ class Block {
   }
 
   damage(d) {
-    this.hp = Math.max(this.hp - d, this.maxHp);
+    this.hp = Math.max(this.hp - d, 0);
     if (this.hp !== Infinity) {
       this.s = true;
       clearTimeout(this.bar);
