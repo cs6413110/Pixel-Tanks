@@ -844,7 +844,6 @@ class AI {
     }
     for (let i = miny; i <= maxy; i++) py.push(i*100);
     for (let i = minx; i <= maxx; i++) px.push(i*100);
-    alert('PY: '+py+' | PX: '+px);
     if (x === x2) {
       for (const p of py) for (const b of this.host.b) if (x >= b.x && x <= b.x+100 && p >= b.y && p <= b.y+100) return false;
     } else {
@@ -852,10 +851,12 @@ class AI {
       const offset = slope*x-y;
       for (const p of py) {
         const c = (p-offset)/slope;
+        this.raw.points.push({x: c, y: p});
         for (const b of this.host.b) if (c >= b.x && c <= b.x+100 && p >= b.y && p <= b.y+100) return false;
       }
       for (const p of px) {
         const c = p*slope+offset;
+        this.raw.points.push({x: p, y: c});
         for (const b of this.host.b) if (p >= b.x && p <= b.x+100 && c >= b.y && c <= b.y+100) return false;
       }
     }
