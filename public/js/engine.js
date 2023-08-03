@@ -539,7 +539,7 @@ class AI {
     this.class = '';
     const t = host.pt.find(t => t.username === host.getUsername(this.team));
     this.cosmetic = t ? t.cosmetic : '';
-    this.raw = {coords: [], epx: -100, epy: -100, parsed: []};
+    this.raw = {coords: [], epx: -100, epy: -100, parsed: [], points: []};
   }
 
   update() {
