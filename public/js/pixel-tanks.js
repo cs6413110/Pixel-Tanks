@@ -1656,7 +1656,7 @@ function Game() {
         if (!this.canFire) return;
         this.canFire = false;
         clearTimeout(this.fireTimeout);
-        this.fireTimeout = setTimeout(() => {this.canFire = true}, this.fireType === 1 ? 190 : 590);
+        this.fireTimeout = setTimeout(() => {this.canFire = true}, this.fireType === 1 ? 180 : 580);
       }
       var fireType = ['grapple', 'megamissle', 'dynamite', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? (PixelTanks.userData.class === 'medic' ? 'healmissle' : 'powermissle') : (type === 0 ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
       while (l<(fireType === 1 ? 1 : 15)) {
