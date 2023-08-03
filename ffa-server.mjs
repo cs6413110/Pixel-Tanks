@@ -53,7 +53,6 @@ const deathMessages = [
   `{victim} was fed a healthy dose of explosives by {killer}`,
   `{victim} became another number in {killer}'s kill streak`,
   `{victim} got wrecked by {killer}`,
-  `{victim} got hit by a steamroller driven by DIO`
 ];
 const joinMessages = [
   `{idot} joined the game`,
@@ -65,7 +64,6 @@ const joinMessages = [
   `{idot} is back`,
   `a wild {idot} spawned`,
   `{idot} is here to kill them all`,
-  `{idot} doesn't have anything better to do`,
   `{idot} is here to fight to the death`,
 ];
 const rageMessages = [
