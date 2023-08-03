@@ -1639,8 +1639,8 @@ function Game() {
       clearInterval(this.fireInterval);
       this.fireInterval = setInterval(() => {
         this.canFire = true;
-        this.fire();
-      }, this.fireType === 1 ? 200 : 600, e.button);
+        this.fire(e.button);
+      }, this.fireType === 1 ? 200 : 600);
     }
 
     mouseup() {
