@@ -159,14 +159,14 @@ class Engine {
         if (collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) {
           if (t.immune && tank.canBashed) {
             if (t.class === 'warrior' && t.username !== tank.username && !t.ded) {
-              this.damagePlayer(tank, { x: tank.x, y: tank.y, u: t.username, a: 50 });
+              this.damagePlayer(tank, { x: tank.x, y: tank.y, u: t.username, a: 100 });
             } else if (t.class == 'medic') {
-              tank.hp = Math.min(tank.hp + 50, tank.maxHp);
+              tank.hp = Math.min(tank.hp+30, tank.maxHp);
             }
             tank.canBashed = false;
             setTimeout(() => {
               tank.canBashed = true;
-            }, 800);
+            }, 400);
           }
         }
       });
@@ -261,7 +261,7 @@ class Engine {
   damagePlayer(victim, damage) {
     if (victim.immune || victim.ded) return;
     if (victim.shields > 0 && damage.a > 0) return victim.shields -= damage.a;
-    if (victim.buff) damage.a *= .75;
+    if (victim.buff) damage.a *= .8;
     victim.hp = Math.min(victim.maxHp, victim.hp - damage.a);
     if (victim.damage) clearTimeout(victim.damage.ti);
     victim.damage = { d: (victim.damage ? victim.damage.d : 0) + damage.a, x: damage.x, y: damage.y, ti: setTimeout(() => { victim.damage = false }, 1000) };
@@ -332,7 +332,7 @@ class Shot {
   constructor(x, y, xm, ym, type, rotation, team, host) {
     const settings = { damage: { bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -100, dynamite: 0, fire: 0 }, speed: { bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9 } };
     const t = host.pt.find(t => t.username === host.getUsername(team));
-    this.damage = settings.damage[type] * t.maxHp / 500 * (t.buff ? 1.5 : 1);
+    this.damage = settings.damage[type] * t.maxHp / 500 * (t.buff ? 1.2 : 1);
     this.team = team;
     this.r = rotation;
     this.type = type;
