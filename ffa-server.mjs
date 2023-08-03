@@ -436,17 +436,17 @@ class Multiplayer extends Engine {
       });
       this.pt.forEach(pt => {
         if (A.collider(pt.x, pt.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.tanks.push(JSON.parse(JSON.stringify(pt, (key, value) => {
-          return ['updates', 'socket', 'render', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluInterval', 'gluTimeout', 'fireTimeout', 'fireInterval'].includes(key) ? undefined : (!isNaN(value) ? Math.round(value) : value);
+          return ['updates', 'socket', 'render', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluInterval', 'gluTimeout', 'fireTimeout', 'fireInterval'].includes(key) ? undefined : (typeof value === 'number' ? Math.round(value) : value);
         })));
       });
       this.ai.forEach(ai => {
         if (A.collider(ai.x, ai.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.ai.push(JSON.parse(JSON.stringify(ai, (key, value) => {
-          return ['team', 'host', 'canFire', 'target'].includes(key) ? undefined : (!isNaN(value) ? Math.round(value) : value);
+          return ['team', 'host', 'canFire', 'target'].includes(key) ? undefined : (typeof value === 'number' ? Math.round(value) : value);
         })));
       });
       this.s.forEach(s => {
         if (A.collider(s.x, s.y, 10, 10, t.x+view.x, t.y+view.y, view.w, view.h)) message.bullets.push(JSON.parse(JSON.stringify(s, (key, value) => {
-          return ['host', 'd', 'damage', 'ra', 'target', 'offset', 'settings', 'md'].includes(key) ? undefined : (!isNaN(value) ? Math.round(value) : value);
+          return ['host', 'd', 'damage', 'ra', 'target', 'offset', 'settings', 'md'].includes(key) ? undefined : (typeof value === 'number' ? Math.round(value) : value);
         })));
       });
       this.d.forEach(d => {
