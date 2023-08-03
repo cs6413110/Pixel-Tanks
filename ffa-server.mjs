@@ -464,7 +464,7 @@ class Multiplayer extends Engine {
       if (b.includes(key) || c.includes(value)) return undefined;
       if (Number.isSafeInteger(value)) return Math.round(value);
       return value;
-    }
+    }))
   }
 
   disconnect(socket, code, reason) {
