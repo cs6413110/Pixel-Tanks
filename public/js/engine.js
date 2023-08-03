@@ -813,7 +813,74 @@ class AI {
       return { x: x / Math.abs(x), y: y / Math.abs(x) };
     }
   }
-
+  raycast(t) {
+  const x = this.x + 40;
+  const y = this.y + 40;
+  const x2 = t.x + 40;
+  const y2 = t.y + 40;
+  const dx = x2 - x;
+  const dy = y2 - y;
+  let minx, miny, maxx, maxy;
+  
+  const roundDown = (a) => Math.floor(a);
+  const roundUp = (a) => Math.ceil(a);
+  
+  if (roundDown(x / 100) !== roundDown(x2 / 100)) {
+    minx = Math.min(roundUp(x / 100), roundUp(x2 / 100));
+    maxx = Math.max(roundDown(x / 100), roundDown(x2 / 100));
+  } else {
+    minx = 0;
+    maxx = -1;
+  }
+  
+  if (roundDown(y / 100) !== roundDown(y2 / 100)) {
+    miny = Math.min(roundUp(y / 100), roundUp(y2 / 100));
+    maxy = Math.max(roundDown(y / 100), roundDown(y2 / 100));
+  } else {
+    miny = 0;
+    maxy = -1;
+  }
+  
+  const px = [];
+  const py = [];
+  
+  for (const b of this.host.b) {
+    if (!collision(b.x, b.y, 100, 100, minx * 100, miny * 100, Math.abs(dx), Math.abs(dy))) continue;
+    if (b.x % 100 !== 0) px.push(b.x);
+    if (b.y % 100 !== 0) py.push(b.y);
+  }
+  
+  for (let i = miny; i <= maxy; i++) py.push(i * 100);
+  for (let i = minx; i <= maxx; i++) px.push(i * 100);
+  
+  if (x === x2) {
+    for (const p of py) {
+      for (const b of this.host.b) {
+        if (x >= b.x && x <= b.x + 100 && p >= b.y && p <= b.y + 100) return false;
+      }
+    }
+  } else {
+    const slope = dy / dx;
+    const offset = slope * x - y;
+    
+    for (const p of py) {
+      const c = (p - offset) / slope;
+      for (const b of this.host.b) {
+        if (c >= b.x && c <= b.x + 100 && p >= b.y && p <= b.y + 100) return false;
+      }
+    }
+    
+    for (const p of px) {
+      const c = p * slope + offset;
+      for (const b of this.host.b) {
+        if (p >= b.x && p <= b.x + 100 && c >= b.y && c <= b.y + 100) return false;
+      }
+    }
+  }
+  
+  return true;
+}
+/*
   raycast(t) {
     const x = this.x+40, y = this.y+40;
     const x2 = t.x+40, y2 = t.y+40;
@@ -838,7 +905,7 @@ class AI {
     const px = [];
     const py = [];
     for (const b of this.host.b) {
-      if (!collision(b.x, b.y, 100, 100, minx, miny, Math.max(dx, 1), Math.max(dy, 1))) continue;
+      if (!collision(b.x, b.y, 100, 100, minx*100, miny*100, Math.max(dx, 1), Math.max(dy, 1))) continue;
       if (b.x%100 !== 0) px.push(b.x);
       if (b.y%100 !== 0) py.push(b.y);
     }
@@ -859,7 +926,7 @@ class AI {
       }
     }
     return true;
-  }
+  }*/
 }
 
 try {
