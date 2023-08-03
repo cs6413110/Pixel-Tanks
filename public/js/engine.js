@@ -838,7 +838,7 @@ class AI {
     const px = [];
     const py = [];
     for (const b of this.host.b) {
-      if (!collision(b.x, b.y, 100, 100, minx, miny, Math.max(dx, 1), Math.max(dy, 1)) continue;
+      if (!collision(b.x, b.y, 100, 100, minx, miny, Math.max(dx, 1), Math.max(dy, 1))) continue;
       if (b.x%100 !== 0) px.push(b.x);
       if (b.y%100 !== 0) py.push(b.y);
     }
