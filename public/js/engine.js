@@ -835,8 +835,8 @@ class AI {
       miny = 0;
       maxy = -1;
     }
-    this.raw.mx = [minx, maxx];
-    this.raw.my = [miny, maxy];
+    this.raw.mx = [minx*100, maxx*100];
+    this.raw.my = [miny*100, maxy*100];
     const px = [];
     const py = [];
     for (const b of this.host.b) {
