@@ -1859,6 +1859,8 @@ function Game() {
         } else {
           Menus.removeListeners()
         }
+      } else if (k === 18) {
+        document.write(JSON.stringify(this.hostupdate));
       }
     }
 
