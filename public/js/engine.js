@@ -147,7 +147,7 @@ class Engine {
 
     this.pt.forEach(t => {
       if (t.dedEffect) t.dedEffect.time = Date.now() - t.dedEffect.start;
-      if (t.class === 'medic' && !t.ded) {
+      if (t.class === 'medic' && !t.ded && t.username !== t.healing) {
         const tank = this.pt.find(tank => tank.username === t.healing);
         if (!tank) {
           t.healing = t.username;
@@ -158,7 +158,7 @@ class Engine {
       this.pt.forEach(tank => {
         if (collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) {
           if (t.immune && tank.canBashed) {
-            if (t.class === 'warrior' && t.username !== tank.username) {
+            if (t.class === 'warrior' && t.username !== tank.username && !t.ded) {
               this.damagePlayer(tank, { x: tank.x, y: tank.y, u: t.username, a: 50 });
             } else if (t.class == 'medic') {
               tank.hp = Math.min(tank.hp + 50, tank.maxHp);
@@ -200,8 +200,8 @@ class Engine {
     this.d.forEach(d => {
       if (!d.c) return;
       this.pt.forEach(t => {
-        if (collision(d.x, d.y, d.w, d.h, t.x, t.y, 80, 80) && ((d.a > 0 && this.getTeam(d.team) !== this.getTeam(t.team)) || (d.a < 0 && this.getTeam(d.team) === this.getTeam(t.team)))) {
-          this.damagePlayer(t, { ...d, u: this.getUsername(d.team) });
+        if (collision(d.x, d.y, d.w, d.h, t.x, t.y, 80, 80) && this.getUsername(d.team) !== this.getUsername(t.team)) {
+          this.damagePlayer(t, { ...d, u: this.getUsername(d.team), a: this.getTeam(d.team) !== this.getTeam(t.team) ? Math.abs(d.a) : d.a});
         }
       });
       this.b.forEach(b => {
