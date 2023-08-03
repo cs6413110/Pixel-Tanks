@@ -436,7 +436,7 @@ class Multiplayer extends Engine {
       }
       for (const pt of this.pt) {
         if (A.collider(pt.x, pt.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) {
-          messages.tanks.push(this.deepClone(pt, ['updates', 'sockets', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluTimeout', 'fireTimeout', 'fireInterval'], []));
+          message.tanks.push(this.deepClone(pt, ['updates', 'sockets', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluTimeout', 'fireTimeout', 'fireInterval'], []));
         }
       }
       for (const ai of this.ai) {
@@ -446,7 +446,7 @@ class Multiplayer extends Engine {
       }
       for (const s of this.s) {
         if (A.collider(s.x, s.y, 10, 10, t.x+view.x, t.y+view.y, view.w, view.h)) {
-          messages.bullets.push(this.deepClone(s, ['host', 'd', 'damage', 'ra', 'target', 'offset', 'md'], []));
+          message.bullets.push(this.deepClone(s, ['host', 'd', 'damage', 'ra', 'target', 'offset', 'md'], []));
         }
       }
       for (const d of this.d) {
