@@ -161,24 +161,24 @@ function Game() {
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], x, y, w, h, 1);
       this.cdraw();
       for (const b of this.buttons) {
-        b[0] = x+b[0]*w/1600;
-        b[1] = y+b[1]*h/1000;
-        b[2] *= w/1600;
-        b[3] *= h/1000;
+        x += b[0]*w/1600;
+        y += b[1]*h/1000;
+        w *= b[2]/1600;
+        h *= b[3]/1000;
         if (b[5]) {
-          if (A.collider({x: b[0], y: b[1], w: b[2], h: b[3]}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
+          if (A.collider({x, y, w, h}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
             b[6] = Math.min(b[6]+1, 10);
           } else {
             b[6] = Math.max(b[6]-1, 0);
           }
         }
-        Menus.scaler.width = b[2]*PixelTanks.resizer;
-        Menus.scaler.height = b[3]*PixelTanks.resizer;
-        Menus.scaler.getContext('2d').setTransform(1, 0, 0, 1, -b[0]*PixelTanks.resizer, -b[1]*PixelTanks.resizer);
+        Menus.scaler.width = w*PixelTanks.resizer;
+        Menus.scaler.height = h*PixelTanks.resizer;
+        Menus.scaler.getContext('2d').setTransform(1, 0, 0, 1, -x*PixelTanks.resizer, -y*PixelTanks.resizer);
         Menus.scaler.getContext('2d').drawImage(GUI.canvas, 0, 0);
         GUI.draw.fillStyle = '#000000';
-        GUI.draw.fillRect(b[0]-20, b[1]-20, b[2]+40, b[3]+40);
-        GUI.drawImage(Menus.scaler, (b[0]-b[6]), (b[1]-b[6]), (b[2]+b[6]*2), (b[3]+b[6]*2), 1);
+        GUI.draw.fillRect(x-20, y-20, w+40, h+40);
+        GUI.drawImage(Menus.scaler, (x-b[6]), (y-b[6]), (w+b[6]*2), (h+b[6]*2), 1);
       }
     }
   }
