@@ -524,7 +524,7 @@ function Game() {
           htp2: '/menus/htp2',
           htp3: '/menus/htp3',
           htp4: '/menus/htp4',
-          pause: '/menus/paused',
+          pause: '/menus/pause',
         },
         emotes: { // type: 0=loop 1=play once 2=static
           speech: '/emotes/speech',
