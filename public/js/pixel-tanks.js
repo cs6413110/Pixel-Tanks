@@ -1717,7 +1717,7 @@ function Game() {
         this.tank.use.push('shield');
         cooldown = 30000;
       }
-      
+      const key = {
         shield: [() => {
           this.tank.use.push('shield');
         }, 30000, false],
