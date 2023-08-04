@@ -1532,13 +1532,13 @@ function Game() {
       GUI.draw.globalAlpha = 0.5;
       const c = [500, 666, 832, 998];
       for (let i = 0; i < 4; i++) {
-        GUI.draw.fillStyle = PixelTanks.userData.color;
         GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], c[i], 900, 100, 100, 1);
-        GUI.draw.fillRect(c[i], 900+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*100, 100, 100);
         GUI.draw.globalAlpha = .5;
         GUI.draw.fillStyle = '#000000';
         if (!this['canItem'+i]) GUI.draw.fillRect(c[i], 900, 100, 100);
         GUI.draw.globalAlpha = 1;
+        GUI.draw.fillRect(c[i], 900+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*100, 100, 100);
+        GUI.draw.fillStyle = PixelTanks.userData.color;
       }
       for (let i = 0; i < 3; i++) {
         GUI.draw.fillRect([418, 1132, 1212][i], 950+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost'][i]])/[10000, 30000, 5000][i], 1)*50, 50, 50);
