@@ -1744,6 +1744,7 @@ function Game() {
       } else if (id === 'fortress') {
         this.tank.use.push('block');
         this.tank.blockType = 'fortress';
+        cooldown = 20000;
       } else if (id === 'flashbang') {
         this.tank.use.push('flashbang');
         cooldown = 40000;
@@ -1755,6 +1756,7 @@ function Game() {
         cooldown = 25000;
       } else if (id === 'airstrike') {
         this.tank.airstrike = {x: this.mouse.x+this.tank.x-800, y: this.mouse.y+this.tank.y-500};
+        cooldown = 20000;
       }
       this.timers.items[slot] = {cooldown: cooldown, time: Date.now()};
       this['canItem'+slot] = false;
