@@ -157,10 +157,15 @@ function Game() {
       }
     }
     
-    draw() {
-      if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], 0, 0, 1600, 1000, 1);
+    draw(x = 0, y = 0, w = 1600, h = 1000) {
+      if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], x, y, w, h, 1);
+      b = [b[0
       this.cdraw();
       for (const b of this.buttons) {
+        b[0] = x+b[0]*w/1600;
+        b[1] = y+b[1]*h/1000;
+        b[2] = b[2]*w/1600;
+        b[3] = b[3]*h/1000;
         if (b[5]) {
           if (A.collider({x: b[0], y: b[1], w: b[2], h: b[3]}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
             b[6] = Math.min(b[6]+1, 10);
@@ -1587,8 +1592,7 @@ function Game() {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(0, 0, 1600, 1000);
         GUI.draw.globalAlpha = 1;
-        Menus.current = 'pause';
-        Menus.redraw();
+        Menus.menus.pause.draw(1200, 0, 400, 1000);
       }
     }
 
