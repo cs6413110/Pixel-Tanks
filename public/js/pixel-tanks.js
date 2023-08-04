@@ -1704,15 +1704,20 @@ function Game() {
     }
 
     item(id, slot) {
-      const key = {
-        duck_tape: [() => {
-          this.tank.use.push('tape');
-          this.playAnimation('tape');
-        }, 30000, false],
-        super_glu: [() => {
-          this.tank.use.push('glu');
-          this.playAnimation('glu');
-        }, 40000, false],
+      let cooldown = 0;
+      if (id === 'duck_tape') {
+        this.tank.use.push('tape');
+        this.playAnimation('tape');
+        cooldown = 30000;
+      } else if (id === 'super_glu') {
+        this.tank.use.push('glu');
+        this.playAnimation('glu');
+        cooldown = 30000;
+      } else if (id === 'shield') {
+        this.tank.use.push('shield');
+        cooldown = 30000;
+      }
+      
         shield: [() => {
           this.tank.use.push('shield');
         }, 30000, false],
@@ -1839,8 +1844,8 @@ function Game() {
         } else if (c === 'builder' && this.canTurret) {
           this.canTurret = false;
           this.tank.use.push('turret');
-          this.timers.class = {time: Date.now(), cooldown: 50};
-          setTimeout(() => {this.canTurret = true}, 40);
+          this.timers.class = {time: Date.now(), cooldown: 30000};
+          setTimeout(() => {this.canTurret = true}, 30000);
         } else if (c === 'warrior' && this.canBuff) {
           this.tank.use.push('buff');
           this.canBuff = false;
