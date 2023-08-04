@@ -166,7 +166,7 @@ function Game() {
         const w = w0+b[2]/1600;
         const h = h0+b[3]/1000;
         if (b[5]) {
-          if (A.collider({x, y, w, h}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
+          if (A.collider({x, y, w, h: h}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
             b[6] = Math.min(b[6]+1, 10);
           } else {
             b[6] = Math.max(b[6]-1, 0);
