@@ -1535,9 +1535,9 @@ function Game() {
         GUI.draw.fillStyle = PixelTanks.userData.color;
         GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], c[i], 900, 100, 100, 1);
         GUI.draw.fillRect(c[i], 900+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*100, 100, 100);
-        GUI.draw.globalAlpha = .2;
+        GUI.draw.globalAlpha = .5;
         GUI.draw.fillStyle = '#000000';
-        if (this['canItem'+i]) GUI.draw.fillRect(c[i], 900, 100, 100);
+        if (!this['canItem'+i]) GUI.draw.fillRect(c[i], 900, 100, 100);
         GUI.draw.globalAlpha = 1;
       }
       for (let i = 0; i < 3; i++) {
