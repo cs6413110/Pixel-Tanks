@@ -1534,6 +1534,9 @@ function Game() {
         const c = [500, 666, 832, 998];
         GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], c[i], 900, 100, 100, 1);
         GUI.draw.fillRect(c[i], 900+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*100, 100, 100);
+        GUI.draw.globalAlpha = .2;
+        if (this['canItem'+i]) GUI.draw.fillRect(c[i], 900, 100, 100);
+        GUI.draw.globalAlpha = 1;
       }
       for (let i = 0; i < 3; i++) {
         GUI.draw.fillRect([418, 1132, 1212][i], 950+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost'][i]])/[10000, 30000, 5000][i], 1)*50, 50, 50);
@@ -1703,7 +1706,11 @@ function Game() {
       }.bind(this), PixelTanks.images.animations[id+'_'].speed);
     }
 
-    item(id, slot) {
+    useItem(id, slot) {
+      if (!this['canItem'+slot]) {
+        if (id === 'dynamite') this.tank.use.push('dyanmite');
+        return;
+      }
       let cooldown = 0;
       if (id === 'duck_tape') {
         this.tank.use.push('tape');
@@ -1716,70 +1723,43 @@ function Game() {
       } else if (id === 'shield') {
         this.tank.use.push('shield');
         cooldown = 30000;
+      } else if (id === 'weak') {
+        this.tank.use.push('block');
+        this.tank.blockType = PixelTanks.userData.class === 'builder' ? 'strong' : 'weak';
+        cooldown = 3000;
+      } else if (id === 'strong') {
+        this.tank.use.push('block');
+        this.tank.blockType = PixelTanks.userData.class === 'builder' ? 'gold' : 'strong';
+        cooldown = 7000;
+      } else if (id === 'spike') {
+        this.tank.use.push('block');
+        this.tank.blockType = 'spike';
+        cooldown = 10000;
+      } else if (id === 'mine') {
+        this.tank.use.push('block');
+        this.tank.blockType = 'mine';
+        cooldown = 1000;
+      } else if (id === 'fortress') {
+        this.tank.use.push('block');
+        this.tank.blockType = 'fortress';
+      } else if (id === 'flashbang') {
+        this.tank.use.push('flashbang');
+        cooldown = 40000;
+      } else if (id === 'bomb') {
+        this.tank.use.push('bomb');
+        cooldown = 5000;
+      } else if (id === 'dynamite') {
+        this.fire('dynamite');
+        cooldown = 25000;
+      } else if (id === 'airstrike') {
+        this.tank.airstrike = {x: this.mouse.x+this.tank.x-800, y: this.mouse.y+this.tank.y-500};
       }
-      const key = {
-        shield: [() => {
-          this.tank.use.push('shield');
-        }, 30000, false],
-        weak: [() => {
-          this.tank.use.push('block');
-          this.tank.blockType = PixelTanks.userData.class === 'builder' ? 'strong' : 'weak';
-        }, 3000, false],
-        strong: [() => {
-          this.tank.use.push('block');
-          this.tank.blockType = PixelTanks.userData.class === 'builder' ? 'gold' : 'strong';
-        }, 7000, false],
-        spike: [() => {
-          this.tank.use.push('block');
-          this.tank.blockType = 'spike';
-        }, 10000, false],
-        flashbang: [() => {
-          this.tank.use.push('flashbang');
-        }, 40000, false],
-        bomb: [() => {
-          this.tank.use.push('bomb');
-        }, 5000, false],
-        mine: [() => {
-          this.tank.use.push('block');
-          this.tank.blockType = 'mine';
-        }, 1000, false],
-        dynamite: [() => {
-          if (!this['canItem'+slot]) {
-            this.tank.use.push('dynamite');
-          } else {
-            this.fire('dynamite');
-            this['canItem'+slot] = false;
-            this.timers.items[slot].cooldown = 25000;
-            this.timers.items[slot].time = new Date();
-            setTimeout(function() {
-              this['canItem'+slot] = true;
-            }.bind(this), 25000);
-          }
-        }, 25000, true],
-        airstrike: [() => {
-          this.tank.airstrike = {x: this.mouse.x+this.tank.x-800, y: this.mouse.y+this.tank.y-500};
-        }, 20000, false],
-        fortress: [() => {
-          this.tank.use.push('block');
-          this.tank.blockType = 'fortress';
-        }, 30000, false],
-      }
-      this.useItem(key[id][0], key[id][1], slot, key[id][2]);
-    }
-
-    useItem(enable, cooldown, slot, c) {
-      if (c) return enable();
-      if (this['canItem'+slot]) {
-        enable = enable.bind(this);
-        enable();
-        this.timers.items[slot].cooldown = cooldown;
-        this.timers.items[slot].time = Date.now();
-        this['canItem'+slot] = false;
-        clearTimeout(this['itemTimeout'+slot]);
-        this['itemTimeout'+slot] = setTimeout(() => {
-          this['canItem'+slot] = true;
-        }, cooldown);
-      }
+      this.timers.items[slot] = {cooldown: cooldown, time: Date.now()};
+      this['canItem'+slot] = false;
+      clearTimeout(this['itemTimeout'+slot]);
+      this['itemTimeout'+slot] = setTimeout(() => {
+        this['canItem'+slot] = true;
+      }, cooldown);
     }
 
     keyStart(e) {
@@ -1793,7 +1773,7 @@ function Game() {
         this.b = {o: this.tank.baseFrame, t: Date.now()};
       }
       for (let i = 0; i < 4; i++) {
-        if (k === PixelTanks.userData.keybinds.items[i]) this.item(PixelTanks.userData.items[i], i);
+        if (k === PixelTanks.userData.keybinds.items[i]) this.useItem(PixelTanks.userData.items[i], i);
       }
       for (let i = 0; i < 6; i++) {
         if (k === PixelTanks.userData.keybinds.emotes[i]) this.emote(Pixel.userData.emotes[i]);
