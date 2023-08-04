@@ -176,6 +176,8 @@ function Game() {
         Menus.scaler.height = b[3]*PixelTanks.resizer;
         Menus.scaler.getContext('2d').setTransform(1, 0, 0, 1, -b[0]*PixelTanks.resizer, -b[1]*PixelTanks.resizer);
         Menus.scaler.getContext('2d').drawImage(GUI.canvas, 0, 0);
+        GUI.draw.fillStyle = '#000000';
+        GUI.draw.fillRect(b[0]-20, b[1]-20, b[2]+40, b[3]+40);
         GUI.drawImage(Menus.scaler, (b[0]-b[6]), (b[1]-b[6]), (b[2]+b[6]*2), (b[3]+b[6]*2), 1);
       }
     }
@@ -1782,7 +1784,7 @@ function Game() {
     }
 
     keyStart(e) {
-      if (this.paused && e.keyCode !== 22) return;
+      if (this.paused && e.keyCode !== 27) return;
       const k = e.keyCode;
       if ([65, 68].includes(k)) {
         this.dx = {o: this.tank.x, t: Date.now(), a: k === 65 ? -1 : 1, b: false};
