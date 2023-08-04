@@ -157,14 +157,14 @@ function Game() {
       }
     }
     
-    draw(x = 0, y = 0, w = 1600, h = 1000) {
-      if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], x, y, w, h, 1);
+    draw(x0 = 0, y0 = 0, w0 = 1600, h0 = 1000) {
+      if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], x0, y0, w0, h0, 1);
       this.cdraw();
       for (const b of this.buttons) {
-        x += b[0]*w/1600;
-        y += b[1]*h/1000;
-        w *= b[2]/1600;
-        h *= b[3]/1000;
+        const x = x0+b[0]*w/1600;
+        const y = y0+b[1]*h/1000;
+        const w = w0+b[2]/1600;
+        const h = h0+b[3]/1000;
         if (b[5]) {
           if (A.collider({x, y, w, h}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
             b[6] = Math.min(b[6]+1, 10);
