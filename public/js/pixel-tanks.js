@@ -1710,7 +1710,7 @@ function Game() {
 
     useItem(id, slot) {
       if (!this['canItem'+slot]) {
-        if (id === 'dynamite') this.tank.use.push('dyanmite');
+        if (id === 'dynamite') this.tank.use.push('dynamite');
         return;
       }
       let cooldown = 0;
