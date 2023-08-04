@@ -168,7 +168,6 @@ function Game() {
             b[6] = Math.max(b[6]-1, 0);
           }
         }
-        
         Menus.scaler.width = b[2]*PixelTanks.resizer;
         Menus.scaler.height = b[3]*PixelTanks.resizer;
         Menus.scaler.getContext('2d').setTransform(1, 0, 0, 1, -b[0]*PixelTanks.resizer, -b[1]*PixelTanks.resizer);
@@ -208,7 +207,6 @@ function Game() {
   
     static redraw() {
       if (!Menus.current) return;
-      GUI.clear();
       Menus.menus[Menus.current].draw();
     }
   
@@ -526,6 +524,7 @@ function Game() {
           htp2: '/menus/htp2',
           htp3: '/menus/htp3',
           htp4: '/menus/htp4',
+          pause: '/menus/paused',
         },
         emotes: { // type: 0=loop 1=play once 2=static
           speech: '/emotes/speech',
@@ -692,7 +691,7 @@ function Game() {
             [340, 688, 416, 116, function() {this.gamemode = 'tdm'}, false],
             [340, 844, 416, 116, function() {this.gamemode = 'juggernaut'}, false],
             [868, 848, 368, 88, function() {
-              PixelTanks.user.joiner = new Tank(this.ip, true); 
+              PixelTanks.user.player = new Tank(this.ip, true); 
               Menus.removeListeners();
             }],
           ],
@@ -947,6 +946,11 @@ function Game() {
             }
           },
         },
+        pause: {
+          buttons: [[16, 908, 184, 38, function() {
+            PixelTanks.user.player.implode();
+          }, true]],
+        },
       }
 
       for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
@@ -1191,7 +1195,6 @@ function Game() {
         this.socket = new MegaSocket(`ws://${ip}`, {keepAlive: false, reconnect: false, autoconnect: true});
         this.socket.on('message', data => {
           this.ups++;
-          if (this.paused) return;
           switch (data.event) {
             case 'hostupdate':
               if (data.logs) data.logs.reverse();
@@ -1296,7 +1299,6 @@ function Game() {
       this.canItem1 = true;
       this.canItem2 = true;
       this.canItem3 = true;
-      this.canChangePaused = true;
       this.canGrapple = true;
       this.kills = 0;
     }
@@ -1573,10 +1575,18 @@ function Game() {
         GUI.drawText(this.msg, 0, 830, 30, '#ffffff', 0);
       }
 
-      
       if (player.flashbanged) {
         GUI.draw.fillStyle = '#FFFFFF';
         GUI.draw.fillRect(0, 0, 1600, 1000);
+      }
+      
+      if (this.paused) {
+        GUI.draw.globalAlpha = .7;
+        GUI.draw.fillStyle = '#000000';
+        GUI.draw.fillRect(0, 0, 1600, 1000);
+        GUI.draw.globalAlpha = 1;
+        Menus.current = 'pause';
+        Menus.redraw();
       }
     }
 
@@ -1847,10 +1857,9 @@ function Game() {
       } else if (k === 27) {
         this.paused = !this.paused;
         if (this.paused) {
-         GUI.draw.fillStyle = '#000000';
-          GUI.draw.fillRect(0, 0, 1600, 1000);
+          Menus.menus.pause.addListeners();
         } else {
-          Menus.removeListeners()
+          Menus.removeListeners();
         }
       } else if (k === 18) {
         document.write(JSON.stringify(this.hostupdate));
@@ -1914,6 +1923,16 @@ function Game() {
       this.tank.airstrike = null;
       this.tank.fire = [];
       this.tank.use = [];
+    }
+
+    implode() {
+      this.socket.destroy();
+      document.removeEventListener('keydown', this.keydown.bind(this));
+      document.removeEventListener('keyup', this.keyup.bind(this));
+      document.removeEventListener('mousemove', this.mousemove.bind(this));
+      document.removeEventListener('mousedown', this.mousedown.bind(this));
+      document.removeEventListener('mouseup', this.mouseup.bind(this));
+      cancelAnimationFrame(this.render);
     }
   }
 
