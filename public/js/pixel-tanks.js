@@ -950,6 +950,8 @@ function Game() {
           buttons: [[16, 908, 184, 38, function() {
             PixelTanks.user.player.implode();
           }, true]],
+          listeners: {},
+          cdraw: () => {},
         },
       }
 
