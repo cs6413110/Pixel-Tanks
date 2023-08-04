@@ -158,7 +158,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
           setImmediate(() => socket.destroy());
         }
       } catch(e) {
-        socket.send({status: 'error', message: 'Cannot verify token. '+e});
+        socket.send({status: 'error', message: 'Cannot verify token: '+e});
         console.log('Cannot connect to authentication servers! '+e);
         return setImmediate(() => socket.destroy());
       }
@@ -468,17 +468,14 @@ class Multiplayer extends Engine {
   }
 
   disconnect(socket, code, reason) {
-    A.each(this.pt, function(i, pt) {pt.splice(i, 1)}, 'username', socket.username, this.pt);
-    A.each(this.ai, function(i, ai, host, username) {
-      if (host.getUsername(this.team) === username) ai.splice(i, 1);
-    }, null, null, this.ai, this, socket.username);
-    if (this.pt.length === 0) {
-      A.each(this.i, function() {clearInterval(this)});
-      A.each(this.t, function() {clearTimeout(this)});
-      if (servers.length - 1 === servers.indexOf(this)) servers = []; else servers[servers.indexOf(this)] = new FFA();
-      return;
-    }
+    this.pt = this.pt.filter(t => t.username !== socket.username);
+    this.ai = this.ai.filter(ai => this.getUsername(ai.team) !== socket.username);
     this.logs.push({m: this.rageMsg(socket.username), c: '#E10600'});
+    if (this.pt.length === 0) {
+      this.i.forEach(i => clearInterval(i));
+      this.t.forEach(t => clearTimeout(t));
+      servers[servers.indexOf(this)] = new FFA();
+    }
   }
 
   deathMsg(victim, killer) {
