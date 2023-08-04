@@ -161,9 +161,10 @@ function Game() {
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], x, y, w, h, 1);
       this.cdraw();
       for (const b of this.buttons) {
-        b[0] += x;
-        b[1] += y;
-
+        b[0] += x+b[0]*w/1600;
+        b[1] += y+b[1]*h/1000;
+        b[2] *= w/1600;
+        b[3] *= h/1000;
         if (b[5]) {
           if (A.collider({x: b[0], y: b[1], w: b[2], h: b[3]}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
             b[6] = Math.min(b[6]+1, 10);
@@ -952,7 +953,7 @@ function Game() {
           },
         },
         pause: {
-          buttons: [[16, 908, 184, 38, function() {
+          buttons: [[128, 908, 1472, 38, function() {
             PixelTanks.user.player.implode();
           }, true]],
           listeners: {},
