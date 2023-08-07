@@ -201,7 +201,7 @@ class Engine {
       if (!d.c) return;
       this.pt.forEach(t => {
         if (collision(d.x, d.y, d.w, d.h, t.x, t.y, 80, 80) && this.getUsername(d.team) !== this.getUsername(t.team)) {
-          this.damagePlayer(t, { ...d, u: this.getUsername(d.team), a: this.getTeam(d.team) !== this.getTeam(t.team) ? Math.abs(d.a) : d.a});
+          this.damagePlayer(t, { ...d, u: this.getUsername(d.team), a: this.getTeam(d.team) !== this.getTeam(t.team) ? Math.abs(d.a) : Math.min(0, d.a)});
         }
       });
       this.b.forEach(b => {
