@@ -834,10 +834,12 @@ class AI {
       for (const b of blocks) {
         for (const p of py) {
           const xm = (p-o)/(dy/dx);
+          this.raw.points.push({x: xm, y: p});
           if (collision(b.x, b.y, 100, 100, xm, p, 0, 0)) return false;
         }
         for (const p of px) {
           const ym = (dy/dx)*p+o;
+          this.raw.points.push({x: p, y: ym});
           if (collision(b.x, b.y, 100, 100, p, ym, 0, 0)) return false;
         }
       }
