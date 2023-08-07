@@ -192,6 +192,7 @@ function Game() {
   
     static render() {
       requestAnimationFrame(Menus.render);
+      GUI.clear();
       Menus.redraw();
     }
   
