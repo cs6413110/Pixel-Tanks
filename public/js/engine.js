@@ -815,51 +815,31 @@ class AI {
   }
 
   raycast(t) {
-    const x = this.x+40, y = this.y+40;
-    const x2 = t.x+40, y2 = t.y+40;
-    const dx = x2-x, dy = y2-y;
-    let minx, miny, maxx, maxy;
-    const topLeft = (a) => a < 0 ? Math.ceil(a) : Math.floor(a);
-    const bottomRight = (a) => a < 0 ? Math.floor(a) : Math.ceil(a);
-    if (topLeft(x/100) !== topLeft(x2/100)) {
-      minx = bottomRight((x > x2 ? x : x2)/100);
-      maxx = topLeft((x > x2 ? x2 : x)/100);
-    } else {
-      minx = 0;
-      maxx = -1;
+    const x = this.x+40, y = this.y+40, x2 = t.x+40, y2 = t.y+40, dx = x-x2, dy = y-y2;
+    const minx = Math.min(x, x2), miny = Math.min(y, y2), maxx = Math.max(x, x2), miny = Math.max(y, y2);
+    const blocks = this.host.b.filter(b => collision(b.x, b.y, 100, 100, minx, miny, Math.abs(dx), Math.abs(dy)));
+    const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
+    const down = a => a < 0 ? Math.ceil(a) : Math.floor(a);
+    const px = [], py = [];
+    for (let i = up(minx/100); i < down(maxx/100) i++) px.push(i*100);
+    for (let i = up(miny/100); i < down(maxy/100); i++) py.push(i*100);
+    for (const b of blocks) {
+      if (b.x%100 !== 0) px = px.concat([b.x, b.x+100]);
+      if (b.y%100 !== 0) py = py.concat([b.y, b.y+100]);
     }
-    if (topLeft(y/100) !== topLeft(y2/100)) {
-      miny = bottomRight((y > y2 ? y : y2)/100);
-      maxy = topLeft((y > y2 ? y2 : y)/100);
+    if (dx === 0) {
+      for (const p of py) for (const b of blocks) if (collision(b.x, b.y, 100, 100, x, p, 0, 0)) return false;
     } else {
-      miny = 0;
-      maxy = -1;
-    }
-    this.raw.mx = [minx*100, maxx*100];
-    this.raw.my = [miny*100, maxy*100];
-    const px = [];
-    const py = [];
-    for (const b of this.host.b) {
-      if (!collision(b.x, b.y, 100, 100, minx*100, miny*100, Math.max(Math.abs(dx), 1), Math.max(Math.abs(dy), 1))) continue;
-      if (b.x%100 !== 0) px.push(b.x);
-      if (b.y%100 !== 0) py.push(b.y);
-    }
-    for (let i = miny; i <= maxy; i++) py.push(i*100);
-    for (let i = minx; i <= maxx; i++) px.push(i*100);
-    if (x === x2) {
-      for (const p of py) for (const b of this.host.b) if (x >= b.x && x <= b.x+100 && p >= b.y && p <= b.y+100) return false;
-    } else {
-      const slope = dy/dx;
-      const offset = slope*x-y;
-      for (const p of py) {
-        const c = (p-offset)/slope;
-        this.raw.points.push({x: c, y: p});
-        for (const b of this.host.b) if (c >= b.x && c <= b.x+100 && p >= b.y && p <= b.y+100) return false;
-      }
-      for (const p of px) {
-        const c = p*slope+offset;
-        this.raw.points.push({x: p, y: c});
-        for (const b of this.host.b) if (p >= b.x && p <= b.x+100 && c >= b.y && c <= b.y+100) return false;
+      const o = miny-(dy/dx)*minx;
+      for (const b of blocks) {
+        for (const p of py) {
+          const xm = (p-o)/(dy/dx);
+          if (collision(b.x, b.y, 100, 100, xm, p, 0, 0)) return false;
+        }
+        for (const p of px) {
+          const ym = (dy/dx)*p+o;
+          if (collision(b.x, b.y, 100, 100, p, ym, 0, 0)) return false;
+        }
       }
     }
     return true;
