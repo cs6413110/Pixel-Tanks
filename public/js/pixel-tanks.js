@@ -1595,7 +1595,7 @@ function Game() {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(0, 0, 1600, 1000);
         GUI.draw.globalAlpha = 1;
-        Menus.menus.pause.draw(1200, 0, 400, 1000);
+        Menus.menus.pause.draw([1200, 0, 400, 1000]);
       }
     }
 
