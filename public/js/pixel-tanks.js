@@ -1828,6 +1828,7 @@ function Game() {
             this.timers.class = {time: Date.now(), cooldown: 30000};
             this.invis = setTimeout(() => {
               this.tank.invis = false;
+              this.timers.class = {time: Date.now(), cooldown: 30000};
               this.invis = setTimeout(() => {
                 this.canInvis = true;
               }, 30000);  
