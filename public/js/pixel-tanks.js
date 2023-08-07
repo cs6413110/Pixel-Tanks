@@ -187,8 +187,6 @@ function Game() {
         Menus.scaler.height = h*PixelTanks.resizer;
         Menus.scaler.getContext('2d').setTransform(1, 0, 0, 1, -x*PixelTanks.resizer, -y*PixelTanks.resizer);
         Menus.scaler.getContext('2d').drawImage(GUI.canvas, 0, 0);
-        GUI.draw.fillStyle = '#000000';
-        GUI.draw.fillRect(x-20, y-20, w+40, h+40);
         GUI.drawImage(Menus.scaler, (x-b[6]), (y-b[6]), (w+b[6]*2), (h+b[6]*2), 1);
       }
     }
