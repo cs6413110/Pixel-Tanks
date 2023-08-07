@@ -188,7 +188,6 @@ function Game() {
   class Menus {
     static start() {
       Menus.renderer = requestAnimationFrame(Menus.render);
-      window.addEventListener('mousemove', Menus.mouseLog);
     }
   
     static render() {
@@ -203,7 +202,6 @@ function Game() {
   
     static stop() {
       cancelAnimationFrame(Menus.renderer);
-      window.removeEventListener('mousemove', Menus.mouseLog);
     }
   
     static trigger(name) {
@@ -368,6 +366,7 @@ function Game() {
       GUI.drawText('Loading Font', 800, 500, 50, '#fffff', 0.5);
       window.oncontextmenu = () => {return false};
       window.addEventListener('resize', GUI.resize);
+      window.addEventListener('mousemove', Menus.mouseLog);
     }
   
     static updateBootProgress(progress) {
