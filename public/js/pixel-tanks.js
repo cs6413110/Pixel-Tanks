@@ -56,6 +56,7 @@ function Game() {
         }
         if (data.status === 'error') {
           if (data.message === 'Invalid token.') {
+            clearInterval(PixelTanks.autosave);
             if (PixelTanks.user.player) PixelTanks.user.player.implode();
             PixelTanks.user.token = undefined;
             PixelTanks.user.username = undefined;
