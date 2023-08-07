@@ -954,7 +954,7 @@ function Game() {
           },
         },
         pause: {
-          buttons: [[128, 908, 1472, 38, function() {
+          buttons: [[128, 910, 1460, 50, function() {
             alert(3);
             PixelTanks.user.player.implode();
           }, true]],
@@ -1944,6 +1944,7 @@ function Game() {
       document.removeEventListener('mousedown', this.mousedown.bind(this));
       document.removeEventListener('mouseup', this.mouseup.bind(this));
       cancelAnimationFrame(this.render);
+      alert(4);
     }
   }
 
