@@ -1837,6 +1837,7 @@ function Game() {
             setTimeout(() => {
               this.canInvis = true;
             }, 30000-(Date.now()-this.timers.class.time));
+            this.timers.class = {time: Date.now(), cooldown: 30000-(Date.now()-this.timers.class.time)};
           }
         } else if (c === 'tactical' && this.canMegamissle) {
           this.fire('megamissle');
