@@ -161,8 +161,8 @@ function Game() {
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], x0, y0, w0, h0, 1);
       this.cdraw();
       for (const b of this.buttons) {
-        const x = x0+b[0]*w/1600;
-        const y = y0+b[1]*h/1000;
+        const x = x0+b[0]*w0/1600;
+        const y = y0+b[1]*h0/1000;
         const w = w0+b[2]/1600;
         const h = h0+b[3]/1000;
         if (b[5]) {
