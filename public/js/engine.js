@@ -816,7 +816,7 @@ class AI {
 
   raycast(t) {
     const x = this.x+40, y = this.y+40, x2 = t.x+40, y2 = t.y+40, dx = x-x2, dy = y-y2;
-    const minx = Math.min(x, x2), miny = Math.min(y, y2), maxx = Math.max(x, x2), miny = Math.max(y, y2);
+    const minx = Math.min(x, x2), miny = Math.min(y, y2), maxx = Math.max(x, x2), maxy = Math.max(y, y2);
     const blocks = this.host.b.filter(b => collision(b.x, b.y, 100, 100, minx, miny, Math.abs(dx), Math.abs(dy)));
     const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
     const down = a => a < 0 ? Math.ceil(a) : Math.floor(a);
