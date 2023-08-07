@@ -955,7 +955,6 @@ function Game() {
         },
         pause: {
           buttons: [[128, 910, 1460, 50, function() {
-            alert(3);
             PixelTanks.user.player.implode();
           }, true]],
           listeners: {},
@@ -1937,14 +1936,15 @@ function Game() {
     }
 
     implode() {
-      this.socket.destroy();
+      this.socket.close();
       document.removeEventListener('keydown', this.keydown.bind(this));
       document.removeEventListener('keyup', this.keyup.bind(this));
       document.removeEventListener('mousemove', this.mousemove.bind(this));
       document.removeEventListener('mousedown', this.mousedown.bind(this));
       document.removeEventListener('mouseup', this.mouseup.bind(this));
       cancelAnimationFrame(this.render);
-      alert(4);
+      Menus.menus.pause.removeListeners();
+      Menus.trigger('main');
     }
   }
 
