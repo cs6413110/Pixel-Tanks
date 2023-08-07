@@ -964,7 +964,7 @@ function Game() {
           },
         },
         pause: {
-          buttons: [[128, 910, 1460, 50, function() {
+          buttons: [[128, 910, 1460, 76, function() {
             PixelTanks.user.player.implode();
           }, true]],
           listeners: {},
