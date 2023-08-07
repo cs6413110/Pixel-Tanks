@@ -864,7 +864,7 @@ const Profile = (arr, update) => {
           const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0};
           e[p] = () => {
             const start = Date.now();
-            f.o.apply(null, arguments);
+            f.o.apply(e, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
             update(functions);
@@ -877,7 +877,7 @@ const Profile = (arr, update) => {
           const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0};
           e.prototype[p] = () => {
             const start = Date.now();
-            f.o.apply(null, arguments);
+            f.o.apply(e.prototype, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
             update(functions);
