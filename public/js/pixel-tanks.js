@@ -55,7 +55,7 @@ function Game() {
           alert('Socket Encryption Error: ' + A.de(data.data));
         }
         if (data.status === 'error') {
-          if (data.message === 'Invalid Token') {
+          if (data.message === 'Invalid Token.') {
             PixelTanks.user.token = undefined;
             PixelTanks.user.username = undefined;
             return Menus.trigger('start');
