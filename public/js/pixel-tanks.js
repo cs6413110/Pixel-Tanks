@@ -1937,7 +1937,7 @@ function Game() {
     }
 
     implode() {
-      this.socket.close();
+      if (this.multiplayer) this.socket.close();
       document.removeEventListener('keydown', this.keydown.bind(this));
       document.removeEventListener('keyup', this.keyup.bind(this));
       document.removeEventListener('mousemove', this.mousemove.bind(this));
