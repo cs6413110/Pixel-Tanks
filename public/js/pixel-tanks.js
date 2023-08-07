@@ -56,6 +56,7 @@ function Game() {
         }
         if (data.status === 'error') {
           if (data.message === 'Invalid token.') {
+            if (PixelTanks.user.player) PixelTanks.user.player.implode();
             PixelTanks.user.token = undefined;
             PixelTanks.user.username = undefined;
             return Menus.trigger('start');
@@ -1952,6 +1953,7 @@ function Game() {
       document.removeEventListener('mouseup', this.mouseup.bind(this));
       cancelAnimationFrame(this.render);
       Menus.menus.pause.removeListeners();
+      PixelTanks.user.player = undefined;
       Menus.trigger('main');
     }
   }
