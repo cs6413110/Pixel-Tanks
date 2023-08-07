@@ -137,6 +137,7 @@ function Game() {
         if (typeof b[4] === 'function') b[4] = b[4].bind(this);
         b[6] = 0;
       }
+      this.render = [0, 0, 1600, 1000];
     }
     
     addListeners() {
@@ -149,7 +150,7 @@ function Game() {
     
     onclick() {
       for (const b of this.buttons) {
-        if (A.collider({x: Menus.x, y: Menus.y, w: 0, h: 0}, {x: b[0], y: b[1], w: b[2], h: b[3]})) {
+        if (A.collider({x: Menus.x, y: Menus.y, w: 0, h: 0}, {x: this.render[0]+b[0], y: this.render[1]+b[1], w: b[2]*this.render[2]/1600, h: b[3]*this.render[3]/1000})) {
           if (typeof b[4] === 'function') {
             return b[4]();
           } else return Menus.trigger(b[4]);
@@ -157,14 +158,15 @@ function Game() {
       }
     }
     
-    draw(x0 = 0, y0 = 0, w0 = 1600, h0 = 1000) {
-      if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], x0, y0, w0, h0, 1);
+    draw(render) {
+      if (render) this.render = render;
+      if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[3], this.render[4], 1);
       this.cdraw();
       for (const b of this.buttons) {
-        const x = x0+b[0]*w0/1600;
-        const y = y0+b[1]*h0/1000;
-        const w = b[2]*w0/1600;
-        const h = b[3]*h0/1000;
+        const x = this.render[0]+b[0]*this.render[2]/1600;
+        const y = this.render[1]+b[1]*this.render[3]/1000;
+        const w = b[2]*this.render[2]/1600;
+        const h = b[3]*this.render[3]/1000;
         if (b[5]) {
           if (A.collider({x, y, w, h: h}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
             b[6] = Math.min(b[6]+1, 10);
@@ -213,7 +215,7 @@ function Game() {
   
     static redraw() {
       if (!Menus.current) return;
-      Menus.menus[Menus.current].draw();
+      Menus.menus[Menus.current].draw([0, 0, 1600, 1000]);
     }
   
     static removeListeners() {
