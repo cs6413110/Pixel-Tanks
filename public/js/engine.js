@@ -821,7 +821,7 @@ class AI {
     const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
     const down = a => a < 0 ? Math.ceil(a) : Math.floor(a);
     const px = [], py = [];
-    for (let i = up(minx/100); i < down(maxx/100) i++) px.push(i*100);
+    for (let i = up(minx/100); i < down(maxx/100); i++) px.push(i*100);
     for (let i = up(miny/100); i < down(maxy/100); i++) py.push(i*100);
     for (const b of blocks) {
       if (b.x%100 !== 0) px = px.concat([b.x, b.x+100]);
