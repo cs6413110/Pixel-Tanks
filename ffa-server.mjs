@@ -165,7 +165,9 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
     } else if (data.type === 'update') {
       try {
         servers[socket.room].update(data);
-      } catch(e) {socket.destroy()}
+      } catch(e) {
+        console.error('Invalid Socket: (r='+socket.room+', u='+socket.username+')');
+      }
     } else if (data.type === 'ping') {
       socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
