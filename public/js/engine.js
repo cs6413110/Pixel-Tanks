@@ -831,7 +831,7 @@ class AI {
     if (dx === 0) {
       for (const p of py) for (const b of blocks) if (collision(b.x, b.y, 100, 100, x, p, 0, 0)) return false;
     } else {
-      const o = miny-(dy/dx)*minx;
+      const o = y-(dy/dx)*x;
       for (const b of blocks) {
         for (const p of py) {
           const xm = (p-o)/(dy/dx);
