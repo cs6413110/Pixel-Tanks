@@ -891,7 +891,7 @@ const Profile = (arr, update) => {
   }
 }
 
-const lagometer = [];
+let lagometer = [];
 Profile([Engine, Block, Shot, AI, Damage], (f) => {
   lagometer = f;
 });
