@@ -862,9 +862,9 @@ const Profile = (arr, update) => {
       for (const p of Object.getOwnPropertyNames(e)) {
         if (typeof e[p] === 'function') {
           const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0};
-          e[p] = () => {
+          e[p] = function() {
             const start = Date.now();
-            f.o.apply(f.o, arguments);
+            f.o.apply(this, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
             update(functions);
@@ -875,9 +875,9 @@ const Profile = (arr, update) => {
       for (const p of Object.getOwnPropertyNames(e.prototype)) {
         if (typeof e.prototype[p] === 'function') {
           const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0};
-          e.prototype[p] = () => {
+          e.prototype[p] = function() {
             const start = Date.now();
-            f.o.apply(f.o, arguments);
+            f.o.apply(this, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
             update(functions);
