@@ -805,7 +805,7 @@ class AI {
     clearTimeout(this.healTimeout);
     this.healTimeout = setTimeout(() => {
       this.healInterval = setInterval(() => {
-        this.hp = Math.max(this.hp+.4, this.maxHp);
+        this.hp = Math.min(this.hp+.4, this.maxHp);
       }, 15);
     });
   }
