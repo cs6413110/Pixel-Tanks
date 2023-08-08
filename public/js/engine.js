@@ -6,7 +6,7 @@ const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true 
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 
 class Engine {
-  constructor(levels) {                  
+  constructor(levels) {
     this.spawn = { x: 0, y: 0 };
     this.ai = [];
     this.b = [];
@@ -143,9 +143,15 @@ class Engine {
   }
 
   tick() {
-    this.ai.concat(this.s).forEach(e => e.update());
+    this.map = new PF.Grid(30, 30);
+    for (const b of this.host.b) {
+      if (b.x < 0 || b.y < 0 || b.x > 2900 || b.y > 2900) continue;
+      if (b.x % 100 === 0 && b.y % 100 === 0) this.map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), false);
+    }
+    for (const ai of this.ai) setImmediate(ai.update);
+    for (const s of this.s) setImmediate(s.update);
 
-    this.pt.forEach(t => {
+    for (const t of this.pt) {
       if (t.dedEffect) t.dedEffect.time = Date.now() - t.dedEffect.start;
       if (t.class === 'medic' && !t.ded && t.username !== t.healing) {
         const tank = this.pt.find(tank => tank.username === t.healing);
@@ -155,7 +161,7 @@ class Engine {
       }
       if (t.pushback !== 0) t.pushback += 0.5;
       if (t.fire && this.getTeam(t.fire.team) !== this.getTeam(t.team)) this.damagePlayer(t, { x: t.x, y: t.y, u: this.getUsername(t.fire.team), a: .5 });
-      this.pt.forEach(tank => {
+      for (const tank of this.pt) {
         if (collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) {
           if (t.immune && tank.canBashed) {
             if (t.class === 'warrior' && t.username !== tank.username && !t.ded) {
@@ -169,8 +175,8 @@ class Engine {
             }, 400);
           }
         }
-      });
-      this.b.forEach(b => {
+      }
+      for (const b of this.b) {
         if (collision(t.x, t.y, 80, 80, b.x, b.y, 100, 100) && !t.ded && !t.immune) {
           if (b.type === 'mine' && b.a) {
             setTimeout(() => b.destroy());
@@ -192,26 +198,22 @@ class Engine {
             this.damagePlayer(t, { a: 1, x: t.x, y: t.y, u: this.getUsername(b.team) });
           }
         }
-      });
+      }
       if (t.damage) t.damage.y--;
       if (t.grapple) this.grapple(t);
-    });
+    }
 
-    this.d.forEach(d => {
+    for (const d of this.d) {
       if (!d.c) return;
-      this.pt.forEach(t => {
+      for (const t of this.pt) {
         if (collision(d.x, d.y, d.w, d.h, t.x, t.y, 80, 80) && this.getUsername(d.team) !== this.getUsername(t.team)) {
           this.damagePlayer(t, { ...d, u: this.getUsername(d.team), a: this.getTeam(d.team) !== this.getTeam(t.team) ? Math.abs(d.a) : Math.min(0, d.a)});
         }
-      });
-      this.b.forEach(b => {
-        if (collision(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) b.damage(d.a);
-      });
-      this.ai.forEach(ai => {
-        if (collision(d.x, d.y, d.w, d.h, ai.x, ai.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) ai.damage(d.a);
-      });
+      }
+      for (const b of this.b) if (collision(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) b.damage(d.a);
+      for (const ai of this.ai) if (collision(d.x, d.y, d.w, d.h, ai.x, ai.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) ai.damage(d.a);
       d.c = false;
-    });
+    }
   }
 
   grapple(t) {
@@ -609,11 +611,6 @@ class AI {
   }
 
   generatePath() {
-    const map = new PF.Grid(30, 30);
-    for (const b of this.host.b) {
-      if (b.x < 0 || b.y < 0 || b.x > 2900 || b.y > 2900) continue;
-      if (b.x % 100 === 0 && b.y % 100 === 0) map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), false);
-    }
     const {mode, role, bond, target, toPoint, r} = this;
     const sx = (this.x - 10) / 100, sy = (this.y - 10) / 100;
     // coords, sort order, path length limiter, target point, epicenter point
@@ -671,7 +668,7 @@ class AI {
     coords = coords.filter(c => !Array.isArray(c));
     coords.sort((a, b) => sortAsc ? a.d - b.d : b.d - a.d);
     coords.forEach(c => {
-      if (!limiter.includes(finder.findPath(sx, sy, c.x, c.y, map.clone()).length)) this.raw.parsed.push(c);
+      if (!limiter.includes(finder.findPath(sx, sy, c.x, c.y, this.host.map.clone()).length)) this.raw.parsed.push(c);
     });
     this.path = false;
     let i = 0;
@@ -679,7 +676,7 @@ class AI {
       const paths = coords.slice(0, Math.min(5, coords.length));
       const r = this.choosePath(paths.length);
       const { x, y } = paths[r];
-      const p = finder.findPath(sx, sy, x, y, map.clone());
+      const p = finder.findPath(sx, sy, x, y, this.host.map.clone());
       if (!limiter.includes(p.length)) {
         coords.splice(r, 1);
         i++;
