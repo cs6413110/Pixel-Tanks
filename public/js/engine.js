@@ -144,7 +144,7 @@ class Engine {
 
   tick() {
     this.map = new PF.Grid(30, 30);
-    for (const b of this.host.b) {
+    for (const b of this.b) {
       if (b.x < 0 || b.y < 0 || b.x > 2900 || b.y > 2900) continue;
       if (b.x % 100 === 0 && b.y % 100 === 0) this.map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), false);
     }
