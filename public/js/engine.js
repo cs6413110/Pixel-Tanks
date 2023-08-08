@@ -545,7 +545,6 @@ class AI {
 
   update() {
     this.identify();
-    if (Math.random() < .2) this.inaccuracy = Math.max(Math.min(this.inaccuracy+Math.floor(Math.random()*3)-1, 20), -20);
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
       this.r = this.toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40))+this.inaccuracy;
@@ -775,6 +774,13 @@ class AI {
     if (!type) type = Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
     const cooldown = {powermissle: 0, shotgun: 600, bullet: 200}[type];
     this.pushback = -3;
+    if (type === 'shotgun') {
+      this.inaccuracy = Math.floor(Math.random()*80)-40;
+    } else if (type === 'bullet') {
+      this.inaccuracy = Math.floor(Math.random()*40)-20;
+    } else {
+      this.inaccuracy = Math.floor(Math.random()*20)-10;
+    }
     let l = type === 'shotgun' ? -10 : 0;
     while (l<(type === 'shotgun' ? 15 : 1)) {
       const { x, y } = this.toPoint(this.r+l);
@@ -792,7 +798,14 @@ class AI {
 
   damage(d) {
     this.hp -= d;
-    if (this.hp <= 0) setTimeout(() => this.destroy());
+    if (this.hp <= 0) return setTimeout(() => this.destroy());
+    clearInterval(this.healInterval);
+    clearTimeout(this.healTimeout);
+    this.healTimeout = setTimeout(() => {
+      this.healInterval = setInterval(() => {
+        this.hp = Math.max(this.hp+.4, this.maxHp);
+      }, 15);
+    });
   }
 
   destroy() {
