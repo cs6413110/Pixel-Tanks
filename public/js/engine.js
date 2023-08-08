@@ -864,10 +864,11 @@ const Profile = (arr, update) => {
           const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0};
           e[p] = function() {
             const start = Date.now();
-            f.o.apply(this, arguments);
+            const r = f.o.apply(this, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
             update(functions);
+            return r;
           }
           functions.push(f);
         }
@@ -877,11 +878,13 @@ const Profile = (arr, update) => {
           const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0};
           e.prototype[p] = function() {
             const start = Date.now();
-            f.o.apply(this, arguments);
+            const r = f.o.apply(this, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
             update(functions);
+            return r;
           }
+          functions.push(f);
         }
       }
     }
