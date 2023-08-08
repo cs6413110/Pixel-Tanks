@@ -1364,11 +1364,7 @@ function Game() {
       GUI.draw.fillRect(x-2, y+98, 84, 11);
       GUI.draw.fillStyle = '#00FF00';
       GUI.draw.fillRect(x, y+100, 80*hp/maxHp, 5);
-      GUI.drawText('['+role+'] Idiot Bot', x+40, y-25, 50, '#ffffff', 0.5);
-      // debug line of sight renderer
-      GUI.draw.fillStyle = '#ffffff';
-      for (const r of raw.points) GUI.draw.fillRect(r.x-5, r.y-5, 10, 10);
-      return;
+      GUI.drawText('['+role+'] AI Bot', x+40, y-25, 50, '#ffffff', 0.5);
       //debug path renderer
       GUI.draw.strokeStyle = '#000000';
       GUI.draw.lineWidth = 5;
