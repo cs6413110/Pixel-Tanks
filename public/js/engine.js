@@ -51,11 +51,12 @@ class Engine {
       if (t.y % 100 < 20 && [315, 0, 45].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x / 100) * 100, Math.floor(t.y / 100) * 100 - 100, 100, type, team, this));
     }
     if (use.includes('dynamite')) {
-      this.s.forEach(s => {
+      for (let i = this.s.length-1; i >= 0; i--) {
+        const s = this.s[i];
         if (this.getUsername(s.team) !== t.username || s.type !== 'dynamite') return;
-        this.d.push(new Damage(s.x - 100, s.y - 100, 200, 200, 100, s.team, this));
-        setTimeout(() => s.destroy());
-      });
+        this.d.push(new Damage(s.x-100, s.y-100, 200, 200, 100, s.team, this));
+        s.destroy();
+      }
     }
     if (use.includes('toolkit')) {
       if (t.healInterval) {
@@ -110,9 +111,10 @@ class Engine {
       });
     }
     if (use.includes('bomb')) {
-      this.b.forEach(b => {
-        if (collision(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) setTimeout(() => b.destroy());
-      });
+      for (let i = this.b.length-1; i >= 0; i--) {
+        const b = this.b[i];
+        if (collision(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) b.destroy();
+      }
     }
     if (use.includes('turret')) {
       //this.ai = this.ai.filter(ai => this.getUsername(ai.team) !== t.username);
@@ -181,10 +183,11 @@ class Engine {
           }
         }
       }
-      for (const b of this.b) {
+      for (let i = this.b.length-1; i >= 0; i--) {
+        const b = this.b[i];
         if (collision(t.x, t.y, 80, 80, b.x, b.y, 100, 100) && !t.ded && !t.immune) {
           if (b.type === 'mine' && b.a) {
-            setTimeout(() => b.destroy());
+            b.destroy();
           } else if (b.type === 'fire') {
             if (t.fire) {
               clearTimeout(t.fireTimeout);
@@ -215,8 +218,14 @@ class Engine {
           this.damagePlayer(t, { ...d, u: this.getUsername(d.team), a: this.getTeam(d.team) !== this.getTeam(t.team) ? Math.abs(d.a) : Math.min(0, d.a)});
         }
       }
-      for (const b of this.b) if (collision(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) b.damage(d.a);
-      for (const ai of this.ai) if (collision(d.x, d.y, d.w, d.h, ai.x, ai.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) ai.damage(d.a);
+      for (let i = this.b.length-1; i >= 0; i--) {
+        const b = this.b[i];
+        if (collision(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) b.damage(d.a);
+      }
+      for (let i = this.ai.length-1; i >= 0; i--) {
+        const ai = this.ai[i];
+        if (collision(d.x, d.y, d.w, d.h, ai.x, ai.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) ai.damage(d.a);
+      }
       d.c = false;
     }
   }
@@ -324,7 +333,7 @@ class Block {
         this.s = false;
       }, 3000);
     }
-    if (this.hp <= 0) setTimeout(() => this.destroy());
+    if (this.hp <= 0) this.destroy();
   }
 
   destroy() {
@@ -413,7 +422,8 @@ class Shot {
       }
     };
 
-    for (const ai of ais) {
+    for (let i = ais.length-1; i >= 0; i--) {
+      const ai = ais[i];
       if (!collision(ai.x, ai.y, 80, 80, x, y, 10, 10)) continue;
       if (type === 'dynamite') {
         this.target = ai;
@@ -433,7 +443,8 @@ class Shot {
       }
     }
 
-    for (const b of blocks) {
+    for (let i = blocks.length-1; i >= 0; i--) {
+      const b = blocks[i];
       if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
       if (type === 'grapple') {
         const t = this.host.pt.find(t => t.username === host.getUsername(this.team));
@@ -507,7 +518,7 @@ class Damage {
     this.c = true;
     this.f = 0;
     setInterval(() => this.f++, 18);
-    setTimeout(this.destroy.bind(this), 200);
+    setTimeout(() => this.destroy(), 200);
   }
 
   destroy() {
@@ -800,7 +811,7 @@ class AI {
 
   damage(d) {
     this.hp -= d;
-    if (this.hp <= 0) return setTimeout(() => this.destroy());
+    if (this.hp <= 0) return this.destroy();
     clearInterval(this.healInterval);
     clearTimeout(this.healTimeout);
     this.healTimeout = setTimeout(() => {
