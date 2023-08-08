@@ -822,14 +822,14 @@ class AI {
     const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
     const down = a => a < 0 ? Math.ceil(a) : Math.floor(a);
     let px = [], py = [];
-    for (let i = up(minx/100); i < down(maxx/100); i++) px.push(i*100);
-    for (let i = up(miny/100); i < down(maxy/100); i++) py.push(i*100);
+    for (let i = up(minx/100); i <= down(maxx/100); i++) px.push(i*100);
+    for (let i = up(miny/100); i <= down(maxy/100); i++) py.push(i*100);
     for (const b of blocks) {
       if (b.x%100 !== 0) px = px.concat([b.x, b.x+100]);
       if (b.y%100 !== 0) py = py.concat([b.y, b.y+100]);
     }
     if (dx === 0) {
-      for (const p of py) for (const b of blocks) if (collision(b.x, b.y, 100, 100, x, p, 0, 0)) return false;
+      for (const p of py) for (const b of blocks) if (collision(b.x, b.y, 100, 100, x-.5, p-.5, 1, 1)) return false;
     } else {
       const o = y-(dy/dx)*x;
       for (const b of blocks) {
@@ -891,6 +891,7 @@ const Profile = (arr, update) => {
   }
 }
 
+const lagometer = [];
 Profile([Engine, Block, Shot, AI, Damage], (f) => {
-  console.log(JSON.stringify(f));
+  lagometer = f;
 });
