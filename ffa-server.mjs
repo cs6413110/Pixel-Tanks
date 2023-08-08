@@ -439,7 +439,7 @@ class Multiplayer extends Engine {
       }
       for (const ai of this.ai) {
         if (A.collider(ai.x, ai.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) {
-          message.ai.push(this.deepClone(ai, ['team', 'host', 'canFire', 'target'], []));
+          message.ai.push(this.deepClone(ai, ['team', 'host', 'canFire', 'target', 'healTimeout', 'healInterval'], []));
         }
       }
       for (const s of this.s) {
