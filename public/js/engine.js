@@ -545,7 +545,7 @@ class AI {
 
   update() {
     this.identify();
-    if (Math.random() < .2) this.inaccuracy = Math.max(Math.min(this.inaccuracy+Math.floor(Math.random()*4-2), 20), -20);
+    if (Math.random() < .2) this.inaccuracy = Math.max(Math.min(this.inaccuracy+Math.floor(Math.random()*3)-1, 20), -20);
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
       this.r = this.toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40))+this.inaccuracy;
@@ -590,7 +590,7 @@ class AI {
 
   collision(x, y) {
     for (const b of this.host.b) {
-      if (collision(x, y, 80, 80, b.x, b.y, 100, 100)) {
+      if (collision(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) {
         return {x: b.x+50, y: b.y+50, t: this.obstruction ? this.obstruction.t : Date.now()};
       }
     }
