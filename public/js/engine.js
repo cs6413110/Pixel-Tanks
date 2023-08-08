@@ -545,7 +545,7 @@ class AI {
 
   update() {
     this.identify();
-    if (Math.random() < .2) this.inaccuracy = Math.max(Math.min(this.inaccuracy+Math.floor(Math.random()*4-2), 10), -10);
+    if (Math.random() < .2) this.inaccuracy = Math.max(Math.min(this.inaccuracy+Math.floor(Math.random()*4-2), 20), -20);
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
       this.r = this.toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40))+this.inaccuracy;
