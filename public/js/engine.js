@@ -896,6 +896,7 @@ Profile([Engine, Block, Shot, AI, Damage], (f) => {
   lagometer = f;
 });
 setInterval(() => {
-  const top = lagometer.slice(0, Math.min(5, lagometer.length));
+  lagometer.sort((a, b) => b.t - a.t);
+  const sorted = lagometer.slice(0, Math.min(5, lagometer.length));
   for (const t of top) console.log(t.name+': '+t.t+' over '+t.i);
-}, 1000);
+}, 10000);
