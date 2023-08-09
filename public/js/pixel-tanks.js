@@ -1356,7 +1356,7 @@ function Game() {
     }
 
     drawAI(ai) {
-      const {x, y, role, r, baseRotation, baseFrame, pushback, cosmetic, hp, maxHp, raw} = ai;
+      const {x, y, role, r, baseRotation, baseFrame, pushback, cosmetic, hp, maxHp} = ai;
       GUI.drawImage(PixelTanks.images.tanks[role === 0 ? 'base' : 'bottom'+(baseFrame ? '' : '2')], x, y, 80, 80, 1, 40, 40, 0, 0, baseRotation);
       GUI.drawImage(PixelTanks.images.tanks.top, x, y, 80, 90, 1, 40, 40, 0, pushback, r);
       if (cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[cosmetic], x, y, 80, 90, 1, 40, 40, 0, pushback, r);
@@ -1365,40 +1365,6 @@ function Game() {
       GUI.draw.fillStyle = '#00FF00';
       GUI.draw.fillRect(x, y+100, 80*hp/maxHp, 5);
       GUI.drawText('['+role+'] AI Bot', x+40, y-25, 50, '#ffffff', 0.5);
-      //debug path renderer
-      GUI.draw.strokeStyle = '#000000';
-      GUI.draw.lineWidth = 5;
-      GUI.draw.beginPath();
-      GUI.draw.moveTo(raw.coords[0][0]*100, raw.coords[0][1]*100);
-      for (const c of raw.coords) {
-        if (!Array.isArray(c)) {
-          GUI.draw.fillStyle = '#00FF00';
-          GUI.draw.lineTo(c.x*100+50, c.y*100+50);
-          GUI.draw.fillRect(c.x*100+25, c.y*100+25, 50, 50);
-          GUI.draw.moveTo(c.x*100+50, c.y*100+50);
-        }
-      }
-      GUI.draw.stroke();
-      raw.coords.forEach(c => GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 50, 50));
-      for (const c of raw.parsed) {
-        GUI.draw.fillStyle = '#FF0000';
-        GUI.draw.fillRect(c.x*100+25, c.y*100+25, 50, 50);
-        GUI.draw.strokeRect(c.x*100+25, c.y*100+25, 50, 50)
-      }
-      GUI.draw.fillStyle = '#0000FF';
-      GUI.draw.fillRect(raw.epx*100+25, raw.epy*100+25, 50, 50);
-      GUI.draw.fillStyle = '#6A0F8E';
-      GUI.draw.fillRect(raw.tpx*100+25, raw.tpy*100+25, 50, 50);
-      if (ai.path) {
-        GUI.draw.strokeStyle = '#ffffff';
-        GUI.draw.beginPath();
-        GUI.draw.moveTo(ai.path.p[0]*100+50, ai.path.p[1]*100+50);
-        for (const p of ai.path.p) {
-          GUI.draw.lineTo(p[0]*100+50, p[1]*100+50);
-          GUI.draw.moveTo(p[0]*100+50, p[1]*100+50);
-        }
-        GUI.draw.stroke();
-      }
     }
 
     drawTank(t) {
