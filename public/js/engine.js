@@ -53,7 +53,7 @@ class Engine {
     if (use.includes('dynamite')) {
       for (let i = this.s.length-1; i >= 0; i--) {
         const s = this.s[i];
-        if (this.getUsername(s.team) !== t.username || s.type !== 'dynamite') return;
+        if (this.getUsername(s.team) !== t.username || s.type !== 'dynamite') continue;
         this.d.push(new Damage(s.x-100, s.y-100, 200, 200, 100, s.team, this));
         s.destroy();
       }
