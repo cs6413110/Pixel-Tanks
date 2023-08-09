@@ -2,12 +2,12 @@ try {
   PF = require('pathfinding');
 } catch (e) {}
 
-const setImmediate = setImmediate || setTimeout;
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 
 class Engine {
   constructor(levels) {
+    setImmediate = setImmediate || setTimeout;
     this.spawn = { x: 0, y: 0 };
     this.ai = [];
     this.b = [];
