@@ -874,53 +874,5 @@ class AI {
 }
 
 try {
-  module.exports = { Engine };
+  module.exports = {Engine, Block, Shot, AI, Damage};
 } catch (e) {}
-
-const Profile = (arr, update) => {
-  const functions = [];
-  for (let e of arr) {
-    if (typeof e !== 'function') continue;
-    if (/^\s*class\s+/.test(e.toString())) {
-      const n = e.name;
-      for (const p of Object.getOwnPropertyNames(e)) {
-        if (typeof e[p] === 'function') {
-          const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0};
-          e[p] = function() {
-            const start = Date.now();
-            const r = f.o.apply(this, arguments);
-            f.i++;
-            f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
-            update(functions);
-            return r;
-          }
-          functions.push(f);
-        }
-      }
-      for (const p of Object.getOwnPropertyNames(e.prototype)) {
-        if (typeof e.prototype[p] === 'function') {
-          const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0};
-          e.prototype[p] = function() {
-            const start = Date.now();
-            const r = f.o.apply(this, arguments);
-            f.i++;
-            f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
-            update(functions);
-            return r;
-          }
-          functions.push(f);
-        }
-      }
-    }
-  }
-}
-
-let lagometer = [];
-Profile([Engine, Block, Shot, AI, Damage], (f) => {
-  lagometer = f;
-});
-setInterval(() => {
-  lagometer.sort((a, b) => b.t - a.t);
-  const top = lagometer.slice(0, Math.min(15, lagometer.length));
-  for (const t of top) console.log(t.name+': '+t.t+' over '+t.i);
-}, 10000);
