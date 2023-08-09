@@ -558,7 +558,6 @@ class AI {
     this.class = '';
     const t = host.pt.find(t => t.username === host.getUsername(this.team));
     this.cosmetic = t ? t.cosmetic : '';
-    this.raw = {coords: [], epx: -100, epy: -100, parsed: []};
   }
 
   update() {
@@ -680,12 +679,8 @@ class AI {
       const x = coords[i][0] + epx, y = coords[i][1] + epy;
       if (x >= 0 && y >= 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x-tpx)**2+(y-tpy)**2) };
     }
-    this.raw = {coords, epx, epy, tpx, tpy, parsed: []};
     coords = coords.filter(c => !Array.isArray(c));
     coords.sort((a, b) => sortAsc ? a.d - b.d : b.d - a.d);
-    coords.forEach(c => {
-      if (!limiter.includes(finder.findPath(sx, sy, c.x, c.y, this.host.map.clone()).length)) this.raw.parsed.push(c);
-    });
     this.path = false;
     let i = 0;
     while (!this.path) {
