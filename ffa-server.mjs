@@ -17,7 +17,7 @@ import fetch from 'node-fetch';
 import HyperExpress from 'hyper-express';
 import jsonpack from 'jsonpack';
 import Filter from 'bad-words';
-import {Engine} from './public/js/engine.js';
+import {Engine, Block, Shot, AI, Damage} from './public/js/engine.js';
 
 function measureLag(i) {
   const start = Date.now();
@@ -558,3 +558,51 @@ class FFA extends Multiplayer {
 
 Server.use(Core);
 if (!SETTINGS.export) Server.listen(SETTINGS.port);
+
+const Profile = (arr, update) => {
+  const functions = [];
+  for (let e of arr) {
+    if (typeof e !== 'function') continue;
+    if (/^\s*class\s+/.test(e.toString())) {
+      const n = e.name;
+      for (const p of Object.getOwnPropertyNames(e)) {
+        if (typeof e[p] === 'function') {
+          const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0};
+          e[p] = function() {
+            const start = Date.now();
+            const r = f.o.apply(this, arguments);
+            f.i++;
+            f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
+            update(functions);
+            return r;
+          }
+          functions.push(f);
+        }
+      }
+      for (const p of Object.getOwnPropertyNames(e.prototype)) {
+        if (typeof e.prototype[p] === 'function') {
+          const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0};
+          e.prototype[p] = function() {
+            const start = Date.now();
+            const r = f.o.apply(this, arguments);
+            f.i++;
+            f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
+            update(functions);
+            return r;
+          }
+          functions.push(f);
+        }
+      }
+    }
+  }
+}
+
+let lagometer = [];
+Profile([Engine, Block, Shot, AI, Damage, FFA, Multiplayer, A], (f) => {
+  lagometer = f;
+});
+setInterval(() => {
+  lagometer.sort((a, b) => b.t - a.t);
+  const top = lagometer.slice(0, Math.min(15, lagometer.length));
+  for (const t of top) console.log(t.name+': '+t.t+' over '+t.i);
+}, 10000);
