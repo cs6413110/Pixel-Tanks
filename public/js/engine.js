@@ -1,4 +1,4 @@
-﻿try {
+try {
   PF = require('pathfinding');
 } catch (e) {}
 
@@ -151,8 +151,12 @@ class Engine {
       if (b.x % 100 === 0 && b.y % 100 === 0) this.map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), false);
     }
     
-    for (const ai of this.ai) ai.update();
-    for (const s of this.s) s.update();
+    setImmediate(() => {
+      for (const ai of this.ai) ai.update();
+    });
+    setImmediate(() => {
+      for (const s of this.s) s.update()
+    });
 
     for (const t of this.pt) {
       if (t.dedEffect) t.dedEffect.time = Date.now() - t.dedEffect.start;
