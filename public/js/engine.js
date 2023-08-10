@@ -125,7 +125,7 @@ class Engine {
       t.buff = true;
       setTimeout(() => {
         t.buff = false;
-      }, 10000);
+      }, 15000);
     }
     if (use.includes('healSwitch')) {
       let a = [];
