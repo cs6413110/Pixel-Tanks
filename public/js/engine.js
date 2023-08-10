@@ -119,7 +119,7 @@ class Engine {
     }
     if (use.includes('turret')) {
       //this.ai = this.ai.filter(ai => this.getUsername(ai.team) !== t.username);
-      //this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, Math.floor(Math.random()*2+1), t.rank, t.team, this));
+      this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, Math.floor(Math.random()*2+1), t.rank, t.team, this));
     }
     if (use.includes('buff')) {
       t.buff = true;
