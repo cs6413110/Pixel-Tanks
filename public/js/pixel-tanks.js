@@ -1847,11 +1847,9 @@ function Game() {
           this.canBoost = false;
           this.tank.immune = true;
           this.timers.boost = Date.now();
-          if (PixelTanks.userData.class === 'tactical') this.tank.use.push('mine');
           setTimeout(() => {
             this.speed = 4;
             this.tank.immune = false;
-            if (PixelTanks.userData.class === 'tactical') this.tank.use.push('mine');
             if (PixelTanks.userData.class === 'stealth') this.tank.use.push('bomb');
           }, 500);
           setTimeout(() => {this.canBoost = true}, 5000);
