@@ -7,7 +7,6 @@ const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && 
 
 class Engine {
   constructor(levels) {
-    if (typeof setImmediate !== 'function') setImmediate = setTimeout;
     this.spawn = { x: 0, y: 0 };
     this.ai = [];
     this.b = [];
@@ -152,12 +151,8 @@ class Engine {
       if (b.x % 100 === 0 && b.y % 100 === 0) this.map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), false);
     }
     
-    setImmediate(() => {
-      for (const ai of this.ai) ai.update();
-    });
-    setImmediate(() => {
-      for (const s of this.s) s.update()
-    });
+    for (const ai of this.ai) ai.update();
+    for (const s of this.s) s.update()
 
     for (const t of this.pt) {
       if (t.dedEffect) t.dedEffect.time = Date.now() - t.dedEffect.start;
