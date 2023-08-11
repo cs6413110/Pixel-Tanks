@@ -11,30 +11,22 @@ const toPoint = angle => {
 }
 const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
 const down = a => a < 0 ? Math.ceil(a) : Math.floor(a);
-const raycast = (x, y, x2, y2, w) {
-  const dx = x-x2, dy = y-y2;
+const raycast = (x, y, x2, y2, w) => {
+  const dx = x-x2, dy = y-y2, adx = Math.abs(dx), ady = Math.abs(dy);
   const minx = Math.min(x, x2), miny = Math.min(y, y2), maxx = Math.max(x, x2), maxy = Math.max(y, y2);
-  const walls = w.filter(w => collision(w.x, w.y, 100, 100, minx, miny, Math.abs(dx), Math.abs(dy)));
-  let px = [], py = [];
-  for (let i = up(minx/100); i <= down(maxx/100); i++) px.push(i*100);
-  for (let i = up(miny/100); i <= down(maxy/100); i++) py.push(i*100);
+  const walls = w.filter(w => collision(w.x, w.y, 100, 100, minx, miny, adx, ady));
+  let px = Array.from({adx+1}, (_, i) => minx+i), py = Array.from({ady+1}, (_, i) => miny+i);
   for (const w of walls) {
-    if (w.x%100 !== 0) px = px.concat([w.x, w.x+100]);
-    if (w.y%100 !== 0) py = py.concat([w.y, w.y+100]);
+    if (w.x%100 !== 0) px.push(w.x, w.x+100);
+    if (w.y%100 !== 0) py.push(w.y, w.y+100);
   }
   if (dx === 0) {
     for (const p of py) for (const w of walls) if (collision(w.x, w.y, 100, 100, x-.5, p-.5, 1, 1)) return false;
   } else {
     const o = y-(dy/dx)*x;
     for (const w of walls) {
-      for (const p of py) {
-        const xm = (p-o)/(dy/dx);
-        if (collision(w.x, w.y, 100, 100, xm-.5, p-.5, 1, 1)) return false;
-      }
-      for (const p of px) {
-        const ym = (dy/dx)*p+o;
-        if (collision(w.x, w.y, 100, 100, p-.5, ym-.5, 1, 1)) return false;
-      }
+      for (const p of py) if (collision(w.x, w.y, 100, 100, (p-o)/(dy/dx)-.5, p-.5, 1, 1)) return false;
+      for (const p of px) if (collision(w.x, w.y, 100, 100, p-.5, (dy/dx)*p+o-.5, 1, 1)) return false;
     }
   }
   return true;
