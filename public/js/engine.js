@@ -7,7 +7,7 @@ const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && 
 const toAngle = (x, y) => (-Math.atan2(x, y)*180/Math.PI+360)%360;
 const toPoint = angle => {
   const theta = (-angle) * Math.PI / 180, y = Math.cos(theta), x = Math.sin(theta);
-  return x === 0 ? {x, y: y/Math.abs(y)} : {x: x/Math.abs(x), y/Math.abs(x)}
+  return x === 0 ? {x, y: y/Math.abs(y)} : {x: x/Math.abs(x), y: y/Math.abs(x)}
 }
 const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
 const down = a => a < 0 ? Math.ceil(a) : Math.floor(a);
