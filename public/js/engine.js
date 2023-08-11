@@ -4,6 +4,41 @@ try {
 
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
+const toAngle = (x, y) => (-Math.atan2(x, y)*180/Math.PI+360)%360;
+const toPoint = angle => {
+  const theta = (-angle) * Math.PI / 180, y = Math.cos(theta), x = Math.sin(theta);
+  return x === 0 ? {x, y: y/Math.abs(y)} : {x: x/Math.abs(x), y/Math.abs(x)}
+}
+const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
+const down = a => a < 0 ? Math.ceil(a) : Math.floor(a);
+const raycast = (x, y, x2, y2, w) {
+  const dx = x-x2, dy = y-y2;
+  const minx = Math.min(x, x2), miny = Math.min(y, y2), maxx = Math.max(x, x2), maxy = Math.max(y, y2);
+  const walls = w.filter(w => collision(w.x, w.y, 100, 100, minx, miny, Math.abs(dx), Math.abs(dy)));
+  let px = [], py = [];
+  for (let i = up(minx/100); i <= down(maxx/100); i++) px.push(i*100);
+  for (let i = up(miny/100); i <= down(maxy/100); i++) py.push(i*100);
+  for (const w of walls) {
+    if (w.x%100 !== 0) px = px.concat([w.x, w.x+100]);
+    if (w.y%100 !== 0) py = py.concat([w.y, w.y+100]);
+  }
+  if (dx === 0) {
+    for (const p of py) for (const w of walls) if (collision(w.x, w.y, 100, 100, x-.5, p-.5, 1, 1)) return false;
+  } else {
+    const o = y-(dy/dx)*x;
+    for (const w of walls) {
+      for (const p of py) {
+        const xm = (p-o)/(dy/dx);
+        if (collision(w.x, w.y, 100, 100, xm-.5, p-.5, 1, 1)) return false;
+      }
+      for (const p of px) {
+        const ym = (dy/dx)*p+o;
+        if (collision(w.x, w.y, 100, 100, p-.5, ym-.5, 1, 1)) return false;
+      }
+    }
+  }
+  return true;
+}
 
 class Engine {
   constructor(levels) {
@@ -556,11 +591,11 @@ class AI {
     this.identify();
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
-      this.r = this.toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40))+this.inaccuracy;
+      this.r = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40))+this.inaccuracy;
       if (this.canPowermissle) this.fire(this.obstruction.x, this.obstruction.y, 'powermissle');
       if (this.canFire) this.fire(this.obstruction.x, this.obstruction.y);
     } else if (this.mode !== 0) {
-      this.r = this.toAngle(this.target.x - this.x, this.target.y - this.y)+this.inaccuracy;
+      this.r = toAngle(this.target.x - this.x, this.target.y - this.y)+this.inaccuracy;
       if (this.canPowermissle) this.fire(this.target.x, this.target.y, 'powermissle');
       if (this.canFire) this.fire(this.target.x, this.target.y);
     }
@@ -737,20 +772,10 @@ class AI {
       }
     }
     targets.sort((a, b) => a.distance - b.distance);
-    for (const t of targets) {
-      if (this.raycast(t)) {
-        target = t;
-        break;
-      }
-    }
+    for (const t of targets) if (raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) break target = t;
     if (this.role === 3 && !this.bond && allies.length > 0) {
       allies.sort((a, b) => a.distance - b.distance);
-      for (const a of allies) {
-        if (this.raycast(a)) {
-          this.bond = a;
-          break;
-        }
-      }
+      for (const a of allies) if (raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) break this.bond = a;
     }
     if (!target) {
       if (this.role === 0) this.r++;
@@ -783,7 +808,7 @@ class AI {
     }
     let l = type === 'shotgun' ? -10 : 0;
     while (l<(type === 'shotgun' ? 15 : 1)) {
-      const { x, y } = this.toPoint(this.r+l);
+      const { x, y } = toPoint(this.r+l);
       this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, type, this.r+l, this.team, this.host));
       l += 5;
     }
@@ -813,51 +838,6 @@ class AI {
     if (index !== -1) this.host.ai.splice(index, 1);
   }
 
-  toAngle(x, y) {
-    return (-Math.atan2(x, y) * 180 / Math.PI + 360) % 360;
-  }
-
-  toPoint(angle) {
-    const theta = (-angle) * Math.PI / 180;
-    const y = Math.cos(theta);
-    const x = Math.sin(theta);
-    if (x === 0) {
-      return { x: 0, y: y / Math.abs(y) };
-    } else {
-      return { x: x / Math.abs(x), y: y / Math.abs(x) };
-    }
-  }
-
-  raycast(t) {
-    const x = this.x+40, y = this.y+40, x2 = t.x+40, y2 = t.y+40, dx = x-x2, dy = y-y2;
-    const minx = Math.min(x, x2), miny = Math.min(y, y2), maxx = Math.max(x, x2), maxy = Math.max(y, y2);
-    const blocks = this.host.b.filter(b => collision(b.x, b.y, 100, 100, minx, miny, Math.abs(dx), Math.abs(dy)));
-    const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
-    const down = a => a < 0 ? Math.ceil(a) : Math.floor(a);
-    let px = [], py = [];
-    for (let i = up(minx/100); i <= down(maxx/100); i++) px.push(i*100);
-    for (let i = up(miny/100); i <= down(maxy/100); i++) py.push(i*100);
-    for (const b of blocks) {
-      if (b.x%100 !== 0) px = px.concat([b.x, b.x+100]);
-      if (b.y%100 !== 0) py = py.concat([b.y, b.y+100]);
-    }
-    if (dx === 0) {
-      for (const p of py) for (const b of blocks) if (collision(b.x, b.y, 100, 100, x-.5, p-.5, 1, 1)) return false;
-    } else {
-      const o = y-(dy/dx)*x;
-      for (const b of blocks) {
-        for (const p of py) {
-          const xm = (p-o)/(dy/dx);
-          if (collision(b.x, b.y, 100, 100, xm-.5, p-.5, 1, 1)) return false;
-        }
-        for (const p of px) {
-          const ym = (dy/dx)*p+o;
-          if (collision(b.x, b.y, 100, 100, p-.5, ym-.5, 1, 1)) return false;
-        }
-      }
-    }
-    return true;
-  }
 }
 
 try {
