@@ -1711,7 +1711,7 @@ function Game() {
       } else if (id === 'fortress') {
         this.tank.use.push('block');
         this.tank.blockType = 'fortress';
-        cooldown = 20000;
+        cooldown = 10000;
       } else if (id === 'flashbang') {
         this.tank.use.push('flashbang');
         cooldown = 40000;
