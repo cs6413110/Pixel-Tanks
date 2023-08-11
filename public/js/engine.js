@@ -15,7 +15,7 @@ const raycast = (x, y, x2, y2, w) => {
   const dx = x-x2, dy = y-y2, adx = Math.abs(dx), ady = Math.abs(dy);
   const minx = Math.min(x, x2), miny = Math.min(y, y2), maxx = Math.max(x, x2), maxy = Math.max(y, y2);
   const walls = w.filter(w => collision(w.x, w.y, 100, 100, minx, miny, adx, ady));
-  let px = Array.from({adx+1}, (_, i) => minx+i), py = Array.from({ady+1}, (_, i) => miny+i);
+  let px = Array.from({length: adx+1}, (_, i) => minx+i), py = Array.from({length: ady+1}, (_, i) => miny+i);
   for (const w of walls) {
     if (w.x%100 !== 0) px.push(w.x, w.x+100);
     if (w.y%100 !== 0) py.push(w.y, w.y+100);
