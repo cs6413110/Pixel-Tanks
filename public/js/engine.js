@@ -464,14 +464,13 @@ class Shot {
     for (let i = blocks.length-1; i >= 0; i--) {
       const b = blocks[i];
       if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
-      /*if (type === 'grapple') {
-        return;
+      if (type === 'grapple') {
         const t = this.host.pt.find(t => t.username === host.getUsername(this.team));
         if (t.grapple) t.grapple.bullet.destroy();
         t.grapple = { target: b, bullet: this };
         this.update = () => { };
         return false;
-      } else */if (type === 'dynamite') {
+      } else if (type === 'dynamite') {
         this.target = b;
         this.offset = [b.x - x, b.y - y];
         this.update = () => {
@@ -494,13 +493,13 @@ class Shot {
     }
 
     if (x < 0 || x > 3000 || y < 0 || y > 3000) {
-      /*if (type === 'grapple') {
+      if (type === 'grapple') {
         const t = host.pt.find(t => t.username === host.getUsername(this.team));
         if (t.grapple) t.grapple.bullet.destroy();
         t.grapple = { target: { x: x, y: y }, bullet: this };
         this.update = () => { };
         return false;
-      }*/
+      }
       return true;
     }
     return false;
