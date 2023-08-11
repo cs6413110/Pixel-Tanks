@@ -465,12 +465,14 @@ class Shot {
       const b = blocks[i];
       if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
       if (type === 'grapple') {
+        if (b.type === 'fortress' && host.getTeam(b.team) === host.getTeam(this.team)) return false;
         const t = this.host.pt.find(t => t.username === host.getUsername(this.team));
         if (t.grapple) t.grapple.bullet.destroy();
         t.grapple = { target: b, bullet: this };
         this.update = () => { };
         return false;
       } else if (type === 'dynamite') {
+        if (b.type === 'fortress' && host.getTeam(b.team) === host.getTeam(this.team)) return false;
         this.target = b;
         this.offset = [b.x - x, b.y - y];
         this.update = () => {
@@ -482,7 +484,7 @@ class Shot {
         host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
         return true;
       } else {
-        if ('fortress' === b.type && host.getTeam(b.team) === host.getTeam(this.team)) return false;
+        if (b.type === 'fortress' && host.getTeam(b.team) === host.getTeam(this.team)) return false;
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
         } else {
