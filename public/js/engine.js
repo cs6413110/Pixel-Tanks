@@ -764,10 +764,16 @@ class AI {
       }
     }
     targets.sort((a, b) => a.distance - b.distance);
-    for (const t of targets) if (raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) break target = t;
+    for (const t of targets) if (raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) {
+      target = t;
+      break;
+    }
     if (this.role === 3 && !this.bond && allies.length > 0) {
       allies.sort((a, b) => a.distance - b.distance);
-      for (const a of allies) if (raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) break this.bond = a;
+      for (const a of allies) if (raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) {
+        this.bond = a;
+        break;
+      }
     }
     if (!target) {
       if (this.role === 0) this.r++;
