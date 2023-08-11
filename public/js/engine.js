@@ -167,7 +167,7 @@ class Engine {
     }
     if (fire.length > 0) {
       t.pushback = -6;
-      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, s.type === 'grapple' ? t.username : this.parseTeamExtras(t.team), this));
+      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, this.parseTeamExtras(t.team), this));
     }
   }
 
@@ -482,7 +482,7 @@ class Shot {
         host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
         return true;
       } else {
-        if (['fortress'].includes(b.type) && host.getTeam(b.team) === host.getTeam(this.team)) return false;
+        if ('fortress' === b.type && host.getTeam(b.team) === host.getTeam(this.team)) return false;
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
         } else {
