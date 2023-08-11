@@ -324,7 +324,7 @@ class Block {
     this.type = type;
     this.host = host;
     this.s = false;
-    this.c = !['spike', 'mine', 'fire', 'airstrike', 'fortress'].includes(type); // collision
+    this.c = !['spike', 'mine', 'fire', 'airstrike'].includes(type); // collision
     this.team = team;
     if (['spike', 'mine', 'fire'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 5000 : 30000);
     if (type === 'airstrike') {
@@ -482,7 +482,7 @@ class Shot {
         host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
         return true;
       } else {
-        if (['fortress', 'mine'].includes(b.type) && host.getTeam(b.team) === host.getTeam(this.team)) return false;
+        if (['fortress'].includes(b.type) && host.getTeam(b.team) === host.getTeam(this.team)) return false;
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
         } else {
