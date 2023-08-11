@@ -324,7 +324,7 @@ class Block {
     this.type = type;
     this.host = host;
     this.s = false;
-    this.c = !['spike', 'mine', 'fire', 'airstrike'].includes(type); // collision
+    this.c = !['spike', 'mine', 'fire', 'airstrike', 'fortress'].includes(type); // collision
     this.team = team;
     if (['spike', 'mine', 'fire'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 5000 : 30000);
     if (type === 'airstrike') {
