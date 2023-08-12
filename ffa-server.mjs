@@ -15,25 +15,127 @@ const SETTINGS = {
 
 import fetch from 'node-fetch';
 import HyperExpress from 'hyper-express';
-import jsonpack from 'jsonpack';
+import compile from 'fast-json-stringify';
 import Filter from 'bad-words';
 import {Engine, Block, Shot, AI, Damage} from './public/js/engine.js';
 
-function measureLag(i) {
+let tickspeed = -1;
+const getTickspeed = i => {
   const start = Date.now();
   setTimeout(() => {
-    const lag = Date.now()-start;
-    console.log(i+':'+lag);
-    setTimeout(() => measureLag(i+1), 1000);
-  })
+    tickspeed = Date.now()-start; 
+    getTickspeed();
+  });
 }
-measureLag(1)
+setTimeout(() => getTickspeed());
 
 const filter = new Filter();
 export const Core = new HyperExpress.Router();
 const Server = new HyperExpress.Server({fast_buffers: true});
 const encode = (c) => {let x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}
 const decode = (b) => {let a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")}
+const schema = {
+  type: 'object',
+  additionalProperties: false,
+  properties: {
+    blocks: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          x: { type: 'number', round: true },
+          y: { type: 'number', round: true },
+          maxHp: { type: 'number', round: true },
+          hp: { type: 'number', round: true },
+          type: { type: 'string' },
+          s: { type: 'boolean' },
+          team: { type: 'string' },
+        },
+      },
+    },
+    tanks: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          rank: { type: 'number' },
+          username: { type: 'string' },
+          cosmetic: { type: 'string' },
+          color: { type: 'string' },
+          damage: { type: 'boolean' },
+          maxHp: { type: 'number', round: true },
+          hp: { type: 'number', round: true },
+          shields: { type: 'number', round: true },
+          team: { type: 'string' },
+          x: { type: 'number', round: true },
+          y: { type: 'number', round: true },
+          r: { type: 'number', round: true },
+          pushback: { type: 'number' },
+          baseRotation: { type: 'number' },
+          baseFrame: { type: 'number' },
+          fire: { type: 'boolean' },
+          healing: { type: 'string' },
+        },
+      },
+    },
+    ai: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          role: { type: 'number' },
+          x: { type: 'number' },
+          y: { type: 'number' },
+          r: { type: 'number', round: true },
+          baseRotation: { type: 'number' },
+          baseFrame: { type: 'number' },
+          mode: { type: 'number' },
+          rank: { type: 'number' },
+          hp: { type: 'number', round: true },
+          maxHp: { type: 'number', round: true },
+          pushback: { type: 'number' },
+          cosmetic: { type: 'string' },
+        }
+      }
+    },
+    bullets: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          team: { type: 'string' },
+          r: { type: 'number', round: true },
+          type: { type: 'string' },
+          x: { type: 'number', round: true },
+          y: { type: 'number', round: true },
+          sx: { type: 'number', round: true },
+          sy: { type: 'number', round: true },
+        },
+      },
+    },
+    explosions: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          x: { type: 'number', round: true },
+          y: { type: 'number', round: true },
+          w: { type: 'number' },
+          h: { type: 'number' },
+          f: { type: 'number' },
+        },
+      },
+    },
+    logs: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
+    event: { type: 'string' },
+  },
+}
+const stringify = compile(schema);
 const deathMessages = [
   `{victim} was killed by {killer}`,
   `{victim} was put out of their misery by {killer}`,
@@ -425,44 +527,16 @@ class Multiplayer extends Engine {
 
   send() {
     const view = {x: -860, y: -560, w: 1880, h: 1280};
-    this.pt.forEach(t => {
-      const message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, event: 'hostupdate'};
-      for (const b of this.b) {
-        if (A.collider(b.x, b.y, 100, 100, t.x+view.x, t.y+view.y, view.w, view.h)) {
-          message.blocks.push(this.deepClone(b, ['host', 'bar', 'sd', 'c'], [Infinity]));
-        }
-      }
-      for (const pt of this.pt) {
-        if (A.collider(pt.x, pt.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) {
-          message.tanks.push(this.deepClone(pt, ['updates', 'sockets', 'healInterval', 'healTimeout', 'flashbangTimeout', 'grapple', 'gluInterval', 'ti', 'gluTimeout', 'fireTimeout', 'fireInterval'], []));
-        }
-      }
-      for (const ai of this.ai) {
-        if (A.collider(ai.x, ai.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) {
-          message.ai.push(this.deepClone(ai, ['team', 'host', 'canFire', 'target', 'healTimeout', 'healInterval'], []));
-        }
-      }
-      for (const s of this.s) {
-        if (A.collider(s.x, s.y, 10, 10, t.x+view.x, t.y+view.y, view.w, view.h)) {
-          message.bullets.push(this.deepClone(s, ['host', 'd', 'damage', 'ra', 'target', 'offset', 'md'], []));
-        }
-      }
-      for (const d of this.d) {
-        if (A.collider(d.x, d.y, d.w, d.h, t.x+view.x, t.y+view.y, view.w, view.h)) {
-          message.explosions.push(this.deepClone(d, ['host', 'a', 'c'], []));
-        }
-      }
-      t.socket.send(message);
+    for (const t of this.pt) {
+      const message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, tickspeed, event: 'hostupdate'};
+      for (const b of this.b) if (A.collider(b.x, b.y, 100, 100, t.x+view.x, t.y+view.y, view.w, view.h)) message.blocks.push(b);
+      for (const pt of this.pt) if (A.collider(pt.x, pt.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.tanks.push(pt);
+      for (const ai of this.ai) if (A.collider(ai.x, ai.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.ai.push(ai);
+      for (const s of this.s) if (A.collider(s.x, s.y, 10, 10, t.x+view.x, t.y+view.y, view.w, view.h)) message.bullets.push(s);
+      for (const d of this.d) if (A.collider(d.x, d.y, d.w, d.h, t.x+view.x, t.y+view.y, view.w, view.h)) message.explosions.push(d);
+      t.socket.send(stringify(message));
       outgoing_per_second++;
-    });
-  }
-
-  deepClone(a, b, c) {
-    return JSON.parse(JSON.stringify(a, (key, value) => {
-      if (b.includes(key) || c.includes(value)) return undefined;
-      if (Number.isSafeInteger(value)) return Math.round(value);
-      return value;
-    }))
+    }
   }
 
   disconnect(socket, code, reason) {
