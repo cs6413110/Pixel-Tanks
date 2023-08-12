@@ -646,7 +646,7 @@ class AI {
   }
 
   generatePath() {
-    const {mode, role, bond, target, toPoint, r} = this;
+    const {mode, role, bond, target, r} = this;
     const sx = (this.x - 10) / 100, sy = (this.y - 10) / 100;
     // coords, sort order, path length limiter, target point, epicenter point
     let coords, sortAsc, limiter, ranged, tpx, tpy, epx, epy, tx, ty;
