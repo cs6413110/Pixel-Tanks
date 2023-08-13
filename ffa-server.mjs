@@ -217,7 +217,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
   sockets.push(socket);
   socket._send = socket.send;
   socket.send = (data) => {
-    socket._send(encode(jsonpack.pack(data)));
+    socket._send(encode(stringify(data)));
   };
   if (SETTINGS.banips.includes(socket.ip)) {
     socket.send({status: 'error', message: 'Your ip has been banned!'});
@@ -226,7 +226,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
   socket.on('message', async (data) => {
     incoming_per_second++;
     try {
-      data = jsonpack.unpack(decode(data));
+      data = JSON.parse(decode(data));
     } catch(e) {
       return socket.destroy();
     }
