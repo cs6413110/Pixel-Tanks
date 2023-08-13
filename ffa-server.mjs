@@ -650,6 +650,7 @@ const Profile = (arr, update) => {
             const r = f.o.apply(this, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
+            f.t = Date.now()-start;
             update(functions);
             return r;
           }
@@ -664,6 +665,7 @@ const Profile = (arr, update) => {
             const r = f.o.apply(this, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
+            f.t = Date.now()-start;
             update(functions);
             return r;
           }
