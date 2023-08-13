@@ -1,16 +1,11 @@
 import { expose } from 'threads/worker';
+import PF from 'pathfinding';
 
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
 const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
 const down = a => a < 0 ? Math.ceil(a) : Math.floor(a);
 const Compute = {
   pathfind: (sx, sy, tx, ty, map) => finder.findPath(sx, sy, tx, ty, map),
-  collision: (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2),
-  toAngle: (x, y) => (-Math.atan2(x, y)*180/Math.PI+360)%360,
-  toPoint: angle => {
-    const theta = (-angle) * Math.PI / 180, y = Math.cos(theta), x = Math.sin(theta);
-    return x === 0 ? {x, y: y/Math.abs(y)} : {x: x/Math.abs(x), y: y/Math.abs(x)}
-  },
   raycast: (x, y, x2, y2, w) => {
     const dx = x-x2, dy = y-y2, adx = Math.abs(dx), ady = Math.abs(dy);
     const minx = Math.min(x, x2), miny = Math.min(y, y2), maxx = Math.max(x, x2), maxy = Math.max(y, y2);
