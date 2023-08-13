@@ -216,9 +216,7 @@ setInterval(() => {
 Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
   sockets.push(socket);
   socket._send = socket.send;
-  socket.send = (data) => {
-    socket._send(encode(stringify(data)));
-  };
+  socket.send = data => socket._send(encode(typeof data === 'object' ? JSON.stringify(data) : data));
   if (SETTINGS.banips.includes(socket.ip)) {
     socket.send({status: 'error', message: 'Your ip has been banned!'});
     return setImmediate(() => socket.destroy());
