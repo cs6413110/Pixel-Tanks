@@ -1,14 +1,20 @@
-const pathfinding = document.createElement('SCRIPT');
-pathfinding.crossOrigin = '';
-pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
-pathfinding.onload = () => {
-  const engine = document.createElement('SCRIPT');
-  engine.crossOrigin = '';
-  engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
-  engine.onload = Game;
-  document.head.appendChild(engine);
+const threads = document.createElement('SCRIPT');
+threads.crossOrigin = '';
+threads.src = 'https://cdn.jsdelivr.net/npm/threads@1.7.0/dist/master/index.js';
+threads.onload = () => {
+  const pathfinding = document.createElement('SCRIPT');
+  pathfinding.crossOrigin = '';
+  pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
+  pathfinding.onload = () => {
+    const engine = document.createElement('SCRIPT');
+    engine.crossOrigin = '';
+    engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
+    engine.onload = Game;
+    document.head.appendChild(engine);
+  }
+  document.head.appendChild(pathfinding);
 }
-document.head.appendChild(pathfinding);
+document.head.appendChild(threads);
 function Game() {
   class MegaSocket {
     constructor(url, options) {
