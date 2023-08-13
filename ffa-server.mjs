@@ -70,6 +70,7 @@ const schema = {
           x: { type: 'number', round: true },
           y: { type: 'number', round: true },
           r: { type: 'number', round: true },
+          ded: { type: 'boolean', round: true },
           pushback: { type: 'number' },
           baseRotation: { type: 'number' },
           baseFrame: { type: 'number' },
@@ -129,7 +130,11 @@ const schema = {
     logs: {
       type: 'array',
       items: {
-        type: 'string',
+        type: 'object',
+        properties: {
+          m: { type: 'string' },
+          c: { type: 'string' },
+        },
       },
     },
     event: { type: 'string' },
