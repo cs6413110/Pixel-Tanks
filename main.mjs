@@ -3,7 +3,6 @@ import {promises as fs} from 'fs';
 import {MongoClient} from 'mongodb';
 import Filter from 'bad-words';
 import TokenGenerator from 'uuid-token-generator';
-import jsonpack from 'jsonpack';
 import {Core} from './ffa-server.mjs';
 
 const connectionString =
@@ -54,11 +53,11 @@ router.ws('/', {idle_timeout: Infinity}, (socket) => {
   sockets.push(socket);
   socket._send = socket.send;
   socket.send = (data) => {
-    socket._send(encode(jsonpack.pack(data)));
+    socket._send(encode(JSON.stringify(data)));
   };
   socket.on('message', (data) => {
     try {
-      data = jsonpack.unpack(decode(data));
+      data = JSON.parse(decode(data));
     } catch (e) {
       return socket.destroy();
     }
