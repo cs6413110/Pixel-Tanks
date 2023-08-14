@@ -24,9 +24,10 @@ class Compute {
     let worker = this.workers.find(w => w.ready);
     if (!worker) worker = await this.pushWorker();
     worker.ready = false;
-    console.log('worker started');
+    let start = Date.now();
     worker[id](...params).then(o => {
       worker.ready = true;
+      console.log('worker took '+(Date.now()-start));
       callback(o);
     });
   }
@@ -37,11 +38,8 @@ const blocks = [];
 for (let i = 0; i < 10000; i++) blocks.push([Math.random()*2000-200, Math.random()*1400-200, 100, 100]);
 
 setInterval(async () => {
-  console.log('Workers: '+Compute.workers.length);
-  console.log('Assigning workers tasks');
-  let startThreaded = process.hrtime();
-  let counter = 0, start = Date.now();
-  for (let i = 0; i < Compute.workers.length; i++) {
+  let counter = 0;
+  for (let i = 0; i <= Compute.workers.length; i++) {
     Compute.pushWork('collider', r => {
       console.log('Worker #'+i+' finished');
       counter++;
@@ -49,7 +47,6 @@ setInterval(async () => {
       if (counter === Compute.workers.length) console.log('Threaded took '+(endThreaded[0]*1000000+endThreaded[1])+'ns');
     }, 0, 0, 1600, 1000, blocks);
   }
-  console.log('setup took '+(Date.now()-start));
 
   let startSync = process.hrtime();
   for (let i = 0; i < Compute.workers.length; i++) collider(0, 0, 1600, 1000, blocks);
