@@ -48,8 +48,10 @@ setInterval(async () => {
   }
 }, 10000);
 
-setTimeout(() => setInterval(() => {
-  let startSync = Date.now();
-  for (let i = 0; i < Compute.workers.length; i++) collider(0, 0, 1600, 1000, blocks);
-  console.log('Sync took '+(Date.now()-startSync)+'ms');
-}, 1000), 5000);
+setTimeout(() => {
+  setInterval(() => {
+    let startSync = Date.now();
+    for (let i = 0; i < Compute.workers.length; i++) collider(0, 0, 1600, 1000, blocks);
+    console.log('Sync took '+(Date.now()-startSync)+'ms');
+  }, 10000);
+}, 5000);
