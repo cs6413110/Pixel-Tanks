@@ -40,6 +40,7 @@ for (let i = 0; i < 10000; i++) blocks.push([Math.random()*2000-200, Math.random
 setInterval(async () => {
   let counter = 0, startThreaded = Date.now();
   for (let i = 0; i < Compute.workers.length; i++) {
+    console.log('Assinging work');
     Compute.pushWork('collider', r => {
       console.log('Thread '+i+' done');
       counter++;
