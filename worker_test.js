@@ -16,18 +16,20 @@ class Compute {
   static async pushWorker() {
     const worker = new Worker('./public/js/compute.js');
     worker.ready = true;
+    worker.on('message', data => {
+      console.log('worker done');
+      worker.ready = true;
+      worker.callback(data);
+    });
     this.workers.push(worker);
     return worker;
   }
 
   static async pushWork(id, callback, ...params) {
     let worker = this.workers.find(w => w.ready);
-    if (!worker) worker = await this.pushWorker();
+    if (worker === undefined) worker = await this.pushWorker();
     worker.ready = false;
-    worker.on('message', data => {
-      worker.ready = true;
-      callback(data);
-    });
+    worker.callback = callback;
     worker.postMessage({task: id, params});
   }
 }
