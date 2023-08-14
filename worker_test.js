@@ -18,7 +18,7 @@ class Compute {
     worker.ready = true;
     worker.on('message', data => {
       worker.ready = true;
-      this.taskData(data);
+      worker.callback(data);
     });
     this.workers.push(worker);
     return worker;
@@ -31,10 +31,6 @@ class Compute {
     worker.callback = callback;
     worker.postMessage({task: id, params});
     worker.on('exit', console.log);
-  }
-
-  static taskData(data) {
-    callback(data);
   }
 }
 Compute.initialize(4);
