@@ -20,7 +20,7 @@ class Compute {
     return worker;
   }
 
-  static async pushWork(id, ...params, callback) {
+  static async pushWork(id, callback, ...params) {
     let worker = this.workers.find(w => w.ready);
     if (!worker) worker = await this.pushWorker();
     worker.ready = false;
@@ -41,11 +41,11 @@ setInterval(async () => {
   let startThreaded = Date.now();
   let counter = 0;
   for (let i = 0; i < Compute.workers.length; i++) {
-    Compute.pushWork('collider', 0, 0, 1600, 1000, blocks, r => {
+    Compute.pushWork('collider', r => {
       console.log('Worker #'+i+' finished');
       counter++;
       if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
-    });
+    }, 0, 0, 1600, 1000, blocks);
   }
 
   let startSync = Date.now();
