@@ -39,15 +39,15 @@ const blocks = [];
 for (let i = 0; i < 10000; i++) blocks.push([Math.random()*2000-200, Math.random()*1400-200, 100, 100]);
 
 setInterval(async () => {
-  let counter = 0, startThreaded = Date.now();
+  let counter = 0, startThreaded = Date.now(), cringe = [];
   for (let i = 0; i < Compute.workers.length; i++) {
-    console.log('Assinging work');
+    cringe[i] = Compute.workers[i].ready;
     Compute.pushWork('collider', r => {
-      console.log('Thread '+i+' done');
       counter++;
       if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
     }, 0, 0, 1600, 1000, blocks);
   }
+  console.log(cringe);
 
   let startSync = Date.now();
   for (let i = 0; i < Compute.workers.length; i++) collider(0, 0, 1600, 1000, blocks);
