@@ -32,7 +32,7 @@ setInterval(() => {
   console.log('Workers: '+Compute.workers.length);
   console.log('Assigning workers+1 tasks');
   for (let i = 0; i <= Compute.workers.length; i++) {
-    const output = Compute.pushWork('collider', 0, 0, 1600, 1000, blocks);
+    const output = await Compute.pushWork('collider', 0, 0, 1600, 1000, blocks);
     console.log('Worker #'+i+' finished => '+output);
   }
 }, 5000);
