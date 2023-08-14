@@ -1,5 +1,6 @@
-import { expose } from 'threads/worker';
-import PF from 'pathfinding';
+const Threads = require('threads/worker');
+PF = require('pathfinding');
+const { expose } = Threads;
 
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
 const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
