@@ -43,7 +43,10 @@ setInterval(async () => {
     Compute.pushWork('collider', r => {
       console.log('Worker #'+i+' finished');
       counter++;
-      if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
+      if (counter === Compute.workers.length) {
+        console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
+        console.log(Compute.workers);
+      }
     }, 0, 0, 1600, 1000, blocks);
   }
 
