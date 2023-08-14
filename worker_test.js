@@ -30,24 +30,24 @@ class Compute {
     if (worker === undefined) worker = await this.pushWorker();
     worker.ready = false;
     worker.callback = callback;
-    worker.postMessage({task: id, params}, []);
+    worker.postMessage({task: id, params}, [params[4]]);
   }
 }
 Compute.initialize(4);
 
 const blocks = [];
-for (let i = 0; i < 1000; i++) blocks.push([Math.random()*2000-200, Math.random()*1400-200]);
+for (let i = 0; i < 1000; i++) blocks.push(Math.random()*2000-200, Math.random()*1400-200);
+
 
 setInterval(async () => {
-  let counter = 0, startThreaded = Date.now(), cringe = [];
+  let counter = 0, startThreaded = Date.now();
   for (let i = 0; i < Compute.workers.length; i++) {
-    cringe[i] = Compute.workers[i].ready;
+    const arraybuffer = new Int32Array(blocks).buffer;
     Compute.pushWork('collider', r => {
       counter++;
       if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
-    }, 0, 0, 1600, 1000, blocks);
+    }, 0, 0, 1600, 1000, arraybuffer);
   }
-  console.log(cringe);
 
   let startSync = Date.now();
   for (let i = 0; i < Compute.workers.length; i++) collider(0, 0, 1600, 1000, blocks);
