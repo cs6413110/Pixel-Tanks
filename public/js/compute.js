@@ -2,7 +2,7 @@ const { parentPort } = require('worker_threads');
 const PF = require('pathfinding');
 
 const blocks = [];
-for (let i = 0; i < 1000000; i++) blocks.push(Math.random()*2000-200, Math.random()*1400-200);
+for (let i = 0; i < 1; i++) blocks.push(Math.random()*2000-200, Math.random()*1400-200);
 
 
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
