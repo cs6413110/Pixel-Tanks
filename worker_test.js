@@ -17,6 +17,7 @@ class Compute {
     const worker = new Worker('./public/js/compute.js');
     worker.ready = true;
     worker.on('message', data => {
+      console.log('inc data from worker');
       worker.ready = true;
       worker.callback(data);
     });
@@ -30,7 +31,6 @@ class Compute {
     worker.ready = false;
     worker.callback = callback;
     worker.postMessage({task: id, params});
-    worker.on('exit', () => console.log('ded'));
   }
 }
 Compute.initialize(4);
