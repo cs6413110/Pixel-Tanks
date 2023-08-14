@@ -22,7 +22,7 @@ class Compute {
 
   static async pushWork(id, ...params) {
     let worker = this.workers.find(w => w.ready);
-    if (!worker) worker = this.pushWorker();
+    if (!worker) worker = await this.pushWorker();
     worker.ready = false;
     const output = await worker[id](...params);
     worker.ready = true;
