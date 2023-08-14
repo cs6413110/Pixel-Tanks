@@ -1,10 +1,11 @@
 
 try {
   Threads = require('threads');
+  spawn = Threads.spawn;
+  Thread = Threads.Thread;
+  Worker = Threads.Worker
   PF = require('pathfinding');
 } catch (e) {}
-if (!Threads) Threads = {spawn: () => {}, Thread: 0, Worker: 0};
-const {spawn, Thread, Worker} = Threads;
 
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 const toAngle = (x, y) => (-Math.atan2(x, y)*180/Math.PI+360)%360;
