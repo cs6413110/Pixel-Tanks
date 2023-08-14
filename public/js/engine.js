@@ -1,6 +1,7 @@
 try {
-  import { spawn, Thread, Pool, Worker } from 'threads';
-  import PF from 'pathfinding';
+  const Threads = require('threads');
+  const { spawn, Thread, Worker } = Threads;
+  PF = require('pathfinding');
 } catch (e) {}
 
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
@@ -16,8 +17,8 @@ class Compute {
     for (let i = 0; i < t; i++) this.pushWorker();
   }
 
-  static pushWorker() {
-    const worker = new Worker('./compute.js');
+  static async pushWorker() {
+    const worker = await spawn(new Worker('./compute.js'));
     worker.ready = true;
     this.workers.push(worker);
     return worker;
