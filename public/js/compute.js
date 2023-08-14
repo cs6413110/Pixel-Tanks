@@ -33,4 +33,5 @@ const Compute = {
   }
 }
 
+setInterval(() => console.log("keepalive"), 1000);
 parentPort.once('message', data => parentPort.postMessage(Compute[data.task](...data.params)));
