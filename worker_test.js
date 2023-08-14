@@ -30,7 +30,7 @@ class Compute {
     worker.ready = false;
     worker.callback = callback;
     worker.postMessage({task: id, params});
-    worker.on('exit', console.log);
+    worker.on('exit', () => console.log('ded'));
   }
 }
 Compute.initialize(4);
