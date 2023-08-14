@@ -36,6 +36,6 @@ const Compute = {
 setInterval(() => setImmediate, 1000);
 parentPort.on('message', data => {
   let start = Date.now();
-  parentPort.postMessage(Compute[data.task](...JSON.parse(process.env/DATA)));
+  parentPort.postMessage(Compute[data.task](...JSON.parse(process.env.DATA)));
   console.log('Worker time => '+(Date.now()-start));
 });
