@@ -36,7 +36,7 @@ class Compute {
 Compute.initialize(4);
 
 const blocks = [];
-for (let i = 0; i < 1000000; i++) blocks.push(Math.random()*2000-200, Math.random()*1400-200);
+for (let i = 0; i < 10000000; i++) blocks.push(Math.random()*2000-200, Math.random()*1400-200);
 new Worker('process.env.DATA = "'+JSON.stringify([0, 0, 1600, 1000, blocks])+'"', { eval: true, env: SHARE_ENV }); 
 
 setInterval(async () => {
@@ -51,4 +51,4 @@ setInterval(async () => {
   let startSync = Date.now();
   for (let i = 0; i < Compute.workers.length; i++) collider(0, 0, 1600, 1000, blocks);
   console.log('Sync took '+(Date.now()-startSync)+'ms');
-}, 5000);
+}, 10000);
