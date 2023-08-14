@@ -37,7 +37,6 @@ Compute.initialize(4);
 
 const blocks = [];
 for (let i = 0; i < 1000000; i++) blocks.push(Math.random()*2000-200, Math.random()*1400-200);
-new Worker('process.env.DATA = "'+JSON.stringify([0, 0, 1600, 1000, blocks])+'"', { eval: true, env: SHARE_ENV }); 
 
 setInterval(async () => {
   let counter = 0, startThreaded = Date.now();
