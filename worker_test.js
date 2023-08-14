@@ -41,6 +41,7 @@ setInterval(async () => {
   let counter = 0, startThreaded = Date.now();
   for (let i = 0; i < Compute.workers.length; i++) {
     Compute.pushWork('collider', r => {
+      console.log('Thread '+i+' done');
       counter++;
       if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
     }, 0, 0, 1600, 1000, blocks);
