@@ -38,17 +38,20 @@ for (let i = 0; i < 10000; i++) blocks.push([Math.random()*2000-200, Math.random
 setInterval(async () => {
   console.log('Workers: '+Compute.workers.length);
   console.log('Assigning workers tasks');
-  let startThreaded = Date.now();
-  let counter = 0;
+  let startThreaded = process.hrtime();
+  let counter = 0, start = Date.now();
   for (let i = 0; i < Compute.workers.length; i++) {
     Compute.pushWork('collider', r => {
       console.log('Worker #'+i+' finished');
       counter++;
-      if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
+      let endThreaded = process.hrtime(startThreaded);
+      if (counter === Compute.workers.length) console.log('Threaded took '+(endThreaded[0]*1000000-endThreaded[1])+'ms');
     }, 0, 0, 1600, 1000, blocks);
   }
+  console.log('setup took'+(Date.now()-start));
 
-  let startSync = Date.now();
+  let startSync = process.hrtime();
   for (let i = 0; i < Compute.workers.length; i++) collider(0, 0, 1600, 1000, blocks);
-  console.log('Sync took '+(Date.now()-startSync)+'ms');
+  let endSync = process.hrtime(startSync);
+  console.log('Sync took '+(endSync[0]*1000000-endSync[1])+'ms');
 }, 5000);
