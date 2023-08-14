@@ -15,7 +15,7 @@ class Compute {
 
   static async pushWorker() {
     console.log('worker created');
-    const worker = new Worker('./public/js/compute.js', { env: SHARE_ENV });
+    const worker = new Worker('./public/js/compute.js');
     worker.ready = true;
     worker.on('message', data => {
       worker.ready = true;
@@ -27,7 +27,7 @@ class Compute {
 
   static async pushWork(id, callback) {
     let worker = this.workers.find(w => w.ready);
-    if (worker === undefined) worker = await this.pushWorker();
+    if (!worker) worker = await this.pushWorker();
     worker.ready = false;
     worker.callback = callback;
     worker.postMessage({task: id});
@@ -44,7 +44,7 @@ setInterval(async () => {
     Compute.pushWork('collider', r => {
       counter++;
       if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
-    });
+    }, JSON.stringify([0, 0, 1600, 1000, blocks]));
   }
 }, 10000);
 
