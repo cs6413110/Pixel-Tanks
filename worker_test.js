@@ -46,8 +46,10 @@ setInterval(async () => {
       if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
     });
   }
+}, 10000);
 
+setTimeout(() => setInterval(() => {
   let startSync = Date.now();
   for (let i = 0; i < Compute.workers.length; i++) collider(0, 0, 1600, 1000, blocks);
   console.log('Sync took '+(Date.now()-startSync)+'ms');
-}, 10000);
+}, 1000), 5000);
