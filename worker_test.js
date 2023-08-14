@@ -32,7 +32,7 @@ class Compute {
 Compute.initialize(4);
 
 const blocks = [];
-for (let i = 0; i < 1; i++) blocks.push([Math.random()*2000-200, Math.random()*1400-200, 100, 100]);
+for (let i = 0; i < 10000; i++) blocks.push([Math.random()*2000-200, Math.random()*1400-200, 100, 100]);
 
 setInterval(async () => {
   console.log('Workers: '+Compute.workers.length);
