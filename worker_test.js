@@ -36,7 +36,7 @@ class Compute {
 Compute.initialize(4);
 
 const blocks = [];
-for (let i = 0; i < 1; i++) blocks.push(Math.random()*2000-200, Math.random()*1400-200);
+for (let i = 0; i < 10; i++) blocks.push(Math.random()*2000-200, Math.random()*1400-200);
 
 setInterval(async () => {
   let counter = 0, startThreaded = Date.now();
