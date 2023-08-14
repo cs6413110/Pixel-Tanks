@@ -39,7 +39,7 @@ setInterval(async () => {
   console.log('Assigning workers+1 tasks');
   let start = Date.now();
   for (let i = 0; i <= Compute.workers.length; i++) {
-    Compute.pushWork('collider', 0, 0, 1600, 1000, blocks).then((r) => console.log('Worker #'+i+' finished => '+r));
+    Compute.pushWork('collider', 0, 0, 1600, 1000, blocks).then((r) => console.log('Worker #'+i+' finished'));
   }
   
   let end = Date.now()-start;
