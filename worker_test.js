@@ -47,5 +47,6 @@ setInterval(async () => {
 
   start = Date.now();
   for (let i = 0; i < Compute.workers.length; i++) collider(0, 0, 1600, 1000, blocks);
+  end = Date.now()-start;
   console.log('Sync took '+end+'ms');
 }, 5000);
