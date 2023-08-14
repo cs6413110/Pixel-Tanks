@@ -45,13 +45,13 @@ setInterval(async () => {
       console.log('Worker #'+i+' finished');
       counter++;
       let endThreaded = process.hrtime(startThreaded);
-      if (counter === Compute.workers.length) console.log('Threaded took '+(endThreaded[0]*1000000-endThreaded[1])+'ms');
+      if (counter === Compute.workers.length) console.log('Threaded took '+(endThreaded[0]*1000000+endThreaded[1])+'ns');
     }, 0, 0, 1600, 1000, blocks);
   }
-  console.log('setup took'+(Date.now()-start));
+  console.log('setup took '+(Date.now()-start));
 
   let startSync = process.hrtime();
   for (let i = 0; i < Compute.workers.length; i++) collider(0, 0, 1600, 1000, blocks);
   let endSync = process.hrtime(startSync);
-  console.log('Sync took '+(endSync[0]*1000000-endSync[1])+'ms');
+  console.log('Sync took '+(endSync[0]*1000000+endSync[1])+'ns');
 }, 5000);
