@@ -3,6 +3,7 @@ PF = require('pathfinding');
 const { expose } = Threads;
 
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
+const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
 const down = a => a < 0 ? Math.ceil(a) : Math.floor(a);
 const Compute = {
@@ -26,6 +27,11 @@ const Compute = {
       }
     }
     return true;
+  },
+  collider: (x, y, w, h, rects) => {
+    const collided = [];
+    for (let i = 0; i < rects.length; i++) if (collision(x, y, w, h, rects[i][0], rects[i][1], rects[i][2], rects[i][3])) collided.push(i);
+    return collided;
   }
 }
 expose(Compute);
