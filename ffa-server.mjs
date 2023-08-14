@@ -34,6 +34,15 @@ export const Core = new HyperExpress.Router();
 const Server = new HyperExpress.Server({fast_buffers: true});
 const encode = (c) => {let x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}
 const decode = (b) => {let a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")}
+const auth = (username, token) => {
+  try {
+    const res = await fetch(`http://141.148.128.231/verify?username=${username}&token=${token}`);
+    const body = await res.text();
+    return body === 'true';
+  } catch(e) {
+    return false;
+  }
+}
 const schema = {
   type: 'object',
   additionalProperties: false,
@@ -244,29 +253,18 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
       socket.username = data.username;
     }
     if (data.type === 'join') {
-      let joinable = servers.filter(s => s.pt.length < SETTINGS.ppm).sort((a, b) => a.pt.length-b.pt.length);
-      if (joinable.length === 0) {
-        joinable[0] = new FFA();
-        servers.push(joinable[0]);
-      } else if (joinable[0].pt.some(t => t.username === socket.username)) {
-        socket.send({status: 'error', message: 'You are already in the server!'});
-        return setImmediate(() => socket.destroy());
-      }
-      const { username, token, tank } = data;
-      try {
-        const res = await fetch(`http://141.148.128.231/verify?username=${username}&token=${token}`);
-        const body = await res.text();
-        if (body === 'true') {
-          joinable[0].add(socket, tank);
-          socket.room = servers.indexOf(joinable[0]);
-        } else {
-          socket.send({status: 'error', message: 'Invalid Token.'});
-          setImmediate(() => socket.destroy());
+      if (!await auth(data.username, data.token)) return socket.send({status: 'error', message: 'Invalid Token.'});
+      if (data.gamemode === 'ffa') {
+        let joinable = servers.filter(s => s.pt.length < SETTINGS.ppm).sort((a, b) => a.pt.length-b.pt.length);
+        if (joinable.length === 0) {
+          joinable[0] = new FFA();
+          servers.push(joinable[0]);
+        } else if (joinable[0].pt.some(t => t.username === socket.username)) {
+          socket.send({status: 'error', message: 'You are already in the server!'});
+          return setImmediate(() => socket.destroy());
         }
-      } catch(e) {
-        socket.send({status: 'error', message: 'Cannot verify token: '+e});
-        console.log('Cannot connect to authentication servers! '+e);
-        return setImmediate(() => socket.destroy());
+        socket.room = servers.indexOf(joinable[0]);
+        joinable[0].add(socket, data.tank);
       }
     } else if (data.type === 'update') {
       if (socket.room !== undefined) servers[socket.room].update(data);
@@ -603,7 +601,7 @@ class FFA extends Multiplayer {
   ontick() {}
 }
 
-/*class DUELS extends Engine {
+class DUELS extends Engine {
   constructor(ip) {
     super(ip, duelsLevels);
     this.mode = 0; // 0 -> waiting for players to join, 1 -> waiting for second player to join, 2 -> 10 second ready timer, 3 -> match active, 4 -> gameover and server shutdown
@@ -632,7 +630,7 @@ class FFA extends Multiplayer {
 
   }
 
-}*/
+}
 
 Server.use(Core);
 if (!SETTINGS.export) Server.listen(SETTINGS.port);
