@@ -25,7 +25,10 @@ class Compute {
     if (!worker) worker = await this.pushWorker();
     worker.ready = false;
     worker.postMessage({task: id, params});
-    worker.on('message', callback);
+    worker.on('message', (d) => {
+      worker.ready = true;
+      callback(d);
+    });
     worker.on('exit', console.log);
   }
 }
