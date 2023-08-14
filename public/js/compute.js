@@ -33,5 +33,5 @@ const Compute = {
   }
 }
 
-setInterval(() => setImmediate(), 1000);
+setInterval(() => setImmediate, 1000);
 parentPort.once('message', data => parentPort.postMessage(Compute[data.task](...data.params)));
