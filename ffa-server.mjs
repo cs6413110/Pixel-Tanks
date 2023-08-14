@@ -138,6 +138,7 @@ const schema = {
       },
     },
     event: { type: 'string' },
+    tickspeed: { type: 'number' },
   },
 }
 const stringify = compile(schema);
