@@ -20,13 +20,14 @@ class Compute {
     return worker;
   }
 
-  static async pushWork(id, ...params) {
+  static async pushWork(id, ...params, callback) {
     let worker = this.workers.find(w => w.ready);
     if (!worker) worker = await this.pushWorker();
     worker.ready = false;
-    const output = await worker[id](...params);
-    worker.ready = true;
-    return output;
+    worker[id](...params).then(o => {
+      worker.ready = true;
+      callback(o);
+    });
   }
 }
 Compute.initialize(4);
@@ -40,8 +41,8 @@ setInterval(async () => {
   let startThreaded = Date.now();
   let counter = 0;
   for (let i = 0; i < Compute.workers.length; i++) {
-    Compute.pushWork('collider', 0, 0, 1600, 1000, blocks).then((r) => {
-      console.log('Worker #'+i+' finished')
+    Compute.pushWork('collider', 0, 0, 1600, 1000, blocks, r => {
+      console.log('Worker #'+i+' finished');
       counter++;
       if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
     });
