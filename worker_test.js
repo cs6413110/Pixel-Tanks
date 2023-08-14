@@ -16,9 +16,8 @@ class Compute {
 
   static async pushWork(id, ...params) {
     let worker = this.workers.find(w => w.ready);
-    if (!worker) worker = this.pushWorker();
+    if (worker === undefined) worker = this.pushWorker();
     worker.ready = false;
-    console.log('properties: '+Object.getOwnPropertyNames(worker));
     const output = await worker[id](...params);
     worker.ready = true;
     return output;
@@ -33,6 +32,6 @@ setInterval(() => {
   console.log('Workers: '+Compute.workers.length);
   console.log('Assigning workers+1 tasks');
   for (let i = 0; i <= Compute.workers.length; i++) {
-    console.log('Worker #'+i+' finished => '+Compute.pushWork('collider', 0, 0, 1600, 1000, blocks));
+    console.log('Worker #'+i+' finished => '+await Compute.pushWork('collider', 0, 0, 1600, 1000, blocks));
   }
 }, 5000);
