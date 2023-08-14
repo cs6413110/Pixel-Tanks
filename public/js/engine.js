@@ -4,7 +4,7 @@ try {
   PF = require('pathfinding');
 } catch (e) {}
 
-if (Threads) const {spawn, Thread, Worker} = Threads;
+const {spawn, Thread, Worker} = Threads;
 
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 const toAngle = (x, y) => (-Math.atan2(x, y)*180/Math.PI+360)%360;
