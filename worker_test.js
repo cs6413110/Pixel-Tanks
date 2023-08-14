@@ -16,7 +16,8 @@ class Compute {
 
   static async pushWork(id, ...params) {
     let worker = this.workers.find(w => w.ready);
-    if (worker === undefined) worker = this.pushWorker();
+    if (!worker) worker = this.pushWorker();
+    console.log(worker);
     worker.ready = false;
     const output = await worker[id](...params);
     worker.ready = true;
@@ -28,7 +29,7 @@ Compute.initialize(4);
 const blocks = [];
 for (let i = 0; i < 100; i++) blocks.push([Math.random()*2000-200, Math.random()*1400-200, 100, 100]);
 
-setInterval(() => {
+setInterval(async () => {
   console.log('Workers: '+Compute.workers.length);
   console.log('Assigning workers+1 tasks');
   for (let i = 0; i <= Compute.workers.length; i++) {
