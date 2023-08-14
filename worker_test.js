@@ -33,5 +33,5 @@ setInterval(() => {
   console.log('Assigning workers+1 tasks');
   const output = [];
   for (let i = 0; i <= Compute.workers.length; i++) output[i] = Compute.pushWork('collider', 0, 0, 1600, 1000, blocks);
-  console.log(JSON.stingify(output));
+  console.log(JSON.stringify(output));
 }, 5000);
