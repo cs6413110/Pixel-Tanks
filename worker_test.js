@@ -36,12 +36,12 @@ class Compute {
 Compute.initialize(4);
 
 const blocks = [];
-for (let i = 0; i < 10; i++) blocks.push(Math.random()*2000-200, Math.random()*1400-200);
+for (let i = 0; i < 10; i++) blocks.push({x: Math.random()*2000-200, y: Math.random()*1400-200});
 
 setInterval(async () => {
   let counter = 0, startThreaded = Date.now();
   for (let i = 0; i < Compute.workers.length; i++) {
-    Compute.pushWork('collider', r => {
+    Compute.pushWork('raycast', r => {
       counter++;
       if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
     }, 0, 0, 1600, 1000, blocks);
