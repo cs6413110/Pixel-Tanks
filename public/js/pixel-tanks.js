@@ -1525,6 +1525,7 @@ function Game() {
       GUI.draw.globalAlpha = .2;
       GUI.draw.fillRect(0, 0, 180, 250);
       GUI.draw.globalAlpha = 1;
+      GUI.drawText('ServerTickSpeed: '+this.hostupdate.tickspeed, 10, 20, 30, '#ffffff', 0);
       GUI.drawText('Kills Streak: '+this.kills, 10, 50, 30, '#ffffff', 0);
       GUI.drawText('Crates: '+this.crates, 10, 100, 30, '#ffffff', 0);
       GUI.drawText('Experience: '+this.xp, 10, 150, 30, '#ffffff', 0);
