@@ -706,7 +706,7 @@ function Game() {
             [340, 688, 416, 116, function() {this.gamemode = 'tdm'}, false],
             [340, 844, 416, 116, function() {this.gamemode = 'juggernaut'}, false],
             [868, 848, 368, 88, function() {
-              PixelTanks.user.player = new Tank(this.ip, true); 
+              PixelTanks.user.player = new Tank(this.ip, true, this.gamemode); 
               Menus.removeListeners();
             }],
           ],
@@ -1176,7 +1176,7 @@ function Game() {
   }
 
   class Tank {
-    constructor(ip, multiplayer) {
+    constructor(ip, multiplayer, gamemode) {
       this.xp = 0;
       this.crates = 0;
       this.kills = 0;
@@ -1198,6 +1198,7 @@ function Game() {
         username: PixelTanks.user.username,
         token: PixelTanks.user.token,
         type: 'join',
+        gamemode: gamemode,
         tank: {
           rank: PixelTanks.userData.stats[4],
           username: PixelTanks.user.username,
