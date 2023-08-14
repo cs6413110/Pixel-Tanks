@@ -18,7 +18,6 @@ class Compute {
     const worker = new Worker('./public/js/compute.js');
     worker.ready = true;
     worker.on('message', data => {
-      console.log('worker done');
       worker.ready = true;
       worker.callback(data);
     });
@@ -37,7 +36,7 @@ class Compute {
 Compute.initialize(4);
 
 const blocks = [];
-for (let i = 0; i < 10000; i++) blocks.push([Math.random()*2000-200, Math.random()*1400-200, 100, 100]);
+for (let i = 0; i < 1000000; i++) blocks.push([Math.random()*2000-200, Math.random()*1400-200, 100, 100]);
 
 setInterval(async () => {
   let counter = 0, startThreaded = Date.now(), cringe = [];
