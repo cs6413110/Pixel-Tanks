@@ -24,6 +24,7 @@ class Compute {
     let worker = this.workers.find(w => w.ready);
     if (!worker) worker = await this.pushWorker();
     worker.ready = false;
+    console.log('worker started');
     worker[id](...params).then(o => {
       worker.ready = true;
       callback(o);
