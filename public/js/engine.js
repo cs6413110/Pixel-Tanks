@@ -834,14 +834,13 @@ class AI {
       this.healInterval = setInterval(() => {
         this.hp = Math.min(this.hp+.4, this.maxHp);
       }, 15);
-    });
+    }, 10000);
   }
 
   destroy() {
     const index = this.host.ai.indexOf(this);
     if (index !== -1) this.host.ai.splice(index, 1);
   }
-
 }
 
 try {
