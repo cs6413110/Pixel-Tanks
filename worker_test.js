@@ -1,6 +1,12 @@
 const Threads = require('threads');
 const {spawn, Worker} = Threads;
 
+const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
+const collider = (x, y, w, h, rects) => {
+  const collided = [];
+  for (let i = 0; i < rects.length; i++) if (collision(x, y, w, h, rects[i][0], rects[i][1], rects[i][2], rects[i][3])) collided.push(i);
+  return collided;
+}
 class Compute {
   static initialize(t) {
     this.workers = [];
@@ -17,7 +23,6 @@ class Compute {
   static async pushWork(id, ...params) {
     let worker = this.workers.find(w => w.ready);
     if (!worker) worker = this.pushWorker();
-    console.log(worker);
     worker.ready = false;
     const output = await worker[id](...params);
     worker.ready = true;
@@ -32,8 +37,15 @@ for (let i = 0; i < 100; i++) blocks.push([Math.random()*2000-200, Math.random()
 setInterval(async () => {
   console.log('Workers: '+Compute.workers.length);
   console.log('Assigning workers+1 tasks');
+  let start = Date.now();
   for (let i = 0; i <= Compute.workers.length; i++) {
     const output = await Compute.pushWork('collider', 0, 0, 1600, 1000, blocks);
     console.log('Worker #'+i+' finished => '+output);
   }
+  let end = Date.now()-start;
+  console.log('Threaded took '+end+'ms');
+
+  start = Date.now();
+  for (let i = 0; i < Compute.workers.length; i++) collider(0, 0, 1600, 1000, blocks);
+  console.log('Sync took '+end+'ms');
 }, 5000);
