@@ -16,10 +16,6 @@ class Compute {
   static async pushWorker() {
     const worker = new Worker('./public/js/compute.js');
     worker.ready = true;
-    worker.on('message', data => {
-      worker.ready = true;
-      worker.callback(data);
-    });
     this.workers.push(worker);
     return worker;
   }
@@ -29,6 +25,10 @@ class Compute {
     if (!worker) worker = await this.pushWorker();
     worker.ready = false;
     worker.callback = callback;
+    worker.on('message', data => {
+      worker.ready = true;
+      worker.callback(data);
+    });
     worker.postMessage({task: id, params});
   }
 }
