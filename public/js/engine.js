@@ -1,9 +1,8 @@
-
 try {
   Threads = require('threads');
   spawn = Threads.spawn;
   Thread = Threads.Thread;
-  Worker = Threads.Worker
+  Worker = Threads.Worker;
   PF = require('pathfinding');
 } catch (e) {}
 
