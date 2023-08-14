@@ -27,7 +27,7 @@ class Compute {
   static async pushWork(id, callback, ...params) {
     let worker = this.workers.find(w => w.ready);
     if (!worker) worker = await this.pushWorker();
-    worker.ready = false;
+    //worker.ready = false;
     worker.callback = callback;
     worker.postMessage({task: id, params});
   }
