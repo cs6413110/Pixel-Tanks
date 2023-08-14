@@ -34,7 +34,7 @@ export const Core = new HyperExpress.Router();
 const Server = new HyperExpress.Server({fast_buffers: true});
 const encode = (c) => {let x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}
 const decode = (b) => {let a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")}
-const auth = (username, token) => {
+const auth = async (username, token) => {
   try {
     const res = await fetch(`http://141.148.128.231/verify?username=${username}&token=${token}`);
     const body = await res.text();
