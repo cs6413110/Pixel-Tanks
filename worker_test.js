@@ -1,4 +1,4 @@
-const { Worker } = require('worker_threads');
+const { Worker, SHARED_ENV } = require('worker_threads');
 
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 const collider = (x, y, w, h, rects) => {
@@ -15,7 +15,7 @@ class Compute {
 
   static async pushWorker() {
     console.log('worker created');
-    const worker = new Worker('./public/js/compute.js');
+    const worker = new Worker('./public/js/compute.js', { env: SHARED_ENV });
     worker.ready = true;
     worker.on('message', data => {
       worker.ready = true;
@@ -25,28 +25,27 @@ class Compute {
     return worker;
   }
 
-  static async pushWork(id, callback, ...params) {
+  static async pushWork(id, callback) {
     let worker = this.workers.find(w => w.ready);
     if (worker === undefined) worker = await this.pushWorker();
     worker.ready = false;
     worker.callback = callback;
-    worker.postMessage({task: id, params}, [params[4]]);
+    worker.postMessage({task: id});
   }
 }
 Compute.initialize(4);
 
 const blocks = [];
 for (let i = 0; i < 1000; i++) blocks.push(Math.random()*2000-200, Math.random()*1400-200);
-
+process.env.DATA = JSON.stringify([0, 0, 1600, 1000, blocks]);
 
 setInterval(async () => {
   let counter = 0, startThreaded = Date.now();
   for (let i = 0; i < Compute.workers.length; i++) {
-    const arraybuffer = new Int32Array(blocks).buffer;
     Compute.pushWork('collider', r => {
       counter++;
       if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
-    }, 0, 0, 1600, 1000, arraybuffer);
+    });
   }
 
   let startSync = Date.now();
