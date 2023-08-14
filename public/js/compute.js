@@ -41,6 +41,7 @@ const Compute = {
 setInterval(() => setImmediate, 1000);
 parentPort.on('message', data => {
   let start = Date.now();
-  parentPort.postMessage(Compute[data.task](0, 0, 1600, 100, blocks));
+  Compute[data.task](0, 0, 1600, 100, blocks);
+  parentPort.postMessage('done');
   console.log('Worker time => '+(Date.now()-start));
 });
