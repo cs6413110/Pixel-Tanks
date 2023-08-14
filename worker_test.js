@@ -17,7 +17,6 @@ class Compute {
     const worker = new Worker('./public/js/compute.js');
     worker.ready = true;
     worker.on('message', data => {
-      console.log('inc data from worker');
       worker.ready = true;
       worker.callback(data);
     });
@@ -44,7 +43,7 @@ setInterval(async () => {
     Compute.pushWork('collider', r => {
       console.log('Worker #'+i+' finished');
       counter++;
-      if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ns');
+      if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
     }, 0, 0, 1600, 1000, blocks);
   }
 
