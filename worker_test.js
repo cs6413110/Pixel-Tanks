@@ -14,6 +14,7 @@ class Compute {
   }
 
   static async pushWorker() {
+    console.log('worker created');
     const worker = new Worker('./public/js/compute.js');
     worker.ready = true;
     worker.on('message', data => {
