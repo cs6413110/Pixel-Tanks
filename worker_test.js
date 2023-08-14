@@ -24,10 +24,9 @@ class Compute {
     let worker = this.workers.find(w => w.ready);
     if (!worker) worker = await this.pushWorker();
     worker.ready = false;
-    worker.callback = callback;
     worker.on('message', data => {
       worker.ready = true;
-      worker.callback(data);
+      callback(data);
     });
     worker.postMessage({task: id, params});
   }
