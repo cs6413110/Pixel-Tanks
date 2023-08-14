@@ -28,7 +28,7 @@ const Compute = {
   },
   collider: (x, y, w, h, rects) => {
     const collided = [];
-    for (let i = 0; i < rects.length; i++) if (collision(x, y, w, h, rects[i][0], rects[i][1], rects[i][2], rects[i][3])) collided.push(i);
+    for (let i = 0; i < rects.length; i++) if (collision(x, y, w, h, rects[i][0], rects[i][1], 100, 100)) collided.push(i);
     return collided;
   }
 }
