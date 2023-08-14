@@ -1,10 +1,6 @@
 const { parentPort } = require('worker_threads');
 const PF = require('pathfinding');
 
-const blocks = [];
-for (let i = 0; i < 1; i++) blocks.push(Math.random()*2000-200, Math.random()*1400-200);
-
-
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
@@ -41,7 +37,6 @@ const Compute = {
 setInterval(() => setImmediate, 1000);
 parentPort.on('message', data => {
   let start = Date.now();
-  Compute[data.task](0, 0, 1600, 100, blocks);
-  parentPort.postMessage('done');
+  parentPort.postMessage(Compute[data.task](JSON.parse(data)));
   console.log('Worker time => '+(Date.now()-start));
 });
