@@ -1,4 +1,4 @@
-const { Worker, SHARED_ENV } = require('worker_threads');
+const { Worker, SHARE_ENV } = require('worker_threads');
 
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 const collider = (x, y, w, h, rects) => {
@@ -15,7 +15,7 @@ class Compute {
 
   static async pushWorker() {
     console.log('worker created');
-    const worker = new Worker('./public/js/compute.js', { env: SHARED_ENV });
+    const worker = new Worker('./public/js/compute.js', { env: SHARE_ENV });
     worker.ready = true;
     worker.on('message', data => {
       worker.ready = true;
@@ -41,7 +41,7 @@ new Worker('process.env.SET_IN_WORKER = "foo"', { eval: true, env: SHARE_ENV })
   .on('exit', () => {
     console.log(process.env.SET_IN_WORKER);  // Prints 'foo'.
   }); 
-new Worker('process.env.DATA = "'+JSON.stringify([0, 0, 1600, 1000, blocks])+'"', { eval: true, env: SHARED_ENV }).on('exit', () => {
+new Worker('process.env.DATA = "'+JSON.stringify([0, 0, 1600, 1000, blocks])+'"', { eval: true, env: SHARE_ENV }).on('exit', () => {
   console.log(process.env.DATA);
 }); 
 
