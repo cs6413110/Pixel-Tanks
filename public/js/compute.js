@@ -27,7 +27,6 @@ const Compute = {
     return true;
   },
   collider: (x, y, w, h, rects) => {
-    rects = new Int32Array(rects);
     const collided = [];
     for (let i = 0; i < rects.length; i+=2) if (collision(x, y, w, h, rects[i], rects[i+1], 100, 100)) collided.push(i);
     return collided;
