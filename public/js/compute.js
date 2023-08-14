@@ -35,8 +35,7 @@ const Compute = {
 
 setInterval(() => setImmediate, 1000);
 parentPort.once('message', data => {
-  console.log('Slave got work');
   let start = Date.now();
   parentPort.postMessage(Compute[data.task](...data.params));
-  console.log('Slave took: '+(Date.now()-start));
+  console.log('Worker time => '+(Date.now()-start));
  });
