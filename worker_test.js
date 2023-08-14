@@ -38,7 +38,7 @@ const blocks = [];
 for (let i = 0; i < 10000; i++) blocks.push([Math.random()*2000-200, Math.random()*1400-200, 100, 100]);
 
 setInterval(async () => {
-  let counter = 0;
+  let counter = 0, startThreaded = process.hrtime();
   for (let i = 0; i <= Compute.workers.length; i++) {
     Compute.pushWork('collider', r => {
       console.log('Worker #'+i+' finished');
