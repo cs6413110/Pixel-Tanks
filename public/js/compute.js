@@ -1,7 +1,5 @@
-const Threads = require('threads/worker');
-PF = require('pathfinding');
-const { expose } = Threads;
-
+const { parentPort } = require('worker_threads');
+const PF = require('pathfinding');
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
@@ -34,4 +32,5 @@ const Compute = {
     return collided;
   }
 }
-expose(Compute);
+
+parentPort.once('message', data => parentPort.postMessage(Compute[data.task](...data.params)));
