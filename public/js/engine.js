@@ -469,21 +469,9 @@ class Shot {
     for (let i = blocks.length-1; i >= 0; i--) {
       const b = blocks[i];
       if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
-      if (type === 'grapple') {
+      if (type === 'dynamite') {
         if (b.type === 'fortress' && host.getTeam(b.team) === host.getTeam(this.team)) return false;
-        const t = this.host.pt.find(t => t.username === host.getUsername(this.team));
-        if (t.grapple) t.grapple.bullet.destroy();
-        t.grapple = { target: b, bullet: this };
-        this.update = () => { };
-        return false;
-      } else if (type === 'dynamite') {
-        if (b.type === 'fortress' && host.getTeam(b.team) === host.getTeam(this.team)) return false;
-        this.target = b;
-        this.offset = [b.x - x, b.y - y];
-        this.update = () => {
-          this.x = this.target.x - this.offset[0];
-          this.y = this.target.y - this.offset[1];
-        }
+        this.update = () => {}
         return false;
       } else if (type === 'fire') {
         host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
@@ -500,14 +488,20 @@ class Shot {
     }
 
     if (x < 0 || x > 3000 || y < 0 || y > 3000) {
-      if (type === 'grapple') {
-        const t = host.pt.find(t => t.username === host.getUsername(this.team));
-        if (t.grapple) t.grapple.bullet.destroy();
-        t.grapple = { target: { x: x, y: y }, bullet: this };
-        this.update = () => { };
+      if (type === 'dynamite') {
+        this.update = () => {}
         return false;
+      } else if (type === 'fire') {
+        host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
+        return true;
+      } else {
+        if (key[type]) {
+          host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
+        } else {
+          b.damage(this.damage);
+        }
+        return true;
       }
-      return true;
     }
     return false;
   }
