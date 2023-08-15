@@ -43,10 +43,11 @@ class Compute {
   static async pushWork(id, callback, ...params) {
     let worker = this.workers.find(w => w.ready);
     if (!worker) worker = await this.pushWorker();
-    new Worker('process.env.DATA = "'+JSON.stringify(params)+'";', { eval: true, env: SHARE_ENV })
-    worker.ready = false;
-    worker.callback = callback;
-    worker.postMessage({task: id, params});
+    new Worker('process.env.DATA = "'+JSON.stringify(params)+'";', { eval: true, env: SHARE_ENV }).on('exit', () => {
+      worker.ready = false;
+      worker.callback = callback;
+      worker.postMessage({task: id, params});
+    }
   }
 }
 Compute.initialize(4);
