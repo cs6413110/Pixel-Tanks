@@ -225,7 +225,7 @@ class Engine {
               clearInterval(t.fireInterval);
               t.fire = false;
             }, 2000);
-          } else if (b.type === 'spike') {
+          } else if (b.type === 'spike' && this.getTeam(b.team) !== this.getTeam(t.team)) {
             this.damagePlayer(t, { a: 1, x: t.x, y: t.y, u: this.getUsername(b.team) });
           }
         }
