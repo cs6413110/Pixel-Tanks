@@ -1,4 +1,4 @@
-const { Worker, SHARE_ENV, setEnvironmentData} = require('worker_threads');
+const { Worker, SHARE_ENV} = require('worker_threads');
 
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 const raycast = (x, y, x2, y2, w) => {
@@ -43,10 +43,9 @@ class Compute {
   static async pushWork(id, callback, ...params) {
     let worker = this.workers.find(w => w.ready);
     if (!worker) worker = await this.pushWorker();
-    setEnvironmentData('work', JSON.stringify(params));
     worker.ready = false;
     worker.callback = callback;
-    worker.postMessage({task: id});
+    worker.postMessage({task: id, params});
   }
 }
 Compute.initialize(4);
