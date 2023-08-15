@@ -1,4 +1,4 @@
-const { parentPort, getEnvironmentData } = require('worker_threads');
+const { parentPort } = require('worker_threads');
 const PF = require('pathfinding');
 
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
@@ -37,7 +37,6 @@ const Compute = {
 setInterval(() => setImmediate, 1000);
 parentPort.on('message', data => {
   let start = Date.now();
-  const params = JSON.parse(getEnvironmentData('work'));
-  parentPort.postMessage(Compute[data.task](...params));
+  parentPort.postMessage(Compute[data.task](...data.params));
   console.log('Worker time => '+(Date.now()-start));
 });
