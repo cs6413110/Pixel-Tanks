@@ -37,7 +37,7 @@ const Compute = {
 setInterval(() => setImmediate, 1000);
 parentPort.on('message', data => {
   let start = Date.now();
-  const params = JSON.parse(worker.getEnvironmentData('work'));
+  const params = JSON.parse(getEnvironmentData('work'));
   parentPort.postMessage(Compute[data.task](...params));
   console.log('Worker time => '+(Date.now()-start));
 });
