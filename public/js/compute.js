@@ -1,4 +1,4 @@
-const { parentPort } = require('worker_threads');
+const { parentPort, getEnvironmentData } = require('worker_threads');
 const PF = require('pathfinding');
 
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
