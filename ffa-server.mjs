@@ -84,16 +84,14 @@ const schema = {
           baseRotation: { type: 'number' },
           baseFrame: { type: 'number' },
           fire: {
-            fieldUsed: true,
-            type: 'object',
+            type: ['object', 'boolean'],
             properties: {
               team: { type: 'string' },
               frame: { type: 'number' },
             },
           },
           damage: {
-            fieldUsed: true,
-            type: 'object',
+            type: ['object', 'boolean'],
             properties: {
               d: { type: 'number', round: true },
               x: { type: 'number', round: true },
@@ -101,8 +99,7 @@ const schema = {
             },
           },
           animation: {
-            fieldUsed: true,
-            type: 'object',
+            type: ['object', 'boolean'],
             properties: {
               id: { type: 'string' },
               frame: { type: 'number' },
