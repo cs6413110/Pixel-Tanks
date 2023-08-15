@@ -43,7 +43,7 @@ class Compute {
   static async pushWork(id, callback, ...params) {
     let worker = this.workers.find(w => w.ready);
     if (!worker) worker = await this.pushWorker();
-    setEnvironmentData('data', JSON.stringify(params));
+    setEnvironmentData('work', JSON.stringify(params));
     worker.ready = false;
     worker.callback = callback;
     worker.postMessage({task: id});
