@@ -47,7 +47,7 @@ class Compute {
       worker.ready = false;
       worker.callback = callback;
       worker.postMessage({task: id, params});
-    }
+    });
   }
 }
 Compute.initialize(4);
