@@ -83,8 +83,28 @@ const schema = {
           pushback: { type: 'number' },
           baseRotation: { type: 'number' },
           baseFrame: { type: 'number' },
-          fire: { type: 'object' },
-          damage: { type: 'object' },
+          fire: {
+            type: 'object',
+            properties: {
+              team: { type: 'string' },
+              frame: { type: 'number' },
+            },
+          },
+          damage: {
+            type: 'object',
+            properties: {
+              d: { type: 'number', round: true },
+              x: { type: 'number', round: true },
+              y: { type: 'number', round: true },
+            },
+          },
+          animation: {
+            type: 'object',
+            properties: {
+              id: { type: 'string' },
+              frame: { type: 'number' },
+            },
+          },
           buff: { type: 'boolean' },
           invis: { type: 'boolean' },
           healing: { type: 'string' },
