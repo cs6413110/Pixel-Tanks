@@ -41,7 +41,7 @@ for (let i = 0; i < 10; i++) blocks.push({x: Math.random()*2000-200, y: Math.ran
 setInterval(async () => {
   let counter = 0, startThreaded = Date.now();
   for (let i = 0; i < Compute.workers.length; i++) {
-    Compute.pushWork('raycast', r => {
+    Compute.pushWork('collider', r => {
       counter++;
       if (counter === Compute.workers.length) console.log('Threaded took '+(Date.now()-startThreaded)+'ms');
     }, 0, 0, 1600, 1000, blocks);
