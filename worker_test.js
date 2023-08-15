@@ -1,4 +1,4 @@
-const { Worker, SHARE_ENV} = require('worker_threads');
+const { Worker, SHARE_ENV } = require('worker_threads');
 
 const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 const raycast = (x, y, x2, y2, w) => {
@@ -30,7 +30,7 @@ class Compute {
 
   static async pushWorker() {
     console.log('worker created');
-    const worker = new Worker('./public/js/compute.js');
+    const worker = new Worker('./public/js/compute.js', { env: SHARE_ENV });
     worker.ready = true;
     worker.on('message', data => {
       worker.ready = true;
@@ -43,6 +43,7 @@ class Compute {
   static async pushWork(id, callback, ...params) {
     let worker = this.workers.find(w => w.ready);
     if (!worker) worker = await this.pushWorker();
+    new Worker('process.env.DATA = "'+JSON.stringify(params)+'";', { eval: true, env: SHARE_ENV })
     worker.ready = false;
     worker.callback = callback;
     worker.postMessage({task: id, params});
