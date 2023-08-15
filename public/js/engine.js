@@ -35,7 +35,7 @@ class Compute {
     return output;
   }
 }
-Compute.initialize(4);
+//Compute.initialize(4);
 
 class Engine {
   constructor(levels) {
