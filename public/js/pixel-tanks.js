@@ -1432,7 +1432,7 @@ function Game() {
 
       if (t.animation) GUI.drawImage(PixelTanks.images.animations[t.animation.id], t.x, t.y, 80, 90, 1, 0, 0, 0, 0, 0, t.animation.frame*40, 0, 40, 45);
 
-      if (t.healing && t.class === 'medic' && !t.ded) {
+      if (t.healing && !t.ded) {
         const target = this.hostupdate.tanks.find(tank => tank.username === t.healing);
         if (Math.sqrt((target.x-t.x)**2+(target.y-t.y)**2) > 500) return;
         GUI.draw.beginPath();
