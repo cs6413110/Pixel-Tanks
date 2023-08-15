@@ -1,5 +1,6 @@
 const { Worker, SHARE_ENV } = require('worker_threads');
 
+const collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
 const raycast = (x, y, x2, y2, w) => {
   const dx = x-x2, dy = y-y2, adx = Math.abs(dx), ady = Math.abs(dy);
   const minx = Math.min(x, x2), miny = Math.min(y, y2), maxx = Math.max(x, x2), maxy = Math.max(y, y2);
