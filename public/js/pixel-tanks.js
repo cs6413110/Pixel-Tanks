@@ -898,11 +898,11 @@ function Game() {
             for (let i = 0; i < 4; i++) GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [404, 492, 580, 668][i], 820, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
             GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
-            const key = {tactical: [702, 348], fire: [702, 456], medic: [702, 564], stealth: [816, 348], builder: [816, 45], warrior: [816, 564]};
-            GUI.drawImage(PixelTanks.images.menus.classTab, 1112, 816, 88, 88, 1, 0, 0, 0, 0, 0, key[PixelTanks.userData.class][0], key[PixelTanks.userData.class][1], 88, 88);
-            GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 760, 224, 80, 80, 1);
+            const key = {tactical: [14, 4], fire: [14, 122], medic: [14, 230], stealth: [128, 4], builder: [128, 122], warrior: [128, 230]};
+            if (PixelTanks.userData.class) GUI.drawImage(PixelTanks.images.menus.classTab, 1112, 816, 88, 88, 1, 0, 0, 0, 0, 0, key[PixelTanks.userData.class][0], key[PixelTanks.userData.class][1], 88, 88);
+            if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 760, 224, 80, 80, 1);
             const deathEffectData = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect+'_'];
-            GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 536, 224, 80, 80, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
+            if (PixelTanks.userData.deathEffect) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 536, 224, 80, 80, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
             if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
             if (this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.deathEffectsTab) {
               GUI.draw.fillStyle = '#000000';
