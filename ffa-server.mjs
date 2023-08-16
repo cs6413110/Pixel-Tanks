@@ -52,7 +52,7 @@ const hostupdateSchema = sp.build({
   tickspeed: 'int16',
 }, false);
 const joinerupdateSchema = sp.build({status: 'string', message: 'string'}, false);
-const otherSchema = sp.build({event: 'string', data: [{key: 'string', value: 'int16'}], message: 'string'}, false);
+const otherSchema = sp.build({event: 'string', status: 'string', data: [{key: 'string', value: 'int16'}], message: 'string'}, false);
 const deathMessages = [
   `{victim} was killed by {killer}`,
   `{victim} was put out of their misery by {killer}`,
@@ -141,7 +141,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
   socket.on('message', async (data) => {
     incoming_per_second++;
     try {
-      data = joinerupdateSchema.decode(data);
+      data = JSON.parse(data);
     } catch(e) {
       return socket.destroy();
     }
