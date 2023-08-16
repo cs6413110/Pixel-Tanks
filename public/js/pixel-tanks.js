@@ -810,7 +810,7 @@ function Game() {
                 if (x < 688 || x > 912 || y < 334 || y > 666) return this.classTab = false;
                 for (let xm = 0; xm < 2; xm++) {
                   for (let ym = 0; ym < 3; ym++) {
-                    if (collision(x, y, 0, 0, [702, 820][xm], [352, 456, 564][ym], 88, 88)) {
+                    if (collision(x, y, 0, 0, [702, 810][xm], [348, 456, 564][ym], 88, 88)) {
                       if (PixelTanks.userData.classes[[[0, 6, 3], [1, 4, 2]][xm][ym]]) {
                         PixelTanks.userData.class = [['tactical', 'fire', 'medic'], ['stealth', 'builder', 'warrior']][xm][ym];
                       } else alert('You need to buy this first!');
@@ -898,7 +898,7 @@ function Game() {
             for (let i = 0; i < 4; i++) GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [404, 492, 580, 668][i], 820, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
             GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
-            const key = {tactical: [7, 4], fire: [7, 61], medic: [7, 115], stealth: [62, 4], builder: [62, 61], warrior: [62, 115]};
+            const key = {tactical: [7, 7], fire: [7, 61], medic: [7, 115], stealth: [61, 7], builder: [61, 61], warrior: [61, 115]};
             if (PixelTanks.userData.class) GUI.drawImage(PixelTanks.images.menus.classTab, 1112, 816, 88, 88, 1, 0, 0, 0, 0, 0, key[PixelTanks.userData.class][0], key[PixelTanks.userData.class][1], 44, 44);
             if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 760, 224, 80, 80, 1);
             const deathEffectData = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect+'_'];
