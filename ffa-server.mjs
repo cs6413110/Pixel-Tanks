@@ -32,8 +32,6 @@ setTimeout(() => getTickspeed());
 const filter = new Filter();
 export const Core = new HyperExpress.Router();
 const Server = new HyperExpress.Server({fast_buffers: true});
-const encode = (c) => {let x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}
-const decode = (b) => {let a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")}
 const auth = async (username, token) => {
   try {
     const res = await fetch(`http://141.148.128.231/verify?username=${username}&token=${token}`);
@@ -53,6 +51,8 @@ const hostupdateSchema = sp.build({
   event: 'string',
   tickspeed: 'int16',
 }, false);
+const joinerupdateSchema = sp.build({status: 'string', message: 'string'}, false);
+const otherSchema = sp.build({event: 'string', data: [{key: 'string', value: 'int16'}], message: 'string'}, false);
 const deathMessages = [
   `{victim} was killed by {killer}`,
   `{victim} was put out of their misery by {killer}`,
@@ -132,6 +132,8 @@ setInterval(() => {
 
 Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
   sockets.push(socket);
+  socket._send = socket.send;
+  socket.send = (data) => socket._send(typeof data === 'object' ? otherSchema.encode(data) : data)
   if (SETTINGS.banips.includes(socket.ip)) {
     socket.send({status: 'error', message: 'Your ip has been banned!'});
     return setImmediate(() => socket.destroy());
@@ -139,7 +141,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
   socket.on('message', async (data) => {
     incoming_per_second++;
     try {
-      data = JSON.parse(decode(data));
+      data = joinerupdateSchema.decode(data);
     } catch(e) {
       return socket.destroy();
     }
@@ -168,8 +170,6 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
       }
     } else if (data.type === 'update') {
       if (socket.room !== undefined) servers[socket.room].update(data);
-    } else if (data.type === 'ping') {
-      socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
       if (SETTINGS.mutes.find(i => i.username === socket.username)) return;
       let msg = data.msg;
@@ -237,7 +237,7 @@ const Commands = {
     servers[this.room].pt.forEach(t => {
       t.x = servers[this.room].spawn.x;
       t.y = servers[this.room].spawn.y;
-      t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
+      t.socket.send(otherSchema.encode({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]}));
     });
   },
   banip: function(data) {
@@ -414,7 +414,7 @@ class Multiplayer extends Engine {
   }
 
   override(t) {
-    t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
+    t.socket.send(otherSchema.encode({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]}));
   }
 
   add(socket, data) {
@@ -483,7 +483,7 @@ class FFA extends Multiplayer {
     t.deathsPerMovement++;
     if (t.deathsPerMovement === 1) {
       this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
-      m.socket.send({event: 'kill'});
+      m.socket.send(otherSchema.encode({event: 'kill'}));
     } else this.logs.push({m: m.username+' killed an afk player!', c: '#FF0000'});
     A.each(this.ai, function(i, host, t) {
       if (host.getUsername(this.team) === t.username) {
@@ -492,8 +492,8 @@ class FFA extends Multiplayer {
       }
     }, null, null, this, t);
     setTimeout(function() {
-      t.socket.send({event: 'ded'});
-      t.socket.send({event: 'override', data: [{key: 'x', value: this.spawn.x}, {key: 'y', value: this.spawn.y}]});
+      t.socket.send(otherSchema.encode({event: 'ded'}));
+      t.socket.send(otherSchema.encode({event: 'override', data: [{key: 'x', value: this.spawn.x}, {key: 'y', value: this.spawn.y}]}));
       A.assign(t, 'x', this.spawn.x, 'y', this.spawn.y, 'ded', false, 'hp', t.maxHp);
     }.bind(this), 10000);
   }
