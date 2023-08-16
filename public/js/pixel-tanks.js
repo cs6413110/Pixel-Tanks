@@ -365,7 +365,6 @@ function Game() {
       Menus.scaler = document.createElement('CANVAS');
       GUI.canvas = document.createElement('CANVAS');
       GUI.draw = GUI.canvas.getContext('2d');
-      GUI.draw.imageSmoothingEnabled = false;
       document.body.appendChild(GUI.canvas);
       PixelTanks.resizer = window.innerHeight/1000;
       GUI.canvas.height = window.innerHeight;
@@ -795,7 +794,7 @@ function Game() {
         inventory: {
           buttons: [
             [424, 28, 108, 108, 'main', true],
-            [1064, 458, 88, 88, function() {alert('Not available since bradley didnt make menus')}, false],
+            [1064, 458, 88, 88, PixelTanks.upgrade, false],
             [1112, 814, 88, 88, function() {PixelTanks.switchTab('classTab')}, true],
             [400, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 1)}, true],
             [488, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 2)}, true],
@@ -811,12 +810,10 @@ function Game() {
                 if (x < 688 || x > 912 || y < 334 || y > 666) return this.classTab = false;
                 for (let xm = 0; xm < 2; xm++) {
                   for (let ym = 0; ym < 3; ym++) {
-                    if (A.collider({x, y, w: 0, h: 0}, {x: [702, 816][xm], y: [348, 456, 564][ym], w: 88, h: 88})) {
+                    if (collision(x, y, 0, 0, [702, 816][xm], [348, 456, 564][ym], 88, 88)) {
                       if (PixelTanks.userData.classes[[[0, 6, 3], [1, 4, 2]][xm][ym]]) {
                         PixelTanks.userData.class = [['tactical', 'fire', 'medic'], ['stealth', 'builder', 'warrior']][xm][ym];
-                      } else {
-                        alert('You need to buy this first!');
-                      }
+                      } else alert('You need to buy this first!');
                       return;
                     }
                   }
@@ -825,19 +822,17 @@ function Game() {
                 if (x < 580 || x > 1020 || y < 334 || y > 666) return this.itemTab = false;
                 const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], fortress: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], mine: [904, 570]};
                 for (const item in key) {
-                  if (x > key[item][0] && x < key[item][0]+80 && y > key[item][1] && y < key[item][1]+80) {
+                  if (collision(x, y, 0, 0, key[item][0], key[item][y], 80, 80)) {
                     if (!PixelTanks.userData.items.includes(item)) {
-                  PixelTanks.userData.items[this.currentItem-1] = item;
-                    } else {
-                      alert('You are not allowed to have more than 1 of the same item');
-                    }
+                      PixelTanks.userData.items[this.currentItem-1] = item;
+                    } else alert('You are not allowed to have more than 1 of the same item');
                     return;
                   }
                 }
               } else if (this.cosmeticTab) {
                 if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.cosmeticTab = false;
                 for (let i = 0; i < 16; i++) {
-                  if (A.collider({x, y, w: 0, h: 0}, {x: 598+(i%4)*108, y: 298+Math.floor(i/4)*108, w: 88, h: 88})) {
+                  if (collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
                     if (e.button === 0) {
                       PixelTanks.userData.cosmetic = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
                     } else {
@@ -849,7 +844,7 @@ function Game() {
               } else if (this.deathEffectsTab) {
                 if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.deathEffectsTab = false;
                 for (let i = 0; i < 16; i++) {
-                  if (A.collider({x, y, w: 0, h: 0}, {x: 598+(i%4)*108, y: 298+Math.floor(i/4)*108, w: 88, h: 88})) {
+                  if (collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
                     if (e.button === 0) {
                       PixelTanks.userData.deathEffect = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i];
                     } else {
@@ -864,13 +859,15 @@ function Game() {
               this.target = {x: e.clientX-window.innerWidth/2, y: e.clientY-window.innerHeight/2};
             },
             keydown: function(e) {
-              if (e.key.length === 1) this.color += e.key;
+              if (e.key.length === 1 && this.color.length < 7) {
+                this.color += e.key;
+                PixelTanks.userData.color = this.color;
+              }
               if (e.keyCode === 8) this.color = this.color.slice(0, -1);
               if (this.cosmeticTab) {
                 if (e.keyCode === 37 && this.cosmeticMenu > 0) this.cosmeticMenu--;
                 if (e.keyCode === 39 && this.cosmeticMenu+1 !== Math.ceil(PixelTanks.userData.cosmetics.length/16)) this.cosmeticMenu++;
               }
-              PixelTanks.userData.color = this.color;
             }
           },
           cdraw: function() {
@@ -884,6 +881,12 @@ function Game() {
             GUI.draw.fillStyle = this.color;
             GUI.draw.fillRect(1116, 264, 40, 40);
             GUI.drawText(this.color, 1052, 256, 20, this.color, 0);
+            GUI.drawText(PixelTanks.user.username, 400, 320, 80, '#000000', .5);
+            GUI.drawText('Coins: '+PixelTanks.userData.stats[0], 500, 400, 50, '#FFFF8F', .5);
+            GUI.drawText('Rank: '+PixelTanks.userData.stats[4], 500, 500, 50, '##FF2400', .5);
+            GUI.drawText('Level Up Requirements', 1200, 400, 50, '#000000', .5);
+            GUI.drawText(PixelTanks.userData.stats[0]+'/'+(PixelTanks.userData.stats[4]+1)*1000+' Coins', 1200, 500, 50, '#000000', .5);
+            GUI.drawText(PixelTanks.userData.stats[4]+'/'+(PixelTanks.userData.stats[4]+1)*100+' XP', 1200, 550, 50, '#000000', .5);
             GUI.drawImage(PixelTanks.images.tanks.top, 1064, 458, 88, 88, 1);
             for (let i = 0; i < 4; i++) {
               GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [402, 490, 578, 666][i], 816, 80, 80, 1);
@@ -891,7 +894,6 @@ function Game() {
             GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
             GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
             if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
-
             if (this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.deathEffectsTab) {
               GUI.draw.fillStyle = '#000000';
               GUI.draw.globalAlpha = .7;
