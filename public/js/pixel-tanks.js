@@ -684,6 +684,7 @@ function Game() {
               PixelTanks.user.player = new Tank(null, false);
             }, true],
             [320, 920, 80, 80, function() {
+              clearInterval(PixelTanks.autosave);
               PixelTanks.user.token = undefined;
               PixelTanks.user.username = undefined;
               Menus.trigger('start');
