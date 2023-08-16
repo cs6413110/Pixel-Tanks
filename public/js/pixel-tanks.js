@@ -878,15 +878,17 @@ function Game() {
               this.cosmeticMenu = 0;
               this.deathEffectsMenu = 0;
             }
+            const coins = PixelTanks.userData.stats[0], xp = PixelTanks.userData.stats[3], rank = PixelTanks.userData.stats[4];
+            const coinsUP = (rank+1)*1000, xpUP = (rank+1)*100;
             GUI.draw.fillStyle = this.color;
             GUI.draw.fillRect(1116, 264, 40, 40);
             GUI.drawText(this.color, 1052, 256, 20, this.color, 0);
             GUI.drawText(PixelTanks.user.username, 300, 420, 80, '#000000', .5);
-            GUI.drawText('Coins: '+PixelTanks.userData.stats[0], 300, 500, 50, '#FFFF8F', .5);
-            GUI.drawText('Rank: '+PixelTanks.userData.stats[4], 300, 520, 50, '##FF2400', .5);
+            GUI.drawText('Coins: '+coins, 300, 500, 50, '#FFFF8F', .5);
+            GUI.drawText('Rank: '+rank, 300, 520, 50, '##FF2400', .5);
             GUI.drawText('Level Up Progress', 1400, 400, 50, '#000000', .5);
-            GUI.drawText(PixelTanks.userData.stats[0]+'/'+(PixelTanks.userData.stats[4]+1)*1000+' Coins', 1400, 500, 50, '#000000', .5);
-            GUI.drawText(PixelTanks.userData.stats[4]+'/'+(PixelTanks.userData.stats[4]+1)*100+' XP', 1400, 550, 50, '#000000', .5);
+            GUI.drawText((rank < 20 ? coins+'/'+coinsUP : 'MAXED')+' Coins', 1400, 500, 50, rank < 20 ? (coins < coinsUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
+            GUI.drawText((rank < 20 ? xp+'/'+xpUP : 'MAXED')+' XP', 1400, 550, 50, rank < 20 ? (xp < xpUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
             GUI.drawImage(PixelTanks.images.tanks.top, 1064, 458, 88, 88, 1);
             for (let i = 0; i < 4; i++) {
               GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [402, 490, 578, 666][i], 816, 80, 80, 1);
