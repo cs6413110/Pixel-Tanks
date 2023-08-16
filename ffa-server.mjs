@@ -15,7 +15,7 @@ const SETTINGS = {
 
 import fetch from 'node-fetch';
 import HyperExpress from 'hyper-express';
-import compile from 'fast-json-stringify';
+import sp from 'schemapack';
 import Filter from 'bad-words';
 import {Engine, Block, Shot, AI, Damage} from './public/js/engine.js';
 
@@ -43,137 +43,16 @@ const auth = async (username, token) => {
     return false;
   }
 }
-const schema = {
-  type: 'object',
-  additionalProperties: false,
-  properties: {
-    blocks: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          x: { type: 'number', round: true },
-          y: { type: 'number', round: true },
-          maxHp: { type: 'number', round: true },
-          hp: { type: 'number', round: true },
-          type: { type: 'string' },
-          s: { type: 'boolean' },
-          team: { type: 'string' },
-        },
-      },
-    },
-    tanks: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          rank: { type: 'number' },
-          username: { type: 'string' },
-          cosmetic: { type: 'string' },
-          color: { type: 'string' },
-          damage: { type: 'boolean' },
-          maxHp: { type: 'number', round: true },
-          hp: { type: 'number', round: true },
-          shields: { type: 'number', round: true },
-          team: { type: 'string' },
-          x: { type: 'number', round: true },
-          y: { type: 'number', round: true },
-          r: { type: 'number', round: true },
-          ded: { type: 'boolean', round: true },
-          pushback: { type: 'number' },
-          baseRotation: { type: 'number' },
-          baseFrame: { type: 'number' },
-          fire: {
-            type: ['object', 'boolean'],
-            properties: {
-              team: { type: 'string' },
-              frame: { type: 'number' },
-            },
-          },
-          damage: {
-            type: ['object', 'boolean'],
-            properties: {
-              d: { type: 'number', round: true },
-              x: { type: 'number', round: true },
-              y: { type: 'number', round: true },
-            },
-          },
-          animation: {
-            type: ['object', 'boolean'],
-            properties: {
-              id: { type: 'string' },
-              frame: { type: 'number' },
-            },
-          },
-          buff: { type: 'boolean' },
-          invis: { type: 'boolean' },
-          healing: { type: 'string' },
-        },
-      },
-    },
-    ai: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          role: { type: 'number' },
-          x: { type: 'number' },
-          y: { type: 'number' },
-          r: { type: 'number', round: true },
-          baseRotation: { type: 'number' },
-          baseFrame: { type: 'number' },
-          mode: { type: 'number' },
-          rank: { type: 'number' },
-          hp: { type: 'number', round: true },
-          maxHp: { type: 'number', round: true },
-          pushback: { type: 'number' },
-          cosmetic: { type: 'string' },
-        }
-      }
-    },
-    bullets: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          team: { type: 'string' },
-          r: { type: 'number', round: true },
-          type: { type: 'string' },
-          x: { type: 'number', round: true },
-          y: { type: 'number', round: true },
-          sx: { type: 'number', round: true },
-          sy: { type: 'number', round: true },
-        },
-      },
-    },
-    explosions: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          x: { type: 'number', round: true },
-          y: { type: 'number', round: true },
-          w: { type: 'number' },
-          h: { type: 'number' },
-          f: { type: 'number' },
-        },
-      },
-    },
-    logs: {
-      type: 'array',
-      items: {
-        type: 'object',
-        properties: {
-          m: { type: 'string' },
-          c: { type: 'string' },
-        },
-      },
-    },
-    event: { type: 'string' },
-    tickspeed: { type: 'number' },
-  },
-}
-const stringify = compile(schema);
+const hostupdateSchema = sp.build({
+  blocks: [{x: 'int16', y: 'int16', maxHp: 'int16', hp: 'int8', type: 'string', s: 'bool', team: 'string'}],
+  tanks: [{rank: 'int8', username: 'string', cosmetic: 'string', color: 'string', maxHp: 'int16', hp: 'int16', shields: 'int16', team: 'string', x: 'int16', y: 'int16', r: 'int16', ded: 'bool', pushback: 'float32', baseRotation: 'int16', baseFrame: 'int8', fire: {team: 'string', frame: 'number'}, damage: {d: 'int16', x: 'int16', y: 'int16'}, animation: {id: 'string', frame: 'int16'}, buff: 'bool', invis: 'bool', healing: 'string'}],
+  ai: [{role: 'int16', x: 'int16', y: 'int16', r: 'int16', baseRotation: 'int16', baseFrame: 'int16', mode: 'int16', rank: 'int16', hp: 'int16', maxHp: 'int16', pushback: 'float32', cosmetic: 'string'}],
+  bullets: [{team: 'string', r: 'int16', type: 'string', x: 'int16', y: 'int16', sx: 'int16', sy: 'int16'}],
+  explosions: [{x: 'int16', y: 'int16', w: 'int16', h: 'int16', f: 'int16'}],
+  logs: [{m: 'string', c: 'string'}],
+  event: 'string',
+  tickspeed: 'int16',
+}, false);
 const deathMessages = [
   `{victim} was killed by {killer}`,
   `{victim} was put out of their misery by {killer}`,
@@ -253,8 +132,6 @@ setInterval(() => {
 
 Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
   sockets.push(socket);
-  socket._send = socket.send;
-  socket.send = data => socket._send(encode(typeof data === 'object' ? JSON.stringify(data) : data));
   if (SETTINGS.banips.includes(socket.ip)) {
     socket.send({status: 'error', message: 'Your ip has been banned!'});
     return setImmediate(() => socket.destroy());
@@ -559,7 +436,7 @@ class Multiplayer extends Engine {
       for (const ai of this.ai) if (A.collider(ai.x, ai.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.ai.push(ai);
       for (const s of this.s) if (A.collider(s.x, s.y, 10, 10, t.x+view.x, t.y+view.y, view.w, view.h)) message.bullets.push(s);
       for (const d of this.d) if (A.collider(d.x, d.y, d.w, d.h, t.x+view.x, t.y+view.y, view.w, view.h)) message.explosions.push(d);
-      t.socket.send(stringify(message));
+      t.socket.send(hostupdateSchema.encode(message));
       outgoing_per_second++;
     }
   }
