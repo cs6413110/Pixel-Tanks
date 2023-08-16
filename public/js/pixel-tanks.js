@@ -667,8 +667,8 @@ function Game() {
               this.username = '';
               this.password = '';
             }
-            GUI.drawText(this.username, 574, 432, 50, '#000000', 0);
-            GUI.drawText(this.password.replace(/./g, '*'), 574, 560, 50, '#000000', 0);
+            GUI.drawText(this.username, 574, 412, 50, '#000000', 0);
+            GUI.drawText(this.password.replace(/./g, '*'), 574, 540, 50, '#000000', 0);
           },
         },
         main: {
