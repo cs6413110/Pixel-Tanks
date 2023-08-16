@@ -892,6 +892,7 @@ function Game() {
             if (coins < coinsUp || xp < xpUP || rank >= 20) {
              // GUI.draw.fillStyle = '#000000';
               //GUI.draw.globalAlpha = .7;
+              alert('attempt draw rect :(');
               GUI.draw.fillRect(0, 0, 10, 10);
               //GUI.draw.fillRect(1064, 458, 88, 88);
               //GUI.draw.globalAlpha = 1;
