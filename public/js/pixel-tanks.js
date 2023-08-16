@@ -889,10 +889,11 @@ function Game() {
             GUI.drawText('Level Up Progress', 1400, 400, 50, '#000000', .5);
             GUI.drawText((rank < 20 ? coins+'/'+coinsUP : 'MAXED')+' Coins', 1400, 500, 50, rank < 20 ? (coins < coinsUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
             GUI.drawText((rank < 20 ? xp+'/'+xpUP : 'MAXED')+' XP', 1400, 550, 50, rank < 20 ? (xp < xpUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
-            if (coins < coinsUp || xp < xpUP) {
+            if (coins < coinsUp || xp < xpUP || rank >= 20) {
               GUI.draw.fillStyle = '#000000';
               GUI.draw.globalAlpha = .5;
               GUI.draw.fillRect(1064, 458, 88, 88);
+              GUI.draw.globalAlpha = 1;
             }
             for (let i = 0; i < 4; i++) GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [402, 490, 578, 666][i], 816, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
