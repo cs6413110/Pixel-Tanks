@@ -649,10 +649,10 @@ function Game() {
       Menus.menus = {
         start: {
           buttons: [
-            [580, 740, 200, 100, function() {PixelTanks.auth(this.username, this.password, 'login')}, true],
-            [820, 740, 200, 100, function() {PixelTanks.auth(this.username, this.password, 'signup')}, true],
-            [580, 480, 440, 60, function() {this.type = 'username'}, false],
-            [580, 580, 440, 60, function() {this.type = 'password'}, false],
+            [544, 648, 216, 116, function() {PixelTanks.auth(this.username, this.password, 'login')}, true],
+            [840, 648, 26, 116, function() {PixelTanks.auth(this.username, this.password, 'signup')}, true],
+            [564, 392, 456, 80, function() {this.type = 'username'}, false],
+            [564, 520, 456, 80, function() {this.type = 'password'}, false],
           ],
           listeners: {
             keydown: function(e) {
@@ -667,8 +667,8 @@ function Game() {
               this.username = '';
               this.password = '';
             }
-            GUI.drawText(this.username, 580, 495, 30, '#ffffff', 0);
-            GUI.drawText(this.password.replace(/./g, '*'), 580, 595, 30, '#ffffff', 0);
+            GUI.drawText(this.username, 564, 392, 50, '#ffffff', 0);
+            GUI.drawText(this.password.replace(/./g, '*'), 564, 520, 50, '#ffffff', 0);
           },
         },
         main: {
