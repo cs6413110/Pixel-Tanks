@@ -890,7 +890,7 @@ function Game() {
             GUI.drawText((rank < 20 ? coins+'/'+coinsUP : 'MAXED')+' Coins', 1400, 500, 50, rank < 20 ? (coins < coinsUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
             GUI.drawText((rank < 20 ? xp+'/'+xpUP : 'MAXED')+' XP', 1400, 550, 50, rank < 20 ? (xp < xpUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
             if (coins < coinsUp || xp < xpUP || rank >= 20) {
-              GUI.draw.fillStyle = '#000000';
+             // GUI.draw.fillStyle = '#000000';
               //GUI.draw.globalAlpha = .7;
               GUI.draw.fillRect(0, 0, 10, 10);
               //GUI.draw.fillRect(1064, 458, 88, 88);
