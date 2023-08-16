@@ -793,15 +793,15 @@ function Game() {
         },
         inventory: {
           buttons: [
-            [104, 5, 27, 27, 'main', true],
-            [266, 115, 22, 22, PixelTanks.upgrade, true],
-            [278, 204, 22, 22, function() {PixelTanks.switchTab('classTab')}, true],
-            [100, 204, 22, 22, function() {PixelTanks.switchTab('itemTab', 1)}, true],
-            [122, 204, 22, 22, function() {PixelTanks.switchTab('itemTab', 2)}, true],
-            [144, 204, 22, 22, function() {PixelTanks.switchTab('itemTab', 3)}, true],
-            [166, 204, 22, 22, function() {PixelTanks.switchTab('itemTab', 4)}, true],
-            [189, 55, 22, 22, function() {PixelTanks.switchTab('cosmeticTab')}, true],
-            [133, 55, 22, 22, function() {PixelTanks.switchTab('deathEffectsTab')}, true],
+            [416, 20, 108, 108, 'main', true],
+            [1064, 460, 88, 88, PixelTanks.upgrade, true],
+            [1112, 816, 88, 88, function() {PixelTanks.switchTab('classTab')}, true],
+            [400, 816, 88, 88, function() {PixelTanks.switchTab('itemTab', 1)}, true],
+            [488, 816, 88, 88, function() {PixelTanks.switchTab('itemTab', 2)}, true],
+            [576, 816, 88, 88, function() {PixelTanks.switchTab('itemTab', 3)}, true],
+            [664, 816, 88, 88, function() {PixelTanks.switchTab('itemTab', 4)}, true],
+            [756, 220, 88, 88, function() {PixelTanks.switchTab('cosmeticTab')}, true],
+            [532, 220, 88, 88, function() {PixelTanks.switchTab('deathEffectsTab')}, true],
           ],
           listeners: {
             mousedown: function(e) {
@@ -881,7 +881,7 @@ function Game() {
             const coins = PixelTanks.userData.stats[0], xp = PixelTanks.userData.stats[3], rank = PixelTanks.userData.stats[4];
             const coinsUP = (rank+1)*1000, xpUP = (rank+1)*100;
             GUI.draw.fillStyle = this.color;
-            GUI.draw.fillRect(252, 65, 8, 8);
+            GUI.draw.fillRect(1008, 260, 32, 32);
             GUI.drawText(this.color, 1052, 256, 20, '#000000', 0);
             GUI.drawText(PixelTanks.user.username, 300, 420, 80, '#000000', .5);
             GUI.drawText('Coins: '+coins, 300, 500, 50, '#FFFF8F', .5);
@@ -895,7 +895,7 @@ function Game() {
               GUI.draw.fillRect(1064, 458, 88, 88);
               GUI.draw.globalAlpha = 1;
             }
-            for (let i = 0; i < 4; i++) GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [402, 490, 578, 666][i], 816, 80, 80, 1);
+            for (let i = 0; i < 4; i++) GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [404, 492, 580, 668][i], 820, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
             GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
             if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
