@@ -882,17 +882,19 @@ function Game() {
             const coinsUP = (rank+1)*1000, xpUP = (rank+1)*100;
             GUI.draw.fillStyle = this.color;
             GUI.draw.fillRect(1116, 264, 40, 40);
-            GUI.drawText(this.color, 1052, 256, 20, this.color, 0);
+            GUI.drawText(this.color, 1052, 256, 20, '#000000', 0);
             GUI.drawText(PixelTanks.user.username, 300, 420, 80, '#000000', .5);
             GUI.drawText('Coins: '+coins, 300, 500, 50, '#FFFF8F', .5);
-            GUI.drawText('Rank: '+rank, 300, 520, 50, '##FF2400', .5);
+            GUI.drawText('Rank: '+rank, 300, 550, 50, '##FF2400', .5);
             GUI.drawText('Level Up Progress', 1400, 400, 50, '#000000', .5);
             GUI.drawText((rank < 20 ? coins+'/'+coinsUP : 'MAXED')+' Coins', 1400, 500, 50, rank < 20 ? (coins < coinsUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
             GUI.drawText((rank < 20 ? xp+'/'+xpUP : 'MAXED')+' XP', 1400, 550, 50, rank < 20 ? (xp < xpUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
-            GUI.drawImage(PixelTanks.images.tanks.top, 1064, 458, 88, 88, 1);
-            for (let i = 0; i < 4; i++) {
-              GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [402, 490, 578, 666][i], 816, 80, 80, 1);
+            if (coins < coinsUp || xp < xpUP) {
+              GUI.draw.fillStyle = '#000000';
+              GUI.draw.globalAlpha = .5;
+              GUI.draw.fillRect(1064, 458, 88, 88);
             }
+            for (let i = 0; i < 4; i++) GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [402, 490, 578, 666][i], 816, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
             GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
             if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
@@ -1154,6 +1156,17 @@ function Game() {
       setTimeout(() => {Menus.redraw()}, 2000);
       PixelTanks.userData.cosmetics.push(crate[rarity][number]);
       PixelTanks.save();
+    }
+
+    static upgrade() {
+      const coins = PixelTanks.userData.stats[0], xp = PixelTanks.userData.stats[3], rank = PixelTanks.userData.stats[4];
+      if (coins < (rank+1)*1000 || xp < (rank+1)*100) return alert('Your broke boi!');
+      if (rank >= 20) return alert('You are max level!');
+      PixelTanks.userData.stats[0] -= (rank+1)*1000;
+      PixelTanks.userData.stats[3] -= (rank+1)*100;
+      PixelTanks.userData.stats[4]++;
+      PixelTanks.save();
+      alert('You Leveled Up to '+(rank+1));
     }
 
     static purchase(stat) {
