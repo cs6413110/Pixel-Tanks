@@ -794,7 +794,7 @@ function Game() {
         inventory: {
           buttons: [
             [424, 28, 108, 108, 'main', true],
-            [1064, 458, 88, 88, PixelTanks.upgrade, false],
+            [1064, 458, 88, 88, PixelTanks.upgrade, true],
             [1112, 814, 88, 88, function() {PixelTanks.switchTab('classTab')}, true],
             [400, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 1)}, true],
             [488, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 2)}, true],
@@ -881,12 +881,12 @@ function Game() {
             GUI.draw.fillStyle = this.color;
             GUI.draw.fillRect(1116, 264, 40, 40);
             GUI.drawText(this.color, 1052, 256, 20, this.color, 0);
-            GUI.drawText(PixelTanks.user.username, 400, 320, 80, '#000000', .5);
-            GUI.drawText('Coins: '+PixelTanks.userData.stats[0], 500, 400, 50, '#FFFF8F', .5);
-            GUI.drawText('Rank: '+PixelTanks.userData.stats[4], 500, 500, 50, '##FF2400', .5);
-            GUI.drawText('Level Up Requirements', 1200, 400, 50, '#000000', .5);
-            GUI.drawText(PixelTanks.userData.stats[0]+'/'+(PixelTanks.userData.stats[4]+1)*1000+' Coins', 1200, 500, 50, '#000000', .5);
-            GUI.drawText(PixelTanks.userData.stats[4]+'/'+(PixelTanks.userData.stats[4]+1)*100+' XP', 1200, 550, 50, '#000000', .5);
+            GUI.drawText(PixelTanks.user.username, 300, 420, 80, '#000000', .5);
+            GUI.drawText('Coins: '+PixelTanks.userData.stats[0], 300, 500, 50, '#FFFF8F', .5);
+            GUI.drawText('Rank: '+PixelTanks.userData.stats[4], 300, 520, 50, '##FF2400', .5);
+            GUI.drawText('Level Up Progress', 1400, 400, 50, '#000000', .5);
+            GUI.drawText(PixelTanks.userData.stats[0]+'/'+(PixelTanks.userData.stats[4]+1)*1000+' Coins', 1400, 500, 50, '#000000', .5);
+            GUI.drawText(PixelTanks.userData.stats[4]+'/'+(PixelTanks.userData.stats[4]+1)*100+' XP', 1400, 550, 50, '#000000', .5);
             GUI.drawImage(PixelTanks.images.tanks.top, 1064, 458, 88, 88, 1);
             for (let i = 0; i < 4; i++) {
               GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [402, 490, 578, 666][i], 816, 80, 80, 1);
