@@ -5,8 +5,7 @@ import Filter from 'bad-words';
 import TokenGenerator from 'uuid-token-generator';
 import {Core} from './ffa-server.mjs';
 
-const connectionString =
-  'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = 80;
+const connectionString = 'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = 80;
 
 const HyperExpressServer = new Server({fast_buffers: true}), router = new Router(), client = new MongoClient(connectionString), filter = new Filter(), tokgen = new TokenGenerator(256, TokenGenerator.BASE62), tokens = new Set(), sockets = [];
 let db;
@@ -17,8 +16,6 @@ let db;
 })();
 
 const valid = (token, username) => tokens.has(`${token}:${username}`);
-const encode = (c) => {let x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}
-const decode = (b) => {let a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")}
 const routes = {
   auth: async ({ username, type, password }, socket) => {
     if (!username.trim() || /\s|:/.test(username)) return socket.send({ status: 'error', message: 'Invalid username.'});
@@ -52,12 +49,10 @@ const routes = {
 router.ws('/', {idle_timeout: Infinity}, (socket) => {
   sockets.push(socket);
   socket._send = socket.send;
-  socket.send = (data) => {
-    socket._send(encode(JSON.stringify(data)));
-  };
+  socket.send = (data) => socket._send(JSON.stringify(data));
   socket.on('message', (data) => {
     try {
-      data = JSON.parse(decode(data));
+      data = JSON.parse(data);
     } catch (e) {
       return socket.destroy();
     }
