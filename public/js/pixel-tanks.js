@@ -365,6 +365,8 @@ function Game() {
       Menus.scaler = document.createElement('CANVAS');
       GUI.canvas = document.createElement('CANVAS');
       GUI.draw = GUI.canvas.getContext('2d');
+      GUI.draw.imageSmoothingEnabled = false;
+      Menus.scaler.getContext('2d').imageSmoothingEnabled = false;
       document.body.appendChild(GUI.canvas);
       PixelTanks.resizer = window.innerHeight/1000;
       GUI.canvas.height = window.innerHeight;
