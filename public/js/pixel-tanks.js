@@ -650,7 +650,7 @@ function Game() {
         start: {
           buttons: [
             [544, 648, 216, 116, function() {PixelTanks.auth(this.username, this.password, 'login')}, true],
-            [840, 648, 26, 116, function() {PixelTanks.auth(this.username, this.password, 'signup')}, true],
+            [840, 648, 216, 116, function() {PixelTanks.auth(this.username, this.password, 'signup')}, true],
             [564, 392, 456, 80, function() {this.type = 'username'}, false],
             [564, 520, 456, 80, function() {this.type = 'password'}, false],
           ],
@@ -667,8 +667,8 @@ function Game() {
               this.username = '';
               this.password = '';
             }
-            GUI.drawText(this.username, 564, 392, 50, '#ffffff', 0);
-            GUI.drawText(this.password.replace(/./g, '*'), 564, 520, 50, '#ffffff', 0);
+            GUI.drawText(this.username, 574, 432, 50, '#000000', 0);
+            GUI.drawText(this.password.replace(/./g, '*'), 574, 560, 50, '#000000', 0);
           },
         },
         main: {
