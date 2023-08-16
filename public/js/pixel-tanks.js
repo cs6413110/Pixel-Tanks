@@ -793,15 +793,15 @@ function Game() {
         },
         inventory: {
           buttons: [
-            [424, 28, 108, 108, 'main', true],
-            [1064, 458, 88, 88, PixelTanks.upgrade, true],
-            [1112, 814, 88, 88, function() {PixelTanks.switchTab('classTab')}, true],
-            [400, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 1)}, true],
-            [488, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 2)}, true],
-            [576, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 3)}, true],
-            [664, 814, 88, 88, function() {PixelTanks.switchTab('itemTab', 4)}, true],
-            [756, 220, 88, 88, function() {PixelTanks.switchTab('cosmeticTab')}, true],
-            [556, 220, 88, 88, function() {PixelTanks.switchTab('deathEffectsTab')}, true],
+            [104, 5, 27, 27, 'main', true],
+            [266, 115, 22, 22, PixelTanks.upgrade, true],
+            [278, 204, 22, 22, function() {PixelTanks.switchTab('classTab')}, true],
+            [100, 204, 22, 22, function() {PixelTanks.switchTab('itemTab', 1)}, true],
+            [122, 204, 22, 22, function() {PixelTanks.switchTab('itemTab', 2)}, true],
+            [144, 204, 22, 22, function() {PixelTanks.switchTab('itemTab', 3)}, true],
+            [166, 204, 22, 22, function() {PixelTanks.switchTab('itemTab', 4)}, true],
+            [189, 55, 22, 22, function() {PixelTanks.switchTab('cosmeticTab')}, true],
+            [133, 55, 22, 22, function() {PixelTanks.switchTab('deathEffectsTab')}, true],
           ],
           listeners: {
             mousedown: function(e) {
@@ -881,7 +881,7 @@ function Game() {
             const coins = PixelTanks.userData.stats[0], xp = PixelTanks.userData.stats[3], rank = PixelTanks.userData.stats[4];
             const coinsUP = (rank+1)*1000, xpUP = (rank+1)*100;
             GUI.draw.fillStyle = this.color;
-            GUI.draw.fillRect(1116, 264, 40, 40);
+            GUI.draw.fillRect(252, 65, 8, 8);
             GUI.drawText(this.color, 1052, 256, 20, '#000000', 0);
             GUI.drawText(PixelTanks.user.username, 300, 420, 80, '#000000', .5);
             GUI.drawText('Coins: '+coins, 300, 500, 50, '#FFFF8F', .5);
@@ -891,7 +891,7 @@ function Game() {
             GUI.drawText((rank < 20 ? xp+'/'+xpUP : 'MAXED')+' XP', 1400, 550, 50, rank < 20 ? (xp < xpUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
             alert('outside of if statement');
             if (coins < coinsUp || xp < xpUP || rank > 19) {
-             // GUI.draw.fillStyle = '#000000';
+              //GUI.draw.fillStyle = '#000000';
               //GUI.draw.globalAlpha = .7;
               alert('attempt draw rect :(');
               GUI.draw.fillRect(0, 0, 10, 10);
