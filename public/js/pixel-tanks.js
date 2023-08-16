@@ -889,15 +889,11 @@ function Game() {
             GUI.drawText('Level Up Progress', 1400, 400, 50, '#000000', .5);
             GUI.drawText((rank < 20 ? coins+'/'+coinsUP : 'MAXED')+' Coins', 1400, 500, 50, rank < 20 ? (coins < coinsUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
             GUI.drawText((rank < 20 ? xp+'/'+xpUP : 'MAXED')+' XP', 1400, 550, 50, rank < 20 ? (xp < xpUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
-            alert('outside of if statement');
-            if (coins < coinsUp || xp < xpUP || rank > 19) {
-              //GUI.draw.fillStyle = '#000000';
-              //GUI.draw.globalAlpha = .7;
-              alert('attempt draw rect :(');
-              GUI.draw.fillRect(0, 0, 10, 10);
-              //GUI.draw.fillRect(1064, 458, 88, 88);
-              //GUI.draw.globalAlpha = 1;
-              alert(3);
+            if (coins < coinsUP || xp < xpUP || rank > 19) {
+              GUI.draw.fillStyle = '#000000';
+              GUI.draw.globalAlpha = .7;
+              GUI.draw.fillRect(1064, 458, 88, 88);
+              GUI.draw.globalAlpha = 1;
             }
             for (let i = 0; i < 4; i++) GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [402, 490, 578, 666][i], 816, 80, 80, 1);
             GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
