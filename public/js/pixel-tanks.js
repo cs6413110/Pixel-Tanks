@@ -667,8 +667,8 @@ function Game() {
               this.username = '';
               this.password = '';
             }
-            GUI.drawText(this.username, 574, 412, 50, '#000000', 0);
-            GUI.drawText(this.password.replace(/./g, '*'), 574, 540, 50, '#000000', 0);
+            GUI.drawText(this.username, 574, 407, 50, '#000000', 0);
+            GUI.drawText(this.password.replace(/./g, '*'), 574, 535, 50, '#000000', 0);
           },
         },
         main: {
@@ -885,7 +885,7 @@ function Game() {
             const coinsUP = (rank+1)*1000, xpUP = (rank+1)*100;
             GUI.draw.fillStyle = this.color;
             GUI.draw.fillRect(1008, 260, 32, 32);
-            GUI.drawText(this.color, 1052, 256, 20, '#000000', 0);
+            GUI.drawText(this.color, 1052, 260, 30, '#000000', 0);
             GUI.drawText(PixelTanks.user.username, 300, 420, 80, '#000000', .5);
             GUI.drawText('Coins: '+coins, 300, 500, 50, '#FFFF8F', .5);
             GUI.drawText('Rank: '+rank, 300, 550, 50, '##FF2400', .5);
