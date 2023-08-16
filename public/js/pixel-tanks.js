@@ -892,7 +892,7 @@ function Game() {
             if (coins < coinsUp || xp < xpUP || rank >= 20) {
               GUI.draw.fillStyle = '#000000';
               GUI.draw.globalAlpha = .7;
-              //GUI.draw.fillRect(1064, 458, 88, 88);
+              GUI.draw.fillRect(1064, 458, 88, 88);
               GUI.draw.globalAlpha = 1;
             }
             for (let i = 0; i < 4; i++) GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [402, 490, 578, 666][i], 816, 80, 80, 1);
