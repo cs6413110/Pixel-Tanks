@@ -46,6 +46,7 @@ const routes = {
       socket.send({status: 'error', message: 'Error getting: '+e});
     }
   },
+  ping: () => {},
 };
 
 expressWs(app);
