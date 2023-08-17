@@ -31,7 +31,7 @@ const getTickspeed = i => {
 setTimeout(() => getTickspeed());
 
 const filter = new Filter();
-export const app = express;
+export const ffa = express;
 const auth = async (username, token) => {
   try {
     const res = await fetch(`http://141.148.128.231/verify?username=${username}&token=${token}`);
@@ -118,8 +118,8 @@ setInterval(() => {
   });
 }, 60000);
 
-expressWs(app);
-app.ws(SETTINGS.path, socket => {
+expressWs(ffa);
+ffa.ws(SETTINGS.path, socket => {
   sockets.push(socket);
   socket._send = socket.send;
   socket.send = data => socket._send(msgpack.encode(data));
@@ -523,7 +523,7 @@ class DUELS extends Engine {
 
 }
 
-if (!SETTINGS.export) app.listen(SETTINGS.port);
+if (!SETTINGS.export) ffa.listen(SETTINGS.port);
 
 const Profile = (arr, update) => {
   const functions = [];
