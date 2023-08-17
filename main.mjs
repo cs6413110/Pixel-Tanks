@@ -1,6 +1,7 @@
 import {Server, Router} from 'hyper-express';
 import {promises as fs} from 'fs';
 import {MongoClient} from 'mongodb';
+import msgpack from 'msgpack-lite';
 import Filter from 'bad-words';
 import TokenGenerator from 'uuid-token-generator';
 import {Core} from './ffa-server.mjs';
@@ -49,10 +50,10 @@ const routes = {
 router.ws('/', {idle_timeout: Infinity}, (socket) => {
   sockets.push(socket);
   socket._send = socket.send;
-  socket.send = (data) => socket._send(JSON.stringify(data));
+  socket.send = (data) => socket._send(msgpack.encode(data));
   socket.on('message', (data) => {
     try {
-      data = JSON.parse(data);
+      data = msgpack.decode(data);
     } catch (e) {
       return socket.destroy();
     }
