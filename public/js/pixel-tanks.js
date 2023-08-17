@@ -41,6 +41,7 @@ function Game() {
 
     connect() {
       this.socket = new WebSocket(this.url);
+      this.socket.binaryType = 'arraybuffer';
       this.socket.onopen = () => {
         this.status = 'connected';
         if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => {
