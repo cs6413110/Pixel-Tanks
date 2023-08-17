@@ -177,7 +177,7 @@ class Engine {
   }
 
   tick() {
-    for (const b of this.b) if (b.x >= 0 && b.y >= 0 && b.x <= 2900 && b.y <= 2900) this.map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), b.x % 100 !== 0 && b.y % 100 !== 0);
+    const mapRedone = false;
     for (const ai of this.ai) ai.update();
     for (const s of this.s) s.update()
 
@@ -185,26 +185,19 @@ class Engine {
       if (t.dedEffect) t.dedEffect.time = Date.now() - t.dedEffect.start;
       if (t.class === 'medic' && !t.ded && t.username !== t.healing) {
         const tank = this.pt.find(tank => tank.username === t.healing);
-        if (!tank) {
-          t.healing = t.username;
-        } else if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + .2, tank.maxHp);
+        if (!tank) t.healing = t.username; else if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + .2, tank.maxHp);
       }
       if (t.pushback !== 0) t.pushback += 0.5;
       if (t.fire && this.getTeam(t.fire.team) !== this.getTeam(t.team)) this.damagePlayer(t, { x: t.x, y: t.y, u: this.getUsername(t.fire.team), a: .5 });
       for (const tank of this.pt) {
-        if (collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) {
-          if (t.immune && tank.canBashed) {
-            if (t.class === 'warrior' && t.username !== tank.username && !t.ded) {
-              this.damagePlayer(tank, { x: tank.x, y: tank.y, u: t.username, a: 100 });
-            } else if (t.class == 'medic') {
-              tank.hp = Math.min(tank.hp+30, tank.maxHp);
-            }
-            tank.canBashed = false;
-            setTimeout(() => {
-              tank.canBashed = true;
-            }, 400);
-          }
-        }
+        if (!t.immune || !tank.canBashed || t.ded) continue;
+        if (!((t.class === 'warrior' && this.getTeam(t.team) !== this.getTeam(tank.team)) || (t.class === 'medic' && this.getTeam(t.team) === this.getTeam(tank.team))) continue;
+        if (!collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) continue;
+        this.damagePlayer(tank, { x: tank.x, y: tank.y, u: t.username, a: t.class === 'warrior' ? 100 : -30 });
+        tank.canBashed = false;
+        setTimeout(() => {
+          tank.canBashed = true;
+        }, 400);
       }
       for (let i = this.b.length-1; i >= 0; i--) {
         const b = this.b[i];
@@ -232,24 +225,6 @@ class Engine {
       }
       if (t.damage) t.damage.y--;
       if (t.grapple) this.grapple(t);
-    }
-
-    for (const d of this.d) {
-      if (!d.c) return;
-      for (const t of this.pt) {
-        if (collision(d.x, d.y, d.w, d.h, t.x, t.y, 80, 80) && this.getUsername(d.team) !== this.getUsername(t.team)) {
-          this.damagePlayer(t, { ...d, u: this.getUsername(d.team), a: this.getTeam(d.team) !== this.getTeam(t.team) ? Math.abs(d.a) : Math.min(0, d.a)});
-        }
-      }
-      for (let i = this.b.length-1; i >= 0; i--) {
-        const b = this.b[i];
-        if (collision(d.x, d.y, d.w, d.h, b.x, b.y, 100, 100)) b.damage(d.a);
-      }
-      for (let i = this.ai.length-1; i >= 0; i--) {
-        const ai = this.ai[i];
-        if (collision(d.x, d.y, d.w, d.h, ai.x, ai.y, 80, 80) && this.getTeam(ai.team) !== this.getTeam(d.team)) ai.damage(d.a);
-      }
-      d.c = false;
     }
   }
 
@@ -544,8 +519,10 @@ class Damage {
     this.a = a;
     this.team = team;
     this.host = host;
-    this.c = true;
     this.f = 0;
+    for (const t of host.pt) if (host.getUsername(team) !== host.getUsername(t.team)) if (collision(x, y, w, h, t.x, t.y, 80, 80)) this.damagePlayer(t, { ...this, u: host.getUsername(team), a: host.getTeam(team) !== host.getTeam(t.team) ? Math.abs(a) : Math.min(0, a)});
+    for (let i = host.b.length-1; i >= 0; i--) if (collision(x, y, w, h, host.b[i].x, host.b[i].y, 100, 100)) host.b[i].damage(a);
+    for (let i = host.ai.length-1; i >= 0; i--) if (host.getTeam(host.ai[i].team) !== host.getTeam(team)) host.ai[i].damage(a);
     setInterval(() => this.f++, 18);
     setTimeout(() => this.destroy(), 200);
   }
