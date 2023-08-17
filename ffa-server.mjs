@@ -14,7 +14,8 @@ const SETTINGS = {
 }
 
 import fetch from 'node-fetch';
-import HyperExpress from 'hyper-express';
+import express from 'express';
+import expressWs from 'express-ws';
 import msgpack from 'msgpack-lite';
 import Filter from 'bad-words';
 import {Engine, Block, Shot, AI, Damage} from './public/js/engine.js';
@@ -30,8 +31,7 @@ const getTickspeed = i => {
 setTimeout(() => getTickspeed());
 
 const filter = new Filter();
-export const Core = new HyperExpress.Router();
-const Server = new HyperExpress.Server({fast_buffers: true});
+export const app = express;
 const auth = async (username, token) => {
   try {
     const res = await fetch(`http://141.148.128.231/verify?username=${username}&token=${token}`);
@@ -118,7 +118,8 @@ setInterval(() => {
   });
 }, 60000);
 
-Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
+expressWs(app);
+app.ws(SETTINGS.path, socket => {
   sockets.push(socket);
   socket._send = socket.send;
   socket.send = data => socket._send(msgpack.encode(data));
@@ -522,8 +523,7 @@ class DUELS extends Engine {
 
 }
 
-Server.use(Core);
-if (!SETTINGS.export) Server.listen(SETTINGS.port);
+if (!SETTINGS.export) app.listen(SETTINGS.port);
 
 const Profile = (arr, update) => {
   const functions = [];
