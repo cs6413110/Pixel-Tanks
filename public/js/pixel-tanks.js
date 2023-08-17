@@ -140,6 +140,7 @@ function Game() {
       this.id = id;
       this.buttons = buttons;
       this.listeners = listeners;
+      this.buttonEffect = true;
       this.cdraw = cdraw.bind(this);
       this.listeners.click = this.onclick;
       for (const l in this.listeners) this.listeners[l] = this.listeners[l].bind(this);
@@ -172,6 +173,7 @@ function Game() {
       if (render) this.render = render;
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3], 1);
       this.cdraw();
+      if (!this.buttonEffect) return;
       for (const b of this.buttons) {
         const x = this.render[0]+b[0]*this.render[2]/1600;
         const y = this.render[1]+b[1]*this.render[3]/1000;
@@ -826,7 +828,7 @@ function Game() {
                 if (x < 580 || x > 1020 || y < 334 || y > 666) return this.itemTab = false;
                 const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], fortress: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], mine: [904, 570]};
                 for (const item in key) {
-                  if (collision(x, y, 0, 0, key[item][0], key[item][y], 80, 80)) {
+                  if (collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
                     if (!PixelTanks.userData.items.includes(item)) {
                       PixelTanks.userData.items[this.currentItem-1] = item;
                     } else alert('You are not allowed to have more than 1 of the same item');
@@ -908,7 +910,9 @@ function Game() {
             if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 760, 224, 80, 80, 1);
             const deathEffectData = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect+'_'];
             if (PixelTanks.userData.deathEffect) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 536, 224, 80, 80, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
+            Menus.menus.inventory.buttonEffect = true;
             if (this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.deathEffectsTab) {
+              Menus.menus.inventory.buttonEffect = false;
               GUI.draw.fillStyle = '#000000';
               GUI.draw.globalAlpha = .7;
               GUI.draw.fillRect(0, 0, 1600, 1600);
