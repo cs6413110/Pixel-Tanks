@@ -85,7 +85,10 @@ function Game() {
       if (event === 'close') this.callstack.close = [];
     }
     send(data) {
-      this.socket.send(msgpack.encode(data));
+      data = msgpack.encode(data);
+      alert(typeof data);
+      alert(data);
+      this.socket.send(data);
     }
     close() {
       this.socket.close();
