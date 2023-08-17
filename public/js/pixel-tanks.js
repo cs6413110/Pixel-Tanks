@@ -676,13 +676,13 @@ function Game() {
         },
         main: {
           buttons: [
-            [243, 210, 22, 22, 'keybinds', true],
-            [133, 154, 134, 34, 'multiplayer', true],
-            [162, 210, 22, 22, 'shop', true],
-            [135, 210, 22, 22, 'inventory', true],
-            [189, 210, 22, 22, 'crate', true],
-            [216, 210, 22, 22, 'htp1', true],
-            [133, 98, 134, 34, function() {
+            [972, 840, 88, 88, 'keybinds', true],
+            [532, 624, 536, 136, 'multiplayer', true],
+            [648, 840, 88, 88, 'shop', true],
+            [540, 840, 88, 88, 'inventory', true],
+            [756, 840, 88, 88, 'crate', true],
+            [864, 840, 88, 88, 'htp1', true],
+            [532, 392, 536, 136, function() {
               Menus.removeListeners();
               PixelTanks.user.player = new Tank(null, false);
             }, true],
