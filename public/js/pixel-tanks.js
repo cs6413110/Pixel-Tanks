@@ -44,7 +44,7 @@ function Game() {
         this.socket.binaryType = 'arraybuffer';
         this.status = 'connected';
         if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => {
-          this.socket.send('|');
+          this.socket.ping(msgpack.encode({op: 'ping'}));
         }, 50000);
         this.callstack.open.forEach(f => f());
       }
