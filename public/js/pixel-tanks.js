@@ -22,7 +22,6 @@ function Game() {
       this.options = {};
       this.callstack = {open: [], close: [], message: []};
       const {keepAlive = true, autoconnect = true, reconnect = false} = options;
-
       this.options.keepAlive = keepAlive;
       this.options.autoconnect = autoconnect;
       this.options.reconnect = reconnect;
@@ -41,8 +40,8 @@ function Game() {
 
     connect() {
       this.socket = new WebSocket(this.url);
-      this.socket.binaryType = 'arraybuffer';
       this.socket.onopen = () => {
+        this.socket.binaryType = 'arraybuffer';
         this.status = 'connected';
         if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => {
           this.socket.send('|');
