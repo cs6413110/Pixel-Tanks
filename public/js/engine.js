@@ -379,7 +379,7 @@ class Shot {
   }
 
   collision() {
-    const key = { bullet: false, shotgun: false, powermissle: 100, megamissle: 150, healmissle: 100, fire: false };
+    const key = { bullet: false, shotgun: false, powermissle: 50, megamissle: 100, healmissle: 50, fire: false };
     const { host, x, y, type } = this;
     const blocks = this.host.b, ais = this.host.ai, pt = this.host.pt;
     for (const t of pt) {
