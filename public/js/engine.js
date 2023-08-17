@@ -479,9 +479,6 @@ class Shot {
       } else if (type === 'dynamite') {
         this.update = () => {}
         return false;
-      } else if (type === 'fire') {
-        host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
-        return true;
       } else {
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
