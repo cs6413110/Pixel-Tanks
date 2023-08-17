@@ -52,7 +52,7 @@ function Game() {
         try {
           data = msgpack.decode(data.data);
         } catch(e) {
-          alert('Socket Encryption Error: ' + data+' | '+e);
+          alert('Socket Encryption Error: ' + data.data+' | '+e);
         }
         if (data.status === 'error') {
           if (data.message === 'Invalid token.') {
