@@ -568,11 +568,12 @@ const Profile = (arr, update) => {
 }
 
 let lagometer = [];
-Profile([Engine, Block, Shot, AI, Damage, FFA, Multiplayer, A], (f) => {
+Profile([Engine, Block, Shot, AI, Damage, FFA, Multiplayer, A], f => {
   lagometer = f;
 });
 setInterval(() => {
   lagometer.sort((a, b) => b.t - a.t);
   const top = lagometer.slice(0, Math.min(15, lagometer.length));
+  console.log('-----PROFILING REPORT-----');
   for (const t of top) console.log(t.name+': '+t.t+' over '+t.i);
 }, 10000);
