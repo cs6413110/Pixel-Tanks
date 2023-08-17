@@ -54,6 +54,7 @@ router.ws('/', {idle_timeout: Infinity}, (socket) => {
   socket.on('message', (data) => {
     try {
       data = msgpack.decode(Buffer.from(data));
+      console.log(data)
     } catch (e) {
       console.log(e);
       return socket.destroy();
