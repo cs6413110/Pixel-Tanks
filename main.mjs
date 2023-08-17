@@ -57,6 +57,7 @@ router.ws('/', {idle_timeout: Infinity}, (socket) => {
       data = msgpack.decode(data);
       console.log(data);
     } catch (e) {
+      console.log(e);
       return socket.destroy();
     }
     if (!socket.username) socket.username = data.username;
