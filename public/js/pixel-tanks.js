@@ -1,7 +1,7 @@
-const threads = document.createElement('SCRIPT');
-threads.crossOrigin = '';
-threads.src = 'https://cdn.jsdelivr.net/npm/threads@1.7.0/dist/master/index.js';
-threads.onload = () => {
+const packer = document.createElement('SCRIPT');
+packer.crossOrigin = '';
+packer.src = 'https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js';
+packer.onload = () => {
   const pathfinding = document.createElement('SCRIPT');
   pathfinding.crossOrigin = '';
   pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
@@ -14,7 +14,7 @@ threads.onload = () => {
   }
   document.head.appendChild(pathfinding);
 }
-document.head.appendChild(threads);
+document.head.appendChild(packer);
 function Game() {
   class MegaSocket {
     constructor(url, options) {
@@ -50,9 +50,9 @@ function Game() {
       }
       this.socket.onmessage = data => {
         try {
-          data = JSON.parse(A.de(data.data));
+          data = msgpack.decode(data);
         } catch(e) {
-          alert('Socket Encryption Error: ' + A.de(data.data));
+          alert('Socket Encryption Error: ' + data.data);
         }
         if (data.status === 'error') {
           if (data.message === 'Invalid token.') {
@@ -85,7 +85,7 @@ function Game() {
       if (event === 'close') this.callstack.close = [];
     }
     send(data) {
-      this.socket.send(A.en(JSON.stringify(data)));
+      this.socket.send(msgpack.encode(data));
     }
     close() {
       this.socket.close();
