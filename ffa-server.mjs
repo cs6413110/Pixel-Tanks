@@ -540,7 +540,7 @@ const Profile = (arr, update) => {
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
             const end = process.hrtime(start);
-            f.t = (end[0]+Math.floor(end[1]/1000000))+'.'+(end[1]%1000000);
+            f.t = (end[0]+Math.floor(end[1]/1000000))+'.'+((end[1]%1000000)/1000000);
             update(functions);
             return r;
           }
@@ -556,7 +556,7 @@ const Profile = (arr, update) => {
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
             const end = process.hrtime(start);
-            f.t = (end[0]+Math.floor(end[1]/1000000))+'.'+(end[1]%1000000);
+            f.t = (end[0]+Math.floor(end[1]/1000000))+'.'+((end[1]%1000000)/1000000);
             update(functions);
             return r;
           }
