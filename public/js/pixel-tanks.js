@@ -50,6 +50,7 @@ function Game() {
       }
       this.socket.onmessage = data => {
         try {
+          alert(data.data.toString());
           data = msgpack.decode(data.data);
         } catch(e) {
           alert('Socket Encryption Error: ' + data.data+' | '+e);
