@@ -445,6 +445,7 @@ class Shot {
       const b = blocks[i];
       if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
       if (type === 'grapple') {
+        if (b.type === 'fortress' && host.getTeam(b.team) === host.getTeam(this.team)) return false;
         const t = this.host.pt.find(t => t.username === host.getUsername(this.team));
         if (t.grapple) t.grapple.bullet.destroy();
         t.grapple = { target: b, bullet: this };
