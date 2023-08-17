@@ -677,7 +677,7 @@ function Game() {
         main: {
           buttons: [
             [972, 840, 88, 88, 'keybinds', true],
-            [532, 624, 536, 136, 'multiplayer', true],
+            [532, 616, 536, 136, 'multiplayer', true],
             [648, 840, 88, 88, 'shop', true],
             [540, 840, 88, 88, 'inventory', true],
             [756, 840, 88, 88, 'crate', true],
