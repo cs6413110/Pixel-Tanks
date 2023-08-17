@@ -676,22 +676,22 @@ function Game() {
         },
         main: {
           buttons: [
-            [1180, 920, 80, 80, 'keybinds', true],
-            [580, 500, 440, 100, 'multiplayer', true],
-            [580, 640, 440, 100, 'shop', true],
-            [420, 920, 80, 80, 'inventory', true],
-            [528, 896, 80, 80, 'crate', true],
-            [620, 920, 80, 80, 'htp1', true],
-            [580, 360, 440, 100, function() {
+            [243, 210, 22, 22, () => alert('In progress...'), true],
+            [133, 154, 134, 34, 'multiplayer', true],
+            [162, 210, 22, 22, 'shop', true],
+            [135, 210, 22, 22, 'inventory', true],
+            [189, 210, 22, 22, 'crate', true],
+            [216, 210, 22, 22, 'htp1', true],
+            [133, 98, 134, 34, function() {
               Menus.removeListeners();
               PixelTanks.user.player = new Tank(null, false);
             }, true],
-            [320, 920, 80, 80, function() {
+            /*[320, 920, 80, 80, function() {
               clearInterval(PixelTanks.autosave);
               PixelTanks.user.token = undefined;
               PixelTanks.user.username = undefined;
               Menus.trigger('start');
-            }],
+            }],*/ // logout
           ],
           listeners: {},
           cdraw: function() {
