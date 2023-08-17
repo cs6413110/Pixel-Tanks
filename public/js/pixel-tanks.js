@@ -890,8 +890,8 @@ function Game() {
             GUI.draw.fillRect(1008, 260, 32, 32);
             GUI.drawText(this.color, 1052, 260, 30, '#000000', 0);
             GUI.drawText(PixelTanks.user.username, 300, 420, 80, '#000000', .5);
-            GUI.drawText('Coins: '+coins, 300, 500, 50, '#FFFF8F', .5);
-            GUI.drawText('Rank: '+rank, 300, 550, 50, '##FF2400', .5);
+            GUI.drawText('Coins: '+coins, 300, 500, 50, '#FFE900', .5);
+            GUI.drawText('Rank: '+rank, 300, 550, 50, '#FF2400', .5);
             GUI.drawText('Level Up Progress', 1400, 400, 50, '#000000', .5);
             GUI.drawText((rank < 20 ? coins+'/'+coinsUP : 'MAXED')+' Coins', 1400, 500, 50, rank < 20 ? (coins < coinsUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
             GUI.drawText((rank < 20 ? xp+'/'+xpUP : 'MAXED')+' XP', 1400, 550, 50, rank < 20 ? (xp < xpUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
