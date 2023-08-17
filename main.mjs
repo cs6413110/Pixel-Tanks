@@ -56,9 +56,7 @@ app.ws('/', socket => {
   socket.on('message', (data) => {
     try {
       data = msgpack.decode(Buffer.from(data));
-      console.log(data)
     } catch (e) {
-      console.log(e);
       return socket.destroy();
     }
     if (!socket.username) socket.username = data.username;
