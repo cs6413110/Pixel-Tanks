@@ -535,11 +535,12 @@ const Profile = (arr, update) => {
         if (typeof e[p] === 'function') {
           const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0};
           e[p] = function() {
-            const start = Date.now();
+            const start = process.hrtime();
             const r = f.o.apply(this, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
-            f.t = Date.now()-start;
+            const end = process.hrtime(start);
+            f.t = (end[0]+Math.floor(end[1]/1000000))+'.'+(end[1]%1000000);
             update(functions);
             return r;
           }
@@ -550,11 +551,12 @@ const Profile = (arr, update) => {
         if (typeof e.prototype[p] === 'function') {
           const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0};
           e.prototype[p] = function() {
-            const start = Date.now();
+            const start = process.hrtime();
             const r = f.o.apply(this, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
-            f.t = Date.now()-start;
+            const end = process.hrtime(start);
+            f.t = (end[0]+Math.floor(end[1]/1000000))+'.'+(end[1]%1000000);
             update(functions);
             return r;
           }
