@@ -50,10 +50,11 @@ function Game() {
       }
       this.socket.onmessage = data => {
         try {
+          alert(data);
           data = msgpack.decode(data);
         } catch(e) {
           alert(e);
-          alert('Socket Encryption Error: ' + data.data);
+          alert('Socket Encryption Error: ' + data);
         }
         if (data.status === 'error') {
           if (data.message === 'Invalid token.') {
@@ -87,8 +88,6 @@ function Game() {
     }
     send(data) {
       data = msgpack.encode(data);
-      alert(typeof data);
-      alert(data);
       this.socket.send(data);
     }
     close() {
