@@ -695,10 +695,10 @@ function Game() {
           ],
           listeners: {},
           cdraw: function() {
-            GUI.drawImage(PixelTanks.images.tanks.bottom, 1400, 800, 80, 80, 1);
-            GUI.drawImage(PixelTanks.images.tanks.top, 1400, 800, 80, 90, 1);
-            if (PixelTanks.userData.cosmetic !== '' && PixelTanks.userData.cosmetic !== undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 1400, 800, 80, 90, 1);
-            GUI.drawText(PixelTanks.user.username, 1440, 900, 50, '#ffffff', 0.5);
+            GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
+            GUI.drawImage(PixelTanks.images.tanks.top, 1200, 600, 160, 180, 1);
+            if (PixelTanks.userData.cosmetic !== '' && PixelTanks.userData.cosmetic !== undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 1200, 600, 160, 180, 1);
+            GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
           },
         },
         multiplayer: {
