@@ -41,7 +41,7 @@ function Game() {
     connect() {
       this.socket = new WebSocket(this.url);
       this.socket.onopen = () => {
-        //this.socket.binaryType = 'arraybuffer';
+        this.socket.binaryType = 'arraybuffer';
         this.status = 'connected';
         if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => {
           this.socket.send('|');
@@ -50,8 +50,7 @@ function Game() {
       }
       this.socket.onmessage = data => {
         try {
-          alert(data.data.toString());
-          data = msgpack.decode(data.data);
+          data = msgpack.decode(new Uint8Array(data.data));
         } catch(e) {
           alert('Socket Encryption Error: ' + data.data+' | '+e);
         }
