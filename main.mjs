@@ -69,7 +69,8 @@ app.ws('/', socket => {
 });
 
 app.get('/verify', (req, res) => {
-  res.end(valid(req.query.token, req.query.username).toString())
+  console.log('Attempting to verify');
+  res.end(valid(req.query.token, req.query.username).toString());
 });
 app.get('/*', async(req, res) => {
   res.header('Content-Type', 'application/javascript').end(await fs.readFile('./public/js/pixel-tanks.js'))
