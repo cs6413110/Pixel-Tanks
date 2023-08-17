@@ -426,7 +426,7 @@ class Multiplayer extends Engine {
       for (const pt of this.pt) if (A.collider(pt.x, pt.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.tanks.push({...pt, updates: undefined, socket: undefined, render: undefined, healInterval: undefined, healTimeout: undefined, flashbangTimeout: undefined, grapple: undefined, gluInterval: undefined, damage: {...pt.damage, ti: undefined}, gluTimeout: undefined, fireTimeout: undefined, fireInterval: undefined});
       for (const ai of this.ai) if (A.collider(ai.x, ai.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.ai.push({...ai, team: undefined, host: undefined, canFire: undefined, target: undefined});
       for (const s of this.s) if (A.collider(s.x, s.y, 10, 10, t.x+view.x, t.y+view.y, view.w, view.h)) message.bullets.push({...s, host: undefined, d: undefined, damage: undefined, ra: undefined, target: undefined, offset: undefined, settings: undefined, md: undefined});
-      for (const d of this.d) if (A.collider(d.x, d.y, d.w, d.h, t.x+view.x, t.y+view.y, view.w, view.h)) message.explosions.push({...d, host: undefined, a: undefined, c: undefined});
+      for (const d of this.d) if (A.collider(d.x, d.y, d.w, d.h, t.x+view.x, t.y+view.y, view.w, view.h)) message.explosions.push({...d, host: undefined, a: undefined});
       t.socket.send(message);
       outgoing_per_second++;
     }
