@@ -129,7 +129,7 @@ Core.ws(SETTINGS.path, {idleTimeout: Infinity, max_backpressure: 1}, socket => {
   socket.on('message', async (data) => {
     incoming_per_second++;
     try {
-      data = msgpack.decode(data);
+      data = msgpack.decode(Buffer.from(data));
     } catch(e) {
       return socket.destroy();
     }
