@@ -1184,7 +1184,7 @@ function Game() {
       alert('You Leveled Up to '+(rank+1));
     }
 
-    static renderBottom(x, y, s, hcolor) {
+    static renderBottom(x, y, s, color) {
       GUI.draw.fillStyle = color;
       GUI.draw.beginPath();
       GUI.draw.moveTo(x+20/80*s, y+8/80*s);
