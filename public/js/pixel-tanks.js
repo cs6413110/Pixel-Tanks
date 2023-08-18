@@ -695,7 +695,9 @@ function Game() {
           ],
           listeners: {},
           cdraw: function() {
+            PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
             GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
+            PixelTanks.renderTop(1200, 600, 160, PixelTanks.userData.color);
             GUI.drawImage(PixelTanks.images.tanks.top, 1200, 600, 160, 180, 1);
             if (PixelTanks.userData.cosmetic !== '' && PixelTanks.userData.cosmetic !== undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 1200, 600, 160, 180, 1);
             GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
@@ -899,7 +901,9 @@ function Game() {
               GUI.draw.globalAlpha = 1;
             }
             for (let i = 0; i < 4; i++) GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [404, 492, 580, 668][i], 820, 80, 80, 1);
+            PixelTanks.renderBottom(680, 380, 240, PixelTanks.userData.color);
             GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
+            PixelTanks.renderTop(680, 380, 240, PixelTanks.userData.color);
             GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
             if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
             const key = {tactical: [7, 7], fire: [7, 61], medic: [7, 115], stealth: [61, 7], builder: [61, 61], warrior: [61, 115]};
@@ -1180,6 +1184,36 @@ function Game() {
       alert('You Leveled Up to '+(rank+1));
     }
 
+    static renderBottom(x, y, s, hcolor) {
+      draw.fillStyle = color;
+      draw.beginPath();
+      draw.moveTo(x+20/80*s, y+8/80*s);
+      draw.lineTo(x+60/80*s, y+8/80*s);
+      draw.lineTo(x+60/80*s, y+72/80*s);
+      draw.lineTo(x+20/80*s, y+72/80*s); 
+      draw.lineTo(x+20/80*s, y+8/80*s);
+      draw.fill();
+    }
+
+    static renderTop(x, y, s, color) {
+      draw.fillStyle = color;
+      draw.beginPath();
+      draw.moveTo(x+29/80*s, y+88/80*s);
+      draw.lineTo(x+29/80*s, y+68/80*s);
+      draw.lineTo(x+24/80*s, y+68/80*s);
+      draw.lineTo(x+13/80*s, y+57/80*s);
+      draw.lineTo(x+13/80*s, y+24/80*s);
+      draw.lineTo(x+24/80*s, y+13/80*s);
+      draw.lineTo(x+57/80*s, y+13/80*s);
+      draw.lineTo(x+68/80*s, y+24/80*s);
+      draw.lineTo(x+68/80*s, y+57/80*s);
+      draw.lineTo(x+57/80*s, y+68/80*s);
+      draw.lineTo(x+52/80*s, y+68/80*s);
+      draw.lineTo(x+52/80*s, y+88/80*s);
+      draw.lineTo(x+29/80*s, y+88/80*s);
+      draw.fill();
+    }
+
     static purchase(stat) {
       var key = {
         tactical: [['classes', 0], 70000],
@@ -1387,7 +1421,9 @@ function Game() {
 
     drawAI(ai) {
       const {x, y, role, r, baseRotation, baseFrame, pushback, cosmetic, hp, maxHp} = ai;
+      if (role !== 0) PixelTanks.renderBase(x, y, 80, '#FF0000');
       GUI.drawImage(PixelTanks.images.tanks[role === 0 ? 'base' : 'bottom'+(baseFrame ? '' : '2')], x, y, 80, 80, 1, 40, 40, 0, 0, baseRotation);
+      PixelTanks.renderTop(x, y, 80, '#FF0000');
       GUI.drawImage(PixelTanks.images.tanks.top, x, y, 80, 90, 1, 40, 40, 0, pushback, r);
       if (cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[cosmetic], x, y, 80, 90, 1, 40, 40, 0, pushback, r);
       GUI.draw.fillStyle = '#000000';
@@ -1402,8 +1438,10 @@ function Game() {
       let a = 1;
       if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
       if ((t.invis && p) || t.ded) a = .5;
+      PixelTanks.renderBottom(t.x, t.y, 80, t.color);
       GUI.drawImage(PixelTanks.images.tanks['bottom'+(t.baseFrame ? '' : '2')], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
       if (t.fire) GUI.drawImage(PixelTanks.images.animations.fire, t.x, t.y, 80, 80, 1, 0, 0, 0, 0, 0, t.fire.frame*29, 0, 29, 29);
+      PixelTanks.renderTop(t.x, t.y, 80, t.color);
       GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.invis && t.username !== PixelTanks.user.username) return;
@@ -1424,7 +1462,7 @@ function Game() {
         username += ' ['+t.team.split(':')[1]+']';
       }
 
-      GUI.drawText(username, t.x+40, t.y-25, 50, t.color, 0.5);
+      GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
 
       if (t.shields > 0 && (!t.invis || (t.invis && p))) {
         GUI.draw.beginPath();
