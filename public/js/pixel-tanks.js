@@ -901,9 +901,9 @@ function Game() {
               GUI.draw.globalAlpha = 1;
             }
             for (let i = 0; i < 4; i++) GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [404, 492, 580, 668][i], 820, 80, 80, 1);
-            PixelTanks.renderBottom(680, 380, 240, PixelTanks.userData.color);
+            PixelTanks.renderBottom(680, 380, 240, PixelTanks.userData.color, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
             GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
-            PixelTanks.renderTop(680, 380, 240, PixelTanks.userData.color);
+            PixelTanks.renderTop(680, 380, 240, PixelTanks.userData.color, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
             GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
             if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
             const key = {tactical: [7, 7], fire: [7, 61], medic: [7, 115], stealth: [61, 7], builder: [61, 61], warrior: [61, 115]};
@@ -1184,7 +1184,11 @@ function Game() {
       alert('You Leveled Up to '+(rank+1));
     }
 
-    static renderBottom(x, y, s, color) {
+    static renderBottom(x, y, s, color, a=0) {
+      if (a) {
+        GUI.draw.translate(x+40/80*w, y+40/80*w);
+        GUI.draw.rotate(a*Math.PI/180);
+      }
       GUI.draw.fillStyle = color;
       GUI.draw.beginPath();
       GUI.draw.moveTo(x+20/80*s, y+8/80*s);
@@ -1193,9 +1197,17 @@ function Game() {
       GUI.draw.lineTo(x+20/80*s, y+72/80*s); 
       GUI.draw.lineTo(x+20/80*s, y+8/80*s);
       GUI.draw.fill();
+      if (a) {
+        GUI.draw.rotate(-a*Math.PI/180);
+        GUI.draw.translate(-x-40/80*w, -y-40/80*w);
+      }
     }
 
-    static renderTop(x, y, s, color) {
+    static renderTop(x, y, s, color, a=0) {
+      if (a) {
+        GUI.draw.translate(x+40/80*w, y+40/80*w);
+        GUI.draw.rotate(a*Math.PI/180);
+      }
       GUI.draw.fillStyle = color;
       GUI.draw.beginPath();
       GUI.draw.moveTo(x+29/80*s, y+88/80*s);
@@ -1212,6 +1224,10 @@ function Game() {
       GUI.draw.lineTo(x+52/80*s, y+88/80*s);
       GUI.draw.lineTo(x+29/80*s, y+88/80*s);
       GUI.draw.fill();
+      if (a) {
+        GUI.draw.rotate(-a*Math.PI/180);
+        GUI.draw.translate(-x-40/80*w, -y-40/80*w);
+      }
     }
 
     static purchase(stat) {
