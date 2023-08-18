@@ -1200,10 +1200,8 @@ function Game() {
     }
 
     static renderTop(x, y, s, color, a=0) {
-      if (a) {
-        GUI.draw.translate(x+40/80*s, y+40/80*s);
-        GUI.draw.rotate(a*Math.PI/180);
-      }
+      GUI.draw.translate(x+40/80*s, y+40/80*s);
+      GUI.draw.rotate(a*Math.PI/180);
       GUI.draw.fillStyle = color;
       GUI.draw.beginPath();
       GUI.draw.moveTo(-11/80*s, 48/80*s);
@@ -1220,10 +1218,8 @@ function Game() {
       GUI.draw.lineTo(12/80*s, 48/80*s);
       GUI.draw.lineTo(-11/80*s, 48/80*s);
       GUI.draw.fill();
-      if (a) {
-        GUI.draw.rotate(-a*Math.PI/180);
-        GUI.draw.translate(-x-40/80*s, -y-40/80*s);
-      }
+      GUI.draw.rotate(-a*Math.PI/180);
+      GUI.draw.translate(-x-40/80*s, -y-40/80*s);
     }
 
     static purchase(stat) {
