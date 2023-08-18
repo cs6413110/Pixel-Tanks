@@ -1191,11 +1191,11 @@ function Game() {
       }
       GUI.draw.fillStyle = color;
       GUI.draw.beginPath();
-      GUI.draw.moveTo(x+20/80*s, y+8/80*s);
-      GUI.draw.lineTo(x+60/80*s, y+8/80*s);
-      GUI.draw.lineTo(x+60/80*s, y+72/80*s);
-      GUI.draw.lineTo(x+20/80*s, y+72/80*s); 
-      GUI.draw.lineTo(x+20/80*s, y+8/80*s);
+      GUI.draw.moveTo(-20/80*s, -32/80*s);
+      GUI.draw.lineTo(20/80*s, -32/80*s);
+      GUI.draw.lineTo(20/80*s, 32/80*s);
+      GUI.draw.lineTo(-20/80*s, 32/80*s); 
+      GUI.draw.lineTo(-20/80*s, -32/80*s);
       GUI.draw.fill();
       if (a) {
         GUI.draw.rotate(-a*Math.PI/180);
@@ -1210,19 +1210,19 @@ function Game() {
       }
       GUI.draw.fillStyle = color;
       GUI.draw.beginPath();
-      GUI.draw.moveTo(x+29/80*s, y+88/80*s);
-      GUI.draw.lineTo(x+29/80*s, y+68/80*s);
-      GUI.draw.lineTo(x+24/80*s, y+68/80*s);
-      GUI.draw.lineTo(x+13/80*s, y+57/80*s);
-      GUI.draw.lineTo(x+13/80*s, y+24/80*s);
-      GUI.draw.lineTo(x+24/80*s, y+13/80*s);
-      GUI.draw.lineTo(x+57/80*s, y+13/80*s);
-      GUI.draw.lineTo(x+68/80*s, y+24/80*s);
-      GUI.draw.lineTo(x+68/80*s, y+57/80*s);
-      GUI.draw.lineTo(x+57/80*s, y+68/80*s);
-      GUI.draw.lineTo(x+52/80*s, y+68/80*s);
-      GUI.draw.lineTo(x+52/80*s, y+88/80*s);
-      GUI.draw.lineTo(x+29/80*s, y+88/80*s);
+      GUI.draw.moveTo(-11/80*s, 48/80*s);
+      GUI.draw.lineTo(-11/80*s, 28/80*s);
+      GUI.draw.lineTo(-16/80*s, 28/80*s);
+      GUI.draw.lineTo(-27/80*s, 17/80*s);
+      GUI.draw.lineTo(-27/80*s, -16/80*s);
+      GUI.draw.lineTo(-16/80*s, -27/80*s);
+      GUI.draw.lineTo(17/80*s, -27/80*s);
+      GUI.draw.lineTo(28/80*s, -16/80*s);
+      GUI.draw.lineTo(28/80*s, 17/80*s);
+      GUI.draw.lineTo(17/80*s, 28/80*s);
+      GUI.draw.lineTo(12/80*s, 28/80*s);
+      GUI.draw.lineTo(12/80*s, 48/80*s);
+      GUI.draw.lineTo(-11/80*s, 48/80*s);
       GUI.draw.fill();
       if (a) {
         GUI.draw.rotate(-a*Math.PI/180);
