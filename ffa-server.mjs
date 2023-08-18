@@ -125,21 +125,22 @@ ffa.ws(SETTINGS.path, socket => {
   socket.send = data => socket._send(msgpack.encode(data));
   if (SETTINGS.banips.includes(socket.ip)) {
     socket.send({status: 'error', message: 'Your ip has been banned!'});
-    return setImmediate(() => socket.destroy());
+    return setImmediate(() => socket.close());
   }
   socket.on('message', async (data) => {
     incoming_per_second++;
     try {
       data = msgpack.decode(data);
     } catch(e) {
-      return socket.destroy();
+      console.log('Invalid data: '+data);
+      return socket.close();
     }
     if (!socket.username) {
-      if (/\s|:/.test(data.username)) return socket.destroy();
+      if (/\s|:/.test(data.username)) return socket.close();
       const ban = SETTINGS.bans.find(i => i.username === data.username);
       if (ban) {
         socket.send({status: 'error', message: `You are banned. Banned by ${ban.by} for ${ban.reason}. You are banned for ${ban.time} more minutes or until an admin unbans you. You were banned by an admin on this server, not the entire game, so you can join other servers.`});
-        return setImmediate(() => socket.destroy());
+        return setImmediate(() => socket.close());
       }
       socket.username = data.username;
     }
@@ -152,7 +153,7 @@ ffa.ws(SETTINGS.path, socket => {
           servers.push(joinable[0]);
         } else if (joinable[0].pt.some(t => t.username === socket.username)) {
           socket.send({status: 'error', message: 'You are already in the server!'});
-          return setImmediate(() => socket.destroy());
+          return setImmediate(() => socket.close());
         }
         socket.room = servers.indexOf(joinable[0]);
         joinable[0].add(socket, data.tank);
@@ -176,7 +177,7 @@ ffa.ws(SETTINGS.path, socket => {
     } else if (data.type === 'stats') {
       const players = servers.reduce((arr, s) => [...arr, ...s.pt.map(t => t.username)], []);
       socket.send({event: 'stats', totalRooms: servers.length, totalPlayers: players.length, players: players, bans: SETTINGS.bans, mutes: SETTINGS.mutes, admins: SETTINGS.admins, out: outgoing_per_second, in: incoming_per_second, sockets: sockets.length});
-    } else setTimeout(() => socket.destroy());
+    } else setTimeout(() => socket.close());
   });
   socket.on('close', (code, reason) => {
     if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
@@ -245,9 +246,7 @@ const Commands = {
     sockets.forEach(s => {
       if (!s.ip === ip) return;
       s.send({status: 'error', message: 'You were just ip banned!'});
-      setTimeout(() => {
-        s.destroy();
-      });
+      setTimeout(() => s.close());
     });
     servers[this.room].logs.push({m: data[1]+`'s ip, `+ip+`, has been banned.`, c: '#FF0000'});
   },
@@ -271,9 +270,7 @@ const Commands = {
     sockets.forEach(s => {
       if (s.username !== data[1]) return;
       s.send({status: 'error', message: 'You were just banned!'});
-      setTimeout(() => {
-        s.destroy();
-      });
+      setTimeout(() => s.close());
     });
   },
   bans: function(data) {
@@ -339,7 +336,7 @@ const Commands = {
     A.each(sockets, function(i, socket, data) {
       if (this.username === data[1]) {
         this.send({status: 'error', message: 'You have been kicked by '+socket.username});
-        setTimeout(function() {this.destroy()}.bind(this));
+        setTimeout(function() {this.close()}.bind(this));
       }
     }, null, null, this, data);
   },
