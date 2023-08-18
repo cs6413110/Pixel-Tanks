@@ -1186,7 +1186,7 @@ function Game() {
 
     static renderBottom(x, y, s, color, a=0) {
       if (a) {
-        GUI.draw.translate(x+40/80*w, y+40/80*w);
+        GUI.draw.translate(x+40/80*s, y+40/80*s);
         GUI.draw.rotate(a*Math.PI/180);
       }
       GUI.draw.fillStyle = color;
@@ -1199,13 +1199,13 @@ function Game() {
       GUI.draw.fill();
       if (a) {
         GUI.draw.rotate(-a*Math.PI/180);
-        GUI.draw.translate(-x-40/80*w, -y-40/80*w);
+        GUI.draw.translate(-x-40/80*s, -y-40/80*s);
       }
     }
 
     static renderTop(x, y, s, color, a=0) {
       if (a) {
-        GUI.draw.translate(x+40/80*w, y+40/80*w);
+        GUI.draw.translate(x+40/80*s, y+40/80*s);
         GUI.draw.rotate(a*Math.PI/180);
       }
       GUI.draw.fillStyle = color;
@@ -1226,7 +1226,7 @@ function Game() {
       GUI.draw.fill();
       if (a) {
         GUI.draw.rotate(-a*Math.PI/180);
-        GUI.draw.translate(-x-40/80*w, -y-40/80*w);
+        GUI.draw.translate(-x-40/80*s, -y-40/80*s);
       }
     }
 
