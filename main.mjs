@@ -29,7 +29,7 @@ const routes = {
     } else if (type === 'login') {
       if (item === null) return socket.send({status: 'error', message: 'This account does not exist.'});
       if (item.password !== password) return socket.send({status: 'error', message: 'Incorrect password.'});
-    } else return socket.destroy();
+    } else return;
     socket.send({status: 'success', token});
     tokens.add(`${token}:${username}`);
   },
@@ -58,7 +58,8 @@ app.ws('/', socket => {
     try {
       data = msgpack.decode(data);
     } catch (e) {
-      return socket.destroy();
+      console.log('Invalid Data: '+e);
+      return socket.close();
     }
     if (!socket.username) socket.username = data.username;
     try {
