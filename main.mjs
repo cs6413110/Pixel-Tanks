@@ -56,7 +56,7 @@ app.ws('/', socket => {
   socket.send = (data) => socket._send(msgpack.encode(data));
   socket.on('message', (data) => {
     try {
-      data = msgpack.decode(Buffer.from(data));
+      data = msgpack.decode(data);
     } catch (e) {
       return socket.destroy();
     }
