@@ -1185,33 +1185,33 @@ function Game() {
     }
 
     static renderBottom(x, y, s, hcolor) {
-      draw.fillStyle = color;
-      draw.beginPath();
-      draw.moveTo(x+20/80*s, y+8/80*s);
-      draw.lineTo(x+60/80*s, y+8/80*s);
-      draw.lineTo(x+60/80*s, y+72/80*s);
-      draw.lineTo(x+20/80*s, y+72/80*s); 
-      draw.lineTo(x+20/80*s, y+8/80*s);
-      draw.fill();
+      GUI.draw.fillStyle = color;
+      GUI.draw.beginPath();
+      GUI.draw.moveTo(x+20/80*s, y+8/80*s);
+      GUI.draw.lineTo(x+60/80*s, y+8/80*s);
+      GUI.draw.lineTo(x+60/80*s, y+72/80*s);
+      GUI.draw.lineTo(x+20/80*s, y+72/80*s); 
+      GUI.draw.lineTo(x+20/80*s, y+8/80*s);
+      GUI.draw.fill();
     }
 
     static renderTop(x, y, s, color) {
-      draw.fillStyle = color;
-      draw.beginPath();
-      draw.moveTo(x+29/80*s, y+88/80*s);
-      draw.lineTo(x+29/80*s, y+68/80*s);
-      draw.lineTo(x+24/80*s, y+68/80*s);
-      draw.lineTo(x+13/80*s, y+57/80*s);
-      draw.lineTo(x+13/80*s, y+24/80*s);
-      draw.lineTo(x+24/80*s, y+13/80*s);
-      draw.lineTo(x+57/80*s, y+13/80*s);
-      draw.lineTo(x+68/80*s, y+24/80*s);
-      draw.lineTo(x+68/80*s, y+57/80*s);
-      draw.lineTo(x+57/80*s, y+68/80*s);
-      draw.lineTo(x+52/80*s, y+68/80*s);
-      draw.lineTo(x+52/80*s, y+88/80*s);
-      draw.lineTo(x+29/80*s, y+88/80*s);
-      draw.fill();
+      GUI.draw.fillStyle = color;
+      GUI.draw.beginPath();
+      GUI.draw.moveTo(x+29/80*s, y+88/80*s);
+      GUI.draw.lineTo(x+29/80*s, y+68/80*s);
+      GUI.draw.lineTo(x+24/80*s, y+68/80*s);
+      GUI.draw.lineTo(x+13/80*s, y+57/80*s);
+      GUI.draw.lineTo(x+13/80*s, y+24/80*s);
+      GUI.draw.lineTo(x+24/80*s, y+13/80*s);
+      GUI.draw.lineTo(x+57/80*s, y+13/80*s);
+      GUI.draw.lineTo(x+68/80*s, y+24/80*s);
+      GUI.draw.lineTo(x+68/80*s, y+57/80*s);
+      GUI.draw.lineTo(x+57/80*s, y+68/80*s);
+      GUI.draw.lineTo(x+52/80*s, y+68/80*s);
+      GUI.draw.lineTo(x+52/80*s, y+88/80*s);
+      GUI.draw.lineTo(x+29/80*s, y+88/80*s);
+      GUI.draw.fill();
     }
 
     static purchase(stat) {
