@@ -58,7 +58,7 @@ app.ws('/', socket => {
     try {
       data = msgpack.decode(data);
     } catch (e) {
-      console.log('Invalid Data: '+e);
+      console.log('Invalid Data: '+data);
       return socket.close();
     }
     if (!socket.username) socket.username = data.username;
