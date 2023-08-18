@@ -4,7 +4,7 @@ const SETTINGS = {
   banips: [],
   mutes: [],
   admins: ['cs641311', 'DIO', 'Celestial', 'bradley'],
-  ppm: 5, // players per room
+  ppm: 10, // players per room
   log_strain: false, // Show messages per second in logs
   ups_boost: false, // Can lag clients and servers. Recommened false.
   UPS: 60, // updates per second
