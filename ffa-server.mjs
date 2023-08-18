@@ -130,7 +130,7 @@ ffa.ws(SETTINGS.path, socket => {
   socket.on('message', async (data) => {
     incoming_per_second++;
     try {
-      data = msgpack.decode(Buffer.from(data));
+      data = msgpack.decode(data);
     } catch(e) {
       return socket.destroy();
     }
