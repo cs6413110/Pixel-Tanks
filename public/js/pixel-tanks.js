@@ -1199,27 +1199,27 @@ function Game() {
       GUI.draw.translate(-x-40/80*s, -y-40/80*s);
     }
 
-    static renderTop(x, y, s, color, a=0, offset=0) {
-      GUI.draw.translate(x+40/80*s, y+offset+40/80*s);
+    static renderTop(x, y, s, color, a=0, p=0) {
+      GUI.draw.translate(x+40/80*s, y+40/80*s);
       GUI.draw.rotate(a*Math.PI/180);
       GUI.draw.fillStyle = color;
       GUI.draw.beginPath();
-      GUI.draw.moveTo(-11/80*s, 48/80*s);
-      GUI.draw.lineTo(-11/80*s, 28/80*s);
-      GUI.draw.lineTo(-16/80*s, 28/80*s);
-      GUI.draw.lineTo(-27/80*s, 17/80*s);
-      GUI.draw.lineTo(-27/80*s, -16/80*s);
-      GUI.draw.lineTo(-16/80*s, -27/80*s);
-      GUI.draw.lineTo(17/80*s, -27/80*s);
-      GUI.draw.lineTo(28/80*s, -16/80*s);
-      GUI.draw.lineTo(28/80*s, 17/80*s);
-      GUI.draw.lineTo(17/80*s, 28/80*s);
-      GUI.draw.lineTo(12/80*s, 28/80*s);
-      GUI.draw.lineTo(12/80*s, 48/80*s);
-      GUI.draw.lineTo(-11/80*s, 48/80*s);
+      GUI.draw.moveTo(-11/80*s, p+48/80*s);
+      GUI.draw.lineTo(-11/80*s, p+28/80*s);
+      GUI.draw.lineTo(-16/80*s, p+28/80*s);
+      GUI.draw.lineTo(-27/80*s, p+17/80*s);
+      GUI.draw.lineTo(-27/80*s, p-16/80*s);
+      GUI.draw.lineTo(-16/80*s, p-27/80*s);
+      GUI.draw.lineTo(17/80*s, p-27/80*s);
+      GUI.draw.lineTo(28/80*s, p-16/80*s);
+      GUI.draw.lineTo(28/80*s, p+17/80*s);
+      GUI.draw.lineTo(17/80*s, p+28/80*s);
+      GUI.draw.lineTo(12/80*s, p+28/80*s);
+      GUI.draw.lineTo(12/80*s, p+48/80*s);
+      GUI.draw.lineTo(-11/80*s, p+48/80*s);
       GUI.draw.fill();
       GUI.draw.rotate(-a*Math.PI/180);
-      GUI.draw.translate(-x-40/80*s, -y-offset-40/80*s);
+      GUI.draw.translate(-x-40/80*s, -y-40/80*s);
     }
 
     static purchase(stat) {
