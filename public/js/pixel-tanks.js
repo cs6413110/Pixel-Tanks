@@ -1199,8 +1199,8 @@ function Game() {
       GUI.draw.translate(-x-40/80*s, -y-40/80*s);
     }
 
-    static renderTop(x, y, s, color, a=0) {
-      GUI.draw.translate(x+40/80*s, y+40/80*s);
+    static renderTop(x, y, s, color, a=0, offset=0) {
+      GUI.draw.translate(x+40/80*s, y+offset+40/80*s);
       GUI.draw.rotate(a*Math.PI/180);
       GUI.draw.fillStyle = color;
       GUI.draw.beginPath();
@@ -1219,7 +1219,7 @@ function Game() {
       GUI.draw.lineTo(-11/80*s, 48/80*s);
       GUI.draw.fill();
       GUI.draw.rotate(-a*Math.PI/180);
-      GUI.draw.translate(-x-40/80*s, -y-40/80*s);
+      GUI.draw.translate(-x-40/80*s, -y-offset-40/80*s);
     }
 
     static purchase(stat) {
@@ -1431,7 +1431,7 @@ function Game() {
       const {x, y, role, r, baseRotation, baseFrame, pushback, cosmetic, hp, maxHp} = ai;
       if (role !== 0) PixelTanks.renderBase(x, y, 80, '#FF0000');
       GUI.drawImage(PixelTanks.images.tanks[role === 0 ? 'base' : 'bottom'+(baseFrame ? '' : '2')], x, y, 80, 80, 1, 40, 40, 0, 0, baseRotation);
-      PixelTanks.renderTop(x, y, 80, '#FF0000', r);
+      PixelTanks.renderTop(x, y, 80, '#FF0000', r, pushback);
       GUI.drawImage(PixelTanks.images.tanks.top, x, y, 80, 90, 1, 40, 40, 0, pushback, r);
       if (cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[cosmetic], x, y, 80, 90, 1, 40, 40, 0, pushback, r);
       GUI.draw.fillStyle = '#000000';
@@ -1451,7 +1451,7 @@ function Game() {
       GUI.drawImage(PixelTanks.images.tanks['bottom'+(t.baseFrame ? '' : '2')], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
       if (t.fire) GUI.drawImage(PixelTanks.images.animations.fire, t.x, t.y, 80, 80, 1, 0, 0, 0, 0, 0, t.fire.frame*29, 0, 29, 29);
       GUI.draw.globalAlpha = a;
-      PixelTanks.renderTop(t.x, t.y+t.pushback, 80, t.color, t.r);
+      PixelTanks.renderTop(t.x, t.y, 80, t.color, t.r, t.pushback);
       GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.invis && t.username !== PixelTanks.user.username) return;
