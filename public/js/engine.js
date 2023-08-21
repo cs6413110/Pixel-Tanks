@@ -190,7 +190,7 @@ class Engine {
       if (t.immune && !t.ded) for (const tank of this.pt) {
         if (!tank.canBashed) continue;
         if ((t.class === 'warrior' && this.getTeam(t.team) !== this.getTeam(tank.team)) || (t.class === 'medic' && this.getTeam(t.team) === this.getTeam(tank.team))) {
-          if (!collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80) && t.username !== tank.username) continue;
+          if (!collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) continue;
           this.damagePlayer(tank, { x: tank.x, y: tank.y, u: t.username, a: t.class === 'warrior' ? 100 : -30 });
           tank.canBashed = false;
           setTimeout(() => {
@@ -272,7 +272,7 @@ class Engine {
   }
 
   damagePlayer(victim, damage) {
-    if (victim.immune || victim.ded) return;
+    if ((victim.immune && damage.a > 0) || victim.ded) return;
     if (victim.shields > 0 && damage.a > 0) return victim.shields -= damage.a;
     if (victim.buff) damage.a *= .8;
     victim.hp = Math.min(victim.maxHp, victim.hp - damage.a);
