@@ -1446,10 +1446,12 @@ function Game() {
       let a = 1;
       if (t.invis && !p && !this.ded) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
       if ((t.invis && p) || t.ded) a = .5;
-      PixelTanks.renderBottom(t.x, t.y, 80, t.color, t.baseRotation);
+      GUI.draw.globalAlpha = a;
+      PixelTanks.renderBottom(t.x, t.y+t.pushback, 80, t.color, t.baseRotation);
       GUI.drawImage(PixelTanks.images.tanks['bottom'+(t.baseFrame ? '' : '2')], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
       if (t.fire) GUI.drawImage(PixelTanks.images.animations.fire, t.x, t.y, 80, 80, 1, 0, 0, 0, 0, 0, t.fire.frame*29, 0, 29, 29);
-      PixelTanks.renderTop(t.x, t.y, 80, t.color, t.r);
+      GUI.draw.globalAlpha = a;
+      PixelTanks.renderTop(t.x, t.y+t.pushback, 80, t.color, t.r);
       GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.invis && t.username !== PixelTanks.user.username) return;
