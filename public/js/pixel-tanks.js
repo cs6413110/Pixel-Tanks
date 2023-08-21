@@ -1444,7 +1444,7 @@ function Game() {
     drawTank(t) {
       const p = t.username === PixelTanks.user.username;
       let a = 1;
-      if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
+      if (t.invis && !p && !this.ded) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
       if ((t.invis && p) || t.ded) a = .5;
       PixelTanks.renderBottom(t.x, t.y, 80, t.color, t.baseRotation);
       GUI.drawImage(PixelTanks.images.tanks['bottom'+(t.baseFrame ? '' : '2')], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
@@ -1454,7 +1454,7 @@ function Game() {
       if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.invis && t.username !== PixelTanks.user.username) return;
 
-      if (!t.ded && this.team.split(':')[1].replace('@leader', '') === t.team.split(':')[1].replace('@leader', '')) {
+      if ((!t.ded && this.team.split(':')[1].replace('@leader', '') === t.team.split(':')[1].replace('@leader', '')) || this.ded) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
         GUI.draw.fillStyle = '#00FF00';
@@ -1559,6 +1559,7 @@ function Game() {
         player.baseRotation = this.tank.baseRotation;
         player.baseFrame = this.tank.baseFrame;
         this.team = player.team;
+        this.ded = player.ded;
       }
       GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-this.tank.x+760)*PixelTanks.resizer, (-this.tank.y+460)*PixelTanks.resizer);
 
