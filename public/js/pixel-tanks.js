@@ -1737,7 +1737,7 @@ function Game() {
       var l = 0, blocks = this.hostupdate.blocks, len = blocks.length;
       while (l<len) {
         if ((x > blocks[l].x || x + 80 > blocks[l].x) && (x < blocks[l].x + 100 || x + 80 < blocks[l].x + 100) && (y > blocks[l].y || y + 80 > blocks[l].y) && (y < blocks[l].y + 100 || y + 80 < blocks[l].y + 100)) {
-          if (['barrier', 'weak', 'strong', 'gold', 'void'].includes(blocks[l].type) || blocks[l].type === 'fortress' && blocks[l].team.split(':')[0] !== PixelTanks.user.username) return false;
+          if (['barrier', 'weak', 'strong', 'gold', 'void'].includes(blocks[l].type) || blocks[l].type === 'fortress' && blocks[l].team.split(':')[0].replace('@leader', '') !== this.team) return false;
         }
         l++;
       }
