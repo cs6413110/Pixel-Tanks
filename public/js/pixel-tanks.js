@@ -1456,7 +1456,7 @@ function Game() {
       if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.invis && t.username !== PixelTanks.user.username) return;
 
-      if ((!t.ded && this.team.split(':')[1].replace('@leader', '') === t.team.split(':')[1].replace('@leader', '')) || this.ded) {
+      if ((!t.ded && this.team.split(':')[1].replace('@leader', '') === t.team.split(':')[1].replace('@leader', '')) || (this.ded && !t.ded)) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
         GUI.draw.fillStyle = '#00FF00';
