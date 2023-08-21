@@ -1552,12 +1552,14 @@ function Game() {
       this.tank.baseRotation = (this.left === null) ? (this.up ? 180 : 0) : (this.left ? (this.up === null ? 90 : (this.up ? 135 : 45)) : (this.up === null ? 270 : (this.up ? 225: 315)));
 
       const player = t.find(tank => tank.username === PixelTanks.user.username);
-      player.x = this.tank.x;
-      player.y = this.tank.y;
-      player.r = this.tank.r;
-      player.baseRotation = this.tank.baseRotation;
-      player.baseFrame = this.tank.baseFrame;
-      this.team = tank.team;
+      if (player) {
+        player.x = this.tank.x;
+        player.y = this.tank.y;
+        player.r = this.tank.r;
+        player.baseRotation = this.tank.baseRotation;
+        player.baseFrame = this.tank.baseFrame;
+        this.team = player.team;
+      }
       GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-this.tank.x+760)*PixelTanks.resizer, (-this.tank.y+460)*PixelTanks.resizer);
 
       GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
