@@ -365,7 +365,7 @@ class Shot {
 
   static calc(x, y, xm, ym) {
     const r = 40;
-    const a = xm !== 0 ? ym / xm : 0;
+    const a = xm === 0 ? (ym >= 0 ? 0 : 1) : ym / xm;
     const b = a > 0 ? -1 : 1;
     const c = Math.sqrt(r ** 2 + (r * a) ** 2);
     const d = Math.sqrt(1100 * c ** 2);
