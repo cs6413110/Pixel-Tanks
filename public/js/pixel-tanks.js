@@ -1454,7 +1454,7 @@ function Game() {
       if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.invis && t.username !== PixelTanks.user.username) return;
 
-      if (!t.ded) {
+      if (!t.ded && this.team.split(':')[1].replace('@leader', '') === t.team.split(':')[1].replace('@leader', '')) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
         GUI.draw.fillStyle = '#00FF00';
@@ -1552,13 +1552,12 @@ function Game() {
       this.tank.baseRotation = (this.left === null) ? (this.up ? 180 : 0) : (this.left ? (this.up === null ? 90 : (this.up ? 135 : 45)) : (this.up === null ? 270 : (this.up ? 225: 315)));
 
       const player = t.find(tank => tank.username === PixelTanks.user.username);
-      try {
-        player.x = this.tank.x;
-      } catch(e) {console.log(JSON.stringify(this.hostupdate))}
+      player.x = this.tank.x;
       player.y = this.tank.y;
       player.r = this.tank.r;
       player.baseRotation = this.tank.baseRotation;
       player.baseFrame = this.tank.baseFrame;
+      this.team = tank.team;
       GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-this.tank.x+760)*PixelTanks.resizer, (-this.tank.y+460)*PixelTanks.resizer);
 
       GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
