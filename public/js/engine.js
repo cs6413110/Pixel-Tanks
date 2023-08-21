@@ -189,13 +189,14 @@ class Engine {
       if (t.fire && this.getTeam(t.fire.team) !== this.getTeam(t.team)) this.damagePlayer(t, { x: t.x, y: t.y, u: this.getUsername(t.fire.team), a: .5 });
       for (const tank of this.pt) {
         if (!t.immune || !tank.canBashed || t.ded) continue;
-        if (!((t.class === 'warrior' && this.getTeam(t.team) !== this.getTeam(tank.team)) || (t.class === 'medic' && this.getTeam(t.team) === this.getTeam(tank.team)))) continue;
-        if (!collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) continue;
-        this.damagePlayer(tank, { x: tank.x, y: tank.y, u: t.username, a: t.class === 'warrior' ? 100 : -30 });
-        tank.canBashed = false;
-        setTimeout(() => {
-          tank.canBashed = true;
-        }, 400);
+        if ((t.class === 'warrior' && this.getTeam(t.team) !== this.getTeam(tank.team) || (t.class === 'medic' && this.getTeam(t.team) === this.getTeam(tank.team)) {
+          if (!collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) continue;
+          this.damagePlayer(tank, { x: tank.x, y: tank.y, u: t.username, a: t.class === 'warrior' ? 100 : -30 });
+          tank.canBashed = false;
+          setTimeout(() => {
+            tank.canBashed = true;
+          }, 400);
+        }
       }
       for (let i = this.b.length-1; i >= 0; i--) {
         const b = this.b[i];
