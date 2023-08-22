@@ -246,13 +246,13 @@ class Engine {
 
 class Tank {
   constructor(data, host) {
+    if (data.socket) this.socket = data.socket; // multiplayer patch
     this.username = data.username;
     this.rank = data.rank;
     this.class = data.class;
     this.cosmetic = data.cosmetic;
     this.deathEffect = this.deathEffect;
     this.color = data.color;
-
     this.damage = false;
     this.maxHp = data.rank*10+300;
     this.hp = this.maxHp;
