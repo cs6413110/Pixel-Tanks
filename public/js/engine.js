@@ -57,8 +57,8 @@ class Engine {
   }
 
   update(data) {
-    data = data.data;
     const t = this.pt.find(t => t.username === data.username);
+    data = data.data;
     if (t === undefined) return;
     const { emote, r, baseFrame, use, x, y, fire, airstrike} = data;
     if ((t.emote !== emote || t.r !== r || t.baseFrame !== baseFrame || use.length || fire.length) || (!t.grapple && (t.x !== x || t.y !== y))) t.deathsPerMovement = 0;
