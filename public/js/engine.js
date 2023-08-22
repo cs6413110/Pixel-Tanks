@@ -225,7 +225,7 @@ class Engine {
         }
       }
       if (t.damage) t.damage.y--;
-      if (t.grapple) t.grapple();
+      if (t.grapple) t.grappleCalc();
     }
   }
 
@@ -282,7 +282,7 @@ class Tank {
     if (this.hp <= 0 && this.ondeath) this.ondeath(this, this.pt.find(t => t.username === damage.u));
   }
 
-  grapple() {
+  grappleCalc() {
     const dx = this.grapple.target.x - this.x;
     const dy = this.grapple.target.y - this.y;
     if (dx ** 2 + dy ** 2 > 400) {
