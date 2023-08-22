@@ -255,7 +255,7 @@ class Tank {
         set(v) {
           this.setValue(p, v);
         },
-        writeable: true,
+        configurable: true,
       });
     });
     if (data.socket) this.socket = data.socket; // multiplayer patch
@@ -341,7 +341,7 @@ class Block {
         set(v) {
           this.setValue(p, v);
         },
-        writeable: true,
+        configurable: true,
       });
     });
     this.id = Math.random();
@@ -410,7 +410,7 @@ class Shot {
         set(v) {
           this.setValue(p, v);
         },
-        writeable: true,
+        configurable: true,
       });
     });
     this.id = Math.random();
@@ -593,7 +593,7 @@ class Damage {
         set(v) {
           this.setValue(p, v);
         },
-        writeable: true,
+        configurable: true,
       });
     });
     this.id = Math.random();
@@ -635,7 +635,7 @@ class AI {
         set(v) {
           this.setValue(p, v);
         },
-        writeable: true,
+        configurable: true,
       });
     });
     this.id = Math.random();
