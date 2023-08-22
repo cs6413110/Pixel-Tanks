@@ -1293,7 +1293,6 @@ function Game() {
           this.ups++;
           switch (data.event) {
             case 'hostupdate':
-              alert(JSON.stringify(data));
               this.hostupdate.tickspeed = data.tickspeed;
               this.hostupdate.logs = data.logs.reverse();
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
@@ -1306,7 +1305,6 @@ function Game() {
                   }
                 }
               });
-              alert('result: '+JSON.stringify(this.hostupdate));
               break;
             case 'ded':
               this.reset();
