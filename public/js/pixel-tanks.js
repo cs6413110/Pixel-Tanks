@@ -1252,7 +1252,14 @@ function Game() {
       this.crates = 0;
       this.kills = 0;
       this.coins = 0;
-      this.hostupdate = {};
+      this.hostupdate = {
+        b: [],
+        s: [],
+        pt: [],
+        d: [],
+        ai: [],
+        logs: [],
+      };
       this.paused = false;
       this.speed = 4;
       this.key = [];
@@ -1286,8 +1293,19 @@ function Game() {
           this.ups++;
           switch (data.event) {
             case 'hostupdate':
-              if (data.logs) data.logs.reverse();
-              for (const property in data) this.hostupdate[property] = data[property];
+              this.hostupdate.tickspeed = data.tickspeed;
+              this.hostupdate.logs = data.logs.reverse();
+              ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
+                if (!data[p]) return;
+                for (const e of data[p]) {
+                  const entity = this.hostupdate[p].find(v => v.id = data[p][e].id);
+                  if (!entity) {
+                    this.hostupdate[p].push(data[p][e]);
+                  } else {
+                    entity = data[p][e];
+                  }
+                }
+              });
               break;
             case 'ded':
               this.reset();
@@ -1394,7 +1412,7 @@ function Game() {
 
     drawBlock(b) {
       const size = b.type === 'airstrike' ? 200 : 100;
-      GUI.drawImage(PixelTanks.images.blocks[b.type], b.x, b.y, size, size, (b.type === 'mine' && this.hostupdate.tanks.find(t => t.username === PixelTanks.user.username).team.split(':')[1].replace('@leader', '') !== b.team.split(':')[1].replace('@leader', '')) ? .03 : 1);
+      GUI.drawImage(PixelTanks.images.blocks[b.type], b.x, b.y, size, size, (b.type === 'mine' && this.hostupdate.pt.find(t => t.username === PixelTanks.user.username).team.split(':')[1].replace('@leader', '') !== b.team.split(':')[1].replace('@leader', '')) ? .03 : 1);
     }
 
     drawShot(s) {
@@ -1413,7 +1431,7 @@ function Game() {
         GUI.draw.beginPath();
         GUI.draw.strokeStyle = '#A9A9A9';
         GUI.draw.moveTo(s.x, s.y);
-        const t = this.hostupdate.tanks.find(t => t.username === s.team.split(':')[0]);
+        const t = this.hostupdate.pt.find(t => t.username === s.team.split(':')[0]);
         if (t) GUI.draw.lineTo(t.x+40, t.y+40);
         GUI.draw.stroke();
       } else if (s.type === 'dynamite') {
@@ -1510,7 +1528,7 @@ function Game() {
       if (t.animation) GUI.drawImage(PixelTanks.images.animations[t.animation.id], t.x, t.y, 80, 90, 1, 0, 0, 0, 0, 0, t.animation.frame*40, 0, 40, 45);
 
       if (t.healing && !t.ded) {
-        const target = this.hostupdate.tanks.find(tank => tank.username === t.healing);
+        const target = this.hostupdate.pt.find(tank => tank.username === t.healing);
         if (Math.sqrt((target.x-t.x)**2+(target.y-t.y)**2) > 500) return;
         GUI.draw.beginPath();
         GUI.draw.lineWidth = 10;
@@ -1526,12 +1544,12 @@ function Game() {
     frame() {
       this.render = requestAnimationFrame(this.frame.bind(this));
       GUI.clear();
-      if (this.hostupdate.tanks === undefined) {
+      if (this.hostupdate.pt === undefined) {
         GUI.draw.fillStyle = '#000000';
         return GUI.draw.fillText('Loading Terrain...', 100, 100);
       }
       this.fps++;
-      const t = this.hostupdate.tanks, b = this.hostupdate.blocks, s = this.hostupdate.bullets, a = this.hostupdate.ai, e = this.hostupdate.explosions;
+      const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
       if (this.dx) {
         var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : (this.buffed ? 1.5 : 1));
         if (this.collision(x, this.tank.y)) {
@@ -1723,10 +1741,10 @@ function Game() {
 
     collision(x, y) {
       var l = 0, team;
-      while (l < this.hostupdate.tanks.length) {
-        if (this.hostupdate.tanks[l].username === PixelTanks.user.username) {
-          team = this.hostupdate.tanks[l].team.split(':')[1].replace('@leader', '').replace('@requestor#', '');
-          if (this.hostupdate.tanks[l].ded) return true;
+      while (l < this.hostupdate.pt.length) {
+        if (this.hostupdate.pt[l].username === PixelTanks.user.username) {
+          team = this.hostupdate.pt[l].team.split(':')[1].replace('@leader', '').replace('@requestor#', '');
+          if (this.hostupdate.pt[l].ded) return true;
         }
         l++;
       }
@@ -1734,7 +1752,7 @@ function Game() {
       if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return false;
 
       if (this.tank.invis && this.tank.immune) return true;
-      var l = 0, blocks = this.hostupdate.blocks, len = blocks.length;
+      var l = 0, blocks = this.hostupdate.b, len = blocks.length;
       while (l<len) {
         if ((x > blocks[l].x || x + 80 > blocks[l].x) && (x < blocks[l].x + 100 || x + 80 < blocks[l].x + 100) && (y > blocks[l].y || y + 80 > blocks[l].y) && (y < blocks[l].y + 100 || y + 80 < blocks[l].y + 100)) {
           if (['barrier', 'weak', 'strong', 'gold', 'void'].includes(blocks[l].type) || blocks[l].type === 'fortress' && blocks[l].team.split(':')[0].replace('@leader', '') !== this.team.split(':')[0].replace('@leader', '')) return false;
@@ -1948,11 +1966,11 @@ function Game() {
       } else {
         this.world.update(updateData);
         this.hostupdate = {
-          tanks: this.world.pt,
-          blocks: this.world.b,
-          bullets: this.world.s,
+          pt: this.world.pt,
+          b: this.world.b,
+          s: this.world.s,
           ai: this.world.ai,
-          explosions: this.world.d,
+          d: this.world.d,
           logs: this.world.logs.reverse(),
         }
       }
