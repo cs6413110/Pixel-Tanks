@@ -276,7 +276,7 @@ class Tank {
     if ((this.immune && a > 0) || this.ded) return;
     if (this.shields > 0 &&  a > 0) return this.shields -= a;
     if (this.buff) a *= .8;
-    this.hp = Math.max(Math.min(this.maxHp, this.hp-a), 0);
+    this.hp = Math.min(this.maxHp, this.hp-a);
     if (this.damage) clearTimeout(this.damage.ti);
     this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y, ti: setTimeout(() => {this.damage = false}, 1000)};
     if (this.hp <= 0 && this.ondeath) this.ondeath(this, this.pt.find(t => t.username === u));
