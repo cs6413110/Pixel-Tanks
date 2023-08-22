@@ -294,10 +294,14 @@ class Tank {
       this.grapple.bullet.sx = this.x+40;
       this.grapple.bullet.sy = this.y+40;
       this.host.override(this, [{ key: 'x', value: this.x }, { key: 'y', value: this.y }]);
-      if (!((!this.collision(this.x+mx, this.y) || Math.abs(mx) < 2) && (!this.collision(this.x, this.y+my) || Math.abs(my) < 2))) return;
-    } else return;
+      if ((!this.collision(this.x+mx, this.y) || Math.abs(mx) < 2) && (!this.collision(this.x, this.y+my) || Math.abs(my) < 2)) {
+        this.grapple.bullet.destroy();
+        this.grapple = false;
+      }
+    } else {
       this.grapple.bullet.destroy();
       this.grapple = false;
+    }
   }
 
   collision(x, y) {
