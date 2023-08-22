@@ -1306,6 +1306,7 @@ function Game() {
                   }
                 }
               });
+              alert('result: '+JSON.stringify(this.hostupdate));
               break;
             case 'ded':
               this.reset();
