@@ -267,8 +267,6 @@ class Tank {
     this.baseRotation = 0;
     this.baseFrame = 0;
     this.fire = false;
-    this.damage = false;
-    this.animation = false;
     this.healing = data.username;
     this.host = host;
     host.override(this);
@@ -278,10 +276,10 @@ class Tank {
     if ((this.immune && a > 0) || this.ded) return;
     if (this.shields > 0 &&  a > 0) return this.shields -= a;
     if (this.buff) a *= .8;
-    this.hp = Math.max(Math.min(this.maxHp, this.hp-damage.a), 0);
+    this.hp = Math.max(Math.min(this.maxHp, this.hp-a), 0);
     if (this.damage) clearTimeout(this.damage.ti);
     this.damage = {d: (victim.damage ? victim.damage.d : 0)+a, x, y, ti: setTimeout(() => {this.damage = false}, 1000)};
-    if (this.hp <= 0 && this.ondeath) this.ondeath(this, this.pt.find(t => t.username === damage.u));
+    if (this.hp <= 0 && this.ondeath) this.ondeath(this, this.pt.find(t => t.username === u));
   }
 
   grappleCalc() {
