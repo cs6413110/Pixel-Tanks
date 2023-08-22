@@ -343,7 +343,7 @@ const Commands = {
   kill: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length != 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    for (const s of servers) for (const t of s.pt) if (data[1] === t.username) t.damage(t.x, t.y, 6000, this.username);
+    for (const s of servers) for (const t of s.pt) if (data[1] === t.username) t.damageCalc(t.x, t.y, 6000, this.username);
   },
   cosmetic: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
