@@ -267,6 +267,8 @@ class Tank {
     this.baseRotation = 0;
     this.baseFrame = 0;
     this.fire = false;
+    this.damage = false;
+    this.animation = false;
     this.healing = data.username;
     this.host = host;
     host.override(this);
