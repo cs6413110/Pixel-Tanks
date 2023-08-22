@@ -419,7 +419,7 @@ class Multiplayer extends Engine {
     const view = {x: -860, y: -560, w: 1880, h: 1280};
     for (const t of this.pt) {
       const message = {blocks: [], tanks: [], ai: [], bullets: [], explosions: [], logs: this.logs, tickspeed, event: 'hostupdate'};
-      console.log(b);
+      console.log(this.b);
       for (const b of this.b) if (A.collider(b.x, b.y, 100, 100, t.x+view.x, t.y+view.y, view.w, view.h)) message.blocks.push(b.raw);
       for (const pt of this.pt) if (A.collider(pt.x, pt.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.tanks.push({...pt, updates: undefined, socket: undefined, render: undefined, healInterval: undefined, healTimeout: undefined, flashbangTimeout: undefined, grapple: undefined, gluInterval: undefined, damage: {...pt.damage, ti: undefined}, damageCalc: undefined, grappleCalc: undefined, gluTimeout: undefined, host: undefined, fireTimeout: undefined, fireInterval: undefined});
       for (const ai of this.ai) if (A.collider(ai.x, ai.y, 80, 80, t.x+view.x, t.y+view.y, view.w, view.h)) message.ai.push({...ai, team: undefined, host: undefined, canFire: undefined, target: undefined});
