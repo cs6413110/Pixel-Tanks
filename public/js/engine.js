@@ -314,6 +314,7 @@ class Tank {
 class Block {
   constructor(x, y, health, type, team, host) {
     this.id = Math.random();
+    this.raw = {};
     this.updatedLast = Date.now();
     this.x = x;
     this.y = y;
