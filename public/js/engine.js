@@ -309,6 +309,8 @@ class Tank {
 
 class Block {
   constructor(x, y, health, type, team, host) {
+    this.id = Math.random();
+    this.updatedLast = Date.now();
     this.x = x;
     this.y = y;
     this.maxHp = health;
@@ -332,6 +334,23 @@ class Block {
         this.a = true;
       }, 3000);
     }
+    ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team'].forEach(p => {
+      Object.defineProperty(this, p, {
+        get() {
+          return this.raw[p];
+        },
+        set(v) {
+          this.setValue(p, v);
+        },
+      });
+    });
+  }
+
+  setValue(p, v) {
+    if (this.raw[p] === v) return;
+    this.updatedLast = Date.now();
+    this.raw[p] = v;
+    this.raw[p] = v;
   }
 
   damage(d) {
@@ -358,6 +377,7 @@ class Shot {
   constructor(x, y, xm, ym, type, rotation, team, host) {
     const settings = { damage: { bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -100, dynamite: 0, fire: 0 }, speed: { bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9 } };
     const t = host.pt.find(t => t.username === getUsername(team));
+    this.id = Math.random();
     this.damage = settings.damage[type] * t.maxHp / 500 * (t.buff ? 1.2 : 1);
     this.team = team;
     this.r = rotation;
@@ -522,6 +542,7 @@ class Shot {
 
 class Damage {
   constructor(x, y, w, h, a, team, host) {
+    this.id = Math.random();
     this.x = x;
     this.y = y;
     this.w = w;
@@ -545,6 +566,7 @@ class Damage {
 
 class AI {
   constructor(x, y, role, rank, team, host) {
+    this.id = Math.random();
     this.role = role;
     this.x = x;
     this.y = y;
