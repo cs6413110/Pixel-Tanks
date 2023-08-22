@@ -9,30 +9,6 @@ const toPoint = angle => {
   return x === 0 ? {x, y: y/Math.abs(y)} : {x: x/Math.abs(x), y: y/Math.abs(x)}
 }
 
-class Compute {
-  static initialize(t) {
-    this.workers = [];
-    for (let i = 0; i < t; i++) this.pushWorker();
-  }
-
-  static async pushWorker() {
-    const worker = await spawn(new Worker('./compute.js'));
-    worker.ready = true;
-    this.workers.push(worker);
-    return worker;
-  }
-
-  static async pushWork(id, ...params) {
-    let worker = this.workers.find(w => w.ready);
-    if (!worker) worker = this.pushWorker();
-    worker.ready = false;
-    const output = await worker[id](...params);
-    worker.ready = true;
-    return output;
-  }
-}
-//Compute.initialize(4);
-
 class Engine {
   constructor(levels) {
     this.spawn = { x: 0, y: 0 };
@@ -690,11 +666,11 @@ class AI {
       const paths = coords.slice(0, Math.min(5, coords.length));
       const r = this.choosePath(paths.length);
       const { x, y } = paths[r];
-      const p = Compute.pushWork('pathfind', sx, sy, x, y, this.host.map.clone());
+      //const p = Compute.pushWork('pathfind', sx, sy, x, y, this.host.map.clone());
       if (!limiter.includes(p.length)) {
         coords.splice(r, 1);
         i++;
-        if (i >= 5 && mode !== 0) return this.path = {p: Compute.pushWork('pathfind', sx, sy, tx, ty, this.host.map.clone()).slice(0, 5), m: this.mode, t: Date.now(), o: Date.now()};
+        //if (i >= 5 && mode !== 0) return this.path = {p: Compute.pushWork('pathfind', sx, sy, tx, ty, this.host.map.clone()).slice(0, 5), m: this.mode, t: Date.now(), o: Date.now()};
         if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now(), o: Date.now()};
       } else {
         this.path = { p, m: this.mode, t: Date.now(), o: Date.now()};
@@ -748,13 +724,13 @@ class AI {
       }
     }
     targets.sort((a, b) => a.distance - b.distance);
-    for (const t of targets) if (Compute.pushWork('raycast', this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) {
+    for (const t of targets) //if (Compute.pushWork('raycast', this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) {
       target = t;
       break;
     }
     if (this.role === 3 && !this.bond && allies.length > 0) {
       allies.sort((a, b) => a.distance - b.distance);
-      for (const a of allies) if (Compute.pushWork('raycast', this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) {
+      for (const a of allies) //if (Compute.pushWork('raycast', this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) {
         this.bond = a;
         break;
       }
