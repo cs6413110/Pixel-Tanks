@@ -346,7 +346,7 @@ class Block {
 class Shot {
   constructor(x, y, xm, ym, type, rotation, team, host) {
     const settings = { damage: { bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -100, dynamite: 0, fire: 0 }, speed: { bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9 } };
-    const t = host.pt.find(t => t.username === host.getUsername(team));
+    const t = host.pt.find(t => t.username === getUsername(team));
     this.damage = settings.damage[type] * t.maxHp / 500 * (t.buff ? 1.2 : 1);
     this.team = team;
     this.r = rotation;
@@ -387,7 +387,7 @@ class Shot {
       if (t.ded || !collision(x, y, 10, 10, t.x, t.y, 80, 80)) continue;
       if (type === 'grapple') {
         if (t.grapple) t.grapple.bullet.destroy();
-        t.grapple = { target: host.pt.find(tank => tank.username === host.getUsername(this.team)), bullet: this };
+        t.grapple = { target: host.pt.find(tank => tank.username === getUsername(this.team)), bullet: this };
         this.target = t;
         this.offset = [t.x - x, t.y - y];
         this.update = () => {
@@ -414,8 +414,8 @@ class Shot {
       } else {
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
-        } else if (host.getTeam(t.team) !== host.getTeam(this.team)) {
-          host.damagePlayer(t, { a: this.damage, x: x, y: y, u: host.getUsername(this.team) });
+        } else if (getTeam(t.team) !== getTeam(this.team)) {
+          host.damagePlayer(t, { a: this.damage, x: x, y: y, u: getUsername(this.team) });
         }
         return true;
       }
@@ -435,7 +435,7 @@ class Shot {
       } else {
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
-        } else if (host.getTeam(ai.team) !== host.getTeam(this.team)) {
+        } else if (getTeam(ai.team) !== getTeam(this.team)) {
           ai.damage(this.damage);
         }
         return true;
@@ -446,21 +446,21 @@ class Shot {
       const b = blocks[i];
       if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
       if (type === 'grapple') {
-        if (b.type === 'fortress' && host.getTeam(b.team) === host.getTeam(this.team)) return false;
-        const t = this.host.pt.find(t => t.username === host.getUsername(this.team));
+        if (b.type === 'fortress' && getTeam(b.team) === getTeam(this.team)) return false;
+        const t = this.host.pt.find(t => t.username === getUsername(this.team));
         if (t.grapple) t.grapple.bullet.destroy();
         t.grapple = { target: b, bullet: this };
         this.update = () => {};
         return false;
       } else if (type === 'dynamite') {
-        if (b.type === 'fortress' && host.getTeam(b.team) === host.getTeam(this.team)) return false;
+        if (b.type === 'fortress' && getTeam(b.team) === getTeam(this.team)) return false;
         this.update = () => {}
         return false;
       } else if (type === 'fire') {
         host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
         return true;
       } else {
-        if (b.type === 'fortress' && host.getTeam(b.team) === host.getTeam(this.team)) return false;
+        if (b.type === 'fortress' && getTeam(b.team) === getTeam(this.team)) return false;
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
         } else {
@@ -472,7 +472,7 @@ class Shot {
 
     if (x < 0 || x > 3000 || y < 0 || y > 3000) {
       if (type === 'grapple') {
-        const t = host.pt.find(t => t.username === host.getUsername(this.team));
+        const t = host.pt.find(t => t.username === getUsername(this.team));
         if (t.grapple) t.grapple.bullet.destroy();
         t.grapple = { target: { x: x, y: y }, bullet: this };
         this.update = () => { };
@@ -519,9 +519,9 @@ class Damage {
     this.team = team;
     this.host = host;
     this.f = 0;
-    for (const t of host.pt) if (host.getUsername(team) !== host.getUsername(t.team)) if (collision(x, y, w, h, t.x, t.y, 80, 80)) host.damagePlayer(t, { ...this, u: host.getUsername(team), a: host.getTeam(team) !== host.getTeam(t.team) ? Math.abs(a) : Math.min(0, a)});
+    for (const t of host.pt) if (getUsername(team) !== getUsername(t.team)) if (collision(x, y, w, h, t.x, t.y, 80, 80)) host.damagePlayer(t, { ...this, u: getUsername(team), a: getTeam(team) !== getTeam(t.team) ? Math.abs(a) : Math.min(0, a)});
     for (let i = host.b.length-1; i >= 0; i--) if (collision(x, y, w, h, host.b[i].x, host.b[i].y, 100, 100)) host.b[i].damage(a);
-    for (let i = host.ai.length-1; i >= 0; i--) if (host.getTeam(host.ai[i].team) !== host.getTeam(team)) host.ai[i].damage(a);
+    for (let i = host.ai.length-1; i >= 0; i--) if (getTeam(host.ai[i].team) !== getTeam(team)) host.ai[i].damage(a);
     setInterval(() => this.f++, 18);
     setTimeout(() => this.destroy(), 200);
   }
@@ -561,7 +561,7 @@ class AI {
     this.immune = false;
     this.item = '';
     this.class = '';
-    const t = host.pt.find(t => t.username === host.getUsername(this.team));
+    const t = host.pt.find(t => t.username === getUsername(this.team));
     this.cosmetic = t ? t.cosmetic : '';
   }
 
@@ -735,7 +735,7 @@ class AI {
     let target = false;
     for (const t of host.pt) {
       if (!t.ded) {
-        if (host.getTeam(team) === host.getTeam(t.team)) {
+        if (getTeam(team) === getTeam(t.team)) {
           allies.push({x: t.x, y: t.y, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
         } else {
           targets.push({x: t.x, y: t.y, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
@@ -743,7 +743,7 @@ class AI {
       }
     }
     for (const ai of host.ai) {
-      if (host.getTeam(team) === host.getTeam(ai.team)) {
+      if (getTeam(team) === getTeam(ai.team)) {
         allies.push({x: ai.x, y: ai.y, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
       } else {
         targets.push({x: ai.x, y: ai.y, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
