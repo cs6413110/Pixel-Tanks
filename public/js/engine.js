@@ -355,7 +355,7 @@ class Block {
     if (this.raw[p] === v) return;
     this.updatedLast = Date.now();
     this.raw[p] = v;
-    this.raw[p] = v;
+    this[p] = v;
   }
 
   damage(d) {
@@ -548,6 +548,7 @@ class Shot {
 class Damage {
   constructor(x, y, w, h, a, team, host) {
     this.id = Math.random();
+    this.raw = {};
     this.x = x;
     this.y = y;
     this.w = w;
