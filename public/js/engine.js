@@ -188,12 +188,12 @@ class Engine {
         } else if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + .2, tank.maxHp);
       }
       if (t.pushback !== 0) t.pushback += 0.5;
-      if (t.fire && getTeam(t.fire.team) !== getTeam(t.team)) t.damage(t.x, t.y, .5, getUsername(t.fire.team));
+      if (t.fire && getTeam(t.fire.team) !== getTeam(t.team)) t.damageCalc(t.x, t.y, .5, getUsername(t.fire.team));
       if (t.immune && !t.ded) for (const tank of this.pt) {
         if (!tank.canBashed) continue;
         if ((t.class === 'warrior' && getTeam(t.team) !== getTeam(tank.team)) || (t.class === 'medic' && getTeam(t.team) === getTeam(tank.team))) {
           if (!collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) continue;
-          tank.damage(tank.x, tank.y, t.class === 'warrior' ? 60 : -30, t.username);
+          tank.damageCalc(tank.x, tank.y, t.class === 'warrior' ? 60 : -30, t.username);
           tank.canBashed = false;
           setTimeout(() => {
             tank.canBashed = true;
@@ -220,7 +220,7 @@ class Engine {
               t.fire = false;
             }, 2000);
           } else if (b.type === 'spike' && getTeam(b.team) !== getTeam(t.team)) {
-            t.damage(t.x, t.y, 1, getUsername(b.team));
+            t.damageCalc(t.x, t.y, 1, getUsername(b.team));
           }
         }
       }
@@ -272,7 +272,7 @@ class Tank {
     host.override(this);
   }
 
-  damage(x, y, a, u) {
+  damageCalc(x, y, a, u) {
     if ((this.immune && a > 0) || this.ded) return;
     if (this.shields > 0 &&  a > 0) return this.shields -= a;
     if (this.buff) a *= .8;
@@ -426,7 +426,7 @@ class Shot {
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
         } else if (getTeam(t.team) !== getTeam(this.team)) {
-          t.damage(x, y, this.damage, getUsername(this.team));
+          t.damageCalc(x, y, this.damage, getUsername(this.team));
         }
         return true;
       }
@@ -530,7 +530,7 @@ class Damage {
     this.team = team;
     this.host = host;
     this.f = 0;
-    for (const t of host.pt) if (getUsername(team) !== getUsername(t.team)) if (collision(x, y, w, h, t.x, t.y, 80, 80)) t.damage(x, y, getTeam(team) !== getTeam(t.team) ? Math.abs(a) : Math.min(a, 0), getUsername(team));
+    for (const t of host.pt) if (getUsername(team) !== getUsername(t.team)) if (collision(x, y, w, h, t.x, t.y, 80, 80)) t.damageCalc(x, y, getTeam(team) !== getTeam(t.team) ? Math.abs(a) : Math.min(a, 0), getUsername(team));
     for (let i = host.b.length-1; i >= 0; i--) if (collision(x, y, w, h, host.b[i].x, host.b[i].y, 100, 100)) host.b[i].damage(a);
     for (let i = host.ai.length-1; i >= 0; i--) if (getTeam(host.ai[i].team) !== getTeam(team)) host.ai[i].damage(a);
     setInterval(() => this.f++, 18);
