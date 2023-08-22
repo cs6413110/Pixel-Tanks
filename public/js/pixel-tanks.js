@@ -1293,11 +1293,11 @@ function Game() {
           this.ups++;
           switch (data.event) {
             case 'hostupdate':
+              document.write(JSON.stringify(data));
               this.hostupdate.tickspeed = data.tickspeed;
               this.hostupdate.logs = data.logs.reverse();
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
-                if (!data[p]) return;
-                for (const e of data[p]) {
+                if (data[p]) for (const e of data[p]) {
                   const entity = this.hostupdate[p].find(v => v.id = data[p][e].id);
                   if (!entity) {
                     this.hostupdate[p].push(data[p][e]);
