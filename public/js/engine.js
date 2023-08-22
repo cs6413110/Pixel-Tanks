@@ -279,7 +279,7 @@ class Tank {
     this.hp = Math.max(Math.min(this.maxHp, this.hp-a), 0);
     if (this.damage) clearTimeout(this.damage.ti);
     this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y, ti: setTimeout(() => {this.damage = false}, 1000)};
-    if (this.hp <= 0 && this.host.ondeath) this.host.ondeath(this, this.pt.find(t => t.username === u));
+    if (this.hp <= 0 && this.host.ondeath) this.host.ondeath(this, this.host.pt.find(t => t.username === u));
   }
 
   grappleCalc() {
