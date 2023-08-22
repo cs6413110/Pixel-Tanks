@@ -1298,12 +1298,11 @@ function Game() {
               this.hostupdate.logs = data.logs.reverse();
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
                 if (data[p].length > 0) for (const e of data[p]) {
-                  alert(JSON.stringify(data[p]));
-                  const entity = this.hostupdate[p].find(v => v.id === data[p][e].id);
+                  const entity = this.hostupdate[p].find(v => v.id === e.id);
                   if (!entity) {
-                    this.hostupdate[p].push(data[p][e]);
+                    this.hostupdate[p].push(e);
                   } else {
-                    entity = data[p][e];
+                    entity = e;
                   }
                 }
               });
