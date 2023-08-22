@@ -246,6 +246,17 @@ class Engine {
 
 class Tank {
   constructor(data, host) {
+    this.raw = {};
+    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'healing'].forEach(p => {
+      Object.defineProperty(this, p, {
+        get() {
+          return this.raw[p];
+        },
+        set(v) {
+          this.setValue(p, v);
+        },
+      });
+    });
     if (data.socket) this.socket = data.socket; // multiplayer patch
     this.username = data.username;
     this.rank = data.rank;
@@ -272,13 +283,20 @@ class Tank {
     host.override(this);
   }
 
+  setValue(p, v) {
+    if (this.raw[p] === v) return;
+    this.updatedLast = Date.now();
+    this.raw[p] = v;
+  }
+
   damageCalc(x, y, a, u) {
     if ((this.immune && a > 0) || this.ded) return;
     if (this.shields > 0 &&  a > 0) return this.shields -= a;
     if (this.buff) a *= .8;
     this.hp = Math.max(Math.min(this.maxHp, this.hp-a), 0);
-    if (this.damage) clearTimeout(this.damage.ti);
-    this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y, ti: setTimeout(() => {this.damage = false}, 1000)};
+    clearTimeout(this.damageTimeout);
+    this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
+    this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y};
     if (this.hp <= 0 && this.host.ondeath) this.host.ondeath(this, this.host.pt.find(t => t.username === u));
   }
 
@@ -313,9 +331,8 @@ class Tank {
 
 class Block {
   constructor(x, y, health, type, team, host) {
-    this.id = Math.random();
     this.raw = {};
-    ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team'].forEach(p => {
+    ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team', 'id'].forEach(p => {
       Object.defineProperty(this, p, {
         get() {
           return this.raw[p];
@@ -325,6 +342,7 @@ class Block {
         },
       });
     });
+    this.id = Math.random();
     this.updatedLast = Date.now();
     this.x = x;
     this.y = y;
@@ -381,6 +399,17 @@ class Shot {
   constructor(x, y, xm, ym, type, rotation, team, host) {
     const settings = { damage: { bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -100, dynamite: 0, fire: 0 }, speed: { bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9 } };
     const t = host.pt.find(t => t.username === getUsername(team));
+    this.raw = {};
+    ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id'].forEach(p => {
+      Object.defineProperty(this, p, {
+        get() {
+          return this.raw[p];
+        },
+        set(v) {
+          this.setValue(p, v);
+        },
+      });
+    });
     this.id = Math.random();
     this.damage = settings.damage[type] * t.maxHp / 500 * (t.buff ? 1.2 : 1);
     this.team = team;
@@ -399,6 +428,12 @@ class Shot {
     this.md = this.damage;
     this.xm *= settings.speed[this.type];
     this.ym *= settings.speed[this.type];
+  }
+
+  setValue(p, v) {
+    if (this.raw[p] === v) return;
+    this.updatedLast = Date.now();
+    this.raw[p] = v;
   }
 
   static calc(x, y, xm, ym) {
@@ -546,8 +581,18 @@ class Shot {
 
 class Damage {
   constructor(x, y, w, h, a, team, host) {
-    this.id = Math.random();
     this.raw = {};
+    ['x', 'y', 'w', 'h', 'f', 'id'].forEach(p => {
+      Object.defineProperty(this, p, {
+        get() {
+          return this.raw[p];
+        },
+        set(v) {
+          this.setValue(p, v);
+        },
+      });
+    });
+    this.id = Math.random();
     this.x = x;
     this.y = y;
     this.w = w;
@@ -563,6 +608,12 @@ class Damage {
     setTimeout(() => this.destroy(), 200);
   }
 
+  setValue(p, v) {
+    if (this.raw[p] === v) return;
+    this.updatedLast = Date.now();
+    this.raw[p] = v;
+  }
+
   destroy() {
     const index = this.host.d.indexOf(this);
     if (index !== -1) this.host.d.splice(index, 1);
@@ -571,6 +622,17 @@ class Damage {
 
 class AI {
   constructor(x, y, role, rank, team, host) {
+    this.raw = {};
+    ['role', 'x', 'y', 'r', 'baseRotation', 'baseFrame', 'mode', 'rank', 'hp', 'maxHp', 'pushback', 'cosmetic', 'id'].forEach(p => {
+      Object.defineProperty(this, p, {
+        get() {
+          return this.raw[p];
+        },
+        set(v) {
+          this.setValue(p, v);
+        },
+      });
+    });
     this.id = Math.random();
     this.role = role;
     this.x = x;
@@ -601,6 +663,12 @@ class AI {
     this.class = '';
     const t = host.pt.find(t => t.username === getUsername(this.team));
     this.cosmetic = t ? t.cosmetic : '';
+  }
+
+  setValue(p, v) {
+    if (this.raw[p] === v) return;
+    this.updatedLast = Date.now();
+    this.raw[p] = v;
   }
 
   update() {
