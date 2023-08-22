@@ -18,7 +18,7 @@ import express from 'express';
 import expressWs from 'express-ws';
 import msgpack from 'msgpack-lite';
 import Filter from 'bad-words';
-import {Engine, Block, Shot, AI, Damage} from './public/js/engine.js';
+import {Engine, Block, Shot, AI, Damage, Tank, getTeam, parseTeamExtras, getUsername} from './public/js/engine.js';
 
 let tickspeed = -1;
 const getTickspeed = i => {
@@ -186,7 +186,7 @@ ffa.ws(SETTINGS.path, socket => {
 const Commands = {
   createteam: function(data) {
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    if (servers[this.room].pt.find(t => servers[this.room].getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
+    if (servers[this.room].pt.find(t => getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
     if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
     servers[this.room].pt.find(t => t.username === this.username).team = this.username+':'+data[1]+'@leader';
     servers[this.room].logs.push({m: this.username+' created team '+data[1]+'. Use /join '+data[1]+' to join.', c: '#0000FF'});
@@ -194,7 +194,7 @@ const Commands = {
   join: function(data) {
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     if (servers[this.room].pt.find(t => t.username === this.username).team.includes('@leader')) return this.send({status: 'error', message: 'You must disband your team to join. (/leave)'});
-    if (!servers[this.room].pt.find(t => servers[this.room].getTeam(t.team) === data[1] && t.team.includes('@leader'))) return this.send({status: 'error', message: 'This team does not exist.'});
+    if (!servers[this.room].pt.find(t => getTeam(t.team) === data[1] && t.team.includes('@leader'))) return this.send({status: 'error', message: 'This team does not exist.'});
     servers[this.room].pt.find(t => t.username === this.username).team += '@requestor#'+data[1];
     servers[this.room].logs.push({m: this.username+' requested to join team '+data[1]+'. Team owner can use /accept '+this.username+' to accept them.', c: '#0000FF'});
   },
@@ -202,15 +202,15 @@ const Commands = {
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     var leader = servers[this.room].pt.find(t => t.username === this.username), requestor = servers[this.room].pt.find(t => t.username === data[1]);
     if (!requestor) return this.send({status: 'error', message: 'Player not found.'});
-    if (leader.team.includes('@leader') && requestor.team.includes('@requestor#') && servers[this.room].getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
-      requestor.team = data[1]+':'+servers[this.room].getTeam(leader.team);
-      servers[this.room].logs.push({ m: data[1]+' has joined team '+servers[this.room].getTeam(leader.team), c: '#40C4FF' });
+    if (leader.team.includes('@leader') && requestor.team.includes('@requestor#') && getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
+      requestor.team = data[1]+':'+getTeam(leader.team);
+      servers[this.room].logs.push({ m: data[1]+' has joined team '+getTeam(leader.team), c: '#40C4FF' });
     }
   },
   leave: function() {
     var target = servers[this.room].pt.find(t => t.username === this.username);
     if (target.team.includes('@leader')) servers[this.room].pt.forEach(t => {
-      if (servers[this.room].getTeam(t.team) === servers[this.room].getTeam(target.team)) t.team = t.username+':'+Math.random();
+      if (getTeam(t.team) === getTeam(target.team)) t.team = t.username+':'+Math.random();
     });
     target.team = this.username+':'+Math.random();
   },
@@ -343,7 +343,7 @@ const Commands = {
   kill: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length != 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    for (const s of servers) for (const t of s.pt) if (data[1] === t.username) s.damagePlayer(t, {x: t.x, y: t.y, u: 'an Admin', a: .5}); 
+    for (const s of servers) for (const t of s.pt) if (data[1] === t.username) t.damagePlayer(t.x, t.y, 6000, this.username);
   },
   cosmetic: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
@@ -431,7 +431,7 @@ class Multiplayer extends Engine {
 
   disconnect(socket, code, reason) {
     this.pt = this.pt.filter(t => t.username !== socket.username);
-    this.ai = this.ai.filter(ai => this.getUsername(ai.team) !== socket.username);
+    this.ai = this.ai.filter(ai => getUsername(ai.team) !== socket.username);
     this.logs.push({m: this.rageMsg(socket.username), c: '#E10600'});
     if (this.pt.length === 0) {
       this.i.forEach(i => clearInterval(i));
@@ -474,7 +474,7 @@ class FFA extends Multiplayer {
       m.socket.send({event: 'kill'});
     } else this.logs.push({m: m.username+' killed an afk player!', c: '#FF0000'});
     A.each(this.ai, function(i, host, t) {
-      if (host.getUsername(this.team) === t.username) {
+      if (getUsername(this.team) === t.username) {
         host.ai.splice(i, 1);
         i--;
       }
