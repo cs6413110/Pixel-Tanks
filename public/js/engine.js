@@ -225,7 +225,7 @@ class Engine {
         }
       }
       if (t.damage) t.damage.y--;
-      if (t.grapple) this.grapple(t);
+      if (t.grapple) t.grapple();
     }
   }
 
