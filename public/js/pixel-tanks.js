@@ -1293,7 +1293,6 @@ function Game() {
           this.ups++;
           switch (data.event) {
             case 'hostupdate':
-              document.write(JSON.stringify(data));
               this.hostupdate.tickspeed = data.tickspeed;
               this.hostupdate.logs = data.logs.reverse();
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
