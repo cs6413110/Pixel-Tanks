@@ -53,9 +53,7 @@ class Engine {
   }
 
   add(data) {
-    data = { ...data, damage: false, maxHp: data.rank * 10 + 300, hp: data.rank * 10 + 300, deathsPerMovement: 0, canBashed: true, shields: 0, team: data.username + ':' + Math.random(), x: this.spawn.x, y: this.spawn.y, r: 0, pushback: 0, baseRotation: 0, baseFrame: 0, fire: false, healing: data.username};
-    this.override(data);
-    this.pt.push(data);
+    this.pt.push(new Tank(data, this));
   }
 
   update(data) {
@@ -189,12 +187,12 @@ class Engine {
         } else if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + .2, tank.maxHp);
       }
       if (t.pushback !== 0) t.pushback += 0.5;
-      if (t.fire && getTeam(t.fire.team) !== getTeam(t.team)) this.damagePlayer(t, { x: t.x, y: t.y, u: getUsername(t.fire.team), a: .5 });
+      if (t.fire && getTeam(t.fire.team) !== getTeam(t.team)) t.damage(t.x, t.y, .5, getUsername(t.fire.team));
       if (t.immune && !t.ded) for (const tank of this.pt) {
         if (!tank.canBashed) continue;
         if ((t.class === 'warrior' && getTeam(t.team) !== getTeam(tank.team)) || (t.class === 'medic' && getTeam(t.team) === getTeam(tank.team))) {
           if (!collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) continue;
-          this.damagePlayer(tank, { x: tank.x, y: tank.y, u: t.username, a: t.class === 'warrior' ? 60 : -30 });
+          tank.damage(tank.x, tank.y, t.class === 'warrior' ? 60 : -30, t.username);
           tank.canBashed = false;
           setTimeout(() => {
             tank.canBashed = true;
@@ -221,43 +219,13 @@ class Engine {
               t.fire = false;
             }, 2000);
           } else if (b.type === 'spike' && getTeam(b.team) !== getTeam(t.team)) {
-            this.damagePlayer(t, { a: 1, x: t.x, y: t.y, u: getUsername(b.team) });
+            t.damage(t.x, t.y, 1, getUsername(b.team));
           }
         }
       }
       if (t.damage) t.damage.y--;
       if (t.grapple) this.grapple(t);
     }
-  }
-
-  grapple(t) {
-    const dx = t.grapple.target.x - t.x;
-    const dy = t.grapple.target.y - t.y;
-
-    if (dx ** 2 + dy ** 2 > 400) {
-      const angle = Math.atan2(dy, dx);
-      const mx = Math.cos(angle) * 20;
-      const my = Math.sin(angle) * 20;
-
-      if (this.collision(t.x + mx, t.y)) t.x += mx;
-      if (this.collision(t.x, t.y + my)) t.y += my;
-      t.grapple.bullet.sx = t.x + 40;
-      t.grapple.bullet.sy = t.y + 40;
-      this.override(t, [{ key: 'x', value: t.x }, { key: 'y', value: t.y }]);
-      if ((!this.collision(t.x + mx, t.y) || Math.abs(mx) < 2) && (!this.collision(t.x, t.y + my) || Math.abs(my) < 2)) {
-        t.grapple.bullet.destroy();
-        t.grapple = false;
-      }
-    } else {
-      t.grapple.bullet.destroy();
-      t.grapple = false;
-    }
-  }
-
-  collision(x, y) {
-    if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return false;
-    for (const b of this.b) if (collision(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) return false;
-    return true;
   }
 
   levelReader(level) {
@@ -273,26 +241,68 @@ class Engine {
       }
     }
   }
-
-  damagePlayer(victim, damage) {
-    if ((victim.immune && damage.a > 0) || victim.ded) return;
-    if (victim.shields > 0 && damage.a > 0) return victim.shields -= damage.a;
-    if (victim.buff) damage.a *= .8;
-    victim.hp = Math.min(victim.maxHp, victim.hp - damage.a);
-    if (victim.damage) clearTimeout(victim.damage.ti);
-    victim.damage = { d: (victim.damage ? victim.damage.d : 0) + damage.a, x: damage.x, y: damage.y, ti: setTimeout(() => { victim.damage = false }, 1000) };
-    if (victim.hp <= 0 && this.ondeath) this.ondeath(victim, this.pt.find(t => t.username === damage.u));
-  }
 }
 
 class Tank {
-  constructor() {
-    //data = { ...data, damage: false, maxHp: data.rank * 10 + 300, hp: data.rank * 10 + 300, deathsPerMovement: 0, canBashed: true, shields: 0, team: data.username + ':' + Math.random(), x: this.spawn.x, y: this.spawn.y, r: 0, pushback: 0, baseRotation: 0, baseFrame: 0, fire: false, healing: data.username};
-    //this.override(data);
-    //this.pt.push(data);
+  constructor(data, host) {
+    this.username = data.username;
+    this.rank = data.rank;
+    this.class = data.class;
+    this.cosmetic = data.cosmetic;
+    this.deathEffect = this.deathEffect;
+    this.color = data.color;
+
+    this.damage = false;
+    this.maxHp = data.rank*10+300;
+    this.hp = this.maxHp;
+    this.deathsPerMovement = 0;
+    this.canBashed = true;
+    this.shields = 0;
+    this.team = data.username+':'+Math.random();
+    this.x = host.spawn.x;
+    this.y = host.spawn.y;
+    this.r = 0;
+    this.pushback = 0;
+    this.baseRotation = 0;
+    this.baseFrame = 0;
+    this.fire = false;
+    this.healing = data.username;
+    this.host = host;
+    host.override(this);
   }
 
-  damage() {
+  damage(x, y, a, u) {
+    if ((this.immune && a > 0) || this.ded) return;
+    if (this.shields > 0 &&  a > 0) return this.shields -= a;
+    if (this.buff) a *= .8;
+    this.hp = Math.max(Math.min(this.maxHp, this.hp-damage.a), 0);
+    if (this.damage) clearTimeout(this.damage.ti);
+    this.damage = {d: (victim.damage ? victim.damage.d : 0)+a, x, y, ti: setTimeout(() => {this.damage = false}, 1000)};
+    if (this.hp <= 0 && this.ondeath) this.ondeath(this, this.pt.find(t => t.username === damage.u));
+  }
+
+  grapple() {
+    const dx = this.grapple.target.x - this.x;
+    const dy = this.grapple.target.y - this.y;
+    if (dx ** 2 + dy ** 2 > 400) {
+      const angle = Math.atan2(dy, dx);
+      const mx = Math.cos(angle) * 20;
+      const my = Math.sin(angle) * 20;
+      if (this.collision(this.x+mx, this.y)) this.x += mx;
+      if (this.collision(this.x, this.y+my)) this.y += my;
+      this.grapple.bullet.sx = this.x+40;
+      this.grapple.bullet.sy = this.y+40;
+      this.host.override(this, [{ key: 'x', value: this.x }, { key: 'y', value: this.y }]);
+      if (!((!this.collision(this.x+mx, this.y) || Math.abs(mx) < 2) && (!this.collision(this.x, this.y+my) || Math.abs(my) < 2))) return;
+    } else return;
+      this.grapple.bullet.destroy();
+      this.grapple = false;
+  }
+
+  collision(x, y) {
+    if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return false;
+    for (const b of this.host.b) if (collision(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) return false;
+    return true;
   }
 }
 
@@ -415,11 +425,11 @@ class Shot {
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
         } else if (getTeam(t.team) !== getTeam(this.team)) {
-          host.damagePlayer(t, { a: this.damage, x: x, y: y, u: getUsername(this.team) });
+          t.damage(x, y, this.damage, getUsername(this.team));
         }
         return true;
       }
-    };
+    }
 
     for (let i = ais.length-1; i >= 0; i--) {
       const ai = ais[i];
@@ -519,7 +529,7 @@ class Damage {
     this.team = team;
     this.host = host;
     this.f = 0;
-    for (const t of host.pt) if (getUsername(team) !== getUsername(t.team)) if (collision(x, y, w, h, t.x, t.y, 80, 80)) host.damagePlayer(t, { ...this, u: getUsername(team), a: getTeam(team) !== getTeam(t.team) ? Math.abs(a) : Math.min(0, a)});
+    for (const t of host.pt) if (getUsername(team) !== getUsername(t.team)) if (collision(x, y, w, h, t.x, t.y, 80, 80)) t.damage(x, y, getTeam(team) !== getTeam(t.team) ? Math.abs(a) : Math.min(a, 0), getUsername(team));
     for (let i = host.b.length-1; i >= 0; i--) if (collision(x, y, w, h, host.b[i].x, host.b[i].y, 100, 100)) host.b[i].damage(a);
     for (let i = host.ai.length-1; i >= 0; i--) if (getTeam(host.ai[i].team) !== getTeam(team)) host.ai[i].damage(a);
     setInterval(() => this.f++, 18);
