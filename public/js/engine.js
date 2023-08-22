@@ -315,6 +315,16 @@ class Block {
   constructor(x, y, health, type, team, host) {
     this.id = Math.random();
     this.raw = {};
+    ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team'].forEach(p => {
+      Object.defineProperty(this, p, {
+        get() {
+          return this.raw[p];
+        },
+        set(v) {
+          this.setValue(p, v);
+        },
+      });
+    });
     this.updatedLast = Date.now();
     this.x = x;
     this.y = y;
@@ -339,23 +349,12 @@ class Block {
         this.a = true;
       }, 3000);
     }
-    ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team'].forEach(p => {
-      Object.defineProperty(this, p, {
-        get() {
-          return this.raw[p];
-        },
-        set(v) {
-          this.setValue(p, v);
-        },
-      });
-    });
   }
 
   setValue(p, v) {
     if (this.raw[p] === v) return;
     this.updatedLast = Date.now();
     this.raw[p] = v;
-    this[p] = v;
   }
 
   damage(d) {
