@@ -1298,7 +1298,7 @@ function Game() {
               this.hostupdate.logs = data.logs.reverse();
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
                 if (data[p].length > 0) for (const e of data[p]) {
-                  const entity = this.hostupdate[p].find(v => v.id === e.id);
+                  let entity = this.hostupdate[p].find(d => d.id === e.id);
                   if (!entity) {
                     this.hostupdate[p].push(e);
                   } else {
