@@ -258,7 +258,8 @@ class Tank {
         configurable: true,
       });
     });
-    this.updatedLast = Infinity;
+    this.lastUpdate = 0;
+    this.updatedLast = 0;
     if (data.socket) this.socket = data.socket; // multiplayer patch
     this.username = data.username;
     this.rank = data.rank;
@@ -346,7 +347,7 @@ class Block {
       });
     });
     this.id = Math.random();
-    this.updatedLast = Infinity;
+    this.updatedLast = 0;
     this.x = x;
     this.y = y;
     this.maxHp = health;
@@ -414,7 +415,7 @@ class Shot {
         configurable: true,
       });
     });
-    this.updatedLast = Infinity;
+    this.updatedLast = 0;
     this.id = Math.random();
     this.damage = settings.damage[type] * t.maxHp / 500 * (t.buff ? 1.2 : 1);
     this.team = team;
@@ -598,7 +599,7 @@ class Damage {
         configurable: true,
       });
     });
-    this.updatedLast = Infinity;
+    this.updatedLast = 0;
     this.id = Math.random();
     this.x = x;
     this.y = y;
@@ -641,7 +642,7 @@ class AI {
         configurable: true,
       });
     });
-    this.updatedLast = Infinity;
+    this.updatedLast = 0;
     this.id = Math.random();
     this.role = role;
     this.x = x;
