@@ -1307,6 +1307,11 @@ function Game() {
                   }
                   if (!found) this.hostupdate[p].push(e);
                 }
+                if (data.deleted[p].length > 0) for (const e of data.deleted[p]) {
+                  for (let i = this.hostupdate[p].length-1; i >= 0; i--) {
+                    if (this.hostupdate[p][i].id === e.deleted[p] || collision(this.tank.x-860, this.tank.y-560, 1880, 1280, this.hostupdate[p][i].x, this.hostupdate[p][i].y, 100, 100)) this.hostupdate[p].splice(i, 1);
+                  }
+                }
               });
               break;
             case 'ded':
