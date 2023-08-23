@@ -433,7 +433,6 @@ class Multiplayer extends Engine {
         }
         t.render[p].forEach(id => { // loop through the old id to see which entities are no longer needed to be rendered
           if (!render[p].includes(id) || !ids.includes(id)) { // if old entity was not within the rendering rect or if no exist of next send then delete
-            entities_deleted_per_player++;
             message.delete[p].push(id);
           }
         });
