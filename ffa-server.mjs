@@ -417,7 +417,7 @@ class Multiplayer extends Engine {
 
   send() {
     for (const t of this.pt) {
-      const time = Date.now()-15, view = {x: t.x-860, y: t.y-560, w: 1880, h: 1280}, message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate'};
+      const time = Date.now()-15, view = {x: t.x-860, y: t.y-560, w: 1880, h: 1280}, message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate', deleted: this.deleted};
       for (const b of this.b) {
         //if (b.updatedLast < time) continue;
         message.b.push(b.raw);
