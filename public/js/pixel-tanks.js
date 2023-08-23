@@ -1295,7 +1295,6 @@ function Game() {
             case 'hostupdate':
               this.hostupdate.tickspeed = data.tickspeed;
               this.hostupdate.logs = data.logs.reverse();
-              alert(JSON.stringify(data));
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
                 if (data[p].length > 0) for (const e of data[p]) {
                   let found = false;
