@@ -419,23 +419,23 @@ class Multiplayer extends Engine {
     for (const t of this.pt) {
       const time = Date.now()-15, view = {x: t.x-860, y: t.y-560, w: 1880, h: 1280}, message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate', deleted: this.deleted};
       for (const b of this.b) {
-        //if (b.updatedLast < time) continue;
+        if (b.updatedLast < time) continue;
         message.b.push(b.raw);
       }
       for (const pt of this.pt) {
-        //if (pt.updatedLast < time) continue;
+        if (pt.updatedLast < time) continue;
         message.pt.push(pt.raw);
       }
       for (const ai of this.ai) {
-        //if (ai.updatedLast < time) continue;
+        if (ai.updatedLast < time) continue;
         message.ai.push(ai.raw);
       }
       for (const s of this.s) {
-        //if (s.updatedLast < time) continue;
+        if (s.updatedLast < time) continue;
         message.s.push(s.raw);
       }
       for (const d of this.d) {
-        //if (d.updatedLast < time) continue;
+        if (d.updatedLast < time) continue;
         message.d.push(d.raw);
       }
       t.socket.send(message);
