@@ -418,7 +418,6 @@ class Multiplayer extends Engine {
   send() {
     for (const t of this.pt) {
       const render = {b: [], pt: [], ai: [], s: [], d: []}, view = {x: t.x-860, y: t.y-560, w: 1880, h: 1280}, message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
-      let entities_deleted_per_player = 0;
       ['b', 'pt', 'ai', 's', 'd'].forEach(p => {
         const ids = [];
         for (const e of this[p]) {
@@ -438,9 +437,8 @@ class Multiplayer extends Engine {
             message.delete[p].push(id);
           }
         });
-        t.render = render;
       });
-      if (entities_deleted_per_player) console.log(entities_deleted_per_player);
+      t.render = render;
       t.lastUpdate = Date.now();
       t.socket.send(message);
       outgoing_per_second++;
