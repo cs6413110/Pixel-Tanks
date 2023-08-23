@@ -440,7 +440,7 @@ class Multiplayer extends Engine {
         });
         t.render = render;
       });
-      if (entities_deleted_per_player) console.log(entities_deleted_per_player):
+      if (entities_deleted_per_player) console.log(entities_deleted_per_player);
       t.lastUpdate = Date.now();
       t.socket.send(message);
       outgoing_per_second++;
