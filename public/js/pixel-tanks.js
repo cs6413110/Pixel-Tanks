@@ -1296,20 +1296,15 @@ function Game() {
               this.hostupdate.tickspeed = data.tickspeed;
               this.hostupdate.logs = data.logs.reverse();
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
-                if (data[p].length > 0) for (const e of data[p]) {
-                  let found = false;
-                  for (let i = 0; i < this.hostupdate[p].length; i++) {
-                    if (this.hostupdate[p][i].id === e.id) {
-                      this.hostupdate[p][i] = e;
-                      found = true;
-                      break;
-                    }
-                  }
-                  if (!found) this.hostupdate[p].push(e);
-                }
-                if (data.delete[p].length > 0) for (const id of data.delete[p]) {
-                  this.hostupdate[p] = this.hostupdate[p].filter(e => e.id !== id);
-                }
+                if (data[p].length) data[p].forEach(e => {
+                 const index = this.hostupdate[p].findIndex(obj => obj.id === e.id);
+                 if (index !== -1) {
+                   this.hostupdate[p][index] = e;
+                 } else {
+                   this.hostupdate[p].push(e);
+                 }
+                });
+                if (data.delete[p].length) this.hostupdate[p] = this.hostupdate[p].filter(e => !data.delete[p].includes(e.id));
               });
               break;
             case 'ded':
