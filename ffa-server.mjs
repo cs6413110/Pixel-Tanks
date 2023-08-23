@@ -432,7 +432,7 @@ class Multiplayer extends Engine {
            message[p].push(e.raw);
          } 
         }
-      }
+      });
       t.lastUpdate = Date.now();
       t.socket.send(message);
       outgoing_per_second++;
