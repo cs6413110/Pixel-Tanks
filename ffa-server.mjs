@@ -416,33 +416,34 @@ class Multiplayer extends Engine {
   }
 
   send() {
-    for (const t of this.pt) {
-      const render = {b: [], pt: [], ai: [], s: [], d: []}, view = {x: t.x-860, y: t.y-560, w: 1880, h: 1280}, message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
-      ['b', 'pt', 'ai', 's', 'd'].forEach(p => {
-        const ids = [];
-        for (const e of this[p]) {
-          ids.push(e.id); // keep track of all existing entities
-          if (!A.collider(view.x, view.y, view.w, view.h, e.x, e.y, 100, 100)) continue; // check if entities fit within the viewport
-          render[p].push(e.id); // add entity as SHOULD BE RENDERED
-          if (!t.render[p].includes(e.id)) { // If not yet rendered on client
-            message[p].push(e.raw); // add new entities that need to be rendered
-          }
-          if (e.updatedLast > t.lastUpdate) { // If entity update time is more recent that last send update
-            message[p].push(e.raw); // add entities within render distance that need to be rendered
-          } 
+  for (const t of this.pt) {
+    const render = { b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set() };
+    const view = { x: t.x-860, y: t.y-560, w: 1880, h: 1280 };
+    const message = { b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate', delete: { b: [], pt: [], ai: [], s: [], d: [] } };
+    for (const p of ['b', 'pt', 'ai', 's', 'd']) {
+      const ids = new Set(this[p].map(e => e.id)); // keep track of all existing entities HYPEROPTIMIZE: Make this linked to the host
+      this[p].filter(e => A.collider(view.x, view.y, view.w, view.h, e.x, e.y, 100, 100)).forEach(e => {
+        render[p].add(e.id); // add entity ID to SHOULD BE RENDERED Set
+        if (!t.render[p].has(e.id)) { // If not yet rendered on client
+          message[p].push(e.raw); // add new entities that need to be rendered
         }
-        t.render[p].forEach(id => { // loop through the old id to see which entities are no longer needed to be rendered
-          if (!render[p].includes(id) || !ids.includes(id)) { // if old entity was not within the rendering rect or if no exist of next send then delete
-            message.delete[p].push(id);
-          }
-        });
+        if (e.updatedLast > t.lastUpdate) { // If entity update time is more recent than the last send update
+          message[p].push(e.raw); // add entities within render distance that need to be rendered
+        }
       });
-      t.render = render;
-      t.lastUpdate = Date.now();
-      t.socket.send(message);
-      outgoing_per_second++;
+      t.render[p].forEach(id => { // loop through the old IDs to see which entities are no longer needed to be rendered
+        if (!render[p].has(id) || !ids.has(id)) { // if old entity was not within the rendering rect or if it no longer exists, then delete
+          message.delete[p].push(id);
+        }
+      });
     }
+
+    t.render = render;
+    t.lastUpdate = Date.now();
+    t.socket.send(message);
+    outgoing_per_second++;
   }
+}
 
   disconnect(socket, code, reason) {
     this.pt = this.pt.filter(t => t.username !== socket.username);
