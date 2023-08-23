@@ -247,7 +247,8 @@ class Engine {
 class Tank {
   constructor(data, host) {
     this.raw = {};
-    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'healing'].forEach(p => {
+    this.render = {b: [], s: [], pt: [], d: [], ai: []};
+    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'healing', 'id'].forEach(p => {
       Object.defineProperty(this, p, {
         get() {
           return this.raw[p];
@@ -258,6 +259,7 @@ class Tank {
         configurable: true,
       });
     });
+    this.id = Math.random();
     this.lastUpdate = 0;
     this.updatedLast = 0;
     if (data.socket) this.socket = data.socket; // multiplayer patch
