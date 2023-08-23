@@ -1307,6 +1307,9 @@ function Game() {
                   }
                   if (!found) this.hostupdate[p].push(e);
                 }
+                if (data.delete[p].length > 0) for (const id of data.delete[p]) {
+                  this.hostupdate[p] = this.hostupdate[p].filter(e => e.id !== id);
+                }
               });
               break;
             case 'ded':
