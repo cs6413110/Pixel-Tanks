@@ -417,31 +417,21 @@ class Multiplayer extends Engine {
 
   send() {
     for (const t of this.pt) {
-      const view = {x: t.x-860, y: t.y-560, w: 1880, h: 1280}, message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate'};
-      for (const b of this.b) {
-        if (b.updatedLast < t.lastUpdate && b.updatedLast !== 0) continue;
-        if (!A.collider(view.x, view.y, view.w, view.h, b.x, b.y, 100, 100)) continue;
-        message.b.push(b.raw);
-      }
-      for (const pt of this.pt) {
-        if (pt.updatedLast < t.lastUpdate && pt.updatedLast !== 0) continue;
-        if (!A.collider(view.x, view.y, view.w, view.h, t.x, t.y, 80, 80)) continue;
-        message.pt.push(pt.raw);
-      }
-      for (const ai of this.ai) {
-        if (ai.updatedLast < t.lastUpdate && ai.updatedLast !== 0) continue;
-        if (!A.collider(view.x, view.y, view.w, view.h, ai.x, ai.y, 80, 80)) continue;
-        message.ai.push(ai.raw);
-      }
-      for (const s of this.s) {
-        if (s.updatedLast < t.lastUpdate && s.updatedLast !== 0) continue;
-        if (!A.collider(view.x, view.y, view.w, view.h, s.x, s.y, 10, 10)) continue;
-        message.s.push(s.raw);
-      }
-      for (const d of this.d) {
-        if (d.updatedLast < t.lastUpdate && d.updatedLast !== 0) continue;
-        if (!A.collider(view.x, view.y, view.w, view.h, d.x, d.y, d.w, d.h)) continue;
-        message.d.push(d.raw);
+      const view = {x: t.x-860, y: t.y-560, w: 1880, h: 1280}, message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
+      ['b', 'pt', 'ai', 's', 'd'].forEach(p => {
+        for (const e of this[p]) {
+          if (!A.collider(view.x, view.y, view.w, view.h, e.x, e.y, 100, 100)) {
+            if (t.render[p].includes(e.id)) message.delete[p].push(e.id);
+            continue;
+          }
+          if (!t.render[p].includes(e.id)) {
+            message[p].push(e.raw);
+            t.render[p].push(e.id);
+          }
+          if (e.updatedLast > t.lastUpdate) {
+           message[p].push(e.raw);
+         } 
+        }
       }
       t.lastUpdate = Date.now();
       t.socket.send(message);
