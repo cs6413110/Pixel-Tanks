@@ -440,7 +440,7 @@ class Multiplayer extends Engine {
       }
       for (const d of this.d) {
         if (d.updatedLast < time) continue;
-        if (!A.collider(view.x, view.y view.w, view.h, d.x, d.y, d.w, d.h)) continue;
+        if (!A.collider(view.x, view.y, view.w, view.h, d.x, d.y, d.w, d.h)) continue;
         message.d.push(d.raw);
       }
       t.socket.send(message);
