@@ -1415,7 +1415,7 @@ function Game() {
     drawBlock(b) {
       const size = b.type === 'airstrike' ? 200 : 100;
       const type = ['airstrike', 'fire'].includes(b.type) && getTeam(this.team) === getTeam(b.team) ? 'friendly'+b.type : b.type;
-      GUI.drawImage(PixelTanks.images.blocks[b.type], b.x, b.y, size, size, (b.type === 'mine' && this.hostupdate.pt.find(t => t.username === PixelTanks.user.username).team.split(':')[1].replace('@leader', '') !== b.team.split(':')[1].replace('@leader', '')) ? .03 : 1);
+      GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, (b.type === 'mine' && this.hostupdate.pt.find(t => t.username === PixelTanks.user.username).team.split(':')[1].replace('@leader', '') !== b.team.split(':')[1].replace('@leader', '')) ? .03 : 1);
     }
 
     drawShot(s) {
