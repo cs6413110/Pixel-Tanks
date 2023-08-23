@@ -417,30 +417,29 @@ class Multiplayer extends Engine {
 
   send() {
   for (const t of this.pt) {
-    const render = { b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set() };
-    const view = { x: t.x-860, y: t.y-560, w: 1880, h: 1280 };
-    const message = { b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate', delete: { b: [], pt: [], ai: [], s: [], d: [] } };
+    const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
+    const vx = t.x-860, xy = t.y-560, vw = 1880, vh = 1280;
+    const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
+    let send = false;
     for (const p of ['b', 'pt', 'ai', 's', 'd']) {
-      const ids = new Set(this[p].map(e => e.id)); // keep track of all existing entities HYPEROPTIMIZE: Make this linked to the host
+      const ids = new Set(this[p].map(e => e.id));
       this[p].filter(e => A.collider(view.x, view.y, view.w, view.h, e.x, e.y, 100, 100)).forEach(e => {
-        render[p].add(e.id); // add entity ID to SHOULD BE RENDERED Set
-        if (!t.render[p].has(e.id)) { // If not yet rendered on client
-          message[p].push(e.raw); // add new entities that need to be rendered
-        }
-        if (e.updatedLast > t.lastUpdate) { // If entity update time is more recent than the last send update
-          message[p].push(e.raw); // add entities within render distance that need to be rendered
+        render[p].add(e.id);
+        if (!t.render[p].has(e.id) || e.updatedLast > t.lastUpdate) {
+          message[p].push(e.raw);
+          send = true;
         }
       });
-      t.render[p].forEach(id => { // loop through the old IDs to see which entities are no longer needed to be rendered
-        if (!render[p].has(id) || !ids.has(id)) { // if old entity was not within the rendering rect or if it no longer exists, then delete
+      t.render[p].forEach(id => {
+        if (!render[p].has(id) || !ids.has(id)) {
           message.delete[p].push(id);
+          send = true;
         }
       });
     }
-
     t.render = render;
     t.lastUpdate = Date.now();
-    t.socket.send(message);
+    if (send) t.socket.send(message);
     outgoing_per_second++;
   }
 }
