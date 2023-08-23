@@ -423,7 +423,7 @@ class Multiplayer extends Engine {
     let send = false;
     for (const p of ['b', 'pt', 'ai', 's', 'd']) {
       const ids = new Set(this[p].map(e => e.id));
-      this[p].filter(e => A.collider(view.x, view.y, view.w, view.h, e.x, e.y, 100, 100)).forEach(e => {
+      this[p].filter(e => A.collider(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
         render[p].add(e.id);
         if (!t.render[p].has(e.id) || e.updatedLast > t.lastUpdate) {
           message[p].push(e.raw);
