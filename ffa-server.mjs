@@ -416,33 +416,33 @@ class Multiplayer extends Engine {
   }
 
   send() {
-  for (const t of this.pt) {
-    const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
-    const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;
-    const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
-    let send = false;
-    for (const p of ['b', 'pt', 'ai', 's', 'd']) {
-      const ids = new Set(this[p].map(e => e.id));
-      this[p].filter(e => A.collider(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
-        render[p].add(e.id);
-        if (!t.render[p].has(e.id) || e.updatedLast > t.lastUpdate) {
-          message[p].push(e.raw);
-          send = true;
-        }
-      });
-      t.render[p].forEach(id => {
-        if (!render[p].has(id) || !ids.has(id)) {
-          message.delete[p].push(id);
-          send = true;
-        }
-      });
+    for (const t of this.pt) {
+      const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
+      const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;
+      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
+      let send = false;
+      for (const p of ['b', 'pt', 'ai', 's', 'd']) {
+        const ids = new Set(this[p].map(e => e.id));
+        this[p].filter(e => A.collider(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
+          render[p].add(e.id);
+          if (!t.render[p].has(e.id) || e.updatedLast > t.lastUpdate) {
+            message[p].push(e.raw);
+            send = true;
+          }
+        });
+        t.render[p].forEach(id => {
+          if (!render[p].has(id) || !ids.has(id)) {
+            message.delete[p].push(id);
+            send = true;
+          }
+        });
+      }
+      t.render = render;
+      t.lastUpdate = Date.now();
+     if (send) t.socket.send(message);
+      outgoing_per_second++;
     }
-    t.render = render;
-    t.lastUpdate = Date.now();
-    if (send) t.socket.send(message);
-    outgoing_per_second++;
   }
-}
 
   disconnect(socket, code, reason) {
     this.pt = this.pt.filter(t => t.username !== socket.username);
