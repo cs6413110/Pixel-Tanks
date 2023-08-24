@@ -353,7 +353,7 @@ const Commands = {
   },
   ai: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
-    if (data.length !== 3) return this.send({status: 'error', message: 'Command has invalid arguments.'});
+    if (data.length !== 4) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     servers[this.room].ai.push(new AI(Math.floor(data[1] / 100) * 100 + 10, Math.floor(data[2] / 100) * 100 + 10, data[3], 0, 'GOD:3', servers[this.room]));
   },
 };
