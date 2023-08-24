@@ -90,14 +90,15 @@ class Engine {
       }
     }
     if (use.includes('toolkit')) {
-      if (t.healTimeout) {
-        t.healTimeout = clearTimeout(t.healTimeout);
+      if (t.healTimeout !== undefined) {
+        clearTimeout(t.healTimeout);
+        t.healTimeout = undefined;
       } else {
         t.healTimeout = setTimeout(() => {
           t.hp = t.maxHp;
           const ai = this.ai.find(a => getUsername(a.team) === t.username);
           if (ai) ai.hp = ai.maxHp;
-          t.healInterval = clearInterval(t.healInterval);
+          t.healTimeout = undefined;
         }, 7500);
       }
     }
