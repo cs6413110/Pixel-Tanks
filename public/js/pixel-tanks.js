@@ -1449,8 +1449,9 @@ function Game() {
     }
 
     drawAI(ai) {
+      [{"id":0.04088724217347539,"role":0,"x":10,"y":10,"r":10,"baseRotation":315,"baseFrame":0,"mode":0,"rank":0,"hp":100,"maxHp":300,"pushback":0,"cosmetic":"MLG Glasses"}]
       const {x, y, role, r, baseRotation, baseFrame, pushback, cosmetic, hp, maxHp} = ai;
-      if (role !== 0) PixelTanks.renderBase(x, y, 80, '#FF0000');
+      if (role !== 0) PixelTanks.renderBottom(x, y, 80, '#FF0000');
       GUI.drawImage(PixelTanks.images.tanks[role === 0 ? 'base' : 'bottom'+(baseFrame ? '' : '2')], x, y, 80, 80, 1, 40, 40, 0, 0, baseRotation);
       PixelTanks.renderTop(x, y, 80, '#FF0000', r, pushback);
       GUI.drawImage(PixelTanks.images.tanks.top, x, y, 80, 90, 1, 40, 40, 0, pushback, r);
