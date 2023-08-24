@@ -615,7 +615,7 @@ class Damage {
     this.f = 0;
     for (const t of host.pt) if (getUsername(team) !== getUsername(t.team)) if (collision(x, y, w, h, t.x, t.y, 80, 80)) t.damageCalc(x, y, getTeam(team) !== getTeam(t.team) ? Math.abs(a) : Math.min(a, 0), getUsername(team));
     for (let i = host.b.length-1; i >= 0; i--) if (collision(x, y, w, h, host.b[i].x, host.b[i].y, 100, 100)) host.b[i].damage(a);
-    for (let i = host.ai.length-1; i >= 0; i--) if (getTeam(host.ai[i].team) !== getTeam(team)) host.ai[i].damage(a);
+    for (let i = host.ai.length-1; i >= 0; i--) if (collision(x, y, w, h, host.ai[i].x, host.ai[i].y, 80, 80)) if (getTeam(host.ai[i].team) !== getTeam(team)) host.ai[i].damage(a);
     setInterval(() => this.f++, 18);
     setTimeout(() => this.destroy(), 200);
   }
