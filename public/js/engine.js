@@ -263,7 +263,6 @@ class Tank {
     });
     this.id = Math.random();
     this.lastUpdate = 0;
-    this.updatedLast = 0;
     if (data.socket) this.socket = data.socket; // multiplayer patch
     this.username = data.username;
     this.rank = data.rank;
@@ -351,7 +350,6 @@ class Block {
       });
     });
     this.id = Math.random();
-    this.updatedLast = 0;
     this.x = x;
     this.y = y;
     this.maxHp = health;
@@ -419,7 +417,6 @@ class Shot {
         configurable: true,
       });
     });
-    this.updatedLast = 0;
     this.id = Math.random();
     this.damage = settings.damage[type] * t.maxHp / 500 * (t.buff ? 1.2 : 1);
     this.team = team;
@@ -603,7 +600,6 @@ class Damage {
         configurable: true,
       });
     });
-    this.updatedLast = 0;
     this.id = Math.random();
     this.x = x;
     this.y = y;
@@ -646,12 +642,12 @@ class AI {
         configurable: true,
       });
     });
-    this.updatedLast = 0;
     this.id = Math.random();
     this.role = role;
     this.x = x;
     this.y = y;
     this.r = 0;
+    this.tr = 0;
     this.inaccuracy = 0;
     this.baseRotation = 0;
     this.baseFrame = 0;
@@ -689,13 +685,19 @@ class AI {
     this.identify();
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
-      this.r = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40))+this.inaccuracy;
+      this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
       if (this.canPowermissle) this.fire(this.obstruction.x, this.obstruction.y, 'powermissle');
       if (this.canFire) this.fire(this.obstruction.x, this.obstruction.y);
     } else if (this.mode !== 0) {
-      this.r = toAngle(this.target.x - this.x, this.target.y - this.y)+this.inaccuracy;
+      this.tr = toAngle(this.target.x - this.x, this.target.y - this.y);
       if (this.canPowermissle) this.fire(this.target.x, this.target.y, 'powermissle');
       if (this.canFire) this.fire(this.target.x, this.target.y);
+    }
+    const convertTo360 = a => a < 0 ? 360+a%360 : a%360;
+    if (this.r < this.tr || this.r > convertTo360(this.tr-180)) { // rotation needs to increase
+      this.r = convertTo360(this.r+1);
+    } else {
+      this.r = convertTo360(this.r-1);
     }
     if (this.pushback !== 0) this.pushback += 0.5;
   }
@@ -711,7 +713,7 @@ class AI {
     const dirx = this.path.p[n][0] - this.path.p[f][0];
     const diry = this.path.p[n][1] - this.path.p[f][1];
     this.baseRotation = [[135, 180, 225], [90, this.baseRotation, 270], [45, 0, 315]][diry + 1][dirx + 1];
-    this.r = this.baseRotation;
+    this.tr = this.baseRotation;
     const x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25);
     const y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
     this.obstruction = this.collision(x, y);
@@ -903,13 +905,6 @@ class AI {
     if (!type) type = Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
     const cooldown = {powermissle: 0, shotgun: 600, bullet: 200}[type];
     this.pushback = -3;
-    if (type === 'shotgun') {
-      this.inaccuracy = Math.floor(Math.random()*80)-40;
-    } else if (type === 'bullet') {
-      this.inaccuracy = Math.floor(Math.random()*40)-20;
-    } else {
-      this.inaccuracy = Math.floor(Math.random()*20)-10;
-    }
     let l = type === 'shotgun' ? -10 : 0;
     while (l<(type === 'shotgun' ? 15 : 1)) {
       const { x, y } = toPoint(this.r+l);
