@@ -169,7 +169,14 @@ class Engine {
   }
 
   tick() {
-    const mapRedone = false;
+    this.map.nodes.forEach(row => row.forEach(node => {
+      node.walkable = true;
+      node.f = 0;
+      node.g = 0;
+      node.h = 0;
+      node.parent = null;
+    }));
+    for (const b of this.b) if (b.x >= 0 && b.y >= 0 && b.x <= 2900 && b.y <= 2900) this.map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), b.x % 100 !== 0 && b.y % 100 !== 0);
     for (const ai of this.ai) ai.update();
     for (const s of this.s) s.update()
 
@@ -808,7 +815,7 @@ class AI {
       if (!limiter.includes(p.length)) {
         coords.splice(r, 1);
         i++;
-        //if (i >= 5 && mode !== 0) return this.path = {p: pathfind(sx, sy, tx, ty, this.host.map.clone()).slice(0, 5), m: this.mode, t: Date.now(), o: Date.now()};
+        if (i >= 5 && mode !== 0) return this.path = {p: pathfind(sx, sy, tx, ty, this.host.map.clone()).slice(0, 5), m: this.mode, t: Date.now(), o: Date.now()};
         if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now(), o: Date.now()};
       } else {
         this.path = { p, m: this.mode, t: Date.now(), o: Date.now()};
