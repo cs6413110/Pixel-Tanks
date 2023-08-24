@@ -695,9 +695,9 @@ class AI {
     }
     const convertTo360 = a => a < 0 ? 360+a%360 : a%360;
     if (this.r < this.tr || this.r > convertTo360(this.tr-180)) { // rotation needs to increase
-      this.r = convertTo360(this.r+1);
+      this.r = convertTo360(Math.max(this.r+5, this.tr));
     } else {
-      this.r = convertTo360(this.r-1);
+      this.r = convertTo360(Math.min(this.r-5, this.tr));
     }
     if (this.pushback !== 0) this.pushback += 0.5;
   }
