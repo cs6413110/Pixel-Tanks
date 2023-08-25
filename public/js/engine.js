@@ -195,7 +195,7 @@ class Engine {
         if (!tank.canBashed) continue;
         if ((t.class === 'warrior' && getTeam(t.team) !== getTeam(tank.team)) || (t.class === 'medic' && getTeam(t.team) === getTeam(tank.team))) {
           if (!collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) continue;
-          tank.damageCalc(tank.x, tank.y, t.class === 'warrior' ? 60 : -30, t.username);
+          tank.damageCalc(tank.x, tank.y, t.class === 'warrior' ? 50 : -30, t.username);
           tank.canBashed = false;
           setTimeout(() => {
             tank.canBashed = true;
