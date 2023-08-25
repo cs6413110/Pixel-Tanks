@@ -708,14 +708,14 @@ function Game() {
         multiplayer: {
           buttons: [
             [424, 28, 108, 108, 'main'],
-            [340, 376, 416, 116, function() {this.gamemode = 'ffa'}, false],
-            [340, 532, 416, 116, function() {this.gamemode = 'duels'}, false],
-            [340, 688, 416, 116, function() {this.gamemode = 'tdm'}, false],
-            [340, 844, 416, 116, function() {this.gamemode = 'juggernaut'}, false],
+            [340, 376, 416, 116, function() {this.gamemode = 'ffa'}, true],
+            [340, 532, 416, 116, function() {this.gamemode = 'duels'}, true],
+            [340, 688, 416, 116, function() {this.gamemode = 'tdm'}, true],
+            [340, 844, 416, 116, function() {this.gamemode = 'juggernaut'}, true],
             [868, 848, 368, 88, function() {
               PixelTanks.user.player = new Tank(this.ip, true, this.gamemode); 
               Menus.removeListeners();
-            }],
+            }, true],
           ],
           listeners: {
             keydown: function(e) {
@@ -728,6 +728,7 @@ function Game() {
               this.gamemode = 'ffa';
               this.ip = '141.148.128.231/ffa';
             }
+            GUI.drawText(this.gamemode, 1200, 800, 50, '#FFFFFF', 0.5);
             GUI.drawText(this.ip, 800, 276, 50, '#FFFFFF', 0.5);
           }
         },
