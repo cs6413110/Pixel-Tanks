@@ -437,8 +437,8 @@ class Multiplayer extends Engine {
     for (const t of this.pt) {
       const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
       const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;
-      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
-      let send = false;
+      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
+      let send = true; // RETURN TO FALSE, TEMPORARILY DISABLED TO ALLOW DYNAMIC UPDATES TO LOGS, TICKSPEED, and GLOBAL
       for (const p of ['b', 'pt', 'ai', 's', 'd']) {
         const ids = new Set(this[p].map(e => e.id));
         this[p].filter(e => A.collider(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
@@ -540,17 +540,30 @@ class DUELS extends Multiplayer {
     } else return socket.send("Internal Server Error. You were redirected to a room that couldn't accept you.");
   }
 
-  update(data) {
-    if ([0, 1, 2].includes(this.mode)) return;
-    super.update(data);
-  }
-
-  
-
   ontick() {
-
+    if (this.mode === 1) this.override(this.pt[0]);
+    if (this.mode === 2) {
+      this.override(this.pt[1]);
+      this.global = 'Starting in '+(10-(Date.now()-this.readytime)/1000);
+      if (10-(Date.now()-this.readytime)/1000 <= 0) this.mode = 3;
+    }
   }
 
+  ondeath(t, m) {
+    t.ded = true;
+    this.mode = 4;
+    this.global = t.username+' Wins!';
+    // send gameover to clients and send server in 10 secs
+  }
+
+  disconnect(socket, code, reason) {
+    if ([2, 3].includes(this.mode)) this.mode = 1;
+    this.pt.forEach(t => {
+      t.socket.send({event: 'ded'}); // heal and reset cooldowns
+      t.hp = t.maxHp;
+    }); 
+    super.disconnect(socket, code, reason);
+  }
 }
 
 if (!SETTINGS.export) ffa.listen(SETTINGS.port);
