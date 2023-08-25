@@ -1485,7 +1485,7 @@ function Game() {
       if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.invis && t.username !== PixelTanks.user.username && !this.ded) return;
     
-      if ((!t.ded && this.team.split(':')[1].replace('@leader', '') === t.team.split(':')[1].replace('@leader', '')) || (this.ded && !t.ded)) {
+      if ((!t.ded && getTeam(this.team) === getTeam(t.team)) || (this.ded && !t.ded) || PixelTanks.userData.class === 'tactical') {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
         GUI.draw.fillStyle = '#00FF00';
@@ -1945,8 +1945,8 @@ function Game() {
             this.speed = 4;
             this.tank.immune = false;
             if (PixelTanks.userData.class === 'stealth') this.tank.use.push('bomb');
-          }, 500);
-          setTimeout(() => {this.canBoost = true}, 5000);
+          }, PixelTanks.userData.class === 'tactical' ? 250 : 500);
+          setTimeout(() => {this.canBoost = true}, PixelTanks.userData.class === 'tactical' ? 2500 : 5000);
         }
       }
     }
