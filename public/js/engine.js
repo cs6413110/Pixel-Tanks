@@ -170,6 +170,7 @@ class Engine {
   }
 
   tick() {
+    this.ontick();
     this.map.nodes.forEach(row => row.forEach(node => {
       node.walkable = true;
       node.f = 0;
