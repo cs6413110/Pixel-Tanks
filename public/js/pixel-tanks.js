@@ -1297,6 +1297,7 @@ function Game() {
           switch (data.event) {
             case 'hostupdate':
               this.hostupdate.tickspeed = data.tickspeed;
+              this.hostupdate.global = this.hostupdate.global;
               this.hostupdate.logs = data.logs.reverse();
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
                 if (data[p].length) data[p].forEach(e => {
@@ -1640,6 +1641,7 @@ function Game() {
       GUI.drawText('Crates: '+this.crates, 10, 100, 30, '#ffffff', 0);
       GUI.drawText('Experience: '+this.xp, 10, 150, 30, '#ffffff', 0);
       GUI.drawText('Coins: '+this.coins, 10, 200, 30, '#ffffff', 0);
+      if (this.hostupdate.global) GUI.drawText(this.hostupdate.global, 800, 30, 60, '#ffffff', .5);
 
       var l = 0, len = Math.min((this.showChat || this.hostupdate.logs.length<3) ? this.hostupdate.logs.length : 3, 30);
       while (l<len) {
