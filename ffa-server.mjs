@@ -541,8 +541,14 @@ class DUELS extends Multiplayer {
   }
 
   ontick() {
-    if (this.mode === 1) this.override(this.pt[0]);
+    if ([1, 2].includes(this.mode)) {
+      this.pt[0].x = 0;
+      this.pt[0].y = 0;
+      this.override(this.pt[0]);
+    }
     if (this.mode === 2) {
+      this.pt[1].x = 2920;
+      this.pt[1].y = 2920;
       this.override(this.pt[1]);
       this.global = 'Starting in '+(10-(Date.now()-this.readytime)/1000);
       if (10-(Date.now()-this.readytime)/1000 <= 0) this.mode = 3;
