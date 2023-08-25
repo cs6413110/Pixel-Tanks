@@ -523,8 +523,8 @@ class FFA extends Multiplayer {
 }
 
 class DUELS extends Engine {
-  constructor(duelsLevels) {
-    super(ip, );
+  constructor() {
+    super(duelsLevels);
     this.mode = 0; // 0 -> waiting for players to join, 1 -> waiting for second player to join, 2 -> 10 second ready timer, 3 -> match active, 4 -> gameover and server shutdown
   }
 
