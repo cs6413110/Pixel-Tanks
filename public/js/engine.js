@@ -187,7 +187,7 @@ class Engine {
         const tank = this.pt.find(tank => tank.username === t.healing);
         if (!tank) {
           t.healing = t.username;
-        } else if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + .2, tank.maxHp);
+        } else if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + .4, tank.maxHp);
       }
       if (t.pushback !== 0) t.pushback += 0.5;
       if (t.fire && getTeam(t.fire.team) !== getTeam(t.team)) t.damageCalc(t.x, t.y, .5, getUsername(t.fire.team));
