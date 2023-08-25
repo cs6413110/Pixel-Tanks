@@ -148,14 +148,14 @@ ffa.ws(SETTINGS.path, socket => {
       if (!await auth(data.username, data.token)) return socket.send({status: 'error', message: 'Invalid Token.'});
       let joinable;
       if (data.gamemode === 'ffa') {
-        let joinable = servers.filter(s => s.pt.length < SETTINGS.ppm && s instanceof FFA).sort((a, b) => a.pt.length-b.pt.length);
+        joinable = servers.filter(s => s.pt.length < SETTINGS.ppm && s instanceof FFA).sort((a, b) => a.pt.length-b.pt.length);
         if (joinable.length === 0) {
           joinable[0] = new FFA();
           servers.push(joinable[0]);
         }
       } else if (data.gamemode === 'duels') {
         socket.send({status: 'error', message: 'This gamemode is still under development'});
-        let joinable = servers.filter(s => s.pt.length === 1 && s instanceof DUELS); // no need to sort since they will be sorted in order of creation.
+        joinable = servers.filter(s => s.pt.length === 1 && s instanceof DUELS); // no need to sort since they will be sorted in order of creation.
         if (joinable.length === 0) {
           joinable[0] = new DUELS();
           servers.push(joinable[0]);
