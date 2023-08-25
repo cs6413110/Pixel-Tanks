@@ -150,7 +150,7 @@ class Engine {
       t.buff = true;
       setTimeout(() => {
         t.buff = false;
-      }, 15000);
+      }, 10000);
     }
     if (use.includes('healSwitch')) {
       let a = [];
