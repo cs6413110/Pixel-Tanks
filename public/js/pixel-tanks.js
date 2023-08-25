@@ -1297,7 +1297,7 @@ function Game() {
           switch (data.event) {
             case 'hostupdate':
               this.hostupdate.tickspeed = data.tickspeed;
-              this.hostupdate.global = this.hostupdate.global;
+              this.hostupdate.global = data.global;
               this.hostupdate.logs = data.logs.reverse();
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
                 if (data[p].length) data[p].forEach(e => {
