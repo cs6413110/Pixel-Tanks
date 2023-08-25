@@ -566,15 +566,18 @@ class DUELS extends Multiplayer {
       this.pt[1].x = 2920;
       this.pt[1].y = 2920;
       this.override(this.pt[1]);
-      this.global = 'Starting in '+(10-(Date.now()-this.readytime)/1000);
-      if (10-(Date.now()-this.readytime)/1000 <= 0) this.mode = 3;
+      this.global = 'Starting in '+(10-Math.ceil((Date.now()-this.readytime)/1000));
+      if (10-(Date.now()-this.readytime)/1000 <= 0) {
+        this.global = '======FIGHT======';
+        this.mode = 3;
+      }
     }
   }
 
   ondeath(t, m) {
     t.ded = true;
     this.mode = 4;
-    this.global = t.username+' Wins!';
+    this.global = m.username+' Wins!';
     // send gameover to clients and send server in 10 secs
   }
 
