@@ -594,6 +594,7 @@ class DUELS extends Multiplayer {
         m.shields = 0;
         t.hp = t.maxHp;
         t.shields = 0;
+        t.ded = false;
         this.pt.forEach(t => t.socket.send({event: 'ded'})); // cooldown reset
         setTimeout(() => {
           this.round++;
