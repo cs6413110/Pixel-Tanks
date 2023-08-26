@@ -170,7 +170,6 @@ ffa.ws(SETTINGS.path, socket => {
           servers.push(joinable[0]);
         }
       } else if (data.gamemode === 'duels') {
-        socket.send({status: 'error', message: 'This gamemode is still under development'});
         joinable = servers.filter(s => s.pt.length === 1 && s instanceof DUELS); // no need to sort since they will be sorted in order of creation.
         if (joinable.length === 0) {
           joinable[0] = new DUELS();
