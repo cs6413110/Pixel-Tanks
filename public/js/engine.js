@@ -364,7 +364,7 @@ class Block {
     if (type === 'airstrike') {
       for (let i = 0; i < 20; i++) {
         setTimeout(() => {
-          this.host.d.push(new Damage(this.x + Math.floor(Math.random()*200)-100, this.y + Math.floor(Math.random()*200)-100, 200, 200, 200, this.team, this.host));
+          if (this.host.b.includes(this)) this.host.d.push(new Damage(this.x + Math.floor(Math.random()*200)-100, this.y + Math.floor(Math.random()*200)-100, 200, 200, 200, this.team, this.host));
         }, 5000 + Math.random() * 500);
         setTimeout(() => this.destroy(), 6000);
       }
