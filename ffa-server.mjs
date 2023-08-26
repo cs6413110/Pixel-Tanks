@@ -541,7 +541,9 @@ class FFA extends Multiplayer {
 class DUELS extends Multiplayer {
   constructor() {
     super(duelsLevels);
-    this.mode = 0; // 0 -> waiting for players to join, 1 -> waiting for second player to join, 2 -> 10 second ready timer, 3 -> match active, 4 -> gameover and server shutdown
+    this.round = 0;
+    this.mode = 0; // 0 -> waiting for players to join, 1 -> waiting for second player to join, 2 -> 10 second ready timer, 3 -> match active, 4 -> in between rounds, 5 -> gameover
+    this.wins = {};
   }
 
   add(socket, data) {
@@ -557,7 +559,7 @@ class DUELS extends Multiplayer {
   }
 
   ontick() {
-    if ([1, 2].includes(this.mode)) {
+    if ([1, 2, 4].includes(this.mode)) {
       this.pt[0].x = 0;
       this.pt[0].y = 0;
       this.override(this.pt[0]);
@@ -566,8 +568,8 @@ class DUELS extends Multiplayer {
       this.pt[1].x = 2920;
       this.pt[1].y = 2920;
       this.override(this.pt[1]);
-      this.global = 'Starting in '+(10-Math.ceil((Date.now()-this.readytime)/1000));
-      if (10-(Date.now()-this.readytime)/1000 <= 0) {
+      this.global = 'Round '+this.round+' in '+(5-Math.ceil((Date.now()-this.readytime)/1000));
+      if (5-(Date.now()-this.readytime)/1000 <= 0) {
         this.global = '======FIGHT======';
         this.mode = 3;
       }
@@ -576,13 +578,31 @@ class DUELS extends Multiplayer {
 
   ondeath(t, m) {
     t.ded = true;
-    this.mode = 4;
-    this.global = m.username+' Wins!';
-    // send gameover to clients and send server in 10 secs
+    this.wins[m.username] = this.wins[m.username] === undefined ? 1 : this.wins[m.username]+1;
+    if (this.wins[m.username] === 3) {
+      this.global = m.username+' Wins!';
+      setTimeout(() => {
+        this.pt.forEach(t => {
+          t.socket.send({event: 'gameover'});
+          t.socket.close();
+        });
+      }, 5000);
+    } else {
+      this.global = m.username+' Wins Round '+this.round;
+      setTimeout(() => {
+        this.round++;
+        this.mode = 2; 
+        this.readytime = Date.now();
+      }, 5000);
+    }
   }
 
   disconnect(socket, code, reason) {
-    if ([2, 3].includes(this.mode)) this.mode = 1;
+    if ([2, 3].includes(this.mode)) {
+      this.round = 1;
+      this.mode = 1;
+      this.wins = {};
+    }
     this.pt.forEach(t => {
       t.socket.send({event: 'ded'}); // heal and reset cooldowns
       t.hp = t.maxHp;
