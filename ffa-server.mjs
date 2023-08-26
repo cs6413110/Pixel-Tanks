@@ -595,6 +595,11 @@ class DUELS extends Multiplayer {
         t.hp = t.maxHp;
         t.shields = 0;
         t.ded = false;
+        this.b = [];
+        this.s = [];
+        this.ai = [];
+        this.d = [];
+        this.levelReader(duelsLevels[0]);
         this.pt.forEach(t => t.socket.send({event: 'ded'})); // cooldown reset
         this.round++;
         this.mode = 2; 
