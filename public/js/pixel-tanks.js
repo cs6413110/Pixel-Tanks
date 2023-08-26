@@ -1315,6 +1315,11 @@ function Game() {
               this.reset();
               break;
             case 'gameover':
+              alert(`GAMEOVER
+              No menu for stats for this so um.... 
+              get redirected to the main menu... 
+              If you won, good job, if you lost, keep trying...`);
+              this.implode();
               break;
             case 'pay':
               const amount = Number(data.amount);
