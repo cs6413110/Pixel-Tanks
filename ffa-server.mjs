@@ -541,7 +541,7 @@ class FFA extends Multiplayer {
 class DUELS extends Multiplayer {
   constructor() {
     super(duelsLevels);
-    this.round = 0;
+    this.round = 1;
     this.mode = 0; // 0 -> waiting for players to join, 1 -> waiting for second player to join, 2 -> 10 second ready timer, 3 -> match active, 4 -> in between rounds, 5 -> gameover
     this.wins = {};
   }
@@ -590,9 +590,16 @@ class DUELS extends Multiplayer {
     } else {
       this.global = m.username+' Wins Round '+this.round;
       setTimeout(() => {
-        this.round++;
-        this.mode = 2; 
-        this.readytime = Date.now();
+        m.hp = m.maxHp;
+        m.shields = 0;
+        t.hp = t.maxHp;
+        t.shields = 0;
+        this.pt.forEach(t => t.socket.send({event: 'ded'}); // cooldown reset
+        setTimeout(() => {
+          this.round++;
+          this.mode = 2; 
+          this.readytime = Date.now();
+        }, 5000);
       }, 5000);
     }
   }
