@@ -568,7 +568,7 @@ class DUELS extends Multiplayer {
       this.pt[1].x = 2920;
       this.pt[1].y = 2920;
       this.override(this.pt[1]);
-      this.global = 'Round '+this.round+' in '+(5-Math.ceil((Date.now()-this.readytime)/1000));
+      this.global = 'Round '+this.round+' in '+(5-Math.floor((Date.now()-this.readytime)/1000));
       if (5-(Date.now()-this.readytime)/1000 <= 0) {
         this.global = '======FIGHT======';
         this.mode = 3;
