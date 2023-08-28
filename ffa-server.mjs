@@ -484,7 +484,7 @@ class Multiplayer extends Engine {
     if (this.pt.length === 0) {
       this.i.forEach(i => clearInterval(i));
       this.t.forEach(t => clearTimeout(t));
-      servers[servers.indexOf(this)] = new FFA();
+      servers.splice(servers.indexOf(this), 1);
     }
   }
 
