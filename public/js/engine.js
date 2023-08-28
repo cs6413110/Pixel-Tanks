@@ -360,7 +360,7 @@ class Block {
     this.s = false;
     this.c = !['spike', 'mine', 'fire', 'airstrike'].includes(type); // collision
     this.team = team;
-    if (['spike', 'mine', 'fire'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 5000 : 30000);
+    if (['spike', 'mine', 'fire'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 30000);
     if (type === 'airstrike') {
       for (let i = 0; i < 20; i++) {
         setTimeout(() => {
