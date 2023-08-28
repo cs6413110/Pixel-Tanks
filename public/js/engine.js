@@ -299,7 +299,6 @@ class Tank {
   damageCalc(x, y, a, u) {
     if ((this.immune && a > 0) || this.ded) return;
     if (this.shields > 0 &&  a > 0) return this.shields -= a;
-    if (this.buff) a *= .8;
     this.hp = Math.max(Math.min(this.maxHp, this.hp-a), 0);
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
