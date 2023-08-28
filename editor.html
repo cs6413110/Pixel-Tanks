@@ -77,6 +77,7 @@ canvas.addEventListener('mousemove', (e) => {
 let drawLoop;
 window.addEventListener('mousedown', (e) => {
   clearInterval(drawLoop);
+  drawer();
   drawLoop = setInterval(drawer, 10);
 });
 window.addEventListener('mouseup', (e) => {
