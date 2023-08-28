@@ -1562,7 +1562,9 @@ function Game() {
     frame() {
       this.render = requestAnimationFrame(this.frame.bind(this));
       GUI.clear();
-      if (this.hostupdate.pt === undefined) {
+      if (this.hostupdate.pt.length === 0) {
+        GUI.draw.fillStyle = '#ffffff';
+        GUI.draw.drawRect(0, 0, 1600, 1600);
         GUI.draw.fillStyle = '#000000';
         return GUI.draw.fillText('Loading Terrain...', 100, 100);
       }
