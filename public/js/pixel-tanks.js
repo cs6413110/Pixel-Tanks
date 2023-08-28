@@ -1953,8 +1953,8 @@ function Game() {
             this.speed = 4;
             this.tank.immune = false;
             if (PixelTanks.userData.class === 'stealth') this.tank.use.push('bomb');
-          }, PixelTanks.userData.class === 'tactical' ? 250 : 500);
-          setTimeout(() => {this.canBoost = true}, PixelTanks.userData.class === 'tactical' ? 2500 : 5000);
+          }, 500);
+          setTimeout(() => {this.canBoost = true}, 5000);
         }
       }
     }
