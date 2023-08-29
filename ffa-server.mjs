@@ -194,6 +194,7 @@ ffa.ws(SETTINGS.path, socket => {
       servers[socket.room].logs.push({m: `[${socket.username}] ${msg}`, c: '#ffffff'});
     } else if (data.type === 'command') {
       const func = Commands[data.data[0]], args = data.data;
+      if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'Commands are only allowed in FFA'});
       if (typeof func === 'function') {
         func.bind(socket)(args);
       } else socket.send({status: 'error', message: 'Command not found.'});
