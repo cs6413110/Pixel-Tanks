@@ -1551,7 +1551,8 @@ function Game() {
 
       if (t.healing && !t.ded) {
         const target = this.hostupdate.pt.find(tank => tank.username === t.healing);
-        if (Math.sqrt((target.x-t.x)**2+(target.y-t.y)**2) > 500 || !target) return;
+        if (!target) return;
+        if (Math.sqrt((target.x-t.x)**2+(target.y-t.y)**2) > 500) return;
         GUI.draw.beginPath();
         GUI.draw.lineWidth = 10;
         GUI.draw.strokeStyle = '#00FF00';
