@@ -644,7 +644,7 @@ class TDM extends Multiplayer {
   }
 
   ontick() {
-    if (mode === 0) {
+    if (this.mode === 0) {
       if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
         this.mode = 1; // game start
         this.readytime = Date.now();
@@ -654,7 +654,7 @@ class TDM extends Multiplayer {
         });
         this.levelReader(duelsLevels[0]);
       }
-    } else if (mode === 1) {
+    } else if (this.mode === 1) {
       this.pt.forEach(t => {
         const spawn = getTeam(t.team) === 'BLUE' ? 0 : 1;
         t.x = this.spawns[spawn].x;
