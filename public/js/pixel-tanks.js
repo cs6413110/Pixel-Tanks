@@ -541,10 +541,7 @@ function Game() {
           itemTab: '/menus/itemTab',
           cosmeticTab: '/menus/cosmeticTab',
           deathEffectsTab: '/menus/cosmeticTab',
-          shop_armor: '/menus/shop_armor',
-          shop_class: '/menus/shop_class',
-          shop_items: '/menus/shop_items',
-          shop_kits: '/menus/shop_kits',
+          shop: 'menus/shop',
           broke: '/menus/broke',
           htp1: '/menus/htp1',
           htp2: '/menus/htp2',
@@ -823,7 +820,7 @@ function Game() {
                 for (let xm = 0; xm < 2; xm++) {
                   for (let ym = 0; ym < 3; ym++) {
                     if (collision(x, y, 0, 0, [702, 810][xm], [348, 456, 564][ym], 88, 88)) {
-                      if (PixelTanks.userData.classes[[[0, 6, 3], [1, 4, 2]][xm][ym]]) {
+                      if (PixelTanks.userData.classes[[[0, 5, 3], [1, 4, 2]][xm][ym]]) {
                         PixelTanks.userData.class = [['tactical', 'fire', 'medic'], ['stealth', 'builder', 'warrior']][xm][ym];
                       } else alert('You need to buy this first!');
                       return;
@@ -962,32 +959,25 @@ function Game() {
         },
         shop: {
           buttons: [
-            [424, 28, 108, 108, 'main', true],
-            [88, 212, 328, 64, function() {this.tab='items'}, true],
-            [456, 212, 328, 64, function() {alert('removed')}, false],
-            [824, 212, 328, 64, function() {this.tab='class'}, true],
-            [1192, 212, 328, 64, function() {this.tab='kits'}, true],
+            [416, 20, 108, 108, 'main', true],
+             70000, // tactical
+        30000, // stealth
+        80000, // warrior
+        40000, // medic
+        60000, // builder
+        90000, // fire
+            [58, 52, 122, 24, function() {/* class tab */}, true],
+            [220, 52, 122, 24, function() {/* ded tab */}, true],
+            [124, 101, 44, 44, function() {PixelTanks.purchase(0)}, true],
+            [178, 101, 44, 44, function() {PixelTanks.purchase(1)}, true],
+            [232, 101, 44, 44, function() {PixelTanks.purchase(4)}, true],
+            [224, 155, 44, 44, function() {PixelTanks.purchase(2)}, true],
+            [178, 155, 44, 44, function() {PixelTanks.purchase(5)}, true],
+            [232, 155, 44, 44, function() {PixelTanks.purchase(3)}, true],
           ],
-          listeners: {
-            mousedown: function() {
-              if (this.tab === 'class') {
-                for (let i = 0; i < 6; i++) {
-                  if (A.collider({x: Menus.x, y: Menus.t, w: 0, h: 0}, {x: [504, 720, 936][i%3], y: [416, 632][Math.floor(i/3)], w: 176, h: 176})) PixelTanks.purchase(['tactical', 'stealth', 'builder', 'warrior', 'fire', 'medic'][i]);
-                }
-              }
-            }
-          },
+          listeners: {},
           cdraw: function() {
-            if (!this.tab) this.tab = 'armor';
-            GUI.drawImage(PixelTanks.images.menus['shop_'+this.tab], 0, 0, 1600, 1000, 1);
             GUI.drawText(PixelTanks.userData.stats[0]+' coinage', 800, 350, 50, 0x000000, 0.5);
-            if (this.tab === 'class') {
-              for (let i = 0; i < 6; i++) {
-                if (!PixelTanks.userData.classes[i] && PixelTanks.userData.stats[0] < [70000, 30000, 70000, 50000, 50000, 70000][i]) {
-                  GUI.drawImage(PixelTanks.images.menus.broke, [504, 720, 504, 936, 936, 720][i], [416, 416, 632, 632, 416, 632][i], 176, 176, 1);
-                }
-              }
-            }
           },
         },
         pause: {
@@ -1044,9 +1034,7 @@ function Game() {
                 false, // warrior
                 false, // medic
                 false, // builder
-                false, // summoner
                 false, // fire
-                false, // ice
               ],
               items: ['duck_tape', 'weak', 'bomb', 'flashbang'],
               keybinds: {
@@ -1230,26 +1218,19 @@ function Game() {
     }
 
     static purchase(stat) {
-      var key = {
-        tactical: [['classes', 0], 70000],
-        stealth: [['classes', 1], 30000],
-        warrior: [['classes', 2], 70000],
-        medic: [['classes', 3], 50000],
-        builder: [['classes', 4], 50000],
-        summoner: [['classes', 5], 100000],
-        fire: [['classes', 6], 70000],
-        ice: [['classes', 7], 70000],
-      }
-      if (key[stat] === undefined) alert('The ['+stat+'] item is not registered. Scream at me to add it.');
-      if (PixelTanks.userData[key[stat][0][0]][key[stat][0][1]]) {
-        alert('You already bought this :/');
-      } else if (PixelTanks.userData.stats[0] >= key[stat][1]) {
-        PixelTanks.userData.stats[0] -= key[stat][1];
-        PixelTanks.userData[key[stat][0][0]][key[stat][0][1]] = true;
-        alert('purchase succes. thank u 4 ur monee');
-      } else {
-        alert('Your brok boi');
-      }
+      // since u can like only buy classes the number relates to the index of the true/false value in the PixelTanks.userData.classes to determine whether you have it or not
+      const prices = [
+        70000, // tactical
+        30000, // stealth
+        80000, // warrior
+        40000, // medic
+        60000, // builder
+        90000, // fire
+      ];
+      if (PixelTanks.userData.classes[stat]) return alert('You already bought this.');
+      if (PixelTanks.userData.stats[0] < prices[stat]) return alert('Your brok boi.');
+      PixelTanks.userData.stats[0] -= prices[stat];
+      PixelTanks.userData.classes[stat] = true;
     }
   }
 
