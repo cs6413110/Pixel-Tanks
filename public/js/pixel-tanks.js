@@ -541,7 +541,7 @@ function Game() {
           itemTab: '/menus/itemTab',
           cosmeticTab: '/menus/cosmeticTab',
           deathEffectsTab: '/menus/cosmeticTab',
-          shop: 'menus/shop',
+          shop: '/menus/shop',
           broke: '/menus/broke',
           htp1: '/menus/htp1',
           htp2: '/menus/htp2',
