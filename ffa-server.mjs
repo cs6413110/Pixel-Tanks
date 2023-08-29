@@ -167,7 +167,11 @@ ffa.ws(SETTINGS.path, socket => {
           servers.push(joinable[0]);
         }
       } else if (data.gamemode === 'tdm') {
-        socket.send({status: 'error', message: 'This gamemode is not ready'});
+        joinable = servers.filter(s => s.mode === 0 && s instanceof TDM).sort((a, b) => a.pt.length-b.pt.length);
+        if (joinable.length === 0) {
+          joinable[0] = new TDM();
+          servers.push(joinable[0]);
+        }
       } else if (data.gamemode === 'juggernaut') {
         socket.send({status: 'error', message: 'This gamemode is not ready'});
       }
@@ -540,10 +544,10 @@ class DUELS extends Multiplayer {
     super.add(socket, data);
     if (this.pt.length === 1) {
       this.global = 'Waiting For Player...';
-    } else if (this.pt.length === 2) {
+    } else {
       this.readytime = Date.now();
       this.mode++;
-    } else return socket.send("Internal Server Error. You were redirected to a room that couldn't accept you.");
+    }
   }
 
   ontick() {
@@ -578,17 +582,17 @@ class DUELS extends Multiplayer {
     } else {
       this.global = m.username+' Wins Round '+this.round;
       setTimeout(() => {
-        m.hp = m.maxHp;
-        m.shields = 0;
-        t.hp = t.maxHp;
-        t.shields = 0;
-        t.ded = false;
+        this.pt.forEach(tank => {
+          tank.hp = tank.maxHp;
+          tank.shields = 0;
+          tank.ded = false;
+          t.socket.send({event: 'ded'});
+        });
         this.b = [];
         this.s = [];
         this.ai = [];
         this.d = [];
         this.levelReader(duelsLevels[0]);
-        this.pt.forEach(t => t.socket.send({event: 'ded'})); // cooldown reset
         this.round++;
         this.mode = 1; 
         this.readytime = Date.now();
@@ -612,13 +616,99 @@ class DUELS extends Multiplayer {
 
 class TDM extends Multiplayer {
   constructor() {
+    super([[]]); // no lobby level for now :(
     this.round = 1;
     this.mode = 0; // 0 -> Lobby/Waiting for players, 1 -> About to enter round, 2 -> in game
-    this.wins = {red: 0, blue: 0};
+    this.wins = {RED: 0, BLUE: 0};
   }
 
   add(socket, data) {
-    super.add();
+    super.add(socket, data);
+    const t = this.pt[this.pt.length-1];
+    let red = 0, blue = 0;
+    this.pt.forEach(tank => {
+      if (tank.color === '#FF0000') {
+        red++;
+      } else if (tank.color === '#0000FF') {
+        blue++;
+      }
+    });
+    if (red > blue) t.color = '#0000FF';
+    if (red < blue) t.color = '#FF0000';
+    if (red === blue) t.color = (Math.random() < .5 ? '#FF0000' : '#0000FF');
+    if (this.pt.length === 4) { // once four players, begin the countdown
+      this.readytime = Date.now();
+      this.time = 60; // 1 minute starting time
+    }
+  }
+
+  ontick() {
+    if (mode === 0) {
+      if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
+        this.mode = 1; // game start
+        this.readytime = Date.now();
+        this.time = 5;
+        this.pt.forEach(t => {
+          t.team = t.username+':'+(t.color === '#FF0000' ? 'RED' : 'BLUE');
+        });
+        this.levelReader(duelsLevels[0]);
+      }
+    } else if (mode === 1) {
+      this.pt.forEach(t => {
+        const spawn = getTeam(t.team) === 'BLUE' ? 0 : 1;
+        t.x = this.spawns[spawn].x;
+        t.y = this.spawns[spawn].y;
+        this.override(t);
+      });
+      this.global = 'Round '+this.round+' in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
+      if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
+        this.global = '======FIGHT======';
+        this.mode = 2;
+      }
+    }
+  }
+
+  ondeath(t, m) {
+    t.ded = true;
+    let allies = 0;
+    this.pt.forEach(tank => {
+      if (!tank.ded) {
+        if (getTeam(tank.team) === getTeam(t.team)) {
+          allies++;
+        }
+      }
+    });
+    if (allies === 0) {
+      const winner = getTeam(m.team);
+      this.wins[winner]++;
+      if (this.wins[winner] === 3) {
+        this.global = winner+' Wins!';
+        setTimeout(() => {
+          this.pt.forEach(t => {
+            t.socket.send({event: 'gameover'});
+            t.socket.close();
+          });
+        }, 5000);
+      } else {
+        this.global = winner+' Wins Round '+this.round;
+        setTimeout(() => {
+          this.pt.forEach(tank => {
+            tank.hp = tank.maxHp;
+            tank.shields = 0;
+            tank.ded = false;
+            t.socket.send({event: 'ded'});
+          });
+          this.b = [];
+          this.s = [];
+          this.ai = [];
+          this.d = [];
+          this.levelReader(duelsLevels[0]);
+          this.round++;
+          this.mode = 1; 
+          this.readytime = Date.now();
+        }, 5000);
+      }   
+    }
   }
 }
 
