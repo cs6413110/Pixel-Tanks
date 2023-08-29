@@ -617,7 +617,7 @@ class DUELS extends Multiplayer {
 class TDM extends Multiplayer {
   constructor() {
     super([[]]); // no lobby level for now :(
-    this.global = 'Waiting for Players...');
+    this.global = 'Waiting for Players...';
     this.round = 1;
     this.mode = 0; // 0 -> Lobby/Waiting for players, 1 -> About to enter round, 2 -> in game
     this.wins = {RED: 0, BLUE: 0};
