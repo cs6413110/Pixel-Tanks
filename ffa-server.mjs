@@ -541,36 +541,34 @@ class DUELS extends Multiplayer {
   constructor() {
     super(duelsLevels);
     this.round = 1;
-    this.mode = 0; // 0 -> waiting for players to join, 1 -> waiting for second player to join, 2 -> 10 second ready timer, 3 -> match active, 4 -> in between rounds, 5 -> gameover
+    this.mode = 0; // 0 -> waiting for other player, 1 -> 10 second ready timer, 2-> match active
     this.wins = {};
   }
 
   add(socket, data) {
     super.add(socket, data);
-    if (this.mode === 0) {
+    if (this.pt.length === 1) {
       this.global = 'Waiting For Player...';
-      this.mode++;
-    } else if (this.mode === 1) {
+    } else if (this.pt.length === 2) {
       this.readytime = Date.now();
       this.mode++;
-      this.global = 'Starting in 10';
     } else return socket.send("Internal Server Error. You were redirected to a room that couldn't accept you.");
   }
 
   ontick() {
-    if ([1, 2, 4].includes(this.mode)) {
+    if ([0, 1].includes(this.mode)) {
       this.pt[0].x = 0;
       this.pt[0].y = 0;
       this.override(this.pt[0]);
     }
-    if (this.mode === 2) {
+    if (this.mode === 1) {
       this.pt[1].x = 2920;
       this.pt[1].y = 2920;
       this.override(this.pt[1]);
       this.global = 'Round '+this.round+' in '+(5-Math.floor((Date.now()-this.readytime)/1000));
       if (5-(Date.now()-this.readytime)/1000 <= 0) {
         this.global = '======FIGHT======';
-        this.mode = 3;
+        this.mode = 2;
       }
     }
   }
@@ -601,14 +599,14 @@ class DUELS extends Multiplayer {
         this.levelReader(duelsLevels[0]);
         this.pt.forEach(t => t.socket.send({event: 'ded'})); // cooldown reset
         this.round++;
-        this.mode = 2; 
+        this.mode = 1; 
         this.readytime = Date.now();
       }, 5000);
     }
   }
 
   disconnect(socket, code, reason) {
-    if ([2, 3].includes(this.mode)) {
+    if ([1, 2].includes(this.mode)) {
       this.round = 1;
       this.mode = 1;
       this.wins = {};
@@ -620,6 +618,19 @@ class DUELS extends Multiplayer {
     super.disconnect(socket, code, reason);
   }
 }
+
+class TDM extends Multiplayer {
+  constructor() {
+    this.round = 1;
+    this.mode = 0; // 0 -> Lobby/Waiting for players, 1 -> About to enter round, 2 -> in game
+    this.wins = {red: 0, blue: 0};
+  }
+
+  add(socket, data) {
+  }
+}
+
+
 
 if (!SETTINGS.export) ffa.listen(SETTINGS.port);
 
