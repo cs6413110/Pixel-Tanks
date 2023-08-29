@@ -86,7 +86,7 @@ window.addEventListener('mouseup', (e) => {
 
 const drawer = () => {
   if (x > 0 && y > 0 && x < 600 && y < 600) {
-    world[Math.floor(y/20)][Math.floor(x/20)] = current;
+    world[Math.floor(y/20)][Math.floor(x/20)] = world[Math.floor(y/20)][Math.floor(x/20)] === current ? 'B0' : current;
     document.getElementById('output').innerHTML = JSON.stringify(world);
   }
 }
