@@ -1,7 +1,3 @@
-const arc = document.createElement('SCRIPT');
-arc.src = 'https://arc.io/widget.min.js#N3KzQsou';
-arc.setAttribute('async', '');
-document.head.appendChild(arc);
 const packer = document.createElement('SCRIPT');
 packer.crossOrigin = '';
 packer.src = 'https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js';
