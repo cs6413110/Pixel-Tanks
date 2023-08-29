@@ -63,41 +63,48 @@ const deathMessages = [
 ];
 const joinMessages = [
   `{idot} joined the game`,
-  `{idot} spawned`,
-  `{idot} joined`,
-  `{idot} wants a killsteak`,
-  `{idot} exists`,
-  `{idot} has been summoned`,
-  `{idot} is back`,
-  `a wild {idot} spawned`,
-  `{idot} is here to kill them all`,
-  `{idot} is here to fight to the death`,
+  `{idot} has a document to present`,
+  `{idot} finished their homework`,
+  `{idot} found out cs641311 joined the game`,
+  `{idot} <--- FLAT SPOTTED!!! ඞTARGETඞ ඞATඞ ඞALLඞ ඞCOSTSඞ!!!`,
+  `There is an impostor amogus ඞ`,
+  `{idot} found this server ip address`,
+  `{idot} accidentally clicked play`,
+  `{idot} has bread spam to graciously give everyone`,
+  `{idot}.exe is back online`,
+  `{idot} wants to go home`,
+  `{idot} has some spare time`,
+  `{idot} evaded an enemy techer`,
+  `a wild {idot} appeared!`,
+  `{idot} NEEDS a kilstreak`,
+  `{idot} is ready to commit a breadley's flint and steel`,
+  `{idot} got the rarest join message... mabye...`,
 ];
 const rageMessages = [
-  `{idot}.exe is unresponsive`,
+  `{idot}.exe stopped responding`,
   `{idot} left the game`,
   `{idot} ragequit`,
   `{idot} stopped existing`,
-  `{idot} got away`,
+  `wild {idot} got away`,
   `wild {idot} fled`,
   `{idot} disconnected`,
   `{idot} lost internet connection`,
   `{idot} is not found`,
+  `{idot} left due to a critical condition: skill issue`,
+  `{idot} <--- RAGE QUIT LAFF!!! plz bully this man when u see him bc SKILL ISSUE`,
+  `{idot} skill issued`,
+  `{idot} got techered`,
+  `{idot} was found by the mob`,
+  `{idot} was found guilty`,
+  `{idot} was the Impostor (1 impostor remains)`,
+  `{idot} touched grass and died`,
+  `{idot} dediced to go outside`,
 ];
 var sockets = [], servers = [], incoming_per_second = 0, outgoing_per_second = 0, ffaLevels = [
-  ['22 2 =2222222222222222222222=1','22 = == ===================21=','    =      # # #           122','2=   = #   #   # ## ## #  1 =2','  = @= ##  ## ##         1  =2','=  ==  2## #   # #      1   =2','2=    222### # # #     1  # =2','2  ##22222##   #      1     =2','2=  ##22222##  # #   1      =2','2=   ##22222##      1       =2','2= #  ##22222##    1  #   # =2','2= ##  ##22222##  1         =2','2= ###  ##222221 1  # ##### =2','2= # ##  ##222111   #     # =2','2= # ###  ##211111#  #  # # =2','2= #   ##  #111112##  #   # =2','2= # #   #   111222##  #  # =2','2= ##### #  1 122222##  # # =2','2=         1  ##22222##  ## =2','2= #   #  1    ##22222##  # =2','2=       1      ##22222##   =2','2=      1   # # ###22222##  =2','2=     1      #   ##22222##  2','2= #  1     # # # ###222    =2','2=   1      # # # # ##2  ==  =','2=  1         # # #  ## =  =  ','2= 1  # ## ## # # #   # =   =2','221           #   #      =    ','=12=================== =  = 22','1=2222222222222222222222= 2 22'],
-  ['2     =    #     #  #  =     2', ' ==2=    # #  #  #  #    =2== ', ' =  = =  #    #     #  = =  = ', ' 2 == =  #### # #####  = == 2 ', ' ==== =  #    #     #  = ==== ', '      1  # #     #  #  1      ', '= ===11  # # ### # ##  11=== =', '         # #     #  #         ', '  222#   ############         ', ' 22222#                ###### ', ' 22222#   2  2222  2   #  # # ', ' 22222#                #  # # ', ' 22222#     # 11 #     # ## # ', ' 22222#   2  1111  2   #    # ', ' 22222#   2 11@ 11 2   # ## # ', ' 22222#   2 11  11 2   #  # # ', ' 22222#   2  1111  2   #  # # ', ' 22222#     # 11 #     #### # ', ' 22222#                     # ', ' 22222#   2  2222  2   ## # # ', ' 22222#                #  # # ', '  222#   ############  ###### ', '         #    ##    #         ', '= ===11  # #      # #  11=== =', '      1  #    ##    #  1      ', ' ==== =  #    ##    #  = ==== ', ' 2 == =  #    ##    #  = == 2 ', ' =  = =  #    ##    #  = =  = ', ' ==2=    # #      # #    =2== ', '2     =  #    ##       =     2'],
-  ['========   #      #   =========', '======     2      2     =======', '====11     #      #     11=====', '===111      #    #      111====', '==111#########22#########111==', '==11##   #          #   ##11==', '=   # #                ###   =', '=   #  2    #    #    ####   =', '    #   2            # 1 #    ', '    #    2          #  # #    ', '    # 1   #        ##1## #    ', '#2# #      #####2##   #  # #2#', '   ##      2222222#1### ###   ', '    #      #2    22 #    #    ', '    2  1   #2 @  2######1#    ', '    2    1 #2    22    # 2    ', '    #      #2    2####1# #    ', '   ## #    #222222# #  # ##   ', '#2# #      #####2## #1##1# #2#', '    #     1        ##  # #    ', '    #   1     1     ##1# #    ', '    #    #        1  #   #    ', '=   #          #      ####   =', '=   ### 1  1        1  ###   =', '==11###                 ##11==', '==111#########22#########111==', '===111      #    #      111===', '====11     #      #     11====', '======     2      2     ======', '========   #      #   ========'],
-  ['===========================222', '===========        ========222', '========    ###  #    =====222', '======222####           =====2', '===== 2###    #  11#1111#====2', '====  ##22 ####  111111111===2', '===  ##22###  1  #111#1111#==2', '=== ##  ##  1 1  #111##111#==2', '==22#  ## 1 1 1   1111111122=2', '==2##2## 1   ####  #1111#122=2', '==2#22# 1 1         11111122=2', '=  #2##    #  22  # 111111#222', '= ## # 11                2222=', '=2#  #   #   #  #   #      22=', '=2# ##111# 2  @   2 #        =', '=22 #    # 2      2 #  2### #=', '=####1 2 #   #  #   ### 1  # =', '=2222 2#              1# #   =', '22221  2 1 #  22  # ## 1  ## =', '2=222#21 2        # 1 # #   ==', '2=222 #      ####   #1  # # ==', '2=2 # 12 1 1  #   ## ###  # ==', '2==2     2 22 2 # 1 1   # #===', '2==  12 2 2#   #1  # # #   ===', '2===   #   2 1 # #1#  ####====', '2====  2 21 12 # #   ##  =====', '2=====   1 2#  # # ##   ======', '222=====   1   ###    ========', '222======== 2 1#   ============', '222==========================='],
-  ['=====         ==         =====', '===     ====  ==           ===', '===        =  =====        ===', '=          =  =====          =', '=   = =       ==       = =   =', '   = =        ==        = =   ', '      = =   ====     = =      ', '     = =    ====      = =     ', '            ==                ', '            ==   ===          ', '        =                 =   ', '  ==  ===                 === ', '  ==        =1111=  ====      ', '  ==        1    1  ====      ', '========    1 @  1    ========', '========    1    1    ========', '      ====  1    1        ==  ', '      ====  =1111=        ==  ', '  =                 ===   ==  ', ' ====                 =       ', '  =             ==            ', '                ==          = ', '     = =      ====    = =   = ', '      = =     ====   = =      ', '   = =        ==        = =   ', '=   = =    =====       = =   =', '=          =====             =', '===           ==  ===      ===', '===           ==    ===    ===', '=====         ==         ====='],
-  ['   #   #   #  ==   ##  # #   #','   #   #   #  == #  # ##   # #','   #   #   #2 == ####    #    ','## # ### ###2 == #  # ## ## ##','           22 ==   ## #       ',' ###    ##### == #    # ######',' ##  222  ##  == # ## #    #  ','11# 22222    1== #    #### # #','1## 22      11==    # #       ','1#          11==## ## # ######','  #     11111 ==    # # #     ','    #   111   == ## #   #     ','    #         22    # ###     ','    #        2222 #       # # ','============22@ 22============','============22  22============','       2     2222             ',' ##2######### 22         111  ',' # 2        # ==       11     ',' # ######## # ==     ##    #  ',' # #     22 # ==     ##    ## ',' # # #2## # # ==              ','2# # #2 # # # ==          2   ',' # # # 2# # #2========    22  ',' # # ##2# # # ==         2    ',' # 22     # # ==        # # # ',' # ######## # == 2 2  2 ##### ',' #        2 # ==  2 2   #   # ',' #########2## == 2 2 2      # ','      2       ==        #   # '],
-  ['=   ==========================','     =========================','  @  222 =   =   =   =   =====','     ===   =   =   =   =   222','=   =========1============1==2','==2==########1############1##2','==2==#  1        #          # ','==2==#1    1   1 #          # ','==  =#   1   1   # 1    ##  # ','=== =#          1# 1      # # ','==  =#  1   1    # 1  #   # # ','== ==# 1  1    1 #    #     # ','==  =#       1   #     ##   # ','=== 11  1     2#####2       # ','==  =#    1  222111222      # ','== ==#      1#211 112#  111 # ','==  =# 1 1   #11   11#      # ','=== =#########1     1######## #','==  =#       #11   11#    # # ','== ==#  111  #211 112#  2 # # ','==  =#       222111222    # # ','=== =#        2#####2     2 # ','==  =#    ##     #     #  # # ','== ==#      #    #    ##  # # ','==  =#  #   #  1 # 2      # 2 ','=== =#  #      1 #        # # ','=== 11   ##    1 ####2####### ','===2=#           #        ### ','===2=###################2#### ','===222                        '],
-  ['==============================','=======================1======','==============================','=  #22       #        22#    =','=  ##22      #       222#    =','=    #22     1      222 #    =','=    #22     1     222  #    =','=    ##22    #    222  #     =','= 22  # 222  # 2 22    1     =','= 22  1   2 2#1 22     1     =','=     1   221#112  11  #     =','=     #   211 111  11  #     =','=     #   #1   1#      #     =','=##22##2221  @   ########11##=','=     #   1#   #1      #     =','=     1   11   11 11   #     =','=     1    1   1  11   1     =','=     #   #11111       1     =','=    ##   ##   ##      #     =','=    #   1#2    #1     #     =','=    #  11       11    ##    =','=  ### 11         11    #    =','=  #  ##           ##   #    =','=  # ###  ##  ##  ####  #    =','=  ##                ## #    =','=  ######             # #    =','=22#########22###22######22===','=                          ===','=                          ===','=============================='],
-  ['==============================','=======================1======','==============================','=  #22       #        22#    =','=  ##22      #       222#    =','=    #22  T  1  T   222 #    =','=    #22     1     222  #    =','=    ##22    #    222  #     =','= T2  # 222  # 2 22    1  T  =','= 2T  1   2 1#1 22     1     =','=     1   211#112  11  #     =','=     #   T11 11T  11  #     =','=     #   11   11      #     =','=##22##2221  @  1########11##=','=     #   11   11      #     =','=     1   T1   1T 11   #     =','=     1    1   1  11   1     =','= T   #   #11111       1     =','=    ##   ##   ##      #     =','=    #   1#2    #1     #     =','=    #  11       11    ## T  =','=  ### 11         11    #    =','=  #  ##   T  T    ##   #    =','=  # ###  ##  ##  ####  #    =','=  ##                ## #    =','=  ######             # #    =','=22#########22###22######22===','=                          ===','=    T                 T   ===','=============================='],
-  ['   =   =       11 1 1 ========','   = = = =  111    111        ','   = = = = 1  1  111 1        ',' === = = = 1 111111      ==   ','     = = = 111 11  1 1   ==   ','====== = = 1    11 111   ==   ','       = =   11 1  1     ==   ',' ======= = 11 11 11 1    ==   ','         =   11 11  11   ==   ','==========  1 ###  11    ==   ','           1 ##2#### 1   ==   ','            ##22222##    ==   ','  # # #    ##2222222##   ==   ','           #222222222#   ==   ','           #222222222#   ==   ',' #     #  ##222222222#   ==   ',' #  @  #   2222222222#   ==   ',' #     #  ##222222222#   ==   ','           ##222222##    ==   ','            ##222###     ==   ','  # # #      #####            ','                              ','                      ========','#### #####  ==== ======= = = =','   # #   #  =       = =       ',' #     # #  = === === == =====','   ###   #  ===          =    ',' #     # #  =   = = = ==== =  ','   ###   #  = === = =   =  =  ',' #     # #  = =   = = =   ==  '],
-  ['          =  =##=  #         #','          =  =  =  #      #   ','       =22=  =  =         #   ','   @   =  =  =  = #= ==== = ##','       =  =22=  =             ','       =  =# =  =  = =  = =   ','       =  1  1  1  =      =   ','  ======  1  1  1  =      =   ','  2       = #=  =  = =  = =   ','  2       =  =  =             ','======11===22=  =# = ==== =## ','    2#    2  =  =  #          ','    2   # 2  1  =         #   ','======11====11  ======11======','#                            #','#                            #','======11======  ======11======','             =  =       = 1   ',' #         # =  =   =====     ','     ====    =  =          1 1','    ==  ==   =  = =    1 1    ','## ==    ==  =  = =  1 1   11 ','   =  #   =  1  1 =         1 ',' ##= ###  =  1  1 =    1 1    ','   =  #  ==  =  ===  1    1 1 ','        ==   =  =     1 1     ','     ====    =  = 1 1   1   1 ','      #      =  =  1  1  1    ','=     # #  # =  =   1       1 ','==      #    =##= 1    1   1  '],
+  [["B4","B4","B4","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B4","B4","B4"],["B4","B0","B0","B0","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B0","B0","B0","B4"],["B4","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B4"],["B4","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B4"],["B5","B4","B0","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B2","B2","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B0","B4","B5"],["B5","B5","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B5","B5"],["B5","B5","B4","B2","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B2","B4","B5","B5"],["B5","B5","B4","B2","B4","B0","B0","B0","B0","B0","B4","B4","B0","B2","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B2","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B0","B0","B0","B0","B1","B4","B4","B4","B2","B2","B4","B4","B4","B1","B0","B0","B0","B0","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B4","B0","B0","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B0","B0","B4","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B4","B4","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B4","B4","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B0","B1","B1","B0","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B1","B1","B1","B1","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B2","B0","B0","B0","B2","B0","B0","B0","B1","B1","S","B0","B1","B1","B0","B0","B0","B2","B0","B0","B0","B2","B0","B4","B5","B5"],["B5","B5","B4","B0","B2","B0","B0","B0","B2","B0","B0","B0","B1","B1","B0","B0","B1","B1","B0","B0","B0","B2","B0","B0","B0","B2","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B1","B1","B1","B1","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B0","B1","B1","B0","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B4","B4","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B4","B4","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B4","B0","B0","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B0","B0","B4","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B0","B0","B0","B0","B1","B4","B4","B4","B2","B2","B4","B4","B4","B1","B0","B0","B0","B0","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B2","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B2","B4","B5","B5"],["B5","B5","B4","B2","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B2","B4","B5","B5"],["B5","B5","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B5","B5"],["B5","B4","B0","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B2","B2","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B0","B4","B5"],["B4","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B4"],["B4","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B4"],["B4","B0","B0","B0","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B0","B0","B0","B4"],["B4","B4","B4","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B4","B4","B4"]],
+  [["B4","B0","B4","B0","B4","B0","B4","B0","B4","B5","B2","B2","B2","B2","B0","B0","B2","B2","B2","B2","B5","B0","B4","B0","B0","B0","B0","B0","B4","B0"],["B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B2","B2","B2","B0","B0","B0","B0","B2","B2","B2","B5","B0","B4","B0","B4","B0","B4","B0","B4","B0"],["B4","B0","B4","B0","B4","B0","B4","B0","B4","B5","B2","B2","B0","B0","B0","B0","B0","B0","B2","B2","B5","B0","B4","B0","B4","B0","B4","B0","B4","B0"],["B0","B0","B0","B0","B0","B0","B0","B0","B4","B5","B2","B0","B0","B0","B2","B2","B0","B0","B0","B2","B5","B0","B4","B0","B4","B0","B4","B0","B4","B0"],["B4","B0","B4","B0","B4","B0","B4","B0","B0","B3","B2","B0","B0","B0","B2","B2","B0","B0","B0","B2","B5","B0","B4","B0","B4","B0","B4","B0","B4","B0"],["B0","B0","B0","B0","B0","B0","B0","B0","B4","B5","B0","B2","B0","B0","B0","B0","B0","B0","B2","B0","B5","B0","B4","B0","B4","B0","B4","B0","B4","B0"],["B4","B0","B4","B0","B4","B0","B4","B0","B4","B5","B2","B0","B2","B0","B0","B0","B0","B2","B0","B2","B5","B0","B4","B0","B4","B0","B4","B0","B4","B0"],["B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B2","B2","B0","B2","B0","B0","B2","B0","B2","B2","B5","B0","B4","B0","B4","B0","B4","B0","B4","B0"],["B4","B0","B4","B0","B4","B0","B4","B0","B4","B5","B2","B2","B2","B0","B2","B2","B0","B2","B2","B2","B5","B0","B0","B0","B4","B0","B4","B0","B0","B0"],["B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B3","B3","B5","B5","B5","B5","B5","B5","B5","B5","B5","B3","B5","B5","B5","B5"],["B1","B0","B1","B0","B1","B0","B1","B0","B1","B5","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B0","B0","B2","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B2","B0","B0","B0","B2","B0","B2","B2","B0"],["B0","B1","B0","B2","B0","B2","B0","B1","B0","B5","B0","B0","B4","B0","B3","B3","B0","B4","B0","B0","B5","B0","B0","B2","B2","B2","B2","B2","B2","B0"],["B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B0","B0","B0","B4","B3","B3","B4","B0","B0","B0","B5","B2","B2","B2","B0","B0","B0","B0","B0","B0"],["B1","B0","B2","B0","B2","B0","B2","B0","B0","B3","B0","B0","B3","B3","S","B0","B3","B3","B0","B0","B3","B0","B0","B2","B0","B2","B2","B2","B2","B2"],["B1","B0","B2","B0","B2","B0","B2","B0","B0","B3","B0","B0","B3","B3","B0","B0","B3","B3","B0","B0","B3","B0","B0","B2","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B0","B0","B0","B4","B3","B3","B4","B0","B0","B0","B5","B2","B0","B2","B2","B2","B2","B2","B0","B2"],["B0","B1","B0","B2","B0","B2","B0","B1","B0","B5","B0","B0","B4","B0","B3","B3","B0","B4","B0","B0","B5","B0","B0","B2","B0","B0","B0","B2","B0","B0"],["B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B0","B2","B2","B0","B2","B0","B2","B2","B0"],["B1","B0","B1","B0","B0","B0","B1","B0","B1","B5","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B0","B0","B0","B0","B2","B0","B0","B0","B0"],["B5","B5","B5","B5","B3","B5","B5","B5","B5","B5","B5","B5","B5","B5","B3","B3","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5"],["B0","B0","B0","B4","B0","B4","B0","B0","B0","B5","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B0","B0","B0","B4","B0","B0","B0","B4","B0"],["B0","B4","B0","B4","B0","B4","B0","B4","B0","B5","B0","B2","B0","B0","B0","B0","B0","B0","B2","B0","B5","B0","B4","B0","B0","B0","B4","B0","B0","B0"],["B0","B4","B0","B4","B0","B4","B0","B4","B0","B5","B0","B0","B2","B0","B2","B2","B0","B2","B0","B0","B5","B0","B0","B0","B4","B0","B0","B0","B4","B0"],["B0","B4","B0","B4","B0","B4","B0","B4","B0","B5","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B0","B4","B0","B0","B0","B4","B0","B0","B0"],["B0","B4","B0","B4","B0","B4","B0","B4","B0","B5","B1","B0","B2","B0","B1","B1","B0","B2","B0","B0","B3","B0","B0","B0","B4","B0","B0","B0","B4","B0"],["B0","B4","B0","B4","B0","B4","B0","B4","B0","B5","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B5","B0","B4","B0","B0","B0","B4","B0","B0","B0"],["B0","B4","B0","B4","B0","B4","B0","B4","B0","B5","B0","B0","B2","B0","B2","B2","B0","B2","B0","B0","B5","B0","B0","B0","B4","B0","B0","B0","B4","B0"],["B0","B4","B0","B4","B0","B4","B0","B4","B0","B5","B0","B2","B0","B0","B0","B0","B0","B0","B2","B0","B5","B0","B4","B0","B0","B0","B4","B0","B0","B0"],["B0","B4","B0","B0","B0","B0","B0","B4","B0","B5","B0","B0","B0","B0","B1","B1","B0","B0","B0","B0","B5","B0","B0","B0","B4","B0","B0","B0","B4","B0"]],
 ], duelsLevels = [
-  ['                      ### #   ','      ####       # ##         ','   #      ## #  ##        #  #','#        ###  ######      # # ','     ###            ##     ## ','   ##                ##  ###  ','  #              #            ',' #      #   #       ###   #  #','#     ##         ##   ##      ','      #                       ','           #### #       #    #','  #       #      #         # #','  ###  ##      #  #     #    #','    #  #       #   #        # ','    ### #      #         ## # ','    # #        #  #         # ','     ##  #     #         #    ','     ##  #     #         #    ','     ##   #    #        #  #  ','      ##     #         #  ##  ','        # #    #     ##   #   ',' # ###  #   #     #       #   ',' #      ##   #   #      ###  #',' #      # #  ###  ### ##     #','       #      # #####       # ','  ####        #            ## ','  #   ##                 ##   ',' ##    #   # ## #        #    ','  #           ##              ','                              '],
+  [["A","B0","B0","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5"],["B0","B0","B0","B0","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5"],["B0","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B5","B5"],["B4","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B4","B5","B5"],["B5","B4","B0","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B4","B5","B5"],["B5","B5","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B5","B5"],["B5","B5","B4","B2","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B2","B4","B5","B5"],["B5","B5","B4","B2","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B2","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B0","B0","B0","B0","B0","B4","B4","B4","B2","B2","B4","B4","B4","B1","B0","B0","B0","B0","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B0","B0","B4","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B4","B4","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B0","B1","B1","B0","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B1","B1","B1","B1","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B2","B0","B0","B0","B1","B1","B2","B2","B1","B1","B0","B0","B0","B2","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B2","B0","B0","B0","B1","B1","B2","B2","B1","B1","B0","B0","B0","B2","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B1","B1","B1","B1","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B0","B1","B1","B0","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B4","B4","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B4","B0","B0","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B0","B0","B0","B0","B1","B4","B4","B4","B2","B2","B4","B4","B4","B0","B0","B0","B0","B0","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B2","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B2","B4","B5","B5"],["B5","B5","B4","B2","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B4","B5","B5"],["B5","B5","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B5","B5"],["B5","B5","B4","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B0","B4","B5"],["B5","B5","B4","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B4"],["B5","B5","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B0","B4","B4","B4","B0","B0","B0","B0","B0"],["B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B0","B0","B0","B0"],["B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B0","B0","B"]],
 ];
 
 if (SETTINGS.log_strain) setInterval(() => {
@@ -146,18 +153,34 @@ ffa.ws(SETTINGS.path, socket => {
     }
     if (data.type === 'join') {
       if (!await auth(data.username, data.token)) return socket.send({status: 'error', message: 'Invalid Token.'});
+      let joinable;
       if (data.gamemode === 'ffa') {
-        let joinable = servers.filter(s => s.pt.length < SETTINGS.ppm).sort((a, b) => a.pt.length-b.pt.length);
+        joinable = servers.filter(s => s.pt.length < SETTINGS.ppm && s instanceof FFA).sort((a, b) => a.pt.length-b.pt.length);
         if (joinable.length === 0) {
           joinable[0] = new FFA();
           servers.push(joinable[0]);
-        } else if (joinable[0].pt.some(t => t.username === socket.username)) {
-          socket.send({status: 'error', message: 'You are already in the server!'});
-          return setImmediate(() => socket.close());
         }
-        socket.room = servers.indexOf(joinable[0]);
-        joinable[0].add(socket, data.tank);
+      } else if (data.gamemode === 'duels') {
+        joinable = servers.filter(s => s.pt.length === 1 && s instanceof DUELS); // no need to sort since they will be sorted in order of creation.
+        if (joinable.length === 0) {
+          joinable[0] = new DUELS();
+          servers.push(joinable[0]);
+        }
+      } else if (data.gamemode === 'tdm') {
+        joinable = servers.filter(s => s.mode === 0 && s instanceof TDM).sort((a, b) => a.pt.length-b.pt.length);
+        if (joinable.length === 0) {
+          joinable[0] = new TDM();
+          servers.push(joinable[0]);
+        }
+      } else if (data.gamemode === 'juggernaut') {
+        socket.send({status: 'error', message: 'This gamemode is not ready'});
       }
+      if (joinable[0].pt.some(t => t.username === socket.username)) {
+        socket.send({status: 'error', message: 'You are already in the server!'});
+        return setImmediate(() => socket.close());
+      }
+      socket.room = servers.indexOf(joinable[0]);
+      joinable[0].add(socket, data.tank);
     } else if (data.type === 'update') {
       if (socket.room !== undefined) servers[socket.room].update(data);
     } else if (data.type === 'ping') {
@@ -171,6 +194,7 @@ ffa.ws(SETTINGS.path, socket => {
       servers[socket.room].logs.push({m: `[${socket.username}] ${msg}`, c: '#ffffff'});
     } else if (data.type === 'command') {
       const func = Commands[data.data[0]], args = data.data;
+      if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'Commands are only allowed in FFA'});
       if (typeof func === 'function') {
         func.bind(socket)(args);
       } else socket.send({status: 'error', message: 'Command not found.'});
@@ -350,7 +374,12 @@ const Commands = {
     if (data.length !== 3) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     var pt = A.search(servers[this.room].pt, 'username', data[1]);
     if (pt === undefined) return this.send({status: 'error', message: 'Player Not Found.'}); else pt.cosmetic = data[2].replaceAll('_', ' ');
-  }
+  },
+  ai: function(data) {
+    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    if (data.length !== 4) return this.send({status: 'error', message: 'Command has invalid arguments.'});
+    servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), 0, this.username+':horde', servers[this.room]));
+  },
 };
 
 class A {
@@ -416,34 +445,33 @@ class Multiplayer extends Engine {
   }
 
   send() {
-  for (const t of this.pt) {
-    const render = { b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set() };
-    const view = { x: t.x-860, y: t.y-560, w: 1880, h: 1280 };
-    const message = { b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, tickspeed, event: 'hostupdate', delete: { b: [], pt: [], ai: [], s: [], d: [] } };
-    for (const p of ['b', 'pt', 'ai', 's', 'd']) {
-      const ids = new Set(this[p].map(e => e.id)); // keep track of all existing entities HYPEROPTIMIZE: Make this linked to the host
-      this[p].filter(e => A.collider(view.x, view.y, view.w, view.h, e.x, e.y, 100, 100)).forEach(e => {
-        render[p].add(e.id); // add entity ID to SHOULD BE RENDERED Set
-        if (!t.render[p].has(e.id)) { // If not yet rendered on client
-          message[p].push(e.raw); // add new entities that need to be rendered
-        }
-        if (e.updatedLast > t.lastUpdate) { // If entity update time is more recent than the last send update
-          message[p].push(e.raw); // add entities within render distance that need to be rendered
-        }
-      });
-      t.render[p].forEach(id => { // loop through the old IDs to see which entities are no longer needed to be rendered
-        if (!render[p].has(id) || !ids.has(id)) { // if old entity was not within the rendering rect or if it no longer exists, then delete
-          message.delete[p].push(id);
-        }
-      });
+    for (const t of this.pt) {
+      const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
+      const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;
+      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
+      let send = true; // RETURN TO FALSE, TEMPORARILY DISABLED TO ALLOW DYNAMIC UPDATES TO LOGS, TICKSPEED, and GLOBAL
+      for (const p of ['b', 'pt', 'ai', 's', 'd']) {
+        const ids = new Set(this[p].map(e => e.id));
+        this[p].filter(e => A.collider(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
+          render[p].add(e.id);
+          if (!t.render[p].has(e.id) || e.updatedLast > t.lastUpdate) {
+            message[p].push(e.raw);
+            send = true;
+          }
+        });
+        t.render[p].forEach(id => {
+          if (!render[p].has(id) || !ids.has(id)) {
+            message.delete[p].push(id);
+            send = true;
+          }
+        });
+      }
+      t.render = render;
+      t.lastUpdate = Date.now();
+     if (send) t.socket.send(message);
+      outgoing_per_second++;
     }
-
-    t.render = render;
-    t.lastUpdate = Date.now();
-    t.socket.send(message);
-    outgoing_per_second++;
   }
-}
 
   disconnect(socket, code, reason) {
     this.pt = this.pt.filter(t => t.username !== socket.username);
@@ -452,7 +480,7 @@ class Multiplayer extends Engine {
     if (this.pt.length === 0) {
       this.i.forEach(i => clearInterval(i));
       this.t.forEach(t => clearTimeout(t));
-      servers[servers.indexOf(this)] = new FFA();
+      servers.splice(servers.indexOf(this), 1);
     }
   }
 
@@ -505,36 +533,189 @@ class FFA extends Multiplayer {
   ontick() {}
 }
 
-class DUELS extends Engine {
-  constructor(ip) {
-    super(ip, duelsLevels);
-    this.mode = 0; // 0 -> waiting for players to join, 1 -> waiting for second player to join, 2 -> 10 second ready timer, 3 -> match active, 4 -> gameover and server shutdown
+class DUELS extends Multiplayer {
+  constructor() {
+    super(duelsLevels);
+    this.round = 1;
+    this.mode = 0; // 0 -> waiting for other player, 1 -> 10 second ready timer, 2-> match active
+    this.wins = {};
   }
 
   add(socket, data) {
     super.add(socket, data);
-    if (this.mode === 0) {
+    if (this.pt.length === 1) {
       this.global = 'Waiting For Player...';
-      this.mode++;
-    } else if (this.mode === 1) {
+    } else {
       this.readytime = Date.now();
       this.mode++;
-      this.global = 'Starting in 10';
-    } else return socket.send("Internal Server Error. You were redirected to a room that couldn't accept you.");
+    }
   }
-
-  update(data) {
-    if ([0, 1, 2].includes(this.mode)) return;
-    super.update(data);
-  }
-
-  
 
   ontick() {
-
+    if ([0, 1].includes(this.mode)) {
+      this.pt[0].x = 0;
+      this.pt[0].y = 0;
+      this.override(this.pt[0]);
+    }
+    if (this.mode === 1) {
+      this.pt[1].x = 2920;
+      this.pt[1].y = 2920;
+      this.override(this.pt[1]);
+      this.global = 'Round '+this.round+' in '+(5-Math.floor((Date.now()-this.readytime)/1000));
+      if (5-(Date.now()-this.readytime)/1000 <= 0) {
+        this.global = '======FIGHT======';
+        this.mode = 2;
+      }
+    }
   }
 
+  ondeath(t, m) {
+    t.ded = true;
+    this.wins[m.username] = this.wins[m.username] === undefined ? 1 : this.wins[m.username]+1;
+    if (this.wins[m.username] === 3) {
+      this.global = m.username+' Wins!';
+      setTimeout(() => {
+        this.pt.forEach(t => {
+          t.socket.send({event: 'gameover'});
+          t.socket.close();
+        });
+      }, 5000);
+    } else {
+      this.global = m.username+' Wins Round '+this.round;
+      setTimeout(() => {
+        this.pt.forEach(tank => {
+          tank.hp = tank.maxHp;
+          tank.shields = 0;
+          tank.ded = false;
+          t.socket.send({event: 'ded'});
+        });
+        this.b = [];
+        this.s = [];
+        this.ai = [];
+        this.d = [];
+        this.levelReader(duelsLevels[0]);
+        this.round++;
+        this.mode = 1; 
+        this.readytime = Date.now();
+      }, 5000);
+    }
+  }
+
+  disconnect(socket, code, reason) {
+    if ([1, 2].includes(this.mode)) {
+      this.round = 1;
+      this.mode = 1;
+      this.wins = {};
+    }
+    this.pt.forEach(t => {
+      t.socket.send({event: 'ded'}); // heal and reset cooldowns
+      t.hp = t.maxHp;
+    }); 
+    super.disconnect(socket, code, reason);
+  }
 }
+
+class TDM extends Multiplayer {
+  constructor() {
+    super([[]]); // no lobby level for now :(
+    this.global = 'Waiting for Players...';
+    this.round = 1;
+    this.mode = 0; // 0 -> Lobby/Waiting for players, 1 -> About to enter round, 2 -> in game
+    this.wins = {RED: 0, BLUE: 0};
+  }
+
+  add(socket, data) {
+    super.add(socket, data);
+    const t = this.pt[this.pt.length-1];
+    let red = 0, blue = 0;
+    this.pt.forEach(tank => {
+      if (tank.color === '#FF0000') {
+        red++;
+      } else if (tank.color === '#0000FF') {
+        blue++;
+      }
+    });
+    if (red > blue) t.color = '#0000FF';
+    if (red < blue) t.color = '#FF0000';
+    if (red === blue) t.color = (Math.random() < .5 ? '#FF0000' : '#0000FF');
+    t.team = t.username+':LOBBY';
+    if (this.pt.length === 4) { // once four players, begin the countdown
+      this.readytime = Date.now();
+      this.time = 60; // 1 minute starting time
+    }
+  }
+
+  ontick() {
+    if (this.mode === 0) {
+      if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
+        this.mode = 1; // game start
+        this.readytime = Date.now();
+        this.time = 5;
+        this.pt.forEach(t => {
+          t.team = t.username+':'+(t.color === '#FF0000' ? 'RED' : 'BLUE');
+        });
+        this.levelReader(duelsLevels[0]);
+      }
+    } else if (this.mode === 1) {
+      this.pt.forEach(t => {
+        const spawn = getTeam(t.team) === 'BLUE' ? 0 : 1;
+        t.x = this.spawns[spawn].x;
+        t.y = this.spawns[spawn].y;
+        this.override(t);
+      });
+      this.global = 'Round '+this.round+' in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
+      if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
+        this.global = '======FIGHT======';
+        this.mode = 2;
+      }
+    }
+  }
+
+  ondeath(t, m) {
+    t.ded = true;
+    let allies = 0;
+    this.pt.forEach(tank => {
+      if (!tank.ded) {
+        if (getTeam(tank.team) === getTeam(t.team)) {
+          allies++;
+        }
+      }
+    });
+    if (allies === 0) {
+      const winner = getTeam(m.team);
+      this.wins[winner]++;
+      if (this.wins[winner] === 3) {
+        this.global = winner+' Wins!';
+        setTimeout(() => {
+          this.pt.forEach(t => {
+            t.socket.send({event: 'gameover'});
+            t.socket.close();
+          });
+        }, 5000);
+      } else {
+        this.global = winner+' Wins Round '+this.round;
+        setTimeout(() => {
+          this.pt.forEach(tank => {
+            tank.hp = tank.maxHp;
+            tank.shields = 0;
+            tank.ded = false;
+            t.socket.send({event: 'ded'});
+          });
+          this.b = [];
+          this.s = [];
+          this.ai = [];
+          this.d = [];
+          this.levelReader(duelsLevels[0]);
+          this.round++;
+          this.mode = 1; 
+          this.readytime = Date.now();
+        }, 5000);
+      }   
+    }
+  }
+}
+
+
 
 if (!SETTINGS.export) ffa.listen(SETTINGS.port);
 

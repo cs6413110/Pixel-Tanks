@@ -39,6 +39,7 @@ const toPoint = angle => {
 class Engine {
   constructor(levels) {
     this.spawn = { x: 0, y: 0 };
+    this.spawns = [{x: 0, y: 0}, {x: 0, y: 0}];
     this.ai = [];
     this.b = [];
     this.s = [];
@@ -74,7 +75,7 @@ class Engine {
     }
     t.r = r;
     if (t.ded) return;
-    if (t.immune && (t.class === 'fire' || t.class === 'builder')) {
+    if (t.immune && (t.class === 'fire' || t.class === 'builderd')) {
       const team = parseTeamExtras(t.team), type = t.class === 'fire' ? 'fire' : 'weak';
       if ((t.x + 80) % 100 > 80 && [45, 90, 135].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x / 100) * 100 + 100, Math.floor(t.y / 100) * 100, 100, type, team, this));
       if (t.x % 100 < 20 && [225, 270, 315].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x / 100) * 100 - 100, Math.floor(t.y / 100) * 100, 100, type, team, this));
@@ -90,14 +91,15 @@ class Engine {
       }
     }
     if (use.includes('toolkit')) {
-      if (t.healTimeout) {
-        t.healTimeout = clearTimeout(t.healTimeout);
+      if (t.healTimeout !== undefined) {
+        clearTimeout(t.healTimeout);
+        t.healTimeout = undefined;
       } else {
         t.healTimeout = setTimeout(() => {
           t.hp = t.maxHp;
           const ai = this.ai.find(a => getUsername(a.team) === t.username);
           if (ai) ai.hp = ai.maxHp;
-          t.healInterval = clearInterval(t.healInterval);
+          t.healTimeout = undefined;
         }, 7500);
       }
     }
@@ -149,7 +151,7 @@ class Engine {
       t.buff = true;
       setTimeout(() => {
         t.buff = false;
-      }, 15000);
+      }, 10000);
     }
     if (use.includes('healSwitch')) {
       let a = [];
@@ -169,7 +171,15 @@ class Engine {
   }
 
   tick() {
-    const mapRedone = false;
+    this.ontick();
+    this.map.nodes.forEach(row => row.forEach(node => {
+      node.walkable = true;
+      node.f = 0;
+      node.g = 0;
+      node.h = 0;
+      node.parent = null;
+    }));
+    for (const b of this.b) if (b.x >= 0 && b.y >= 0 && b.x <= 2900 && b.y <= 2900) this.map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), b.x % 100 !== 0 && b.y % 100 !== 0);
     for (const ai of this.ai) ai.update();
     for (const s of this.s) s.update()
 
@@ -179,7 +189,7 @@ class Engine {
         const tank = this.pt.find(tank => tank.username === t.healing);
         if (!tank) {
           t.healing = t.username;
-        } else if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + .2, tank.maxHp);
+        } else if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + .4, tank.maxHp);
       }
       if (t.pushback !== 0) t.pushback += 0.5;
       if (t.fire && getTeam(t.fire.team) !== getTeam(t.team)) t.damageCalc(t.x, t.y, .5, getUsername(t.fire.team));
@@ -187,7 +197,7 @@ class Engine {
         if (!tank.canBashed) continue;
         if ((t.class === 'warrior' && getTeam(t.team) !== getTeam(tank.team)) || (t.class === 'medic' && getTeam(t.team) === getTeam(tank.team))) {
           if (!collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) continue;
-          tank.damageCalc(tank.x, tank.y, t.class === 'warrior' ? 60 : -30, t.username);
+          tank.damageCalc(tank.x, tank.y, t.class === 'warrior' ? 50 : -30, t.username);
           tank.canBashed = false;
           setTimeout(() => {
             tank.canBashed = true;
@@ -224,14 +234,18 @@ class Engine {
   }
 
   levelReader(level) {
-    let l, q, key = { '=': ['void', Infinity], '#': ['barrier', Infinity], '2': ['strong', 200], '1': ['weak', 100], '0': ['spike', 0], '3': ['gold', 300] };
-    for (l = 0; l < level.length; l++) {
-      for (q = 0; q < level[l].split('').length; q++) {
-        const p = level[l].split('');
-        if (p[q] === '@') {
+    const key = { 'B5': ['void', Infinity], 'B4': ['barrier', Infinity], 'B3': ['gold', 300], 'B2': ['strong', 200], 'B1': ['weak', 100]};
+    for (let l = 0; l < level.length; l++) {
+      for (let q = 0; q < level[l].length; q++) {
+        const e = level[l][q];
+        if (e === 'S') {
           this.spawn = { x: q * 100, y: l * 100 };
-        } else if (key[p[q]]) {
-          this.b.push(new Block(q * 100, l * 100, key[p[q]][1], key[p[q]][0], ':', this));
+        } else if (e === 'A') {
+          this.spawns[0] = {x: q*100, y: l*100};
+        } else if (e === 'B') {
+          this.spawns[1] = {x: q*100, y: l*100};
+        } else if (key[e]) {
+          this.b.push(new Block(q * 100, l * 100, key[e][1], key[e][0], ':', this));
         }
       }
     }
@@ -241,7 +255,7 @@ class Engine {
 class Tank {
   constructor(data, host) {
     this.raw = {};
-    this.render = {b: [], s: [], pt: [], d: [], ai: []};
+    this.render = {b: new Set(), s: new Set(), pt: new Set(), d: new Set(), ai: new Set()};
     ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'healing', 'id'].forEach(p => {
       Object.defineProperty(this, p, {
         get() {
@@ -255,7 +269,6 @@ class Tank {
     });
     this.id = Math.random();
     this.lastUpdate = 0;
-    this.updatedLast = 0;
     if (data.socket) this.socket = data.socket; // multiplayer patch
     this.username = data.username;
     this.rank = data.rank;
@@ -291,7 +304,6 @@ class Tank {
   damageCalc(x, y, a, u) {
     if ((this.immune && a > 0) || this.ded) return;
     if (this.shields > 0 &&  a > 0) return this.shields -= a;
-    if (this.buff) a *= .8;
     this.hp = Math.max(Math.min(this.maxHp, this.hp-a), 0);
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
@@ -343,7 +355,6 @@ class Block {
       });
     });
     this.id = Math.random();
-    this.updatedLast = 0;
     this.x = x;
     this.y = y;
     this.maxHp = health;
@@ -353,11 +364,11 @@ class Block {
     this.s = false;
     this.c = !['spike', 'mine', 'fire', 'airstrike'].includes(type); // collision
     this.team = team;
-    if (['spike', 'mine', 'fire'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 5000 : 30000);
+    if (['spike', 'mine', 'fire'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 30000);
     if (type === 'airstrike') {
       for (let i = 0; i < 20; i++) {
         setTimeout(() => {
-          this.host.d.push(new Damage(this.x + Math.floor(Math.random()*200)-100, this.y + Math.floor(Math.random()*200)-100, 200, 200, 200, this.team, this.host));
+          if (this.host.b.includes(this)) this.host.d.push(new Damage(this.x + Math.floor(Math.random()*200)-100, this.y + Math.floor(Math.random()*200)-100, 200, 200, 200, this.team, this.host));
         }, 5000 + Math.random() * 500);
         setTimeout(() => this.destroy(), 6000);
       }
@@ -411,7 +422,6 @@ class Shot {
         configurable: true,
       });
     });
-    this.updatedLast = 0;
     this.id = Math.random();
     this.damage = settings.damage[type] * t.maxHp / 500 * (t.buff ? 1.2 : 1);
     this.team = team;
@@ -595,7 +605,6 @@ class Damage {
         configurable: true,
       });
     });
-    this.updatedLast = 0;
     this.id = Math.random();
     this.x = x;
     this.y = y;
@@ -607,7 +616,7 @@ class Damage {
     this.f = 0;
     for (const t of host.pt) if (getUsername(team) !== getUsername(t.team)) if (collision(x, y, w, h, t.x, t.y, 80, 80)) t.damageCalc(x, y, getTeam(team) !== getTeam(t.team) ? Math.abs(a) : Math.min(a, 0), getUsername(team));
     for (let i = host.b.length-1; i >= 0; i--) if (collision(x, y, w, h, host.b[i].x, host.b[i].y, 100, 100)) host.b[i].damage(a);
-    for (let i = host.ai.length-1; i >= 0; i--) if (getTeam(host.ai[i].team) !== getTeam(team)) host.ai[i].damage(a);
+    for (let i = host.ai.length-1; i >= 0; i--) if (collision(x, y, w, h, host.ai[i].x, host.ai[i].y, 80, 80)) if (getTeam(host.ai[i].team) !== getTeam(team)) host.ai[i].damage(a);
     setInterval(() => this.f++, 18);
     setTimeout(() => this.destroy(), 200);
   }
@@ -638,12 +647,12 @@ class AI {
         configurable: true,
       });
     });
-    this.updatedLast = 0;
     this.id = Math.random();
     this.role = role;
     this.x = x;
     this.y = y;
     this.r = 0;
+    this.tr = 0;
     this.inaccuracy = 0;
     this.baseRotation = 0;
     this.baseFrame = 0;
@@ -681,13 +690,19 @@ class AI {
     this.identify();
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
-      this.r = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40))+this.inaccuracy;
+      this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
       if (this.canPowermissle) this.fire(this.obstruction.x, this.obstruction.y, 'powermissle');
       if (this.canFire) this.fire(this.obstruction.x, this.obstruction.y);
     } else if (this.mode !== 0) {
-      this.r = toAngle(this.target.x - this.x, this.target.y - this.y)+this.inaccuracy;
+      this.tr = toAngle(this.target.x - this.x, this.target.y - this.y);
       if (this.canPowermissle) this.fire(this.target.x, this.target.y, 'powermissle');
       if (this.canFire) this.fire(this.target.x, this.target.y);
+    }
+    const convertTo360 = a => a < 0 ? 360+a%360 : a%360;
+    if ((this.r < this.tr && this.r > this.tr-180)) {
+      this.r = convertTo360(Math.min(this.r+2, this.tr));
+    } else {
+      this.r = convertTo360(Math.max(this.r-2, this.tr));
     }
     if (this.pushback !== 0) this.pushback += 0.5;
   }
@@ -703,7 +718,7 @@ class AI {
     const dirx = this.path.p[n][0] - this.path.p[f][0];
     const diry = this.path.p[n][1] - this.path.p[f][1];
     this.baseRotation = [[135, 180, 225], [90, this.baseRotation, 270], [45, 0, 315]][diry + 1][dirx + 1];
-    this.r = this.baseRotation;
+    this.tr = this.baseRotation;
     const x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25);
     const y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
     this.obstruction = this.collision(x, y);
@@ -808,7 +823,7 @@ class AI {
       if (!limiter.includes(p.length)) {
         coords.splice(r, 1);
         i++;
-        //if (i >= 5 && mode !== 0) return this.path = {p: pathfind(sx, sy, tx, ty, this.host.map.clone()).slice(0, 5), m: this.mode, t: Date.now(), o: Date.now()};
+        if (i >= 5 && mode !== 0) return this.path = {p: pathfind(sx, sy, tx, ty, this.host.map.clone()).slice(0, 5), m: this.mode, t: Date.now(), o: Date.now()};
         if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now(), o: Date.now()};
       } else {
         this.path = { p, m: this.mode, t: Date.now(), o: Date.now()};
@@ -895,13 +910,6 @@ class AI {
     if (!type) type = Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
     const cooldown = {powermissle: 0, shotgun: 600, bullet: 200}[type];
     this.pushback = -3;
-    if (type === 'shotgun') {
-      this.inaccuracy = Math.floor(Math.random()*80)-40;
-    } else if (type === 'bullet') {
-      this.inaccuracy = Math.floor(Math.random()*40)-20;
-    } else {
-      this.inaccuracy = Math.floor(Math.random()*20)-10;
-    }
     let l = type === 'shotgun' ? -10 : 0;
     while (l<(type === 'shotgun' ? 15 : 1)) {
       const { x, y } = toPoint(this.r+l);

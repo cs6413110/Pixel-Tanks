@@ -1,3 +1,7 @@
+const arc = document.createElement('SCRIPT');
+arc.src = 'https://arc.io/widget.min.js#N3KzQsou';
+arc.setAttribute('async', '');
+document.head.appendChild(arc);
 const packer = document.createElement('SCRIPT');
 packer.crossOrigin = '';
 packer.src = 'https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js';
@@ -708,14 +712,14 @@ function Game() {
         multiplayer: {
           buttons: [
             [424, 28, 108, 108, 'main'],
-            [340, 376, 416, 116, function() {this.gamemode = 'ffa'}, false],
-            [340, 532, 416, 116, function() {this.gamemode = 'duels'}, false],
-            [340, 688, 416, 116, function() {this.gamemode = 'tdm'}, false],
-            [340, 844, 416, 116, function() {this.gamemode = 'juggernaut'}, false],
+            [340, 376, 416, 116, function() {this.gamemode = 'ffa'}, true],
+            [340, 532, 416, 116, function() {this.gamemode = 'duels'}, true],
+            [340, 688, 416, 116, function() {this.gamemode = 'tdm'}, true],
+            [340, 844, 416, 116, function() {this.gamemode = 'juggernaut'}, true],
             [868, 848, 368, 88, function() {
               PixelTanks.user.player = new Tank(this.ip, true, this.gamemode); 
               Menus.removeListeners();
-            }],
+            }, true],
           ],
           listeners: {
             keydown: function(e) {
@@ -728,6 +732,7 @@ function Game() {
               this.gamemode = 'ffa';
               this.ip = '141.148.128.231/ffa';
             }
+            GUI.drawText(this.gamemode, 1200, 800, 50, '#FFFFFF', 0.5);
             GUI.drawText(this.ip, 800, 276, 50, '#FFFFFF', 0.5);
           }
         },
@@ -912,7 +917,7 @@ function Game() {
             if (PixelTanks.userData.class) GUI.drawImage(PixelTanks.images.menus.classTab, 1112, 816, 88, 88, 1, 0, 0, 0, 0, 0, key[PixelTanks.userData.class][0], key[PixelTanks.userData.class][1], 44, 44);
             if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 760, 224, 80, 80, 1);
             const deathEffectData = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect+'_'];
-            if (PixelTanks.userData.deathEffect) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 536, 224, 80, 80, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
+            if (PixelTanks.userData.deathEffect && PixelTanks.userData.deathEffect !== 'blocked') GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 536, 224, 80, 80, 1, 0, 0, 0, 0, 0, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
             Menus.menus.inventory.buttonEffect = true;
             if (this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.deathEffectsTab) {
               Menus.menus.inventory.buttonEffect = false;
@@ -1296,6 +1301,7 @@ function Game() {
           switch (data.event) {
             case 'hostupdate':
               this.hostupdate.tickspeed = data.tickspeed;
+              this.hostupdate.global = data.global;
               this.hostupdate.logs = data.logs.reverse();
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
                 if (data[p].length) data[p].forEach(e => {
@@ -1313,6 +1319,11 @@ function Game() {
               this.reset();
               break;
             case 'gameover':
+              alert(`GAMEOVER
+              No menu for stats for this so um.... 
+              get redirected to the main menu... 
+              If you won, good job, if you lost, keep trying...`);
+              this.implode();
               break;
             case 'pay':
               const amount = Number(data.amount);
@@ -1343,6 +1354,13 @@ function Game() {
               PixelTanks.userData.stats[3] += 10;
               PixelTanks.userData.stats[0] += coins;
               PixelTanks.save();
+              this.canItem1 = true;
+              this.canItem2 = true;
+              this.canItem3 = true;
+              this.canItem4 = true;
+              this.canToolkit = true;
+              this.timers.toolkit = -1;
+              this.timers.items = [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}]
               break;
             case 'ping':
               this.ping = new Date().getTime()-this.pingStart;
@@ -1415,7 +1433,7 @@ function Game() {
     drawBlock(b) {
       const size = b.type === 'airstrike' ? 200 : 100;
       const type = ['airstrike', 'fire'].includes(b.type) && getTeam(this.team) === getTeam(b.team) ? 'friendly'+b.type : b.type;
-      GUI.drawImage(PixelTanks.images.blocks[b.type], b.x, b.y, size, size, (b.type === 'mine' && this.hostupdate.pt.find(t => t.username === PixelTanks.user.username).team.split(':')[1].replace('@leader', '') !== b.team.split(':')[1].replace('@leader', '')) ? .03 : 1);
+      GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, (b.type === 'mine' && this.hostupdate.pt.find(t => t.username === PixelTanks.user.username).team.split(':')[1].replace('@leader', '') !== b.team.split(':')[1].replace('@leader', '')) ? .03 : 1);
     }
 
     drawShot(s) {
@@ -1449,8 +1467,9 @@ function Game() {
     }
 
     drawAI(ai) {
+      [{"id":0.04088724217347539,"role":0,"x":10,"y":10,"r":10,"baseRotation":315,"baseFrame":0,"mode":0,"rank":0,"hp":100,"maxHp":300,"pushback":0,"cosmetic":"MLG Glasses"}]
       const {x, y, role, r, baseRotation, baseFrame, pushback, cosmetic, hp, maxHp} = ai;
-      if (role !== 0) PixelTanks.renderBase(x, y, 80, '#FF0000');
+      if (role !== 0) PixelTanks.renderBottom(x, y, 80, '#FF0000');
       GUI.drawImage(PixelTanks.images.tanks[role === 0 ? 'base' : 'bottom'+(baseFrame ? '' : '2')], x, y, 80, 80, 1, 40, 40, 0, 0, baseRotation);
       PixelTanks.renderTop(x, y, 80, '#FF0000', r, pushback);
       GUI.drawImage(PixelTanks.images.tanks.top, x, y, 80, 90, 1, 40, 40, 0, pushback, r);
@@ -1477,7 +1496,7 @@ function Game() {
       if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.invis && t.username !== PixelTanks.user.username && !this.ded) return;
     
-      if ((!t.ded && this.team.split(':')[1].replace('@leader', '') === t.team.split(':')[1].replace('@leader', '')) || (this.ded && !t.ded)) {
+      if ((!t.ded && getTeam(this.team) === getTeam(t.team)) || (this.ded && !t.ded) || (PixelTanks.userData.class === 'tactical' && !t.ded)) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
         GUI.draw.fillStyle = '#00FF00';
@@ -1532,6 +1551,7 @@ function Game() {
 
       if (t.healing && !t.ded) {
         const target = this.hostupdate.pt.find(tank => tank.username === t.healing);
+        if (!target) return;
         if (Math.sqrt((target.x-t.x)**2+(target.y-t.y)**2) > 500) return;
         GUI.draw.beginPath();
         GUI.draw.lineWidth = 10;
@@ -1547,7 +1567,9 @@ function Game() {
     frame() {
       this.render = requestAnimationFrame(this.frame.bind(this));
       GUI.clear();
-      if (this.hostupdate.pt === undefined) {
+      if (this.hostupdate.pt.length === 0) {
+        GUI.draw.fillStyle = '#ffffff';
+        GUI.draw.drawRect(0, 0, 1600, 1600);
         GUI.draw.fillStyle = '#000000';
         return GUI.draw.fillText('Loading Terrain...', 100, 100);
       }
@@ -1631,6 +1653,7 @@ function Game() {
       GUI.drawText('Crates: '+this.crates, 10, 100, 30, '#ffffff', 0);
       GUI.drawText('Experience: '+this.xp, 10, 150, 30, '#ffffff', 0);
       GUI.drawText('Coins: '+this.coins, 10, 200, 30, '#ffffff', 0);
+      if (this.hostupdate.global) GUI.drawText(this.hostupdate.global, 800, 30, 60, '#ffffff', .5);
 
       var l = 0, len = Math.min((this.showChat || this.hostupdate.logs.length<3) ? this.hostupdate.logs.length : 3, 30);
       while (l<len) {
