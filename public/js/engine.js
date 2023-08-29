@@ -234,16 +234,16 @@ class Engine {
   }
 
   levelReader(level) {
-    const key = { 'B5': ['void', Infinity], 'B4': ['barrier', Infinity],  'B3': ['gold', 300], 'B2': ['strong', 200], 'B1': ['weak', 100]};
+    const key = { 'B5': ['void', Infinity], 'B4': ['barrier', Infinity], 'B3': ['gold', 300], 'B2': ['strong', 200], 'B1': ['weak', 100]};
     for (let l = 0; l < level.length; l++) {
       for (let q = 0; q < level[l].length; q++) {
         const e = level[l][q];
         if (e === 'S') {
           this.spawn = { x: q * 100, y: l * 100 };
         } else if (e === 'A') {
-          this.spawns[0] = {x: q*100, l*100};
+          this.spawns[0] = {x: q*100, y: l*100};
         } else if (e === 'B') {
-          this.spawns[1] = {x: q*100, l*100};
+          this.spawns[1] = {x: q*100, y: l*100};
         } else if (key[e]) {
           this.b.push(new Block(q * 100, l * 100, key[e][1], key[e][0], ':', this));
         }
