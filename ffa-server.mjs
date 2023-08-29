@@ -637,6 +637,7 @@ class TDM extends Multiplayer {
     if (red > blue) t.color = '#0000FF';
     if (red < blue) t.color = '#FF0000';
     if (red === blue) t.color = (Math.random() < .5 ? '#FF0000' : '#0000FF');
+    t.team = t.username+':LOBBY';
     if (this.pt.length === 4) { // once four players, begin the countdown
       this.readytime = Date.now();
       this.time = 60; // 1 minute starting time
