@@ -960,12 +960,6 @@ function Game() {
         shop: {
           buttons: [
             [416, 20, 108, 108, 'main', true],
-             70000, // tactical
-        30000, // stealth
-        80000, // warrior
-        40000, // medic
-        60000, // builder
-        90000, // fire
             [58, 52, 122, 24, function() {/* class tab */}, true],
             [220, 52, 122, 24, function() {/* ded tab */}, true],
             [124, 101, 44, 44, function() {PixelTanks.purchase(0)}, true],
