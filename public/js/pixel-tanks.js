@@ -960,14 +960,14 @@ function Game() {
         shop: {
           buttons: [
             [416, 20, 108, 108, 'main', true],
-            [58, 52, 122, 24, function() {/* class tab */}, true],
-            [220, 52, 122, 24, function() {/* ded tab */}, true],
-            [124, 101, 44, 44, function() {PixelTanks.purchase(0)}, true],
-            [178, 101, 44, 44, function() {PixelTanks.purchase(1)}, true],
-            [232, 101, 44, 44, function() {PixelTanks.purchase(4)}, true],
-            [224, 155, 44, 44, function() {PixelTanks.purchase(2)}, true],
-            [178, 155, 44, 44, function() {PixelTanks.purchase(5)}, true],
-            [232, 155, 44, 44, function() {PixelTanks.purchase(3)}, true],
+            [232, 208, 488, 96, function() {/* class tab */}, true],
+            [880, 208, 488, 96, function() {/* ded tab */}, true],
+            [496, 404, 176, 176, function() {PixelTanks.purchase(0)}, true],
+            [712, 404, 176, 176, function() {PixelTanks.purchase(1)}, true],
+            [928, 404, 176, 176, function() {PixelTanks.purchase(4)}, true],
+            [496, 620, 176, 176, function() {PixelTanks.purchase(2)}, true],
+            [712, 620, 176, 176, function() {PixelTanks.purchase(5)}, true],
+            [928, 620, 176, 176, function() {PixelTanks.purchase(3)}, true],
           ],
           listeners: {},
           cdraw: function() {
