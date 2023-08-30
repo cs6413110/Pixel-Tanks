@@ -77,16 +77,16 @@ canvas.addEventListener('mousemove', (e) => {
 let drawLoop;
 canvas.addEventListener('mousedown', (e) => {
   clearInterval(drawLoop);
-  drawer();
-  drawLoop = setInterval(drawer, 10);
+  drawer(e);
+  drawLoop = setInterval(drawer, 10, e);
 });
 window.addEventListener('mouseup', (e) => {
   clearInterval(drawLoop);
 });
 
-const drawer = () => {
+const drawer = (e) => {
   if (x > 0 && y > 0 && x < 600 && y < 600) {
-    world[Math.floor(y/20)][Math.floor(x/20)] = world[Math.floor(y/20)][Math.floor(x/20)] === current ? 'B0' : current;
+    world[Math.floor(y/20)][Math.floor(x/20)] = e.button === 0 ? current : 'B0';
     document.getElementById('output').innerHTML = JSON.stringify(world);
   }
 }
