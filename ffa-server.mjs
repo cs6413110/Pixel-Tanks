@@ -199,8 +199,13 @@ ffa.ws(SETTINGS.path, socket => {
         func.bind(socket)(args);
       } else socket.send({status: 'error', message: 'Command not found.'});
     } else if (data.type === 'stats') {
-      const players = servers.reduce((arr, s) => [...arr, ...s.pt.map(t => t.username)], []);
-      socket.send({event: 'stats', totalRooms: servers.length, totalPlayers: players.length, players: players, bans: SETTINGS.bans, mutes: SETTINGS.mutes, admins: SETTINGS.admins, out: outgoing_per_second, in: incoming_per_second, sockets: sockets.length});
+      const gamemodes = {FFA: [], DUELS: [], TDM: []};
+      servers.forEach(s => {
+        s.forEach(t => {
+          gamemodes[instanceof s].push(t.username);
+        });
+      });
+      socket.send({...gamemodes, tickspeed, event: 'stats'});
     } else setTimeout(() => socket.close());
   });
   socket.on('close', (code, reason) => {
