@@ -726,6 +726,7 @@ function Game() {
                 this.socket.send({username: PixelTanks.user.username, type: 'stats'});
               });
               this.socket.on('message', (d) => {
+                alert(JSON.stringify(d));
                 this.output = JSON.stringify(d);
               });
             }
