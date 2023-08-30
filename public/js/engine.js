@@ -4,10 +4,8 @@ try {
 
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
 const pathfind = (sx, sy, tx, ty, map) => finder.findPath(sx, sy, tx, ty, map);
-const raycast = (x, y, x2, y2, walls) => {
-  const dx = x-x2, dy = y-y2, adx = Math.abs(dx), ady = Math.abs(dy);
-  const minx = Math.min(x, x2), miny = Math.min(y, y2), maxx = Math.max(x, x2), maxy = Math.max(y, y2);
-  let px = new Set(), new Set();
+const raycast = (x1, y1, x2, y2, walls) => {
+  const dx = x1-x2, dy = y1-y2, adx = Math.abs(dx), ady = Math.abs(dy), minx = Math.min(x1, x2), miny = Math.min(y1, y2), maxx = Math.max(x1, x2), maxy = Math.max(y1, y2), px = new Set(), py = new Set();
   walls = walls.filter(({x, y}) => {
     const xw = x + 100, yw = y + 100;
     if (x >= minx && xw <= maxx && y >= miny && yw <= maxy) {
@@ -19,7 +17,7 @@ const raycast = (x, y, x2, y2, walls) => {
     }
     return false;
   });
-  walls = walls.filter(w => collision(w.x, w.y, 100, 100, minx, miny, adx, ady));
+  walls = walls.filter(({x, y}) => collision(x, y, 100, 100, minx, miny, adx, ady));
   for (const {x, y} of walls) {
     const xw = x+100, yw = y+100;
     if (x >= minx && x <= maxx) px.add(x);
@@ -29,8 +27,8 @@ const raycast = (x, y, x2, y2, walls) => {
   }
   if (dx === 0) {
     for (const p of py) {
-      for (const w of walls) {
-        if (collision(w.x, w.y, 100, 100, x-.5, p-.5, 1, 1)) return false;
+      for (const {x, y} of walls) {
+        if (collision(x, y, 100, 100, x1-.5, p-.5, 1, 1)) return false;
       }
     }
   } else {
