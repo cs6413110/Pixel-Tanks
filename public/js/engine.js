@@ -4,22 +4,28 @@ try {
 
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
 const pathfind = (sx, sy, tx, ty, map) => finder.findPath(sx, sy, tx, ty, map);
-const up = a => a < 0 ? Math.floor(a) : Math.ceil(a);
-const down = a => a < 0 ? Math.ceil(a) : Math.floor(a);
-const raycast = (x, y, x2, y2, w) => {
+const raycast = (x, y, x2, y2, walls) => {
   const dx = x-x2, dy = y-y2, adx = Math.abs(dx), ady = Math.abs(dy);
   const minx = Math.min(x, x2), miny = Math.min(y, y2), maxx = Math.max(x, x2), maxy = Math.max(y, y2);
-  const walls = w.filter(w => collision(w.x, w.y, 100, 100, minx, miny, adx, ady));
-  let px = new Set(Array.from({length: adx+1}, (_, i) => minx+i)), py = new Set(Array.from({length: ady+1}, (_, i) => miny+i));
-  for (const w of walls) {
-    if (w.x%100 !== 0) {
-      px.add(w.x);
-      px.add(w.x+100);
+  let px = new Set(), new Set();
+  walls = walls.filter(({x, y}) => {
+    const xw = x + 100, yw = y + 100;
+    if (x >= minx && xw <= maxx && y >= miny && yw <= maxy) {
+      if (x >= minx && x <= maxx) px.add(x);
+      if (xw >= minx && xw <= maxx) px.add(xw);
+      if (y >= miny && y <= maxy) py.add(y);
+      if (xw >= miny && yw <= maxy) py.add(yw);
+      return true;
     }
-    if (w.y%100 !== 0) {
-      py.add(w.y);
-      py.add(w.y+100);
-    }
+    return false;
+  });
+  walls = walls.filter(w => collision(w.x, w.y, 100, 100, minx, miny, adx, ady));
+  for (const {x, y} of walls) {
+    const xw = x+100, yw = y+100;
+    if (x >= minx && x <= maxx) px.add(x);
+    if (xw >= minx && xw <= maxx) px.add(xw);
+    if (y >= miny && y <= maxy) py.add(y);
+    if (xw >= miny && yw <= maxy) py.add(yw);
   }
   if (dx === 0) {
     for (const p of py) {
@@ -28,13 +34,13 @@ const raycast = (x, y, x2, y2, w) => {
       }
     }
   } else {
-    const o = y-(dy/dx)*x;
-    for (const w of walls) {
+    const s = dy/dx, o = y-s*x;
+    for (const {x, y} of walls) {
       for (const p of py) {
-        if (collision(w.x, w.y, 100, 100, (p-o)/(dy/dx)-.5, p-.5, 1, 1)) return false;
+        if (collision(x, y, 100, 100, (p-o)/s-1, p-1, 2, 2)) return false;
       }
       for (const p of px) {
-        if (collision(w.x, w.y, 100, 100, p-.5, (dy/dx)*p+o-.5, 1, 1)) return false;
+        if (collision(x, y, 100, 100, p-1, s*p+o-1, 2, 2)) return false;
       }
     }
   }
