@@ -720,12 +720,15 @@ function Game() {
                 this.ip += e.key;
               } else if (e.keyCode === 8) {
                 this.ip = this.ip.slice(0, -1);
-              } else if (!e.connect)return;
+              } else if (!e.connect) return;
+              alert('socket created');
               this.socket = new MegaSocket('ws://'+this.ip, {keepAlive: true, reconnect: true, autoconnect: true});
               this.socket.on('connect', () => {
+                alert('socket connected');
                 this.socket.send({username: PixelTanks.user.username, type: 'stats'});
               });
               this.socket.on('message', (d) => {
+                alert('message received');
                 GUI.drawText(JSON.stringify(d), 100, 100, '#000000', 0);
               });
             }
