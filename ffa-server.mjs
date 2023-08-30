@@ -202,7 +202,7 @@ ffa.ws(SETTINGS.path, socket => {
       const gamemodes = {FFA: [], DUELS: [], TDM: []};
       servers.forEach(s => {
         s.forEach(t => {
-          gamemodes[instanceof s].push(t.username);
+          gamemodes[s.name].push(t.username);
         });
       });
       socket.send({...gamemodes, tickspeed, event: 'stats'});
