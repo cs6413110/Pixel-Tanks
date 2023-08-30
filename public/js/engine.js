@@ -10,18 +10,32 @@ const raycast = (x, y, x2, y2, w) => {
   const dx = x-x2, dy = y-y2, adx = Math.abs(dx), ady = Math.abs(dy);
   const minx = Math.min(x, x2), miny = Math.min(y, y2), maxx = Math.max(x, x2), maxy = Math.max(y, y2);
   const walls = w.filter(w => collision(w.x, w.y, 100, 100, minx, miny, adx, ady));
-  let px = Array.from({length: adx+1}, (_, i) => minx+i), py = Array.from({length: ady+1}, (_, i) => miny+i);
+  let px = new Set(Array.from({length: adx+1}, (_, i) => minx+i)), py = new Set(Array.from({length: ady+1}, (_, i) => miny+i));
   for (const w of walls) {
-    if (w.x%100 !== 0) px.push(w.x, w.x+100);
-    if (w.y%100 !== 0) py.push(w.y, w.y+100);
+    if (w.x%100 !== 0) {
+      px.add(w.x);
+      px.add(w.x+100);
+    }
+    if (w.y%100 !== 0) {
+      py.add(w.y);
+      py.add(w.y+100);
+    }
   }
   if (dx === 0) {
-    for (const p of py) for (const w of walls) if (collision(w.x, w.y, 100, 100, x-.5, p-.5, 1, 1)) return false;
+    for (const p of py) {
+      for (const w of walls) {
+        if (collision(w.x, w.y, 100, 100, x-.5, p-.5, 1, 1)) return false;
+      }
+    }
   } else {
     const o = y-(dy/dx)*x;
     for (const w of walls) {
-      for (const p of py) if (collision(w.x, w.y, 100, 100, (p-o)/(dy/dx)-.5, p-.5, 1, 1)) return false;
-      for (const p of px) if (collision(w.x, w.y, 100, 100, p-.5, (dy/dx)*p+o-.5, 1, 1)) return false;
+      for (const p of py) {
+        if (collision(w.x, w.y, 100, 100, (p-o)/(dy/dx)-.5, p-.5, 1, 1)) return false;
+      }
+      for (const p of px) {
+        if (collision(w.x, w.y, 100, 100, p-.5, (dy/dx)*p+o-.5, 1, 1)) return false;
+      }
     }
   }
   return true;
