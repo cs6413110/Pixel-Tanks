@@ -210,7 +210,7 @@ class Engine {
         } else if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + .4, tank.maxHp);
       }
       if (t.pushback !== 0) t.pushback += 0.5;
-      if (t.fire && getTeam(t.fire.team) !== getTeam(t.team)) t.damageCalc(t.x, t.y, .5, getUsername(t.fire.team));
+      if (t.fire && getTeam(t.fire.team) !== getTeam(t.team)) t.damageCalc(t.x, t.y, .25, getUsername(t.fire.team));
       if (t.immune && !t.ded) for (const tank of this.pt) {
         if (!tank.canBashed) continue;
         if ((t.class === 'warrior' && getTeam(t.team) !== getTeam(tank.team)) || (t.class === 'medic' && getTeam(t.team) === getTeam(tank.team))) {
@@ -240,7 +240,7 @@ class Engine {
             t.fireTimeout = setTimeout(() => {
               clearInterval(t.fireInterval);
               t.fire = false;
-            }, 2000);
+            }, 4000);
           } else if (b.type === 'spike' && getTeam(b.team) !== getTeam(t.team)) {
             t.damageCalc(t.x, t.y, 1, getUsername(b.team));
           }
@@ -510,7 +510,7 @@ class Shot {
         t.fireTimeout = setTimeout(() => {
           clearInterval(t.fireInterval);
           t.fire = false;
-        }, 2000);
+        }, 4000);
       } else {
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
