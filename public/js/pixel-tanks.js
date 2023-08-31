@@ -1801,25 +1801,18 @@ function Game() {
         this.tank.use.push('shield');
         cooldown = 30000;
       } else if (id === 'weak') {
-        this.tank.use.push('block');
-        this.tank.blockType = PixelTanks.userData.class === 'builder' ? 'strong' : 'weak';
+        this.tank.use.push('block#'+PixelTanks.userData.class === 'builder' ? 'strong' : 'weak');
         cooldown = 3000;
       } else if (id === 'strong') {
-        this.tank.use.push('block');
-        this.tank.blockType = PixelTanks.userData.class === 'builder' ? 'gold' : 'strong';
+        this.tank.use.push('block#'+PixelTanks.userData.class === 'builder' ? 'gold' : 'strong');
         cooldown = 7000;
       } else if (id === 'spike') {
-        this.tank.use.push('block');
-        this.tank.blockType = 'spike';
+        this.tank.use.push('block#spike');
         cooldown = 10000;
       } else if (id === 'mine') {
-        //this.tank.use.push('block');
-        //this.tank.blockType = 'mine';
-        //cooldown = 1000;
+        // soon to be replaced
       } else if (id === 'fortress') {
-        //this.tank.use.push('block');
-        //this.tank.blockType = 'fortress';
-        //cooldown = 10000;
+        // soon to be replaced
       } else if (id === 'flashbang') {
         this.tank.use.push('flashbang');
         cooldown = 40000;
@@ -1984,7 +1977,6 @@ function Game() {
           logs: this.world.logs.reverse(),
         }
       }
-      this.tank.blockType = null;
       this.tank.airstrike = null;
       this.tank.fire = [];
       this.tank.use = [];
