@@ -6,6 +6,7 @@
 <input id='import' /><button onclick='port()'>Import Level</button>
 <script>window.onerror = (a, b, c) => alert(a+' '+c);</script>
 <script>
+window.oncontextmenu = () => false;
 const button_key = {
   'B0': 'Eraser',
   'B1': 'Weak Block',
