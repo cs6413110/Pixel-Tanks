@@ -32,7 +32,7 @@ const raycast = (x1, y1, x2, y2, walls) => {
       }
     }
   } else {
-    const s = dy/dx, o = y-s*x;
+    const s = dy/dx, o = y1-s*x;
     for (const {x, y} of walls) {
       for (const p of py) {
         if (collision(x, y, 100, 100, (p-o)/s-1, p-1, 2, 2)) return false;
