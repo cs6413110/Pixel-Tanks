@@ -1899,8 +1899,8 @@ function Game() {
         } else if (c === 'tactical' && this.canMegamissle) {
           this.fire('megamissle');
           this.canMegamissle = false;
-          this.timers.class = {time: Date.now(), cooldown: 30000};
-          setTimeout(() => {this.canMegamissle = true}, 30000);
+          this.timers.class = {time: Date.now(), cooldown: 20000};
+          setTimeout(() => {this.canMegamissle = true}, 20000);
         } else if (c === 'builder' && this.canTurret) {
           this.canTurret = false;
           this.tank.use.push('turret');
