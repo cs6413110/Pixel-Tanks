@@ -399,13 +399,10 @@ function Game() {
           floor: '/blocks/floor',
           void: '/blocks/void',
           gold: '/blocks/gold',
-          heal: '/blocks/heal',
-          mine: '/blocks/mine',
           fire: '/blocks/fire',
           friendlyfire: '/blocks/friendlyfire',
           airstrike: '/blocks/airstrike',
           friendlyairstrike: '/blocks/friendlyairstrike',
-          fortress: '/blocks/fortress',
         },
         bullets: {
           //normal: '/bullets/normal', no image yet :(
@@ -1416,7 +1413,7 @@ function Game() {
     drawBlock(b) {
       const size = b.type === 'airstrike' ? 200 : 100;
       const type = ['airstrike', 'fire'].includes(b.type) && getTeam(this.team) === getTeam(b.team) ? 'friendly'+b.type : b.type;
-      GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, (b.type === 'mine' && this.hostupdate.pt.find(t => t.username === PixelTanks.user.username).team.split(':')[1].replace('@leader', '') !== b.team.split(':')[1].replace('@leader', '')) ? .03 : 1);
+      GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1);
     }
 
     drawShot(s) {
@@ -1768,7 +1765,7 @@ function Game() {
       var l = 0, blocks = this.hostupdate.b, len = blocks.length;
       while (l<len) {
         if ((x > blocks[l].x || x + 80 > blocks[l].x) && (x < blocks[l].x + 100 || x + 80 < blocks[l].x + 100) && (y > blocks[l].y || y + 80 > blocks[l].y) && (y < blocks[l].y + 100 || y + 80 < blocks[l].y + 100)) {
-          if (['barrier', 'weak', 'strong', 'gold', 'void'].includes(blocks[l].type) || blocks[l].type === 'fortress' && blocks[l].team.split(':')[0].replace('@leader', '') !== this.team.split(':')[0].replace('@leader', '')) return false;
+          if (['barrier', 'weak', 'strong', 'gold', 'void'].includes(blocks[l].type)) return false;
         }
         l++;
       }
@@ -1816,13 +1813,13 @@ function Game() {
         this.tank.blockType = 'spike';
         cooldown = 10000;
       } else if (id === 'mine') {
-        this.tank.use.push('block');
-        this.tank.blockType = 'mine';
-        cooldown = 1000;
+        //this.tank.use.push('block');
+        //this.tank.blockType = 'mine';
+        //cooldown = 1000;
       } else if (id === 'fortress') {
-        this.tank.use.push('block');
-        this.tank.blockType = 'fortress';
-        cooldown = 10000;
+        //this.tank.use.push('block');
+        //this.tank.blockType = 'fortress';
+        //cooldown = 10000;
       } else if (id === 'flashbang') {
         this.tank.use.push('flashbang');
         cooldown = 40000;
