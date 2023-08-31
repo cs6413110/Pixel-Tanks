@@ -1801,10 +1801,10 @@ function Game() {
         this.tank.use.push('shield');
         cooldown = 30000;
       } else if (id === 'weak') {
-        this.tank.use.push('block#'+PixelTanks.userData.class === 'builder' ? 'strong' : 'weak');
+        this.tank.use.push('block#'+(PixelTanks.userData.class === 'builder' ? 'strong' : 'weak'));
         cooldown = 3000;
       } else if (id === 'strong') {
-        this.tank.use.push('block#'+PixelTanks.userData.class === 'builder' ? 'gold' : 'strong');
+        this.tank.use.push('block#'+(PixelTanks.userData.class === 'builder' ? 'gold' : 'strong'));
         cooldown = 7000;
       } else if (id === 'spike') {
         this.tank.use.push('block#spike');
