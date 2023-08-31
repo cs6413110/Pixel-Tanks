@@ -178,7 +178,7 @@ class Engine {
       });
       t.healing = a[(a.indexOf(t.healing)+1)%a.length]; //lots of brain cells died for this line of code <R.I.P>
     }
-    if (use.includes('shield')) t.shields = Math.min(500, t.shields + 100);
+    if (use.includes('shield')) t.shields = Math.min(500, Math.max(0, t.shields)+100);
     if (airstrike) {
       this.b.push(new Block(airstrike.x, airstrike.y, Infinity, 'airstrike', parseTeamExtras(t.team), this));
     }
