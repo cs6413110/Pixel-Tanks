@@ -1505,7 +1505,7 @@ function Game() {
         GUI.draw.fill();
         GUI.draw.globalAlpha = 1;
         GUI.draw.fillStyle = '#000000';
-        GUI.draw.fillRect(t.x-2, t.y+123, 84, 11);
+        GUI.draw.fillRect(t.x-2, t.y+113, 84, 11);
         GUI.draw.fillStyle = '#00FFFF';
         GUI.draw.fillRect(t.x, t.y+115, 80*t.shields/(Math.ceil(t.shields/100)*100), 5);
       }
