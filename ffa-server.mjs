@@ -246,14 +246,6 @@ const Commands = {
     });
     target.team = this.username+':'+Math.random();
   },
-  pay: function(data) {
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
-    if (data.length !== 3 || new Number(data[2]) === NaN) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    servers[this.room].pt.forEach(t => {
-      if (t.username === data[1]) this.socket.send({event: 'pay', amount: new Number(data[2])});
-    });
-    servers[this.room].logs.push({m: data[1]+' was paid '+data[2]+' by '+this.username, c: '#FFFF20'});
-  },
   newmap: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     servers[this.room].b = [];
