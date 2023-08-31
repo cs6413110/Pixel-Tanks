@@ -136,15 +136,18 @@ class Engine {
       }, 100);
       t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
     }
-    if (use.includes('block')) {
-      const coordinates = [{ r: [337.5, 360], dx: -10, dy: 80 }, { r: [0, 22.5], dx: -10, dy: 80 }, { r: [22.5, 67.5], dx: -100, dy: 80 }, { r: [67.5, 112.5], dx: -100, dy: -10 }, { r: [112.5, 157.5], dx: -100, dy: -100 }, { r: [157.5, 202.5], dx: -10, dy: -100 }, { r: [202.5, 247.5], dx: 80, dy: -100 }, { r: [247.5, 292.5], dx: 80, dy: -10 }, { r: [292.5, 337.5], dx: 80, dy: 80 }];
-      for (const coord of coordinates) {
-        if (r >= coord.r[0] && r < coord.r[1]) {
-          this.b.push(new Block(t.x + coord.dx, t.y + coord.dy, { strong: 200, weak: 100, gold: 300, mine: 0, spike: 0, fortress: 150 }[data.blockType], data.blockType, t.team, this));
-          break;
+    const coords = [{ r: [337.5, 360], dx: -10, dy: 80 }, { r: [0, 22.5], dx: -10, dy: 80 }, { r: [22.5, 67.5], dx: -100, dy: 80 }, { r: [67.5, 112.5], dx: -100, dy: -10 }, { r: [112.5, 157.5], dx: -100, dy: -100 }, { r: [157.5, 202.5], dx: -10, dy: -100 }, { r: [202.5, 247.5], dx: 80, dy: -100 }, { r: [247.5, 292.5], dx: 80, dy: -10 }, { r: [292.5, 337.5], dx: 80, dy: 80 }];
+    use.forEach(b => { // updated block renderer, but expand to include all entity updates later
+      if (b.includes('block#')) {
+        const type = b.replace('block#', '');
+        for (const coord of coords) {
+          if (r >= coord.r[0] && r < coord.r[1]) {
+            this.b.push(new Block(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 0}[type], type, t.team, this));
+            break;
+          }
         }
       }
-    }
+    });
     if (use.includes('flashbang')) {
       this.pt.forEach(tank => {
         if (!collision(tank.x - 860, tank.y - 560, 1800, 1200, t.x, t.y, 80, 80) || tank.username === t.username) return;
@@ -225,9 +228,7 @@ class Engine {
       for (let i = this.b.length-1; i >= 0; i--) {
         const b = this.b[i];
         if (collision(t.x, t.y, 80, 80, b.x, b.y, 100, 100) && !t.ded && !t.immune) {
-          if (b.type === 'mine' && b.a) {
-            b.destroy();
-          } else if (b.type === 'fire') {
+          if (b.type === 'fire') {
             if (t.fire) {
               clearTimeout(t.fireTimeout);
               t.fire = { team: b.team, frame: t.fire.frame };
@@ -380,21 +381,15 @@ class Block {
     this.type = type;
     this.host = host;
     this.s = false;
-    this.c = !['spike', 'mine', 'fire', 'airstrike'].includes(type); // collision
+    this.c = !['spike', 'fire', 'airstrike'].includes(type); // collision
     this.team = team;
-    if (['spike', 'mine', 'fire'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 30000);
+    if (['fire', 'airstrike'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
     if (type === 'airstrike') {
       for (let i = 0; i < 20; i++) {
         setTimeout(() => {
           if (this.host.b.includes(this)) this.host.d.push(new Damage(this.x + Math.floor(Math.random()*200)-100, this.y + Math.floor(Math.random()*200)-100, 200, 200, 200, this.team, this.host));
         }, 5000 + Math.random() * 500);
-        setTimeout(() => this.destroy(), 6000);
       }
-    } else if (type === 'mine') {
-      this.a = false;
-      setTimeout(() => {
-        this.a = true;
-      }, 3000);
     }
   }
 
@@ -418,7 +413,6 @@ class Block {
 
   destroy() {
     clearTimeout(this.sd);
-    if (this.type === 'mine') this.host.d.push(new Damage(this.x, this.y, 100, 100, 50, this.team, this.host));
     const index = this.host.b.indexOf(this);
     if (index !== -1) this.host.b.splice(index, 1);
   }
@@ -546,21 +540,18 @@ class Shot {
       const b = blocks[i];
       if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
       if (type === 'grapple') {
-        if (b.type === 'fortress' && getTeam(b.team) === getTeam(this.team)) return false;
         const t = this.host.pt.find(t => t.username === getUsername(this.team));
         if (t.grapple) t.grapple.bullet.destroy();
         t.grapple = { target: b, bullet: this };
         this.update = () => {};
         return false;
       } else if (type === 'dynamite') {
-        if (b.type === 'fortress' && getTeam(b.team) === getTeam(this.team)) return false;
         this.update = () => {}
         return false;
       } else if (type === 'fire') {
         host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
         return true;
       } else {
-        if (b.type === 'fortress' && getTeam(b.team) === getTeam(this.team)) return false;
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
         } else {
