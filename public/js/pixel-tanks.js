@@ -1548,15 +1548,15 @@ function Game() {
       GUI.clear();
       if (this.hostupdate.pt.length === 0) {
         GUI.draw.fillStyle = '#ffffff';
-        GUI.draw.drawRect(0, 0, 1600, 1600);
+        GUI.draw.fillRect(0, 0, 1600, 1600);
         GUI.draw.fillStyle = '#000000';
-        return GUI.draw.fillText('Loading Terrain...', 100, 100);
+        return  GUI.drawText('Loading Terrain', 800, 500, 100, '#ffffff', 0.5);
       }
       if (this.socket.status !== 'connected') {
         GUI.draw.fillStyle = '#ffffff';
-        GUI.draw.drawRect(0, 0, 1600, 1600);
+        GUI.draw.fillRect(0, 0, 1600, 1600);
         GUI.draw.fillStyle = '#000000';
-        return GUI.draw.fillText('Server closed :(', 100, 100);
+        return GUI.drawText('Server Closed', 800, 500, 100, '#ffffff', 0.5);
       }
       this.fps++;
       const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
@@ -1580,7 +1580,6 @@ function Game() {
       }
       if (this.b) this.tank.baseFrame = ((this.b.o ? 0 : 1)+Math.floor((Date.now()-this.b.t)/60))%2;
       this.tank.baseRotation = (this.left === null) ? (this.up ? 180 : 0) : (this.left ? (this.up === null ? 90 : (this.up ? 135 : 45)) : (this.up === null ? 270 : (this.up ? 225: 315)));
-
       const player = t.find(tank => tank.username === PixelTanks.user.username);
       if (player) {
         player.x = this.tank.x;
