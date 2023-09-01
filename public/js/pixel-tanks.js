@@ -1239,6 +1239,7 @@ function Game() {
       this.crates = 0;
       this.kills = 0;
       this.coins = 0;
+      this.datastuff = [];
       this.hostupdate = {
         b: [],
         s: [],
@@ -1901,7 +1902,7 @@ function Game() {
           Menus.removeListeners();
         }
       } else if (k === 18) {
-        document.write(JSON.stringify(this.hostupdate));
+        document.write(JSON.stringify(this.datastuff));
       }
     }
 
@@ -1942,6 +1943,7 @@ function Game() {
 
     send() {
       const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank};
+      this.datastuff.push(updateData);
       if (this.multiplayer) {
         this.ops++;
         this.socket.send(updateData);
