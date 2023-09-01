@@ -1239,7 +1239,7 @@ function Game() {
       this.crates = 0;
       this.kills = 0;
       this.coins = 0;
-      this.datastuff = [];
+      this.lastUpdate = {};
       this.hostupdate = {
         b: [],
         s: [],
@@ -1627,7 +1627,7 @@ function Game() {
       GUI.draw.globalAlpha = .2;
       GUI.draw.fillRect(0, 0, 180, 250);
       GUI.draw.globalAlpha = 1;
-      GUI.drawText('ServerTickSpeed: '+this.hostupdate.tickspeed, 10, 20, 30, '#ffffff', 0);
+      GUI.drawText('T='+this.hostupdate.tickspeed+' F='+this.fps+' U='+this.ups+' O='+this.ops, 10, 20, 30, '#ffffff', 0);
       GUI.drawText('Kills Streak: '+this.kills, 10, 50, 30, '#ffffff', 0);
       GUI.drawText('Crates: '+this.crates, 10, 100, 30, '#ffffff', 0);
       GUI.drawText('Experience: '+this.xp, 10, 150, 30, '#ffffff', 0);
@@ -1901,8 +1901,6 @@ function Game() {
         } else {
           Menus.removeListeners();
         }
-      } else if (k === 18) {
-        document.write(JSON.stringify(this.datastuff));
       }
     }
 
@@ -1943,7 +1941,7 @@ function Game() {
 
     send() {
       const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank};
-      this.datastuff.push(updateData);
+      if (this.tank.x === this.lastUpdate.x && this.tank.y === this.lastUpdate.y && this.tank.r === this.lastUpdate.r && this.tank.use.length === 0 && this.tank.fire.length === 0 && this.tank.airstrike === null) return;
       if (this.multiplayer) {
         this.ops++;
         this.socket.send(updateData);
@@ -1958,6 +1956,7 @@ function Game() {
           logs: this.world.logs.reverse(),
         }
       }
+      this.lastUpdate = updateData.data;
       this.tank.airstrike = null;
       this.tank.fire = [];
       this.tank.use = [];
