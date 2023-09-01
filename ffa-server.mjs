@@ -512,11 +512,8 @@ class FFA extends Multiplayer {
       start: Date.now(),
       time: 0,
     }
-    t.deathsPerMovement++;
-    if (t.deathsPerMovement === 1) {
-      this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
-      m.socket.send({event: 'kill'});
-    } else this.logs.push({m: m.username+' killed an afk player!', c: '#FF0000'});
+    this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
+    m.socket.send({event: 'kill'});
     A.each(this.ai, function(i, host, t) {
       if (getUsername(this.team) === t.username) {
         host.ai.splice(i, 1);
