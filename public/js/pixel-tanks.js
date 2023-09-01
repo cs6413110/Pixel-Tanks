@@ -1358,7 +1358,7 @@ function Game() {
             this.ups = 0;
             this.fps = 0;
           }, 1000);
-          setInterval(this.send.bind(this), 1000/60);
+          setInterval(this.send.bind(this), 1000/30);
         });
       } else {
         this.world = new Singleplayer([
