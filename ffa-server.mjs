@@ -451,7 +451,7 @@ class Multiplayer extends Engine {
       const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
       const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;
       const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
-      let send = true; // RETURN TO FALSE, TEMPORARILY DISABLED TO ALLOW DYNAMIC UPDATES TO LOGS, TICKSPEED, and GLOBAL
+      let send = false;
       for (const p of ['b', 'pt', 'ai', 's', 'd']) {
         const ids = new Set(this[p].map(e => e.id));
         this[p].filter(e => A.collider(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
@@ -470,7 +470,7 @@ class Multiplayer extends Engine {
       }
       t.render = render;
       t.lastUpdate = Date.now();
-     if (send) t.socket.send(message);
+      if (send) t.socket.send(message);
       outgoing_per_second++;
     }
   }
