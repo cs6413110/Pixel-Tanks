@@ -188,8 +188,9 @@ class Engine {
       if (t.dedEffect) t.dedEffect.time = Date.now() - t.dedEffect.start;
       if (t.pushback !== 0) t.pushback += 0.5;
       if (t.fire && getTeam(t.fire.team) !== getTeam(t.team)) t.damageCalc(t.x, t.y, .25, getUsername(t.fire.team));
-      if (t.immune && !t.ded) for (const tank of this.pt) {
+      for (const tank of this.pt) {
         if (t.class === 'medic' && !t.ded && !tank.ded && (t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + .3, tank.maxHp);
+        if (!t.immune || t.ded) continue;
         if (!tank.canBashed) continue;
         if ((t.class === 'warrior' && getTeam(t.team) !== getTeam(tank.team)) || (t.class === 'medic' && getTeam(t.team) === getTeam(tank.team))) {
           if (!collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) continue;
