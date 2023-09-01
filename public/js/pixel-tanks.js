@@ -1532,20 +1532,6 @@ function Game() {
       }
 
       if (t.animation) GUI.drawImage(PixelTanks.images.animations[t.animation.id], t.x, t.y, 80, 90, 1, 0, 0, 0, 0, 0, t.animation.frame*40, 0, 40, 45);
-
-      if (t.healing && !t.ded) {
-        const target = this.hostupdate.pt.find(tank => tank.username === t.healing);
-        if (!target) return;
-        if (Math.sqrt((target.x-t.x)**2+(target.y-t.y)**2) > 500) return;
-        GUI.draw.beginPath();
-        GUI.draw.lineWidth = 10;
-        GUI.draw.strokeStyle = '#00FF00';
-        GUI.draw.globalAlpha = .7;
-        GUI.draw.moveTo(t.x+40, t.y+40);
-        GUI.draw.lineTo(target.x+40, target.y+40);
-        GUI.draw.stroke();
-        GUI.draw.globalAlpha = 1;
-      }
     }
 
     frame() {
