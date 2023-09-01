@@ -1278,9 +1278,9 @@ function Game() {
       if (multiplayer) {
         this.socket = new MegaSocket(`ws://${ip}`, {keepAlive: false, reconnect: false, autoconnect: true});
         this.socket.on('message', data => {
-          this.ups++;
           switch (data.event) {
             case 'hostupdate':
+              this.ups++;
               this.hostupdate.tickspeed = data.tickspeed;
               this.hostupdate.global = data.global;
               this.hostupdate.logs = data.logs.reverse();
