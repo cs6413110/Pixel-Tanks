@@ -77,10 +77,9 @@ class Engine {
 
   update(data) {
     const t = this.pt.find(t => t.username === data.username);
+    if (!t) return;
     data = data.data;
-    if (t === undefined) return;
     const { emote, r, baseFrame, use, x, y, fire, airstrike} = data;
-    if ((t.emote !== emote || t.r !== r || t.baseFrame !== baseFrame || use.length || fire.length) || (!t.grapple && (t.x !== x || t.y !== y))) t.deathsPerMovement = 0;
     t.baseRotation = data.baseRotation;
     t.immune = data.immune;
     t.animation = data.animation;
@@ -100,86 +99,70 @@ class Engine {
       if ((t.y + 80) % 100 > 80 && [135, 180, 225].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x / 100) * 100, Math.floor(t.y / 100) * 100 + 100, 100, type, team, this));
       if (t.y % 100 < 20 && [315, 0, 45].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x / 100) * 100, Math.floor(t.y / 100) * 100 - 100, 100, type, team, this));
     }
-    if (use.includes('dynamite')) {
-      for (let i = this.s.length-1; i >= 0; i--) {
-        const s = this.s[i];
-        if (getUsername(s.team) !== t.username || s.type !== 'dynamite') continue;
-        this.d.push(new Damage(s.x-100, s.y-100, 200, 200, 100, s.team, this));
-        s.destroy();
-      }
-    }
-    if (use.includes('toolkit')) {
-      if (t.healTimeout !== undefined) {
-        clearTimeout(t.healTimeout);
-        t.healTimeout = undefined;
-      } else {
-        t.healTimeout = setTimeout(() => {
-          t.hp = t.maxHp;
-          const ai = this.ai.find(a => getUsername(a.team) === t.username);
-          if (ai) ai.hp = ai.maxHp;
+    for (const e of use) {
+      if (e === 'dynamite') {
+        for (let i = this.s.length-1; i >= 0; i--) {
+          const {x, y, team, type, destroy} = this.s[i];
+          if (getUsername(team) !== t.username || type !== 'dynamite') continue;
+          this.d.push(new Damage(x-100, y-100, 200, 200, 100, team, this));
+          destroy();
+        }
+      } else if (e === 'toolkit') {
+        if (t.healTimeout !== undefined) {
+          clearTimeout(t.healTimeout);
           t.healTimeout = undefined;
-        }, 7500);
-      }
-    }
-    if (use.includes('tape')) {
-      t.hp = Math.min(t.maxHp, t.hp + t.maxHp / 4);
-      const ai = this.ai.find(a => getUsername(a.team) === t.username);
-      if (ai) ai.hp = Math.min(ai.maxHp, ai.hp + ai.maxHp / 4);
-    }
-    if (use.includes('glu')) {
-      clearInterval(t.gluInterval);
-      clearTimeout(t.gluTimeout);
-      t.gluInterval = setInterval(() => {
-        t.hp = Math.min(t.maxHp, t.hp + 3);
-        const ai = this.ai.find(a => getUsername(a.team) === t.username);
-        if (ai) ai.hp = Math.min(ai.maxHp, ai.hp + 3);
-      }, 100);
-      t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
-    }
-    const coords = [{ r: [337.5, 360], dx: -10, dy: 80 }, { r: [0, 22.5], dx: -10, dy: 80 }, { r: [22.5, 67.5], dx: -100, dy: 80 }, { r: [67.5, 112.5], dx: -100, dy: -10 }, { r: [112.5, 157.5], dx: -100, dy: -100 }, { r: [157.5, 202.5], dx: -10, dy: -100 }, { r: [202.5, 247.5], dx: 80, dy: -100 }, { r: [247.5, 292.5], dx: 80, dy: -10 }, { r: [292.5, 337.5], dx: 80, dy: 80 }];
-    use.forEach(b => { // updated block renderer, but expand to include all entity updates later
-      if (b.includes('block#')) {
-        const type = b.replace('block#', '');
+        } else {
+          t.healTimeout = setTimeout(() => {
+            t.hp = t.maxHp;
+            t.healTimeout = undefined;
+          }, 7500);
+        }
+      } else if (e === 'tape') {
+        t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
+      } else if (e === 'glu') {
+        clearInterval(t.gluInterval);
+        clearTimeout(t.gluTimeout);
+        t.glueInterval = setInterval(() => {
+          t.hp = Math.min(t.maxHp, t.hp+3.5);
+        });
+        t.gluTimeout = setTimeout(() => clearInterval(t.glueInterval), 5000);
+      } else if (e.includes('block#') {
+        const coords = [{ r: [337.5, 360], dx: -10, dy: 80 }, { r: [0, 22.5], dx: -10, dy: 80 }, { r: [22.5, 67.5], dx: -100, dy: 80 }, { r: [67.5, 112.5], dx: -100, dy: -10 }, { r: [112.5, 157.5], dx: -100, dy: -100 }, { r: [157.5, 202.5], dx: -10, dy: -100 }, { r: [202.5, 247.5], dx: 80, dy: -100 }, { r: [247.5, 292.5], dx: 80, dy: -10 }, { r: [292.5, 337.5], dx: 80, dy: 80 }];
+        const type = e.replace('block#', '');
         for (const coord of coords) {
           if (r >= coord.r[0] && r < coord.r[1]) {
             this.b.push(new Block(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 0}[type], type, t.team, this));
             break;
           }
         }
+      } else if (e === 'flashbang') {
+        for (const tank of this.pt) {
+          const bangTime = (500-Math.sqrt((t.x-tank.x)**2+(t.y-tank.y)**2)/500)*10;
+          if (bangTime > 0) {
+            tank.flashbanged = true;
+            clearTimeout(tank.flashbangTimeout);
+            tank.flashbangTimeout = setTimeout(() => {
+              tank.flashbanged = false;
+            }, tank.username === t.username ? 500 : bangTime);
+          }
+        }
+      } else if (e === 'bomb') {
+        for (let i = this.b.length-1; i >= 0; i--) {
+          const b = this.b[i];
+          if (collision(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) b.destroy();
+        }
+      } else if (e === 'turret') {
+        this.ai = this.ai.filter(ai => getUsername(ai.team) !== t.username);
+        this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
+      } else if (e === 'buff') {
+        t.buff = true;
+        setTimeout(() => { t.buff = false }, 10000);
+      } else if (e === 'healSwitch') {
+      } else if (e === 'shield') {
+        t.shields = Math.min(300, Math.max(0, t.shields)+100);
+      } else if (e === 'airstrike') {
+        this.b.push(new Block(airstrike.x, airstrike.y, Infinity, 'airstrike', parseTeamExtras(t.team), this));
       }
-    });
-    if (use.includes('flashbang')) {
-      this.pt.forEach(tank => {
-        if (!collision(tank.x - 860, tank.y - 560, 1800, 1200, t.x, t.y, 80, 80) || tank.username === t.username) return;
-        tank.flashbanged = true;
-        clearTimeout(tank.flashbangTimeout);
-        tank.flashbangTimeout = setTimeout(() => {
-          tank.flashbanged = false;
-        }, 1000);
-      });
-    }
-    if (use.includes('bomb')) {
-      for (let i = this.b.length-1; i >= 0; i--) {
-        const b = this.b[i];
-        if (collision(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) b.destroy();
-      }
-    }
-    if (use.includes('turret')) {
-      this.ai = this.ai.filter(ai => getUsername(ai.team) !== t.username);
-      this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
-    }
-    if (use.includes('buff')) {
-      t.buff = true;
-      setTimeout(() => {
-        t.buff = false;
-      }, 10000);
-    }
-    if (use.includes('healSwitch')) {
-      return;
-    }
-    if (use.includes('shield')) t.shields = Math.min(500, Math.max(0, t.shields)+100);
-    if (airstrike) {
-      this.b.push(new Block(airstrike.x, airstrike.y, Infinity, 'airstrike', parseTeamExtras(t.team), this));
     }
     if (fire.length > 0) {
       t.pushback = -6;
