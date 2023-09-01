@@ -250,7 +250,7 @@ class Tank {
   constructor(data, host) {
     this.raw = {};
     this.render = {b: new Set(), s: new Set(), pt: new Set(), d: new Set(), ai: new Set()};
-    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id'].forEach(p => {
+    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class'].forEach(p => {
       Object.defineProperty(this, p, {
         get() {
           return this.raw[p];
