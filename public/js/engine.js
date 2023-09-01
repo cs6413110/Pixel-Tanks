@@ -160,9 +160,10 @@ class Engine {
       } else if (e === 'healSwitch') {
       } else if (e === 'shield') {
         t.shields = Math.min(300, Math.max(0, t.shields)+100);
-      } else if (e === 'airstrike') {
-        this.b.push(new Block(airstrike.x, airstrike.y, Infinity, 'airstrike', parseTeamExtras(t.team), this));
       }
+    }
+    if (airstrike) {
+      this.b.push(new Block(airstrike.x, airstrike.y, Infinity, 'airstrike', parseTeamExtras(t.team), this));
     }
     if (fire.length > 0) {
       t.pushback = -6;
