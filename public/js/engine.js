@@ -175,11 +175,7 @@ class Engine {
       }, 10000);
     }
     if (use.includes('healSwitch')) {
-      let a = [];
-      this.pt.forEach(tank => {
-        if (getTeam(tank.team) === getTeam(t.team)) a.push(tank.username);
-      });
-      t.healing = a[(a.indexOf(t.healing)+1)%a.length]; //lots of brain cells died for this line of code <R.I.P>
+      return;
     }
     if (use.includes('shield')) t.shields = Math.min(500, Math.max(0, t.shields)+100);
     if (airstrike) {
@@ -206,15 +202,10 @@ class Engine {
 
     for (const t of this.pt) {
       if (t.dedEffect) t.dedEffect.time = Date.now() - t.dedEffect.start;
-      if (t.class === 'medic' && !t.ded && t.username !== t.healing) {
-        const tank = this.pt.find(tank => tank.username === t.healing);
-        if (!tank) {
-          t.healing = t.username;
-        } else if ((t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + .4, tank.maxHp);
-      }
       if (t.pushback !== 0) t.pushback += 0.5;
       if (t.fire && getTeam(t.fire.team) !== getTeam(t.team)) t.damageCalc(t.x, t.y, .25, getUsername(t.fire.team));
       if (t.immune && !t.ded) for (const tank of this.pt) {
+        if (t.class === 'medic' && !t.ded && !tank.ded && (t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000) tank.hp = Math.min(tank.hp + .15, tank.maxHp);
         if (!tank.canBashed) continue;
         if ((t.class === 'warrior' && getTeam(t.team) !== getTeam(tank.team)) || (t.class === 'medic' && getTeam(t.team) === getTeam(tank.team))) {
           if (!collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) continue;
@@ -275,7 +266,7 @@ class Tank {
   constructor(data, host) {
     this.raw = {};
     this.render = {b: new Set(), s: new Set(), pt: new Set(), d: new Set(), ai: new Set()};
-    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'healing', 'id'].forEach(p => {
+    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id'].forEach(p => {
       Object.defineProperty(this, p, {
         get() {
           return this.raw[p];
@@ -309,7 +300,6 @@ class Tank {
     this.baseRotation = 0;
     this.baseFrame = 0;
     this.fire = false;
-    this.healing = data.username;
     this.host = host;
     host.override(this);
   }
