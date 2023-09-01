@@ -102,10 +102,10 @@ class Engine {
     for (const e of use) {
       if (e === 'dynamite') {
         for (let i = this.s.length-1; i >= 0; i--) {
-          const {x, y, team, type, destroy} = this.s[i];
-          if (getUsername(team) !== t.username || type !== 'dynamite') continue;
-          this.d.push(new Damage(x-100, y-100, 200, 200, 100, team, this));
-          destroy();
+          const s = this.s[i];
+          if (getUsername(s.team) !== t.username || s.type !== 'dynamite') continue;
+          this.d.push(new Damage(s.x-100, s.y-100, 200, 200, 100, s.team, this));
+          s.destroy();
         }
       } else if (e === 'toolkit') {
         if (t.healTimeout !== undefined) {
