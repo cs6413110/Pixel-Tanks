@@ -1464,8 +1464,10 @@ function Game() {
     drawTank(t) {
       if (t.class === 'medic' && !t.ded) {
         GUI.draw.fillStyle = '#00FF00';
+        GUI.draw.beginPath();
         GUI.draw.globalAlpha = .1;
         GUI.draw.arc(t.x+40, t.y+40, 500, 0, 2*Math.PI);
+        GUI.draw.fill();
         GUI.draw.globalAlpha = 1;
       }
       const p = t.username === PixelTanks.user.username;
