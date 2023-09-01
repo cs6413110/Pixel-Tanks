@@ -1552,6 +1552,12 @@ function Game() {
         GUI.draw.fillStyle = '#000000';
         return GUI.draw.fillText('Loading Terrain...', 100, 100);
       }
+      if (this.socket.status !== 'connected') {
+        GUI.draw.fillStyle = '#ffffff';
+        GUI.draw.drawRect(0, 0, 1600, 1600);
+        GUI.draw.fillStyle = '#000000';
+        return GUI.draw.fillText('Server closed :(', 100, 100);
+      }
       this.fps++;
       const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
       if (this.dx) {
