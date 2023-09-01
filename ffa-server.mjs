@@ -714,9 +714,7 @@ class TDM extends Multiplayer {
   }
 }
 
-
-
-if (!SETTINGS.export) ffa.listen(SETTINGS.port);
+ffa.listen(SETTINGS.port);
 
 const Profile = (arr, update) => {
   const functions = [];
