@@ -1956,7 +1956,7 @@ function Game() {
           logs: this.world.logs.reverse(),
         }
       }
-      this.lastUpdate = updateData.data;
+      this.lastUpdate = JSON.parse(JSON.stringify(updateData.data));
       this.tank.airstrike = null;
       this.tank.fire = [];
       this.tank.use = [];
