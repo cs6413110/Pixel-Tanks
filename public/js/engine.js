@@ -688,7 +688,7 @@ class AI {
     const {x, y, path, baseRotation} = this;
     if ((x-10)%100 === 0 && (y-10)%100 === 0) this.onBlock();
     if (!path.p.length) return;
-    const now = Date.now(), len = path.p.length-1, frames = Math.min(Math.floor((now-path.t)/15), (path.p.length-1)*25), len*25), f = Math.floor(frames/25), n = Math.min(f+1, len), dx = path.p[n][0]-path.p[f][0], dy = path.p[n][1]-path.p[f][1], offset = 4*(frames%25), x = 10+path.p[f][0]*100+offset*dx, y = 10+path.p[f][1]*100+offset*dy;
+    const now = Date.now(), len = path.p.length-1, frames = Math.min(Math.floor((now-path.t)/15), len*25), f = Math.floor(frames/25), n = Math.min(f+1, len), dx = path.p[n][0]-path.p[f][0], dy = path.p[n][1]-path.p[f][1], offset = 4*(frames%25), x = 10+path.p[f][0]*100+offset*dx, y = 10+path.p[f][1]*100+offset*dy;
     this.baseRotation = [[135, 180, 225], [90, this.baseRotation, 270], [45, 0, 315]][dy+1][dx+1];
     this.tr = this.baseRotation;
     this.obstruction = this.collision(x, y);
