@@ -636,7 +636,6 @@ class AI {
     this.y = y;
     this.r = 0;
     this.tr = 0;
-    this.inaccuracy = 0;
     this.baseRotation = 0;
     this.baseFrame = 0;
     this.mode = 0;
@@ -674,42 +673,30 @@ class AI {
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
-      if (this.canPowermissle) this.fire(this.obstruction.x, this.obstruction.y, 'powermissle');
-      if (this.canFire) this.fire(this.obstruction.x, this.obstruction.y);
+      if (this.canPowermissle && Math.random() <= 1/300) this.fire(this.obstruction.x, this.obstruction.y, 'powermissle');
+      if (this.canFire && Math.random() <= 1/20) this.fire(this.obstruction.x, this.obstruction.y);
     } else if (this.mode !== 0) {
       this.tr = toAngle(this.target.x - this.x, this.target.y - this.y);
-      if (this.canPowermissle) this.fire(this.target.x, this.target.y, 'powermissle');
-      if (this.canFire) this.fire(this.target.x, this.target.y);
+      if (this.canPowermissle && Math.random() <= 1/300) this.fire(this.target.x, this.target.y, 'powermissle');
+      if (this.canFire && Math.random() <= 1/20) this.fire(this.target.x, this.target.y);
     }
-    const convertTo360 = a => a < 0 ? 360+a%360 : a%360;
-    if ((this.r < this.tr && this.r > this.tr-180)) {
-      this.r = convertTo360(Math.min(this.r+2, this.tr));
-    } else {
-      this.r = convertTo360(Math.max(this.r-2, this.tr));
-    }
+    this.r = role === 0 ? this.tr : (this.r+((this.tr-this.r+360)%360 < (this.r-this.tr+360)%360 ? 2 : -2)+360)%360;
     if (this.pushback !== 0) this.pushback += 0.5;
   }
 
   move() {
-    if ((this.x - 10) % 100 === 0 && (this.y - 10) % 100 === 0) this.onBlock();
-    let frames = Math.floor((Date.now() - this.path.t) / 15);
-    if ((this.path.p.length - 1) * 25 < frames) {
-      if (this.path.p.length === 0) return;
-      frames = (this.path.p.length - 1) * 25;
-    }
-    const f = Math.floor(frames / 25), n = f + 1 === this.path.p.length ? f : f + 1;
-    const dirx = this.path.p[n][0] - this.path.p[f][0];
-    const diry = this.path.p[n][1] - this.path.p[f][1];
-    this.baseRotation = [[135, 180, 225], [90, this.baseRotation, 270], [45, 0, 315]][diry + 1][dirx + 1];
+    const {x, y, path, baseRotation} = this;
+    if ((x-10)%100 === 0 && (y-10)%100 === 0) this.onBlock();
+    if (!path.p.length) return;
+    const now = Date.now(), l = path.p.length-1, frames = Math.min(Math.floor((now-path.t)/15), (path.p.length-1)*25), l*25), f = Math.floor(frames/25), n = Math.min(f+1, l), dx = path.p[n][0]-path.p[f][0], dy = path.p[n][1]-path.p[f][1], offset = 4*(frames%25), x = 10+path.p[f][0]*100+offset*dx, y = 10+path.p[f][1]*100+offset*dy;
+    this.baseRotation = [[135, 180, 225], [90, this.baseRotation, 270], [45, 0, 315]][dy+1][dx+1];
     this.tr = this.baseRotation;
-    const x = this.path.p[f][0] * 100 + 10 + dirx * 4 * (frames % 25);
-    const y = this.path.p[f][1] * 100 + 10 + diry * 4 * (frames % 25);
     this.obstruction = this.collision(x, y);
     if (!this.obstruction) {
       if (this.canBoost) {
         this.canBoost = false;
         this.immune = Date.now();
-        setTimeout(() => {this.immune = false}, 800);
+        setTimeout(() => {this.immune = false}, 500);
         setTimeout(() => {this.canBoost = true}, 5000);
       }
       this.x = x;
@@ -743,7 +730,6 @@ class AI {
   generatePath() {
     const {mode, role, bond, target, r} = this;
     const sx = (this.x - 10) / 100, sy = (this.y - 10) / 100;
-    // coords, sort order, path length limiter, target point, epicenter point
     let coords, sortAsc, limiter, ranged, tpx, tpy, epx, epy, tx, ty;
     if ([1, 2].includes(mode)) {
       tx = Math.floor((target.x+40)/100);
@@ -890,7 +876,7 @@ class AI {
   }
 
   fire(tx, ty, type) {
-    if (!type) type = Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
+    if (!type) type = Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) && role !== 0 < 150 ? 'shotgun' : 'bullet';
     const cooldown = {powermissle: 0, shotgun: 600, bullet: 200}[type];
     this.pushback = -3;
     let l = type === 'shotgun' ? -10 : 0;
