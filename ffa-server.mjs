@@ -380,7 +380,7 @@ const Commands = {
   ai: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 5) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), 0, this.username+':horde', servers[this.room]));
+    for (let i = 0; i < Number(data[4]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), 0, this.username+':horde', servers[this.room]));
   },
 };
 
