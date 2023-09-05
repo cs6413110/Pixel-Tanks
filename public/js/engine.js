@@ -877,7 +877,7 @@ class AI {
   }
 
   fire(tx, ty, type) {
-    if (!type) type = Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) && role !== 0 < 150 ? 'shotgun' : 'bullet';
+    if (!type) type = Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) && this.role !== 0 < 150 ? 'shotgun' : 'bullet';
     const cooldown = {powermissle: 0, shotgun: 600, bullet: 200}[type];
     this.pushback = -3;
     let l = type === 'shotgun' ? -10 : 0;
