@@ -665,12 +665,12 @@ class AI {
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
-      if (this.canPowermissle && Math.random() <= 1/300) this.fire(this.obstruction.x, this.obstruction.y, 'powermissle');
-      if (this.canFire && Math.random() <= 1/20) this.fire(this.obstruction.x, this.obstruction.y);
+      if (this.canPowermissle && Math.random() <= 1/10) this.fire(this.obstruction.x, this.obstruction.y, 'powermissle');
+      if (this.canFire && Math.random() <= 1/5) this.fire(this.obstruction.x, this.obstruction.y);
     } else if (this.mode !== 0) {
       this.tr = toAngle(this.target.x - this.x, this.target.y - this.y);
-      if (this.canPowermissle && Math.random() <= 1/300) this.fire(this.target.x, this.target.y, 'powermissle');
-      if (this.canFire && Math.random() <= 1/20) this.fire(this.target.x, this.target.y);
+      if (this.canPowermissle && Math.random() <= 1/10) this.fire(this.target.x, this.target.y, 'powermissle');
+      if (this.canFire && Math.random() <= 1/5) this.fire(this.target.x, this.target.y);
     }
     const dir = (this.tr-this.r+360)%360 < (this.r-this.tr+360)%360 ? 4 : -4;
     this.r = this.role === 0 ? this.tr : Math[dir > 0 ? 'min' : 'max']((this.r+dir+360)%360, this.tr);
