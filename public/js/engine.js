@@ -672,7 +672,7 @@ class AI {
       if (this.canPowermissle && Math.random() <= 1/300) this.fire(this.target.x, this.target.y, 'powermissle');
       if (this.canFire && Math.random() <= 1/20) this.fire(this.target.x, this.target.y);
     }
-    const dir = (this.r+((this.tr-this.r+360)%360 < (this.r-this.tr+360)%360 ? 4 : -4);
+    const dir = (this.tr-this.r+360)%360 < (this.r-this.tr+360)%360 ? 4 : -4;
     this.r = this.role === 0 ? this.tr : (Math[dir > 0 ? 'min' : 'max']((this.r+dir+360)%360, this.tr);
     if (this.pushback !== 0) this.pushback += 0.5;
   }
