@@ -682,7 +682,19 @@ class AI {
     if ((x-10)%100 === 0 && (y-10)%100 === 0) this.onBlock();
     if (!path) return;
     if (!path.p.length) return;
-    const now = Date.now(), len = path.p.length-1, frames = Math.min(Math.floor((now-path.t)/15), len*25), f = Math.floor(frames/25), n = Math.min(f+1, len), dx = path.p[n][0]-path.p[f][0], dy = path.p[n][1]-path.p[f][1], offset = 4*(frames%25), nx = 10+path.p[f][0]*100+offset*dx, ny = 10+path.p[f][1]*100+offset*dy;
+    const now = Date.now();
+    const len = path.p.length-1;
+    const frames = Math.min(Math.floor((now-path.t)/15), len*25);
+    if (this.immune+500 > path.p.t) { // if boost affects positioning of current path
+      frames += Math.floor((now-Math.max(this.immune, path.t))/15); // add extra frames
+    } 
+    const f = Math.floor(frames/25);
+    const n = Math.min(f+1, len);
+    const dx = path.p[n][0]-path.p[f][0];
+    const dy = path.p[n][1]-path.p[f][1];
+    const offset = 4*(frames%25);
+    const nx = 10+path.p[f][0]*100+offset*dx;
+    const ny = 10+path.p[f][1]*100+offset*dy;
     this.baseRotation = [[135, 180, 225], [90, baseRotation, 270], [45, 0, 315]][dy+1][dx+1];
     this.tr = this.baseRotation;
     this.obstruction = this.collision(nx, ny);
@@ -690,7 +702,6 @@ class AI {
       if (this.canBoost) {
         this.canBoost = false;
         this.immune = Date.now();
-        setTimeout(() => {this.immune = false}, 500);
         setTimeout(() => {this.canBoost = true}, 5000);
       }
       this.x = nx;
