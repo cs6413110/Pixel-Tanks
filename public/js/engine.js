@@ -428,7 +428,7 @@ class Shot {
 
   static calc(x, y, xm, ym) {
     const r = 60;
-    const a = xm === 0 ? 0 : ym / xm;
+    const a = xm === 0 ? 1000000 : ym / xm;
     const b = xm === 0 ? 0 : (a > 0 ? -1 : 1);
     const c = Math.sqrt(r**2+(r*a)**2);
     const d = r*c;
