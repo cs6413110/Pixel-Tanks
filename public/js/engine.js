@@ -684,7 +684,7 @@ class AI {
     if (!path.p.length) return;
     const now = Date.now();
     const len = path.p.length-1;
-    const frames = Math.min(Math.floor((now-path.t)/15), len*25);
+    let frames = Math.min(Math.floor((now-path.t)/15), len*25);
     if (this.immune+500 > path.t) {
       frames += Math.floor((now-Math.max(this.immune, path.t))/15); // add extra frames
     } 
