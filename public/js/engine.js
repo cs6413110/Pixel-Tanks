@@ -129,7 +129,7 @@ class Engine {
         }
       } else if (e === 'flashbang') {
         for (const tank of this.pt) {
-          const bangTime = (500-Math.sqrt((t.x-tank.x)**2+(t.y-tank.y)**2))/500*100;
+          const bangTime = (500-Math.sqrt((t.x-tank.x)**2+(t.y-tank.y)**2))*5;
           if (bangTime > 0) {
             tank.flashbanged = true;
             clearTimeout(tank.flashbangTimeout);
