@@ -64,25 +64,10 @@ const joinMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
 ];
-const rageMessages = [
-  `{idot}.exe stopped responding`,
+const rageMessages =[
   `{idot} left the game`,
-  `{idot} ragequit`,
-  `{idot} stopped existing`,
-  `wild {idot} got away`,
-  `wild {idot} fled`,
+  `{idot} quit`,
   `{idot} disconnected`,
-  `{idot} lost internet connection`,
-  `{idot} is not found`,
-  `{idot} left due to a critical condition: skill issue`,
-  `{idot} <--- RAGE QUIT LAFF!!! plz bully this man when u see him bc SKILL ISSUE`,
-  `{idot} skill issued`,
-  `{idot} got techered`,
-  `{idot} was found by the mob`,
-  `{idot} was found guilty`,
-  `{idot} was the Impostor (1 impostor remains)`,
-  `{idot} touched grass and died`,
-  `{idot} dediced to go outside`,
 ];
 var sockets = [], servers = [], incoming_per_second = 0, outgoing_per_second = 0, ffaLevels = [
   [["B4","B4","B4","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B4","B4","B4"],["B4","B0","B0","B0","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B0","B0","B0","B4"],["B4","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B4"],["B4","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B4"],["B5","B4","B0","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B2","B2","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B0","B4","B5"],["B5","B5","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B5","B5"],["B5","B5","B4","B2","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B2","B4","B5","B5"],["B5","B5","B4","B2","B4","B0","B0","B0","B0","B0","B4","B4","B0","B2","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B2","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B0","B0","B0","B0","B1","B4","B4","B4","B2","B2","B4","B4","B4","B1","B0","B0","B0","B0","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B4","B0","B0","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B0","B0","B4","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B4","B4","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B4","B4","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B0","B1","B1","B0","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B1","B1","B1","B1","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B2","B0","B0","B0","B2","B0","B0","B0","B1","B1","S","B0","B1","B1","B0","B0","B0","B2","B0","B0","B0","B2","B0","B4","B5","B5"],["B5","B5","B4","B0","B2","B0","B0","B0","B2","B0","B0","B0","B1","B1","B0","B0","B1","B1","B0","B0","B0","B2","B0","B0","B0","B2","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B1","B1","B1","B1","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B0","B1","B1","B0","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B4","B4","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B4","B4","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B4","B0","B0","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B0","B0","B4","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B0","B0","B0","B0","B1","B4","B4","B4","B2","B2","B4","B4","B4","B1","B0","B0","B0","B0","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B2","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B2","B4","B5","B5"],["B5","B5","B4","B2","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B2","B4","B5","B5"],["B5","B5","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B5","B5"],["B5","B4","B0","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B2","B2","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B0","B4","B5"],["B4","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B4"],["B4","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B4"],["B4","B0","B0","B0","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B0","B0","B0","B4"],["B4","B4","B4","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B4","B4","B4"]],
@@ -363,8 +348,8 @@ const Commands = {
   },
   ai: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
-    if (data.length !== 6) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Number(data[4]), this.username+':horde', servers[this.room]));
+    if (data.length !== 7) return this.send({status: 'error', message: 'Command has invalid arguments.'});
+    for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Number(data[4]), this.username+':'+data[6], servers[this.room]));
   },
 };
 
