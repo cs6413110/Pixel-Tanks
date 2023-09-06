@@ -427,16 +427,14 @@ class Shot {
   }
 
   static calc(x, y, xm, ym) {
-    const r = 40;
-    const a = xm === 0 ? 0 : ym / xm;
-    const b = a > 0 ? -1 : 1;
-    const c = Math.sqrt(r ** 2 + (r * a) ** 2);
-    const d = Math.sqrt(1100 * c ** 2);
-    const x1 = -r * b * d / c ** 2;
-    const x2 = r * b * d / c ** 2;
-    const y1 = Math.abs(r * a) * d / c ** 2;
-    const y2 = -Math.abs(r * a) * d / c ** 2;
-    return { x: ym >= 0 ? x1 * 2 + x : x2 * 2 + x, y: ym >= 0 ? y1 * 2 + y : y2 * 2 + y };
+    const r = 60;
+    const a = xm === 0 ? 1 : ym / xm;
+    const b = a > 0 ? -1 : (a === 0 ? 0 : 1);
+    const c = Math.sqrt(r**2+(r*a)**2);
+    const d = r*c;
+    const cx = -r*b*d/c**2;
+    const cy = Math.abs(r*a)*d/c**2;
+    return {x: x+cx*(ym >= 0 ? 1 : -1), y: y+cy*(ym >= 0 ? 1 : -1)};
   }
 
   collision() {
