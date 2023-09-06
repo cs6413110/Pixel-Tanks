@@ -615,7 +615,7 @@ class AI {
       Object.defineProperty(this, p, {
         get() {
           return this.raw[p];
-        },
+      },
         set(v) {
           this.setValue(p, v);
         },
@@ -647,7 +647,7 @@ class AI {
     this.canItem = true;
     this.canClass = true;
     this.canBoost = true;
-    this.immune = false;
+    this.immune = 0;
     this.item = '';
     this.class = '';
     const t = host.pt.find(t => t.username === getUsername(this.team));
@@ -685,7 +685,7 @@ class AI {
     const now = Date.now();
     const len = path.p.length-1;
     const frames = Math.min(Math.floor((now-path.t)/15), len*25);
-    if (this.immune+500 > path.p.t) { // if boost affects positioning of current path
+    if (this.immune+500 > path.t) {
       frames += Math.floor((now-Math.max(this.immune, path.t))/15); // add extra frames
     } 
     const f = Math.floor(frames/25);
