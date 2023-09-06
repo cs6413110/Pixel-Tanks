@@ -1813,7 +1813,7 @@ function Game() {
         // soon to be replaced
       } else if (id === 'flashbang') {
         this.tank.use.push('flashbang');
-        cooldown = 40000;
+        cooldown = 20000;
       } else if (id === 'bomb') {
         this.tank.use.push('bomb');
         cooldown = 5000;
