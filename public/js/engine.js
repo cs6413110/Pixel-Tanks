@@ -130,7 +130,6 @@ class Engine {
       } else if (e === 'flashbang') {
         for (const tank of this.pt) {
           const bangTime = (500-Math.sqrt((t.x-tank.x)**2+(t.y-tank.y)**2))/500*100;
-          console.log(bangTime);
           if (bangTime > 0) {
             tank.flashbanged = true;
             clearTimeout(tank.flashbangTimeout);
@@ -244,7 +243,7 @@ class Tank {
   constructor(data, host) {
     this.raw = {};
     this.render = {b: new Set(), s: new Set(), pt: new Set(), d: new Set(), ai: new Set()};
-    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbang'].forEach(p => {
+    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged'].forEach(p => {
       Object.defineProperty(this, p, {
         get() {
           return this.raw[p];
