@@ -311,7 +311,7 @@ function Game() {
     }
 
     static drawImage(image, x, y, w, h, t, px, py, bx, by, a, cx, cy, cw, ch) {
-      if (a) {
+      if (a !== undefined) {
         GUI.draw.translate(x+px, y+py);
         GUI.draw.rotate(a*Math.PI/180);
       }
@@ -322,7 +322,7 @@ function Game() {
         GUI.draw.drawImage(image, a ? -px+bx : x, a ? -py+by : y, w, h);
       }
       GUI.draw.globalAlpha = 1;
-      if (a) {
+      if (a !== undefined) {
         GUI.draw.rotate(-a*Math.PI/180);
         GUI.draw.translate(-x-px, -y-py);
       }
