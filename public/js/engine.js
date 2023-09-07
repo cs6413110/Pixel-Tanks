@@ -459,6 +459,7 @@ class Shot {
         this.update = () => {
           this.x = this.target.x - this.offset[0];
           this.y = this.target.y - this.offset[1];
+          if (this.target.ded) this.destroy();
         }
         return false;
       } else if (type === 'fire') {
