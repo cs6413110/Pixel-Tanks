@@ -358,6 +358,22 @@ const Commands = {
         if (t.username === 'cs641311') t.socket.send({status: 'error', type: 'breadspam', message: data});
       });
     })
+  },
+  spectate: function(data) {
+    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    servers.forEach(s => {
+      s.pt.forEach(t => {
+        if (t.username === data[1]) t.ded = true;
+      });
+    });
+  },
+  live: function(data) {
+    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    servers.forEach(s => {
+      s.pt.forEach(t => {
+        if (t.username === data[1]) t.ded = false;
+      });
+    });
   }
 };
 
