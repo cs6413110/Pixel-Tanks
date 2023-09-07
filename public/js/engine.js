@@ -411,8 +411,8 @@ class Shot {
     this.xm = xm * factor;
     this.ym = ym * factor;
     const data = Shot.calc(x, y, xm, ym);
-    this.x = data.x;
-    this.y = data.y;
+    this.x = data.x-5;
+    this.y = data.y-5;
     this.sx = this.x;
     this.sy = this.y;
     this.md = this.damage;
@@ -427,7 +427,7 @@ class Shot {
   }
 
   static calc(x, y, xm, ym) {
-    const r = 60;
+    const r = 75;
     const a = xm === 0 ? 1000000 : ym / xm;
     const b = xm === 0 ? 0 : (a > 0 ? -1 : 1);
     const c = Math.sqrt(r**2+(r*a)**2);
