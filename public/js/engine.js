@@ -896,6 +896,7 @@ class AI {
   }
 
   damage(d) {
+    if (this.immune) return;
     this.hp -= d;
     if (this.hp <= 0) return this.destroy();
     clearInterval(this.healInterval);
