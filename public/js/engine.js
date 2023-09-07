@@ -683,7 +683,7 @@ class AI {
     const now = Date.now();
     const len = path.p.length-1;
     let frames = Math.min(Math.floor((now-path.t)/15), len*25);
-    if (this.immune+500 > path.t) frames += 3*Math.floor((now-Math.max(this.immune, path.t))/15);
+    if (this.immune+500 > path.t) frames += 3*Math.floor(Math.max(now-Math.max(this.immune, path.t), 500)/15);
     const f = Math.floor(frames/25);
     const n = Math.min(f+1, len);
     const dx = path.p[n][0]-path.p[f][0];
