@@ -1388,9 +1388,6 @@ function Game() {
         class: {time: time, cooldown: -1},
         items: [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}],
       };
-      
-      if (PixelTanks.userData.class === 'stealth') {
-        this.tank.invis = true;}
       this.fireType = 1;
       this.halfSpeed = false;
       this.canFire = true;
@@ -1398,7 +1395,6 @@ function Game() {
       this.canToolkit = true;
       this.canPowermissle = true;
       this.canMegamissle = true;
-      this.canInvis = true;
       this.canTurret = true;
       this.canBuild = true;
       this.canBuff = true;
@@ -1874,7 +1870,7 @@ function Game() {
       } else if (k === 70) {
         const c = PixelTanks.userData.class;
         if (c === 'stealth') {
-          this.tank = {x: this.mouse.x+this.tank.x-800, y: this.mouse.y+this.tank.y-500};
+          this.tank.invis = !this.tank.invis;
           this.timers.class = {time: Date.now(), cooldown: 20000};
         } else if (c === 'tactical' && this.canMegamissle) {
           this.fire('megamissle');
