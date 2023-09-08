@@ -1551,7 +1551,7 @@ function Game() {
         GUI.draw.fillRect(0, 0, 1600, 1600);
         return  GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
       }
-      if (this.socket.status !== 'connected') {
+      if (multiplayer) if (this.socket.status !== 'connected' ) {
         GUI.draw.fillStyle = '#ffffff';
         GUI.draw.fillRect(0, 0, 1600, 1600);
         return GUI.drawText('Server Closed', 800, 500, 100, '#000000', 0.5);
