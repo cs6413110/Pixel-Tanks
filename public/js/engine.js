@@ -231,6 +231,8 @@ class Engine {
           this.spawns[0] = {x: q*100, y: l*100};
         } else if (e === 'B') {
           this.spawns[1] = {x: q*100, y: l*100};
+        } else if (e.split('')[0] === 'A' && e.split('').length === 2) {
+          this.ai.push(new AI(q*100+10, l*100+10, Number(e.split('')[1]), 0/*rank*/, ':', this));
         } else if (key[e]) {
           this.b.push(new Block(q * 100, l * 100, key[e][1], key[e][0], ':', this));
         }
