@@ -1258,6 +1258,9 @@ function Game() {
       this.msg = '';
       this.multiplayer = multiplayer;
       this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
+      this.ops = 0;
+      this.ups = 0;
+      this.fps = 0;
       this.reset();
 
       const joinData = {
@@ -1392,14 +1395,6 @@ function Game() {
       this.canBoost = true;
       this.canToolkit = true;
       this.canPowermissle = true;
-      this.canMegamissle = true;
-      this.canTurret = true;
-      this.canBuild = true;
-      this.canBuff = true;
-      this.canHeal = true;
-      this.canFlame = true;
-      this.canDynamite = true;
-      this.hasDynamite = false;
       this.canItem0 = true;
       this.canItem1 = true;
       this.canItem2 = true;
@@ -1866,34 +1861,28 @@ function Game() {
           setTimeout(() => {this.halfSpeed = false}, PixelTanks.userData.class === 'medic' ? 5000 : 7500);
           this.playAnimation('toolkit');
         }
-      } else if (k === 70) {
+      } else if (k === 70 && this.canClass) {
+        this.canClass = false;
+        setTimeout(() => {this.canClass = true}, this.timers.class.cooldown);
         const c = PixelTanks.userData.class;
         if (c === 'stealth') {
           this.tank.invis = !this.tank.invis;
           this.timers.class = {time: Date.now(), cooldown: 20000};
-        } else if (c === 'tactical' && this.canMegamissle) {
+        } else if (c === 'tactical') {
           this.fire('megamissle');
-          this.canMegamissle = false;
           this.timers.class = {time: Date.now(), cooldown: 20000};
-          setTimeout(() => {this.canMegamissle = true}, 20000);
-        } else if (c === 'builder' && this.canTurret) {
-          this.canTurret = false;
+        } else if (c === 'builder') {
           this.tank.use.push('turret');
           this.timers.class = {time: Date.now(), cooldown: 30000};
-          setTimeout(() => {this.canTurret = true}, 30000);
-        } else if (c === 'warrior' && this.canBuff) {
+        } else if (c === 'warrior') {
           this.tank.use.push('buff');
-          this.canBuff = false;
           this.timers.class = {time: Date.now(), cooldown: 40000};
-          setTimeout(() => {this.canBuff = true}, 40000);
         } else if (c === 'medic') {
           this.tank.use.push('healSwitch');
           this.timers.class = {time: Date.now(), cooldown: 0};
         } else if (c === 'fire' && this.canFlame) {
-          this.canFlame = false;
-          this.timers.class = {time: Date.now(), cooldown: 10000};
           for (let i = -30; i < 30; i += 5) this.tank.fire.push({...toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
-          setTimeout(() => {this.canFlame = true}, 10000);
+          this.timers.class = {time: Date.now(), cooldown: 10000};
         }
       } else if (k === 27) {
         this.paused = !this.paused;
