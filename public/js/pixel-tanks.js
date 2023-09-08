@@ -1,4 +1,3 @@
-window.onerror = alert;
 const packer = document.createElement('SCRIPT');
 packer.crossOrigin = '';
 packer.src = 'https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js';
