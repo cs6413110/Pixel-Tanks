@@ -696,7 +696,7 @@ class AI {
     this.tr = this.baseRotation;
     this.obstruction = this.collision(nx, ny);
     if (!this.obstruction) {
-      if (this.canBoost) {
+      if (this.canBoost && Math.random() < 1/300) {
         this.canBoost = false;
         this.immune = Date.now();
         setTimeout(() => {this.canBoost = true}, 5000);
