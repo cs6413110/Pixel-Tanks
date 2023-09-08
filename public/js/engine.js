@@ -243,7 +243,7 @@ class Tank {
   constructor(data, host) {
     this.raw = {};
     this.render = {b: new Set(), s: new Set(), pt: new Set(), d: new Set(), ai: new Set()};
-    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged'].forEach(p => {
+    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'deathEffect'].forEach(p => {
       Object.defineProperty(this, p, {
         get() {
           return this.raw[p];
@@ -640,7 +640,6 @@ class AI {
     this.obstruction = false;
     this.bond = false;
     this.path = false;
-    this.delay = false;
     this.canFire = true;
     this.canPowermissle = true;
     this.canItem = true;
@@ -682,12 +681,9 @@ class AI {
     if (!path) return;
     if (!path.p.length) return;
     const now = Date.now();
-    if (path.t+this.delay > now) return;
-    path.t += this.delay;
     const len = path.p.length-1;
     let frames = Math.min(Math.floor((now-path.t)/15), len*25);
     if (this.immune+500 > path.t) frames = Math.min(frames+3*Math.floor(Math.min(now-Math.max(this.immune, path.t), this.immune+500-path.t)/15), len*25);
-    path.t -= this.delay;
     const f = Math.floor(frames/25);
     const n = Math.min(f+1, len);
     const dx = path.p[n][0]-path.p[f][0];
@@ -723,18 +719,15 @@ class AI {
   onBlock() {
     if (!this.path) this.generatePath();
     if (this.path.p.length === 0) {
-      this.delay = 300;
       this.generatePath();
     }
     if (this.path.p.length !== 0) {
       const final = this.path.p[this.path.p.length - 1];
       if ((this.x - 10) / 100 === final[0] && (this.y - 10) / 100 === final[1]) {
-        this.delay = Math.floor(Math.random()*300)+50;
         this.generatePath();
       }
     }
     if (this.path.m !== this.mode) {
-      this.delay = Math.floor(Math.random()*300)+50;
       this.generatePath();
     }
   }
