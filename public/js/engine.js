@@ -159,7 +159,7 @@ class Engine {
     }
     if (fire.length > 0) {
       t.pushback = -6;
-      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank, this));
+      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank*(t.buff ? 1.5 : 1), this));
     }
   }
 
@@ -402,7 +402,7 @@ class Shot {
       });
     });
     this.id = Math.random();
-    this.damage = settings.damage[type]*rank*10+300*(t.buff ? 1.2 : 1);
+    this.damage = settings.damage[type]*rank*10+300;
     this.team = team;
     this.r = rotation;
     this.type = type;
