@@ -10,6 +10,7 @@ packer.onload = () => {
     engine.crossOrigin = '';
     engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
     engine.onload = Game;
+    engine.addEventListener('error', alert);
     document.head.appendChild(engine);
   }
   document.head.appendChild(pathfinding);
