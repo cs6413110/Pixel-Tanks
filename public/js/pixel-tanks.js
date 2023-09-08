@@ -1984,6 +1984,9 @@ function Game() {
       super(levels);
     }
 
+    ontick() {
+    }
+
     override(data) {
       PixelTanks.user.player.tank.x = data.x;
       PixelTanks.user.player.tank.y = data.y;
