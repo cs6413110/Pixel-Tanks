@@ -1408,6 +1408,7 @@ function Game() {
       this.canItem3 = true;
       this.canGrapple = true;
       this.kills = 0;
+      this.tank.use.push('bomb');
     }
 
     drawBlock(b) {
