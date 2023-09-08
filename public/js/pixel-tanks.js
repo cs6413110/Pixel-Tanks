@@ -8,12 +8,9 @@ packer.onload = () => {
   pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
   pathfinding.onload = () => {
     const engine = document.createElement('SCRIPT');
-    engine.crossOrigin = '';
+    engine.crossOrigin = 'anonymous';
     engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
     engine.onload = Game;
-    engine.addEventListener('error', e => {
-      alert(e.target.src);
-    });
     document.head.appendChild(engine);
   }
   document.head.appendChild(pathfinding);
