@@ -682,6 +682,8 @@ class AI {
     if (!path) return;
     if (!path.p.length) return;
     const now = Date.now();
+    if (path.t+this.delay > now) return;
+    path.t += this.delay;
     const len = path.p.length-1;
     let frames = Math.min(Math.floor((now-path.t)/15), len*25);
     if (this.immune+500 > path.t) frames = Math.min(frames+3*Math.floor(Math.min(now-Math.max(this.immune, path.t), this.immune+500-path.t)/15), len*25);
@@ -719,14 +721,21 @@ class AI {
 
   onBlock() {
     if (!this.path) this.generatePath();
-    if (this.path.p.length === 0) setTimeout(() => this.generatePath(), 300); // .3s delay for failed path generation
+    if (this.path.p.length === 0) {
+      this.delay = 300;
+      this.generatePath();
+    }
     if (this.path.p.length !== 0) {
       const final = this.path.p[this.path.p.length - 1];
       if ((this.x - 10) / 100 === final[0] && (this.y - 10) / 100 === final[1]) {
-        setTimeout(() => this.generatePath(), Math.floor(Math.random()*300)+50); // .1s delay for after path finished
+        this.delay = Math.floor(Math.random()*300)+50;
+        this.generatePath();
       }
     }
-    if (this.path.m !== this.mode) this.generatePath();
+    if (this.path.m !== this.mode) {
+      this.delay = Math.floor(Math.random()*300)+50;
+      this.generatePath();
+    }
   }
 
   generatePath() {
