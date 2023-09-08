@@ -402,7 +402,7 @@ class Shot {
       });
     });
     this.id = Math.random();
-    this.damage = settings.damage[type]*rank*10+300;
+    this.damage = settings.damage[type]*(rank*10+300)/500;
     this.team = team;
     this.r = rotation;
     this.type = type;
