@@ -159,7 +159,7 @@ class Engine {
     }
     if (fire.length > 0) {
       t.pushback = -6;
-      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), this));
+      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank, this));
     }
   }
 
@@ -387,9 +387,8 @@ class Block {
 }
 
 class Shot {
-  constructor(x, y, xm, ym, type, rotation, team, host) {
+  constructor(x, y, xm, ym, type, rotation, team, rank, host) {
     const settings = { damage: { bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -100, dynamite: 0, fire: 0 }, speed: { bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9 } };
-    const t = host.pt.find(t => t.username === getUsername(team));
     this.raw = {};
     ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id'].forEach(p => {
       Object.defineProperty(this, p, {
@@ -403,7 +402,7 @@ class Shot {
       });
     });
     this.id = Math.random();
-    this.damage = settings.damage[type] * t.maxHp / 500 * (t.buff ? 1.2 : 1);
+    this.damage = settings.damage[type]*rank*10+300*(t.buff ? 1.2 : 1);
     this.team = team;
     this.r = rotation;
     this.type = type;
@@ -889,7 +888,7 @@ class AI {
     let l = type === 'shotgun' ? -10 : 0;
     while (l<(type === 'shotgun' ? 15 : 1)) {
       const { x, y } = toPoint(this.r+l);
-      this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, type, this.r+l, this.team, this.host));
+      this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, type, this.r+l, this.team, this.rank, this.host));
       l += 5;
     }
     if (type === 'powermissle') {
