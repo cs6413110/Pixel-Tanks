@@ -1247,6 +1247,7 @@ function Game() {
         d: [],
         ai: [],
         logs: [],
+        tickspeed: -1,
       };
       this.paused = false;
       this.speed = 4;
