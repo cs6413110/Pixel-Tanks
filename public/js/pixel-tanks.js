@@ -1394,6 +1394,7 @@ function Game() {
       };
       this.fireType = 1;
       this.halfSpeed = false;
+      this.canClass = true;
       this.canFire = true;
       this.canBoost = true;
       this.canToolkit = true;
