@@ -1895,7 +1895,7 @@ function Game() {
         } else {
           Menus.removeListeners();
         }
-      } else if (k === 18) alert(JSON.stringify(f));
+      } else if (k === 18) alert(JSON.stringify(lagometer));
     }
 
     keyLoop(e) {
