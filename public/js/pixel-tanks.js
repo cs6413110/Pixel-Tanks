@@ -1995,12 +1995,12 @@ function Game() {
           if (typeof e[p] === 'function') {
             const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0};
             e[p] = function() {
-              const start = process.hrtime();
+              const start = Date.now();
               const r = f.o.apply(this, arguments);
               f.i++;
               f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
-              const end = process.hrtime(start);
-              f.t = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
+              const end = Date.now()-start;
+              f.t = end;
               update(functions);
               return r;
            }
@@ -2011,12 +2011,12 @@ function Game() {
           if (typeof e.prototype[p] === 'function') {
             const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0};
             e.prototype[p] = function() {
-              const start = process.hrtime();
+              const start = Date.now();
               const r = f.o.apply(this, arguments);
               f.i++;
               f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
-              const end = process.hrtime(start);
-              f.t = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
+              const end = Date.now()-start;
+              f.t = end;
               update(functions);
               return r;
             }
