@@ -1355,14 +1355,6 @@ function Game() {
 
         this.socket.on('connect', () => {
           this.socket.send(joinData);
-          this.pinger = setInterval(() =>  {
-            this.pingId = Math.random();
-            this.pingStart = Date.now();
-            this.socket.send({type: 'ping', id: this.pingId});
-            this.ops = 0;
-            this.ups = 0;
-            this.fps = 0;
-          }, 1000);
           setInterval(this.send.bind(this), 1000/30);
         });
       } else {
@@ -1372,6 +1364,16 @@ function Game() {
           setInterval(this.send.bind(this), 1000/60);
         });
       }
+      this.pinger = setInterval(() =>  {
+        if (multiplayer) {
+          this.pingId = Math.random();
+          this.pingStart = Date.now();
+          this.socket.send({type: 'ping', id: this.pingId});
+        }
+        this.ops = 0;
+        this.ups = 0;
+        this.fps = 0;
+      }, 1000);
 
       document.addEventListener('keydown', this.keydown.bind(this));
       document.addEventListener('keyup', this.keyup.bind(this));
