@@ -628,6 +628,7 @@ class AI {
     this.y = y;
     this.r = 0;
     this.tr = 0;
+    this.barrelSpeed = Math.floor(Math.random()*4)+1;
     this.baseRotation = 0;
     this.baseFrame = 0;
     this.mode = 0;
@@ -671,8 +672,8 @@ class AI {
       if (this.canPowermissle && Math.random() <= 1/10) this.fire(this.target.x, this.target.y, 'powermissle');
       if (this.canFire && Math.random() <= 1/5) this.fire(this.target.x, this.target.y);
     }
-    const dir = (this.tr-this.r+360)%360 < (this.r-this.tr+360)%360 ? 4 : -4;
-    this.r = this.role === 0 ? this.tr : Math[dir > 0 ? 'min' : 'max']((this.r+dir+360)%360, this.tr);
+    const dir = (this.tr-this.r+360)%360 < (this.r-this.tr+360)%360 ? 1 : -1;
+    this.r = this.role === 0 ? this.tr : Math[dir > 0 ? 'min' : 'max']((this.r+dir*this.barrelSpeed+360)%360, this.tr);
     if (this.pushback !== 0) this.pushback += 0.5;
   }
 
