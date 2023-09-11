@@ -1871,7 +1871,7 @@ function Game() {
         const c = PixelTanks.userData.class;
         if (c === 'stealth') {
           this.tank.invis = !this.tank.invis;
-          this.timers.class = {time: Date.now(), cooldown: 20000};
+          this.timers.class = {time: Date.now(), cooldown: 0};
         } else if (c === 'tactical') {
           this.fire('megamissle');
           this.timers.class = {time: Date.now(), cooldown: 20000};
