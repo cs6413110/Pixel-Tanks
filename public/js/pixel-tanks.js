@@ -1934,10 +1934,11 @@ function Game() {
     }
 
     send() {
+      const {x, y, r, use, fire, airstrike} = this.tank;
       const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank};
-      if (this.tank.x === this.lastUpdate.x && this.tank.y === this.lastUpdate.y && this.tank.r === this.lastUpdate.r && this.tank.use.length === 0 && this.tank.fire.length === 0 && this.tank.airstrike === null) return;
+      if (x === this.lastUpdate.x && y === this.lastUpdate.y && r === this.lastUpdate.r && use.length === 0 && fire.length === 0 && airstrike === null) return;
+      this.ops++;
       if (this.multiplayer) {
-        this.ops++;
         this.socket.send(updateData);
       } else {
         this.world.update(updateData);
@@ -1950,7 +1951,7 @@ function Game() {
           logs: this.world.logs.reverse(),
         }
       }
-      this.lastUpdate = JSON.parse(JSON.stringify(updateData.data));
+      this.lastUpdate = {x, y, r};
       this.tank.airstrike = null;
       this.tank.fire = [];
       this.tank.use = [];
