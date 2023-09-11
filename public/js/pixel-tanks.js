@@ -1504,14 +1504,14 @@ function Game() {
       if (t.shields > 0 && (!t.invis || (t.invis && p))) {
         GUI.draw.beginPath();
         GUI.draw.fillStyle = '#7DF9FF';
-        GUI.draw.globalAlpha = (t.shields/300)*.1+.1; // .2 max, .1 min
+        GUI.draw.globalAlpha = (t.shields/100)*.4; // .2 max, .1 min
         GUI.draw.arc(t.x+40, t.y+40, 66, 0, 2*Math.PI);
         GUI.draw.fill();
         GUI.draw.globalAlpha = 1;
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(t.x-2, t.y+113, 84, 11);
         GUI.draw.fillStyle = '#00FFFF';
-        GUI.draw.fillRect(t.x, t.y+115, 80*t.shields/(Math.ceil(t.shields/100)*100), 5);
+        GUI.draw.fillRect(t.x, t.y+115, 80*t.shields/100, 5);
       }
 
       if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
