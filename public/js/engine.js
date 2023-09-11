@@ -151,7 +151,7 @@ class Engine {
         setTimeout(() => { t.buff = false }, 10000);
       } else if (e === 'healSwitch') {
       } else if (e === 'shield') {
-        t.shields = Math.min(300, Math.max(0, t.shields)=100);
+        t.shields = 100;
       }
     }
     if (airstrike) {
