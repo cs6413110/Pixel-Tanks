@@ -1885,7 +1885,7 @@ function Game() {
         } else if (c === 'medic') {
           this.tank.use.push('healSwitch');
           this.timers.class = {time: Date.now(), cooldown: 0};
-        } else if (c === 'fire' && this.canFlame) {
+        } else if (c === 'fire') {
           for (let i = -30; i < 30; i += 5) this.tank.fire.push({...toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
           this.timers.class = {time: Date.now(), cooldown: 10000};
         }
