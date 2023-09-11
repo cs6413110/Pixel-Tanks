@@ -107,7 +107,7 @@ class Engine {
           t.healTimeout = setTimeout(() => {
             t.hp = t.maxHp;
             t.healTimeout = undefined;
-          }, 7500);
+          }, t.class === 'medic' ? 5000 : 7500);
         }
       } else if (e === 'tape') {
         t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
@@ -181,6 +181,7 @@ class Engine {
       if (t.pushback !== 0) t.pushback += 0.5;
       if (t.fire && getTeam(t.fire.team) !== getTeam(t.team)) t.damageCalc(t.x, t.y, .25, getUsername(t.fire.team));
       for (const tank of this.pt) {
+        if (t.username === tank.username) return;
         if (t.class === 'medic' && !t.ded && !tank.ded && (t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000 && getTeam(t.team) === getTeam(tank.team)) tank.hp = Math.min(tank.hp + .3, tank.maxHp);
         if (!t.immune || t.ded) continue;
         if (!tank.canBashed) continue;
