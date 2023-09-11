@@ -1868,7 +1868,6 @@ function Game() {
         }
       } else if (k === 70 && this.canClass) {
         this.canClass = false;
-        setTimeout(() => {this.canClass = true}, this.timers.class.cooldown);
         const c = PixelTanks.userData.class;
         if (c === 'stealth') {
           this.tank.invis = !this.tank.invis;
@@ -1889,6 +1888,7 @@ function Game() {
           for (let i = -30; i < 30; i += 5) this.tank.fire.push({...toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
           this.timers.class = {time: Date.now(), cooldown: 10000};
         }
+        setTimeout(() => {this.canClass = true}, this.timers.class.cooldown);
       } else if (k === 27) {
         this.paused = !this.paused;
         if (this.paused) {
