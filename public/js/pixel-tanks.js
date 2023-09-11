@@ -2032,7 +2032,7 @@ function Game() {
   }
 
   let lagometer = [];
-  /*Profile([Engine, Block, Shot, AI, Damage, MegaSocket, A, Menu, Menus, Network, Loader, GUI, PixelTanks, Tank, Singleplayer], f => {
+  Profile([Engine, Block, Shot, AI, Damage, MegaSocket, A, Menu, Menus, Network, Loader, GUI, PixelTanks, Tank, Singleplayer], f => {
     lagometer = f;
-  });*/
+  });
 };
