@@ -1895,7 +1895,11 @@ function Game() {
         } else {
           Menus.removeListeners();
         }
-      } else if (k === 18) alert(JSON.stringify(lagometer));
+      } else if (k === 18) {
+        const win = window.open('about:blank', '_blank');
+        win.focus();
+        win.document.write(JSON.stringify(lagometer));
+      }
     }
 
     keyLoop(e) {
