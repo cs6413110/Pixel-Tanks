@@ -1896,9 +1896,9 @@ function Game() {
           Menus.removeListeners();
         }
       } else if (k === 18) {
-        const win = window.open('about:blank', '_blank');
+        /*const win = window.open('about:blank', '_blank');
         win.focus();
-        win.document.write(JSON.stringify(lagometer));
+        win.document.write(JSON.stringify(lagometer));*/
       }
     }
 
