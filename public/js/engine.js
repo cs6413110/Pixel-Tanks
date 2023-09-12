@@ -165,60 +165,11 @@ class Engine {
 
   tick() {
     this.ontick();
-    this.map.nodes.forEach(row => row.forEach(node => {
-      node.walkable = true;
-      node.f = 0;
-      node.g = 0;
-      node.h = 0;
-      node.parent = null;
-    }));
+    this.map = new PF.Grid(30, 30);
     for (const b of this.b) if (b.x >= 0 && b.y >= 0 && b.x <= 2900 && b.y <= 2900) this.map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), b.x % 100 !== 0 && b.y % 100 !== 0);
-    for (const ai of this.ai) ai.update();
-    for (const s of this.s) s.update()
-
-    for (const t of this.pt) {
-      if (t.dedEffect) t.dedEffect.time = Date.now() - t.dedEffect.start;
-      if (t.pushback !== 0) t.pushback += 0.5;
-      if (t.fire && getTeam(t.fire.team) !== getTeam(t.team)) t.damageCalc(t.x, t.y, .25, getUsername(t.fire.team));
-      for (const tank of this.pt) {
-        if (t.username === tank.username) continue;
-        if (t.class === 'medic' && !t.ded && !tank.ded && (t.x - tank.x) ** 2 + (t.y - tank.y) ** 2 < 250000 && getTeam(t.team) === getTeam(tank.team)) tank.hp = Math.min(tank.hp + .3, tank.maxHp);
-        if (!t.immune || t.ded) continue;
-        if (!tank.canBashed) continue;
-        if ((t.class === 'warrior' && getTeam(t.team) !== getTeam(tank.team)) || (t.class === 'medic' && getTeam(t.team) === getTeam(tank.team))) {
-          if (!collision(t.x, t.y, 80, 80, tank.x, tank.y, 80, 80)) continue;
-          tank.damageCalc(tank.x, tank.y, t.class === 'warrior' ? 75 : -30, t.username);
-          tank.canBashed = false;
-          setTimeout(() => {
-            tank.canBashed = true;
-          }, 400);
-        }
-      }
-      for (let i = this.b.length-1; i >= 0; i--) {
-        const b = this.b[i];
-        if (collision(t.x, t.y, 80, 80, b.x, b.y, 100, 100) && !t.ded && !t.immune) {
-          if (b.type === 'fire') {
-            if (t.fire) {
-              clearTimeout(t.fireTimeout);
-              t.fire = { team: b.team, frame: t.fire.frame };
-            } else {
-              t.fire = { team: b.team, frame: 0 };
-              t.fireInterval = setInterval(() => {
-                t.fire.frame = t.fire.frame === 0 ? 1 : 0;
-              }, 50);
-            }
-            t.fireTimeout = setTimeout(() => {
-              clearInterval(t.fireInterval);
-              t.fire = false;
-            }, 4000);
-          } else if (b.type === 'spike' && getTeam(b.team) !== getTeam(t.team)) {
-            t.damageCalc(t.x, t.y, 1, getUsername(b.team));
-          }
-        }
-      }
-      if (t.damage) t.damage.y--;
-      if (t.grapple) t.grappleCalc();
-    }
+    for (const s of this.s) s.update();
+    for (let i = this.ai.length-1; i >= 0; i--) this.ai[i].update();
+    for (const t of this.pt) t.update();
   }
 
   levelReader(level) {
@@ -264,7 +215,7 @@ class Tank {
     this.rank = data.rank;
     this.class = data.class;
     this.cosmetic = data.cosmetic;
-    this.deathEffect = this.deathEffect;
+    this.deathEffect = data.deathEffect;
     this.color = data.color;
     this.damage = false;
     this.maxHp = data.rank*10+300;
@@ -287,6 +238,47 @@ class Tank {
     if (this.raw[p] === v) return;
     this.updatedLast = Date.now();
     this.raw[p] = v;
+  }
+
+  update() {
+    if (this.dedEffect) this.dedEffect.time = Date.now() - this.dedEffect.start;
+    if (this.pushback !== 0) this.pushback += 0.5;
+    if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(t.x, t.y, .25, getUsername(this.fire.team));
+    for (const t of this.host.pt) {
+      if (this.username === t.username) continue;
+      if (this.class === 'medic' && !this.ded && !t.ded && (this.x-t.x)**2 + (this.y-t.y)**2 < 250000 && getTeam(this.team) === getTeam(t.team)) t.hp = Math.min(t.hp+.3, t.maxHp);
+      if (!this.immune || this.ded || !t.canBashed) continue;
+      if (!t.canBashed) continue;
+      if ((this.class === 'warrior' && getTeam(this.team) !== getTeam(t.team)) || (this.class === 'medic' && getTeam(this.team) === getTeam(t.team))) {
+        if (!collision(this.x, this.y, 80, 80, t.x, t.y, 80, 80)) continue;
+        t.damageCalc(t.x, t.y, this.class === 'warrior' ? 75 : -30, this.username);
+        t.canBashed = false;
+        setTimeout(() => {t.canBashed = true}, 400);
+      }
+    }
+    for (const {x, y, type, team} of this.host.b) {
+      if (collision(this.x, this.y, 80, 80, x, y, 100, 100) && !this.ded && !this.immune) {
+        if (type === 'fire') {
+          if (this.fire) {
+            clearTimeout(this.fireTimeout);
+            this.fire = {team, frame: this.fire.frame};
+          } else {
+            this.fire = {team, frame: 0};
+            this.fireInterval = setInterval(() => {
+              this.fire.frame = this.fire.frame === 0 ? 1 : 0;
+            }, 50);
+          }
+          this.fireTimeout = setTimeout(() => {
+            clearInterval(this.fireInterval);
+            this.fire = false;
+          }, 4000);
+        } else if (type === 'spike' && getTeam(team) !== getTeam(this.team)) {
+          this.damageCalc(this.x, this.y, 1, getUsername(team));
+        }
+      }
+    }
+    if (this.damage) this.damage.y--;
+    if (this.grapple) t.grappleCalc();
   }
 
   damageCalc(x, y, a, u) {
@@ -629,7 +621,7 @@ class AI {
     this.y = y;
     this.r = 0;
     this.tr = 0;
-    this.barrelSpeed = Math.floor(Math.random()*4)+1;
+    this.barrelSpeed = Math.floor(Math.random()*3)+2;
     this.baseRotation = 0;
     this.baseFrame = 0;
     this.mode = 0;
@@ -648,6 +640,10 @@ class AI {
     this.canItem = true;
     this.canClass = true;
     this.canBoost = true;
+    this.color = '#'+Math.floor(Math.random()*16777215).toString(16);
+    this.damage = false;
+    this.canBashed = false;
+    this.fire = false;
     this.immune = 0;
     this.item = '';
     this.class = '';
@@ -675,7 +671,42 @@ class AI {
     }
     const dir = (this.tr-this.r+360)%360 < (this.r-this.tr+360)%360 ? 1 : -1;
     this.r = this.role === 0 ? this.tr : Math[dir > 0 ? 'min' : 'max']((this.r+dir*this.barrelSpeed+360)%360, this.tr);
+    if (this.dedEffect) this.dedEffect.time = Date.now()-this.dedEffect.start;
     if (this.pushback !== 0) this.pushback += 0.5;
+    if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damage(.25);
+    for (const t of this.host.pt) {
+      if (this.class === 'medic' && !t.ded && (this.x-t.x)**2 + (this.y-t.y)**2 < 250000 && getTeam(this.team) === getTeam(t.team)) t.hp = Math.min(t.hp+.3, t.maxHp);
+      if (this.immune+500 < Date.now() || !t.canBashed) continue;
+      if ((this.class === 'warrior' && getTeam(this.team) !== getTeam(t.team)) || (this.class === 'medic' && getTeam(this.team) === getTeam(t.team))) {
+        if (!collision(this.x, this.y, 80, 80, t.x, t.y, 80, 80)) continue;
+        t.damageCalc(t.x, t.y, this.class === 'warrior' ? 75 : -30, getUsername(this.team));
+        t.canBashed = false;
+        setTimeout(() => {t.canBashed = true}, 400);
+      }
+    }
+    for (const {x, y, type, team} of this.host.b) {
+      if (collision(this.x, this.y, 80, 80, x, y, 100, 100) && this.immune+500 < Date.now()) {
+        if (type === 'fire') {
+          if (this.fire) {
+            clearTimeout(this.fireTimeout);
+            this.fire = {team, frame: this.fire.frame};
+          } else {
+            this.fire = {team, frame: 0};
+            this.fireInterval = setInterval(() => {
+              this.fire.frame = this.fire.frame === 0 ? 1 : 0;
+            }, 50);
+          }
+          this.fireTimeout = setTimeout(() => {
+            clearInterval(this.fireInterval);
+            this.fire = false;
+          }, 4000);
+        } else if (type === 'spike' && getTeam(team) !== getTeam(this.team)) {
+          this.damage(1);
+        }
+      }
+    }
+    if (this.damage) this.damage.y--;
+    //if (this.grapple) t.grappleCalc(); no grapple for ai yet
   }
 
   move() {
@@ -904,6 +935,9 @@ class AI {
 
   damage(d) {
     if (this.immune+500 > Date.now()) return;
+    clearTimeout(this.damageTimeout);
+    this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
+    this.damage = {d: (this.damage ? this.damage.d : 0)+d, x: this.x, y: this.y};
     this.hp -= d;
     if (this.hp <= 0) return this.destroy();
     clearInterval(this.healInterval);
