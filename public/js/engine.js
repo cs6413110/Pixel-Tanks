@@ -464,6 +464,7 @@ class Shot {
           this.x = this.target.x - this.offset[0];
           this.y = this.target.y - this.offset[1];
           if (this.target.ded) this.destroy();
+          if (this.host.pt.find(t => t.username === getUsername(this.team)).ded) this.destroy();
         }
         return false;
       } else if (type === 'fire') {
