@@ -485,6 +485,14 @@ class Shot {
           this.y = this.target.y - this.offset[1];
         }
         return false;
+      } else if (type === 'fire') {
+        if (ai.fire) clearTimeout(ai.fireTimeout);
+        ai.fire = {team: this.team, frame: ai.fire?.frame || 0};
+        ai.fireInterval ??= setInterval(() => ai.fire.frame ^= 1, 50);
+        ai.fireTimeout = setTimeout(() => {
+          clearInterval(ai.fireInterval);
+          ai.fire = false;
+        }, 4000);
       } else {
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
@@ -604,7 +612,7 @@ class Damage {
 class AI {
   constructor(x, y, role, rank, team, host) {
     this.raw = {};
-    ['role', 'x', 'y', 'r', 'baseRotation', 'baseFrame', 'mode', 'rank', 'hp', 'maxHp', 'pushback', 'cosmetic', 'id'].forEach(p => {
+    ['role', 'x', 'y', 'r', 'baseRotation', 'baseFrame', 'mode', 'rank', 'hp', 'maxHp', 'pushback', 'cosmetic', 'id', 'fire', 'damage'].forEach(p => {
       Object.defineProperty(this, p, {
         get() {
           return this.raw[p];
