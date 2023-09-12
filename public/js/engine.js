@@ -660,7 +660,7 @@ class AI {
     this.canBoost = true;
     this.color = '#'+Math.floor(Math.random()*16777215).toString(16);
     this.damage = false;
-    this.canBashed = false;
+    this.canBashed = true;
     this.fire = false;
     this.immune = 0;
     this.item = '';
