@@ -622,7 +622,7 @@ class Damage {
 class AI {
   constructor(x, y, role, rank, team, host) {
     this.raw = {};
-    ['role', 'x', 'y', 'r', 'baseRotation', 'baseFrame', 'mode', 'rank', 'hp', 'maxHp', 'pushback', 'cosmetic', 'id', 'fire', 'damage', 'team'].forEach(p => {
+    ['role', 'x', 'y', 'r', 'baseRotation', 'baseFrame', 'mode', 'rank', 'hp', 'maxHp', 'pushback', 'cosmetic', 'id', 'fire', 'damage', 'team', 'color'].forEach(p => {
       Object.defineProperty(this, p, {
         get() {
           return this.raw[p];
