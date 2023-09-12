@@ -497,7 +497,7 @@ class FFA extends Multiplayer {
     super(ffaLevels);
   } 
 
-  ondeath(t, m) {
+  ondeath(t, m={}) {
     t.ded = true;
     if (m.deathEffect) t.dedEffect = {
       x: t.x,
@@ -507,8 +507,8 @@ class FFA extends Multiplayer {
       start: Date.now(),
       time: 0,
     }
-    this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
-    m.socket.send({event: 'kill'});
+    if (m.username) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
+    if (m.socket) m.socket.send({event: 'kill'});
     A.each(this.ai, function(i, host, t) {
       if (getUsername(this.team) === t.username) {
         host.ai.splice(i, 1);
