@@ -1449,10 +1449,10 @@ function Game() {
     }
 
     drawAI(ai) {
-      [{"id":0.04088724217347539,"role":0,"x":10,"y":10,"r":10,"baseRotation":315,"baseFrame":0,"mode":0,"rank":0,"hp":100,"maxHp":300,"pushback":0,"cosmetic":"MLG Glasses"}]
       const {x, y, role, r, baseRotation, baseFrame, pushback, cosmetic, hp, maxHp} = ai;
       if (role !== 0) PixelTanks.renderBottom(x, y, 80, '#FF0000');
       GUI.drawImage(PixelTanks.images.tanks[role === 0 ? 'base' : 'bottom'+(baseFrame ? '' : '2')], x, y, 80, 80, 1, 40, 40, 0, 0, baseRotation);
+      if (ai.fire) GUI.drawImage(PixelTanks.images.animations.fire, x, y, 80, 80, 1, 0, 0, 0, 0, undefined, ai.fire.frame*29, 0, 29, 29);
       PixelTanks.renderTop(x, y, 80, '#FF0000', r, pushback);
       GUI.drawImage(PixelTanks.images.tanks.top, x, y, 80, 90, 1, 40, 40, 0, pushback, r);
       if (cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[cosmetic], x, y, 80, 90, 1, 40, 40, 0, pushback, r);
@@ -1461,6 +1461,11 @@ function Game() {
       GUI.draw.fillStyle = '#00FF00';
       GUI.draw.fillRect(x, y+100, 80*hp/maxHp, 5);
       GUI.drawText('['+role+'] AI Bot', x+40, y-25, 50, '#ffffff', 0.5);
+      if (ai.damage) {
+        for (let i = 0; i < 2; i++) {
+          GUI.drawText((ai.damage.d < 0 ? '+' : '-')+Math.round(ai.damage.d), ai.damage.x, ai.damage.y, Math.round(ai.damage.d/5)+[20, 15][i], ['#ffffff', PixelTanks.user.username === t.u ? '#ff0000' : '#0000ff'][i], 0.5);
+        }
+      }
     }
 
     drawTank(t) {
