@@ -1463,7 +1463,7 @@ function Game() {
       GUI.drawText('['+role+'] AI Bot', x+40, y-25, 50, '#ffffff', 0.5);
       if (ai.damage) {
         for (let i = 0; i < 2; i++) {
-          GUI.drawText((ai.damage.d < 0 ? '+' : '-')+Math.round(ai.damage.d), ai.damage.x, ai.damage.y, Math.round(ai.damage.d/5)+[20, 15][i], ['#ffffff', PixelTanks.user.username === t.u ? '#ff0000' : '#0000ff'][i], 0.5);
+          GUI.drawText((ai.damage.d < 0 ? '+' : '-')+Math.round(ai.damage.d), ai.damage.x, ai.damage.y, Math.round(ai.damage.d/5)+[20, 15][i], ['#ffffff', getTeam(this.team) === getTeam(ai.team) ? '#ff0000' : '#0000ff'][i], 0.5);
         }
       }
     }
@@ -1526,7 +1526,7 @@ function Game() {
       if (t.damage) {
         const {x, y, d} = t.damage;
         for (let i = 0; i < 2; i++) {
-          GUI.drawText((d < 0 ? '+' : '-')+Math.round(d), x, y, Math.round(d/5)+[20, 15][i], ['#ffffff', PixelTanks.user.username === t.u ? '#ff0000' : '#0000ff'][i], 0.5);
+          GUI.drawText((d < 0 ? '+' : '-')+Math.round(d), x, y, Math.round(d/5)+[20, 15][i], ['#ffffff', getTeam(this.team) === getTeam(t.team) ? '#ff0000' : '#0000ff'][i], 0.5);
         }
       }
       
