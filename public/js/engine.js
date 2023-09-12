@@ -258,7 +258,7 @@ class Tank {
     }
     for (const ai of this.host.ai) {
       if (this.class === 'medic' && !this.ded && (this.x-ai.x)**2 + (this.y-ai.y)**2 < 250000 && getTeam(this.team) === getTeam(ai.team)) ai.hp = Math.min(ai.hp+.3, ai.maxHp);
-      if (this.immune+500 < Date.now() || this.ded || !ai.canBashed) continue;
+      if (!this.immune || this.ded || !ai.canBashed) continue;
       if ((this.class === 'warrior' && getTeam(this.team) !== getTeam(ai.team)) || (this.class === 'medic' && getTeam(this.team) === getTeam(ai.team))) {
         if (!collision(this.x, this.y, 80, 80, ai.x, ai.y, 80, 80)) continue;
         ai.damageCalc(ai.x, ai.y, this.class === 'warrior' ? 75 : -30, getUsername(this.team));
