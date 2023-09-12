@@ -278,7 +278,7 @@ class Tank {
       }
     }
     if (this.damage) this.damage.y--;
-    if (this.grapple) t.grappleCalc();
+    if (this.grapple) this.grappleCalc();
   }
 
   damageCalc(x, y, a, u) {
