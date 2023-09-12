@@ -243,7 +243,7 @@ class Tank {
   update() {
     if (this.dedEffect) this.dedEffect.time = Date.now() - this.dedEffect.start;
     if (this.pushback !== 0) this.pushback += 0.5;
-    if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(t.x, t.y, .25, getUsername(this.fire.team));
+    if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25, getUsername(this.fire.team));
     for (const t of this.host.pt) {
       if (this.username === t.username) continue;
       if (this.class === 'medic' && !this.ded && !t.ded && (this.x-t.x)**2 + (this.y-t.y)**2 < 250000 && getTeam(this.team) === getTeam(t.team)) t.hp = Math.min(t.hp+.3, t.maxHp);
