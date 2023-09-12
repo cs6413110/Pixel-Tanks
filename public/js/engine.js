@@ -489,7 +489,7 @@ class Shot {
         if (key[type]) {
           host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
         } else if (getTeam(ai.team) !== getTeam(this.team)) {
-          ai.damage(this.damage);
+          ai.damage(x, y, this.damage);
         }
         return true;
       }
@@ -584,7 +584,7 @@ class Damage {
     this.f = 0;
     for (const t of host.pt) if (getUsername(team) !== getUsername(t.team)) if (collision(x, y, w, h, t.x, t.y, 80, 80)) t.damageCalc(x, y, getTeam(team) !== getTeam(t.team) ? Math.abs(a) : Math.min(a, 0), getUsername(team));
     for (let i = host.b.length-1; i >= 0; i--) if (collision(x, y, w, h, host.b[i].x, host.b[i].y, 100, 100)) host.b[i].damage(a);
-    for (let i = host.ai.length-1; i >= 0; i--) if (collision(x, y, w, h, host.ai[i].x, host.ai[i].y, 80, 80)) if (getTeam(host.ai[i].team) !== getTeam(team)) host.ai[i].damage(a);
+    for (let i = host.ai.length-1; i >= 0; i--) if (collision(x, y, w, h, host.ai[i].x, host.ai[i].y, 80, 80)) if (getTeam(host.ai[i].team) !== getTeam(team)) host.ai[i].damage(host.ai[i].x, host.ai[i].y, a);
     setInterval(() => this.f++, 18);
     setTimeout(() => this.destroy(), 200);
   }
@@ -662,18 +662,18 @@ class AI {
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
-      if (this.canPowermissle && Math.random() <= 1/10) this.fire(this.obstruction.x, this.obstruction.y, 'powermissle');
-      if (this.canFire && Math.random() <= 1/5) this.fire(this.obstruction.x, this.obstruction.y);
+      if (this.canPowermissle && Math.random() <= 1/10) this.fireCalc(this.obstruction.x, this.obstruction.y, 'powermissle');
+      if (this.canFire && Math.random() <= 1/5) this.fireCalc(this.obstruction.x, this.obstruction.y);
     } else if (this.mode !== 0) {
       this.tr = toAngle(this.target.x - this.x, this.target.y - this.y);
-      if (this.canPowermissle && Math.random() <= 1/10) this.fire(this.target.x, this.target.y, 'powermissle');
-      if (this.canFire && Math.random() <= 1/5) this.fire(this.target.x, this.target.y);
+      if (this.canPowermissle && Math.random() <= 1/10) this.fireCalc(this.target.x, this.target.y, 'powermissle');
+      if (this.canFire && Math.random() <= 1/5) this.fireCalc(this.target.x, this.target.y);
     }
     const dir = (this.tr-this.r+360)%360 < (this.r-this.tr+360)%360 ? 1 : -1;
     this.r = this.role === 0 ? this.tr : Math[dir > 0 ? 'min' : 'max']((this.r+dir*this.barrelSpeed+360)%360, this.tr);
     if (this.dedEffect) this.dedEffect.time = Date.now()-this.dedEffect.start;
     if (this.pushback !== 0) this.pushback += 0.5;
-    if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damage(.25);
+    if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damage(this.x, this.y, .25);
     for (const t of this.host.pt) {
       if (this.class === 'medic' && !t.ded && (this.x-t.x)**2 + (this.y-t.y)**2 < 250000 && getTeam(this.team) === getTeam(t.team)) t.hp = Math.min(t.hp+.3, t.maxHp);
       if (this.immune+500 < Date.now() || !t.canBashed) continue;
@@ -701,7 +701,7 @@ class AI {
             this.fire = false;
           }, 4000);
         } else if (type === 'spike' && getTeam(team) !== getTeam(this.team)) {
-          this.damage(1);
+          this.damage(this.x, this.y, 1);
         }
       }
     }
@@ -914,7 +914,7 @@ class AI {
     this.mode = (this.hp < .3 * this.maxHp && this.role !== 1) ? 2 : 1;
   }
 
-  fire(tx, ty, type) {
+  fireCalc(tx, ty, type) {
     if (!type) type = this.role !== 0 && Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
     const cooldown = {powermissle: 0, shotgun: 600, bullet: 200}[type];
     this.pushback = -3;
@@ -933,11 +933,11 @@ class AI {
     }
   }
 
-  damage(d) {
+  damage(x, y, d) {
     if (this.immune+500 > Date.now()) return;
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
-    this.damage = {d: (this.damage ? this.damage.d : 0)+d, x: this.x, y: this.y};
+    this.damage = {d: (this.damage ? this.damage.d : 0)+d, x, y};
     this.hp -= d;
     if (this.hp <= 0) return this.destroy();
     clearInterval(this.healInterval);
