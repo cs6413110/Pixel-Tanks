@@ -908,7 +908,7 @@ class AI {
       }
     }
     for (const ai of host.ai) {
-      if (ai.id === this.target.id_ previousTargetExists = true;
+      if (ai.id === this.target.id) previousTargetExists = true;
       if (getTeam(team) === getTeam(ai.team)) {
         allies.push({x: ai.x, y: ai.y, id: ai.id, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
       } else {
