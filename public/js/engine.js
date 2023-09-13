@@ -642,6 +642,7 @@ class AI {
     this.tr = 0;
     this.barrelSpeed = Math.floor(Math.random()*3)+2;
     this.inaccuracy = Math.floor(Math.random()*10);
+    this.stupidity = Math.floor(Math.random()*4)
     this.baseRotation = 0;
     this.baseFrame = 0;
     this.mode = 0;
@@ -682,12 +683,12 @@ class AI {
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40))+Math.floor(Math.random()*this.inaccuracy);
-      if (this.canPowermissle && Math.random() <= 1/10) this.fireCalc(this.obstruction.x, this.obstruction.y, 'powermissle');
-      if (this.canFire && Math.random() <= 1/5) this.fireCalc(this.obstruction.x, this.obstruction.y);
+      if (this.canPowermissle && Math.random() <= 1/(10*this.stupidity)) this.fireCalc(this.obstruction.x, this.obstruction.y, 'powermissle');
+      if (this.canFire && Math.random() <= 1/(5*this.stupidity)) this.fireCalc(this.obstruction.x, this.obstruction.y);
     } else if (this.mode !== 0) {
       this.tr = toAngle(this.target.x - this.x, this.target.y - this.y)+Math.floor(Math.random()*this.inaccuracy);
-      if (this.canPowermissle && Math.random() <= 1/10) this.fireCalc(this.target.x, this.target.y, 'powermissle');
-      if (this.canFire && Math.random() <= 1/5) this.fireCalc(this.target.x, this.target.y);
+      if (this.canPowermissle && Math.random() <= 1/(10*this.stupidity)) this.fireCalc(this.target.x, this.target.y, 'powermissle');
+      if (this.canFire && Math.random() <= 1/(5*this.stupidity)) this.fireCalc(this.target.x, this.target.y);
     }
     const dir = (this.tr-this.r+360)%360 < (this.r-this.tr+360)%360 ? 1 : -1;
     this.r = this.role === 0 ? this.tr : Math[dir > 0 ? 'min' : 'max']((this.r+dir*this.barrelSpeed+360)%360, this.tr);
@@ -759,7 +760,7 @@ class AI {
     this.tr = this.baseRotation;
     this.obstruction = this.collision(nx, ny);
     if (!this.obstruction) {
-      if (this.canBoost && Math.random() < 1/300) {
+      if (this.canBoost && Math.random() < 1/(300*this.stupidity)) {
         this.canBoost = false;
         this.immune = Date.now();
         setTimeout(() => {this.canBoost = true}, 5000);
