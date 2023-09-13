@@ -898,7 +898,7 @@ class AI {
     const targets = [], allies = [];
     let target = false;
     for (const t of host.pt) {
-      if (!t.ded) {
+      if (!t.ded && !t.invis) {
         if (getTeam(team) === getTeam(t.team)) {
           allies.push({x: t.x, y: t.y, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
         } else {
@@ -932,7 +932,7 @@ class AI {
         if (!this.target.c) this.target.c = setTimeout(() => {
           this.mode = 0;
           this.target = false;
-        }, 10000);
+        }, 500);
       }
       return;
     }
