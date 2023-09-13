@@ -896,21 +896,23 @@ class AI {
   identify() {
     const { host, team } = this;
     const targets = [], allies = [];
-    let target = false;
+    let target = false, previousTargetExists = false;
     for (const t of host.pt) {
       if (!t.ded && !t.invis) {
+        if (t.id === this.target.id) previousTargetExists = true;
         if (getTeam(team) === getTeam(t.team)) {
-          allies.push({x: t.x, y: t.y, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
+          allies.push({x: t.x, y: t.y, id: t.id, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
         } else {
-          targets.push({x: t.x, y: t.y, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
+          targets.push({x: t.x, y: t.y, id: t.id, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
         }
       }
     }
     for (const ai of host.ai) {
+      if (ai.id === this.target.id_ previousTargetExists = true;
       if (getTeam(team) === getTeam(ai.team)) {
-        allies.push({x: ai.x, y: ai.y, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
+        allies.push({x: ai.x, y: ai.y, id: ai.id, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
       } else {
-        targets.push({x: ai.x, y: ai.y, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
+        targets.push({x: ai.x, y: ai.y, id: ai.id, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
       }
     }
     targets.sort((a, b) => a.distance - b.distance);
@@ -932,7 +934,7 @@ class AI {
         if (!this.target.c) this.target.c = setTimeout(() => {
           this.mode = 0;
           this.target = false;
-        }, 500);
+        }, !previousTargetExists ? 0 : 10000);
       }
       return;
     }
