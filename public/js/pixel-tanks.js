@@ -706,6 +706,7 @@ function Game() {
           cdraw: function() {
             alert('Ok um... so DarkMemeGod I need the width and height of buttons too, not just x and y so here is beta thing');
             const level = prompt('Which level do u want to do?');
+            Menus.removeListeners();
             PixelTanks.user.player = new Tank(level, false, null);
           },
         },
