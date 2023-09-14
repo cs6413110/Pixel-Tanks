@@ -596,7 +596,7 @@ class DUELS extends Multiplayer {
   disconnect(socket, code, reason) {
     if ([1, 2].includes(this.mode)) {
       this.round = 1;
-      this.mode = 1;
+      this.mode = 0;
       this.wins = {};
     }
     this.pt.forEach(t => {
