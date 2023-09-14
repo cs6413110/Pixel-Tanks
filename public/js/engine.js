@@ -123,7 +123,7 @@ class Engine {
         const type = e.replace('block#', '');
         for (const coord of coords) {
           if (r >= coord.r[0] && r < coord.r[1]) {
-            this.b.push(new Block(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 0}[type], type, t.team, this));
+            this.b.push(new Block(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 50}[type], type, t.team, this));
             break;
           }
         }
