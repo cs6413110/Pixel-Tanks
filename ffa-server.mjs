@@ -441,10 +441,11 @@ class Multiplayer extends Engine {
 
   send() {
     for (const t of this.pt) {
-      const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
+      const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
       const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;
       const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
       let send = false;
+      if (render.logs !== t.render.logs) send = true;
       for (const p of ['b', 'pt', 'ai', 's', 'd']) {
         const ids = new Set(this[p].map(e => e.id));
         this[p].filter(e => A.collider(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
