@@ -741,10 +741,9 @@ function Game() {
         },
         crate: {
           buttons: [
-            [418, 112, 106, 106, 'main', true],
-            [1076, 114, 106, 106, 'cosmetic', true],
-            [625, 324, 564, 564, function() {PixelTanks.openCrate()}, false],
-            [0, 324, 564, 564, function() {PixelTanks.openDeath()}, false],
+            [416, 20, 81, 81, 'main', true],
+            [232, 308, 488, 488, function() {PixelTanks.openCrate()}, false],
+            [880, 308, 488, 488, function() {PixelTanks.openDeath()}, false],
           ],
           listeners: {},
           cdraw: function() {
