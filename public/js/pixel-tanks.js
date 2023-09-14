@@ -717,7 +717,7 @@ function Game() {
                 [659, 262],
                 [877, 262],
               ];
-              for (const c in levelCoords) {
+              for (const c of levelCoords) {
                 alert('Click: ( '+x+', '+y+') T: ( '+(c[0]*1600/1049)+', '+(c[1]*1000/653)+')');
                 if (x > c[0]*1600/1049 && x < (c[0]+80)*1600/1049 && y > c[1]*1000/653 && y < (c[1]+74)*1000/653) {
                   Menus.removeListeners();
