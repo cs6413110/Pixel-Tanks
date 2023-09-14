@@ -640,8 +640,8 @@ class AI {
     this.y = y;
     this.r = 0;
     this.tr = 0;
-    this.barrelSpeed = Math.floor(Math.random()*2)+2;
-    this.inaccuracy = Math.floor(Math.random()*30);
+    this.barrelSpeed = Math.floor(Math.random()*3)+1;
+    this.inaccuracy = Math.floor(Math.random()*20)-10;
     this.stupidity = Math.floor(Math.random()*4)+1;
     this.baseRotation = 0;
     this.baseFrame = 0;
@@ -682,11 +682,11 @@ class AI {
     this.identify();
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
-      this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40))+Math.floor(Math.random()*this.inaccuracy);
+      this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40))+this.inaccuracy;
       if (this.canPowermissle && Math.random() <= 1/(600*this.stupidity)) this.fireCalc(this.obstruction.x, this.obstruction.y, 'powermissle');
       if (this.canFire && Math.random() <= 1/(10*this.stupidity)) this.fireCalc(this.obstruction.x, this.obstruction.y);
     } else if (this.mode !== 0) {
-      this.tr = toAngle(this.target.x - this.x, this.target.y - this.y)+Math.floor(Math.random()*this.inaccuracy);
+      this.tr = toAngle(this.target.x - this.x, this.target.y - this.y)+this.inaccuracy;
       if (this.canPowermissle && Math.random() <= 1/(600*this.stupidity)) this.fireCalc(this.target.x, this.target.y, 'powermissle');
       if (this.canFire && Math.random() <= 1/(10*this.stupidity)) this.fireCalc(this.target.x, this.target.y);
     }
