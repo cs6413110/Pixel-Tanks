@@ -159,7 +159,7 @@ class Engine {
     }
     if (fire.length > 0) {
       t.pushback = -6;
-      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank*(t.buff ? 1.5 : 1), this));
+      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank*(t.buff ? 1.2 : 1), this));
     }
   }
 
@@ -283,7 +283,7 @@ class Tank {
             this.fire = false;
           }, 4000);
         } else if (type === 'spike' && getTeam(team) !== getTeam(this.team)) {
-          this.damageCalc(this.x, this.y, 1, getUsername(team));
+          this.damageCalc(this.x, this.y, .5, getUsername(team));
         }
       }
     }
@@ -352,7 +352,7 @@ class Block {
     this.type = type;
     this.host = host;
     this.s = false;
-    this.c = !['spike', 'fire', 'airstrike'].includes(type); // collision
+    this.c = !['fire', 'airstrike'].includes(type); // collision
     this.team = team;
     if (['fire', 'airstrike'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
     if (type === 'airstrike') {
