@@ -1340,13 +1340,13 @@ function Game() {
               PixelTanks.userData.stats[3] += 10;
               PixelTanks.userData.stats[0] += coins;
               PixelTanks.save();
+              this.canItem0 = true;
               this.canItem1 = true;
               this.canItem2 = true;
               this.canItem3 = true;
-              this.canItem4 = true;
               this.canToolkit = true;
               this.timers.toolkit = -1;
-              this.timers.items = [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}]
+              this.timers.items = [{time: 0, cooldown: -1}, {time: 0, cooldown: -1,}, {time: 0, cooldown: -1}, {time: 0, cooldown: -1}]
               break;
             case 'ping':
               this.ping = new Date().getTime()-this.pingStart;
