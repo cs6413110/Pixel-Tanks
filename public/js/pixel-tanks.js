@@ -718,6 +718,7 @@ function Game() {
                 [877, 262],
               ];
               for (const c in levelCoords) {
+                alert('Click: ( '+x+', '+y+') T: ( '+c[0]*1600/1049+', '+c[1]*1000/653+')');
                 if (x > c[0]*1600/1049 && x < (c[0]+80)*1600/1049 && y > c[1]*1000/653 && y < (c[1]+74)*1000/653) {
                   Menus.removeListeners();
                   PixelTanks.user.player = new Tank(levelCoords.indexOf(c)+1, false, null);
