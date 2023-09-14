@@ -704,10 +704,16 @@ function Game() {
           ],
           listeners: {},
           cdraw: function() {
-            Menus.removeListeners();
-            alert('Ok um... so DarkMemeGod I need the width and height of buttons too, not just x and y so here is beta thing');
-            const level = prompt('Which level do u want to do?');
-            PixelTanks.user.player = new Tank(level, false, null);
+            if (this.n === undefined) {
+              Menus.removeListeners();
+              alert('Ok um... so DarkMemeGod I need the width and height of buttons too, not just x and y so here is beta thing');
+              const level = prompt('Which level do u want to do?');
+              PixelTanks.user.player = new Tank(level, false, null);
+              this.n = 0;
+              setTimeout(() => {
+                this.n = undefined;
+              }, 100);
+            }
           },
         },
         multiplayer: {
