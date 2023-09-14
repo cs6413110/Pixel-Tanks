@@ -3,7 +3,7 @@ const SETTINGS = {
   bans: [],
   banips: [],
   mutes: [],
-  admins: ['cs641311', 'DIO', 'Celestial', 'bradley'],
+  admins: ['cs641311', 'DIO', 'Celestial', 'bradley', 'DarkMemeGod'],
   ppm: 10, // players per room
   log_strain: false, // Show messages per second in logs
   ups_boost: false, // Can lag clients and servers. Recommened false.
