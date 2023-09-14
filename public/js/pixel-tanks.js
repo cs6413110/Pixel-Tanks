@@ -173,7 +173,7 @@ function Game() {
       if (render) this.render = render;
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3], 1);
       this.cdraw();
-      return; // temp
+      //return; // temp
       if (!this.buttonEffect) return;
       for (const b of this.buttons) {
         const x = this.render[0]+b[0]*this.render[2]/1600;
