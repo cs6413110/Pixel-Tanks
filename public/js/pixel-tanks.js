@@ -1901,11 +1901,10 @@ function Game() {
         const c = PixelTanks.userData.class;
         if (c === 'stealth') {
           //this.tank.invis = !this.tank.invis;
-          if (this.collision(this.mouse.x+this.tank.x-800, this.mouse.y+this.tank.y-500)) {
-            this.tank.x = this.mouse.x+this.tank.x-800;
-            this.tank.y = this.mouse.y+this.tank.y-500; 
-            this.timers.class = {time: Date.now(), cooldown: 20000};
-          } else this.timers.class = {time: Date.now, cooldown: 0};
+          this.tank.x = this.mouse.x+this.tank.x-800;
+          this.tank.y = this.mouse.y+this.tank.y-500; 
+          this.tank.use.push('bomb');
+          this.timers.class = {time: Date.now(), cooldown: 20000};
         } else if (c === 'tactical') {
           this.fire('megamissle');
           this.timers.class = {time: Date.now(), cooldown: 20000};
