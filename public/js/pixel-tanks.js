@@ -2030,14 +2030,13 @@ function Game() {
     constructor(level) {
       if (level > levels.length || level < 1) level = 1;
       super([levels[level-1]]);
-      this.enemies = this.ai.length;
     }
 
     ontick() {
       if (this.ai.length === 0) {
         setTimeout(() => {
           PixelTanks.user.player.implode();
-          Menus.menus.victory.stats = {kills: this.enemies, coins: this.enemies*1000};
+          Menus.menus.victory.stats = {kills: 'n/a', coins: 'n/a'};
           Menus.trigger('victory');
         }, 3000);
         this.ontick = () => {}
