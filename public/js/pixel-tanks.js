@@ -1918,7 +1918,9 @@ function Game() {
         if (c === 'stealth') {
           //this.tank.invis = !this.tank.invis;
           this.tank.x = this.mouse.x+this.tank.x-800;
-          this.tank.y = this.mouse.y+this.tank.y-500; 
+          this.tank.y = this.mouse.y+this.tank.y-500;
+          if (this.dx) this.dx = {o: this.tank.y, t: Date.now(), a: k === 65 ? -1 : 1, b: false};
+          if (this.dy) this.dy = {o: this.tank.y, t: Date.now(), a: k === 87 ? -1 : 1, b: false};
           this.tank.use.push('bomb');
           this.timers.class = {time: Date.now(), cooldown: 20000};
         } else if (c === 'tactical') {
