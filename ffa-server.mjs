@@ -568,10 +568,10 @@ class DUELS extends Multiplayer {
     if (this.wins[m.username] === 3) {
       this.global = m.username+' Wins!';
       setTimeout(() => {
-        this.pt.forEach(t => {
-          t.socket.send({event: 'gameover'});
-          t.socket.close();
-        });
+        t.socket.send({event: 'gameover', type: 'defeat'});
+        m.socket.send({event: 'gameover', type: 'victory'});
+        t.socket.close();
+        m.socket.close();
       }, 5000);
     } else {
       this.global = m.username+' Wins Round '+this.round;
@@ -681,7 +681,7 @@ class TDM extends Multiplayer {
         this.global = winner+' Wins!';
         setTimeout(() => {
           this.pt.forEach(t => {
-            t.socket.send({event: 'gameover'});
+            t.socket.send({event: 'gameover', type: winner === t.team ? 'victory' : 'defeat'});
             t.socket.close();
           });
         }, 5000);
