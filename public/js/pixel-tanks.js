@@ -527,8 +527,8 @@ function Game() {
           main: '/menus/main',
           multiplayer: '/menus/multiplayer',
           singleplayer: '/menus/singleplayer',
-          victory: '/menus/victory',
-          defeat: '/menus/defeat',
+          //victory: '/menus/victory',
+          //defeat: '/menus/defeat',
           crate: '/menus/crate',
           settings: '/menus/settings',
           keybinds: '/menus/keybinds',
@@ -701,7 +701,7 @@ function Game() {
           },
         },
         singleplayer: {
-          buttons: 
+          buttons: [
             [25, 28, 80, 74, 'main', true],
           ],
           listeners: {
