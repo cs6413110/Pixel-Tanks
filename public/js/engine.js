@@ -640,9 +640,9 @@ class AI {
     this.y = y;
     this.r = 0;
     this.tr = 0;
-    this.barrelSpeed = Math.floor(Math.random()*3)+1;
-    this.inaccuracy = Math.floor(Math.random()*20)-10;
-    this.stupidity = Math.floor(Math.random()*4)+1;
+    this.barrelSpeed = Math.random()*3+1;
+    this.inaccuracy = Math.floor(Math.random()*40)-20;
+    this.stupidity = Math.random()*2+1;
     this.baseRotation = 0;
     this.baseFrame = 0;
     this.mode = 0;
