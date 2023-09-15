@@ -1286,6 +1286,7 @@ function Game() {
       this.msg = '';
       this.multiplayer = multiplayer;
       this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
+      this.tank.invis = PixelTanks.userData.class === 'stealth';
       this.ops = 0;
       this.ups = 0;
       this.fps = 0;
