@@ -1347,7 +1347,7 @@ function Game() {
               this.implode();
               if (data.type === 'victory') {
                 Menus.menus.victory.stats = {kills: 'n/a', coins: 'n/a'};
-                Menus.trigger('victory);
+                Menus.trigger('victory');
               } else {
                 Menus.menus.defeat.stats = {kills: 'n/a', coins: 'n/a'};
                 Menus.trigger('defeat');
