@@ -730,12 +730,24 @@ function Game() {
           cdraw: function() {},
         },
         victory: {
-          buttons: [],
+          buttons: [
+            [656, 603, 313, 112, 'main', true],
+            [558, 726, 505, 114, function() {
+              alert('lol idk')
+            }, true],
+          ],
           listeners: {},
-          cdraw: function() {},
+          cdraw: function() {
+            
+          },
         },
         defeat: {
-          buttons: [],
+          buttons: [
+            [656, 603, 313, 112, 'main', true],
+            [558, 726, 505, 114, function() {
+              alert('lol idk')
+            }, true],
+          ],
           listeners: {},
           cdraw: function() {},
         },
