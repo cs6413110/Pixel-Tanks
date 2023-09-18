@@ -2084,14 +2084,14 @@ function Game() {
         const n = e.name;
         for (const p of Object.getOwnPropertyNames(e)) {
           if (typeof e[p] === 'function') {
-            const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0};
+            const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0, l: 0};
             e[p] = function() {
               const start = Date.now();
               const r = f.o.apply(this, arguments);
               f.i++;
               f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
               const end = Date.now()-start;
-              f.t = end;
+              f.l = end;
               update(functions);
               return r;
            }
@@ -2100,14 +2100,14 @@ function Game() {
         }
         for (const p of Object.getOwnPropertyNames(e.prototype)) {
           if (typeof e.prototype[p] === 'function') {
-            const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0};
+            const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0, l: 0};
             e.prototype[p] = function() {
               const start = Date.now();
               const r = f.o.apply(this, arguments);
               f.i++;
               f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
               const end = Date.now()-start;
-              f.t = end;
+              f.l = end;
               update(functions);
               return r;
             }
