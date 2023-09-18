@@ -1962,7 +1962,9 @@ function Game() {
         }
       } else if (k === 18) {
         const win = window.open('about:blank', '_blank');
-        win.document.write(JSON.stringify(lagometer));
+        lagometer.sort((a, b) => b.t - a.t);
+        const top = lagometer.slice(0, lagometer.length);
+        for (const t of top) win.document.writeln(t.name+': ('+t.t+', '+t.l+') over '+t.i);
       }
     }
 
