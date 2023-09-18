@@ -1890,10 +1890,10 @@ function Game() {
       if (this.paused && e.keyCode !== 27) return;
       const k = e.keyCode;
       if ([65, 68].includes(k)) {
-        this.dx = {o: this.tank.x, t: Date.now(), this.key[e.keyCode] ? -1 : 1, b: false};
+        this.dx = {o: this.tank.x, t: Date.now(), a: k === 65 ? -1 : 1, b: false};
         this.b = {o: this.tank.baseFrame, t: Date.now()};
       } else if ([83, 87].includes(k)) {
-        this.dy = {o: this.tank.y, t: Date.now(), this.key[e.keyCode] ? -1 : 1, b: false};
+        this.dy = {o: this.tank.y, t: Date.now(), a: k === 87 ? -1 : 1, b: false};
         this.b = {o: this.tank.baseFrame, t: Date.now()};
       }
       for (let i = 0; i < 4; i++) {
