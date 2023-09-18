@@ -2028,7 +2028,11 @@ function Game() {
     }
 
     implode() {
-      if (this.multiplayer) this.socket.close();
+      if (this.multiplayer) {
+        this.socket.close();
+      } else {
+        PixelTanks.user.player.world.i.forEach(i => clearInterval(i));
+      }
       document.removeEventListener('keydown', this.keydown.bind(this));
       document.removeEventListener('keyup', this.keyup.bind(this));
       document.removeEventListener('mousemove', this.mousemove.bind(this));
