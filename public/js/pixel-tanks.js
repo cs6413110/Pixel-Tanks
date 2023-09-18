@@ -1021,6 +1021,7 @@ function Game() {
         pause: {
           buttons: [[128, 910, 1460, 76, function() {
             PixelTanks.user.player.implode();
+            Menus.trigger('main');
           }, true]],
           listeners: {},
           cdraw: () => {},
@@ -2022,7 +2023,6 @@ function Game() {
       cancelAnimationFrame(this.render);
       Menus.menus.pause.removeListeners();
       PixelTanks.user.player = undefined;
-      Menus.trigger('main');
     }
   }
 
