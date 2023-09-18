@@ -718,14 +718,14 @@ const Profile = (arr, update) => {
       const n = e.name;
       for (const p of Object.getOwnPropertyNames(e)) {
         if (typeof e[p] === 'function') {
-          const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0};
+          const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0, l: 0};
           e[p] = function() {
             const start = process.hrtime();
             const r = f.o.apply(this, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
             const end = process.hrtime(start);
-            f.t = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
+            f.l = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
             update(functions);
             return r;
           }
@@ -734,14 +734,14 @@ const Profile = (arr, update) => {
       }
       for (const p of Object.getOwnPropertyNames(e.prototype)) {
         if (typeof e.prototype[p] === 'function') {
-          const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0};
+          const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0, l: 0};
           e.prototype[p] = function() {
             const start = process.hrtime();
             const r = f.o.apply(this, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
             const end = process.hrtime(start);
-            f.t = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
+            f.l = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
             update(functions);
             return r;
           }
@@ -760,5 +760,5 @@ setInterval(() => {
   lagometer.sort((a, b) => b.t - a.t);
   const top = lagometer.slice(0, Math.min(15, lagometer.length));
   console.log('-----PROFILING REPORT-----');
-  for (const t of top) console.log(t.name+': '+t.t+' over '+t.i);
+  for (const t of top) console.log(t.name+': ('+t.t+', '+t.l+') over '+t.i);
 }, 10000);
