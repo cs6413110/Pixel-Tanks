@@ -1,13 +1,10 @@
 const packer = document.createElement('SCRIPT');
-packer.crossOrigin = '';
 packer.src = 'https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js';
 packer.onload = () => {
   const pathfinding = document.createElement('SCRIPT');
-  pathfinding.crossOrigin = '';
   pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
   pathfinding.onload = () => {
     const engine = document.createElement('SCRIPT');
-    engine.crossOrigin = 'anonymous';
     engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
     engine.onload = Game;
     document.head.appendChild(engine);
@@ -2031,7 +2028,7 @@ function Game() {
       if (this.multiplayer) {
         this.socket.close();
       } else {
-        PixelTanks.user.player.world.i.forEach(i => clearInterval(i));
+        this.world.i.forEach(i => clearInterval(i));
       }
       document.removeEventListener('keydown', this.keydown.bind(this));
       document.removeEventListener('keyup', this.keyup.bind(this));
