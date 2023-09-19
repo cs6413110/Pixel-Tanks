@@ -573,7 +573,7 @@ class DUELS extends Multiplayer {
           tank.hp = tank.maxHp;
           tank.shields = 0;
           tank.ded = false;
-          t.socket.send({event: 'ded'});
+          tank.socket.send({event: 'ded'});
         });
         this.b = [];
         this.s = [];
