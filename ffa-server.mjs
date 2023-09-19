@@ -537,13 +537,13 @@ class DUELS extends Multiplayer {
 
   ontick() {
     if ([0, 1].includes(this.mode)) {
-      this.pt[0].x = this.spawns[0];
-      this.pt[0].y = this.spawns[0];
+      this.pt[0].x = this.spawns[0].x;
+      this.pt[0].y = this.spawns[0].y;
       this.override(this.pt[0]);
     }
     if (this.mode === 1) {
-      this.pt[1].x = this.spawns[1];
-      this.pt[1].y = this.spawns[1];
+      this.pt[1].x = this.spawns[1].x;
+      this.pt[1].y = this.spawns[1].y;
       this.override(this.pt[1]);
       this.global = 'Round '+this.round+' in '+(5-Math.floor((Date.now()-this.readytime)/1000));
       if (5-(Date.now()-this.readytime)/1000 <= 0) {
