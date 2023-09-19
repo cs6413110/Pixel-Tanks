@@ -1802,14 +1802,8 @@ function Game() {
     }
 
     collision(x, y) {
-      var l = 0, team;
-      while (l < this.hostupdate.pt.length) {
-        if (this.hostupdate.pt[l].username === PixelTanks.user.username) {
-          team = this.hostupdate.pt[l].team.split(':')[1].replace('@leader', '').replace('@requestor#', '');
-          if (this.hostupdate.pt[l].ded) return true;
-        }
-        l++;
-      }
+      if (this.tank.invis) return true;
+      if (this.ded) return true;
 
       if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return false;
 
@@ -1926,13 +1920,8 @@ function Game() {
         this.canClass = false;
         const c = PixelTanks.userData.class;
         if (c === 'stealth') {
-          //this.tank.invis = !this.tank.invis;
-          this.tank.x = this.mouse.x+this.tank.x-800;
-          this.tank.y = this.mouse.y+this.tank.y-500;
-          if (this.dx) this.dx = {o: this.tank.x, t: Date.now(), a: (this.key[65] ? -1 : 1), b: false};
-          if (this.dy) this.dy = {o: this.tank.y, t: Date.now(), a: (this.key[87] ? -1 : 1), b: false};
-          this.tank.use.push('bomb');
-          this.timers.class = {time: Date.now(), cooldown: 20000};
+          this.tank.invis = !this.tank.invis;
+          this.timers.class = {time: Date.now(), cooldown: 50};
         } else if (c === 'tactical') {
           this.fire('megamissle');
           this.timers.class = {time: Date.now(), cooldown: 20000};
