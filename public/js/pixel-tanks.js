@@ -1964,7 +1964,7 @@ function Game() {
           setTimeout(() => {
             this.speed = 4;
             this.tank.immune = false;
-            //if (PixelTanks.userData.class === 'stealth') this.tank.use.push('bomb');
+            if (PixelTanks.userData.class === 'stealth') this.tank.use.push('bomb');
           }, 500);
           setTimeout(() => {this.canBoost = true}, 5000);
         }
