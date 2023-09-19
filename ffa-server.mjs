@@ -719,7 +719,8 @@ const Profile = (arr, update) => {
         if (typeof e[p] === 'function') {
           const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0, l: 0};
           e[p] = function() {
-            const start = process.hrtime();
+            const s = process.hrtime();
+            const start = (s[0]+Math.floor(s[1]/1000000))+((s[1]%1000000)/1000000);
             const r = f.o.apply(this, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
@@ -735,7 +736,8 @@ const Profile = (arr, update) => {
         if (typeof e.prototype[p] === 'function') {
           const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0, l: 0};
           e.prototype[p] = function() {
-            const start = process.hrtime();
+            const s = process.hrtime();
+            const start = (s[0]+Math.floor(s[1]/1000000))+((s[1]%1000000)/1000000);
             const r = f.o.apply(this, arguments);
             f.i++;
             f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
