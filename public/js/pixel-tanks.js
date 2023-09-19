@@ -1802,7 +1802,7 @@ function Game() {
     }
 
     collision(x, y) {
-      if (this.tank.invis) return true;
+      if (this.tank.invis && this.tank.immune) return true;
       if (this.ded) return true;
 
       if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return false;
