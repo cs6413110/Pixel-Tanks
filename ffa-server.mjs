@@ -719,13 +719,12 @@ const Profile = (arr, update) => {
         if (typeof e[p] === 'function') {
           const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0, l: 0};
           e[p] = function() {
-            const s = process.hrtime();
-            const start = (s[0]+Math.floor(s[1]/1000000))+((s[1]%1000000)/1000000);
+            const start = process.hrtime();
             const r = f.o.apply(this, arguments);
             f.i++;
-            f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
             const end = process.hrtime(start);
             f.l = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
+            f.t = (f.t*(f.i-1)+f.l)/f.i;
             update(functions);
             return r;
           }
@@ -736,13 +735,12 @@ const Profile = (arr, update) => {
         if (typeof e.prototype[p] === 'function') {
           const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0, l: 0};
           e.prototype[p] = function() {
-            const s = process.hrtime();
-            const start = (s[0]+Math.floor(s[1]/1000000))+((s[1]%1000000)/1000000);
+            const start = process.hrtime();
             const r = f.o.apply(this, arguments);
             f.i++;
-            f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
             const end = process.hrtime(start);
             f.l = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
+            f.t = (f.t*(f.i-1)+f.l)/f.i;
             update(functions);
             return r;
           }
