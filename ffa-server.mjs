@@ -351,14 +351,6 @@ const Commands = {
     if (data.length !== 7) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, data[3], Math.min(20, Math.max(0, Number(data[4]))), ':'+data[6], servers[this.room]));
   },
-  scream: function(data) {
-    if (this.username !== 'bradley') return this.send({status: 'error', message: 'You are not a bread!'});
-    servers.forEach(s => {
-      s.pt.forEach(t => {
-        if (t.username === 'cs641311') t.socket.send({status: 'error', type: 'breadspam', message: data});
-      });
-    })
-  },
   spectate: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     servers.forEach(s => {
@@ -545,13 +537,13 @@ class DUELS extends Multiplayer {
 
   ontick() {
     if ([0, 1].includes(this.mode)) {
-      this.pt[0].x = 0;
-      this.pt[0].y = 0;
+      this.pt[0].x = this.spawns[0];
+      this.pt[0].y = this.spawns[0];
       this.override(this.pt[0]);
     }
     if (this.mode === 1) {
-      this.pt[1].x = 2920;
-      this.pt[1].y = 2920;
+      this.pt[1].x = this.spawns[1];
+      this.pt[1].y = this.spawns[1];
       this.override(this.pt[1]);
       this.global = 'Round '+this.round+' in '+(5-Math.floor((Date.now()-this.readytime)/1000));
       if (5-(Date.now()-this.readytime)/1000 <= 0) {
