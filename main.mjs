@@ -1,3 +1,5 @@
+import * as Sentry from '@sentry/node';
+import { ProfilingIntegration } from '@sentry/profiling-node';
 import express from 'express';
 import expressWs from 'express-ws';
 import {promises as fs} from 'fs';
@@ -11,6 +13,19 @@ const connectionString = 'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongo
 
 const app = express(), client = new MongoClient(connectionString), filter = new Filter(), tokgen = new TokenGenerator(256, TokenGenerator.BASE62), tokens = new Set(), sockets = [];
 let db;
+
+Sentry.init({
+  dsn: 'https://7ffdd0d30668422c8f453bc1d8b8d49c@o4504300641517568.ingest.sentry.io/4504300646105088',
+  tracesSampleRate: 1.0,
+  profilesSampleRate: 1.0,
+  integrations: [
+    new Sentry.Integrations.Http({tracing: true}),
+    new Sentry.Integrations.Express({app}),
+    new ProfilingIntegration(),
+  ],
+});
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
 
 (async () => {
   await client.connect();
@@ -73,4 +88,5 @@ app.ws('/', socket => {
 app.use(ffa);
 app.get('/verify', (req, res) => res.end(valid(req.query.token, req.query.username).toString()));
 app.get('/*', async(req, res) => res.header('Content-Type', 'application/javascript').end(await fs.readFile('./public/js/pixel-tanks.js')));
+app.use(Sentry.Handlers.errorHandler());
 app.listen(port);
