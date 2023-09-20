@@ -15,7 +15,7 @@ const app = express(), client = new MongoClient(connectionString), filter = new 
 let db;
 
 Sentry.init({
-  dsn: 'https://7ffdd0d30668422c8f453bc1d8b8d49c@o4504300641517568.ingest.sentry.io/4504300646105088',
+  dsn: 'https://d900a2c488024fb294768830690d53dd@o4504300641517568.ingest.sentry.io/4505286074957824',
   tracesSampleRate: 1.0,
   profilesSampleRate: 1.0,
   integrations: [
