@@ -167,8 +167,8 @@ ffa.ws(SETTINGS.path, socket => {
       try {
         msg = SETTINGS.filterProfanity ? filter.clean(msg) : msg;
       } catch(e) {}
-      if (socket.room) servers[socket.room].logs.push({m: `[${socket.username}] ${msg}`, c: '#ffffff'});
-      if (data.room) servers[data.room].logs.push({m: `[${data.username}] ${msg}`, c: '#ffffff'});
+      if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${msg}`, c: '#ffffff'});
+      if (servers[data.room]) servers[data.room].logs.push({m: `[${data.username}] ${msg}`, c: '#ffffff'});
     } else if (data.type === 'logs') {
       if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
     } else if (data.type === 'command') {
