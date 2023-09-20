@@ -18,7 +18,7 @@ import express from 'express';
 import expressWs from 'express-ws';
 import msgpack from 'msgpack-lite';
 import Filter from 'bad-words';
-import {Engine, Block, Shot, AI, Damage, Tank, getTeam, parseTeamExtras, getUsername} from './public/js/engine.js';
+import {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} from './public/js/engine.js';
 
 let tickspeed = -1;
 const getTickspeed = i => {
