@@ -989,5 +989,5 @@ class AI {
 }
 
 try {
-  module.exports = {Engine, Block, Shot, AI, Damage, Tank, getTeam, parseTeamExtras, getUsername};
+  module.exports = {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername};
 } catch (e) {}
