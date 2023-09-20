@@ -28,13 +28,11 @@ Sentry.init({
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 
-let transactionNum = 1;
 function profile() {
   const transaction = Sentry.startTransaction({
     op: 'Profiling/Performance',
-    name: 'Transaction #'+transactionNum,
+    name: 'Transaction',
   });
-  transactionNum++;
   setTimeout(() => {
     transaction.finish();
     profile();
