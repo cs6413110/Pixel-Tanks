@@ -21,6 +21,7 @@ Sentry.init({
   integrations: [
     new Sentry.Integrations.Http({tracing: true}),
     new Sentry.Integrations.Express({app}),
+    new Sentry.Integrations.Mongo(),
     new ProfilingIntegration(),
   ],
 });
