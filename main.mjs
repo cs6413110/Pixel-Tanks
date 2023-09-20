@@ -101,7 +101,8 @@ const Profile = (arr, update) => {
       for (const p of Object.getOwnPropertyNames(e)) {
         if (typeof e[p] === 'function') {
           e[p] = function() {
-            if (canProfile) const t = Sentry.startTransaction({op: 'Production', name: n+'.'+e[p].name});
+            let t;
+            if (canProfile) t = Sentry.startTransaction({op: 'Production', name: n+'.'+e[p].name});
             const r = f.o.apply(this, arguments);
             if (canProfile) {
               t.finish();
@@ -115,7 +116,8 @@ const Profile = (arr, update) => {
       for (const p of Object.getOwnPropertyNames(e.prototype)) {
         if (typeof e.prototype[p] === 'function') {
           e.prototype[p] = function() {
-            if (canProfile) const t = Sentry.startTransaction({op: 'Production', name: n+'.'+p});
+            let t;
+            if (canProfile) t = Sentry.startTransaction({op: 'Production', name: n+'.'+p});
             const r = f.o.apply(this, arguments);
             if (canProfile) {
               t.finish();
