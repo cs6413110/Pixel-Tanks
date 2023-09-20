@@ -924,7 +924,7 @@ class AI {
     }
     if (this.role === 3 && !this.bond && allies.length > 0) {
       allies.sort((a, b) => a.distance - b.distance);
-      for (const a of allies) if (raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) {
+      for (const a of allies) if (raycast(this.x+40, this.y+40, a.x+40, a.y+40, this.host.b)) {
         this.bond = a;
         break;
       }
