@@ -2046,5 +2046,21 @@ function Game() {
         }, 3000);
         this.ontick = () => {}
       }
-    
+    }
+
+    ondeath() {
+      PixelTanks.user.player.implode();
+      setTimeout(() => {
+        Menus.menus.defeat.stats = {kills: 'n/a', coins: 'n/a'};
+        Menus.trigger('defeat');
+      }, 3000);
+    }
+
+    override(data) {
+      PixelTanks.user.player.tank.x = data.x;
+      PixelTanks.user.player.tank.y = data.y;
+    }
+  }
+
+  window.onload = PixelTanks.start;
 };
