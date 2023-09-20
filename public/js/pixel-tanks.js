@@ -14,14 +14,10 @@ packer.onload = () => {
 document.head.appendChild(packer);
 function Game() {
   class MegaSocket {
-    constructor(url, options) {
+    constructor(url, options={keepAlive = true, autoconnect = true, reconnect = false}) {
       this.url = url;
-      this.options = {};
+      this.options = options;
       this.callstack = {open: [], close: [], message: []};
-      const {keepAlive = true, autoconnect = true, reconnect = false} = options;
-      this.options.keepAlive = keepAlive;
-      this.options.autoconnect = autoconnect;
-      this.options.reconnect = reconnect;
       if (this.options.autoconnect) {
         this.status = 'connecting';
         this.connect();
