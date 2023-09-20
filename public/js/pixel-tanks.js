@@ -1946,11 +1946,6 @@ function Game() {
         } else {
           Menus.removeListeners();
         }
-      } else if (k === 18) {
-        const win = window.open('about:blank', '_blank');
-        lagometer.sort((a, b) => b.t - a.t);
-        const top = lagometer.slice(0, lagometer.length);
-        for (const t of top) win.document.writeln(t.name+': ('+t.t+', '+t.l+') over '+t.i);
       }
     }
 
@@ -2051,67 +2046,5 @@ function Game() {
         }, 3000);
         this.ontick = () => {}
       }
-    }
-
-    ondeath() {
-      PixelTanks.user.player.implode();
-      setTimeout(() => {
-        Menus.menus.defeat.stats = {kills: 'n/a', coins: 'n/a'};
-        Menus.trigger('defeat');
-      }, 3000);
-    }
-
-    override(data) {
-      PixelTanks.user.player.tank.x = data.x;
-      PixelTanks.user.player.tank.y = data.y;
-    }
-  }
-
-  window.onload = PixelTanks.start;
-  const Profile = (arr, update) => {
-    const functions = [];
-    for (let e of arr) {
-      if (typeof e !== 'function') continue;
-      if (/^\s*class\s+/.test(e.toString())) {
-        const n = e.name;
-        for (const p of Object.getOwnPropertyNames(e)) {
-          if (typeof e[p] === 'function') {
-            const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0, l: 0};
-            e[p] = function() {
-              const start = Date.now();
-              const r = f.o.apply(this, arguments);
-              f.i++;
-              f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
-              const end = Date.now()-start;
-              f.l = end;
-              update(functions);
-              return r;
-           }
-            functions.push(f);
-          }
-        }
-        for (const p of Object.getOwnPropertyNames(e.prototype)) {
-          if (typeof e.prototype[p] === 'function') {
-            const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0, l: 0};
-            e.prototype[p] = function() {
-              const start = Date.now();
-              const r = f.o.apply(this, arguments);
-              f.i++;
-              f.t = (f.t*(f.i-1)+Date.now()-start)/f.i;
-              const end = Date.now()-start;
-              f.l = end;
-              update(functions);
-              return r;
-            }
-            functions.push(f);
-          }
-        }
-      }
-    }
-  }
-
-  let lagometer = [];
-  Profile([Engine, Block, Shot, AI, Damage, MegaSocket, A, Menu, Menus, Network, Loader, GUI, PixelTanks, Tank, Singleplayer], f => {
-    lagometer = f;
-  });
+    
 };
