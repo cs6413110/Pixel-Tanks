@@ -14,7 +14,7 @@ packer.onload = () => {
 document.head.appendChild(packer);
 function Game() {
   class MegaSocket {
-    constructor(url, options={keepAlive = true, autoconnect = true, reconnect = false}) {
+    constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
       this.url = url;
       this.options = options;
       this.callstack = {open: [], close: [], message: []};
