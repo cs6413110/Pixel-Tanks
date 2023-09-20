@@ -56,7 +56,6 @@ class Engine {
     this.pt = [];
     this.d = [];
     this.i = [];
-    this.t = [];
     this.logs = [];
     this.map = new PF.Grid(30, 30);
     this.levelReader(levels[Math.floor(Math.random() * levels.length)]);
@@ -679,14 +678,14 @@ class AI {
   }
 
   update() {
-    this.identify();
+    if (Math.random() <= 1/(3*this.stupidity)) this.identify();
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
-      this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40))+this.inaccuracy;
+      if (Math.random() <= 1/(3*this.stupidity)) this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40))+this.inaccuracy;
       if (this.canPowermissle && Math.random() <= 1/(600*this.stupidity)) this.fireCalc(this.obstruction.x, this.obstruction.y, 'powermissle');
       if (this.canFire && Math.random() <= 1/(10*this.stupidity)) this.fireCalc(this.obstruction.x, this.obstruction.y);
     } else if (this.mode !== 0) {
-      this.tr = toAngle(this.target.x - this.x, this.target.y - this.y)+this.inaccuracy;
+      if (Math.random() <= 1/(3*this.stupidity)) this.tr = toAngle(this.target.x - this.x, this.target.y - this.y)+this.inaccuracy;
       if (this.canPowermissle && Math.random() <= 1/(600*this.stupidity)) this.fireCalc(this.target.x, this.target.y, 'powermissle');
       if (this.canFire && Math.random() <= 1/(10*this.stupidity)) this.fireCalc(this.target.x, this.target.y);
     }
