@@ -706,4 +706,4 @@ class TDM extends Multiplayer {
 }
 
 ffa.listen(SETTINGS.port);
-module.exports = {Engine, AI, ffa};
+module.exports = {AI, Engine, ffa};
