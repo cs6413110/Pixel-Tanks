@@ -179,8 +179,9 @@ ffa.ws(SETTINGS.path, socket => {
     } else if (data.type === 'stats') {
       const gamemodes = {FFA: [], DUELS: [], TDM: []};
       servers.forEach(s => {
+        gamemodes[s.name][servers.indexOf(s)] = []
         s.forEach(t => {
-          gamemodes[s.name].push(t.username);
+          gamemodes[s.name][servers.indexOf(s)].push(t.username);
         });
       });
       socket.send({...gamemodes, tickspeed, event: 'stats'});
