@@ -31,7 +31,7 @@ const getTickspeed = i => {
 setTimeout(() => getTickspeed());
 
 const filter = new Filter();
-export const ffa = express();
+const ffa = express();
 const auth = async (username, token) => {
   try {
     const res = await fetch(`http://141.148.128.231/verify?username=${username}&token=${token}`);
@@ -706,4 +706,4 @@ class TDM extends Multiplayer {
 }
 
 ffa.listen(SETTINGS.port);
-module.exports = {Engine, Block, Shot, AI, Damage, FFA, DUELS, TDM, Multiplayer, A};
+module.exports = {Engine, AI, ffa};
