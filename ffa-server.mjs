@@ -169,7 +169,7 @@ ffa.ws(SETTINGS.path, socket => {
       } catch(e) {}
       servers[socket.room].logs.push({m: `[${socket.username}] ${msg}`, c: '#ffffff'});
     } else if (data.type === 'logs') {
-      socket.send({event: 'logs', logs: servers[data.room].logs});
+      if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
     } else if (data.type === 'command') {
       const func = Commands[data.data[0]], args = data.data;
       if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'Commands are only allowed in FFA'});
@@ -179,7 +179,6 @@ ffa.ws(SETTINGS.path, socket => {
     } else if (data.type === 'stats') {
       let gamemodes = {FFA: [], DUELS: [], TDM: []};
       for (let i = 0; i < servers.length; i++) {
-        console.log(servers[i].constructor.name);
         gamemodes[servers[i].constructor.name][i] = [];
         for (let l = 0; l < servers[i].pt.length; l++) {
           gamemodes[servers[i].constructor.name][i].push(servers[i].pt[l].username);
