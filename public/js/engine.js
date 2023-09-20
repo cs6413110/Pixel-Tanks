@@ -9,7 +9,7 @@ const raycast = (x1, y1, x2, y2, walls) => {
   walls = walls.filter(({x, y, type}) => {
     if (!['void', 'barrier', 'strong', 'weak', 'gold'].includes(type)) return;
     if (collision(x, y, 100, 100, minx, miny, adx, ady)) {
-      if (collision(x, y, 100, 100, sx-1, sy-1, 2, 2) || collision(x, y, 100, 100, tx-1, ty-1, 2, 2)) return false;
+      if (collision(x, y, 100, 100, x1-1, y1-1, 2, 2) || collision(x, y, 100, 100, x2-1, y2-1, 2, 2)) return false;
       const xw = x + 100, yw = y + 100;
       if (x >= minx && x <= maxx) px.push(x);
       if (xw >= minx && xw <= maxx) px.push(xw);
