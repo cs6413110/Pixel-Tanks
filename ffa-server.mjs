@@ -179,7 +179,7 @@ ffa.ws(SETTINGS.path, socket => {
     } else if (data.type === 'stats') {
       let gamemodes = {FFA: [], DUELS: [], TDM: []};
       for (let i = 0; i < servers.length; i++) {
-        gamemodes[s.name][i] = [];
+        gamemodes[servers[i].name][i] = [];
         for (let l = 0; i < servers[i].pt.length; l++) {
           gamemodes[servers[i].name][i].push(servers[i].pt[l].username);
         }
