@@ -177,13 +177,13 @@ ffa.ws(SETTINGS.path, socket => {
         func.bind(socket)(args);
       } else socket.send({status: 'error', message: 'Command not found.'});
     } else if (data.type === 'stats') {
-      const gamemodes = {FFA: [], DUELS: [], TDM: []};
-      servers.forEach(s => {
-        gamemodes[s.name][servers.indexOf(s)] = []
-        s.forEach(t => {
-          gamemodes[s.name][servers.indexOf(s)].push(t.username);
-        });
-      });
+      let gamemodes = {FFA: [], DUELS: [], TDM: []};
+      for (let i = 0; i < servers.length; i++) {
+        gamemodes[s.name][i] = [];
+        for (let l = 0; i < servers[i].pt.length; l++) {
+          gamemodes[servers[i].name][i].push(servers[i].pt[l].username);
+        }
+      }
       socket.send({...gamemodes, tickspeed, event: 'stats'});
     } else setTimeout(() => socket.close());
   });
