@@ -37,7 +37,7 @@ function profile() {
   setTimeout(() => {
     transaction.finish();
     profile();
-  }, 60000);
+  }, 300000);
 }
 setTimeout(() => profile());
 
