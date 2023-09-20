@@ -7,7 +7,7 @@ import {MongoClient} from 'mongodb';
 import msgpack from 'msgpack-lite';
 import Filter from 'bad-words';
 import TokenGenerator from 'uuid-token-generator';
-import {ffa} from './ffa-server.mjs';
+import {Engine, Block, Shot, AI, Damage, FFA, DUELS, TDM, Multiplayer, A, ffa} from './ffa-server.mjs';
 
 const connectionString = 'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = 80;
 
@@ -27,18 +27,6 @@ Sentry.init({
 });
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
-
-function profile() {
-  const transaction = Sentry.startTransaction({
-    op: 'Profiling/Performance',
-    name: 'Transaction',
-  });
-  setTimeout(() => {
-    transaction.finish();
-    profile();
-  }, 300000);
-}
-setTimeout(() => profile());
 
 (async () => {
   await client.connect();
@@ -103,3 +91,33 @@ app.get('/verify', (req, res) => res.end(valid(req.query.token, req.query.userna
 app.get('/*', async(req, res) => res.header('Content-Type', 'application/javascript').end(await fs.readFile('./public/js/pixel-tanks.js')));
 app.use(Sentry.Handlers.errorHandler());
 app.listen(port);
+
+const Profile = (arr, update) => {
+  for (let e of arr) {
+    if (typeof e !== 'function') continue;
+    if (/^\s*class\s+/.test(e.toString())) {
+      const n = e.name;
+      for (const p of Object.getOwnPropertyNames(e)) {
+        if (typeof e[p] === 'function') {
+          e[p] = function() {
+            const t = Sentry.startTransaction({op: 'Production', name: n+'.'+e[p].name});
+            const r = f.o.apply(this, arguments);
+            t.finish();
+            return r;
+          }
+        }
+      }
+      for (const p of Object.getOwnPropertyNames(e.prototype)) {
+        if (typeof e.prototype[p] === 'function') {
+          e.prototype[p] = function() {
+            const t = Sentry.startTransaction({op: 'Production', name: n+'.'+p});
+            const r = f.o.apply(this, arguments);
+            t.finish();
+            return r;
+          }
+        }
+      }
+    }
+  }
+}
+Profile([Engine, Block, Shot, AI, Damage, FFA, DUELS, TDM, Multiplayer, A]);
