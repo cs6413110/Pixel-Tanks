@@ -1,13 +1,17 @@
-<script src='https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js'></script>
-<div id='connection'>Connecting...</div>
-<div id='servers' style='border: 1px solid black'></div>
-<div id='messages' style='border: 1px solid black'></div>
-<input id='message' /><button onclick='sendMessage()'>Send</button>
-<input id='server' /><button onclick='setRoom()'>Join Room</button>
-<script>
-window.onerror = alert;
-</script>
-<script>
+const script = document.createElement('SCRIPT');
+script.src = 'https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js'
+const connection = document.createElement('DIV'), servers = document.createElement('DIV'), messages = document.createElement('DIV'), message = document.createElement('input'), server = document.createElement('input'), join = document.createElement('BUTTON');
+join.innerHTML = 'Join Server';
+join.addEventListener('click', () => {
+  setRoom();
+});
+document.head.appendChild(script);
+document.body.appendChild(connection);
+document.body.appendChild(servers);
+document.body.appendChild(messages);
+document.body.appendChild(message);
+document.body.appendChild(server);
+document.body.appendChild(join);
 class MegaSocket {
   constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
     this.url = url;
@@ -42,7 +46,7 @@ class MegaSocket {
       } catch(e) {
         alert('Socket Encryption Error: ' + data.data+' | '+e);
       }
-      //if (data.status === 'error') return alert(data.message);
+      if (data.status === 'error') return alert(data.message);
       this.callstack.message.forEach(f => f(data));
     }
     this.socket.onclose = e => {
@@ -92,7 +96,6 @@ socket.on('message', d => {
     socket.logs = d.logs;
   }
 });
-const connection = document.getElementById('connection'), servers = document.getElementById('servers'), messages = document.getElementById('messages'), message = document.getElementById('message'), server = document.getElementById('server');
 const render = () => {
   connection.innerHTML = socket.status;
   servers.innerHTML = JSON.stringify(socket.stats);
@@ -112,4 +115,3 @@ window.onkeydown = (e) => {
   if (e.key === 'Enter') sendMessage();
 }
 setInterval(() => render(), 15);
-</script>
