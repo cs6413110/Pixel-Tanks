@@ -706,3 +706,4 @@ class TDM extends Multiplayer {
 }
 
 ffa.listen(SETTINGS.port);
+module.exports = {Engine, Block, Shot, AI, Damage, FFA, DUELS, TDM, Multiplayer, A};
