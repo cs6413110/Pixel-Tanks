@@ -27,6 +27,20 @@ Sentry.init({
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 
+let transactionNum = 1;
+function profile() {
+  const transaction = Sentry.startTransaction({
+    op: 'Profiling/Performance',
+    name: 'Transaction #'+transactionNum,
+  });
+  transactionNum++;
+  setTimeout(() => {
+    transaction.finish();
+    profile();
+  }, 60000);
+}
+setTimeout(() => profile());
+
 (async () => {
   await client.connect();
   db = client.db('data').collection('data');
