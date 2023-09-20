@@ -181,7 +181,7 @@ ffa.ws(SETTINGS.path, socket => {
       for (let i = 0; i < servers.length; i++) {
         console.log(servers[i].constructor.name);
         gamemodes[servers[i].constructor.name][i] = [];
-        for (let l = 0; i < servers[i].pt.length; l++) {
+        for (let l = 0; l < servers[i].pt.length; l++) {
           gamemodes[servers[i].constructor.name][i].push(servers[i].pt[l].username);
         }
       }
