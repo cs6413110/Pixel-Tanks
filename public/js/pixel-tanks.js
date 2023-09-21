@@ -1901,9 +1901,7 @@ function Game() {
           this.timers.toolkit = new Date();
           setTimeout(() => {this.canToolkit = true}, 40000);
           setTimeout(() => {this.halfSpeed = false}, PixelTanks.userData.class === 'medic' ? 5000 : 7500);
-          if (this.tank.invis) {
-            this.tank.invis = !this.tank.invis;
-          }
+          this.tank.invis = false;
           this.playAnimation('toolkit');
         }
       } else if (k === 70 && this.canClass) {
