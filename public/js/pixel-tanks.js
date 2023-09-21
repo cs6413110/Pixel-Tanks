@@ -18,16 +18,15 @@ function Game() {
       this.url = url;
       this.options = options;
       this.callstack = {open: [], close: [], message: []};
+      this.status = 'idle';
+      window.addEventListener('offline', () => {
+        this.socket.close();
+        this.socket.onclose();
+      });
+      if (this.options.reconnect) window.addEventListener('online', this.connect.bind(this));
       if (this.options.autoconnect) {
         this.status = 'connecting';
         this.connect();
-      } else {
-        this.status = 'idle';
-        window.addEventListener('offline', () => {
-          this.socket.close();
-          this.socket.onclose();
-        });
-        if (this.options.reconnect) window.addEventListener('online', this.connect.bind(this));
       }
     }
 
@@ -37,8 +36,8 @@ function Game() {
         this.socket.binaryType = 'arraybuffer';
         this.status = 'connected';
         if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => {
-          this.socket.send(msgpack.encode({op: 'ping'}));
-        }, 50000);
+          this.socket.send(msgpack.encode({type: 'ping', op: 'ping'}));
+        }, 30000);
         this.callstack.open.forEach(f => f());
       }
       this.socket.onmessage = data => {
