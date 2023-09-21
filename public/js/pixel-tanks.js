@@ -1307,6 +1307,7 @@ function Game() {
       this.ops = 0;
       this.ups = 0;
       this.fps = 0;
+      this.ping = 0;
       this.reset();
 
       const joinData = {
@@ -1358,12 +1359,6 @@ function Game() {
                 Menus.trigger('defeat');
               }
               break;
-            case 'pay':
-              const amount = Number(data.amount);
-              this.coins += amount;
-              PixelTanks.userData.stats[0] += amount;
-              PixelTanks.save();
-              break;
             case 'override':
               data.data.forEach(d => {
                 this.tank[d.key] = d.value;
@@ -1396,7 +1391,7 @@ function Game() {
               this.timers.items = [{time: 0, cooldown: -1}, {time: 0, cooldown: -1,}, {time: 0, cooldown: -1}, {time: 0, cooldown: -1}]
               break;
             case 'ping':
-              this.ping = new Date().getTime()-this.pingStart;
+              if (data.id === this.pingId) this.ping = Date.now()-this.pingStart;
               break;
           }
         });
@@ -1679,11 +1674,11 @@ function Game() {
       GUI.draw.globalAlpha = .2;
       GUI.draw.fillRect(0, 0, 180, 250);
       GUI.draw.globalAlpha = 1;
-      GUI.drawText('T='+this.hostupdate.tickspeed+' F='+this.fps+' U='+this.ups+' O='+this.ops, 10, 20, 30, '#ffffff', 0);
-      GUI.drawText('Kills Streak: '+this.kills, 10, 50, 30, '#ffffff', 0);
+      GUI.drawText('T='+this.hostupdate.tickspeed+' P='+this.ping+' F='+this.fps+' U='+this.ups+' O='+this.ops, 10, 20, 30, '#ffffff', 0);
+      GUI.drawText('Killstreak: '+this.kills, 10, 50, 30, '#ffffff', 0);
       GUI.drawText('Crates: '+this.crates, 10, 100, 30, '#ffffff', 0);
-      GUI.drawText('Experience: '+this.xp, 10, 150, 30, '#ffffff', 0);
-      GUI.drawText('Coins: '+this.coins, 10, 200, 30, '#ffffff', 0);
+      GUI.drawText('XP: '+this.xp, 10, 150, 30, '#ffffff', 0);
+      GUI.drawText('coin$: '+this.coins, 10, 200, 30, '#ffffff', 0);
       if (this.hostupdate.global) GUI.drawText(this.hostupdate.global, 800, 30, 60, '#ffffff', .5);
 
       var l = 0, len = Math.min((this.showChat || this.hostupdate.logs.length<3) ? this.hostupdate.logs.length : 3, 30);
