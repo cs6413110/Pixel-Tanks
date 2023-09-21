@@ -78,7 +78,7 @@ class MegaSocket {
 
 let room = '';
 const username = 'screamFix';
-const socket = new MegaSocket('ws://141.148.128.231/ffa', {keepAlive: true, autoconnect: true, reconnect: false});
+const socket = new MegaSocket('ws://141.148.128.231/ffa', {keepAlive: true, autoconnect: true, reconnect: true});
 socket.logs = [];
 socket.stats = [];
 socket.on('connect', () => {
