@@ -421,6 +421,7 @@ class Shot {
     this.md = this.damage;
     this.xm *= settings.speed[this.type];
     this.ym *= settings.speed[this.type];
+    console.log('('+this.xm+', '+this.ym+')');
   }
 
   setValue(p, v) {
