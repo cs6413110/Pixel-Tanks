@@ -401,45 +401,48 @@ class Block {
   }
 }
 
+const bullet_settings = {
+  damage: {
+    bullet: 20,
+    shotgun: 20,
+    grapple: 0,
+    powermissle: 100,
+    megamissle: 200,
+    healmissle: -100,
+    dynamite: 0,
+    fire: 0,
+  },
+  speed: {
+    bullet: 1,
+    shotgun: .8,
+    grapple: 2,
+    powermissle: 1.5,
+    megamissle: 1.5,
+    healmissle: 1.5,
+    dynamite: .8,
+    fire: .9,
+  }
+};
+
 class Shot {
   constructor(x, y, xm, ym, type, rotation, team, rank, host) {
-    const settings = { damage: { bullet: 20, shotgun: 20, grapple: 0, powermissle: 100, megamissle: 200, healmissle: -100, dynamite: 0, fire: 0 }, speed: { bullet: 1, shotgun: .8, grapple: 2, powermissle: 1.5, megamissle: 1.5, healmissle: 1.5, dynamite: .8, fire: .9 } };
-    this.raw = {};
-    ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id'].forEach(p => {
-      Object.defineProperty(this, p, {
-        get() {
-          return this.raw[p];
-        },
-        set(v) {
-          this.setValue(p, v);
-        },
-        configurable: true,
-      });
-    });
-    this.id = Math.random();
-    this.damage = settings.damage[type]*(rank*10+300)/500;
     this.team = team;
     this.r = rotation;
     this.type = type;
     this.host = host;
     this.e = Date.now();
+    this.raw = {};
+    this.id = Math.random();
+    this.damage = bullet_settings.damage[type]*(rank*10+300)/500;
+    this.md = this.damage;
     const factor = 6/Math.sqrt(xm ** 2 + ym ** 2);
-    this.xm = xm * factor;
-    this.ym = ym * factor;
+    this.xm = xm*factor*bullet_settings.speed[this.type];
+    this.ym = ym*factor*bullet_settings.speed[this.type];
     const data = Shot.calc(x, y, xm, ym);
     this.x = data.x-5;
     this.y = data.y-5;
     this.sx = this.x;
     this.sy = this.y;
-    this.md = this.damage;
-    this.xm *= settings.speed[this.type];
-    this.ym *= settings.speed[this.type];
-  }
-
-  setValue(p, v) {
-    if (this.raw[p] === v) return;
-    this.updatedLast = Date.now();
-    this.raw[p] = v;
   }
 
   static calc(x, y, xm, ym) {
@@ -580,6 +583,8 @@ class Shot {
       this.damage = this.md - (this.d / 300) * this.md;  
       if (this.d >= 300) this.destroy();
     } else if (this.type === 'dynamite') this.r += 5;
+    for (const property of ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id']) this.raw[property] = this[property];
+    this.updatedLast = Date.now();
   }
 
   destroy() {
