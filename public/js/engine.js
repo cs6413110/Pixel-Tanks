@@ -359,7 +359,7 @@ class Block {
     this.host = host;
     this.s = false;
     this.c = !['fire', 'airstrike'].includes(type); // collision
-    for (let x = this.x/100, y = this.y/100, i = 0; i < 4; i++) host.cells[Math.floor(i < 2 ? x : x + 100)][Math.floor(i % 2 ? y : y + 100)].add(this);
+    for (let x = this.x/100, y = this.y/100, i = 0; i < 4; i++) host.cells[Math.min(29, Math.floor(i < 2 ? x : x + 100))][Math.min(29, Math.floor(i % 2 ? y : y + 100))].add(this);
     this.team = team;
     if (['fire', 'airstrike'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
     if (type === 'airstrike') {
