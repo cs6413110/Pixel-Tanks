@@ -559,7 +559,7 @@ class Shot {
   }
 
   update() {
-    const time = (Date.now() - this.e) / 5;
+    const time = (Date.now() - this.e)%5;
     this.x = time * this.xm + this.sx;
     this.y = time * this.ym + this.sy;
     if (this.collision()) this.destroy();
