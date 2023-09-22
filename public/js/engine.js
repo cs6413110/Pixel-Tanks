@@ -218,7 +218,6 @@ class Tank {
     });
     this.id = Math.random();
     this.lastUpdate = 0;
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 80)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 80)))].add(this);
     if (data.socket) this.socket = data.socket; // multiplayer patch
     this.username = data.username;
     this.rank = data.rank;
@@ -240,6 +239,7 @@ class Tank {
     this.baseFrame = 0;
     this.fire = false;
     this.host = host;
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 80)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 80)))].add(this);
     host.override(this);
   }
 
