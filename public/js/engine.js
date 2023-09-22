@@ -61,7 +61,8 @@ class Engine {
     this.logs = [];
     this.map = new PF.Grid(30, 30);
     this.levelReader(levels[Math.floor(Math.random() * levels.length)]);
-    this.i.push(setInterval(() => this.tick(), 1000 / 60));
+    this.i.push(setInterval(() => this.highTick(), 1000 / 60));
+    this.i.push(setInterval(() => this.lowTick(), 1000 / 20));
   }
 
   add(data) {
@@ -164,13 +165,17 @@ class Engine {
     }
   }
 
-  tick() {
+  highTick() {
     this.ontick();
     this.map = new PF.Grid(30, 30);
     for (const b of this.b) if (b.x >= 0 && b.y >= 0 && b.x <= 2900 && b.y <= 2900) this.map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), b.x % 100 !== 0 && b.y % 100 !== 0);
-    for (const s of this.s) s.update();
+    for (const s of this.s) s.highTick();
     for (let i = this.ai.length-1; i >= 0; i--) this.ai[i].update();
     for (const t of this.pt) t.update();
+  }
+
+  lowTick() {
+    for (const s of this.s) s.lowTick();
   }
 
   levelReader(level) {
@@ -558,16 +563,19 @@ class Shot {
     return false;
   }
 
-  update() {
+  highTick() {
     const time = Math.floor((Date.now()-this.e)/5);
     this.x = time*this.xm+this.sx;
     this.y = time*this.ym+this.sy;
-    if (this.collision()) this.destroy();
     if (this.type === 'shotgun') {
       this.d = Math.sqrt((this.x - this.sx) ** 2 + (this.y - this.sy) ** 2);
       this.damage = this.md - (this.d / 300) * this.md;  
       if (this.d >= 300) this.destroy();
     } else if (this.type === 'dynamite') this.r += 5;
+  }
+
+  lowTick() {
+    if (this.collision()) this.destroy();
   }
 
   destroy() {
