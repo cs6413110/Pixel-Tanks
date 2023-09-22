@@ -527,7 +527,7 @@ class Shot {
     }
 
     
-    for (let x = this.x/100, y = this.y/100, i = 0; i < 4; i++) {
+    /*for (let x = this.x/100, y = this.y/100, i = 0; i < 4; i++) {
       for (const b of host.cells[Math.floor(i < 2 ? x : x + 10)][Math.floor(i % 2 ? y : y + 10)]) {
         if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
         if (type === 'grapple' || type === 'dynamite') {
@@ -548,8 +548,8 @@ class Shot {
           return true;
         }
       }
-    }
-    /*for (let i = blocks.length-1; i >= 0; i--) {
+    }*/
+    for (let i = blocks.length-1; i >= 0; i--) {
       const b = blocks[i];
       if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
       if (type === 'grapple') {
@@ -572,7 +572,7 @@ class Shot {
         }
         return true;
       }
-    }*/
+    }
 
     if (x < 0 || x > 3000 || y < 0 || y > 3000) {
       if (type === 'grapple') {
