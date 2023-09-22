@@ -360,10 +360,7 @@ class Block {
     this.host = host;
     this.s = false;
     this.c = !['fire', 'airstrike'].includes(type); // collision
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      console.log(Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 100))), Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 100))));
-      host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 100)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 100)))].add(this);
-    }
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)))].add(this);
     this.team = team;
     if (['fire', 'airstrike'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
     if (type === 'airstrike') {
@@ -688,7 +685,7 @@ class AI {
     this.class = '';
     const t = host.pt.find(t => t.username === getUsername(this.team));
     this.cosmetic = t ? t.cosmetic : '';
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + role === 0 ? 100 : 80)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + role === 0 ? 100 : 80)))].add(this);
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + role === 0 ? 1 : .8)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + role === 0 ? 1 : .8)))].add(this);
   }
 
   setValue(p, v) {
