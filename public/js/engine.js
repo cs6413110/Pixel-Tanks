@@ -275,9 +275,7 @@ class Tank {
             this.fire = {team, frame: this.fire.frame};
           } else {
             this.fire = {team, frame: 0};
-            this.fireInterval = setInterval(() => {
-              this.fire.frame = this.fire.frame === 0 ? 1 : 0;
-            }, 50);
+            t.fireInterval ??= setInterval(() => t.fire.frame ^= 1, 50);
           }
           this.fireTimeout = setTimeout(() => {
             clearInterval(this.fireInterval);
