@@ -471,6 +471,11 @@ class Multiplayer extends Engine {
   disconnect(socket, code, reason) {
     this.pt = this.pt.filter(t => t.username !== socket.username);
     this.ai = this.ai.filter(ai => getUsername(ai.team) !== socket.username);
+    this.host.cells.forEach(row => {
+      row.forEach(set => {
+        set.delete(this.pt.find(t.username === socket.username));
+      });
+    });
     this.logs.push({m: this.rageMsg(socket.username), c: '#E10600'});
     if (this.pt.length === 0) {
       this.i.forEach(i => clearInterval(i));
