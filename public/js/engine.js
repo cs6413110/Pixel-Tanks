@@ -410,7 +410,7 @@ class Shot {
     this.type = type;
     this.host = host;
     this.e = Date.now();
-    const factor = 18 / Math.sqrt(xm ** 2 + ym ** 2);
+    const factor = 6 / Math.sqrt(xm ** 2 + ym ** 2);
     this.xm = xm * factor;
     this.ym = ym * factor;
     const data = Shot.calc(x, y, xm, ym);
@@ -421,7 +421,6 @@ class Shot {
     this.md = this.damage;
     this.xm *= settings.speed[this.type];
     this.ym *= settings.speed[this.type];
-    console.log('('+this.xm+', '+this.ym+')');
   }
 
   setValue(p, v) {
@@ -560,7 +559,7 @@ class Shot {
   }
 
   update() {
-    const time = (Date.now() - this.e) / 15;
+    const time = (Date.now() - this.e) / 5;
     this.x = time * this.xm + this.sx;
     this.y = time * this.ym + this.sy;
     if (this.collision()) this.destroy();
