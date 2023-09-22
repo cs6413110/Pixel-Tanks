@@ -59,6 +59,13 @@ class Engine {
     this.d = [];
     this.i = [];
     this.logs = [];
+    this.cells = [];
+    for (let y = 0; y < 30; y++) {
+      this.cells[y] = [];
+      for (let x = 0; x < 30; x++) {
+        this.cells[y][x] = new Set();
+      }
+    }
     this.map = new PF.Grid(30, 30);
     this.levelReader(levels[Math.floor(Math.random() * levels.length)]);
     this.i.push(setInterval(() => this.tick(), 1000 / 60));
@@ -352,6 +359,7 @@ class Block {
     this.host = host;
     this.s = false;
     this.c = !['fire', 'airstrike'].includes(type); // collision
+    for (let x = this.x/100, y = this.y/100, i = 0; i < 4; i++) host.cells[Math.floor(i < 2 ? x : x + 100)][Math.floor(i % 2 ? y : y + 100)].add(this);
     this.team = team;
     if (['fire', 'airstrike'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
     if (type === 'airstrike') {
@@ -385,6 +393,11 @@ class Block {
     clearTimeout(this.sd);
     const index = this.host.b.indexOf(this);
     if (index !== -1) this.host.b.splice(index, 1);
+    this.host.cells.forEach(row => {
+      row.forEach(set => {
+        set.delete(this);
+      });
+    });
   }
 }
 
@@ -513,7 +526,30 @@ class Shot {
       }
     }
 
-    for (let i = blocks.length-1; i >= 0; i--) {
+    
+    for (let x = this.x/100, y = this.y/100, i = 0; i < 4; i++) {
+      for (const b of host.cells[Math.floor(i < 2 ? x : x + 10)][Math.floor(i % 2 ? y : y + 10)]) {
+        if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
+        if (type === 'grapple' || type === 'dynamite') {
+          if (type === 'grapple') {
+            const t = this.host.pt.find(t => t.username === getUsername(this.team));
+            if (t.grapple) t.grapple.bullet.destroy();
+            t.grapple = {target: b, bullet: this}
+          }
+          this.update = () => {}
+          return false;
+        } else {
+          if (type === 'fire') host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
+          if (key[type]) {
+            host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
+          } else if (type !== 'fire') {
+            b.damage(this.damage);
+          }
+          return true;
+        }
+      }
+    }
+    /*for (let i = blocks.length-1; i >= 0; i--) {
       const b = blocks[i];
       if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
       if (type === 'grapple') {
@@ -536,7 +572,7 @@ class Shot {
         }
         return true;
       }
-    }
+    }*/
 
     if (x < 0 || x > 3000 || y < 0 || y > 3000) {
       if (type === 'grapple') {
