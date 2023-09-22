@@ -359,7 +359,7 @@ class Block {
     this.host = host;
     this.s = false;
     this.c = !['fire', 'airstrike'].includes(type); // collision
-    for (let x = this.x/100, y = this.y/100, i = 0; i < 4; i++) host.cells[Math.min(29, Math.floor(i < 2 ? x : x + 100))][Math.min(29, Math.floor(i % 2 ? y : y + 100))].add(this);
+    for (let x = this.x/100, y = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? x : x + 100)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? y : y + 100)))].add(this);
     this.team = team;
     if (['fire', 'airstrike'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
     if (type === 'airstrike') {
@@ -529,6 +529,7 @@ class Shot {
     
     for (let x = this.x/100, y = this.y/100, i = 0; i < 4; i++) {
       for (const b of host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? x : x + .1)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? y : y + .1)))]) {
+        console.log(b.id);
         if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
         if (type === 'grapple' || type === 'dynamite') {
           if (type === 'grapple') {
