@@ -651,7 +651,7 @@ class AI {
       });
     });
     this.id = Math.random();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (role === 0 ? 100 : 80))))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (role === 100 : 80))))].add(this);
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + role === 0 ? 100 : 80)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + role === 0 ? 100 : 80)))].add(this);
     this.role = role;
     this.x = x;
     this.y = y;
