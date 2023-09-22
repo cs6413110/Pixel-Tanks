@@ -559,16 +559,15 @@ class Shot {
   }
 
   update() {
-    const time = (Date.now() - this.e)%5;
-    this.x = time * this.xm + this.sx;
-    this.y = time * this.ym + this.sy;
+    const time = Math.floor((Date.now()-this.e)/5);
+    this.x = time*this.xm+this.sx;
+    this.y = time*this.ym+this.sy;
     if (this.collision()) this.destroy();
-    this.d = Math.sqrt((this.x - this.sx) ** 2 + (this.y - this.sy) ** 2);
     if (this.type === 'shotgun') {
-      this.damage = this.md - (this.d / 300) * this.md;
+      this.d = Math.sqrt((this.x - this.sx) ** 2 + (this.y - this.sy) ** 2);
+      this.damage = this.md - (this.d / 300) * this.md;  
       if (this.d >= 300) this.destroy();
-    }
-    if (this.type === 'dynamite') this.r += 5;
+    } else if (this.type === 'dynamite') this.r += 5;
   }
 
   destroy() {
