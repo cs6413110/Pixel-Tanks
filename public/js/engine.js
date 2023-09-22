@@ -528,7 +528,7 @@ class Shot {
 
     
     for (let x = this.x/100, y = this.y/100, i = 0; i < 4; i++) {
-      for (const b of host.cells[Math.floor(i < 2 ? x : x + .1)][Math.floor(i % 2 ? y : y + .1)]) {
+      for (const b of host.cells[Math.min(29, Math.floor(i < 2 ? x : x + .1))][Math.min(29, Math.floor(i % 2 ? y : y + .1))]) {
         if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
         if (type === 'grapple' || type === 'dynamite') {
           if (type === 'grapple') {
