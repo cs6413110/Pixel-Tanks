@@ -218,6 +218,7 @@ class Tank {
     });
     this.id = Math.random();
     this.lastUpdate = 0;
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 80)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 80)))].add(this);
     if (data.socket) this.socket = data.socket; // multiplayer patch
     this.username = data.username;
     this.rank = data.rank;
@@ -532,7 +533,7 @@ class Shot {
     
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       for (const b of host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .1)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .1)))]) {
-        if (!b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
+        if (!(b instanceof Block) !b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
         if (type === 'grapple' || type === 'dynamite') {
           if (type === 'grapple') {
             const t = this.host.pt.find(t => t.username === getUsername(this.team));
@@ -650,6 +651,7 @@ class AI {
       });
     });
     this.id = Math.random();
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + role === 0 ? 100 : 80)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + role === 100 : 80)))].add(this);
     this.role = role;
     this.x = x;
     this.y = y;
