@@ -503,50 +503,49 @@ class Shot {
           }
         } else if (e instanceof Block) {
           if (!(b instanceof Block) && !b.c || !collision(b.x, b.y, 100, 100, x, y, 10, 10)) continue;
-            if (type === 'grapple' || type === 'dynamite') {
-              if (type === 'grapple') {
-                const t = this.host.pt.find(t => t.username === getUsername(this.team));
-                if (t.grapple) t.grapple.bullet.destroy();
-                t.grapple = {target: b, bullet: this}
-              }
-              this.update = () => {}
-              return false;
-            } else {
-              if (type === 'fire') host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
-              if (key[type]) {
-                host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
-              } else if (type !== 'fire') {
-                b.damage(this.damage);
-              }
-              return true;
+          if (type === 'grapple' || type === 'dynamite') {
+            if (type === 'grapple') {
+              const t = this.host.pt.find(t => t.username === getUsername(this.team));
+              if (t.grapple) t.grapple.bullet.destroy();
+              t.grapple = {target: b, bullet: this}
             }
-          } else if (e instanceof AI) {
-            const ai = ais[i];
-            if (!collision(ai.x, ai.y, 80, 80, x, y, 10, 10)) continue;
-            if (type === 'dynamite') {
-              this.target = ai;
-              this.offset = [ai.x - x, ai.y - y];
-              this.update = () => {
-                this.x = this.target.x - this.offset[0];
-                this.y = this.target.y - this.offset[1];
-              }
-              return false;
-            } else if (type === 'fire') {
-              if (ai.fire) clearTimeout(ai.fireTimeout);
-              ai.fire = {team: this.team, frame: ai.fire?.frame || 0};
-              ai.fireInterval ??= setInterval(() => ai.fire.frame ^= 1, 50);
-              ai.fireTimeout = setTimeout(() => {
-                clearInterval(ai.fireInterval);
-                ai.fire = false;
-              }, 4000);
-            } else {
-              if (key[type]) {
-                host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
-              } else if (getTeam(ai.team) !== getTeam(this.team)) {
-                ai.damageCalc(x, y, this.damage);
-              }
-              return true;
+            this.update = () => {}
+            return false;
+          } else {
+            if (type === 'fire') host.b.push(new Block(b.x, b.y, Infinity, 'fire', this.team, host));
+            if (key[type]) {
+              host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
+            } else if (type !== 'fire') {
+              b.damage(this.damage);
             }
+            return true;
+          }
+        } else if (e instanceof AI) {
+          const ai = ais[i];
+          if (!collision(ai.x, ai.y, 80, 80, x, y, 10, 10)) continue;
+          if (type === 'dynamite') {
+            this.target = ai;
+            this.offset = [ai.x - x, ai.y - y];
+            this.update = () => {
+              this.x = this.target.x - this.offset[0];
+              this.y = this.target.y - this.offset[1];
+            }
+            return false;
+          } else if (type === 'fire') {
+            if (ai.fire) clearTimeout(ai.fireTimeout);
+            ai.fire = {team: this.team, frame: ai.fire?.frame || 0};
+            ai.fireInterval ??= setInterval(() => ai.fire.frame ^= 1, 50);
+            ai.fireTimeout = setTimeout(() => {
+              clearInterval(ai.fireInterval);
+              ai.fire = false;
+            }, 4000);
+          } else {
+            if (key[type]) {
+              host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
+            } else if (getTeam(ai.team) !== getTeam(this.team)) {
+              ai.damageCalc(x, y, this.damage);
+             }
+            return true;
           }
         }
       }
