@@ -91,7 +91,7 @@ class Engine {
       t.y = y;
       const cells = [];
       for (let dx = t.x/100, dy = t.y/100, i = 0; i < 4; i++) {
-        const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)));
+        const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .8)));
         this.cells[cx][cy].add(t);
         cells.push({x: cx, y: cy});
       }
@@ -525,7 +525,8 @@ class Shot {
             return true;
           }
         } else if (e instanceof AI) {
-          if (!collision(e.x, e.y, 80, 80, x, y, 10, 10)) continue;
+          console.log('asdfjkadsnlfkjasdnlfkjasdf')
+          if (!collision(e.x, e.y, e.role === 0 ? 100 : 80, e.role === 0 ? 100 : 80, x, y, 10, 10)) continue;
           if (type === 'dynamite') {
             this.target = e;
             this.offset = [e.x-x, e.y-y];
@@ -547,7 +548,7 @@ class Shot {
               host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
             } else if (getTeam(e.team) !== getTeam(this.team)) {
               e.damageCalc(x, y, this.damage);
-             }
+            }
             return true;
           }
         }
@@ -797,7 +798,7 @@ class AI {
     }
     const cells = [];
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)));
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + role === 0 ? 1 : .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + role === 0 ? 1 : .8)));
       this.host.cells[cx][cy].add(this);
       cells.push({x: cx, y: cy});
     }
