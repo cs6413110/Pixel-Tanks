@@ -526,6 +526,7 @@ class Shot {
           }
         } else */if (e instanceof AI) {
           //if (!collision(x, y, 10, 10, e.x, e.y, e.role === 0 ? 100 : 80, e.role === 0 ? 100 : 80)) continue;
+          console.log('asdf');
           if (type === 'dynamite') {
             this.target = e;
             this.offset = [e.x-x, e.y-y];
