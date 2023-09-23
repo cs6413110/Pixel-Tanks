@@ -689,7 +689,12 @@ class AI {
     this.class = '';
     const t = host.pt.find(t => t.username === getUsername(this.team));
     this.cosmetic = t ? t.cosmetic : '';
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + role === 0 ? 1 : .8)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + role === 0 ? 1 : .8)))].add(this);
+    this.cells = [];
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + role === 0 ? 1 : .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + role === 0 ? 1 : .8)));
+      host.cells[cx][cy].add(this);
+      this.cells.push({x: cx, y: cy});
+    }
   }
 
   setValue(p, v) {
@@ -790,6 +795,14 @@ class AI {
     } else {
       this.path.t = this.path.o+Date.now()-this.obstruction.t;
     }
+    const cells = [];
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)));
+      this.cells[cx][cy].add(this);
+      cells.push({x: cx, y: cy});
+    }
+    for (const cell of this.cells.filter(c => !cells.includes(c))) this.cells[cell.x][cell.y].delete(this);
+    this.cells = cells;
   }
 
   collision(x, y) {
@@ -1005,11 +1018,7 @@ class AI {
   destroy() {
     const index = this.host.ai.indexOf(this);
     if (index !== -1) this.host.ai.splice(index, 1);
-    this.host.cells.forEach(row => {
-      row.forEach(set => {
-        set.delete(this);
-      });
-    });
+    for (const cell of this.cells) this.host.cells[cell.x][cell.y].delete(this);
   }
 }
 
