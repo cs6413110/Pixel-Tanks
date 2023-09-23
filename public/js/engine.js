@@ -694,7 +694,6 @@ class AI {
       host.cells[cx][cy].add(this);
       this.cells.push({x: cx, y: cy});
     }
-    this.update = () => {};
   }
 
   setValue(p, v) {
@@ -708,7 +707,7 @@ class AI {
     if (this.role !== 0) this.move();
     const cells = [];
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .8)));
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + role === 0 ? 1 : .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + role === 0 ? 1 : .8)));
       this.host.cells[cx][cy].add(this);
       cells.push({x: cx, y: cy});
     }
