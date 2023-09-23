@@ -525,7 +525,7 @@ class Shot {
             return true;
           }
         } else if (e instanceof AI) {
-          if (!collision(x, y, 10, 10, e.x, e.y, role === 0 ? 100 : 80, role === 0 ? 100 : 80)) continue;
+          if (!collision(x, y, 10, 10, e.x, e.y, e.role === 0 ? 100 : 80, e.role === 0 ? 100 : 80)) continue;
           if (type === 'dynamite') {
             this.target = e;
             this.offset = [e.x-x, e.y-y];
@@ -800,6 +800,7 @@ class AI {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.role === 0 ? 1 : .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.role === 0 ? 1 : .8)));
       this.host.cells[cx][cy].add(this);
       cells.push({x: cx, y: cy});
+      console.log(cx, cy);
     }
     for (const cell of this.cells.filter(c => !cells.includes(c))) this.host.cells[cell.x][cell.y].delete(this);
     this.cells = cells;
