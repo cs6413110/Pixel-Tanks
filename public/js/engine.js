@@ -339,66 +339,53 @@ class Tank {
 
 class Block {
   constructor(x, y, health, type, team, host) {
-    this.raw = {};
-    ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team', 'id'].forEach(p => {
-      Object.defineProperty(this, p, {
-        get() {
-          return this.raw[p];
-        },
-        set(v) {
-          this.setValue(p, v);
-        },
-        configurable: true,
-      });
-    });
-    this.id = Math.random();
     this.x = x;
     this.y = y;
     this.maxHp = health;
     this.hp = health;
     this.type = type;
     this.host = host;
-    this.s = false;
-    this.c = !['fire', 'airstrike'].includes(type); // collision
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)))].add(this);
     this.team = team;
-    if (['fire', 'airstrike'].includes(type)) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
+    this.raw = {};
+    this.id = Math.random();
+    this.s = false;
+    this.c = !['fire', 'airstrike'].includes(type);
+    if (type === 'fire' || type === 'airstrike') this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
     if (type === 'airstrike') {
-      for (let i = 0; i < 20; i++) {
-        setTimeout(() => {
-          if (this.host.b.includes(this)) this.host.d.push(new Damage(this.x + Math.floor(Math.random()*200)-100, this.y + Math.floor(Math.random()*200)-100, 200, 200, 200, this.team, this.host));
-        }, 5000 + Math.random() * 500);
-      }
+      for (let i = 0; i < 20; i++) setTimeout(() => {
+        if (this.host.b.includes(this)) this.host.d.push(new Damage(this.x + Math.floor(Math.random()*200)-100, this.y + Math.floor(Math.random()*200)-100, 200, 200, 200, this.team, this.host));
+      }, 5000+Math.random()*500);
     }
+    this.cells = [];
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)));
+      host.cells[cx][cy].add(this);
+      this.cells.push({x: cx, y: cy});
+    }
+    this.u();
   }
 
-  setValue(p, v) {
-    if (this.raw[p] === v) return;
+  u() {
     this.updatedLast = Date.now();
-    this.raw[p] = v;
+    for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team', 'id']) this.raw[property] = this[property];
   }
 
   damage(d) {
-    this.hp = Math.max(this.hp - d, 0);
-    if (this.hp !== Infinity) {
-      this.s = true;
-      clearTimeout(this.bar);
-      this.bar = setTimeout(() => {
-        this.s = false;
-      }, 3000);
-    }
-    if (this.hp <= 0) this.destroy();
+    if (this.hp === Infinity) return;
+    this.hp = Math.max(this.hp-d, 0);
+    this.s = true;
+    clearTimeout(this.bar);
+    this.bar = setTimeout(() => { this.s = false }, 3000);
+    this.u();
+    if (this.hp === 0) this.destroy();
   }
 
   destroy() {
     clearTimeout(this.sd);
+    clearTimeout(this.bar);
     const index = this.host.b.indexOf(this);
     if (index !== -1) this.host.b.splice(index, 1);
-    this.host.cells.forEach(row => {
-      row.forEach(set => {
-        set.delete(this);
-      });
-    });
+    for (const cell of this.cells) this.host.cells[cell.x][cell.y].delete(this);
   }
 }
 
@@ -444,6 +431,7 @@ class Shot {
     this.y = data.y-5;
     this.sx = this.x;
     this.sy = this.y;
+    this.u();
   }
 
   static calc(x, y, xm, ym) {
@@ -496,7 +484,7 @@ class Shot {
           } else {
             if (key[type]) {
               host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
-            } else if (getTeam(t.team) !== getTeam(this.team)) {
+            } else if (getTeam(e.team) !== getTeam(this.team)) {
               e.damageCalc(x, y, this.damage, getUsername(this.team));
             }
             return true;
@@ -580,8 +568,12 @@ class Shot {
       this.damage = this.md - (this.d / 300) * this.md;  
       if (this.d >= 300) this.destroy();
     } else if (this.type === 'dynamite') this.r += 5;
-    for (const property of ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id']) this.raw[property] = this[property];
+    this.u();
+  }
+
+  u() {
     this.updatedLast = Date.now();
+    for (const property of ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id']) this.raw[property] = this[property];
   }
 
   destroy() {
