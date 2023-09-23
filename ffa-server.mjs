@@ -471,7 +471,7 @@ class Multiplayer extends Engine {
   disconnect(socket, code, reason) {
     this.pt = this.pt.filter(t => t.username !== socket.username);
     this.ai = this.ai.filter(ai => getUsername(ai.team) !== socket.username);
-    this.host.cells.forEach(row => {
+    this.cells.forEach(row => {
       row.forEach(set => {
         set.delete(this.pt.find(t.username === socket.username));
       });
