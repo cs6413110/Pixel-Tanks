@@ -467,7 +467,7 @@ class Shot {
     const blocks = this.host.b, ais = this.host.ai, pt = this.host.pt;
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       for (const e of host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .1)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .1)))]) {
-        if (e instanceof Tank) {
+        /*if (e instanceof Tank) {
           if (e.ded || !collision(x, y, 10, 10, e.x, e.y, 80, 80)) continue;
           if (type === 'grapple') {
             if (e.grapple) e.grapple.bullet.destroy();
@@ -524,7 +524,7 @@ class Shot {
             }
             return true;
           }
-        } else if (e instanceof AI) {
+        } else */if (e instanceof AI) {
           //if (!collision(x, y, 10, 10, e.x, e.y, e.role === 0 ? 100 : 80, e.role === 0 ? 100 : 80)) continue;
           if (type === 'dynamite') {
             this.target = e;
