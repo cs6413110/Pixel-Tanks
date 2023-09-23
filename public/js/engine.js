@@ -525,6 +525,7 @@ class Shot {
             return true;
           }
         } else if (e instanceof AI) {
+          console.log('b');
           if (!collision(e.x, e.y, e.role === 0 ? 100 : 80, e.role === 0 ? 100 : 80, x, y, 10, 10)) continue;
           console.log('aaa');
           if (type === 'dynamite') {
