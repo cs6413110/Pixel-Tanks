@@ -388,7 +388,10 @@ class Block {
     this.hp = Math.max(this.hp-d, 0);
     this.s = true;
     clearTimeout(this.bar);
-    this.bar = setTimeout(() => { this.s = false }, 3000);
+    this.bar = setTimeout(() => {
+      this.s = false;
+      this.u();
+    }, 3000);
     this.u();
     if (this.hp === 0) this.destroy();
   }
