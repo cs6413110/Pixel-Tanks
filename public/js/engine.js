@@ -708,6 +708,14 @@ class AI {
   update() {
     if (Math.random() <= 1/(3*this.stupidity)) this.identify();
     if (this.role !== 0) this.move();
+    const cells = [];
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .8)));
+      this.host.cells[cx][cy].add(this);
+      cells.push({x: cx, y: cy});
+    }
+    for (const cell of this.cells.filter(c => !cells.includes(c))) this.host.cells[cell.x][cell.y].delete(this);
+    this.cells = cells;
     if (this.obstruction && !this.target.s) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
       if (this.canPowermissle && Math.random() <= 1/(600*this.stupidity)) this.fireCalc(this.obstruction.x, this.obstruction.y, 'powermissle');
@@ -797,14 +805,6 @@ class AI {
     } else {
       this.path.t = this.path.o+Date.now()-this.obstruction.t;
     }
-    const cells = [];
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .8)));
-      this.host.cells[cx][cy].add(this);
-      cells.push({x: cx, y: cy});
-    }
-    for (const cell of this.cells.filter(c => !cells.includes(c))) this.host.cells[cell.x][cell.y].delete(this);
-    this.cells = cells;
   }
 
   collision(x, y) {
