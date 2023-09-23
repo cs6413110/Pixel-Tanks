@@ -696,6 +696,7 @@ class AI {
       host.cells[cx][cy].add(this);
       this.cells.push({x: cx, y: cy});
     }
+    this.update = undefined;
   }
 
   setValue(p, v) {
