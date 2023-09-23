@@ -95,7 +95,7 @@ class Engine {
         this.cells[cx][cy].add(t);
         cells.push({x: cx, y: cy});
       }
-      for (const cell of A.filter(c => !cells.includes(c))) this.cells[cell.x][cell.y].delete(this);
+      for (const cell of t.cells.filter(c => !cells.includes(c))) this.cells[cell.x][cell.y].delete(this);
       t.cells = cells;
     }
     t.r = r;
