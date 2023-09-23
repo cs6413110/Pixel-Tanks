@@ -1500,6 +1500,8 @@ function Game() {
       GUI.draw.fillStyle = '#00FF00';
       GUI.draw.fillRect(x, y+100, 80*hp/maxHp, 5);
       GUI.drawText('['+role+'] AI Bot', x+40, y-25, 50, '#ffffff', 0.5);
+      GUI.draw.fillStyle = '#ffffff';
+      for (let i = 0; i < ai.cells.length; i++) GUI.draw.fillRect(ai.cells[i].x*100, ai.cells[i].y*100, 100, 100);
       if (ai.damage) {
         for (let i = 0; i < 2; i++) {
           GUI.drawText((ai.damage.d < 0 ? '+' : '-')+Math.round(ai.damage.d), ai.damage.x, ai.damage.y, Math.round(ai.damage.d/5)+[20, 15][i], ['#ffffff', getTeam(this.team) === getTeam(ai.team) ? '#ff0000' : '#0000ff'][i], 0.5);
