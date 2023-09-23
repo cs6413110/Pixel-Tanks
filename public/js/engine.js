@@ -89,6 +89,14 @@ class Engine {
     if (!t.grapple) {
       t.x = x;
       t.y = y;
+      const cells = [];
+      for (let dx = t.x/100, dy = t.y/100, i = 0; i < 4; i++) {
+        const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)));
+        this.cells[cx][cy].add(t);
+        cells.push({x: cx, y: cy});
+      }
+      for (const cell of A.filter(c => !cells.includes(c))) this.cells[cell.x][cell.y].delete(this);
+      t.cells = cells;
     }
     t.r = r;
     if (t.ded) return;
@@ -239,7 +247,12 @@ class Tank {
     this.baseFrame = 0;
     this.fire = false;
     this.host = host;
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 80)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 80)))].add(this);
+    this.cells = [];
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)));
+      host.cells[cx][cy].add(this);
+      this.cells.push({x: cx, y: cy});
+    }
     host.override(this);
   }
 
