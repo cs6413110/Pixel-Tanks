@@ -53,19 +53,11 @@ class Engine {
     this.spawn = { x: 0, y: 0 };
     this.spawns = [{x: 0, y: 0}, {x: 0, y: 0}];
     this.ai = [];
-    this.b = [];
     this.s = [];
     this.pt = [];
     this.d = [];
     this.i = [];
     this.logs = [];
-    this.cells = [];
-    for (let y = 0; y < 30; y++) {
-      this.cells[y] = [];
-      for (let x = 0; x < 30; x++) {
-        this.cells[y][x] = new Set();
-      }
-    }
     this.map = new PF.Grid(30, 30);
     this.levelReader(levels[Math.floor(Math.random() * levels.length)]);
     this.i.push(setInterval(() => this.tick(), 1000 / 60));
@@ -192,6 +184,14 @@ class Engine {
   }
 
   levelReader(level) {
+    this.b = [];
+    this.cells = [];
+    for (let y = 0; y < 30; y++) {
+      this.cells[y] = [];
+      for (let x = 0; x < 30; x++) {
+        this.cells[y][x] = new Set();
+      }
+    }
     const key = { 'B5': ['void', Infinity], 'B4': ['barrier', Infinity], 'B3': ['gold', 300], 'B2': ['strong', 200], 'B1': ['weak', 100]};
     for (let l = 0; l < level.length; l++) {
       for (let q = 0; q < level[l].length; q++) {
