@@ -523,7 +523,7 @@ class Shot {
             }
             return true;
           }
-        } else if (e instanceof AI) {
+        } else if (e.constructor.name === 'AI') {//e instanceof AI) {
           if (!collision(x, y, 10, 10, e.x, e.y, 80, 80)) continue;
           if (type === 'dynamite') {
             this.target = e;
