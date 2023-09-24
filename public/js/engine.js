@@ -98,7 +98,7 @@ class Engine {
       for (const cell of t.cells.filter(c => {
         for (const a of cells) if (a.x === c.x && a.y === c.y) return false;
         return true;
-      }) this.cells[cell.x][cell.y].delete(this);
+      })) this.cells[cell.x][cell.y].delete(this);
       t.cells = cells;
     }
     t.r = r;
@@ -717,7 +717,7 @@ class AI {
     for (const cell of this.cells.filter(c => {
       for (const a of cells) if (a.x === c.x && a.y === c.y) return false;
       return true;
-    }) this.host.cells[cell.x][cell.y].delete(this);
+    })) this.host.cells[cell.x][cell.y].delete(this);
     this.cells = cells;
     if (this.obstruction && !this.target.s) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
