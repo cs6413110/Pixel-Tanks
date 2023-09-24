@@ -761,8 +761,7 @@ function Game() {
                 this.ip += e.key;
               } else if (e.keyCode === 8) {
                 this.ip = this.ip.slice(0, -1);
-              } else if (e.keyCode !== -1) return;
-              alert(e.keyCode);
+              }
               this.socket = new MegaSocket('ws://'+this.ip, {keepAlive: true, reconnect: true, autoconnect: true});
               this.socket.on('connect', () => {
                 this.socket.send({username: PixelTanks.user.username, type: 'stats'});
