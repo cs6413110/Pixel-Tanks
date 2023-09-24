@@ -467,7 +467,9 @@ class Shot {
   collision() {
     const key = { bullet: false, shotgun: false, powermissle: 50, megamissle: 100, healmissle: 50, fire: false };
     const { host, x, y, type } = this;
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
+    const cells = new Set();
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.push({dx, dy});
+    for (const {dx, dy} of cells) {
       for (const e of host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .1)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .1)))]) {
         if (e instanceof Tank) {
           if (e.ded || !collision(x, y, 10, 10, e.x, e.y, 80, 80)) continue;
@@ -623,9 +625,23 @@ class Damage {
     this.team = team;
     this.host = host;
     this.f = 0;
-    for (const t of host.pt) if (getUsername(team) !== getUsername(t.team)) if (collision(x, y, w, h, t.x, t.y, 80, 80)) t.damageCalc(x, y, getTeam(team) !== getTeam(t.team) ? Math.abs(a) : Math.min(a, 0), getUsername(team));
-    for (let i = host.b.length-1; i >= 0; i--) if (collision(x, y, w, h, host.b[i].x, host.b[i].y, 100, 100)) host.b[i].damage(a);
-    for (let i = host.ai.length-1; i >= 0; i--) if (collision(x, y, w, h, host.ai[i].x, host.ai[i].y, 80, 80)) if (getTeam(host.ai[i].team) !== getTeam(team)) host.ai[i].damageCalc(host.ai[i].x, host.ai[i].y, a);
+    const cells = new Set();
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.push({dx, dy});
+    for (const {dx, dy} of cells) {
+      for (const e of host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.w/100)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.h/100)))]) {
+        if (e instanceof Tank) {
+          if (getUsername(team) !== getUsername(e.team)) {
+            if (collision(x, y, w, h, e.x, e.y, 80, 80) t.damageCalc(x, y, getTeam(team) !== getTeam(e.team) ? Math.abs(a) : Math.min(a, 0), getUsername(team));
+          }
+        } else if (e instanceof Block) {
+          if (collision(x, y, w, h, e.x, e.y, 100, 100)) e.damage(a);
+        } else if (e instanceof AI) {
+          if (collision(x, y, w, h, e.x, e.y, e.role === 0 ? 100 : 80, e.role === 0 ? 100 : 80)) {
+            if (getTeam(team) !== getTeam(e.team)) e.damageCalc(e.x, e.y, a);
+          }
+        }
+      }
+    }
     setInterval(() => this.f++, 18);
     setTimeout(() => this.destroy(), 200);
   }
