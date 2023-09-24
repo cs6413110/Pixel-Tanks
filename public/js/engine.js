@@ -626,7 +626,7 @@ class Damage {
     this.host = host;
     this.f = 0;
     const cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add({cx: Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.w/100)))}, cy: Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.h/100))));
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add({cx: Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.w/100))), cy: Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.h/100)))});
     for (const {cx, cy} of cells) {  
       for (const e of host.cells[cx][cy]) {
         if (e instanceof Tank) {
