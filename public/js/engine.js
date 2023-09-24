@@ -95,7 +95,10 @@ class Engine {
         this.cells[cx][cy].add(t);
         cells.push({x: cx, y: cy});
       }
-      for (const cell of t.cells.filter(c => !cells.includes(c))) this.cells[cell.x][cell.y].delete(this);
+      for (const cell of t.cells.filter(c => {
+        for (const a of cells) if (a.x === c.x && a.y === c.y) return false;
+        return true;
+      }) this.cells[cell.x][cell.y].delete(this);
       t.cells = cells;
     }
     t.r = r;
@@ -711,8 +714,10 @@ class AI {
       this.host.cells[cx][cy].add(this);
       cells.push({x: cx, y: cy});
     }
-    console.log(this.cells, cells, this.cells.filter(c => !cells.includes(c)));
-    for (const cell of this.cells.filter(c => !cells.includes(c))) this.host.cells[cell.x][cell.y].delete(this);
+    for (const cell of this.cells.filter(c => {
+      for (const a of cells) if (a.x === c.x && a.y === c.y) return false;
+      return true;
+    }) this.host.cells[cell.x][cell.y].delete(this);
     this.cells = cells;
     if (this.obstruction && !this.target.s) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
