@@ -762,12 +762,12 @@ function Game() {
               } else if (e.keyCode === 8) {
                 this.ip = this.ip.slice(0, -1);
               } else if (e.keyCode !== -1) return;
-              this.socket = new MegaSocket('ws://'+this.ip, {keepAlive: true, reconnect: true, autoconnect: true});
+              this.socket = new MegaSocket('ws://'+this.ip, {keepAlive: false, reconnect: true, autoconnect: true});
               this.socket.on('connect', () => {
                 this.socket.send({username: PixelTanks.user.username, type: 'stats'});
               });
               this.socket.on('message', (d) => {
-                this.output = JSON.stringify(d);
+                this.output = d;
               });
             }
           },
@@ -780,6 +780,9 @@ function Game() {
             GUI.drawText(this.gamemode, 1200, 800, 50, '#FFFFFF', 0.5);
             GUI.drawText(this.ip, 800, 276, 50, '#FFFFFF', 0.5);
             GUI.drawText(this.output, 100, 100, 20, '#000000', 0);
+            GUI.drawText(this.output.FFA.length, 340+416, 376+58, 50, '#FFFFFF', 0.5);
+            GUI.drawText(this.output.DUELS.length, 340+416, 590, 50, '#FFFFFF', 0.5);
+            GUI.drawText(this.output.TDM.length, 340+416, 688+58, 50, '#FFFFFF', 0.5);
           }
         },
         crate: {
