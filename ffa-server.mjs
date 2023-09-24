@@ -226,7 +226,6 @@ const Commands = {
   },
   newmap: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
-    servers[this.room].b = [];
     servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
     servers[this.room].pt.forEach(t => {
       t.x = servers[this.room].spawn.x;
