@@ -779,12 +779,14 @@ function Game() {
             }
             GUI.drawText(this.gamemode, 1200, 800, 50, '#FFFFFF', 0.5);
             GUI.drawText(this.ip, 800, 276, 50, '#FFFFFF', 0.5);
-            GUI.drawText(this.output.FFA.length, 766, 434, 50, '#FFFFFF', 0.5);
-            GUI.drawText(this.output.DUELS.length, 766, 590, 50, '#FFFFFF', 0.5);
-            GUI.drawText(this.output.TDM.length, 766, 764, 50, '#FFFFFF', 0.5);
+            GUI.drawText(this.output.FFA.length, 820, 434, 50, '#FFFFFF', 0.5);
+            GUI.drawText(this.output.DUELS.length, 820, 590, 50, '#FFFFFF', 0.5);
+            GUI.drawText(this.output.TDM.length, 820, 764, 50, '#FFFFFF', 0.5);
+            let offset = 0;
             for (const server of this.output[this.gamemode.toUpperCase()]) {
               if (server !== null) for (const player of server) {
-                GUI.drawText(player, 868, 350, 50, '#FFFFFF', 0.5);
+                GUI.drawText(player, 880, 400+40*offset, 50, '#FFFFFF', 0);
+                offset++;
               }
             }
           }
