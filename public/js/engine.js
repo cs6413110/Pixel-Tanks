@@ -468,7 +468,7 @@ class Shot {
     const key = { bullet: false, shotgun: false, powermissle: 50, megamissle: 100, healmissle: 50, fire: false };
     const { host, x, y, type } = this;
     const cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.push({dx, dy});
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add({dx, dy});
     for (const {dx, dy} of cells) {
       for (const e of host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .1)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .1)))]) {
         if (e instanceof Tank) {
@@ -626,7 +626,7 @@ class Damage {
     this.host = host;
     this.f = 0;
     const cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.push({dx, dy});
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add({dx, dy});
     for (const {dx, dy} of cells) {
       for (const e of host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.w/100)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.h/100)))]) {
         if (e instanceof Tank) {
