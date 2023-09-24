@@ -467,9 +467,7 @@ class Shot {
   collision() {
     const key = { bullet: false, shotgun: false, powermissle: 50, megamissle: 100, healmissle: 50, fire: false };
     const { host, x, y, type } = this;
-    const cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add({dx, dy});
-    for (const {dx, dy} of cells) {
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       for (const e of host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .1)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .1)))]) {
         if (e instanceof Tank) {
           if (e.ded || !collision(x, y, 10, 10, e.x, e.y, 80, 80)) continue;
@@ -625,9 +623,7 @@ class Damage {
     this.team = team;
     this.host = host;
     this.f = 0;
-    const cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add({dx, dy});
-    for (const {dx, dy} of cells) {
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       for (const e of host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.w/100)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.h/100)))]) {
         if (e instanceof Tank) {
           if (getUsername(team) !== getUsername(e.team)) {
