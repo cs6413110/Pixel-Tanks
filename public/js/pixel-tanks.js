@@ -784,7 +784,7 @@ function Game() {
             GUI.drawText(this.output.TDM.length, 766, 764, 50, '#FFFFFF', 0.5);
             for (const server of this.output[this.gamemode.toUpperCase()]) {
               if (server !== null) for (const player of server) {
-                GUI.drawText(player, 868, 848, 50 '#FFFFFF', 0.5);
+                GUI.drawText(player, 868, 848, 50, '#FFFFFF', 0.5);
               }
             }
           }
