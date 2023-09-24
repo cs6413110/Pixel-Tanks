@@ -467,8 +467,10 @@ class Shot {
   collision() {
     const key = { bullet: false, shotgun: false, powermissle: 50, megamissle: 100, healmissle: 50, fire: false };
     const { host, x, y, type } = this;
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      for (const e of host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .1)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .1)))]) {
+    const cells = new Set();
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add({cx: Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .1))), cy: Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .1)))});
+    for (const {cx, cy} of cells) {  
+      for (const e of host.cells[cx][cy]) {
         if (e instanceof Tank) {
           if (e.ded || !collision(x, y, 10, 10, e.x, e.y, 80, 80)) continue;
           if (type === 'grapple') {
@@ -623,8 +625,10 @@ class Damage {
     this.team = team;
     this.host = host;
     this.f = 0;
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      for (const e of host.cells[Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.w/100)))][Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.h/100)))]) {
+    const cells = new Set();
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add({cx: Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.w/100)))}, cy: Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.h/100))));
+    for (const {cx, cy} of cells) {  
+      for (const e of host.cells[cx][cy]) {
         if (e instanceof Tank) {
           if (getUsername(team) !== getUsername(e.team)) {
             if (collision(x, y, w, h, e.x, e.y, 80, 80)) t.damageCalc(x, y, getTeam(team) !== getTeam(e.team) ? Math.abs(a) : Math.min(a, 0), getUsername(team));
