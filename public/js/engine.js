@@ -523,7 +523,7 @@ class Shot {
             }
             return true;
           }
-        } else if (e.constructor.name === 'AI') {//e instanceof AI) {
+        } else if (e instanceof AI) {
           if (!collision(x, y, 10, 10, e.x, e.y, 80, 80)) continue;
           if (type === 'dynamite') {
             this.target = e;
@@ -711,7 +711,7 @@ class AI {
       this.host.cells[cx][cy].add(this);
       cells.push({x: cx, y: cy});
     }
-    for (const cell of this.cells.filter(c => !cells.includes(c))) this.host.cells[cell.x][cell.y].delete(this);
+    //for (const cell of this.cells.filter(c => !cells.includes(c))) this.host.cells[cell.x][cell.y].delete(this);
     this.cells = cells;
     if (this.obstruction && !this.target.s) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
