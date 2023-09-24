@@ -625,13 +625,15 @@ class Damage {
     this.team = team;
     this.host = host;
     this.f = 0;
-    const cells = new Set();
+    const cells = new Set(), cache = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add({cx: Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.w/100))), cy: Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.h/100)))});
-    for (const {cx, cy} of cells) {  
+    for (const {cx, cy} of cells) {
       for (const e of host.cells[cx][cy]) {
+        if (cache.has(e.id)) continue;
+        cache.add(e.id);
         if (e instanceof Tank) {
           if (getUsername(team) !== getUsername(e.team)) {
-            if (collision(x, y, w, h, e.x, e.y, 80, 80)) t.damageCalc(x, y, getTeam(team) !== getTeam(e.team) ? Math.abs(a) : Math.min(a, 0), getUsername(team));
+            if (collision(x, y, w, h, e.x, e.y, 80, 80)) e.damageCalc(x, y, getTeam(team) !== getTeam(e.team) ? Math.abs(a) : Math.min(a, 0), getUsername(team));
           }
         } else if (e instanceof Block) {
           if (collision(x, y, w, h, e.x, e.y, 100, 100)) e.damage(a);
