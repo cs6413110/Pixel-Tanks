@@ -775,6 +775,7 @@ function Game() {
             if (!this.gamemode) {
               this.gamemode = 'ffa';
               this.ip = '141.148.128.231/ffa';
+              alert(this.listeners.keydown);
               this.listeners.keydown({keyCode: -1});
             }
             GUI.drawText(this.gamemode, 1200, 800, 50, '#FFFFFF', 0.5);
