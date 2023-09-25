@@ -368,7 +368,7 @@ class Block {
     this.c = !['fire', 'airstrike'].includes(type);
     if (type === 'fire' || type === 'airstrike') this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
     if (type === 'airstrike') {
-      for (let i = 0; i < 40; i++) setTimeout(() => {
+      for (let i = 0; i < 80; i++) setTimeout(() => {
         if (this.host.b.includes(this)) this.host.d.push(new Damage(this.x + Math.floor(Math.random()*250)-50, this.y + Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host));
       }, 5000+Math.random()*500);
     }
