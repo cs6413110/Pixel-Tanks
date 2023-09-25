@@ -486,7 +486,7 @@ class Shot {
             return false;
           } else if (type === 'dynamite') {
             this.target = e;
-            this.offset = [e.x-x, t.y-y];
+            this.offset = [e.x-x, e.y-y];
             this.update = () => {
               this.x = this.target.x - this.offset[0];
               this.y = this.target.y - this.offset[1];
