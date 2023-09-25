@@ -206,11 +206,12 @@ function Game() {
   
     static stop() {
       cancelAnimationFrame(Menus.renderer);
+      Menus.renderer = undefined;
     }
   
     static trigger(name) {
       if (Menus.current) Menus.menus[Menus.current].removeListeners();
-      if (!Menus.renderer) Menus.start();
+      if (Menus.renderer === undefined) Menus.start();
       Menus.current = name;
       Menus.menus[Menus.current].addListeners();
     }
