@@ -81,17 +81,6 @@ class Engine {
     if (!t.grapple) {
       t.x = x;
       t.y = y;
-      const cells = [];
-      for (let dx = t.x/100, dy = t.y/100, i = 0; i < 4; i++) {
-        const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .8)));
-        this.cells[cx][cy].add(t);
-        cells.push({x: cx, y: cy});
-      }
-      for (const cell of t.cells.filter(c => {
-        for (const a of cells) if (a.x === c.x && a.y === c.y) return false;
-        return true;
-      })) this.cells[cell.x][cell.y].delete(this);
-      t.cells = cells;
     }
     t.r = r;
     if (t.ded) return;
@@ -266,6 +255,17 @@ class Tank {
   }
 
   update() {
+    const cells = [];
+    for (let dx = t.x/100, dy = t.y/100, i = 0; i < 4; i++) {
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .8)));
+      this.cells[cx][cy].add(t);
+      cells.push({x: cx, y: cy});
+    }
+    for (const cell of t.cells.filter(c => {
+      for (const a of cells) if (a.x === c.x && a.y === c.y) return false;
+      return true;
+    })) this.cells[cell.x][cell.y].delete(this);
+    t.cells = cells;
     if (this.dedEffect) this.dedEffect.time = Date.now() - this.dedEffect.start;
     if (this.pushback !== 0) this.pushback += 0.5;
     if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25, getUsername(this.fire.team));
