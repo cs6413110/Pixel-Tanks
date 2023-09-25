@@ -727,6 +727,7 @@ class AI {
   }
 
   update() {
+    if (this.mode === 3) return this.r += 3;
     if (Math.random() <= 1/(3*this.stupidity)) this.identify();
     if (this.role !== 0) this.move();
     const cells = [];
