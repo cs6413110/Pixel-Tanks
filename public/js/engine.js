@@ -265,7 +265,7 @@ class Tank {
       for (const a of cells) if (a.x === c.x && a.y === c.y) return false;
       return true;
     })) this.host.cells[cell.x][cell.y].delete(this);
-    t.cells = cells;
+    this.cells = cells;
     if (this.dedEffect) this.dedEffect.time = Date.now() - this.dedEffect.start;
     if (this.pushback !== 0) this.pushback += 0.5;
     if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25, getUsername(this.fire.team));
