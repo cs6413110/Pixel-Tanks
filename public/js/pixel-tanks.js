@@ -2055,7 +2055,7 @@ function Game() {
         PixelTanks.user.player.implode();
         Menus.menus.defeat.stats = {kills: 'n/a', coins: 'n/a'};
         Menus.trigger('defeat');
-      }, 3000);
+      }, 10000);
     }
 
     override(data) {
