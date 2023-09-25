@@ -2048,8 +2048,11 @@ function Game() {
     }
 
     ondeath() {
-      PixelTanks.user.player.implode();
+      this.ai.forEach(ai => {
+        ai.mode = 3;
+      });
       setTimeout(() => {
+        PixelTanks.user.player.implode();
         Menus.menus.defeat.stats = {kills: 'n/a', coins: 'n/a'};
         Menus.trigger('defeat');
       }, 3000);
