@@ -194,7 +194,7 @@ function Game() {
     }
   
     static render() {
-      requestAnimationFrame(Menus.render);
+      Menus.renderer = requestAnimationFrame(Menus.render);
       GUI.clear();
       Menus.redraw();
     }
