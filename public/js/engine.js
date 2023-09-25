@@ -107,7 +107,7 @@ class Engine {
         for (let i = this.s.length-1; i >= 0; i--) {
           const s = this.s[i];
           if (getUsername(s.team) !== t.username || s.type !== 'dynamite') continue;
-          this.d.push(new Damage(s.x-100, s.y-100, 200, 200, 100, s.team, this));
+          this.d.push(new Damage(s.x-100, s.y-100, 100, 100, 100, s.team, this));
           s.destroy();
         }
       } else if (e === 'toolkit') {
@@ -481,6 +481,7 @@ class Shot {
             this.update = () => {
               this.x = this.target.x - this.offset[0];
               this.y = this.target.y - this.offset[1];
+              this.u();
             };
             return false;
           } else if (type === 'dynamite') {
@@ -489,6 +490,7 @@ class Shot {
             this.update = () => {
               this.x = this.target.x - this.offset[0];
               this.y = this.target.y - this.offset[1];
+              this.u();
               if (this.target.ded) this.destroy();
               if (this.host.pt.find(t => t.username === getUsername(this.team)).ded) this.destroy();
             }
@@ -536,6 +538,7 @@ class Shot {
             this.update = () => {
               this.x = this.target.x - this.offset[0];
               this.y = this.target.y - this.offset[1];
+              this.u();
             }
             return false;
           } else if (type === 'fire') {
@@ -563,7 +566,7 @@ class Shot {
         const t = host.pt.find(t => t.username === getUsername(this.team));
         if (t.grapple) t.grapple.bullet.destroy();
         t.grapple = { target: { x: x, y: y }, bullet: this };
-        this.update = () => { };
+        this.update = () => {};
         return false;
       } else if (type === 'dynamite') {
         this.update = () => {}
