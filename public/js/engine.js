@@ -258,7 +258,7 @@ class Tank {
     const cells = [];
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .8)));
-      this.host.cells[cx][cy].add(t);
+      this.host.cells[cx][cy].add(this);
       cells.push({x: cx, y: cy});
     }
     for (const cell of this.cells.filter(c => {
