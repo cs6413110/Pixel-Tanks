@@ -12,6 +12,7 @@ packer.onload = () => {
   document.head.appendChild(pathfinding);
 }
 document.head.appendChild(packer);
+window.onerror = confirm('Listen for errors?') ? alert : () => {}
 function Game() {
   class MegaSocket {
     constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
