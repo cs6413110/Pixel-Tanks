@@ -1138,9 +1138,9 @@ function Game() {
         rarity = 'legendary';
       } else if (rand < 50) { // 4%
         rarity = 'epic';
-      } else if (Math.floor(Math.random() * (1001)) < 150) { // 10%
+      } else if (rand < 150) { // 10%
         rarity = 'rare';
-      } else if (Math.floor(Math.random() * (1000 - 0 + 1)) < 300) { // 15%
+      } else if (rand < 300) { // 15%
         rarity = 'uncommon';
       } else { // 70%
         rarity = 'common'; 
@@ -1149,7 +1149,7 @@ function Game() {
       PixelTanks.userData.stats[1] -= price; 
       let number = Math.floor(Math.random()*(crate[type][rarity].length)), item;
       for (const e in this.images[name]) if (e === crate[type][rarity][number]) item = this.images[name][e];
-      if (c === undefined) document.write('Game Crash!<br>Crashed while trying to give you cosmetic id "'+crate[type][rarity][number]+'". Report this to cs641311, bradley, or Celestial.');
+      if (item === undefined) document.write('Game Crash!<br>Crashed while trying to give you cosmetic id "'+crate[type][rarity][number]+'". Report this to cs641311, bradley, or Celestial.');
       Menus.removeListeners();
       const start = Date.now(), render = setInterval(function() {
         GUI.clear();
