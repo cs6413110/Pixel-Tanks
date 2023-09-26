@@ -1,0 +1,13 @@
+name: Sourcery
+on:
+  push:
+    branches: ["master"]
+  workflow_dispath:
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: sourcery-ai/action@v1
+        with:
+          token: "user_jHqDjgus1Wew58Iiodjo2n54AOKk8VarUMOt85D3Z2cCC_VMiLhhPgWjRmE"
+          check: false
