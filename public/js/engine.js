@@ -607,19 +607,6 @@ class Shot {
 
 class Damage {
   constructor(x, y, w, h, a, team, host) {
-    this.raw = {};
-    ['x', 'y', 'w', 'h', 'f', 'id'].forEach(p => {
-      Object.defineProperty(this, p, {
-        get() {
-          return this.raw[p];
-        },
-        set(v) {
-          this.setValue(p, v);
-        },
-        configurable: true,
-      });
-    });
-    this.id = Math.random();
     this.x = x;
     this.y = y;
     this.w = w;
@@ -627,6 +614,8 @@ class Damage {
     this.a = a;
     this.team = team;
     this.host = host;
+    this.raw = {};
+    this.id = Math.random();
     this.f = 0;
     const cells = new Set(), cache = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add({cx: Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.w/100))), cy: Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.h/100)))});
@@ -647,14 +636,16 @@ class Damage {
         }
       }
     }
-    setInterval(() => this.f++, 18);
+    setInterval(() => {
+      this.f++;
+      this.u();
+    }, 18);
     setTimeout(() => this.destroy(), 200);
   }
-
-  setValue(p, v) {
-    if (this.raw[p] === v) return;
+  
+  u() {
     this.updatedLast = Date.now();
-    this.raw[p] = v;
+    for (const property of ['x', 'y', 'w', 'h', 'f', 'id']) this.raw[property] = this[property];
   }
 
   destroy() {
