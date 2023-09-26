@@ -2,7 +2,7 @@ name: Sourcery
 on:
   push:
     branches: ["master"]
-  workflow_dispath:
+  workflow_dispatch:
 jobs:
   review:
     runs-on: ubuntu-latest
