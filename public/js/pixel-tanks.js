@@ -795,8 +795,8 @@ function Game() {
         crate: {
           buttons: [
             [416, 20, 81, 81, 'main', true],
-            [232, 308, 488, 488, function() {PixelTanks.openCrate()}, false],
-            [880, 308, 488, 488, function() {PixelTanks.openDeath()}, false],
+            [232, 308, 488, 488, function() {PixelTanks.openCrate(0)}, false],
+            [880, 308, 488, 488, function() {PixelTanks.openCrate(1)}, false],
           ],
           listeners: {},
           cdraw: function() {
@@ -1116,6 +1116,8 @@ function Game() {
 
     static openDeath() {
       const {userData, images} = PixelTanks;
+      if (userData.stats[1] < 5) return alert('Your broke boi!');
+      userData.stats[1] -= 5;
       const rand = Math.floor(Math.random()*1001), crate = {
         common: ['explode', 'nuke', 'evan'],
         uncommon: ['anvil', 'insta'],
@@ -1125,73 +1127,48 @@ function Game() {
         mythic: ['clicked'],
       }
       let rarity;
-
-      if (userData.stats[1] < 5) return alert('Your broke boi!');
-      userData.stats[1] -= 5;
-
-      if (Math.floor(Math.random() * (1001)) < 1) { // .1%
+      if (rand < 1) { // .1%
         rarity = 'mythic';
-      } else if (Math.floor(Math.random() * (1001)) < 10) { // .9%
+      } else if (rand < 10) { // .9%
         rarity = 'legendary';
-      } else if (Math.floor(Math.random() * (1001)) < 50) { // 4%
+      } else if (rand < 50) { // 4%
         rarity = 'epic';
-      } else if (Math.floor(Math.random() * (1001)) < 150) { // 10%
+      } else if (rand < 150) { // 10%
         rarity = 'rare';
-      } else if (Math.floor(Math.random() * (1000 - 0 + 1)) < 300) { // 15%
+      } else if (rand < 300) { // 15%
         rarity = 'uncommon';
       } else { // 70%
         rarity = 'common'; 
       }
 
-      var number = Math.floor(Math.random()*(crate[rarity].length)), d;
-      for (var deathEffect in this.images.deathEffects) {if (deathEffect === crate[rarity][number]) d = this.images.deathEffects[deathEffect]}
+      const number = Math.floor(Math.random()*(crate[rarity].length)), d;
+      for (var deathEffect in this.images.deathEffects) if (deathEffect === crate[rarity][number]) d = this.images.deathEffects[deathEffect];
       if (d === undefined) document.write('Game Crash!<br>Crashed while trying to give you cosmetic id "'+crate[rarity][number]+'". Report this to cs641311, bradley, or Celestial.');
-      Menus.removeListeners();
-      var start = Date.now();
-      var render = setInterval(function() {
-        GUI.clear();
-        GUI.drawImage(d, 600, 400, 400, 400, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-start)/PixelTanks.images.deathEffects[crate[rarity][number]+'_'].speed)%PixelTanks.images.deathEffects[crate[rarity][number]+'_'].frames)*200, 0, 200, 200);
-        GUI.drawText('You Got', 800, 200, 100, '#ffffff', 0.5);
-        GUI.drawText(crate[rarity][number], 800, 800, 50, '#ffffff', 0.5);
-        GUI.drawText(rarity, 800, 900, 30, {
-          mythic: '#FF0000',
-          legendary: '#FFFF00',
-          epic: '#A020F0',
-          rare: '#0000FF',
-          uncommon: '#32CD32',
-          common: '#FFFFFF',
-        }[rarity], 0.5);
-      }, 15);
-      setTimeout(() => {
-        clearInterval(render);
-        Menus.trigger('crate');
-      }, 5000);
-      PixelTanks.userData.deathEffects.push(crate[rarity][number]);
-      PixelTanks.save();
+  
     }
 
-    static openCrate(crate) {
-      if (PixelTanks.userData.stats[1] <= 0) {
-        alert('Your broke boi!');
-        return;
-      }
-      PixelTanks.userData.stats[1]--;
-
-      var crate = {
+    static openCrate(type) {
+      const price = type ? 5 : 1, name = type ? 'deathEffects' : 'cosmetics', rand = Math.floor(Math.random()*1001), crate = [{
         common: ['X', 'Red Hoodie', 'Devil Wings', 'Devil Horns', 'Exclaimation Point', 'Orange Hoodie', 'Yellow Hoodie', 'Green Hoodie', 'Leaf', 'Blue Hoodie', 'Purple Hoodie', 'Purple Flower', 'Boost', 'Cancelled', 'Spirals', 'Laff', 'Speaker', 'Spikes', 'Bat Wings', 'Christmas Tree', 'Candy Cane', 'Pumpkin Face', 'Top Hat', 'Mask', 'Purple-Pink Hoodie', 'Bunny Ears', 'Red Ghost', 'Blue Ghost', 'Pink Ghost', 'Orange Ghost'],
         uncommon: ['Apple', 'Pumpkin', 'Basketball', 'Banana', 'Pickle', 'Blueberry', 'Eggplant', 'Peace', 'Question Mark', 'Small Scratch', 'Kill = Ban', 'Headphones', 'Reindeer Hat', 'Pumpkin Hat', 'Cat Ears', 'Cake', 'Cat Hat', 'First Aid', 'Fisher Hat'],
         rare: ['Hax', 'Tools', 'Money Eyes', 'Dizzy', 'Checkmark', 'Sweat', 'Scared', 'Blue Tint', 'Purple Top Hat', 'Purple Grad Hat', 'Eyebrows', 'Helment', 'Rudolph', 'Candy Corn', 'Flag', 'Swords'],
         epic: ['Rage', 'Onfire', 'Halo', 'Police', 'Deep Scratch', 'Back Button', 'Controller', 'Assassin', 'Astronaut', 'Christmas Lights', 'No Mercy', 'Error'],
         legendary: ['Redsus', 'Uno Reverse', 'Christmas Hat', 'Mini Tank', 'Paleontologist', 'Yellow Pizza'],
         mythic: ['Terminator', 'MLG Glasses'],
-      }
-
-      var rarity;
-      if (Math.floor(Math.random() * (1001)) < 1) { // .1%
+      }, {
+        common: ['explode', 'nuke', 'evan'],
+        uncommon: ['anvil', 'insta'],
+        rare: ['amogus', 'minecraft', 'magic'],
+        epic: [/*'blocked',*/ 'battery'],
+        legendary: ['error', 'enderman'],
+        mythic: ['clicked'],
+      }];
+      let rarity;
+      if (rand < 1) { // .1%
         rarity = 'mythic';
-      } else if (Math.floor(Math.random() * (1001)) < 10) { // .9%
+      } else if (rand < 10) { // .9%
         rarity = 'legendary';
-      } else if (Math.floor(Math.random() * (1001)) < 50) { // 4%
+      } else if (rand < 50) { // 4%
         rarity = 'epic';
       } else if (Math.floor(Math.random() * (1001)) < 150) { // 10%
         rarity = 'rare';
@@ -1200,24 +1177,25 @@ function Game() {
       } else { // 70%
         rarity = 'common'; 
       }
-
-      var number = Math.floor(Math.random()*(crate[rarity].length)), c;
-      for (var cosmetic in this.images.cosmetics) {if (cosmetic === crate[rarity][number]) c = this.images.cosmetics[cosmetic]}
-      if (c === undefined) document.write('Game Crash!<br>Crashed while trying to give you cosmetic id "'+crate[rarity][number]+'". Report this to cs641311, bradley, or Celestial.');
-      GUI.clear();
-      GUI.drawImage(c, 600, 400, 400, 400, 1);
-      GUI.drawText('You Got', 800, 200, 100, '#ffffff', 0.5);
-      GUI.drawText(crate[rarity][number], 800, 800, 50, '#ffffff', 0.5);
-      GUI.drawText(rarity, 800, 900, 30, {
-        mythic: '#FF0000',
-        legendary: '#FFFF00',
-        epic: '#A020F0',
-        rare: '#0000FF',
-        uncommon: '#32CD32',
-        common: '#FFFFFF',
-      }[rarity], 0.5);
-      setTimeout(() => {Menus.redraw()}, 2000);
-      PixelTanks.userData.cosmetics.push(crate[rarity][number]);
+      if (PixelTanks.userData.stats[1] < price) return alert('Your broke boi!');
+      PixelTanks.userData.stats[1] -= price; 
+      let number = Math.floor(Math.random()*(crate[type][rarity].length)), item;
+      for (const e in this.images[name]) if (e === crate[type][rarity][number]) item = this.images[name][e];
+      if (c === undefined) document.write('Game Crash!<br>Crashed while trying to give you cosmetic id "'+crate[type][rarity][number]+'". Report this to cs641311, bradley, or Celestial.');
+      Menus.removeListeners();
+      const start = Date.now(), render = setInterval(function() {
+        GUI.clear();
+        if (type) GUI.drawImage(item, 600, 400, 400, 400, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-start)/PixelTanks.images[name][crate[type][rarity][number]+'_'].speed)%PixelTanks.images[name][crate[type][rarity][number]+'_'].frames)*200, 0, 200, 200);
+        if (!type) GUI.drawImage(item, 600, 400, 400, 400, 1);
+        GUI.drawText('You Got', 800, 200, 100, '#ffffff', 0.5);
+        GUI.drawText(crate[type][rarity][number], 800, 800, 50, '#ffffff', 0.5);
+        GUI.drawText(rarity, 800, 900, 30, {mythic: '#FF0000', legendary: '#FFFF00', epic: '#A020F0', rare: '#0000FF', uncommon: '#32CD32', common: '#FFFFFF'}[rarity], 0.5);
+      }, 15);
+      setTimeout(() => {
+        clearInterval(render);
+        Menus.trigger('crate');
+      }, 5000);
+      PixelTanks.userData[name].push(crate[type][rarity][number]);
       PixelTanks.save();
     }
 
