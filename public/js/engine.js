@@ -636,7 +636,7 @@ class Damage {
         }
       }
     }
-    setInterval(() => {
+    this.i = setInterval(() => {
       this.f++;
       this.u();
     }, 18);
@@ -649,6 +649,7 @@ class Damage {
   }
 
   destroy() {
+    clearInterval(this.i);
     const index = this.host.d.indexOf(this);
     if (index !== -1) this.host.d.splice(index, 1);
   }
