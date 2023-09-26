@@ -12,7 +12,6 @@ packer.onload = () => {
   document.head.appendChild(pathfinding);
 }
 document.head.appendChild(packer);
-window.onerror = confirm('Listen for errors?') ? alert : () => {}
 function Game() {
   class MegaSocket {
     constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
@@ -1116,6 +1115,7 @@ function Game() {
     } // OPTIMIZE
     
     static openCrate(type) {
+      try {
       const price = type ? 5 : 1, name = type ? 'deathEffects' : 'cosmetics', rand = Math.floor(Math.random()*1001), crate = [{
         common: ['X', 'Red Hoodie', 'Devil Wings', 'Devil Horns', 'Exclaimation Point', 'Orange Hoodie', 'Yellow Hoodie', 'Green Hoodie', 'Leaf', 'Blue Hoodie', 'Purple Hoodie', 'Purple Flower', 'Boost', 'Cancelled', 'Spirals', 'Laff', 'Speaker', 'Spikes', 'Bat Wings', 'Christmas Tree', 'Candy Cane', 'Pumpkin Face', 'Top Hat', 'Mask', 'Purple-Pink Hoodie', 'Bunny Ears', 'Red Ghost', 'Blue Ghost', 'Pink Ghost', 'Orange Ghost'],
         uncommon: ['Apple', 'Pumpkin', 'Basketball', 'Banana', 'Pickle', 'Blueberry', 'Eggplant', 'Peace', 'Question Mark', 'Small Scratch', 'Kill = Ban', 'Headphones', 'Reindeer Hat', 'Pumpkin Hat', 'Cat Ears', 'Cake', 'Cat Hat', 'First Aid', 'Fisher Hat'],
@@ -1165,6 +1165,7 @@ function Game() {
       }, 5000);
       PixelTanks.userData[name].push(crate[type][rarity][number]);
       PixelTanks.save();
+      } catch(e) {alert(e)}
     }
 
     static upgrade() {
