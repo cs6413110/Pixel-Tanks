@@ -1120,7 +1120,7 @@ function Game() {
         common: ['explode', 'nuke', 'evan'],
         uncommon: ['anvil', 'insta'],
         rare: ['amogus', 'minecraft', 'magic'],
-        epic: ['blocked', 'battery'],
+        epic: [/*'blocked',*/ 'battery'],
         legendary: ['error', 'enderman'],
         mythic: ['clicked'],
       }
