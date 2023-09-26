@@ -1003,7 +1003,6 @@ class AI {
     if (this.target) this.target.c = clearTimeout(this.target.c);
     target.s = true;
     this.target = target;
-    if (this.bond) return;
     this.mode = (this.hp < .3 * this.maxHp && this.role !== 1) ? 2 : 1;
   }
 
