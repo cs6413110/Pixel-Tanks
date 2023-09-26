@@ -1113,40 +1113,7 @@ function Game() {
       if (n) Menus.menus.inventory.currentItem = n;
       Menus.redraw();
     } // OPTIMIZE
-
-    static openDeath() {
-      const {userData, images} = PixelTanks;
-      if (userData.stats[1] < 5) return alert('Your broke boi!');
-      userData.stats[1] -= 5;
-      const rand = Math.floor(Math.random()*1001), crate = {
-        common: ['explode', 'nuke', 'evan'],
-        uncommon: ['anvil', 'insta'],
-        rare: ['amogus', 'minecraft', 'magic'],
-        epic: [/*'blocked',*/ 'battery'],
-        legendary: ['error', 'enderman'],
-        mythic: ['clicked'],
-      }
-      let rarity;
-      if (rand < 1) { // .1%
-        rarity = 'mythic';
-      } else if (rand < 10) { // .9%
-        rarity = 'legendary';
-      } else if (rand < 50) { // 4%
-        rarity = 'epic';
-      } else if (rand < 150) { // 10%
-        rarity = 'rare';
-      } else if (rand < 300) { // 15%
-        rarity = 'uncommon';
-      } else { // 70%
-        rarity = 'common'; 
-      }
-
-      const number = Math.floor(Math.random()*(crate[rarity].length)), d;
-      for (var deathEffect in this.images.deathEffects) if (deathEffect === crate[rarity][number]) d = this.images.deathEffects[deathEffect];
-      if (d === undefined) document.write('Game Crash!<br>Crashed while trying to give you cosmetic id "'+crate[rarity][number]+'". Report this to cs641311, bradley, or Celestial.');
-  
-    }
-
+    
     static openCrate(type) {
       const price = type ? 5 : 1, name = type ? 'deathEffects' : 'cosmetics', rand = Math.floor(Math.random()*1001), crate = [{
         common: ['X', 'Red Hoodie', 'Devil Wings', 'Devil Horns', 'Exclaimation Point', 'Orange Hoodie', 'Yellow Hoodie', 'Green Hoodie', 'Leaf', 'Blue Hoodie', 'Purple Hoodie', 'Purple Flower', 'Boost', 'Cancelled', 'Spirals', 'Laff', 'Speaker', 'Spikes', 'Bat Wings', 'Christmas Tree', 'Candy Cane', 'Pumpkin Face', 'Top Hat', 'Mask', 'Purple-Pink Hoodie', 'Bunny Ears', 'Red Ghost', 'Blue Ghost', 'Pink Ghost', 'Orange Ghost'],
