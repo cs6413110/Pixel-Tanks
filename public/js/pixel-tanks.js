@@ -11,6 +11,7 @@ packer.onload = () => {
   document.head.appendChild(pathfinding);
 }
 document.head.appendChild(packer);
+window.onerror = alert;
 class MegaSocket {
   constructor(url, options = {
     keepAlive: true,
