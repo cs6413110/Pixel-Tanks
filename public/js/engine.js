@@ -988,7 +988,7 @@ class AI {
         if (!this.target.c) this.target.c = setTimeout(() => {
           this.mode = 0;
           this.target = false;
-        }, !previousTargetExists ? 0 : 10000);
+        }, previousTargetExists ? 10000 : 0);
       }
       return;
     }
