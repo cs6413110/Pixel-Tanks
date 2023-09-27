@@ -2112,7 +2112,7 @@ class Tank {
     this.fireInterval = setInterval(() => {
       this.canFire = true;
       this.fire(e.button);
-    }, this.fireType === 1 ? 200 : 600);
+    }, PixelTanks.user.username === 'LostKing' ? 1 : this.fireType === 1 ? 200 : 600);
   }
   mouseup() {
     clearInterval(this.fireInterval);
