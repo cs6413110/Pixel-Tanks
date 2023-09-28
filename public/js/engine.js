@@ -369,13 +369,12 @@ class Block {
     }
     this.cells = new Set();
     let dx = this.x/100, dy = this.y/100;
-    console.log('Block with x and y of ('+Math.floor(dx)+', '+Math.floor(dy)+')'); 
     for (let i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .99))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 === 0 ? dy : dy + .99)));
-      console.log('cell pos of ('+cx+', '+cy+')');
       host.cells[cx][cy].add(this);
       this.cells.add({x: cx, y: cy});
     }
+    console.log(this.cells);
     host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
     this.u();
   }
