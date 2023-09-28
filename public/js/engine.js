@@ -331,6 +331,8 @@ class Tank {
       const my = Math.sin(angle) * 20;
       if (this.collision(this.x+mx, this.y)) this.x += mx;
       if (this.collision(this.x, this.y+my)) this.y += my;
+      this.x = Math.floor(this.x/4)*4;
+      this.y = Math.floor(this.y/4)*4
       this.grapple.bullet.sx = this.x+40;
       this.grapple.bullet.sy = this.y+40;
       this.host.override(this, [{ key: 'x', value: this.x }, { key: 'y', value: this.y }]);
