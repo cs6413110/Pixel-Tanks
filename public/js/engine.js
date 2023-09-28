@@ -440,7 +440,7 @@ const bullet_settings = {
 class Shot {
   constructor(x, y, xm, ym, type, rotation, team, rank, host) {
     this.team = team;
-    this.r = rotation;
+    this.r = rotation; // USELESS?
     this.type = type;
     this.host = host;
     this.e = Date.now();
@@ -448,9 +448,9 @@ class Shot {
     this.id = Math.random();
     this.damage = bullet_settings.damage[type]*(rank*10+300)/500;
     this.md = this.damage;
-    const factor = 6/Math.sqrt(xm ** 2 + ym ** 2);
-    this.xm = xm*factor*bullet_settings.speed[this.type];
-    this.ym = ym*factor*bullet_settings.speed[this.type];
+    const factor = 6/Math.sqrt(xm**2+ym**2);
+    this.xm = xm*factor*bullet_settings.speed[type];
+    this.ym = ym*factor*bullet_settings.speed[type];
     const data = Shot.calc(x, y, xm, ym);
     this.x = data.x-5;
     this.y = data.y-5;
@@ -579,9 +579,7 @@ class Shot {
         this.update = () => {}
         return false;
       } else {
-        if (key[type]) {
-          host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
-        }
+        if (key[type]) host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
         return true;
       }
     }
