@@ -372,7 +372,7 @@ class Block {
     for (let i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .99))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 === 0 ? dy : dy + .99)));
       host.cells[cx][cy].add(this);
-      this.cells.add({x: cx, y: cy});
+      this.cells.add(x+'x'+y);
     }
     console.log(this.cells);
     host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
@@ -403,12 +403,13 @@ class Block {
     const index = this.host.b.indexOf(this);
     if (index !== -1) this.host.b.splice(index, 1);
     for (const cell of this.cells) {
-      this.host.cells[cell.x][cell.y].delete(this);
+      const [x, y] = cell.split('x');
+      this.host.cells[x][y].delete(this);
       let deletePathfindGrid = true;
-      for (const e of this.host.cells[cell.x][cell.y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) deletePathfindGrid = false;
+      for (const e of this.host.cells[x][y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) deletePathfindGrid = false;
       if (deletePathfindGrid && this.x % 100 === 0 && this.y % 100 === 0) {
-        console.log('Block Deleted at ('+cell.x+', '+cell.y+')');
-        this.host.map.setWalkableAt(cell.x, cell.y, true);
+        console.log('Block Deleted at ('+x+', '+y+')');
+        this.host.map.setWalkableAt(x, y, true);
       }
     }
   }
