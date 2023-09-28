@@ -365,13 +365,12 @@ class Block {
       }, 5000+Math.random()*500);
     }
     this.cells = new Set();
-    let dx = this.x/100, dy = this.y/100;
-    for (let i = 0; i < 4; i++) {
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .99))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 === 0 ? dy : dy + .99)));
       host.cells[cx][cy].add(this);
       this.cells.add(cx+'x'+cy);
     }
-    host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
+    if (this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 ) host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
     this.u();
   }
 
