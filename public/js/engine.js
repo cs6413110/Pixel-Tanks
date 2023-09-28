@@ -239,9 +239,9 @@ class Tank {
     this.host = host;
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)));
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .79))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .79)));
       host.cells[cx][cy].add(this);
-      this.cells.add({x: cx, y: cy});
+      this.cells.add(cx+'x'+cy);
     }
     host.override(this);
   }
@@ -255,11 +255,14 @@ class Tank {
   update() {
     const cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .8)));
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .79))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .79)));
       this.host.cells[cx][cy].add(this);
-      cells.add({x: cx, y: cy});
+      cells.add(cx+'x'+cy);
     }
-    for (const cell of this.cells) for (const c of cells) if (cell.x !== c.x && cell.y !== c.y) this.host.cells[cell.x][cell.y].delete(this);
+    for (const cell of this.cells.filter(c => !cells.has(c))) {
+      const [x, y] = cell.split('x');
+      this.host.cells[x][y].delete(this);
+    }
     this.cells = cells;
     if (this.dedEffect) this.dedEffect.time = Date.now() - this.dedEffect.start;
     if (this.pushback !== 0) this.pushback += 0.5;
@@ -374,7 +377,6 @@ class Block {
       host.cells[cx][cy].add(this);
       this.cells.add(cx+'x'+cy);
     }
-    console.log(this.cells);
     host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
     this.u();
   }
@@ -407,10 +409,7 @@ class Block {
       this.host.cells[x][y].delete(this);
       let deletePathfindGrid = true;
       for (const e of this.host.cells[x][y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) deletePathfindGrid = false;
-      if (deletePathfindGrid && this.x % 100 === 0 && this.y % 100 === 0) {
-        console.log('Block Deleted at ('+x+', '+y+')');
-        this.host.map.setWalkableAt(x, y, true);
-      }
+      if (deletePathfindGrid && this.x % 100 === 0 && this.y % 100 === 0) this.host.map.setWalkableAt(x, y, true);
     }
   }
 }
@@ -475,8 +474,9 @@ class Shot {
     const key = { bullet: false, shotgun: false, powermissle: 50, megamissle: 100, healmissle: 50, fire: false };
     const { host, x, y, type } = this;
     const cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add({cx: Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .1))), cy: Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .1)))});
-    for (const {cx, cy} of cells) {  
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add(Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .1)))+'x'+Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .1))));
+    for (const cell of cells) { 
+      const [cx, cy] = cell.split('x');
       for (const e of host.cells[cx][cy]) {
         if (e instanceof Tank) {
           if (e.ded || !collision(x, y, 10, 10, e.x, e.y, 80, 80)) continue;
@@ -625,8 +625,9 @@ class Damage {
     this.id = Math.random();
     this.f = 0;
     const cells = new Set(), cache = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add({cx: Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.w/100))), cy: Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.h/100)))});
-    for (const {cx, cy} of cells) {
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add(Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.w/100)))+'x'+Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.h/100))));
+    for (const cell of cells) {
+      const [cx, cy] = cell.split('x');
       for (const e of host.cells[cx][cy]) {
         if (cache.has(e.id)) continue;
         cache.add(e.id);
@@ -713,9 +714,9 @@ class AI {
     this.cosmetic = t ? t.cosmetic : '';
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (role === 0 ? 1 : .8)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (role === 0 ? 1 : .8))));
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (role === 0 ? .99 : .79)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (role === 0 ? .99 : .79))));
       host.cells[cx][cy].add(this);
-      this.cells.add({x: cx, y: cy});
+      this.cells.add(cx+'x'+cy);
     }
   }
 
@@ -733,9 +734,12 @@ class AI {
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (this.role === 0 ? 1 : .8)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (this.role === 0 ? 1 : .8))));
       this.host.cells[cx][cy].add(this);
-      cells.add({x: cx, y: cy});
+      cells.add(cx+'x'+cy);
     }
-    for (const cell of this.cells) for (const c of cells) if (cell.x !== c.x && cell.y !== c.y) this.host.cells[cell.x][cell.y].delete(this);
+    for (const cell of this.cells.filter(c => !cells.has(c)) {
+      const [x, y] = cell.split('x');
+      this.host.cells[x][y].delete(this);
+    }
     this.cells = cells;
     if (this.obstruction && !this.target.s) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
@@ -1040,7 +1044,10 @@ class AI {
   destroy() {
     const index = this.host.ai.indexOf(this);
     if (index !== -1) this.host.ai.splice(index, 1);
-    for (const cell of this.cells) this.host.cells[cell.x][cell.y].delete(this);
+    for (const cell of this.cells) {
+      const [x, y] = cell.split('x');
+      this.host.cells[x][y].delete(this);
+    }
   }
 }
 
