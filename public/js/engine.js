@@ -493,7 +493,7 @@ class Shot {
               this.y = this.target.y - this.offset[1];
               this.u();
               if (this.target.ded) this.destroy();
-              if (this.host.pt.find(t => t.username === getUsername(this.team)).ded) this.destroy();
+              if (this.host.pt.find(t => t.username === getUsername(this.team))?.ded) this.destroy();
             }
             return false;
           } else if (type === 'fire') {
