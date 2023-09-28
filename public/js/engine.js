@@ -365,7 +365,8 @@ class Block {
       }, 5000+Math.random()*500);
     }
     this.cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
+    let dx = this.x/100, dy = this.y/100;
+    for (let i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .99))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 === 0 ? dy : dy + .99)));
       host.cells[cx][cy].add(this);
       this.cells.add(cx+'x'+cy);
