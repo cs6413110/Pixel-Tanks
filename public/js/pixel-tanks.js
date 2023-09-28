@@ -1815,7 +1815,7 @@ function Game() {
         this.fire('dynamite');
         cooldown = 25000;
       } else if (id === 'airstrike') {
-        this.tank.airstrike = {x: this.mouse.x+this.tank.x-800, y: this.mouse.y+this.tank.y-500};
+        this.tank.airstrike = {x: this.mouse.x+this.tank.x-750, y: this.mouse.y+this.tank.y-450};
         cooldown = 20000;
       }
       this.timers.items[slot] = {cooldown: cooldown, time: Date.now()};
