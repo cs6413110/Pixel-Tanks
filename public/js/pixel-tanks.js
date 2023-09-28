@@ -1747,7 +1747,7 @@ function Game() {
       }
       var fireType = ['grapple', 'megamissle', 'dynamite', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? (PixelTanks.userData.class === 'medic' ? 'healmissle' : 'powermissle') : (type === 0 ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
       while (l<(fireType === 1 ? 1 : 15)) {
-        this.tank.fire.push({...toPoint(this.tank.r+l), type: type});
+        this.tank.fire.push({...toPoint(this.tank.r+l), type: type, r: this.tank.r+l});
         l += 5;
       }
     }
