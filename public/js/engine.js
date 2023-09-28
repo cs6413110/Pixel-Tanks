@@ -736,7 +736,7 @@ class AI {
       this.host.cells[cx][cy].add(this);
       cells.add(cx+'x'+cy);
     }
-    for (const cell of this.cells.filter(c => !cells.has(c)) {
+    for (const cell of this.cells.filter(c => !cells.has(c))) {
       const [x, y] = cell.split('x');
       this.host.cells[x][y].delete(this);
     }
