@@ -456,7 +456,7 @@ class Shot {
     this.y = data.y-5;
     this.sx = this.x;
     this.sy = this.y;
-    this.update();
+    this.u();
   }
 
   static calc(x, y, xm, ym) {
