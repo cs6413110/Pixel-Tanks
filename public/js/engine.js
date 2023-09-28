@@ -372,7 +372,7 @@ class Block {
     }
     this.cells = [];
     let dx = this.x/100, dy = this.y/100;
-    for (i = 0; i < 4; i++) {
+    for (let i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)));
       host.cells[cx][cy].add(this);
       this.cells.push({x: cx, y: cy});
