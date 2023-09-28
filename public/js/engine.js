@@ -259,10 +259,7 @@ class Tank {
       this.host.cells[cx][cy].add(this);
       cells.add({x: cx, y: cy});
     }
-    for (const cell of this.cells.filter(c => {
-      for (const a of cells) if (a.x === c.x && a.y === c.y) return false;
-      return true;
-    })) this.host.cells[cell.x][cell.y].delete(this);
+    for (const cell of this.cells) for (const c of cells) if (cell.x !== c.x && cell.y !== c.y) this.host.cells[cell.x][cell.y].delete(this);
     this.cells = cells;
     if (this.dedEffect) this.dedEffect.time = Date.now() - this.dedEffect.start;
     if (this.pushback !== 0) this.pushback += 0.5;
@@ -736,10 +733,7 @@ class AI {
       this.host.cells[cx][cy].add(this);
       cells.add({x: cx, y: cy});
     }
-    for (const cell of this.cells.filter(c => {
-      for (const a of cells) if (a.x === c.x && a.y === c.y) return false;
-      return true;
-    })) this.host.cells[cell.x][cell.y].delete(this);
+    for (const cell of this.cells) for (const c of cells) if (cell.x !== c.x && cell.y !== c.y) this.host.cells[cell.x][cell.y].delete(this);
     this.cells = cells;
     if (this.obstruction && !this.target.s) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
