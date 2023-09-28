@@ -974,13 +974,11 @@ function Game() {
             if (PixelTanks.userData.class) GUI.drawImage(PixelTanks.images.menus.classTab, 1112, 816, 88, 88, 1, 0, 0, 0, 0, undefined, key[PixelTanks.userData.class][0], key[PixelTanks.userData.class][1], 44, 44);
             if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 760, 224, 80, 80, 1);
             const deathEffectData = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect+'_'];
-            if (PixelTanks.userData.deathEffect && PixelTanks.userData.deathEffect !== 'blocked') GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 536, 224, 80, 80, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
+            if (PixelTanks.userData.deathEffect) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 536, 224, 80, 80, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
             Menus.menus.inventory.buttonEffect = true;
             if (this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.deathEffectsTab) {
               Menus.menus.inventory.buttonEffect = false;
-              GUI.draw.fillStyle = '#000000';
-              GUI.draw.globalAlpha = .7;
-              GUI.draw.fillRect(0, 0, 1600, 1600);
+              GUI.drawImage(PixelTanks.images.blocks.void, 0, 0, 1600, 1600, .7);
             }
             if (this.classTab) {
               GUI.drawImage(PixelTanks.images.menus.classTab, 688, 334, 224, 332, 1);
@@ -1419,8 +1417,7 @@ function Game() {
 
     drawShot(s) {
       if (s.type == 'bullet') {
-        GUI.draw.fillStyle = '#000000';
-        GUI.draw.fillRect(s.x, s.y, 10, 10);
+        GUI.drawImage(PixelTanks.images.blocks.void, s.x, s.y, 10, 10, .7, 5, 5, 0, 0, s.r+180);
       } else if (['powermissle', 'healmissle'].includes(s.type)) {
         GUI.drawImage(PixelTanks.images.bullets.powermissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+180);
       } else if (s.type === 'megamissle') {
