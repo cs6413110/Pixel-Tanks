@@ -623,6 +623,8 @@ function Game() {
           minecraft_: {frames: 22, speed: 100, kill: 15, type: 2},
           enderman: '/animations/enderman',
           enderman_: {frames: 4, speed: 500, kill: 3, type: 2},
+          wakawaka: '/animations/wakawaka',
+          wakawaka_: {frames: 27, speed: 75, kill: 13, type: 2},
         },
         items: {
           airstrike: '/items/airstrike',
@@ -1127,7 +1129,7 @@ function Game() {
         common: ['explode', 'nuke', 'evan'],
         uncommon: ['anvil', 'insta'],
         rare: ['amogus', 'minecraft', 'magic'],
-        epic: [/*'blocked',*/ 'battery'],
+        epic: ['wakawaka' 'battery'],
         legendary: ['error', 'enderman'],
         mythic: ['clicked'],
       }];
