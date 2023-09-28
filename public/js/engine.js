@@ -406,8 +406,9 @@ class Block {
     if (index !== -1) this.host.b.splice(index, 1);
     for (const cell of this.cells) {
       this.host.cells[cell.x][cell.y].delete(this);
-      for (const e of this.host.cells[cell.x][cell.y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) return;
-      if (this.x % 100 === 0 && this.y % 100 === 0) this.host.map.setWalkableAt(cell.x, cell.y, true);
+      let deletePathfindGrid = true;
+      for (const e of this.host.cells[cell.x][cell.y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) deletePathfindGrid = false;
+      if (deletePathfindGrid && this.x % 100 === 0 && this.y % 100 === 0) this.host.map.setWalkableAt(cell.x, cell.y, true);
     }
   }
 }
