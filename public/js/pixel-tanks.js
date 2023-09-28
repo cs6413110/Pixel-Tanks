@@ -1265,6 +1265,7 @@ function Game() {
       this.ups = 0;
       this.fps = 0;
       this.ping = 0;
+      this.debug = '';
       this.reset();
 
       const joinData = {
@@ -1370,7 +1371,7 @@ function Game() {
           this.pingStart = Date.now();
           this.socket.send({type: 'ping', id: this.pingId});
         }
-        GUI.drawText('T='+this.hostupdate.tickspeed+' P='+this.ping+' F='+this.fps+' U='+this.ups+' O='+this.ops, 10, 20, 30, '#ffffff', 0);
+        this.debug = 'T='+this.hostupdate.tickspeed+' P='+this.ping+' F='+this.fps+' U='+this.ups+' O='+this.ops;
         this.ops = 0;
         this.ups = 0;
         this.fps = 0;
@@ -1632,6 +1633,7 @@ function Game() {
       GUI.draw.globalAlpha = .2;
       GUI.draw.fillRect(0, 0, 180, 250);
       GUI.draw.globalAlpha = 1;
+      GUI.drawText(this.debug, 10, 20, 30, '#ffffff', 0);
       GUI.drawText('Killstreak: '+this.kills, 10, 50, 30, '#ffffff', 0);
       GUI.drawText('Crates: '+this.crates, 10, 100, 30, '#ffffff', 0);
       GUI.drawText('XP: '+this.xp, 10, 150, 30, '#ffffff', 0);
