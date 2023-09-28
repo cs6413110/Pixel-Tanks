@@ -372,7 +372,7 @@ class Block {
     for (let i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .99))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 === 0 ? dy : dy + .99)));
       host.cells[cx][cy].add(this);
-      this.cells.add(x+'x'+y);
+      this.cells.add(cx+'x'+cy);
     }
     console.log(this.cells);
     host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
