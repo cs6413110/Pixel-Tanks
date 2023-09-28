@@ -165,8 +165,6 @@ class Engine {
 
   tick() {
     this.ontick();
-    this.map = new PF.Grid(30, 30);
-    for (const b of this.b) if (b.x >= 0 && b.y >= 0 && b.x <= 2900 && b.y <= 2900) this.map.setWalkableAt(Math.floor(b.x / 100), Math.floor(b.y / 100), b.x % 100 !== 0 && b.y % 100 !== 0);
     for (const s of this.s) s.update();
     for (let i = this.ai.length-1; i >= 0; i--) this.ai[i].update();
     for (const t of this.pt) t.update();
@@ -373,11 +371,13 @@ class Block {
       }, 5000+Math.random()*500);
     }
     this.cells = [];
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
+    let dx = this.x/100, dy = this.y/100;
+    for (i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)));
       host.cells[cx][cy].add(this);
       this.cells.push({x: cx, y: cy});
     }
+    this.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
     this.u();
   }
 
@@ -404,7 +404,11 @@ class Block {
     clearTimeout(this.bar);
     const index = this.host.b.indexOf(this);
     if (index !== -1) this.host.b.splice(index, 1);
-    for (const cell of this.cells) this.host.cells[cell.x][cell.y].delete(this);
+    for (const cell of this.cells) {
+      this.host.cells[cell.x][cell.y].delete(this);
+      for (const e of this.host.cells[cell.x][cell.y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) return;
+      if (this.x % 100 === 0 && this.y % 100 === 0) this.map.setWalkableAt(cell.x, cell.y, true);
+    }
   }
 }
 
