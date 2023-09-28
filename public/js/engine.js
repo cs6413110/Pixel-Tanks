@@ -237,11 +237,11 @@ class Tank {
     this.baseFrame = 0;
     this.fire = false;
     this.host = host;
-    this.cells = [];
+    this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)));
       host.cells[cx][cy].add(this);
-      this.cells.push({x: cx, y: cy});
+      this.cells.add({x: cx, y: cy});
     }
     host.override(this);
   }
@@ -253,11 +253,11 @@ class Tank {
   }
 
   update() {
-    const cells = [];
+    const cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .8))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .8)));
       this.host.cells[cx][cy].add(this);
-      cells.push({x: cx, y: cy});
+      cells.add({x: cx, y: cy});
     }
     for (const cell of this.cells.filter(c => {
       for (const a of cells) if (a.x === c.x && a.y === c.y) return false;
@@ -370,12 +370,12 @@ class Block {
         if (this.host.b.includes(this)) this.host.d.push(new Damage(this.x + Math.floor(Math.random()*250)-50, this.y + Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host));
       }, 5000+Math.random()*500);
     }
-    this.cells = [];
+    this.cells = new Set();
     let dx = this.x/100, dy = this.y/100;
     for (let i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + 1))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + 1)));
       host.cells[cx][cy].add(this);
-      this.cells.push({x: cx, y: cy});
+      this.cells.add({x: cx, y: cy});
     }
     host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
     this.u();
@@ -712,11 +712,11 @@ class AI {
     this.class = '';
     const t = host.pt.find(t => t.username === getUsername(this.team));
     this.cosmetic = t ? t.cosmetic : '';
-    this.cells = [];
+    this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (role === 0 ? 1 : .8)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (role === 0 ? 1 : .8))));
       host.cells[cx][cy].add(this);
-      this.cells.push({x: cx, y: cy});
+      this.cells.add({x: cx, y: cy});
     }
   }
 
@@ -730,11 +730,11 @@ class AI {
     if (this.mode === 3) return this.r += 3;
     if (Math.random() <= 1/(3*this.stupidity)) this.identify();
     if (this.role !== 0) this.move();
-    const cells = [];
+    const cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (this.role === 0 ? 1 : .8)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (this.role === 0 ? 1 : .8))));
       this.host.cells[cx][cy].add(this);
-      cells.push({x: cx, y: cy});
+      cells.add({x: cx, y: cy});
     }
     for (const cell of this.cells.filter(c => {
       for (const a of cells) if (a.x === c.x && a.y === c.y) return false;
