@@ -377,7 +377,7 @@ class Block {
       host.cells[cx][cy].add(this);
       this.cells.push({x: cx, y: cy});
     }
-    this.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
+    host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
     this.u();
   }
 
@@ -407,7 +407,7 @@ class Block {
     for (const cell of this.cells) {
       this.host.cells[cell.x][cell.y].delete(this);
       for (const e of this.host.cells[cell.x][cell.y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) return;
-      if (this.x % 100 === 0 && this.y % 100 === 0) this.map.setWalkableAt(cell.x, cell.y, true);
+      if (this.x % 100 === 0 && this.y % 100 === 0) this.host.map.setWalkableAt(cell.x, cell.y, true);
     }
   }
 }
