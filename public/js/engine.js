@@ -20,20 +20,12 @@ const raycast = (x1, y1, x2, y2, walls) => {
     return false;
   });
   if (dx === 0) {
-    for (const p of py) {
-      for (const {x, y} of walls) {
-        if (collision(x, y, 100, 100, x1-.5, p-.5, 1, 1)) return false;
-      }
-    }
+    for (const p of py) for (const {x, y} of walls) if (collision(x, y, 100, 100, x1-.5, p-.5, 1, 1)) return false;
   } else {
     const s = dy/dx, o = y1-s*x1;
     for (const {x, y} of walls) {
-      for (const p of py) {
-        if (collision(x, y, 100, 100, (p-o)/s-1, p-1, 2, 2)) return false;
-      }
-      for (const p of px) {
-        if (collision(x, y, 100, 100, p-1, s*p+o-1, 2, 2)) return false;
-      }
+      for (const p of py) if (collision(x, y, 100, 100, (p-o)/s-1, p-1, 2, 2)) return false;
+      for (const p of px) if (collision(x, y, 100, 100, p-1, s*p+o-1, 2, 2)) return false;
     }
   }
   return true;
