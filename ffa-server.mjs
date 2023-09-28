@@ -471,7 +471,10 @@ class Multiplayer extends Engine {
   disconnect(socket, code, reason) {
     this.pt = this.pt.filter(t => {
       if (t.username === socket.username) {
-        for (const cell of t.cells) this.cells[cell.x][cell.y].delete(t);
+        for (const cell of t.cells) {
+          const [x, y] = cell.split('x');
+          this.cells[x][y].delete(t);
+        }
         return false;
       }
       return true;
