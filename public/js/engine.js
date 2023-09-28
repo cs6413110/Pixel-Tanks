@@ -408,7 +408,10 @@ class Block {
       this.host.cells[cell.x][cell.y].delete(this);
       let deletePathfindGrid = true;
       for (const e of this.host.cells[cell.x][cell.y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) deletePathfindGrid = false;
-      if (deletePathfindGrid && this.x % 100 === 0 && this.y % 100 === 0) this.host.map.setWalkableAt(cell.x, cell.y, true);
+      if (deletePathfindGrid && this.x % 100 === 0 && this.y % 100 === 0) {
+        console.log('Block Deleted at ('+cell.x+', '+cell.y+')');
+        this.host.map.setWalkableAt(cell.x, cell.y, true);
+      }
     }
   }
 }
