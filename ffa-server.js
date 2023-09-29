@@ -13,7 +13,11 @@ const SETTINGS = {
   export: true,
 }
 
-const fetch = require('node-fetch');
+let fetch;
+(async () => {
+  const { default: fetchDefault } = await import('node-fetch');
+  fetch = fetchDefault;
+})();
 const express = require('express');
 const expressWs = require('express-ws');
 const msgpack = require('msgpack-lite');
