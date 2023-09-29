@@ -258,7 +258,7 @@ class Tank {
     this.cells = cells;
     if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
-      this.u(); // REMOVE THIS TEMPORARY
+      this.setValue('dedEffect', this.dedEffect); // REMOVE THIS TEMPORARY
     }
     if (this.pushback !== 0) this.pushback += 0.5;
     if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25, getUsername(this.fire.team));
