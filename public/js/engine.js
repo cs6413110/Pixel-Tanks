@@ -256,7 +256,10 @@ class Tank {
       this.host.cells[x][y].delete(this);
     }
     this.cells = cells;
-    if (this.dedEffect) this.dedEffect.time = Date.now() - this.dedEffect.start;
+    if (this.dedEffect) {
+      this.dedEffect.time = Date.now() - this.dedEffect.start;
+      this.u(); // REMOVE THIS TEMPORARY
+    }
     if (this.pushback !== 0) this.pushback += 0.5;
     if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25, getUsername(this.fire.team));
     for (const t of this.host.pt) {
@@ -329,9 +332,9 @@ class Tank {
       if ((!this.collision(this.x+mx, this.y) || Math.abs(mx) < 2) && (!this.collision(this.x, this.y+my) || Math.abs(my) < 2)) {
         this.grapple.bullet.destroy();
         this.grapple = false;
+        this.x = Math.floor(this.x/4)*4;
+        this.y = Math.floor(this.y/4)*4
       }
-      this.x = Math.floor(this.x/4)*4;
-      this.y = Math.floor(this.y/4)*4
     } else {
       this.grapple.bullet.destroy();
       this.grapple = false;
