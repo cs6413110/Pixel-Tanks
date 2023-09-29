@@ -613,6 +613,8 @@ function Game() {
           anvil_: {frames: 22, speed: 75, kill: 6, type: 1},
           insta: '/animations/insta',
           insta_: {frames: 22, speed: 75, kill: 21, type: 1},
+          cat: '/animations/cat',
+          cat_: {frames: 4, speed: 250, kill: 4, type: 1},
           crate: '/animations/crate',
           crate_: {frames: 31, speed: 75, kill: 21, type: 2},
           battery: '/animations/battery',
@@ -1129,7 +1131,7 @@ function Game() {
         rare: ['amogus', 'minecraft', 'magic'],
         epic: ['wakawaka', 'battery'],
         legendary: ['error', 'enderman'],
-        mythic: ['clicked'],
+        mythic: ['clicked', 'cat'],
       }];
       let rarity;
       if (rand < 1) { // .1%
