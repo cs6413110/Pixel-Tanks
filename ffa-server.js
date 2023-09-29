@@ -164,7 +164,17 @@ ffa.ws(SETTINGS.path, socket => {
       socket.room = servers.indexOf(joinable[0]);
       joinable[0].add(socket, data.tank);
     } else if (data.type === 'update') {
-      if (socket.room !== undefined) servers[socket.room].update(data);
+      if (servers[socket.room] !== undefined) {
+        servers[socket.room].update(data);
+      } else {
+        let room;
+        servers.forEach(s => {
+          s.pt.forEach(t => {
+            if (t.username === socket.username) room = servers.indexOf(s);
+          });
+        });
+        socket.send({status: 'error', message: 'GIVE TO AARON: Socket tried to join room '+socket.room+' which is invalid. But the room, '+room+' has the player in it.'});
+      }
     } else if (data.type === 'ping') {
       socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
