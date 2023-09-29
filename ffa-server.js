@@ -13,12 +13,12 @@ const SETTINGS = {
   export: true,
 }
 
-import fetch from 'node-fetch';
-import express from 'express';
-import expressWs from 'express-ws';
-import msgpack from 'msgpack-lite';
-import Filter from 'bad-words';
-import {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} from './public/js/engine.js';
+const fetch = require('node-fetch');
+const express = require('express');
+const expressWs = require('express-ws');
+const msgpack = require('msgpack-lite');
+const Filter = require('bad-words');
+const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
 
 let tickspeed = -1;
 const getTickspeed = i => {
@@ -716,4 +716,4 @@ class TDM extends Multiplayer {
 }
 
 ffa.listen(SETTINGS.port);
-export {ffa}
+module.exports = {ffa};
