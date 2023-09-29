@@ -7,7 +7,7 @@ const { MongoClient } = require('mongodb');
 const msgpack = require('msgpack-lite');
 const Filter = require('bad-words');
 const TokenGenerator = require('uuid-token-generator');
-const { ffa } = require('./ffa-server.mjs');
+const { ffa } = require('./ffa-server.js');
 
 const connectionString = 'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = 80;
 
