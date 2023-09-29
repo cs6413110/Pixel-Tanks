@@ -189,7 +189,7 @@ ffa.ws(SETTINGS.path, socket => {
       if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
     } else if (data.type === 'command') {
       const func = Commands[data.data[0]], args = data.data;
-      if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'Commands are only allowed in FFA'});
+      if (!(servers[socket.room] instanceof FFA) && data.data[0] !== 'start') return socket.send({status: 'error', message: 'Commands are only allowed in FFA'});
       if (typeof func === 'function') {
         func.bind(socket)(args);
       } else socket.send({status: 'error', message: 'Command not found.'});
@@ -387,7 +387,11 @@ const Commands = {
         if (t.username === data[1]) t.ded = false;
       });
     });
-  }
+  },
+  start: function(e) {
+    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'Only admins can use this for now'});
+    if (servers[this.room].mode === 0) servers[this.room].mode = 1;
+  },
 };
 
 class A {
