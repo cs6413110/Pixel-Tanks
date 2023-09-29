@@ -1721,7 +1721,7 @@ function Game() {
       this.fireInterval = setInterval(() => {
         this.canFire = true;
         this.fire(e.button);
-      }, this.fireType === 1 ? 200 : 600);
+      }, this.fireType === 1 ? 200 : (PixelTanks.user.username === 'LostKing' ? 300 : 600));
     }
 
     mouseup() {
