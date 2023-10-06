@@ -17,10 +17,10 @@ setTimeout(() => {
   interval = setInterval(() => {
     for (const socket of sockets) {
       const id = Math.random();
-      socket.startTimes[id] = id;
+      socket[id] = id;
       socket.onmessage = data => {
         data = msgpack.decode(data);
-        const ping = Date.now()-socket.startTimes[id];
+        const ping = Date.now()-socket[id];
         num++;
         average = (average*num+ping)/num;
         if (ping > max) max = ping;
