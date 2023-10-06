@@ -39,12 +39,12 @@ setTimeout(() => {
     console.log('Test #2: joining tdm servers with 1k fake players with 60/s update changes and ');
     for (const socket of sockets) {
       socket.username = 'bot-player#'+Math.random();
-      socket.send({username: socket.username, type: 'join', gamemode: 'ffa', tank: {rank: sockets.indexOf(socket), username: socket.username, color: '#FFFFFF'}});
+      socket.send(msgpack.encode({username: socket.username, type: 'join', gamemode: 'ffa', tank: {rank: sockets.indexOf(socket), username: socket.username, color: '#FFFFFF'}}));
     }
     setTimeout(() => {
       console.log('Moving to random pos for 60ups');
       interval = setInterval(() => {
-        socket.send({username, type: 'update', data: {x: Math.random()*3000, y: Math.random()*3000, use: ['shield']}});
+        socket.send(msgpack.endcode({username, type: 'update', data: {x: Math.random()*3000, y: Math.random()*3000, use: ['shield']}}));
       }, 1000/60);
       setTimeout(() => {
         clearInterval(interval);
