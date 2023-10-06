@@ -954,7 +954,7 @@ class AI {
     const { host, team } = this;
     let target = false, previousTargetExists = false, minSpotted = 30000;
     const targets = host.pt.concat(host.ai).sort((a, b) => {
-      const distance = e.x**2+e.y**2;
+      const distance = a.x**2+a.y**2;
       if (a.id === this.target.id) previousTargetExists = true;
       if (a.ded || a.invis || distance > minSpotted || getTeam(team) === getTeam(a.team)) return true;
       minSpotted = distance;
