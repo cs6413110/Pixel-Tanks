@@ -134,7 +134,7 @@ ffa.ws(SETTINGS.path, socket => {
       socket.username = data.username;
     }
     if (data.type === 'join') {
-      if (!await auth(data.username, data.token)) return socket.send({status: 'error', message: 'Invalid Token.'});
+      //if (!await auth(data.username, data.token)) return socket.send({status: 'error', message: 'Invalid Token.'});
       let joinable;
       if (data.gamemode === 'ffa') {
         joinable = servers.filter(s => s.pt.length < SETTINGS.ppm && s instanceof FFA).sort((a, b) => a.pt.length-b.pt.length);
