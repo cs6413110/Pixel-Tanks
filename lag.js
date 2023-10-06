@@ -44,7 +44,7 @@ setTimeout(() => {
     setTimeout(() => {
       console.log('Moving to random pos for 60ups');
       interval = setInterval(() => {
-        socket.send(msgpack.endcode({username, type: 'update', data: {x: Math.random()*3000, y: Math.random()*3000, use: ['shield']}}));
+        for (const socket of sockets) socket.send(msgpack.endcode({username: socket.username, type: 'update', data: {x: Math.random()*3000, y: Math.random()*3000, use: ['shield']}}));
       }, 1000/60);
       setTimeout(() => {
         clearInterval(interval);
