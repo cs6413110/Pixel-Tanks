@@ -9,11 +9,7 @@ let interval;
 // get min, avg, and max ping
 console.log('Beginning Test #1');
 console.log('--- Creating WebSockets ---');
-for (let i = 0; i < 1000; i++) {
-  const socket = new ws('ws://localhost:80/ffa');
-  socket.binaryType = 'arraybuffer';
-  sockets.push(socket);
-}
+for (let i = 0; i < 1000; i++) sockets.push(new ws('ws://localhost:80/ffa'));
 setTimeout(() => {
   console.log('Connections completed!');
   console.log('Sending ping messages 60/s for 1 min');
@@ -23,9 +19,7 @@ setTimeout(() => {
       const id = Math.random();
       socket[id] = id;
       socket.onmessage = data => {
-        console.log(data.data);
-        console.log(JSON.stringify(data.data));
-        data = msgpack.decode(data.data);
+        data = msgpack.decode(new Uint8Array(data.data));
         const ping = Date.now()-socket[id];
         num++;
         average = (average*num+ping)/num;
