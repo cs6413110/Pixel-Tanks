@@ -952,38 +952,25 @@ class AI {
 
   identify() {
     const { host, team } = this;
-    const targets = [], allies = [];
-    let target = false, previousTargetExists = false;
-    for (const t of host.pt) {
-      if (!t.ded && !t.invis) {
-        if (t.id === this.target.id) previousTargetExists = true;
-        if (getTeam(team) === getTeam(t.team)) {
-          allies.push({x: t.x, y: t.y, id: t.id, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
-        } else {
-          targets.push({x: t.x, y: t.y, id: t.id, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
-        }
-      }
-    }
-    for (const ai of host.ai) {
-      if (ai.id === this.target.id) previousTargetExists = true;
-      if (getTeam(team) === getTeam(ai.team)) {
-        allies.push({x: ai.x, y: ai.y, id: ai.id, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
-      } else {
-        targets.push({x: ai.x, y: ai.y, id: ai.id, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
-      }
-    }
-    targets.sort((a, b) => a.distance - b.distance);
+    let target = false, previousTargetExists = false, minSpotted = 30000;
+    const targets = host.pt.concat(host.ai).sort((a, b) => {
+      const distance = e.x**2+e.y**2;
+      if (a.id === this.target.id) previousTargetExists = true;
+      if (a.ded || a.invis || distance > minSpotted || getTeam(team) === getTeam(a.team)) return true;
+      minSpotted = distance;
+      return false;
+    });    
     for (const t of targets) if (raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) {
-      target = t;
+      target = {x: t.x, y: t.y, s: true};
       break;
     }
-    if (this.role === 3 && !this.bond && allies.length > 0) {
+    /*if (this.role === 3 && !this.bond && allies.length > 0) {
       allies.sort((a, b) => a.distance - b.distance);
       for (const a of allies) if (a.id !== this.id) if (raycast(this.x+40, this.y+40, a.x+40, a.y+40, this.host.b)) {
         this.bond = a;
         break;
       }
-    }
+    }*/
     if (!target) {
       if (this.role === 0) this.r++;
       if (this.target) {
@@ -996,7 +983,6 @@ class AI {
       return;
     }
     if (this.target) this.target.c = clearTimeout(this.target.c);
-    target.s = true;
     this.target = target;
     this.mode = (this.hp < .3 * this.maxHp && this.role !== 1) ? 2 : 1;
   }
