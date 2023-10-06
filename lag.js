@@ -17,7 +17,7 @@ setTimeout(() => {
   interval = setInterval(() => {
     for (const socket of sockets) {
       const id = Math.random();
-      socket[id] = id;
+      socket[id] = Date.now();
       socket.onmessage = data => {
         data = msgpack.decode(new Uint8Array(data.data));
         const ping = Date.now()-socket[id];
