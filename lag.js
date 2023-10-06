@@ -1,7 +1,8 @@
 const ws = require('websocket').w3cwebsocket;
 const msgpack = require('msgpack-lite');
 
-const sockets = [], interval;
+const sockets = [];
+let interval;
 
 // Test #1
 // Create a thousand sockets and ping for each
