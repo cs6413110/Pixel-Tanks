@@ -19,7 +19,8 @@ setTimeout(() => {
       const id = Math.random();
       socket[id] = id;
       socket.onmessage = data => {
-        data = msgpack.decode(data);
+        console.log(JSON.stringify(data));
+        data = msgpack.decode(data.data);
         const ping = Date.now()-socket[id];
         num++;
         average = (average*num+ping)/num;
