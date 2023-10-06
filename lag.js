@@ -22,7 +22,7 @@ setTimeout(() => {
         data = msgpack.decode(new Uint8Array(data.data));
         const ping = Date.now()-socket[id];
         num++;
-        average = (average*num+ping)/num;
+        average = (average*(num-1)+ping)/num;
         if (ping > max) max = ping;
         if (ping < min) min = ping;
       }
@@ -32,7 +32,7 @@ setTimeout(() => {
   setTimeout(() => {
     clearInterval(interval);
     console.log('Test #1 complete');
-    console.log('Average: '+average);
+    console.log('Average: '+average+' over '+num);
     console.log('Minimum: '+min);
     console.log('Maximum: '+max);
   }, 60000);
