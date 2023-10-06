@@ -956,13 +956,16 @@ class AI {
     const targets = host.pt.concat(host.ai).sort((a, b) => {
       const distance = a.x**2+a.y**2;
       if (a.id === this.target.id) previousTargetExists = true;
-      if (a.ded || a.invis || distance > minSpotted || getTeam(team) === getTeam(a.team)) return true;
+      if (distance > minSpotted) return true;
       minSpotted = distance;
       return false;
     });    
-    for (const t of targets) if (raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) {
-      target = {x: t.x, y: t.y, s: true};
-      break;
+    for (const t of targets) {
+      if (a.ded || a.invis || getTeam(team) === getTeam(a.team)) continue;
+      if (raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) {
+        target = {x: t.x, y: t.y, s: true};
+        break;
+      }
     }
     /*if (this.role === 3 && !this.bond && allies.length > 0) {
       allies.sort((a, b) => a.distance - b.distance);
