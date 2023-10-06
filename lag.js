@@ -19,6 +19,8 @@ setTimeout(() => {
       const id = Math.random();
       socket[id] = id;
       socket.onmessage = data => {
+        console.log(data.data);
+        console.log(JSON.stringify(data.data));
         data = msgpack.decode(data.data);
         const ping = Date.now()-socket[id];
         num++;
