@@ -1077,11 +1077,11 @@ function Game() {
               deathEffects: [],
               color: '#ffffff',
               stats: [
-                0, // coins
+                1000000, // coins
                 0, // crates
                 1, // level
                 0, // xp
-                0, // rank
+                20, // rank
               ],
               classes: [
                 false, // tactical
