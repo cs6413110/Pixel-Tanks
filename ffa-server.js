@@ -733,5 +733,6 @@ class TDM extends Multiplayer {
   }
 }
 
+ffa.get('/', (req, res) => res.end('Connect via websocket'));
 ffa.listen(SETTINGS.port);
 module.exports = {ffa};
