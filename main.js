@@ -44,7 +44,9 @@ setTimeout(() => profile());
 
 (async () => {
   await client.connect();
+  console.log('Database Client Connected!');
   db = client.db('data').collection('data');
+  console.log('Fetched Database!');
 })();
 
 const valid = (token, username) => tokens.has(`${token}:${username}`);
