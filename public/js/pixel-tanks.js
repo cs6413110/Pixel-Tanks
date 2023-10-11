@@ -1286,7 +1286,7 @@ function Game() {
       }
 
       if (multiplayer) {
-        this.socket = new MegaSocket(`ws://${ip}`, {keepAlive: false, reconnect: false, autoconnect: true});
+        this.socket = new MegaSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://')+ip, {keepAlive: false, reconnect: false, autoconnect: true});
         this.socket.on('message', data => {
           switch (data.event) {
             case 'hostupdate':
