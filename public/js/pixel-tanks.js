@@ -780,6 +780,7 @@ function Game() {
           cdraw: function() {
             if (!this.gamemode) {
               this.gamemode = 'ffa';
+              this.output = {FFA: '', DUELS: '', TDM: ''};
               this.ip = '141.148.128.231/ffa';
               this.listeners.keydown({keyCode: -1, key: ''});
             }
