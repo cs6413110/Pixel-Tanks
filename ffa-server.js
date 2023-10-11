@@ -733,6 +733,6 @@ class TDM extends Multiplayer {
   }
 }
 
-ffa.get('/', res.end('This is a Pixel Tanks server!'));
+ffa.get('/', (req, res) => res.end('This is a Pixel Tanks server!'));
 ffa.listen(process.env.PORT || SETTINGS.port);
 module.exports = {ffa};
