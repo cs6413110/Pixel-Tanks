@@ -4,8 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "node ffa-server.js",
-    "full": "node main.js"
+    "start": "node main.js"
   },
   "author": "",
   "license": "ISC",
