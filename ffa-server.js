@@ -733,5 +733,5 @@ class TDM extends Multiplayer {
   }
 }
 
-ffa.listen(SETTINGS.port);
+ffa.listen(process.env.PORT || SETTINGS.port);
 module.exports = {ffa};
