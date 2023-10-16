@@ -466,8 +466,7 @@ class Multiplayer extends Engine {
         for (let x = -9; x < 9; x++) {
           const cx = Math.floor(t.x/100)+x, cy = Math.floor(t.y/100)+y;
           if (cx >= 0 && cx < 30 && cy >= 0 && cy < 30) for (const entity of this.cells[cx][cy]) {
-            console.log(entity.prototype);
-            const id = key[entity.prototype.name];
+            const id = key[entity.constructor.name];
             render[id].add(entity.id);
             if (!t.render[id].has(entity.id) || entity.updatedLast > t.lastUpdate) {
               message[id].push(entity.raw);
@@ -747,7 +746,7 @@ const Profile = (arr, update) => {
     if (typeof e !== 'function') continue;
     if (/^\s*class\s+/.test(e.toString())) {
       const n = e.name;
-      for (const p of Object.getOwnPropertyNames(e)) {
+      /*for (const p of Object.getOwnPropertyNames(e)) {
         if (typeof e[p] === 'function') {
           const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0, l: 0};
           e[p] = function() {
@@ -762,7 +761,7 @@ const Profile = (arr, update) => {
           }
           functions.push(f);
         }
-      }
+      }*/
       for (const p of Object.getOwnPropertyNames(e.prototype)) {
         if (typeof e.prototype[p] === 'function') {
           const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0, l: 0};
