@@ -1492,8 +1492,8 @@ function Game() {
       if ((!t.ded && getTeam(this.team) === getTeam(t.team)) || (this.ded && !t.ded) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
-        GUI.draw.fillStyle = '#FFFFFF';
-        GUI.draw.fillRect(t.x, t.y+100, 80*(t.hp+t.damage?.d)/t.maxHp, 5);
+        GUI.draw.fillStyle = '#FF0000';
+        GUI.draw.fillRect(t.x, t.y+100, 80*Math.max(t.hp+t.damage?.d, t.maxHp)/t.maxHp, 5);
         GUI.draw.fillStyle = '#00FF00';
         GUI.draw.fillRect(t.x, t.y+100, 80*t.hp/t.maxHp, 5);
       }
