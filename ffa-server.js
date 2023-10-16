@@ -459,25 +459,28 @@ class Multiplayer extends Engine {
   send() {
     for (const t of this.pt) {
       const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
-      const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;
       const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
-      let send = false;
-      if (render.logs !== t.render.logs) send = true;
-      for (const p of ['b', 'pt', 'ai', 's', 'd']) {
-        const ids = new Set(this[p].map(e => e.id));
-        this[p].filter(e => A.collider(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
-          render[p].add(e.id);
-          if (!t.render[p].has(e.id) || e.updatedLast > t.lastUpdate) {
-            message[p].push(e.raw);
+      const key = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
+      let send = render.logs !== t.render.logs;
+      for (let y = 0; y < 10; y++) {
+        for (let x = 0; x < 16; x++) {
+          for (const entity of this.cells[Math.floor(t.x/100)][Math.floor(t.y/100)]) {
+            const id = key[entity.constructor.name];
+            render[id].add(entity.id);
+            if (!t.render[id].has(entity.id) || entity.updatedLast > t.lastUpdate) {
+              message[id].push(entity.raw);
+              send = true;
+            }
+          }
+        }
+      }
+      for (const entity of Object.values(key)) {
+        for (const id of t.render[entity]) {
+          if (!render[entity].has(id)) {
+            message.delete[entity].push(id);
             send = true;
           }
-        });
-        t.render[p].forEach(id => {
-          if (!render[p].has(id) || !ids.has(id)) {
-            message.delete[p].push(id);
-            send = true;
-          }
-        });
+        }
       }
       t.render = render;
       t.lastUpdate = Date.now();
