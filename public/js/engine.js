@@ -592,12 +592,6 @@ class Shot {
     const time = Math.floor((Date.now()-this.e)/5);
     this.x = time*this.xm+this.sx;
     this.y = time*this.ym+this.sy;
-    if (this.collision()) this.destroy();
-    if (this.type === 'shotgun') {
-      this.d = Math.sqrt((this.x - this.sx) ** 2 + (this.y - this.sy) ** 2);
-      this.damage = this.md - (this.d / 300) * this.md;  
-      if (this.d >= 300) this.destroy();
-    } else if (this.type === 'dynamite') this.r += 5;
     const cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .09))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .09)));
@@ -609,6 +603,12 @@ class Shot {
       this.host.cells[x][y].delete(this);
     }
     this.cells = cells;
+    if (this.collision()) this.destroy();
+    if (this.type === 'shotgun') {
+      this.d = Math.sqrt((this.x - this.sx) ** 2 + (this.y - this.sy) ** 2);
+      this.damage = this.md - (this.d / 300) * this.md;  
+      if (this.d >= 300) this.destroy();
+    } else if (this.type === 'dynamite') this.r += 5;
     this.u();
   }
 
