@@ -466,8 +466,7 @@ class Multiplayer extends Engine {
         for (let x = -9; x < 9; x++) {
           const cx = Math.floor(t.x/100)+x, cy = Math.floor(t.y/100)+y;
           if (cx >= 0 && cx < 30 && cy >= 0 && cy < 30) for (const entity of this.cells[cx][cy]) {
-            console.log(entity);
-            console.log(entity.constructor.name);
+            console.log(entity.constructor);
             const id = key[entity.constructor.name];
             render[id].add(entity.id);
             if (!t.render[id].has(entity.id) || entity.updatedLast > t.lastUpdate) {
