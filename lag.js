@@ -38,6 +38,7 @@ setTimeout(() => {
     console.log('-----------------------------------');
     console.log('Test #2: joining tdm servers with 1k fake players with 60/s update changes and ');
     for (const socket of sockets) {
+      socket.onmessage = () => {}
       socket.username = 'bot-player#'+Math.random();
       socket.send(msgpack.encode({username: socket.username, type: 'join', gamemode: 'ffa', tank: {rank: sockets.indexOf(socket), username: socket.username, color: '#FFFFFF'}}));
     }
