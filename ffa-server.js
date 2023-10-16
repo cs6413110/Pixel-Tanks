@@ -759,7 +759,7 @@ const Profile = (arr, update) => {
             update(functions);
             return r;
           }
-          Object.defineProperty(e[p], 'name', f.name.split('.')[1]);
+          Object.defineProperty(e[p], 'name', {value: f.name.split('.')[1]});
           functions.push(f);
         }
       }
