@@ -239,7 +239,6 @@ class Tank {
   }
 
   setValue(p, v) {
-    if (this.raw[p] === v) return;
     this.updatedLast = Date.now();
     this.raw[p] = v;
   }
