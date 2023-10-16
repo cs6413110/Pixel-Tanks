@@ -462,9 +462,9 @@ class Multiplayer extends Engine {
       const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
       const key = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
       let send = render.logs !== t.render.logs;
-      for (let y = 0; y < 10; y++) {
-        for (let x = 0; x < 16; x++) {
-          for (const entity of this.cells[Math.floor(t.x/100)][Math.floor(t.y/100)]) {
+      for (let y = -5; y < 5; y++) {
+        for (let x = -8; x < 8; x++) {
+          for (const entity of this.cells[Math.floor(t.x/100)+x][Math.floor(t.y/100)+y]) {
             const id = key[entity.constructor.name];
             render[id].add(entity.id);
             if (!t.render[id].has(entity.id) || entity.updatedLast > t.lastUpdate) {
