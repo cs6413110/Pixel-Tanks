@@ -464,7 +464,7 @@ class Multiplayer extends Engine {
       let send = render.logs !== t.render.logs;
       for (let y = -5; y < 5; y++) {
         for (let x = -8; x < 8; x++) {
-          for (const entity of this.cells[Math.floor(t.x/100)+x][Math.floor(t.y/100)+y]) {
+          if (x >= 0 && x < 30 && y >= 0 && y < 30) for (const entity of this.cells[Math.floor(t.x/100)+x][Math.floor(t.y/100)+y]) {
             const id = key[entity.constructor.name];
             render[id].add(entity.id);
             if (!t.render[id].has(entity.id) || entity.updatedLast > t.lastUpdate) {
