@@ -467,6 +467,7 @@ class Multiplayer extends Engine {
           const cx = Math.floor(t.x/100)+x, cy = Math.floor(t.y/100)+y;
           if (cx >= 0 && cx < 30 && cy >= 0 && cy < 30) for (const entity of this.cells[cx][cy]) {
             const id = key[entity.constructor.name];
+            console.log(id);
             render[id].add(entity.id);
             if (!t.render[id].has(entity.id) || entity.updatedLast > t.lastUpdate) {
               message[id].push(entity.raw);
@@ -782,7 +783,7 @@ const Profile = (arr, update) => {
   }
 }
 
-/*let lagometer = [];
+let lagometer = [];
 Profile([Engine, Block, Shot, AI, Damage, FFA, Multiplayer, A], f => {
   lagometer = f;
 });
@@ -791,4 +792,4 @@ setInterval(() => {
   const top = lagometer.slice(0, Math.min(15, lagometer.length));
   console.log('-----PROFILING REPORT-----');
   for (const t of top) console.log(t.name+': ('+t.t+', '+t.l+') over '+t.i);
-}, 10000);*/
+}, 10000);
