@@ -746,7 +746,7 @@ const Profile = (arr, update) => {
     if (typeof e !== 'function') continue;
     if (/^\s*class\s+/.test(e.toString())) {
       const n = e.name;
-      /*for (const p of Object.getOwnPropertyNames(e)) {
+      for (const p of Object.getOwnPropertyNames(e)) {
         if (typeof e[p] === 'function') {
           const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0, l: 0};
           e[p] = function() {
@@ -759,9 +759,10 @@ const Profile = (arr, update) => {
             update(functions);
             return r;
           }
+          e[p].name = f.name.split('.')[1];
           functions.push(f);
         }
-      }*/
+      }
       for (const p of Object.getOwnPropertyNames(e.prototype)) {
         if (typeof e.prototype[p] === 'function') {
           const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0, l: 0};
@@ -775,6 +776,7 @@ const Profile = (arr, update) => {
             update(functions);
             return r;
           }
+          e.prototype[p].name = p;
           functions.push(f);
         }
       }
