@@ -145,7 +145,7 @@ ffa.ws(SETTINGS.path, socket => {
         }
         if (!joinable) {
           joinable = Math.random();
-          servers[id] = new FFA();
+          servers[joinable] = new FFA();
         }
       } else if (data.gamemode === 'duels') {
         for (const id in servers) {
@@ -156,7 +156,7 @@ ffa.ws(SETTINGS.path, socket => {
         }
         if (!joinable) {
           joinable = Math.random();
-          servers[id] = new DUELS();
+          servers[joinable] = new DUELS();
         }
       } else if (data.gamemode === 'tdm') {
         for (const id in servers) {
@@ -167,7 +167,7 @@ ffa.ws(SETTINGS.path, socket => {
         }
         if (!joinable) {
           joinable = Math.random();
-          servers[id] = new FFA();
+          servers[joinable] = new FFA();
         }
       } else if (data.gamemode === 'juggernaut') {
         socket.send({status: 'error', message: 'This gamemode is not ready'});
