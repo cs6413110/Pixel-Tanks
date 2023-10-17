@@ -507,7 +507,7 @@ class Multiplayer extends Engine {
       t.render = newrender;
       t.lastUpdate = Date.now();
       console.time('send');
-      if (send) socket.send(message);
+      if (send && !socket.bufferedAmount) socket.send(message);
       console.timeEnd('send');
       outgoing_per_second++;
     }
