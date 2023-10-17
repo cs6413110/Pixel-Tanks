@@ -461,15 +461,14 @@ class Multiplayer extends Engine {
       const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
       const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
       const key = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
-      let send = render.logs !== t.render.logs;
-      for (let y = -6; y < 6; y++) {
-        for (let x = -9; x < 9; x++) {
-          const cx = Math.floor(t.x/100)+x, cy = Math.floor(t.y/100)+y;
-          if (cx >= 0 && cx < 30 && cy >= 0 && cy < 30) for (const entity of this.cells[cx][cy]) {
-            const id = key[entity.constructor.name];
-            render[id].add(entity.id);
-            if (!t.render[id].has(entity.id) || entity.updatedLast > t.lastUpdate) {
-              message[id].push(entity.raw);
+      let send = render.logs.length !== t.render.logs.length;
+      for (let cy = 0, sy = Math.max(Math.floor(t.y/100)-6, 0), ey = Math.min(Math.floor(t.y/100)+6, 30); y < ey; y++) {
+        for (let cx = 0, sx = Math.max(Math.floor(t.x/100)-9, 0), ex = Math.min(Math.floor(t.x/100)+9, 30); x < ex; x++) {
+          for (const {constructor, id, raw, updatedLast} of this.cells[cx][cy]) {
+            const id = key[constructor.name];
+            render[id].add(id);
+            if (!t.render[id].has(id) || updatedLast > t.lastUpdate) {
+              message[id].push(raw);
               send = true;
             }
           }
