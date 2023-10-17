@@ -470,7 +470,10 @@ class Multiplayer extends Engine {
       message.tickspeed = tickspeed;
       message.global = this.global;
       message.logs = this.logs;
-      for (const entity of Object.values(key)) message[entity].length = 0;
+      for (const entity of Object.values(key)) {
+        message[entity].length = 0;
+        message.delete[entity].length = 0;
+      }
       let send = render.logs !== newrender.logs;
       const sy = Math.max(Math.floor(y/100)-7, 0), ey = Math.min(Math.floor(y/100)+7, 30), sx = Math.max(Math.floor(x/100)-10, 0), ex = Math.min(Math.floor(x/100)+10, 30);
       for (let cy = sy; cy < ey; cy++) {
