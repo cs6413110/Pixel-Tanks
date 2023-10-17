@@ -107,7 +107,7 @@ setInterval(() => {
   });
 }, 60000);
 
-expressWs(ffa);
+expressWs(ffa, undefined, {perMessageDeflate: false, skipUTF8Validation: true});
 ffa.ws(SETTINGS.path, socket => {
   sockets.push(socket);
   socket._send = socket.send;
@@ -463,17 +463,22 @@ class Multiplayer extends Engine {
   }
 
   send() {
-    const key = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
+    const key = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'}, keyValues = ['b', 's', 'ai', 'pt', 'd'];
     for (const t of this.pt) {
+      console.time('tankvar');
       const {x, y, lastUpdate, render, socket, message} = t;
+      console.timeEnd('tankvar');
+      console.time('othervar');
       const newrender = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
       message.tickspeed = tickspeed;
       message.global = this.global;
       message.logs = this.logs;
-      for (const entity of Object.values(key)) {
-        message[entity].length = 0;
-        message.delete[entity].length = 0;
+      for (const entity of keyValues) {
+        message[entity] = [];
+        message.delete[entity] = [];
       }
+      console.timeEnd('othervar');
+      console.time('getentities');
       let send = render.logs !== newrender.logs;
       const sy = Math.max(Math.floor(y/100)-7, 0), ey = Math.min(Math.floor(y/100)+7, 30), sx = Math.max(Math.floor(x/100)-10, 0), ex = Math.min(Math.floor(x/100)+10, 30);
       for (let cy = sy; cy < ey; cy++) {
@@ -488,7 +493,9 @@ class Multiplayer extends Engine {
           }
         }
       }
-      for (const entity of Object.values(key)) {
+      console.timeEnd('getentities');
+      console.time('delentities');
+      for (const entity of keyValues)) {
         for (const id of render[entity]) {
           if (!newrender[entity].has(id)) {
             message.delete[entity].push(id);
@@ -496,9 +503,12 @@ class Multiplayer extends Engine {
           }
         }
       }
-      t.render = {...newrender};
+      console.timeEnd('delentities');
+      t.render = newrender;
       t.lastUpdate = Date.now();
+      console.time('send');
       if (send) socket.send(message);
+      console.timeEnd('send');
       outgoing_per_second++;
     }
   }
