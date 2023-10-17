@@ -4,7 +4,7 @@ const SETTINGS = {
   banips: [],
   mutes: [],
   admins: ['cs641311', 'DIO', 'Celestial', 'bradley', 'DarkMemeGod', '3foe'],
-  ppm: 10, // players per room
+  ppm: 400, // players per room
   log_strain: false, // Show messages per second in logs
   ups_boost: false, // Can lag clients and servers. Recommened false.
   UPS: 60, // updates per second
@@ -453,6 +453,7 @@ class Multiplayer extends Engine {
 
   add(socket, data) {
     data.socket = socket;
+    data.message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
     this.logs.push({m: this.joinMsg(data.username), c: '#66FF00'});
     super.add(data);
   }
@@ -464,12 +465,16 @@ class Multiplayer extends Engine {
   send() {
     const key = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     for (const t of this.pt) {
-      const {x, y, lastUpdate, render, socket} = t;
-      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
+      const {x, y, lastUpdate, render, socket, message} = t;
       const newrender = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
+      message.tickspeed = tickspeed;
+      message.global = this.global;
+      message.logs = this.logs;
+      for (const entity of Object.values(key)) message[entity].length = 0;
       let send = render.logs !== newrender.logs;
-      for (let cy = 0, sy = Math.max(Math.floor(y/100)-6, 0), ey = Math.min(Math.floor(y/100)+6, 30); cy < ey; cy++) {
-        for (let cx = 0, sx = Math.max(Math.floor(x/100)-9, 0), ex = Math.min(Math.floor(x/100)+9, 30); cx < ex; cx++) {
+      const sy = Math.max(Math.floor(y/100)-7, 0), ey = Math.min(Math.floor(y/100)+7, 30), sx = Math.max(Math.floor(x/100)-10, 0), ex = Math.min(Math.floor(x/100)+10, 30);
+      for (let cy = sy; cy < ey; cy++) {
+        for (let cx = sx; cx < ex; cx++) {
           for (const {constructor, id, raw, updatedLast} of this.cells[cx][cy]) {
             const type = key[constructor.name];
             newrender[type].add(id);
