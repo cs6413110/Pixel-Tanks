@@ -1,5 +1,5 @@
 const Sentry = require('@sentry/node');
-const { ProfilingIntegration } = require('@sentry/profiling-node');
+//const { ProfilingIntegration } = require('@sentry/profiling-node');
 const express = require('express');
 const expressWs = require('express-ws');
 const fs = require('fs').promises;
@@ -17,12 +17,12 @@ let db;
 Sentry.init({
   dsn: 'https://d900a2c488024fb294768830690d53dd@o4504300641517568.ingest.sentry.io/4505286074957824',
   tracesSampleRate: 1.0,
-  profilesSampleRate: 1.0,
+  //profilesSampleRate: 1.0,
   integrations: [
     new Sentry.Integrations.Http({tracing: true}),
     new Sentry.Integrations.Express({app}),
     new Sentry.Integrations.Mongo(),
-    new ProfilingIntegration(),
+    //new ProfilingIntegration(),
   ],
 });
 app.use(Sentry.Handlers.requestHandler());
