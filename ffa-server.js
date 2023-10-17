@@ -439,6 +439,8 @@ class A {
 class Multiplayer extends Engine {
   constructor(levels) {
     super(levels);
+    this.message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
+    this.newrender = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
     if (!SETTINGS.fps_boost) this.i.push(setInterval(() => this.send(), 1000/SETTINGS.UPS));
   }
 
@@ -457,34 +459,38 @@ class Multiplayer extends Engine {
   }
 
   send() {
+    const key = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     for (const t of this.pt) {
-      const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
-      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
-      const key = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
-      let send = render.logs.length !== t.render.logs.length;
-      for (let cy = 0, sy = Math.max(Math.floor(t.y/100)-6, 0), ey = Math.min(Math.floor(t.y/100)+6, 30); y < ey; y++) {
-        for (let cx = 0, sx = Math.max(Math.floor(t.x/100)-9, 0), ex = Math.min(Math.floor(t.x/100)+9, 30); x < ex; x++) {
+      const {x, y, lastUpdate, render, socket} = t;
+      const {newrender, message} = this;
+      message.tickspeed = tickspeed;
+      message.global = this.global;
+      message.logs = this.logs;
+      newrender.logs = this.logs.length;
+      let send = render.logs !== newrender.logs;
+      for (let cy = 0, sy = Math.max(Math.floor(y/100)-6, 0), ey = Math.min(Math.floor(y/100)+6, 30); cy < ey; cy++) {
+        for (let cx = 0, sx = Math.max(Math.floor(x/100)-9, 0), ex = Math.min(Math.floor(x/100)+9, 30); cx < ex; cx++) {
           for (const {constructor, id, raw, updatedLast} of this.cells[cx][cy]) {
-            const id = key[constructor.name];
-            render[id].add(id);
-            if (!t.render[id].has(id) || updatedLast > t.lastUpdate) {
-              message[id].push(raw);
+            const type = key[constructor.name];
+            newrender[type].add(id);
+            if (!newrender[type].has(id) || updatedLast > lastUpdate) {
+              message[type].push(raw);
               send = true;
             }
           }
         }
       }
       for (const entity of Object.values(key)) {
-        for (const id of t.render[entity]) {
-          if (!render[entity].has(id)) {
+        for (const id of render[entity]) {
+          if (!newrender[entity].has(id)) {
             message.delete[entity].push(id);
             send = true;
           }
         }
       }
-      t.render = render;
+      t.render = newrender;
       t.lastUpdate = Date.now();
-      if (send) t.socket.send(message);
+      if (send) socket.send(message);
       outgoing_per_second++;
     }
   }
