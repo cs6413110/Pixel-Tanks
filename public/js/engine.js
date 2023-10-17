@@ -208,11 +208,7 @@ class Tank {
     });
     this.id = Math.random();
     this.lastUpdate = 0;
-    if (data.socket) {
-      this.socket = data.socket; // multiplayer patch
-      this.message = data.message;
-      this.newrender = data.newrender;
-    }
+    if (data.socket) this.socket = data.socket; // multiplayer patch
     this.username = data.username;
     this.rank = data.rank;
     this.class = data.class;
