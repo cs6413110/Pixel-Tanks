@@ -169,7 +169,7 @@ ffa.ws(SETTINGS.path, socket => {
       } else {
         let room;
         servers.forEach(s => {
-          if (s.pt) s.pt.forEach(t => {
+          if (s) s.pt.forEach(t => {
             if (t.username === socket.username) room = servers.indexOf(s);
           });
         });
