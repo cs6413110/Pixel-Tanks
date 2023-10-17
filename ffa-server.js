@@ -473,7 +473,7 @@ class Multiplayer extends Engine {
           for (const {constructor, id, raw, updatedLast} of this.cells[cx][cy]) {
             const type = key[constructor.name];
             newrender[type].add(id);
-            if (!newrender[type].has(id) || updatedLast > lastUpdate) {
+            if (!render[type].has(id) || updatedLast > lastUpdate) {
               message[type].push(raw);
               send = true;
             }
