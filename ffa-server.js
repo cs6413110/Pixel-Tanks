@@ -444,6 +444,8 @@ class A {
 class Multiplayer extends Engine {
   constructor(levels) {
     super(levels);
+    this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
+    this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
     if (!SETTINGS.fps_boost) this.i.push(setInterval(() => this.send(), 1000/SETTINGS.UPS));
   }
 
@@ -463,28 +465,22 @@ class Multiplayer extends Engine {
   }
 
   send() {
-    const key = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'}, keyValues = ['b', 's', 'ai', 'pt', 'd'];
     for (const t of this.pt) {
-      console.time('tankvar');
       const {x, y, lastUpdate, render, socket, message} = t;
-      console.timeEnd('tankvar');
-      console.time('othervar');
       const newrender = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
       message.tickspeed = tickspeed;
       message.global = this.global;
       message.logs = this.logs;
-      for (const entity of keyValues) {
+      for (const entity of this.sendkeyValues) {
         message[entity] = [];
         message.delete[entity] = [];
       }
-      console.timeEnd('othervar');
-      console.time('getentities');
       let send = render.logs !== newrender.logs;
       const sy = Math.max(Math.floor(y/100)-7, 0), ey = Math.min(Math.floor(y/100)+7, 30), sx = Math.max(Math.floor(x/100)-10, 0), ex = Math.min(Math.floor(x/100)+10, 30);
       for (let cy = sy; cy < ey; cy++) {
         for (let cx = sx; cx < ex; cx++) {
           for (const {constructor, id, raw, updatedLast} of this.cells[cx][cy]) {
-            const type = key[constructor.name];
+            const type = this.sendkey[constructor.name];
             newrender[type].add(id);
             if (!render[type].has(id) || updatedLast > lastUpdate) {
               message[type].push(raw);
@@ -493,9 +489,7 @@ class Multiplayer extends Engine {
           }
         }
       }
-      console.timeEnd('getentities');
-      console.time('delentities');
-      for (const entity of keyValues) {
+      for (const entity of this.sendkeyValues) {
         for (const id of render[entity]) {
           if (!newrender[entity].has(id)) {
             message.delete[entity].push(id);
@@ -503,13 +497,9 @@ class Multiplayer extends Engine {
           }
         }
       }
-      console.timeEnd('delentities');
       t.render = newrender;
       t.lastUpdate = Date.now();
-      console.time('send');
       if (send && !socket.bufferedAmount) socket.send(message);
-      console.timeEnd('send');
-      outgoing_per_second++;
     }
   }
 
