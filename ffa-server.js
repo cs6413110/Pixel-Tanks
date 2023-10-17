@@ -134,8 +134,7 @@ ffa.ws(SETTINGS.path, socket => {
       socket.username = data.username;
     }
     if (data.type === 'join') {
-      console.log(servers);
-      //if (!await auth(data.username, data.token)) return socket.send({status: 'error', message: 'Invalid Token.'});
+      //if (!await auth(data.username, data.token)) return socket.send({status: 'error', message: 'Invalid Token.'}); TEMP
       let joinable;
       if (data.gamemode === 'ffa') {
         for (const id in servers) {
@@ -180,11 +179,7 @@ ffa.ws(SETTINGS.path, socket => {
       socket.room = joinable;
       servers[joinable].add(socket, data.tank);
     } else if (data.type === 'update') {
-      if (servers[socket.room] !== undefined) {
-        servers[socket.room].update(data);
-      } else {
-        socket.send({status: 'error', message: 'GIVE TO AARON: Socket tried to join room '+socket.room+' which is invalid'});
-      }
+      if (servers[socket.room] !== undefined) servers[socket.room].update(data);
     } else if (data.type === 'ping') {
       socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
@@ -204,14 +199,14 @@ ffa.ws(SETTINGS.path, socket => {
         func.bind(socket)(args);
       } else socket.send({status: 'error', message: 'Command not found.'});
     } else if (data.type === 'stats') {
-      let gamemodes = {FFA: [], DUELS: [], TDM: []};
-      for (let i = 0; i < servers.length; i++) {
-        gamemodes[servers[i].constructor.name][i] = [];
-        for (let l = 0; l < servers[i].pt.length; l++) {
-          gamemodes[servers[i].constructor.name][i].push(servers[i].pt[l].username);
+      let gamemodes = {FFA: [], DUELS: [], TDM: [], tickspeed, event: 'stats'};
+      for (const id in servers) {
+        gamemodes[servers[id].constructor.name][id] = [];
+        for (const pt of servers[id].pt) {
+          gamemodes[servers[id].constructor.name][id].push(pt.username);
         }
       }
-      socket.send({...gamemodes, tickspeed, event: 'stats'});
+      socket.send(gamemodes);
     } else setTimeout(() => socket.close());
   });
   socket.on('close', (code, reason) => {
