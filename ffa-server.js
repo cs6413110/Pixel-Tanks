@@ -495,7 +495,7 @@ class Multiplayer extends Engine {
       }
       console.timeEnd('getentities');
       console.time('delentities');
-      for (const entity of keyValues)) {
+      for (const entity of keyValues) {
         for (const id of render[entity]) {
           if (!newrender[entity].has(id)) {
             message.delete[entity].push(id);
