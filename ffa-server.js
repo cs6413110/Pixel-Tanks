@@ -463,6 +463,7 @@ class Multiplayer extends Engine {
     for (const t of this.pt) {
       const {x, y, lastUpdate, render, socket} = t;
       const {newrender, message} = this;
+      console.log(newrender, message);
       message.tickspeed = tickspeed;
       message.global = this.global;
       message.logs = this.logs;
