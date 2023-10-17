@@ -760,7 +760,6 @@ const Profile = (arr, update) => {
             return r;
           }
           Object.defineProperty(e[p], 'name', {value: f.name.split('.')[1]});
-          console.log('static: '+e[p].name);
           functions.push(f);
         }
       }
@@ -778,7 +777,6 @@ const Profile = (arr, update) => {
             return r;
           }
           Object.defineProperty(e.prototype[p], 'name', {value: p === 'constructor' ? n : p});
-          console.log('dynamic: '+e.prototype[p].name);
           functions.push(f);
         }
       }
