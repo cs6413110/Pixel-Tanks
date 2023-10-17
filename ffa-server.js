@@ -514,7 +514,7 @@ class Multiplayer extends Engine {
     this.logs.push({m: this.rageMsg(socket.username), c: '#E10600'});
     if (this.pt.length === 0) {
       this.i.forEach(i => clearInterval(i));
-      servers[servers.indexOf(this)] = undefined;
+      servers[socket.room] = undefined;
     }
   }
 
