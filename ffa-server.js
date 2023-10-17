@@ -137,7 +137,7 @@ ffa.ws(SETTINGS.path, socket => {
       //if (!await auth(data.username, data.token)) return socket.send({status: 'error', message: 'Invalid Token.'});
       let joinable;
       if (data.gamemode === 'ffa') {
-        for (const id of servers) {
+        for (const id in servers) {
           if (servers[id].pt.length < SETTINGS.ppm && servers[id] instanceof FFA) {
             joinable = id;
             break;
@@ -148,7 +148,7 @@ ffa.ws(SETTINGS.path, socket => {
           servers[id] = new FFA();
         }
       } else if (data.gamemode === 'duels') {
-        for (const id of servers) {
+        for (const id in servers) {
           if (servers[id].pt.length === 1 && servers[id] instanceof DUELS) {
             joinable = id;
             break;
@@ -159,7 +159,7 @@ ffa.ws(SETTINGS.path, socket => {
           servers[id] = new DUELS();
         }
       } else if (data.gamemode === 'tdm') {
-        for (const id of servers) {
+        for (const id in servers) {
           if (servers[id].mode === 0 && servers[id] instanceof TDM) {
             joinable = id;
             break;
