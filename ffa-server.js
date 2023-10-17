@@ -777,7 +777,7 @@ const Profile = (arr, update) => {
             update(functions);
             return r;
           }
-          Object.defineProperty(e.prototype[p], 'name', {value: p});
+          Object.defineProperty(e.prototype[p], 'name', {value: p === 'constructor' ? n : p});
           console.log('dynamic: '+e.prototype[p].name);
           functions.push(f);
         }
