@@ -88,13 +88,6 @@ let sockets = [], servers = {}, incoming_per_second = 0, outgoing_per_second = 0
   
 ];
 
-
-if (SETTINGS.log_strain) setInterval(() => {
-  console.log('Incoming: ' + incoming_per_second + ' | Outgoing: ' + outgoing_per_second);
-  incoming_per_second = 0;
-  outgoing_per_second = 0;
-}, 1000);
-
 setInterval(() => {
   SETTINGS.bans = SETTINGS.bans.filter(ban => {
     ban.time--;
@@ -120,7 +113,7 @@ ffa.ws(SETTINGS.path, socket => {
     try {
       data = JSON.parse(data);
     } catch(e) {return socket.close()}
-    /*if (!socket.username) {
+    if (!socket.username) {
       if (/\s|:/.test(data.username)) return socket.close();
       const ban = SETTINGS.bans.find(i => i.username === data.username);
       if (ban) {
@@ -128,7 +121,7 @@ ffa.ws(SETTINGS.path, socket => {
         return setImmediate(() => socket.close());
       }
       socket.username = data.username;
-    }*/
+    }
     if (data.type === 'update') {
       if (servers[socket.room] !== undefined) servers[socket.room].update(data);
     } else if (data.type === 'join') {
