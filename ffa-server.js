@@ -20,7 +20,6 @@ let fetch;
 })();
 const express = require('express');
 const expressWs = require('express-ws');
-const msgpack = require('msgpack-lite');
 const Filter = require('bad-words');
 const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
 
@@ -111,15 +110,7 @@ expressWs(ffa, undefined, {perMessageDeflate: false, skipUTF8Validation: true});
 ffa.ws(SETTINGS.path, socket => {
   sockets.push(socket);
   socket._send = socket.send;
-  socket.send = data => {
-    console.time('msgpack');
-    const msg = msgpack.encode(data);
-    console.timeEnd('msgpack');
-    console.time('stringify');
-    JSON.stringify(data);
-    console.timeEnd('stringify');
-    socket._send(msg);
-  }
+  socket.send = data => socket._send(JSON.stringify(data));
   if (SETTINGS.banips.includes(socket.ip)) {
     socket.send({status: 'error', message: 'Your ip has been banned!'});
     return setImmediate(() => socket.close());
@@ -127,7 +118,7 @@ ffa.ws(SETTINGS.path, socket => {
   socket.on('message', async (data) => {
     incoming_per_second++;
     try {
-      data = msgpack.decode(data);
+      data = JSON.parse(data);
     } catch(e) {
       console.log('Invalid data: '+data);
       return socket.close();
