@@ -107,7 +107,6 @@ setInterval(() => {
   });
 }, 60000);
 
-const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 expressWs(ffa, undefined, {perMessageDeflate: false, skipUTF8Validation: true});
 ffa.ws(SETTINGS.path, socket => {
   sockets.push(socket);
@@ -723,6 +722,7 @@ class TDM extends Multiplayer {
     }
   }
 }
+const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 
 ffa.listen(SETTINGS.port);
 module.exports = {ffa};
