@@ -108,7 +108,6 @@ class Engine {
         clearTimeout(t.gluTimeout);
         t.gluInterval = setInterval(() => {
           t.hp = Math.min(t.maxHp, t.hp+14);
-          this.playanimation('heal')
         }, 400);
         t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
       } else if (e.includes('block#')) {
