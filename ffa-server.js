@@ -166,7 +166,7 @@ ffa.ws(SETTINGS.path, socket => {
         }
         if (!joinable) {
           joinable = Math.random();
-          servers[joinable] = new FFA();
+          servers[joinable] = new TDM();
         }
       } else if (data.gamemode === 'juggernaut') {
         socket.send({status: 'error', message: 'This gamemode is not ready'});
