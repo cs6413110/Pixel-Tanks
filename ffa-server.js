@@ -88,6 +88,7 @@ let sockets = [], servers = {}, incoming_per_second = 0, outgoing_per_second = 0
   
 ];
 
+
 if (SETTINGS.log_strain) setInterval(() => {
   console.log('Incoming: ' + incoming_per_second + ' | Outgoing: ' + outgoing_per_second);
   incoming_per_second = 0;
@@ -106,6 +107,7 @@ setInterval(() => {
   });
 }, 60000);
 
+const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 expressWs(ffa, undefined, {perMessageDeflate: false, skipUTF8Validation: true});
 ffa.ws(SETTINGS.path, socket => {
   sockets.push(socket);
@@ -115,15 +117,11 @@ ffa.ws(SETTINGS.path, socket => {
     socket.send({status: 'error', message: 'Your ip has been banned!'});
     return setImmediate(() => socket.close());
   }
-  socket.on('message', async (data) => {
-    incoming_per_second++;
+  socket.on('message', async(data) => {
     try {
       data = JSON.parse(data);
-    } catch(e) {
-      console.log('Invalid data: '+data);
-      return socket.close();
-    }
-    if (!socket.username) {
+    } catch(e) {return socket.close()}
+    /*if (!socket.username) {
       if (/\s|:/.test(data.username)) return socket.close();
       const ban = SETTINGS.bans.find(i => i.username === data.username);
       if (ban) {
@@ -131,54 +129,31 @@ ffa.ws(SETTINGS.path, socket => {
         return setImmediate(() => socket.close());
       }
       socket.username = data.username;
-    }
-    if (data.type === 'join') {
-      //if (!await auth(data.username, data.token)) return socket.send({status: 'error', message: 'Invalid Token.'}); TEMP
-      let joinable;
-      if (data.gamemode === 'ffa') {
-        for (const id in servers) {
-          if (servers[id].pt.length < SETTINGS.ppm && servers[id] instanceof FFA) {
-            joinable = id;
-            break;
-          }
+    }*/
+    if (data.type === 'update') {
+      if (servers[socket.room] !== undefined) servers[socket.room].update(data);
+    } else if (data.type === 'join') {
+      if (!await auth(data.username, data.token)) return socket.send({status: 'error', message: 'Invalid Token.'}); TEMP
+      let server;
+      for (const id in servers) {
+        if (servers[id] instanceof joinKey[data.gamemode]) {
+          if (data.gamemode === 'ffa' && servers[id].pt.length >= SETTINGS.ppm) continue;
+          if (data.gamemode === 'duels' && servers[id].pt.length !== 1) continue;
+          if (data.gamemode === 'tdm' && servers[id].mode !== 0) continue;
+          server = id;
+          break;
         }
-        if (!joinable) {
-          joinable = Math.random();
-          servers[joinable] = new FFA();
-        }
-      } else if (data.gamemode === 'duels') {
-        for (const id in servers) {
-          if (servers[id].pt.length === 1 && servers[id] instanceof DUELS) {
-            joinable = id;
-            break;
-          }
-        }
-        if (!joinable) {
-          joinable = Math.random();
-          servers[joinable] = new DUELS();
-        }
-      } else if (data.gamemode === 'tdm') {
-        for (const id in servers) {
-          if (servers[id].mode === 0 && servers[id] instanceof TDM) {
-            joinable = id;
-            break;
-          }
-        }
-        if (!joinable) {
-          joinable = Math.random();
-          servers[joinable] = new TDM();
-        }
-      } else if (data.gamemode === 'juggernaut') {
-        socket.send({status: 'error', message: 'This gamemode is not ready'});
       }
-      if (servers[joinable].pt.some(t => t.username === socket.username)) {
+      if (!server) {
+        server = Math.random();
+        servers[server] = new joinKey[data.gamemode]();
+      }
+      if (servers[server].pt.some(t => t.username === socket.username)) {
         socket.send({status: 'error', message: 'You are already in the server!'});
         return setImmediate(() => socket.close());
       }
-      socket.room = joinable;
-      servers[joinable].add(socket, data.tank);
-    } else if (data.type === 'update') {
-      if (servers[socket.room] !== undefined) servers[socket.room].update(data);
+      socket.room = server;
+      servers[server].add(socket, data.tank);
     } else if (data.type === 'ping') {
       socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
