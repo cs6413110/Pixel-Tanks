@@ -363,6 +363,9 @@ const Commands = {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'Only admins can use this for now'});
     if (servers[this.room].mode === 0) servers[this.room].mode = 1;
   },
+  reboot: () => {
+    process.exit(1);
+  }
 };
 
 class A {
