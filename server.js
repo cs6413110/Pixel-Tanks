@@ -4,7 +4,6 @@ const express = require('express');
 const expressWs = require('express-ws');
 const fs = require('fs').promises;
 const { MongoClient } = require('mongodb');
-const msgpack = require('msgpack-lite');
 const Filter = require('bad-words');
 const TokenGenerator = require('uuid-token-generator');
 const { ffa } = require('./ffa-server.js');
@@ -85,10 +84,10 @@ expressWs(app);
 app.ws('/', socket => {
   sockets.push(socket);
   socket._send = socket.send;
-  socket.send = (data) => socket._send(msgpack.encode(data));
+  socket.send = (data) => socket._send(JSON.stringify(data));
   socket.on('message', (data) => {
     try {
-      data = msgpack.decode(data);
+      data = JSON.parse(data);
     } catch (e) {
       console.log('Invalid Data: '+data);
       return socket.close();
