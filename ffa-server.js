@@ -444,7 +444,7 @@ class Multiplayer extends Engine {
             const type = this.sendkey[entity.constructor.name];
             newrender[type].add(entity.id);
             if (!t.render[type].has(entity.id) || entity.updatedLast > t.lastUpdate) {
-              t.message[type].push(entity.raw);
+              message[type].push(entity.raw);
               send = true;
             }
           }
@@ -453,7 +453,7 @@ class Multiplayer extends Engine {
       for (const entity of this.sendkeyValues) {
         for (const id of t.render[entity]) {
           if (!newrender[entity].has(id)) {
-            t.message.delete[entity].push(id);
+            message.delete[entity].push(id);
             send = true;
           }
         }
