@@ -637,6 +637,15 @@ function Game() {
           spike: '/items/spike',
           mine: '/items/mine',
           fortress: '/items/fortress',
+          toolkitui: '/items/toolkitui',
+          boostui: '/items/boostui',
+          powermissleui: '/items/powermissleui',
+          tacticalui: '/items/tacticalui',
+          stealthui: '/items/stealthui',
+          builderui: '/items/builderui',
+          warriorui: '/items/warriorui',
+          medicui: '/items/medicui',
+          fireui: '/items/fireui',
         }
       };
 
