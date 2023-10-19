@@ -340,6 +340,8 @@ class Tank {
     } else {
       this.grapple.bullet.destroy();
       this.grapple = false;
+      this.x = Math.floor(this.x/4)*4;
+      this.y = Math.floor(this.y/4)*4
     }
   }
 
