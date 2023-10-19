@@ -433,6 +433,11 @@ const bullet_settings = {
     healmissle: 1.5,
     dynamite: .8,
     fire: .9,
+  },
+  size: {
+    healmissle: 50,
+    powermissle: 50,
+    megamissle: 100,
   }
 };
 
@@ -488,7 +493,7 @@ class Shot {
         this.update = () => {}
         return false;
       } else {
-        if (key[type]) host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
+        if (bullet_settings.size[type]) host.d.push(new Damage(x - bullet_settings.size[type] / 2 + 10, y - bullet_settings.size[type] / 2 + 10, bullet_settings.size[type], bullet_settings.size[type], this.damage, this.team, host));
         return true;
       }
     }
@@ -528,8 +533,8 @@ class Shot {
               e.fire = false;
             }, 4000);
           } else {
-            if (type.includes('missle')) {
-              host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
+            if (bullet_settings.size[type]) {
+              host.d.push(new Damage(x - bullet_settings.size[type] / 2 + 10, y - bullet_settings.sizetype] / 2 + 10, bullet_settings.size[type], bullet_settings.size[type], this.damage, this.team, host));
             } else if (getTeam(e.team) !== getTeam(this.team)) {
               e.damageCalc(x, y, this.damage, getUsername(this.team));
             }
@@ -547,8 +552,8 @@ class Shot {
             return false;
           } else {
             if (type === 'fire') host.b.push(new Block(e.x, e.y, Infinity, 'fire', this.team, host));
-            if (key[type]) {
-              host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
+            if (bullet_settings.size[type]) {
+              host.d.push(new Damage(x - bullet_settings.size[type] / 2 + 10, y - bullet_settings.size[type] / 2 + 10, bullet_settings.size[type], bullet_settings.size[type], this.damage, this.team, host));
             } else if (type !== 'fire') {
               e.damage(this.damage);
             }
@@ -574,8 +579,8 @@ class Shot {
               e.fire = false;
             }, 4000);
           } else {
-            if (key[type]) {
-              host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
+            if (bullet_settings.size[type]) {
+              host.d.push(new Damage(x - bullet_settings.size[type] / 2 + 10, y - bullet_settings.size[type] / 2 + 10, bullet_settings.size[type], bullet_settings.size[type], this.damage, this.team, host));
             } else if (getTeam(e.team) !== getTeam(this.team)) {
               e.damageCalc(x, y, this.damage);
             }
