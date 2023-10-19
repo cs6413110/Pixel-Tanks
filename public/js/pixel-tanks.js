@@ -1658,11 +1658,11 @@ function Game() {
         if (!this.timers[g[i]] === 0) {
           GUI.draw.fillStyle = '#000000';
           GUI.draw.globalAlpha = .5;
-          GUI.draw.fillRect(c[i], 950, 50, 50);
+          GUI.draw.fillRect([c[i]], 950, 50, 50);
         } else {
           GUI.draw.fillStyle = '#FFFFFF';
           GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.[g[i]].time+this.timers.[g[i]].cooldown))%4000)/1000)-3)));
-          GUI.draw.fillRect(c[i], 950, 50, 50);
+          GUI.draw.fillRect([c[i]], 950, 50, 50);
         }
       }
       GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.class+"ui"], 345, 950, 50, 50, 1);
