@@ -534,7 +534,7 @@ class Shot {
             }, 4000);
           } else {
             if (bullet_settings.size[type]) {
-              host.d.push(new Damage(x - bullet_settings.size[type] / 2 + 10, y - bullet_settings.sizetype] / 2 + 10, bullet_settings.size[type], bullet_settings.size[type], this.damage, this.team, host));
+              host.d.push(new Damage(x - bullet_settings.size[type] / 2 + 10, y - bullet_settings.size[type] / 2 + 10, bullet_settings.size[type], bullet_settings.size[type], this.damage, this.team, host));
             } else if (getTeam(e.team) !== getTeam(this.team)) {
               e.damageCalc(x, y, this.damage, getUsername(this.team));
             }
