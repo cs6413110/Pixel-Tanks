@@ -1648,13 +1648,13 @@ function Game() {
         GUI.draw.fillStyle = PixelTanks.userData.color;
         GUI.draw.fillRect(c[i], 900+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*100, 100, 100);
       }
-      GUI.drawImage(PixelTanks.images.items["powermissleui"], 418, 900, 50, 50, 1);
-      GUI.drawImage(PixelTanks.images.items["toolkitui"], 1132, 900, 50, 50, 1);
-      GUI.drawImage(PixelTanks.images.items["boostui"], 1212, 900, 50, 50, 1);
+      GUI.drawImage(PixelTanks.images.items["powermissleui"], 418, 450, 50, 50, 1);
+      GUI.drawImage(PixelTanks.images.items["toolkitui"], 1132, 450, 50, 50, 1);
+      GUI.drawImage(PixelTanks.images.items["boostui"], 1212, 450, 50, 50, 1);
       for (let i = 0; i < 3; i++) {
         GUI.draw.fillRect([418, 1132, 1212][i], 950+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost'][i]])/[10000, 40000, 5000][i], 1)*50, 50, 50);
       }
-      GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.class+"ui"], 348, 900, 50, 50, 1);
+      GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.class+"ui"], 348, 450, 50, 50, 1);
       GUI.draw.fillRect(348, 950+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*50, 50, 50);
       GUI.draw.globalAlpha = 1;
 
