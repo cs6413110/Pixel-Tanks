@@ -436,31 +436,31 @@ class Multiplayer extends Engine {
     for (const t of this.pt) {
       const newrender = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
       const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
-      let send = render.logs !== newrender.logs;
+      let send = t.render.logs !== newrender.logs;
       const fx = Math.floor(t.x/100), fy = Math.floor(t.y/100), sy = Math.max(fy-7, 0), ey = Math.min(fy+7, 30), sx = Math.max(fx-10, 0), ex = Math.min(fx+10, 30);
       for (let cy = sy; cy < ey; cy++) {
         for (let cx = sx; cx < ex; cx++) {
           for (const entity of this.cells[cx][cy]) {
             const type = this.sendkey[entity.constructor.name];
             newrender[type].add(entity.id);
-            if (!render[type].has(entity.id) || entity.updatedLast > lastUpdate) {
-              message[type].push(entity.raw);
+            if (!t.render[type].has(entity.id) || entity.updatedLast > t.lastUpdate) {
+              t.message[type].push(entity.raw);
               send = true;
             }
           }
         }
       }
       for (const entity of this.sendkeyValues) {
-        for (const id of render[entity]) {
+        for (const id of t.render[entity]) {
           if (!newrender[entity].has(id)) {
-            message.delete[entity].push(id);
+            t.message.delete[entity].push(id);
             send = true;
           }
         }
       }
       t.render = newrender;
       t.lastUpdate = Date.now();
-      if (send) socket.send(message);
+      if (send) t.socket.send(message);
     }
   }
 
