@@ -1626,12 +1626,13 @@ function Game() {
       const c = [500, 666, 832, 998];
       for (let i = 0; i < 4; i++) {
         GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], c[i], 900, 100, 100, 1);
-        GUI.draw.fillStyle = '#000000';
         if (!this['canItem'+i]) {
+          GUI.draw.fillStyle = '#000000';
           GUI.draw.globalAlpha = .5;
           GUI.draw.fillRect(c[i], 900, 100, 100);
         } else {
-          GUI.draw.globalAlpha = Math.max(0, 100*Math.sin(Math.PI*.5*(((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)-3)));
+          GUI.draw.fillStyle = '#FFFFFF';
+          GUI.draw.globalAlpha = Math.max(0, 100*Math.sin(Math.PI*.5*(((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/4000-3)));
           GUI.draw.fillRect(c[i], 900, 100, 100);
         }
         GUI.draw.globalAlpha = 1;
