@@ -476,10 +476,22 @@ class Shot {
   }
 
   collision() {
-    const key = { bullet: false, shotgun: false, powermissle: 50, megamissle: 100, healmissle: 50, fire: false };
-    const { host, x, y, type } = this;
-    const cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add(Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .1)))+'x'+Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .1))));
+    const { host, x, y, type, cells} = this;
+    if (x < 0 || x > 3000 || y < 0 || y > 3000) {
+      if (type === 'grapple') {
+        const t = host.pt.find(t => t.username === getUsername(this.team));
+        if (t.grapple) t.grapple.bullet.destroy();
+        t.grapple = { target: { x: x, y: y }, bullet: this };
+        this.update = () => {};
+        return false;
+      } else if (type === 'dynamite') {
+        this.update = () => {}
+        return false;
+      } else {
+        if (key[type]) host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
+        return true;
+      }
+    }
     for (const cell of cells) { 
       const [cx, cy] = cell.split('x');
       for (const e of host.cells[cx][cy]) {
@@ -516,7 +528,7 @@ class Shot {
               e.fire = false;
             }, 4000);
           } else {
-            if (key[type]) {
+            if (type.includes('missle')) {
               host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
             } else if (getTeam(e.team) !== getTeam(this.team)) {
               e.damageCalc(x, y, this.damage, getUsername(this.team));
@@ -572,40 +584,26 @@ class Shot {
         }
       }
     }
-
-    if (x < 0 || x > 3000 || y < 0 || y > 3000) {
-      if (type === 'grapple') {
-        const t = host.pt.find(t => t.username === getUsername(this.team));
-        if (t.grapple) t.grapple.bullet.destroy();
-        t.grapple = { target: { x: x, y: y }, bullet: this };
-        this.update = () => {};
-        return false;
-      } else if (type === 'dynamite') {
-        this.update = () => {}
-        return false;
-      } else {
-        if (key[type]) host.d.push(new Damage(x - key[type] / 2 + 10, y - key[type] / 2 + 10, key[type], key[type], this.damage, this.team, host));
-        return true;
-      }
-    }
     return false;
   }
 
   update() {
-    const time = Math.floor((Date.now()-this.e)/5);
+    const time = Math.floor((Date.now()-this.e)/5), oldx = this.x, oldy = this.y;
     this.x = time*this.xm+this.sx;
     this.y = time*this.ym+this.sy;
-    const cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .09))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .09)));
-      this.host.cells[cx][cy].add(this);
-      cells.add(cx+'x'+cy);
+    if (Math.floor(oldx/100) !== Math.floor(this.x/100) || Math.floor(oldy/100) !== Math.floor(this.y/100) || Math.floor((oldx+10)/100) !== Math.floor((this.x+10)/100) || Math.floor((oldy+10)/100) !== Math.floor((this.y+10)/100)) { 
+      const cells = new Set();
+      for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
+        const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .09))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .09)));
+        this.host.cells[cx][cy].add(this);
+        cells.add(cx+'x'+cy);
+      }
+      for (const cell of [...this.cells].filter(c => !cells.has(c))) {
+        const [x, y] = cell.split('x');
+        this.host.cells[x][y].delete(this);
+      }
+      this.cells = cells;
     }
-    for (const cell of [...this.cells].filter(c => !cells.has(c))) {
-      const [x, y] = cell.split('x');
-      this.host.cells[x][y].delete(this);
-    }
-    this.cells = cells;
     if (this.collision()) this.destroy();
     if (this.type === 'shotgun') {
       this.d = Math.sqrt((this.x - this.sx) ** 2 + (this.y - this.sy) ** 2);
@@ -644,13 +642,12 @@ class Damage {
     this.f = 0;
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx+w-.01))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy+w-.01)));
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx+w/100-.01))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy+h/100-.01)));
       host.cells[cx][cy].add(this);
       this.cells.add(cx+'x'+cy);
     }
-    const cells = new Set(), cache = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) cells.add(Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + this.w/100)))+'x'+Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + this.h/100))));
-    for (const cell of cells) {
+    const cache = new Set();
+    for (const cell of this.cells) {
       const [cx, cy] = cell.split('x');
       for (const e of host.cells[cx][cy]) {
         if (cache.has(e.id)) continue;
