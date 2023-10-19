@@ -1641,21 +1641,41 @@ function Game() {
           GUI.draw.fillRect(c[i], 900, 100, 100);
         } else {
           GUI.draw.fillStyle = '#FFFFFF';
-          GUI.draw.globalAlpha = .5*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
+          GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
           GUI.draw.fillRect(c[i], 900, 100, 100);
         }
         GUI.draw.globalAlpha = 1;
         GUI.draw.fillStyle = PixelTanks.userData.color;
         GUI.draw.fillRect(c[i], 900+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*100, 100, 100);
       }
-      GUI.drawImage(PixelTanks.images.items["powermissleui"], 418, 950, 50, 50, 1);
-      GUI.drawImage(PixelTanks.images.items["toolkitui"], 1132, 950, 50, 50, 1);
-      GUI.drawImage(PixelTanks.images.items["boostui"], 1212, 950, 50, 50, 1);
+      GUI.drawImage(PixelTanks.images.items["powermissleui"], 422, 950, 50, 50, 1);
+      GUI.drawImage(PixelTanks.images.items["toolkitui"], 1127, 950, 50, 50, 1);
+      GUI.drawImage(PixelTanks.images.items["boostui"], 1207, 950, 50, 50, 1);
+      const c = [422, 1127, 1207];
+      const g = ["powermissile","toolkit","boost"]
       for (let i = 0; i < 3; i++) {
-        GUI.draw.fillRect([418, 1132, 1212][i], 950+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost'][i]])/[10000, 40000, 5000][i], 1)*50, 50, 50);
+        GUI.draw.fillRect([422, 1127, 1207][i], 950+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost'][i]])/[10000, 40000, 5000][i], 1)*50, 50, 50);
+        if (!this.timers[g[i]] === 0) {
+          GUI.draw.fillStyle = '#000000';
+          GUI.draw.globalAlpha = .5;
+          GUI.draw.fillRect(c[i], 950, 50, 50);
+        } else {
+          GUI.draw.fillStyle = '#FFFFFF';
+          GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.[g[i]].time+this.timers.[g[i]].cooldown))%4000)/1000)-3)));
+          GUI.draw.fillRect(c[i], 950, 50, 50);
+        }
       }
-      GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.class+"ui"], 348, 950, 50, 50, 1);
-      GUI.draw.fillRect(348, 950+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*50, 50, 50);
+      GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.class+"ui"], 345, 950, 50, 50, 1);
+      GUI.draw.fillRect(345, 950+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*50, 50, 50);
+      if (!this.timers.class === 0) {
+          GUI.draw.fillStyle = '#000000';
+          GUI.draw.globalAlpha = .5;
+          GUI.draw.fillRect(345, 950, 50, 50);
+        } else {
+          GUI.draw.fillStyle = '#FFFFFF';
+          GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.class.time+this.timers.class.cooldown))%4000)/1000)-3)));
+          GUI.draw.fillRect(345, 950, 50, 50);
+        }
       GUI.draw.globalAlpha = 1;
 
       GUI.draw.fillStyle = '#000000';
