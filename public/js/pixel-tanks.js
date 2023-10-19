@@ -1641,7 +1641,7 @@ function Game() {
           GUI.draw.fillRect(c[i], 900, 100, 100);
         } else {
           GUI.draw.fillStyle = '#FFFFFF';
-          GUI.draw.globalAlpha = .5*Math.abs(Math.sin(Math.PI*.5*(((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))/1000)-3)));
+          GUI.draw.globalAlpha = .5*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
           GUI.draw.fillRect(c[i], 900, 100, 100);
         }
         GUI.draw.globalAlpha = 1;
