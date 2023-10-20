@@ -158,6 +158,7 @@ function Game() {
     }
 
     compile() {
+      return;
       this.cache = [];
       for (const b of this.buttons) {
         const x = this.render[0]+b[0]*this.render[2]/1600, y = this.render[1]+b[1]*this.render[3]/1000, w = b[2]*this.render[2]/1600, h = b[3]*this.render[3]/1000;
@@ -177,6 +178,7 @@ function Game() {
       }
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3], 1);
       this.cdraw();
+      return; //temp
       if (!this.buttonEffect) return;
       for (const b of this.buttons) {
         if (b[5]) {
