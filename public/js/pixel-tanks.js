@@ -135,6 +135,7 @@ function Game() {
         b[6] = 0;
       }
       this.render = [0, 0, 1600, 1000];
+      this.compile();
     }
     
     addListeners() {
@@ -154,29 +155,38 @@ function Game() {
         }
       }
     }
+
+    compile() {
+      this.cache = [];
+      for (const b of this.buttons) {
+        const x = this.render[0]+b[0]*this.render[2]/1600, y = this.render[1]+b[1]*this.render[3]/1000, w = b[2]*this.render[2]/1600, h = b[3]*this.render[3]/1000;
+        const canvas = document.createElement('canvas'), draw = canvas.getContext('2d');
+        canvas.width = w*PixelTanks.resizer;
+        canvas.height = h*PixelTanks.resizer;
+        canvas.draw.setTransfrom(1, 0, 0, 1, -x*PixelTanks.resizer, -y*PixelTanks.resizer);
+        canvas.draw.getContext('2d').drawImage(GUI.canvas, 0, 0);
+        this.cache.push([x, y, w, h, canvas]);
+      }  
+    }
     
     draw(render) {
-      if (render) this.render = render;
+      if (render && !this.render.equals(render)) {
+        this.render = render;
+        this.compile();
+      }
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3], 1);
       this.cdraw();
       if (!this.buttonEffect) return;
       for (const b of this.buttons) {
-        const x = this.render[0]+b[0]*this.render[2]/1600;
-        const y = this.render[1]+b[1]*this.render[3]/1000;
-        const w = b[2]*this.render[2]/1600;
-        const h = b[3]*this.render[3]/1000;
         if (b[5]) {
-          if (A.collider({x, y, w, h: h}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
+          const [x, y, w, h, canvas] = this.cache;
+          if (A.collider({x, y, w, h}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
             b[6] = Math.min(b[6]+1, 10);
           } else {
             b[6] = Math.max(b[6]-1, 0);
           }
         }
-        Menus.scaler.width = w*PixelTanks.resizer;
-        Menus.scaler.height = h*PixelTanks.resizer;
-        Menus.scaler.getContext('2d').setTransform(1, 0, 0, 1, -x*PixelTanks.resizer, -y*PixelTanks.resizer);
-        Menus.scaler.getContext('2d').drawImage(GUI.canvas, 0, 0);
-        GUI.drawImage(Menus.scaler, (x-b[6]), (y-b[6]), (w+b[6]*2), (h+b[6]*2), 1);
+        GUI.drawImage(canvas, x-b[6], y-b[6], w+b[6]*2, h+b[6]*2, 1);
       }
     }
   }
