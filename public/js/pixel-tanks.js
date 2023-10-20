@@ -159,7 +159,6 @@ function Game() {
       if (render) this.render = render;
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3], 1);
       this.cdraw();
-      return; // temp
       if (!this.buttonEffect) return;
       for (const b of this.buttons) {
         const x = this.render[0]+b[0]*this.render[2]/1600;
@@ -188,6 +187,8 @@ function Game() {
     }
   
     static render() {
+      clearTimeout(Menus.r);
+      Menus.r = setTimeout(() => alert('menu rendering off'), 500);
       Menus.renderer = requestAnimationFrame(Menus.render);
       GUI.clear();
       Menus.redraw();
@@ -1641,7 +1642,7 @@ function Game() {
           GUI.draw.fillRect(c[i], 900, 100, 100);
         } else {
           GUI.draw.fillStyle = '#FFFFFF';
-          GUI.draw.globalAlpha = .5*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
+          GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
           GUI.draw.fillRect(c[i], 900, 100, 100);
         }
         GUI.draw.globalAlpha = 1;
