@@ -172,7 +172,7 @@ function Game() {
     }
     
     draw(render) {
-      if (render && !this.render.equals(render)) {
+      if (render && this.render !== render) {
         this.render = render;
         this.compile();
       }
