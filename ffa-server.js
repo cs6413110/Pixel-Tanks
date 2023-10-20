@@ -7,7 +7,7 @@ const SETTINGS = {
   ppm: 400, // players per room
   log_strain: false, // Show messages per second in logs
   ups_boost: false, // Can lag clients and servers. Recommened false.
-  UPS: 30, // updates per second
+  UPS: 60, // updates per second
   filterProfanity: true, // filter profanity
   port: 15132,
   export: true,
