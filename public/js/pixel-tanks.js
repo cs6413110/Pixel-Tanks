@@ -200,8 +200,6 @@ function Game() {
     }
   
     static render() {
-      clearTimeout(Menus.r);
-      Menus.r = setTimeout(() => alert('menu rendering off'), 500);
       Menus.renderer = requestAnimationFrame(Menus.render);
       GUI.clear();
       Menus.redraw();
