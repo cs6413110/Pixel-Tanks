@@ -323,25 +323,19 @@ const Commands = {
   },
   kick: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({ status: 'error', message: 'You are not a server admin!' });
-    if (data.length != 2) return this.send({ status: 'error', message: 'Command has invalid arguments.' });
-    A.each(sockets, function(i, socket, data) {
-      if (this.username === data[1]) {
-        this.send({status: 'error', message: 'You have been kicked by '+socket.username});
-        setTimeout(function() {this.close()}.bind(this));
+    if (data.length !== 2) return this.send({ status: 'error', message: 'Command has invalid arguments.' });
+    for (const socket of sockets) {
+      if (socket.username === data[1]) {
+        socket.send({status: 'error', message: 'You have been kicked by '+this.username});
+        setTimeout(() => socket.close());
       }
-    }, null, null, this, data);
+    }
   },
   kill: function(data) {
     if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
-    if (data.length != 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    for (const s of servers) for (const t of s.pt) if (data[1] === t.username) t.damageCalc(t.x, t.y, 6000, this.username);
-  },
-  cosmetic: function(data) {
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
-    if (data.length !== 3) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    var pt = A.search(servers[this.room].pt, 'username', data[1]);
-    if (pt === undefined) return this.send({status: 'error', message: 'Player Not Found.'}); else pt.cosmetic = data[2].replaceAll('_', ' ');
+    if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
+    for (const server of Object.values(servers)) for (const t of server.pt) if (data[1] === t.username) t.damageCalc(t.x, t.y, 6000, this.username);
   },
   ai: function(data) {
     if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
@@ -351,28 +345,16 @@ const Commands = {
   },
   spectate: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
-    servers.forEach(s => {
-      s.pt.forEach(t => {
-        if (t.username === data[1]) t.ded = true;
-      });
-    });
+    for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = true;
   },
   live: function(data) {
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
-    servers.forEach(s => {
-      s.pt.forEach(t => {
-        if (t.username === data[1]) t.ded = false;
-      });
-    });
+    for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = false;
   },
   switch: function(data) {
     if (!(servers[this.room] instanceof TDM)) return this.send({status: 'error', message: 'This command is only allowed in TDM'});
-    if (data.length === 2 && !SETTINGS.admins.includes(this.username))  return this.send({status: 'error', message: 'You are not an admin!'});
-    for (const t of servers[this.room].pt) {
-      if (t.username === (data.length === 1 ? socket.username : data[1])) {
-        t.color = t.color === '#FF0000' ? '#0000FF' : '#FF0000';
-      }
-    }
+    if (data.length === 2 && !SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not an admin!'});
+    for (const t of servers[this.room].pt) if (t.username === (data.length === 1 ? this.username : data[1])) t.color = t.color === '#FF0000' ? '#0000FF' : '#FF0000';
   },
   start: function() {
     if (!(servers[this.room] instanceof TDM)) return this.send({status: 'error', message: 'This command is only allowed in TDM'});
