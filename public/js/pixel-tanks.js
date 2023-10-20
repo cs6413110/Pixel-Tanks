@@ -1,3 +1,4 @@
+window.onerror = alert;
 const pathfinding = document.createElement('SCRIPT');
 pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
 pathfinding.onload = () => {
