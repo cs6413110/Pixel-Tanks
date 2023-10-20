@@ -367,7 +367,7 @@ const Commands = {
   },
   switch: function(data) {
     if (data.length === 2 && !SETTINGS.admins.includes(this.username))  return this.send({status: 'error', message: 'You are not an admin!'});
-    if (!(servers[socket.room] instanceof TDM)) return socket.send({status: 'error', message: 'This command is only allowed in TDM'});
+    if (!(servers[this.room] instanceof TDM)) return socket.send({status: 'error', message: 'This command is only allowed in TDM'});
     for (const t of servers[this.room].pt) {
       if (t.username === (data.length === 1 ? socket.username : data[1])) {
         t.color = t.color === '#FF0000' ? '#0000FF' : '#FF0000';
@@ -375,7 +375,7 @@ const Commands = {
     }
   },
   start: function() {
-    if (!(servers[socket.room] instanceof TDM)) return socket.send({status: 'error', message: 'This command is only allowed in TDM'});
+    if (!(servers[this.room] instanceof TDM)) return socket.send({status: 'error', message: 'This command is only allowed in TDM'});
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'Only admins can use this for now'});
     if (servers[this.room].mode === 0) servers[this.room].mode = 1;
   },
