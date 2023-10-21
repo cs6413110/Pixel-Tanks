@@ -1506,7 +1506,7 @@ function Game() {
       }
       const p = t.username === PixelTanks.user.username;
       let a = 1;
-      if (t.invis && !p && !this.ded) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
+      if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
       if ((t.invis && p) || t.ded) a = .5;
       GUI.draw.globalAlpha = a;
       PixelTanks.renderBottom(t.x, t.y, 80, t.color, t.baseRotation);
@@ -1912,7 +1912,7 @@ function Game() {
           this.timers.class = {time: Date.now(), cooldown: 50};
         } else if (c === 'tactical') {
           this.fire('megamissle');
-          this.timers.class = {time: Date.now(), cooldown: 20000};
+          this.timers.class = {time: Date.now(), cooldown: 25000};
         } else if (c === 'builder') {
           this.tank.use.push('turret');
           this.timers.class = {time: Date.now(), cooldown: 30000};

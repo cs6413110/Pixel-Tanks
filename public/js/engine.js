@@ -273,7 +273,7 @@ class Tank {
         if (!collision(this.x, this.y, 80, 80, t.x, t.y, 80, 80)) continue;
         t.damageCalc(t.x, t.y, this.class === 'warrior' ? 75 : -30, this.username);
         t.canBashed = false;
-        setTimeout(() => {t.canBashed = true}, 400);
+        setTimeout(() => {t.canBashed = true}, 800);
       }
     }
     for (const ai of this.host.ai) {
@@ -283,7 +283,7 @@ class Tank {
         if (!collision(this.x, this.y, 80, 80, ai.x, ai.y, 80, 80)) continue;
         ai.damageCalc(ai.x, ai.y, this.class === 'warrior' ? 75 : -30, getUsername(this.team));
         ai.canBashed = false;
-        setTimeout(() => {ai.canBashed = true}, 400);
+        setTimeout(() => {ai.canBashed = true}, 800);
       }
     }
     for (const {x, y, type, team} of this.host.b) {
@@ -794,7 +794,7 @@ class AI {
         if (!collision(this.x, this.y, 80, 80, t.x, t.y, 80, 80)) continue;
         t.damageCalc(t.x, t.y, this.class === 'warrior' ? 75 : -30, getUsername(this.team));
         t.canBashed = false;
-        setTimeout(() => {t.canBashed = true}, 400);
+        setTimeout(() => {t.canBashed = true}, 800);
       }
     }
     for (const ai of this.host.ai) {
@@ -804,7 +804,7 @@ class AI {
         if (!collision(this.x, this.y, 80, 80, ai.x, ai.y, 80, 80)) continue;
         ai.damageCalc(ai.x, ai.y, this.class === 'warrior' ? 75 : -30, getUsername(this.team));
         ai.canBashed = false;
-        setTimeout(() => {ai.canBashed = true}, 400);
+        setTimeout(() => {ai.canBashed = true}, 800);
       }
     }
     for (const {x, y, type, team} of this.host.b) {
