@@ -1289,7 +1289,7 @@ function Game() {
       this.msg = '';
       this.multiplayer = multiplayer;
       this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
-      this.tank.invis = PixelTanks.userData.class === 'stealth';
+      this.tank.invis = false;
       this.ops = 0;
       this.ups = 0;
       this.fps = 0;
@@ -1907,8 +1907,20 @@ function Game() {
         this.canClass = false;
         const c = PixelTanks.userData.class;
         if (c === 'stealth' && !this.halfSpeed) {
-          this.tank.invis = !this.tank.invis;
-          this.timers.class = {time: Date.now(), cooldown: 50};
+          const time = (Date.now()-this.timers.class.time)
+          if (this.tank.invis) {
+            clearTimeout(this.stealthTimeout);
+            this.tank.invis = false;
+            this.timers.class = {time: Date.now(), cooldown: time*2};
+          } else if (time > this.timers.class.cooldown) {
+            this.tank.invis = true;
+            this.timers.class = {time: Date.now(), cooldown: 30000};
+            this.stealthTimeout = setTimeout(() => {
+              this.tank.invis = false;
+              this.timers.class = {time: Date.now(), cooldown: 60000};
+            }, 30000);
+          }
+          return this.canClass = true;
         } else if (c === 'tactical') {
           this.fire('megamissle');
           this.timers.class = {time: Date.now(), cooldown: 25000};
