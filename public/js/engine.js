@@ -107,8 +107,8 @@ class Engine {
         clearInterval(t.gluInterval);
         clearTimeout(t.gluTimeout);
         t.gluInterval = setInterval(() => {
-          t.hp = Math.min(t.maxHp, t.hp+14);
-        }, 400);
+          t.hp = Math.min(t.maxHp, t.hp+.5);
+        }, 15);
         t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
       } else if (e.includes('block#')) {
         const coords = [{ r: [337.5, 360], dx: -10, dy: 80 }, { r: [0, 22.5], dx: -10, dy: 80 }, { r: [22.5, 67.5], dx: -100, dy: 80 }, { r: [67.5, 112.5], dx: -100, dy: -10 }, { r: [112.5, 157.5], dx: -100, dy: -100 }, { r: [157.5, 202.5], dx: -10, dy: -100 }, { r: [202.5, 247.5], dx: 80, dy: -100 }, { r: [247.5, 292.5], dx: 80, dy: -10 }, { r: [292.5, 337.5], dx: 80, dy: 80 }];
@@ -130,11 +130,13 @@ class Engine {
             }, tank.username === t.username ? 500 : bangTime);
           }
         }
-      } else if (e === 'bomb') {
-        for (let i = this.b.length-1; i >= 0; i--) {
-          const b = this.b[i];
-          if (collision(t.x, t.y, 80, 80, b.x, b.y, 100, 100)) b.destroy();
+      } else if (e === 'break') {
+        for (const cell of t.cells) {
+          const c = cell.split('x'), cx = c[0], cy = c[0];
+          for (const entity of this.cells[cx][cy]) if (entity instanceof Block && collision(x, y, 80, 80, entity.x, entity.y, 100, 100)) setTimeout(() => entity.destroy());
         }
+      } else if (e === 'bomb') {
+        const cx = Math.floor((t.x+40)/100), cy = Math.floor((t.y+40)/100);
       } else if (e === 'turret') {
         this.ai = this.ai.filter(ai => getUsername(ai.team) !== t.username);
         this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
@@ -266,9 +268,8 @@ class Tank {
     if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25, getUsername(this.fire.team));
     for (const t of this.host.pt) {
       if (this.username === t.username) continue;
-      if (this.class === 'medic' && !this.ded && !t.ded && (this.x-t.x)**2 + (this.y-t.y)**2 < 250000 && getTeam(this.team) === getTeam(t.team)) t.hp = Math.min(t.hp+.3, t.maxHp);
+      if (this.class === 'medic' && !this.ded && !t.ded && (this.x-t.x)**2 + (this.y-t.y)**2 < 62500 && getTeam(this.team) === getTeam(t.team)) t.hp = Math.min(t.hp+.5, t.maxHp);
       if (!this.immune || this.ded || !t.canBashed) continue;
-      if (!t.canBashed) continue;
       if ((this.class === 'warrior' && getTeam(this.team) !== getTeam(t.team)) || (this.class === 'medic' && getTeam(this.team) === getTeam(t.team))) {
         if (!collision(this.x, this.y, 80, 80, t.x, t.y, 80, 80)) continue;
         t.damageCalc(t.x, t.y, this.class === 'warrior' ? 75 : -30, this.username);
