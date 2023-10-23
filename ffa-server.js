@@ -125,7 +125,7 @@ ffa.ws(SETTINGS.path, socket => {
     if (data.type === 'update') {
       if (servers[socket.room] !== undefined) servers[socket.room].update(data);
     } else if (data.type === 'join') {
-      if (!await auth(data.username, data.token)) return socket.send({status: 'error', message: 'Invalid Token.'});
+      //if (!await auth(data.username, data.token)) return socket.send({status: 'error', message: 'Invalid Token.'});
       let server;
       for (const id in servers) {
         if (servers[id] instanceof joinKey[data.gamemode]) {
