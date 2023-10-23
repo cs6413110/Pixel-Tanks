@@ -1834,10 +1834,10 @@ function Game() {
         cooldown = 30000;
       } else if (id === 'weak') {
         this.tank.use.push('block#'+(PixelTanks.userData.class === 'builder' ? 'strong' : 'weak'));
-        cooldown = 3000;
+        cooldown = 4000;
       } else if (id === 'strong') {
         this.tank.use.push('block#'+(PixelTanks.userData.class === 'builder' ? 'gold' : 'strong'));
-        cooldown = 7000;
+        cooldown = 8000;
       } else if (id === 'spike') {
         this.tank.use.push('block#spike');
         cooldown = 10000;
