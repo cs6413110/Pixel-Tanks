@@ -1515,7 +1515,7 @@ function Game() {
       PixelTanks.renderTop(t.x, t.y, 80, t.color, t.r, t.pushback);
       GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
-      if ((!t.ded && getTeam(this.team) === getTeam(t.team)) || (this.ded && !t.ded) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
+      if ((!t.ded && getTeam(this.team) === getTeam(t.team)) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
         GUI.draw.fillStyle = '#FF0000';
@@ -1523,7 +1523,7 @@ function Game() {
         GUI.draw.fillStyle = '#00FF00';
         GUI.draw.fillRect(t.x, t.y+100, 80*t.hp/t.maxHp, 5);
       }
-      if (t.invis && t.username !== PixelTanks.user.username && !this.ded) return;
+      if (t.invis && t.username !== PixelTanks.user.username) return;
 
       var username = '['+t.rank+'] '+t.username;
       if (t.team.split(':')[1].includes('@leader')) {
