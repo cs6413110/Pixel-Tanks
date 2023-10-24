@@ -132,7 +132,7 @@ class Engine {
         }
       } else if (e === 'break') {
         for (const cell of t.cells) {
-          const c = cell.split('x'), cx = c[0], cy = c[0];
+          const c = cell.split('x'), cx = c[0], cy = c[1];
           for (const entity of this.cells[cx][cy]) if (entity instanceof Block && collision(x, y, 80, 80, entity.x, entity.y, 100, 100)) setTimeout(() => entity.destroy());
         }
       } else if (e === 'bomb') {
