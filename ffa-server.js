@@ -180,7 +180,7 @@ ffa.ws(SETTINGS.path, socket => {
 });
 const Commands = {
   createteam: function(data) {
-    if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
+    if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     if (servers[this.room].pt.find(t => getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
     if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
@@ -188,7 +188,7 @@ const Commands = {
     servers[this.room].logs.push({m: this.username+' created team '+data[1]+'. Use /join '+data[1]+' to join.', c: '#0000FF'});
   },
   join: function(data) {
-    if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
+    if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     if (servers[this.room].pt.find(t => t.username === this.username).team.includes('@leader')) return this.send({status: 'error', message: 'You must disband your team to join. (/leave)'});
     if (!servers[this.room].pt.find(t => getTeam(t.team) === data[1] && t.team.includes('@leader'))) return this.send({status: 'error', message: 'This team does not exist.'});
@@ -196,7 +196,7 @@ const Commands = {
     servers[this.room].logs.push({m: this.username+' requested to join team '+data[1]+'. Team owner can use /accept '+this.username+' to accept them.', c: '#0000FF'});
   },
   accept: function(data) {
-    if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
+    if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     var leader = servers[this.room].pt.find(t => t.username === this.username), requestor = servers[this.room].pt.find(t => t.username === data[1]);
     if (!requestor) return this.send({status: 'error', message: 'Player not found.'});
@@ -206,7 +206,7 @@ const Commands = {
     }
   },
   leave: function() {
-    if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
+    if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
     var target = servers[this.room].pt.find(t => t.username === this.username);
     if (target.team.includes('@leader')) servers[this.room].pt.forEach(t => {
       if (getTeam(t.team) === getTeam(target.team)) t.team = t.username+':'+Math.random();
@@ -214,7 +214,7 @@ const Commands = {
     target.team = this.username+':'+Math.random();
   },
   newmap: function(data) {
-    if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
+    if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
     servers[this.room].pt.forEach(t => {
@@ -332,13 +332,13 @@ const Commands = {
     }
   },
   kill: function(data) {
-    if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
+    if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     for (const server of Object.values(servers)) for (const t of server.pt) if (data[1] === t.username) t.damageCalc(t.x, t.y, 6000, this.username);
   },
   ai: function(data) {
-    if (!(servers[socket.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
+    if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
     if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 7) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), ':'+data[6], servers[this.room]));
