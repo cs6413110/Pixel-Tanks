@@ -1,3 +1,4 @@
+try {
 const settings = {
   path: '/ffa',
   authserver: 'localhost',
@@ -678,3 +679,6 @@ const server = Bun.serve({
   },
 });
 console.log(server.port);
+} catch(e) {
+  console.log(e);
+}
