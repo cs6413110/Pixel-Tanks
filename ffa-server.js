@@ -609,13 +609,13 @@ setInterval(() => {
 }, 10000);
 
 export {
-  open(socket) {
+  ffaopen(socket) {
       sockets.add(socket);
       socket._send = socket.send;
       socket.send = data => socket._send(JSON.stringify(data));
       // banip here
     },
-    async message(socket, data) {
+    async ffamessage(socket, data) {
       try {
         data = JSON.parse(data);
       } catch(e) {
@@ -672,7 +672,7 @@ export {
         socket.send(gamemodes);
       }
     },
-    close(socket, code, reason) {
+    ffaclose(socket, code, reason) {
       sockets.delete(socket);
       if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
     },
