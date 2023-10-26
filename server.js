@@ -1,6 +1,7 @@
 const { MongoClient } = require('mongodb');
 //const { ffa } = require('./ffa-server.js');
 
+let db;
 (async () => {
   await client.connect();
   db = client.db('data').collection('data');
