@@ -1,13 +1,13 @@
 const { MongoClient } = require('mongodb');
 //const { ffa } = require('./ffa-server.js');
-
+/*
 let db;
 (async () => {
   await client.connect();
   db = client.db('data').collection('data');
 })();
 
-const connectionString = 'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = process.env.PORT || 80;
+const connectionString = 'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority';
 const client = new MongoClient(connectionString), tokens = new Set(), sockets = [];
 const valid = (token, username) => tokens.has(`${token}:${username}`);
 const routes = {
@@ -40,7 +40,7 @@ const routes = {
   },
   ping: () => {},
 };
-
+*/
 const server = Bun.serve({
   port: process.env.PORT || 80,
   fetch(req, server) {
