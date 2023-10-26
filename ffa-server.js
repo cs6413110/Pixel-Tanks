@@ -10,7 +10,6 @@ const settings = {
   port: 15132,
 }
 
-const Bun = {serve: () => {}};
 class Engine {}
 //const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
 const auth = async(username, token) => {
