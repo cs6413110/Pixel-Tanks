@@ -1,6 +1,4 @@
 const ws = require('websocket').w3cwebsocket;
-const msgpack = require('msgpack-lite');
-
 const sockets = [];
 let interval;
 
@@ -9,7 +7,7 @@ let interval;
 // get min, avg, and max ping
 console.log('Beginning Test #1');
 console.log('--- Creating WebSockets ---');
-for (let i = 0; i < 50; i++) sockets.push(new ws('ws://localhost:80/ffa'));
+for (let i = 0; i < 50; i++) sockets.push(new ws('ws://localhost:3000'));
 setTimeout(() => {
   console.log('Connections completed!');
   console.log('Sending ping messages 60/s for 1 min');
@@ -19,14 +17,14 @@ setTimeout(() => {
       const id = Math.random();
       socket[id] = Date.now();
       socket.onmessage = data => {
-        data = msgpack.decode(new Uint8Array(data.data));
+        data = JSON.parse(new Uint8Array(data.data));
         const ping = Date.now()-socket[id];
         num++;
         average = (average*(num-1)+ping)/num;
         if (ping > max) max = ping;
         if (ping < min) min = ping;
       }
-      socket.send(msgpack.encode({type: 'ping', id}));
+      socket.send(JSON.stringify({type: 'ping', id}));
     }
   }, 1000/60);
   setTimeout(() => {
@@ -40,12 +38,12 @@ setTimeout(() => {
     for (const socket of sockets) {
       socket.onmessage = () => {}
       socket.username = 'bot-player#'+Math.random();
-      socket.send(msgpack.encode({username: socket.username, type: 'join', gamemode: 'ffa', tank: {rank: sockets.indexOf(socket), username: socket.username, color: '#FFFFFF'}}));
+      socket.send(JSON.stringify({username: socket.username, type: 'join', gamemode: 'ffa', tank: {rank: sockets.indexOf(socket), username: socket.username, color: '#FFFFFF'}}));
     }
     setTimeout(() => {
       console.log('Moving to random pos for 60ups');
       interval = setInterval(() => {
-        for (const socket of sockets) socket.send(msgpack.encode({username: socket.username, type: 'update', data: {x: Math.random()*3000, y: Math.random()*3000, fire: [], use: ['shield']}}));
+        for (const socket of sockets) socket.send(JSON.stringify({username: socket.username, type: 'update', data: {x: Math.random()*3000, y: Math.random()*3000, fire: [], use: ['shield']}}));
       }, 1000/60);
       setTimeout(() => {
         clearInterval(interval);
