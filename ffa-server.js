@@ -620,6 +620,7 @@ const server = Bun.serve({
   },
   websocket: {
     open(socket) {
+      console.log('socket connected');
       sockets.add(socket);
       socket._send = socket.send;
       socket.send = data => socket._send(JSON.stringify(data));
@@ -683,6 +684,7 @@ const server = Bun.serve({
       }
     },
     close(socket, code, reason) {
+      console.log('socket closed: '+code+' '+reason);
       sockets.delete(socket);
       if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
     },
