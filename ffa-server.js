@@ -670,9 +670,9 @@ const ffamessage = (socket, data) => {
         }
         socket.send(gamemodes);
       }
-    },
+    }
 const ffaclose = (socket, code, reason) => {
       sockets.delete(socket);
       if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
-    },
+    }
 export {ffaopen, ffamessage, ffaclose};
