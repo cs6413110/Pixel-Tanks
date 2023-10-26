@@ -56,6 +56,7 @@ setTimeout(() => getTickspeed());
 Bun.serve({
   port: settings.port,
   fetch(req, server) {
+    return new Reponse('hi');
     if (server.upgrade(req)) return;
     return new Response('Connect via websocket');
   },
