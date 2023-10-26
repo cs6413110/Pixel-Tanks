@@ -3,7 +3,7 @@ const { MongoClient } = require('mongodb');
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority')
 const tokens = new Set(), sockets = [];
 const valid = (token, username) => tokens.has(`${token}:${username}`);
-const auth = ({username, type, password}, socket) => {
+const auth = async({username, type, password}, socket) => {
   const item = await db.findOne({username}), token = Math.random();
   if (type === 'signup') {
     if (item !== null) return socket.send({status: 'error', message: 'This account already exists.'});
