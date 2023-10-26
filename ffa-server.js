@@ -10,8 +10,8 @@ const settings = {
   port: 15132,
 }
 
-class Engine {}
-//const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
+const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
+console.log('Loaded module');
 const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
   return await response.text() === 'true';
@@ -53,7 +53,7 @@ const getTickspeed = i => {
   });
 }
 setTimeout(() => getTickspeed());
-
+console.log('starting server');
 Bun.serve({
   port: settings.port,
   fetch(req, server) {
@@ -130,7 +130,7 @@ Bun.serve({
     },
   },
 });
-
+console.log('should be started?');
 const Commands = {
   createteam: function(data) {
     if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
