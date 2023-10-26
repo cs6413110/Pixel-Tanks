@@ -166,7 +166,7 @@ const Commands = {
   },
   newmap: function(data) {
     if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    if (!settings.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
     servers[this.room].pt.forEach(t => {
       t.x = servers[this.room].spawn.x;
@@ -176,7 +176,7 @@ const Commands = {
   },
   banip: function(data) {
     return this.send({status: 'error', messsage: "We wouldn't want another evanism catastrophe, now, would we?"});
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    if (!settings.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     var ip;
     try {
@@ -184,7 +184,7 @@ const Commands = {
     } catch(e) {
       return this.send({status: 'error', message: 'Player not found.'});
     }
-    SETTINGS.banips.push(ip);
+    settings.banips.push(ip);
     sockets.forEach(s => {
       if (!s.ip === ip) return;
       s.send({status: 'error', message: 'You were just ip banned!'});
@@ -193,21 +193,21 @@ const Commands = {
     servers[this.room].logs.push({m: data[1]+`'s ip, `+ip+`, has been banned.`, c: '#FF0000'});
   },
   unbanip: function(data) {
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    if (!settings.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    if (SETTINGS.banips.indexOf(data[1]) !== -1) SETTINGS.banips.splice(SETTINGS.banips.indexOf(data[1]), 1);
+    if (settings.banips.indexOf(data[1]) !== -1) settings.banips.splice(settings.banips.indexOf(data[1]), 1);
     servers[this.room].logs.push({m: data[1]+' ip has been unbanned.', c: '#0000FF'});
   },
   ban: function(data) {
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    if (!settings.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length < 4 || isNaN(data[2])) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    if (SETTINGS.admins.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
+    if (settings.admins.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
     var l = 3, reason = '', server = servers[this.room];
     while (l<data.length) {
       reason += data[l]+' ';
       l++;
     }
-    SETTINGS.bans.push({ username: data[1], by: this.username, time: data[2], reason: reason });
+    settings.bans.push({ username: data[1], by: this.username, time: data[2], reason: reason });
     server.logs.push({ m: this.username+' banned '+data[1]+' for '+data[2]+' minutes because "'+reason+'"', c: '#FF0000' });
     sockets.forEach(s => {
       if (s.username !== data[1]) return;
@@ -216,26 +216,26 @@ const Commands = {
     });
   },
   bans: function(data) {
-    if (!SETTINGS.admins.includes(this.username)) return this.send({ status: 'error', message: 'You are not a server admin!' });
+    if (!settings.admins.includes(this.username)) return this.send({ status: 'error', message: 'You are not a server admin!' });
     if (data[1]) {
-      if (!A.each(SETTINGS.bans, function(i, server) {
+      if (!A.each(settings.bans, function(i, server) {
         server.logs = server.logs.concat([{m: this.username+`'s Ban Info:`, c: '#FFFF22'}, {m: 'For: '+this.reason, c: '#FFFF22'}, {m: 'Time left: '+this.time, c: '#FFFF22'}, {m: 'Issued by: '+this.by, c: '#FFFF22'}]);
         return true;
       }, 'username', data[1], servers[this.room])) servers[this.room].logs.push({m: '/bans: '+data[1]+' is not banned.', c: '#FF0000'});
     } else {
       var players = [];
-      A.each(SETTINGS.bans, function(i, p) {p.push(this.username)}, null, players);
+      A.each(settings.bans, function(i, p) {p.push(this.username)}, null, players);
       servers[this.room].logs = servers[this.room].logs.concat([{m: 'Bans Info:', c: '#FFFF22'}, {m: 'All Banned Players: '+players, c: '#FFFF22'}]);
     }
   },
   unban: function(data) {
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    if (!settings.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 2) return this.send({ status: 'error', message: 'Command has invalid arguments.' });
-    A.each(SETTINGS.bans, function(i) {SETTINGS.bans.splice(i, 1)}, 'username', data[1]);
+    A.each(settings.bans, function(i) {settings.bans.splice(i, 1)}, 'username', data[1]);
     servers[this.room].logs.push({m: data[1]+' is unbanned.', c: '#0000FF'});
   },
   mute: function(data) {
-    if (!SETTINGS.admins.includes(this.username)) {
+    if (!settings.admins.includes(this.username)) {
       this.send({ status: 'error', message: 'You are not a server admin!' });
       return;
     }
@@ -243,7 +243,7 @@ const Commands = {
       this.send({ status: 'error', message: 'Command has invalid arguments.' });
       return;
     }
-    SETTINGS.mutes.push({
+    settings.mutes.push({
       username: data[1],
       by: this.username,
       time: data[2],
@@ -251,29 +251,29 @@ const Commands = {
     servers[this.room].logs.push({m: data[1]+' was muted for '+data[2]+' minutes by '+this.username, c: '#FFFF22'});
   },
   mutes: function(data) {
-    if (!SETTINGS.admins.includes(this.username)) {
+    if (!settings.admins.includes(this.username)) {
       this.send({ status: 'error', message: 'You are not a server admin!' });
       return;
     }
     if (data[1]) {
-      if (!A.each(SETTINGS.mutes, function(i, server) {
+      if (!A.each(settings.mutes, function(i, server) {
         server.logs = server.logs.concat([{m: this.username+`'s Mute Info:`, c: '#FFFF22'}, {m: 'Time left: '+this.time, c: '#FFFF22'}, {m: 'Issued by: '+this.by, c: '#FFFF22'}]);
         return true;
       }, 'username', data[1], servers[this.room])) servers[this.room].logs.push({m: '/mutes: '+data[1]+' is not muted.', c: '#FF0000'});
     } else {
       var players = [];
-      A.each(SETTINGS.mutes, function(i, p) {p.push(this.username)}, null, null, players);
+      A.each(settings.mutes, function(i, p) {p.push(this.username)}, null, null, players);
       servers[this.room].logs = servers[this.room].logs.concat([{m: 'Mutes Info:', c: '#FFFF22'}, {m: 'All Muted Players: '+players, c: '#FFFF22'}]);
     }
   },
   unmute: function(data) {
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    if (!settings.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    A.each(SETTINGS.mutes, function(i) {SETTINGS.mutes.splice(i, 1)}, 'username', data[1]);
+    A.each(settings.mutes, function(i) {settings.mutes.splice(i, 1)}, 'username', data[1]);
     servers[this.room].logs.push({m: data[1]+' is unmuted.', c: '#0000FF'});
   },
   kick: function(data) {
-    if (!SETTINGS.admins.includes(this.username)) return this.send({ status: 'error', message: 'You are not a server admin!' });
+    if (!settings.admins.includes(this.username)) return this.send({ status: 'error', message: 'You are not a server admin!' });
     if (data.length !== 2) return this.send({ status: 'error', message: 'Command has invalid arguments.' });
     for (const socket of sockets) {
       if (socket.username === data[1]) {
@@ -284,32 +284,32 @@ const Commands = {
   },
   kill: function(data) {
     if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    if (!settings.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     for (const server of Object.values(servers)) for (const t of server.pt) if (data[1] === t.username) t.damageCalc(t.x, t.y, 6000, this.username);
   },
   ai: function(data) {
     if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    if (!settings.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     if (data.length !== 7) return this.send({status: 'error', message: 'Command has invalid arguments.'});
     for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), ':'+data[6], servers[this.room]));
   },
   spectate: function(data) {
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    if (!settings.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = true;
   },
   live: function(data) {
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
+    if (!settings.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not a server admin!'});
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = false;
   },
   switch: function(data) {
     if (!(servers[this.room] instanceof TDM)) return this.send({status: 'error', message: 'This command is only allowed in TDM'});
-    if (data.length === 2 && !SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not an admin!'});
+    if (data.length === 2 && !settings.admins.includes(this.username)) return this.send({status: 'error', message: 'You are not an admin!'});
     for (const t of servers[this.room].pt) if (t.username === (data.length === 1 ? this.username : data[1])) t.color = t.color === '#FF0000' ? '#0000FF' : '#FF0000';
   },
   start: function() {
     if (!(servers[this.room] instanceof TDM)) return this.send({status: 'error', message: 'This command is only allowed in TDM'});
-    if (!SETTINGS.admins.includes(this.username)) return this.send({status: 'error', message: 'Only admins can use this for now'});
+    if (!settings.admins.includes(this.username)) return this.send({status: 'error', message: 'Only admins can use this for now'});
     if (servers[this.room].mode === 0) {
       servers[this.room].readytime = Date.now();
       servers[this.room].time = 0;
@@ -325,7 +325,7 @@ class Multiplayer extends Engine {
     super(levels);
     this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
-    if (!SETTINGS.fps_boost) this.i.push(setInterval(() => this.send(), 1000/SETTINGS.UPS));
+    if (!settings.fps_boost) this.i.push(setInterval(() => this.send(), 1000/settings.UPS));
   }
 
   override(t) {
