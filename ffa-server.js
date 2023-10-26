@@ -592,7 +592,7 @@ const Profile = (arr, update) => {
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 
 let lagometer = [];
-Profile([Engine, Block, Shot, AI, Damage, FFA, Multiplayer, A], f => {
+Profile([Engine, Block, Shot, AI, Damage, FFA, Multiplayer], f => {
   lagometer = f;
 });
 setInterval(() => {
