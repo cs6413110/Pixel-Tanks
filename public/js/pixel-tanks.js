@@ -701,7 +701,7 @@ function Game() {
             [648, 840, 88, 88, 'shop', true],
             [540, 840, 88, 88, 'inventory', true],
             [756, 840, 88, 88, 'crate', true],
-            [864, 840, 88, 88, 'htp1', true],
+            [864, 840, 88, 88, 'help', true],
             [532, 392, 536, 136, 'singleplayer', true],
             /*[320, 920, 80, 80, function() {
               clearInterval(PixelTanks.autosave);
@@ -906,14 +906,56 @@ function Game() {
             [1344, 644, 236, 80, 'main', true],
             [44, 764, 236, 80, 'main', true],
             [364, 764, 236, 80, 'main', true],
-            [684, 764, 236, 80, 'main', true],
-            [1024, 764, 236, 80, 'main', true],
-            [1344, 764, 236, 80, 'main', true],
-            [44, 884, 236, 80, 'main', true],
-            [364, 884, 236, 80, 'main', true],
+            [684, 764, 236, 80, 'helpinventory', true],
+            [1024, 764, 236, 80, 'helpcosmetic', true],
+            [1344, 764, 236, 80, 'helpclass', true],
+            [44, 884, 236, 80, 'helpmode', true],
+            [364, 884, 236, 80, 'helpvocab', true],
             [684, 884, 236, 80, 'main', true],
             [1024, 884, 236, 80, 'main', true],
-            [1344, 884, 236, 80, 'main', true],
+            [1344, 884, 236, 80, 'helpteam', true],
+          ],
+          listeners: {},
+          cdraw: function() {},
+        },
+        helpinventory: {
+          buttons: [
+            [120, 132, 120, 120, 'main', true],
+          ],
+          listeners: {},
+          cdraw: function() {},
+        },
+        helpcosmetic: {
+          buttons: [
+            [120, 132, 120, 120, 'main', true],
+          ],
+          listeners: {},
+          cdraw: function() {},
+        },
+        helpclass: {
+          buttons: [
+            [120, 132, 120, 120, 'main', true],
+          ],
+          listeners: {},
+          cdraw: function() {},
+        },
+        helpmode: {
+          buttons: [
+            [120, 132, 120, 120, 'main', true],
+          ],
+          listeners: {},
+          cdraw: function() {},
+        },
+        helpvocab: {
+          buttons: [
+            [120, 132, 120, 120, 'main', true],
+          ],
+          listeners: {},
+          cdraw: function() {},
+        },
+        helpteam: {
+          buttons: [
+            [120, 132, 120, 120, 'main', true],
           ],
           listeners: {},
           cdraw: function() {},
