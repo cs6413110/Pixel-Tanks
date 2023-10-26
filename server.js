@@ -8,7 +8,7 @@ let db;
 })();
 
 const connectionString = 'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = process.env.PORT || 80;
-const client = new MongoClient(connectionString), js = Bun.file('./public/js/pixel-tanks.js'), tokens = new Set(), sockets = [];
+const client = new MongoClient(connectionString), tokens = new Set(), sockets = [];
 const valid = (token, username) => tokens.has(`${token}:${username}`);
 const routes = {
   auth: async ({ username, type, password }, socket) => {
@@ -46,7 +46,7 @@ const server = Bun.serve({
   fetch(req, server) {
     const url = new URL(req.url);
     if (server.upgrade(req)) return;
-    if (url.pathname === '/') return new Response(js);
+    if (url.pathname === '/') return new Response(Bun.file('./public/js/pixel-tanks.js'));
     if (url.pathname === '/play') return new Response(`<script src='/'></script>`);
     if (url.pathname === '/verify') return new Reponse(valid(req.query.token, req.query.username).toString());
   },
