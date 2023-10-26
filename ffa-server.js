@@ -608,14 +608,13 @@ setInterval(() => {
   for (const t of top) console.log(t.name+': ('+t.t+', '+t.l+') over '+t.i);
 }, 10000);
 
-export {
-  ffaopen: (socket) => {
+const ffaopen: (socket) => {
     sockets.add(socket);
     socket._send = socket.send;
     socket.send = data => socket._send(JSON.stringify(data));
     // banip here
-  },
-  ffamessage: (socket, data) => {
+  }
+const ffamessage = (socket, data) => {
      try {
         data = JSON.parse(data);
       } catch(e) {
@@ -672,8 +671,8 @@ export {
         socket.send(gamemodes);
       }
     },
-    ffaclose: (socket, code, reason) => {
+const ffaclose = (socket, code, reason) => {
       sockets.delete(socket);
       if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
     },
-}
+export {ffaopen, ffamessage, ffaclose};
