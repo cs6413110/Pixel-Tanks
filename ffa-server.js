@@ -602,7 +602,7 @@ setInterval(() => {
 }, 10000);*/
 
 const server = Bun.serve({
-  port: settings.port,
+  port: 80,
   fetch(req, server) {
     return new Reponse('hi');
     if (server.upgrade(req)) return;
