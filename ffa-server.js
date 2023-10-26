@@ -615,6 +615,9 @@ const server = Bun.serve({
     if (server.upgrade(req)) return;
     return new Response('Connect via websocket');
   },
+  error(error) {
+    console.log(error);
+  },
   websocket: {
     open(socket) {
       sockets.add(socket);
