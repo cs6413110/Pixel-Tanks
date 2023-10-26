@@ -53,7 +53,6 @@ const getTickspeed = i => {
 }
 setTimeout(() => getTickspeed());
 
-const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 Bun.serve({
   port: settings.port,
   fetch(req, server) {
@@ -665,6 +664,7 @@ const Profile = (arr, update) => {
     }
   }
 }
+const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 
 let lagometer = [];
 Profile([Engine, Block, Shot, AI, Damage, FFA, Multiplayer, A], f => {
