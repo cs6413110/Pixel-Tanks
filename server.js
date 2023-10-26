@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb');
-const { ffa } = require('./ffa-server.js');
+//const { ffa } = require('./ffa-server.js');
 
 (async () => {
   await client.connect();
