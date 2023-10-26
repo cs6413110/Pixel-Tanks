@@ -1,53 +1,13 @@
-const Sentry = require('@sentry/node');
-//const { ProfilingIntegration } = require('@sentry/profiling-node');
-const express = require('express');
-const expressWs = require('express-ws');
-const fs = require('fs').promises;
 const { MongoClient } = require('mongodb');
-const Filter = require('bad-words');
-const TokenGenerator = require('uuid-token-generator');
 const { ffa } = require('./ffa-server.js');
-
-const connectionString = 'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = process.env.PORT || 80;
-
-const app = express(), client = new MongoClient(connectionString), filter = new Filter(), tokgen = new TokenGenerator(256, TokenGenerator.BASE62), tokens = new Set(), sockets = [];
-let db;
-
-Sentry.init({
-  dsn: 'https://d900a2c488024fb294768830690d53dd@o4504300641517568.ingest.sentry.io/4505286074957824',
-  tracesSampleRate: 1.0,
-  //profilesSampleRate: 1.0,
-  integrations: [
-    new Sentry.Integrations.Http({tracing: true}),
-    new Sentry.Integrations.Express({app}),
-    new Sentry.Integrations.Mongo(),
-    //new ProfilingIntegration(),
-  ],
-});
-app.use(Sentry.Handlers.requestHandler());
-app.use(Sentry.Handlers.tracingHandler());
-
-let transactionNum = 1;
-function profile() {
-  const transaction = Sentry.startTransaction({
-    op: 'Profiling/Performance',
-    name: 'Transaction',
-  });
-  transactionNum++;
-  setTimeout(() => {
-    transaction.finish();
-    profile();
-  }, 300000);
-}
-setTimeout(() => profile());
 
 (async () => {
   await client.connect();
-  console.log('Database Client Connected!');
   db = client.db('data').collection('data');
-  console.log('Fetched Database!');
 })();
 
+const connectionString = 'mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority', port = process.env.PORT || 80;
+const client = new MongoClient(connectionString), js = Bun.file('./public/js/pixel-tanks.js'), tokens = new Set(), sockets = [];
 const valid = (token, username) => tokens.has(`${token}:${username}`);
 const routes = {
   auth: async ({ username, type, password }, socket) => {
@@ -80,30 +40,33 @@ const routes = {
   ping: () => {},
 };
 
-expressWs(app);
-app.ws('/', socket => {
-  sockets.push(socket);
-  socket._send = socket.send;
-  socket.send = (data) => socket._send(JSON.stringify(data));
-  socket.on('message', (data) => {
-    try {
-      data = JSON.parse(data);
-    } catch (e) {
-      console.log('Invalid Data: '+data);
-      return socket.close();
-    }
-    if (!socket.username) socket.username = data.username;
-    try {
-      routes[data.op](data, socket);
-    } catch (e) {
-      return socket.send({status: 'error', message: 'Invalid or no operation.'});
-    }
-  });
+const server = Bun.serve({
+  port: process.env.PORT || 80,
+  fetch(req, server) {
+    const url = new URL(req.url);
+    if (server.upgrade(req)) return;
+    if (url.pathname === '/') return new Response(js);
+    if (url.pathname === '/play') return new Response(`<script src='/'></script>`);
+    if (url.pathname === '/verify') return new Reponse(valid(req.query.token, req.query.username).toString());
+  },
+  websocket: {
+    open(socket) {
+      sockets.push(socket);
+      socket._send = socket.send;
+      socket.send = data => socket._send(JSON.stringify(data));
+    },
+    message(socket, data) {
+      try {
+        data = JSON.parse(data);
+      } catch(e) {
+        return socket.close();
+      }
+      if (!socket.username) socket.username = data.username;
+      if (typeof routes[data.op] === 'function') {
+        routes[data.op](data, socket);
+      } else {
+        socket.send({status: 'error', message: 'Invalid or no operation.'});
+      }
+    },
+  },
 });
-
-app.use(ffa);
-app.get('/play', async(req, res) => res.header('Content-Type', 'text/html').end(`<script src='/'></script>`));
-app.get('/verify', (req, res) => res.end(valid(req.query.token, req.query.username).toString()));
-app.get('/', async(req, res) => res.header('Content-Type', 'application/javascript').end(await fs.readFile('./public/js/pixel-tanks.js')));
-app.use(Sentry.Handlers.errorHandler());
-app.listen(port);
