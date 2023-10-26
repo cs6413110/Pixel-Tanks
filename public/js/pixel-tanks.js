@@ -920,42 +920,42 @@ function Game() {
         },
         helpinventory: {
           buttons: [
-            [120, 132, 120, 120, 'main', true],
+            [120, 132, 120, 120, 'help', true],
           ],
           listeners: {},
           cdraw: function() {},
         },
         helpcosmetic: {
           buttons: [
-            [120, 132, 120, 120, 'main', true],
+            [120, 132, 120, 120, 'help', true],
           ],
           listeners: {},
           cdraw: function() {},
         },
         helpclass: {
           buttons: [
-            [120, 132, 120, 120, 'main', true],
+            [120, 132, 120, 120, 'help', true],
           ],
           listeners: {},
           cdraw: function() {},
         },
         helpmode: {
           buttons: [
-            [120, 132, 120, 120, 'main', true],
+            [120, 132, 120, 120, 'help', true],
           ],
           listeners: {},
           cdraw: function() {},
         },
         helpvocab: {
           buttons: [
-            [120, 132, 120, 120, 'main', true],
+            [120, 132, 120, 120, 'help', true],
           ],
           listeners: {},
           cdraw: function() {},
         },
         helpteam: {
           buttons: [
-            [120, 132, 120, 120, 'main', true],
+            [120, 132, 120, 120, 'help', true],
           ],
           listeners: {},
           cdraw: function() {},
