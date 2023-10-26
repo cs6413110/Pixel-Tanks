@@ -10,7 +10,7 @@ const settings = {
   port: 15132,
 }
 
-Bun = {serve: () => {}}
+const Bun = {serve: () => {}}
 //const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
 const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
