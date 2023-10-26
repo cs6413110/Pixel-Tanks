@@ -604,7 +604,7 @@ setInterval(() => {
 const server = Bun.serve({
   port: 80,
   fetch(req, server) {
-    return new Reponse('hi');
+    return new Response('hi');
     if (server.upgrade(req)) return;
     return new Response('Connect via websocket');
   },
