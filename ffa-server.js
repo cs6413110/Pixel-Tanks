@@ -608,7 +608,7 @@ setInterval(() => {
   for (const t of top) console.log(t.name+': ('+t.t+', '+t.l+') over '+t.i);
 }, 10000);
 
-const ffaopen: (socket) => {
+const ffaopen = (socket) => {
     sockets.add(socket);
     socket._send = socket.send;
     socket.send = data => socket._send(JSON.stringify(data));
