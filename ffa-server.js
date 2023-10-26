@@ -12,7 +12,7 @@ const settings = {
 }
 
 const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
-/*
+
 const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
   return await response.text() === 'true';
@@ -44,7 +44,7 @@ const deathMessages = [
   `{idot} disconnected`,
 ];
 
-
+/*
 let tickspeed = -1;
 const getTickspeed = i => {
   const start = Date.now();
@@ -54,7 +54,7 @@ const getTickspeed = i => {
   });
 }
 setTimeout(() => getTickspeed());
-
+*/
 const Commands = {
   createteam: function(data) {
     if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
@@ -591,7 +591,7 @@ const Profile = (arr, update) => {
   }
 }
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
-
+/*
 let lagometer = [];
 Profile([Engine, Block, Shot, AI, Damage, FFA, Multiplayer], f => {
   lagometer = f;
