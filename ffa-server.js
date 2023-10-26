@@ -55,6 +55,7 @@ setTimeout(() => getTickspeed());
 
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 Bun.serve({
+  port: settings.port,
   fetch(req, server) {
     if (server.upgrade(req)) return;
     return new Response('Connect via websocket');
