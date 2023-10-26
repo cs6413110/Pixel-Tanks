@@ -1,11 +1,8 @@
-const script = document.createElement('SCRIPT');
-script.src = 'https://rawgit.com/kawanet/msgpack-lite/master/dist/msgpack.min.js'
 const connection = document.createElement('DIV'), servers = document.createElement('DIV'), messages = document.createElement('DIV'), message = document.createElement('input'), server = document.createElement('input'), join = document.createElement('BUTTON');
 join.innerHTML = 'Join Server';
 join.addEventListener('click', () => {
   setRoom();
 });
-document.head.appendChild(script);
 document.body.appendChild(connection);
 document.body.appendChild(servers);
 document.body.appendChild(messages);
@@ -35,13 +32,13 @@ class MegaSocket {
         this.socket.binaryType = 'arraybuffer';
         this.status = 'connected';
         if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => {
-          this.socket.send(msgpack.encode({type: 'ping', op: 'ping'}));
+          this.socket.send(JSON.stringify({type: 'ping', op: 'ping'}));
         }, 30000);
         this.callstack.open.forEach(f => f());
       }
       this.socket.onmessage = data => {
         try {
-          data = msgpack.decode(new Uint8Array(data.data));
+          data = JSON.parse(data.data);
         } catch(e) {
           alert('Socket Encryption Error: ' + data.data+' | '+e);
         }
@@ -76,7 +73,7 @@ class MegaSocket {
       if (event === 'close') this.callstack.close = [];
     }
     send(data) {
-      data = msgpack.encode(data);
+      data = JSON.stringify(data);
       this.socket.send(data);
     }
     close() {
