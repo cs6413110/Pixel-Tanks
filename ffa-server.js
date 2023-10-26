@@ -52,83 +52,7 @@ const getTickspeed = i => {
   });
 }
 setTimeout(() => getTickspeed());
-const server = Bun.serve({
-  port: settings.port,
-  fetch(req, server) {
-    return new Reponse('hi');
-    if (server.upgrade(req)) return;
-    return new Response('Connect via websocket');
-  },
-  /*websocket: {
-    open(socket) {
-      sockets.add(socket);
-      socket._send = socket.send;
-      socket.send = data => socket._send(JSON.stringify(data));
-      // banip here
-    },
-    async message(socket, data) {
-      try {
-        data = JSON.parse(data);
-      } catch(e) {
-        return socket.close();
-      }
-      if (!socket.username) {
-        // check for ban or invalid username here
-        socket.username = data.username;
-      }
-      if (data.type === 'update') {
-        servers[socket.room].update(data);
-      } else if (data.type === 'join') {
-        let server;
-        for (const id in servers) {
-          if (servers[id] instanceof joinKey[data.gamemode]) {
-            if (data.gamemode === 'ffa' && servers[id].pt.length >= settings.players_per_room) continue;
-            if (data.gamemode === 'duels' && servers[id].pt.length !== 1) continue;
-            if (data.gamemode === 'tdm' && servers[id].mode !== 0) continue;
-            server = id;
-            break;
-          }
-        }
-        if (!server) {
-          server = Math.random();
-          servers[server] = new joinKey[data.gamemode]();
-        }
-        if (servers[server].pt.some(t => t.username === socket.username)) {
-          socket.send({status: 'error', message: 'You are already in the server!'});
-          return setImmediate(() => socket.close());
-        }
-        socket.room = server;
-        servers[server].add(socket, data.tank);
-      } else if (data.type === 'ping') {
-        socket.send({event: 'ping', id: data.id});
-      } else if (data.type === 'chat') {
-        // handle mutes and filtering here
-        if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${msg}`, c: '#ffffff'});
-        if (servers[data.room]) servers[data.room].logs.push({m: `[${data.username}] ${msg}`, c: '#ffffff'});
-      } else if (data.type === 'logs') {
-        if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
-      } else if (data.type === 'command') {
-        const f = Commands[data.data[0]], args = data.data;
-        if (typeof func === 'function') {
-          f.bind(socket)(args);
-        } else socket.send({status: 'error', message: 'Command not found.'});
-      } else if (data.type === 'stats') {
-        let gamemodes = {FFA: [], DUELS: [], TDM: [], tickspeed, event: 'stats'};
-        for (const id in servers) {
-          gamemodes[servers[id].constructor.name][id] = [];
-          for (const pt of servers[id].pt) {
-            gamemodes[servers[id].constructor.name][id].push(pt.username);
-          }
-        }
-        socket.send(gamemodes);
-      }
-    },
-    close(socket, code, reason) {
-      if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
-    },
-  },*/
-});
-console.log(server.port);
+
 const Commands = {
   createteam: function(data) {
     if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
@@ -676,3 +600,81 @@ setInterval(() => {
   console.log('-----PROFILING REPORT-----');
   for (const t of top) console.log(t.name+': ('+t.t+', '+t.l+') over '+t.i);
 }, 10000);*/
+
+const server = Bun.serve({
+  port: settings.port,
+  fetch(req, server) {
+    return new Reponse('hi');
+    if (server.upgrade(req)) return;
+    return new Response('Connect via websocket');
+  },
+  /*websocket: {
+    open(socket) {
+      sockets.add(socket);
+      socket._send = socket.send;
+      socket.send = data => socket._send(JSON.stringify(data));
+      // banip here
+    },
+    async message(socket, data) {
+      try {
+        data = JSON.parse(data);
+      } catch(e) {
+        return socket.close();
+      }
+      if (!socket.username) {
+        // check for ban or invalid username here
+        socket.username = data.username;
+      }
+      if (data.type === 'update') {
+        servers[socket.room].update(data);
+      } else if (data.type === 'join') {
+        let server;
+        for (const id in servers) {
+          if (servers[id] instanceof joinKey[data.gamemode]) {
+            if (data.gamemode === 'ffa' && servers[id].pt.length >= settings.players_per_room) continue;
+            if (data.gamemode === 'duels' && servers[id].pt.length !== 1) continue;
+            if (data.gamemode === 'tdm' && servers[id].mode !== 0) continue;
+            server = id;
+            break;
+          }
+        }
+        if (!server) {
+          server = Math.random();
+          servers[server] = new joinKey[data.gamemode]();
+        }
+        if (servers[server].pt.some(t => t.username === socket.username)) {
+          socket.send({status: 'error', message: 'You are already in the server!'});
+          return setImmediate(() => socket.close());
+        }
+        socket.room = server;
+        servers[server].add(socket, data.tank);
+      } else if (data.type === 'ping') {
+        socket.send({event: 'ping', id: data.id});
+      } else if (data.type === 'chat') {
+        // handle mutes and filtering here
+        if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${msg}`, c: '#ffffff'});
+        if (servers[data.room]) servers[data.room].logs.push({m: `[${data.username}] ${msg}`, c: '#ffffff'});
+      } else if (data.type === 'logs') {
+        if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
+      } else if (data.type === 'command') {
+        const f = Commands[data.data[0]], args = data.data;
+        if (typeof func === 'function') {
+          f.bind(socket)(args);
+        } else socket.send({status: 'error', message: 'Command not found.'});
+      } else if (data.type === 'stats') {
+        let gamemodes = {FFA: [], DUELS: [], TDM: [], tickspeed, event: 'stats'};
+        for (const id in servers) {
+          gamemodes[servers[id].constructor.name][id] = [];
+          for (const pt of servers[id].pt) {
+            gamemodes[servers[id].constructor.name][id].push(pt.username);
+          }
+        }
+        socket.send(gamemodes);
+      }
+    },
+    close(socket, code, reason) {
+      if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
+    },
+  },*/
+});
+console.log(server.port);
