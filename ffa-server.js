@@ -7,7 +7,7 @@ const settings = {
   admins: ['cs641311', 'Celestial', 'bradley', 'DIO', 'DarkMemeGod', '3foe'],
   players_per_room: 400,
   ups: 60,
-  port: 10203,
+  port: 15132,
 }
 
 const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
@@ -59,7 +59,6 @@ let sockets = new Set(), servers = {}, incoming_per_second = 0, outgoing_per_sec
 ], tdmLevels = [
   
 ];
-
 
 const Commands = {
   createteam: function(data) {
@@ -609,16 +608,8 @@ setInterval(() => {
   for (const t of top) console.log(t.name+': ('+t.t+', '+t.l+') over '+t.i);
 }, 10000);
 
-const server = Bun.serve({
-  port: settings.port,
-  fetch(req, server) {
-    if (server.upgrade(req)) return;
-  },
-  error(error) {
-    console.log(error);
-  },
-  websocket: {
-    open(socket) {
+export {
+  open(socket) {
       sockets.add(socket);
       socket._send = socket.send;
       socket.send = data => socket._send(JSON.stringify(data));
@@ -685,5 +676,4 @@ const server = Bun.serve({
       sockets.delete(socket);
       if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
     },
-  },
-});
+}
