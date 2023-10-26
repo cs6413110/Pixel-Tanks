@@ -1,7 +1,7 @@
 require('./ffa-server.js');
 const { MongoClient } = require('mongodb');
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority')
-const tokens = new Set(), sockets = [];
+const tokens = new Set(), sockets = new Set();
 const valid = (token, username) => tokens.has(`${token}:${username}`);
 const auth = async({username, type, password}, socket) => {
   const item = await db.findOne({username}), token = Math.random();
@@ -42,7 +42,7 @@ const server = Bun.serve({
   },
   websocket: {
     open(socket) {
-      sockets.push(socket);
+      sockets.add(socket);
       socket._send = socket.send;
       socket.send = data => socket._send(JSON.stringify(data));
     },
@@ -56,5 +56,8 @@ const server = Bun.serve({
       if (data.op === 'database') database(data, socket);
       if (data.op === 'auth') auth(data, socket);
     },
+    close(socket) {
+      sockets.delete(socket);
+    }
   },
 });
