@@ -59,7 +59,7 @@ const server = Bun.serve({
     if (server.upgrade(req)) return;
     return new Response('Connect via websocket');
   },
-  websocket: {
+  /*websocket: {
     open(socket) {
       sockets.add(socket);
       socket._send = socket.send;
@@ -126,7 +126,7 @@ const server = Bun.serve({
     close(socket, code, reason) {
       if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
     },
-  },
+  },*/
 });
 console.log(server.port);
 const Commands = {
