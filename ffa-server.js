@@ -44,7 +44,7 @@ const deathMessages = [
   `{idot} disconnected`,
 ];
 
-/*
+
 let tickspeed = -1;
 const getTickspeed = i => {
   const start = Date.now();
@@ -54,7 +54,7 @@ const getTickspeed = i => {
   });
 }
 setTimeout(() => getTickspeed());
-*/
+
 const Commands = {
   createteam: function(data) {
     if (!(servers[this.room] instanceof FFA)) return socket.send({status: 'error', message: 'This command is only allowed in FFA'});
