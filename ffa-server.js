@@ -7,7 +7,7 @@ const settings = {
   admins: ['cs641311', 'Celestial', 'bradley', 'DIO', 'DarkMemeGod', '3foe'],
   players_per_room: 400,
   ups: 60,
-  port: 3000,
+  port: 15132,
 }
 
 const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
