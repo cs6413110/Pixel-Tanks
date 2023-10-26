@@ -544,7 +544,7 @@ class TDM extends Multiplayer {
     }
   }
 }
-
+/*
 const Profile = (arr, update) => {
   const functions = [];
   for (let e of arr) {
@@ -599,7 +599,7 @@ setInterval(() => {
   const top = lagometer.slice(0, Math.min(15, lagometer.length));
   console.log('-----PROFILING REPORT-----');
   for (const t of top) console.log(t.name+': ('+t.t+', '+t.l+') over '+t.i);
-}, 10000);
+}, 10000);*/
 
 const server = Bun.serve({
   port: settings.port,
