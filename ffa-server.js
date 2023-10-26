@@ -52,7 +52,7 @@ const getTickspeed = i => {
   });
 }
 setTimeout(() => getTickspeed());
-Bun.serve({
+const server = Bun.serve({
   port: settings.port,
   fetch(req, server) {
     return new Reponse('hi');
