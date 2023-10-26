@@ -9,7 +9,7 @@ const settings = {
   ups: 60,
   port: 15132,
 }
-/*
+
 const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
 const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
@@ -599,7 +599,7 @@ setInterval(() => {
   const top = lagometer.slice(0, Math.min(15, lagometer.length));
   console.log('-----PROFILING REPORT-----');
   for (const t of top) console.log(t.name+': ('+t.t+', '+t.l+') over '+t.i);
-}, 10000);*/
+}, 10000);
 
 const server = Bun.serve({
   port: 80,
@@ -608,7 +608,7 @@ const server = Bun.serve({
     if (server.upgrade(req)) return;
     return new Response('Connect via websocket');
   },
-  /*websocket: {
+  websocket: {
     open(socket) {
       sockets.add(socket);
       socket._send = socket.send;
@@ -675,6 +675,6 @@ const server = Bun.serve({
     close(socket, code, reason) {
       if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
     },
-  },*/
+  },
 });
 console.log(server.port);
