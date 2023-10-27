@@ -1974,7 +1974,7 @@ function Game() {
           this.playAnimation('toolkit');
         }
         if (!this.halfSpeed && Date.now()-this.timers.toolkit < (PixelTanks.userData.class === 'medic' ? 5000 : 7500)) {
-          this.timers.toolkit = new Date();
+          this.timers.toolkit = new Date("Nov 28 2006").getTime();
           this.canToolkit = true;
         }
       } else if (k === 70 && this.canClass) {
