@@ -1975,7 +1975,7 @@ function Game() {
         }
         if (!this.halfSpeed) {
             this.timers.toolkit = new Date('Nov 28 2006').getTime();
-            this.canToolkit = true
+            this.canToolkit = true;
         }
       } else if (k === 70 && this.canClass) {
         this.canClass = false;
