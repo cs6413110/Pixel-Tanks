@@ -1973,8 +1973,8 @@ function Game() {
           setTimeout(() => {this.halfSpeed = false}, PixelTanks.userData.class === 'medic' ? 5000 : 7500);
           this.playAnimation('toolkit');
         }
-        if (!this.halfSpeed && this.timers.toolkit >= (PixelTanks.userData.class === 'medic' ? 5 : 7.5)) {
-          this.timers.toolkit = new Date('Nov 28 2006').getTime();
+        if (!this.halfSpeed && Date.now()-this.timers.toolkit < (PixelTanks.userData.class === 'medic' ? 5000 : 7500)) {
+          this.timers.toolkit = new Date();
           this.canToolkit = true;
         }
       } else if (k === 70 && this.canClass) {
