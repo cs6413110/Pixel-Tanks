@@ -1,6 +1,6 @@
 const {ffaopen, ffamessage, ffaclose} = require('./ffa-server.js');
-const { MongoClient } = require('mongodb');
-const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority')
+const {MongoClient} = require('mongodb');
+const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
 const tokens = new Set(), sockets = new Set();
 const valid = (token, username) => tokens.has(`${token}:${username}`);
 const auth = async({username, type, password}, socket) => {
