@@ -177,7 +177,9 @@ function Game() {
       }
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3], 1);
       GUI.draw.fillStyle = '#ffffff';
+      GUI.draw.globalAlpha = .3;
       for (const b of this.buttons) GUI.draw.fillRect(b[0], b[1], b[2], b[3]);
+      GUI.draw.globalAlpha = 1;
       this.cdraw();
       return;
       if (!this.buttonEffect) return;
@@ -929,7 +931,21 @@ function Game() {
               }
             }
           },
-          cdraw: function() {},
+          cdraw: function() {
+            const helpCoords = [
+                [44, 644],
+                [364, 644],
+                [684, 644],
+                [1024, 644],
+                [1344, 644],
+                [44, 764],
+                [364, 764],
+                [684, 884],
+                [1344, 884],
+              ];
+            GUI.draw.fillStyle = '#000000';
+            for (const c of helpCoords) GUI.draw.fillRect(c[0], c[1], 80, 74);
+          },
         },
         helpinventory: {
           buttons: [
