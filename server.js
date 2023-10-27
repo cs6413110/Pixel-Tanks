@@ -1,5 +1,66 @@
 const {ffaopen, ffamessage, ffaclose} = require('./ffa-server.js');
 const {MongoClient} = require('mongodb');
+/*const schemapack = require('schemapack');
+const client = sp.build({
+  username: 'string',
+  type: 'string',
+  gamemode: 'string',
+  op: 'string',
+  token: 'int16',
+  password: 'string',
+  key: 'string',
+  value: {
+    'pixel-tanks': {
+      username: 'string',
+      class: 'string',
+      cosmetic: 'string',
+      cosmetics: ['string'],
+      deathEffect: 'string',
+      deathEffects: ['string'],
+      color: 'string',
+      stats: ['int16'],
+      classes: ['boolean'],
+      items: ['string'],
+      keybinds: {
+        items: ['int16'],
+        emotes: ['int16'],    
+      },
+    }
+  },
+  tank: {
+    rank: 'int16',
+    username: 'string',
+    class: 'string',
+    cosmetic: 'string',
+    deathEffect: 'string',
+    color: 'string',
+    x: 'int16',
+    y: 'int16',
+    r: 'int16',
+    use: ['string'],
+    fire: [{
+      x: 'int16',
+      y: 'int16',
+      type: 'string',
+      r: 'int16',
+    }],
+    baseFrame: 'int16',
+    baseRotation: 'int16',
+    invis: 'boolean',
+    immune: 'boolean',
+    animation: {
+      id: 'string',
+      frame: 'int16',
+    },
+    airstrike: {
+      x: 'int16',
+      y: 'int16',
+    },
+  },
+  id: 'float32',
+  room: 'float32',
+  data: ['string'],
+});*/
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
 const tokens = new Set(), sockets = new Set();
 const valid = (token, username) => tokens.has(`${token}:${username}`);
