@@ -1486,7 +1486,7 @@ function Game() {
     }
 
     reset() {
-      const time = new Date('Nov 28 2006').getTime(
+      const time = new Date('Nov 28 2006').getTime();
       this.timers = {
         boost: time,
         powermissle: time,
