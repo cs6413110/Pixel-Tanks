@@ -1965,6 +1965,10 @@ function Game() {
         if (this.halfSpeed || this.canToolkit) {
           this.tank.use.push('toolkit');
           this.halfSpeed = !this.halfSpeed;
+          if (!this.halfSpeed) {
+            this.timers.toolkit = new Date('Nov 28 2006').getTime();
+            this.canToolkit = true;
+          }
         }
         if (this.canToolkit) {
           this.canToolkit = false;
@@ -1972,10 +1976,6 @@ function Game() {
           setTimeout(() => {this.canToolkit = true}, 40000);
           setTimeout(() => {this.halfSpeed = false}, PixelTanks.userData.class === 'medic' ? 5000 : 7500);
           this.playAnimation('toolkit');
-        }
-        if (!this.halfSpeed) {
-            this.timers.toolkit = new Date('Nov 28 2006').getTime();
-            this.canToolkit = true;
         }
       } else if (k === 70 && this.canClass) {
         this.canClass = false;
