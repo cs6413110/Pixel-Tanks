@@ -1360,7 +1360,7 @@ function Game() {
       this.msg = '';
       this.multiplayer = multiplayer;
       this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
-      this.tank.invis = false;
+      this.tank.invis = true;
       this.ops = 0;
       this.ups = 0;
       this.fps = 0;
@@ -1486,8 +1486,7 @@ function Game() {
     }
 
     reset() {
-      const time = new Date('Nov 28 2006').getTime();
-      clearTimeout(this.stealthTimeout);
+      const time = new Date('Nov 28 2006').getTime(
       this.timers = {
         boost: time,
         powermissle: time,
@@ -1972,27 +1971,14 @@ function Game() {
           this.timers.toolkit = new Date();
           setTimeout(() => {this.canToolkit = true}, 40000);
           setTimeout(() => {this.halfSpeed = false}, PixelTanks.userData.class === 'medic' ? 5000 : 7500);
-          this.tank.invis = false;
           this.playAnimation('toolkit');
         }
       } else if (k === 70 && this.canClass) {
         this.canClass = false;
         const c = PixelTanks.userData.class;
         if (c === 'stealth' && !this.halfSpeed) {
-          const time = (Date.now()-this.timers.class.time)
-          if (this.tank.invis) {
-            clearTimeout(this.stealthTimeout);
-            this.tank.invis = false;
-            this.timers.class = {time: Date.now(), cooldown: time*1.5};
-          } else if (time > this.timers.class.cooldown) {
-            this.tank.invis = true;
-            this.timers.class = {time: Date.now(), cooldown: 30000};
-            this.stealthTimeout = setTimeout(() => {
-              this.tank.invis = false;
-              this.timers.class = {time: Date.now(), cooldown: 45000};
-            }, 30000);
-          }
-          return this.canClass = true;
+          this.tank.invis = !this.tank.invis;
+          this.timers.class = {time: Date.now(), cooldown: 50};
         } else if (c === 'tactical') {
           this.fire('megamissle');
           this.timers.class = {time: Date.now(), cooldown: 25000};
