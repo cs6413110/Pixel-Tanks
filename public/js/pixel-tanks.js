@@ -908,7 +908,7 @@ function Game() {
           listeners: {
             mousedown: function(e) {
               const {x, y} = Menus;
-              const levelCoords = [
+              const helpCoords = [
                 [44, 644],
                 [364, 644],
                 [684, 644],
