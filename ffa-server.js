@@ -720,7 +720,7 @@ const ffaopen = (socket) => {
 }
 const ffamessage = (socket, data) => {
   try {
-    data = decode.decode(data);
+    data = JSON.parse(data);
   } catch(e) {
     return socket.close();
   }
