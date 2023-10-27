@@ -176,6 +176,8 @@ function Game() {
         this.compile();
       }
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3], 1);
+      GUI.draw.fillStyle = '#ffffff';
+      for (const b of this.buttons) GUI.draw.fillRect(b[0], b[1], b[2], b[3]);
       this.cdraw();
       return;
       if (!this.buttonEffect) return;
