@@ -11,6 +11,108 @@ const settings = {
 }
 
 const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
+//const sp = require('schemapack');
+/*const hostupdate = sp.build({
+  b: [{
+    x: 'int16',
+    y: 'int16', 
+    maxHp: 'int16',
+    hp: 'int16',
+    type: 'string',
+    s: 'boolean',
+    team: 'string',
+    id: 'float32',
+  }],
+  pt: [{
+    rank: 'int16',
+    username: 'string',
+    cosmetic: 'string',
+    color: 'string',
+    damage: {
+      x: 'int16',
+      y: 'int16',
+      d: 'int16',
+    },
+    maxHp: 'int16',
+    hp: 'int16',
+    shields: 'int16',
+    team: 'string',
+    x: 'int16',
+    y: 'int16',
+    r: 'int16',
+    ded: 'boolean',
+    pushback: 'int16',
+    baseRotation: 'int16', 
+    baseFrame: 'int16',
+    fire: {
+      frame: 'int16',
+    },
+    animation: {}, // FIX
+    buff: 'boolean',
+    invis: 'boolean',
+    id: 'float32',
+    class: 'string',
+    flashbanged: 'boolean',
+    dedEffect: 'string',
+  }],
+  ai: [{
+    role: 'int16',
+    x: 'int16',
+    y: 'int16',
+    r: 'int16',
+    baseRotation: 'int16',
+    baseFrame: 'int16',
+    mode: 'int16',
+    rank: 'int16',
+    hp: 'int16',
+    maxHp: 'int16',
+    pushback: 'int16',
+    cosmetic: 'string',
+    id: 'float32',
+    fire: {
+      frame: 'int16',
+    },
+    damage: {
+      x: 'int16',
+      y: 'int16',
+      d: 'int16',
+    },
+    team: 'string',
+    color: 'string',
+  }],
+  s: [{
+    team: 'string',
+    r: 'int16',
+    type: 'string',
+    x: 'int16',
+    y: 'int16',
+    sx: 'int16',
+    sy: 'int16',
+    id: 'float32',
+  }],
+  d: [{
+    x: 'int16',
+    y: 'int16',
+    w: 'int16',
+    h: 'int16',
+    f: 'int16',
+    id: 'float32',
+  }],
+  logs: [{
+    m: 'string',
+    c: 'string',
+  }],
+  global: 'string',
+  tickspeed: 'string',
+  event: 'hostupdate',
+  delete: {
+    b: ['float32'],
+    pt: ['float32'],
+    ai: ['float32'],
+    s: ['float32'],
+    d: ['float32'],
+  },
+});*/
 
 const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
@@ -618,7 +720,7 @@ const ffaopen = (socket) => {
 }
 const ffamessage = (socket, data) => {
   try {
-    data = JSON.parse(data);
+    data = decode.decode(data);
   } catch(e) {
     return socket.close();
   }
