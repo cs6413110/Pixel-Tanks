@@ -163,7 +163,6 @@ function Game() {
     }
 
     compile() {
-      return;
       this.cache = [];
       for (const b of this.buttons) {
         const x = this.render[0]+b[0]*this.render[2]/1600, y = this.render[1]+b[1]*this.render[3]/1000, w = b[2]*this.render[2]/1600, h = b[3]*this.render[3]/1000;
@@ -187,11 +186,10 @@ function Game() {
       for (const b of this.buttons) GUI.draw.fillRect(b[0], b[1], b[2], b[3]);
       GUI.draw.globalAlpha = 1;
       this.cdraw();
-      return;
       if (!this.buttonEffect) return;
       for (const b of this.buttons) {
         if (b[5]) {
-          const [x, y, w, h, canvas] = this.cache;
+          const [x, y, w, h, canvas] = this.cache[this.buttons.indexOf(b)];
           if (A.collider({x, y, w, h}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
             b[6] = Math.min(b[6]+1, 10);
           } else {
