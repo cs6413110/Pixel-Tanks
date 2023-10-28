@@ -1182,6 +1182,7 @@ function Game() {
     static launch() {
       
       setTimeout(() => {
+        alert(window.schemapack);
         const schema = window.schemapack.build({
   username: 'string',
   type: 'string',
@@ -1342,7 +1343,7 @@ function Game() {
   },
 });
         Menus.trigger('start');
-      }, 30000);
+      }, 60000);
     }
 
     static save() {
