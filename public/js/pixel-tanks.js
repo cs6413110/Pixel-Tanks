@@ -538,7 +538,7 @@ function Game() {
           victory: '/menus/victory',
           defeat: '/menus/defeat',
           crate: '/menus/crate',
-          settings: '/menus/settings',
+          //settings: '/menus/settings',
           keybinds: '/menus/keybinds',
           inventory: '/menus/inventory',
           classTab: '/menus/classTab',
