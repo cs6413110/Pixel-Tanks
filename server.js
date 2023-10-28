@@ -50,15 +50,15 @@ const server = Bun.serve({
       } else ffaopen(socket);
     },
     message(socket, data) {
-      if (socket.data.isMain) {
       try {
         data = BSON.deserialize(data);
       } catch(e) {
         return socket.close();
       }
-      if (!socket.username) socket.username = data.username;
-      if (data.op === 'database') database(data, socket);
-      if (data.op === 'auth') auth(data, socket);
+      if (socket.data.isMain) {
+        if (!socket.username) socket.username = data.username;
+        if (data.op === 'database') database(data, socket);
+        if (data.op === 'auth') auth(data, socket);
       } else ffamessage(socket, data);
     },
     close(socket, code, reason) {
