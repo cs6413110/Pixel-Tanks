@@ -1489,7 +1489,7 @@ function Game() {
 
         this.socket.on('connect', () => {
           this.socket.send(joinData);
-          setInterval(this.send.bind(this), 1000/30);
+          this.sendInterval = setInterval(this.send.bind(this), 1000/30);
         });
       } else {
         this.world = new Singleplayer(ip);
@@ -1547,7 +1547,7 @@ function Game() {
       const type = ['airstrike', 'fire'].includes(b.type) && getTeam(this.team) === getTeam(b.team) ? 'friendly'+b.type : b.type;
       try {
         GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1);
-      } catch(e) {alert('Block failed to draw! Type:'+type)}
+      } catch(e) {alert('Block failed to draw! b='+JSON.stringify(b))}
     }
 
     drawShot(s) {
@@ -2106,6 +2106,7 @@ function Game() {
 
     implode() {
       if (this.multiplayer) {
+        clearInterval(this.sendInterval);
         this.socket.close();
       } else {
         this.world.i.forEach(i => clearInterval(i));
