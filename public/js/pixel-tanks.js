@@ -1,6 +1,6 @@
 const binary = document.createElement('SCRIPT');
 const pathfinding = document.createElement('SCRIPT');
-binary.src = 'https://raw.githubusercontent.com/phretaddin/schemapack/master/build/schemapack.min.js';
+binary.src = 'https://raw.githubusercontent.com/phretaddin/schemapack/master/build/schemapack.js';
 pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
 pathfinding.onload = () => {
   const engine = document.createElement('SCRIPT');
