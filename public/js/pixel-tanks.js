@@ -71,7 +71,7 @@ function Game() {
       if (event === 'close') this.callstack.close = [];
     }
     send(data) {
-      data = schema.encode(data);
+      data = JSON.stringify(data);
       this.socket.send(data);
     }
     close() {
