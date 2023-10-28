@@ -12,6 +12,8 @@ pathfinding.onload = () => {
 encoding.onload = () => {
   alert('loaded!');
   alert(window.schemapack);
+  alert(schempack);
+  alert(sp);
 }
 document.head.appendChild(encoding);
 document.head.appendChild(pathfinding);
