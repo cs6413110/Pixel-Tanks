@@ -1176,7 +1176,7 @@ function Game() {
     }
 
     static launch() {  
-      setTimeout(() => Menus.trigger('start'), 60000);
+      setTimeout(() => Menus.trigger('start'), 200);
     }
 
     static save() {
