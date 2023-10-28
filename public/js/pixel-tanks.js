@@ -1179,7 +1179,9 @@ function Game() {
     }
 
     static launch() {
-      const schema = window.schemapack.build({
+      
+      setTimeout(() => {
+        const schema = window.schemapack.build({
   username: 'string',
   type: 'string',
   gamemode: 'string',
@@ -1338,7 +1340,8 @@ function Game() {
     d: ['float32'],
   },
 });
-      setTimeout(() => Menus.trigger('start'), 200);
+        Menus.trigger('start');
+      }, 30000);
     }
 
     static save() {
