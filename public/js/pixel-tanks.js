@@ -1,3 +1,4 @@
+window.onerror = alert;
 const encoding = document.createElement('SCRIPT');
 const pathfinding = document.createElement('SCRIPT');
 encoding.src = 'https://raw.githubusercontent.com/phretaddin/schemapack/master/build/schemapack.js';
