@@ -44,15 +44,7 @@ const server = Bun.serve({
   websocket: {
     open(socket) {
       socket._send = socket.send;
-      socket.send = data => {
-        console.time('json');
-        const json = JSON.stringify(data);
-        console.timeEnd('json');
-        console.time('bson');
-        const bson = BSON.serialize(data);
-        console.timeEnd('bson');
-        socket._send(JSON.stringify(data));
-      }
+      socket.send = data => socket._send(BSON.serialize(data));
       if (socket.data.isMain) {
         sockets.add(socket);
       } else ffaopen(socket);
@@ -60,7 +52,7 @@ const server = Bun.serve({
     message(socket, data) {
       if (socket.data.isMain) {
       try {
-        data = JSON.parse(data);
+        data = BSON.deserialize(data);
       } catch(e) {
         return socket.close();
       }
