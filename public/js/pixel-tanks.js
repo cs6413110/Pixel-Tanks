@@ -542,9 +542,8 @@ function Game() {
           keybinds: '/menus/keybinds',
           inventory: '/menus/inventory',
           classTab: '/menus/classTab',
-          healthTab: '/menus/healthTab',
           itemTab: '/menus/itemTab',
-          cosmeticTab: '/menus/cosmeticTab',
+          cosmeticTab: '/menus/cosmeticTab', // FIX DUPLICATE USELESS(deathEffecs and cosmetic tab referenceing same imagoge);
           deathEffectsTab: '/menus/cosmeticTab',
           shop: '/menus/shop',
           broke: '/menus/broke',
