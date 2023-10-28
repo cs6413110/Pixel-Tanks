@@ -43,18 +43,18 @@ const server = Bun.serve({
   },
   websocket: {
     open(socket) {
+      socket._send = socket.send;
+      socket.send = data => {
+        console.time('json');
+        const json = JSON.stringify(data);
+        console.timeEnd('json');
+        console.time('bson');
+        const bson = BSON.serialize(data);
+        console.timeEnd('bson');
+        socket._send(JSON.stringify(data));
+      }
       if (socket.data.isMain) {
         sockets.add(socket);
-        socket._send = socket.send;
-        socket.send = data => {
-          console.time('json');
-          const json = JSON.stringify(data);
-          console.timeEnd('json');
-          console.time('bson');
-          const bson = BSON.serialize(data);
-          console.timeEnd('bson');
-          socket._send(JSON.stringify(data));
-        }
       } else ffaopen(socket);
     },
     message(socket, data) {
