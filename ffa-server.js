@@ -615,11 +615,6 @@ const ffaopen = (socket) => {
   // banip here
 }
 const ffamessage = (socket, data) => {
-  try {
-    data = JSON.parse(data);
-  } catch(e) {
-    return socket.close();
-  }
   if (!socket.username) {
     // check for ban or invalid username here
     socket.username = data.username;
