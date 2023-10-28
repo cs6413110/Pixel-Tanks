@@ -14,7 +14,7 @@ document.head.appendChild(pathfinding);
 function Game() {
   alert(window.schemapack);
   setTimeout(() => alert(window.schemapack), 3000);
-  const schema = window.schemapack.build({
+  /*const schema = window.schemapack.build({
   username: 'string',
   type: 'string',
   gamemode: 'string',
@@ -172,7 +172,7 @@ function Game() {
     s: ['float32'],
     d: ['float32'],
   },
-});
+});*/
   class MegaSocket {
     constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
       this.url = url;
