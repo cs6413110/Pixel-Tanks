@@ -170,7 +170,7 @@ function Game() {
         canvas.width = w*PixelTanks.resizer;
         canvas.height = h*PixelTanks.resizer;
         draw.setTransform(1, 0, 0, 1, -x*PixelTanks.resizer, -y*PixelTanks.resizer);
-        draw.getContext('2d').drawImage(GUI.canvas, 0, 0);
+        draw.drawImage(GUI.canvas, 0, 0);
         this.cache.push([x, y, w, h, canvas]);
       }  
     }
