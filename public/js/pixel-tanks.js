@@ -12,6 +12,9 @@ document.head.appendChild(binary);
 document.head.appendChild(pathfinding);
 function Game() {
   alert(window.schemapack);
+  alert(schemapack);
+  setTimeout(() => alert(schempack), 3000);
+  setTimeout(() => alert(window.schemapack), 3000);
   const schema = window.schemapack.build({
   username: 'string',
   type: 'string',
