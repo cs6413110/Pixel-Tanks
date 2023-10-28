@@ -1,4 +1,3 @@
-window.onerror = alert;
 const encoding = document.createElement('SCRIPT');
 const pathfinding = document.createElement('SCRIPT');
 encoding.src = 'https://raw.githubusercontent.com/phretaddin/schemapack/master/build/schemapack.js';
@@ -9,174 +8,9 @@ pathfinding.onload = () => {
   engine.onload = Game;
   document.head.appendChild(engine);
 }
-encoding.onload = () => {
-  alert('loaded!');
-  alert(window.schemapack);
-  alert(schempack);
-  alert(sp);
-}
 document.head.appendChild(encoding);
 document.head.appendChild(pathfinding);
 function Game() {
-  /*const schema = window.schemapack.build({
-  username: 'string',
-  type: 'string',
-  gamemode: 'string',
-  op: 'string',
-  token: 'int16',
-  password: 'string',
-  key: 'string',
-  value: {
-    'pixel-tanks': {
-      username: 'string',
-      class: 'string',
-      cosmetic: 'string',
-      cosmetics: ['string'],
-      deathEffect: 'string',
-      deathEffects: ['string'],
-      color: 'string',
-      stats: ['int16'],
-      classes: ['boolean'],
-      items: ['string'],
-      keybinds: {
-        items: ['int16'],
-        emotes: ['int16'],    
-      },
-    }
-  },
-  tank: {
-    rank: 'int16',
-    username: 'string',
-    class: 'string',
-    cosmetic: 'string',
-    deathEffect: 'string',
-    color: 'string',
-    x: 'int16',
-    y: 'int16',
-    r: 'int16',
-    use: ['string'],
-    fire: [{
-      x: 'int16',
-      y: 'int16',
-      type: 'string',
-      r: 'int16',
-    }],
-    baseFrame: 'int16',
-    baseRotation: 'int16',
-    invis: 'boolean',
-    immune: 'boolean',
-    animation: {
-      id: 'string',
-      frame: 'int16',
-    },
-    airstrike: {
-      x: 'int16',
-      y: 'int16',
-    },
-  },
-  id: 'float32',
-  room: 'float32',
-  data: ['string'],
-  b: [{
-    x: 'int16',
-    y: 'int16', 
-    maxHp: 'int16',
-    hp: 'int16',
-    type: 'string',
-    s: 'boolean',
-    team: 'string',
-    id: 'float32',
-  }],
-  pt: [{
-    rank: 'int16',
-    username: 'string',
-    cosmetic: 'string',
-    color: 'string',
-    damage: {
-      x: 'int16',
-      y: 'int16',
-      d: 'int16',
-    },
-    maxHp: 'int16',
-    hp: 'int16',
-    shields: 'int16',
-    team: 'string',
-    x: 'int16',
-    y: 'int16',
-    r: 'int16',
-    ded: 'boolean',
-    pushback: 'int16',
-    baseRotation: 'int16', 
-    baseFrame: 'int16',
-    fire: {
-      frame: 'int16',
-    },
-    animation: {}, // FIX
-    buff: 'boolean',
-    invis: 'boolean',
-    id: 'float32',
-    class: 'string',
-    flashbanged: 'boolean',
-    dedEffect: 'string',
-  }],
-  ai: [{
-    role: 'int16',
-    x: 'int16',
-    y: 'int16',
-    r: 'int16',
-    baseRotation: 'int16',
-    baseFrame: 'int16',
-    mode: 'int16',
-    rank: 'int16',
-    hp: 'int16',
-    maxHp: 'int16',
-    pushback: 'int16',
-    cosmetic: 'string',
-    id: 'float32',
-    fire: {
-      frame: 'int16',
-    },
-    damage: {
-      x: 'int16',
-      y: 'int16',
-      d: 'int16',
-    },
-    team: 'string',
-    color: 'string',
-  }],
-  s: [{
-    team: 'string',
-    r: 'int16',
-    type: 'string',
-    x: 'int16',
-    y: 'int16',
-    sx: 'int16',
-    sy: 'int16',
-    id: 'float32',
-  }],
-  d: [{
-    x: 'int16',
-    y: 'int16',
-    w: 'int16',
-    h: 'int16',
-    f: 'int16',
-    id: 'float32',
-  }],
-  logs: [{
-    m: 'string',
-    c: 'string',
-  }],
-  global: 'string',
-  tickspeed: 'string',
-  event: 'string',
-  delete: {
-    b: ['float32'],
-    pt: ['float32'],
-    ai: ['float32'],
-    s: ['float32'],
-    d: ['float32'],
-  },
-});*/
   class MegaSocket {
     constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
       this.url = url;
@@ -1345,6 +1179,165 @@ function Game() {
     }
 
     static launch() {
+      const schema = window.schemapack.build({
+  username: 'string',
+  type: 'string',
+  gamemode: 'string',
+  op: 'string',
+  token: 'int16',
+  password: 'string',
+  key: 'string',
+  value: {
+    'pixel-tanks': {
+      username: 'string',
+      class: 'string',
+      cosmetic: 'string',
+      cosmetics: ['string'],
+      deathEffect: 'string',
+      deathEffects: ['string'],
+      color: 'string',
+      stats: ['int16'],
+      classes: ['boolean'],
+      items: ['string'],
+      keybinds: {
+        items: ['int16'],
+        emotes: ['int16'],    
+      },
+    }
+  },
+  tank: {
+    rank: 'int16',
+    username: 'string',
+    class: 'string',
+    cosmetic: 'string',
+    deathEffect: 'string',
+    color: 'string',
+    x: 'int16',
+    y: 'int16',
+    r: 'int16',
+    use: ['string'],
+    fire: [{
+      x: 'int16',
+      y: 'int16',
+      type: 'string',
+      r: 'int16',
+    }],
+    baseFrame: 'int16',
+    baseRotation: 'int16',
+    invis: 'boolean',
+    immune: 'boolean',
+    animation: {
+      id: 'string',
+      frame: 'int16',
+    },
+    airstrike: {
+      x: 'int16',
+      y: 'int16',
+    },
+  },
+  id: 'float32',
+  room: 'float32',
+  data: ['string'],
+  b: [{
+    x: 'int16',
+    y: 'int16', 
+    maxHp: 'int16',
+    hp: 'int16',
+    type: 'string',
+    s: 'boolean',
+    team: 'string',
+    id: 'float32',
+  }],
+  pt: [{
+    rank: 'int16',
+    username: 'string',
+    cosmetic: 'string',
+    color: 'string',
+    damage: {
+      x: 'int16',
+      y: 'int16',
+      d: 'int16',
+    },
+    maxHp: 'int16',
+    hp: 'int16',
+    shields: 'int16',
+    team: 'string',
+    x: 'int16',
+    y: 'int16',
+    r: 'int16',
+    ded: 'boolean',
+    pushback: 'int16',
+    baseRotation: 'int16', 
+    baseFrame: 'int16',
+    fire: {
+      frame: 'int16',
+    },
+    animation: {}, // FIX
+    buff: 'boolean',
+    invis: 'boolean',
+    id: 'float32',
+    class: 'string',
+    flashbanged: 'boolean',
+    dedEffect: 'string',
+  }],
+  ai: [{
+    role: 'int16',
+    x: 'int16',
+    y: 'int16',
+    r: 'int16',
+    baseRotation: 'int16',
+    baseFrame: 'int16',
+    mode: 'int16',
+    rank: 'int16',
+    hp: 'int16',
+    maxHp: 'int16',
+    pushback: 'int16',
+    cosmetic: 'string',
+    id: 'float32',
+    fire: {
+      frame: 'int16',
+    },
+    damage: {
+      x: 'int16',
+      y: 'int16',
+      d: 'int16',
+    },
+    team: 'string',
+    color: 'string',
+  }],
+  s: [{
+    team: 'string',
+    r: 'int16',
+    type: 'string',
+    x: 'int16',
+    y: 'int16',
+    sx: 'int16',
+    sy: 'int16',
+    id: 'float32',
+  }],
+  d: [{
+    x: 'int16',
+    y: 'int16',
+    w: 'int16',
+    h: 'int16',
+    f: 'int16',
+    id: 'float32',
+  }],
+  logs: [{
+    m: 'string',
+    c: 'string',
+  }],
+  global: 'string',
+  tickspeed: 'string',
+  event: 'string',
+  delete: {
+    b: ['float32'],
+    pt: ['float32'],
+    ai: ['float32'],
+    s: ['float32'],
+    d: ['float32'],
+  },
+});
       setTimeout(() => Menus.trigger('start'), 200);
     }
 
