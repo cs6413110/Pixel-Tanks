@@ -188,8 +188,8 @@ function Game() {
       this.cdraw();
       if (!this.buttonEffect) return;
       for (const b of this.buttons) {
+        const [x, y, w, h, canvas] = this.cache[this.buttons.indexOf(b)];
         if (b[5]) {
-          const [x, y, w, h, canvas] = this.cache[this.buttons.indexOf(b)];
           if (A.collider({x, y, w, h}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
             b[6] = Math.min(b[6]+1, 10);
           } else {
