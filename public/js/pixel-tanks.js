@@ -41,7 +41,7 @@ function Game() {
       }
       this.socket.onmessage = data => {
         try {
-          data = BSON.deserialize(data.data);
+          data = BSON.deserialize(new Uint8Array(data.data));
         } catch(e) {
           alert('Socket Encryption Error: ' + data.data+' | '+e);
         }
