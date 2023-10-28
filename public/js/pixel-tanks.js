@@ -9,7 +9,7 @@ pathfinding.onload = () => {
   engine.onload = Game;
   document.head.appendChild(engine);
 }
-binary.onload = () => {
+encoding.onload = () => {
   alert('loaded!');
   alert(window.schemapack);
 }
