@@ -167,7 +167,7 @@ function Game() {
       for (const b of this.buttons) {
         const x = this.render[0]+b[0]*this.render[2]/1600, y = this.render[1]+b[1]*this.render[3]/1000, w = b[2]*this.render[2]/1600, h = b[3]*this.render[3]/1000;
         const canvas = document.createElement('canvas'), draw = canvas.getContext('2d');
-        document.body.appendChild(canvas);
+        //document.body.appendChild(canvas);
         canvas.width = w*PixelTanks.resizer;
         canvas.height = h*PixelTanks.resizer;
         draw.setTransform(1, 0, 0, 1, -x*PixelTanks.resizer, -y*PixelTanks.resizer);
