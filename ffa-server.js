@@ -612,8 +612,6 @@ setInterval(() => {
 
 const ffaopen = (socket) => {
   sockets.add(socket);
-  socket._send = socket.send;
-  socket.send = data => socket._send(JSON.stringify(data));
   // banip here
 }
 const ffamessage = (socket, data) => {
