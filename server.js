@@ -151,7 +151,7 @@ const schema = schemapack.build({
   }],
   global: 'string',
   tickspeed: 'string',
-  event: 'hostupdate',
+  event: 'string',
   delete: {
     b: ['float32'],
     pt: ['float32'],
