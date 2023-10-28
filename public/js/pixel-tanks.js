@@ -1,4 +1,3 @@
-window.onerror = alert;
 const binary = document.createElement('SCRIPT');
 const pathfinding = document.createElement('SCRIPT');
 binary.src = 'https://raw.githubusercontent.com/phretaddin/schemapack/master/build/schemapack.js';
@@ -9,11 +8,12 @@ pathfinding.onload = () => {
   engine.onload = Game;
   document.head.appendChild(engine);
 }
+binary.onload = () => {
+  alert(schemapack);
+}
 document.head.appendChild(binary);
 document.head.appendChild(pathfinding);
 function Game() {
-  alert(window.schemapack);
-  setTimeout(() => alert(window.schemapack), 3000);
   /*const schema = window.schemapack.build({
   username: 'string',
   type: 'string',
