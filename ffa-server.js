@@ -556,6 +556,7 @@ class TDM extends Multiplayer {
     }
   }
 }
+const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 
 const Profile = (arr, update) => {
   const functions = [];
@@ -565,14 +566,16 @@ const Profile = (arr, update) => {
       const n = e.name;
       for (const p of Object.getOwnPropertyNames(e)) {
         if (typeof e[p] === 'function') {
-          const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0, l: 0};
+          const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0, min: Infinity, max: 0};
           e[p] = function() {
             const start = process.hrtime();
             const r = f.o.apply(this, arguments);
             f.i++;
             const end = process.hrtime(start);
-            f.l = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
-            f.t = (f.t*(f.i-1)+f.l)/f.i;
+            const time = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
+            if (time < f.min) f.min = time;
+            if (time > f.max) f.max = time;
+            f.t = (f.t*(f.i-1)+time)/f.i;
             update(functions);
             return r;
           }
@@ -582,14 +585,16 @@ const Profile = (arr, update) => {
       }
       for (const p of Object.getOwnPropertyNames(e.prototype)) {
         if (typeof e.prototype[p] === 'function') {
-          const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0, l: 0};
+          const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0, min: Infinity, max: 0};
           e.prototype[p] = function() {
             const start = process.hrtime();
             const r = f.o.apply(this, arguments);
             f.i++;
             const end = process.hrtime(start);
-            f.l = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
-            f.t = (f.t*(f.i-1)+f.l)/f.i;
+            const time = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
+            if (time < f.min) f.min = time;
+            if (time > f.max) f.max = time;
+            f.t = (f.t*(f.i-1)+time)/f.i;
             update(functions);
             return r;
           }
@@ -600,7 +605,6 @@ const Profile = (arr, update) => {
     }
   }
 }
-const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 
 let lagometer = [];
 Profile([Engine, Block, Shot, AI, Damage, FFA, Multiplayer], f => {
@@ -610,7 +614,7 @@ setInterval(() => {
   lagometer.sort((a, b) => b.t - a.t);
   const top = lagometer.slice(0, Math.min(15, lagometer.length));
   console.log('-----PROFILING REPORT-----');
-  for (const t of top) console.log(t.name+': ('+t.t+', '+t.l+') over '+t.i);
+  for (const t of top) console.log(t.name+': Min='+t.min+'Avg='+t.t+' Max='+t.max+' Runs='+t.i);
 }, 10000);
 
 const ffaopen = (socket) => {
