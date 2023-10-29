@@ -8,7 +8,7 @@ let interval;
 // get min, avg, and max ping
 console.log('Beginning Test #1');
 console.log('--- Creating WebSockets ---');
-for (let i = 0; i < 50; i++) sockets.push(new ws('ws://localhost:3000'));
+for (let i = 0; i < 50; i++) sockets.push(new ws('ws://localhost/ffa'));
 setTimeout(() => {
   console.log('Connections completed!');
   console.log('Sending ping messages 60/s for 1 min');
