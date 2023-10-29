@@ -1,4 +1,5 @@
 const ws = require('websocket').w3cwebsocket;
+const BSON = require('bson');
 const sockets = [];
 let interval;
 
@@ -17,14 +18,14 @@ setTimeout(() => {
       const id = Math.random();
       socket[id] = Date.now();
       socket.onmessage = data => {
-        data = JSON.parse(new Uint8Array(data.data));
+        data = BSON.deserialize(new Uint8Array(data.data));
         const ping = Date.now()-socket[id];
         num++;
         average = (average*(num-1)+ping)/num;
         if (ping > max) max = ping;
         if (ping < min) min = ping;
       }
-      socket.send(JSON.stringify({type: 'ping', id}));
+      socket.send(BSON.serialize({type: 'ping', id}));
     }
   }, 1000/60);
   setTimeout(() => {
@@ -38,12 +39,12 @@ setTimeout(() => {
     for (const socket of sockets) {
       socket.onmessage = () => {}
       socket.username = 'bot-player#'+Math.random();
-      socket.send(JSON.stringify({username: socket.username, type: 'join', gamemode: 'ffa', tank: {rank: sockets.indexOf(socket), username: socket.username, color: '#FFFFFF'}}));
+      socket.send(BSON.serialize({username: socket.username, type: 'join', gamemode: 'ffa', tank: {rank: sockets.indexOf(socket), username: socket.username, color: '#FFFFFF'}}));
     }
     setTimeout(() => {
       console.log('Moving to random pos for 60ups');
       interval = setInterval(() => {
-        for (const socket of sockets) socket.send(JSON.stringify({username: socket.username, type: 'update', data: {x: Math.random()*3000, y: Math.random()*3000, fire: [], use: ['shield']}}));
+        for (const socket of sockets) socket.send(BSON.serialize({username: socket.username, type: 'update', data: {x: Math.random()*3000, y: Math.random()*3000, fire: [], use: ['shield']}}));
       }, 1000/60);
       setTimeout(() => {
         clearInterval(interval);
