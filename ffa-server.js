@@ -46,7 +46,7 @@ const getTickspeed = () => {
   const start = Bun.nanoseconds();
   setTimeout(() => {
     const end = Bun.nanoseconds();
-    tickspeed = end-start;
+    tickspeed = (end-start)*0.00000001;
   });
 }
 setInterval(getTickspeed, 1000);
