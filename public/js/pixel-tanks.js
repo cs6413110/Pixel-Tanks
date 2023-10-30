@@ -36,13 +36,13 @@ function Game() {
       this.socket.onopen = () => {
         this.status = 'connected';
         if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => {
-          this.socket.send(BSON.serialize({type: 'ping', op: 'ping'}));
+          this.socket.send(JSON.stringify({type: 'ping', op: 'ping'}));
         }, 30000);
         this.callstack.open.forEach(f => f());
       }
       this.socket.onmessage = data => {
         try {
-          data = BSON.deserialize(new Uint8Array(data.data));
+          data = JSON.parse(data.data);
         } catch(e) {
           alert('Socket Encryption Error: ' + data.data+' | '+e);
         }
@@ -77,7 +77,7 @@ function Game() {
       if (event === 'close') this.callstack.close = [];
     }
     send(data) {
-      data = BSON.serialize(data);
+      data = JSON.stringify(data);
       this.socket.send(data);
     }
     close() {
