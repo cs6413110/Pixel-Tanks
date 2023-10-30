@@ -43,9 +43,9 @@ const deathMessages = [
 
 let tickspeed;
 const getTickspeed = () => {
-  const start = performance.now();
+  const start = Bun.nanoseconds();
   setTimeout(() => {
-    const end = performance.now();
+    const end = Bun.nanoseconds();
     tickspeed = end-start;
   });
 }
