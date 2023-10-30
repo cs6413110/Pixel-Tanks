@@ -525,6 +525,7 @@ class Shot {
             }
             return false;
           } else if (type === 'fire') {
+            if (e.immune) return true;
             if (e.fire) clearTimeout(e.fireTimeout);
             e.fire = { team: this.team, frame: e.fire?.frame || 0 };
             e.fireInterval ??= setInterval(() => e.fire.frame ^= 1, 50); // OPTIMIZE make gui effects render by date time not by server interval
