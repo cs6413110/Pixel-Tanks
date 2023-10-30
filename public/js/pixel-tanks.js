@@ -1545,11 +1545,7 @@ function Game() {
     drawBlock(b) {
       const size = b.type === 'airstrike' ? 200 : 100;
       const type = ['airstrike', 'fire'].includes(b.type) && getTeam(this.team) === getTeam(b.team) ? 'friendly'+b.type : b.type;
-      try {
-        GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1);
-      } catch(e) {
-        document.write('Block failed to draw! b='+JSON.stringify(b)+' hostupdate='+JSON.stringify(this.hostupdate))
-      }
+      GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1);
     }
 
     drawShot(s) {
