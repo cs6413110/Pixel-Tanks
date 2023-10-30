@@ -376,7 +376,7 @@ class Block {
       host.cells[cx][cy].add(this);
       this.cells.add(cx+'x'+cy);
     }
-    if (this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && thid.y <= 2900) host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
+    if (this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && this.y <= 2900) host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
     this.u();
   }
 
