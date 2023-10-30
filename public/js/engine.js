@@ -532,6 +532,7 @@ class Shot {
               clearInterval(e.fireInterval);
               e.fire = false;
             }, 4000);
+            return true;
           } else {
             if (bullet_settings.size[type]) {
               host.d.push(new Damage(x - bullet_settings.size[type] / 2 + 10, y - bullet_settings.size[type] / 2 + 10, bullet_settings.size[type], bullet_settings.size[type], this.damage, this.team, host));
@@ -578,6 +579,7 @@ class Shot {
               clearInterval(e.fireInterval);
               e.fire = false;
             }, 4000);
+            return true;
           } else {
             if (bullet_settings.size[type]) {
               host.d.push(new Damage(x - bullet_settings.size[type] / 2 + 10, y - bullet_settings.size[type] / 2 + 10, bullet_settings.size[type], bullet_settings.size[type], this.damage, this.team, host));
