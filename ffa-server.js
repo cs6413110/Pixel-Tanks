@@ -44,7 +44,7 @@ const deathMessages = [
 let tickspeed;
 const getTickspeed = () => {
   const start = performance.now();
-  setImmediate(() => {
+  setTimeout(() => {
     const end = performance.now();
     tickspeed = end-start;
   });
