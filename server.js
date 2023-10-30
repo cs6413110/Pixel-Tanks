@@ -1,6 +1,5 @@
 const {ffaopen, ffamessage, ffaclose} = require('./ffa-server.js');
 const {MongoClient} = require('mongodb');
-const {BSON} = require('bson');
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
 const tokens = new Set(), sockets = new Set();
 const valid = (token, username) => tokens.has(`${token}:${username}`);
@@ -44,14 +43,14 @@ const server = Bun.serve({
   websocket: {
     open(socket) {
       socket._send = socket.send;
-      socket.send = data => socket._send(BSON.serialize(data));
+      socket.send = data => socket._send(JSON.stringify(data));
       if (socket.data.isMain) {
         sockets.add(socket);
       } else ffaopen(socket);
     },
     message(socket, data) {
       try {
-        data = BSON.deserialize(data);
+        data = JSON.parse(data);
       } catch(e) {
         return socket.close();
       }
