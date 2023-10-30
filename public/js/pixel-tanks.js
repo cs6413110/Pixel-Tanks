@@ -2003,9 +2003,7 @@ function Game() {
           this.canToolkit = false;
           this.timers.toolkit = new Date();
           setTimeout(() => {this.canToolkit = true}, 40000);
-          setTimeout(() => {
-            if (this.halfSpeed && Date.now()-this.timers.toolkit < (PixelTanks.userData.class === 'medic' ? 5000 : 7500) this.halfSpeed = false;
-          }, PixelTanks.userData.class === 'medic' ? 5000 : 7500);
+          setTimeout(() => {this.halfSpeed = false}, PixelTanks.userData.class === 'medic' ? 5000 : 7500);
           this.playAnimation('toolkit');
         }
         if (!this.halfSpeed && Date.now()-this.timers.toolkit < (PixelTanks.userData.class === 'medic' ? 5000 : 7500)) {
