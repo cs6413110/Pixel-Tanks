@@ -653,13 +653,13 @@ const ffamessage = (socket, data) => {
     socket.send({event: 'ping', id: data.id});
   } else if (data.type === 'chat') {
     // handle mutes and filtering here
-    if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${msg}`, c: '#ffffff'});
-    if (servers[data.room]) servers[data.room].logs.push({m: `[${data.username}] ${msg}`, c: '#ffffff'});
+    if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${data.msg}`, c: '#ffffff'});
+    if (servers[data.room]) servers[data.room].logs.push({m: `[${data.username}] ${data.msg}`, c: '#ffffff'});
   } else if (data.type === 'logs') {
     if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
   } else if (data.type === 'command') {
     const f = Commands[data.data[0]], args = data.data;
-    if (typeof func === 'function') {
+    if (typeof func !== 'function') {
       f.bind(socket)(args);
     } else socket.send({status: 'error', message: 'Command not found.'});
   } else if (data.type === 'stats') {
