@@ -1,4 +1,4 @@
-const {ffaopen, ffamessage, ffaclose} = require('./ffa-server.js');
+const {multiopen, multimessage, multiclose} = require('./multiplayer.js');
 const {MongoClient} = require('mongodb');
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
 const tokens = new Set(), sockets = new Set();
@@ -46,7 +46,7 @@ const server = Bun.serve({
       socket.send = data => socket._send(JSON.stringify(data));
       if (socket.data.isMain) {
         sockets.add(socket);
-      } else ffaopen(socket);
+      } else multiopen(socket);
     },
     message(socket, data) {
       try {
@@ -58,12 +58,12 @@ const server = Bun.serve({
         if (!socket.username) socket.username = data.username;
         if (data.op === 'database') database(data, socket);
         if (data.op === 'auth') auth(data, socket);
-      } else ffamessage(socket, data);
+      } else multimessage(socket, data);
     },
     close(socket, code, reason) {
       if (socket.data.isMain) {
         sockets.delete(socket);
-      }  else ffaclose(socket, code, reason);
+      }  else multiclose(socket, code, reason);
     }
   },
 });

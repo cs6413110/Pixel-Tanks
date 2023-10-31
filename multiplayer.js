@@ -609,11 +609,11 @@ setInterval(() => {
   for (const t of top) console.log(t.name+': Min='+t.min+'Avg='+t.t+' Max='+t.max+' Runs='+t.i);
 }, 10000);
 
-const ffaopen = (socket) => {
+const multiopen = (socket) => {
   sockets.add(socket);
   // banip here
 }
-const ffamessage = (socket, data) => {
+const multimessage = (socket, data) => {
   if (!socket.username) {
     // check for ban or invalid username here
     socket.username = data.username;
@@ -665,8 +665,8 @@ const ffamessage = (socket, data) => {
     socket.send(gamemodes);
   }
 }
-const ffaclose = (socket, code, reason) => {
+const multiclose = (socket, code, reason) => {
   sockets.delete(socket);
   if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
 }
-export {ffaopen, ffamessage, ffaclose};
+export {multiopen, multimessage, multiclose};
