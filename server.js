@@ -1,3 +1,9 @@
+process.on('unhandledRejection', (reason, p) => {
+  console.error(reason, 'Unhandled Rejection at Promise', p);
+}).on('uncaughtException', err => {
+  console.error(err, 'Uncaught Exception thrown');
+  process.exit(1);
+});
 const {multiopen, multimessage, multiclose} = require('./multiplayer.js');
 const {MongoClient} = require('mongodb');
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
