@@ -2015,7 +2015,7 @@ function Game() {
           this.timers.class = {time: Date.now(), cooldown: 40000};
         } else if (c === 'medic') {
           this.tank.use.push(`healwave${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
-          this.timers.class = {time: Date.now(), cooldown: 0};
+          this.timers.class = {time: Date.now(), cooldown: 30000};
         } else if (c === 'fire') {
           for (let i = -30; i < 30; i += 5) this.tank.fire.push({...toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
           this.timers.class = {time: Date.now(), cooldown: 10000};
