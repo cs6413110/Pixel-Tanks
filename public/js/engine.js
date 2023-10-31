@@ -63,7 +63,7 @@ class Engine {
     const t = this.pt.find(t => t.username === data.username);
     if (!t) return;
     data = data.data; // reduce data copying
-    const { emote, r, baseFrame, use, x, y, fire, airstrike} = data; // destructuring is lag so remove
+    const { emote, r, baseFrame, use, x, y, fire} = data; // destructuring is lag so remove
     t.baseRotation = data.baseRotation;
     t.immune = data.immune;
     t.animation = data.animation;
@@ -157,7 +157,7 @@ class Engine {
       } else if (e === 'healSwitch') {
       } else if (e === 'shield') {
         t.shields = 100;
-      } else if (e.includes('airstrike') {
+      } else if (e.includes('airstrike')) {
         const [ax, ay] = e.replace('airstrike', '').split('x');
         this.b.push(new Block(airstrike.x, airstrike.y, Infinity, 'airstrike', parseTeamExtras(t.team), this));
       }
