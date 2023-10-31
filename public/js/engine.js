@@ -168,6 +168,7 @@ class Engine {
           for (const entity of this.cells[i][l]) {
             if (entity instanceof Tank) {
               if (getTeam(entity.team) === getTeam(t.team)) {
+                this.logs.push({m: 'max: '+entity.maxHp+' current: '+entity.hp+' calc: '+((entity.maxHp-entity.hp)/-3)});
                 entity.damageCalc(entity.x, entity.y, -(entity.maxHp-entity.hp)/3, this.username);
               }
             }
