@@ -62,14 +62,14 @@ class Engine {
   update(data) {
     const t = this.pt.find(t => t.username === data.username);
     if (!t) return;
-    data = data.data;
-    const { emote, r, baseFrame, use, x, y, fire, airstrike} = data;
+    data = data.data; // reduce data copying
+    const { emote, r, baseFrame, use, x, y, fire, airstrike} = data; // destructuring is lag so remove
     t.baseRotation = data.baseRotation;
     t.immune = data.immune;
     t.animation = data.animation;
     t.emote = emote;
     t.invis = data.invis;
-    t.baseFrame = baseFrame;
+    t.baseFrame = data.baseFrame;
     if (!t.grapple) {
       t.x = x;
       t.y = y;
@@ -157,10 +157,10 @@ class Engine {
       } else if (e === 'healSwitch') {
       } else if (e === 'shield') {
         t.shields = 100;
+      } else if (e.includes('airstrike') {
+        const [ax, ay] = e.replace('airstrike', '').split('x');
+        this.b.push(new Block(airstrike.x, airstrike.y, Infinity, 'airstrike', parseTeamExtras(t.team), this));
       }
-    }
-    if (airstrike) {
-      this.b.push(new Block(airstrike.x, airstrike.y, Infinity, 'airstrike', parseTeamExtras(t.team), this));
     }
     if (fire.length > 0) {
       t.pushback = -6;
@@ -783,7 +783,7 @@ class AI {
     if (this.pushback !== 0) this.pushback += 0.5;
     if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25);
     for (const t of this.host.pt) {
-      if (this.class === 'medic' && !t.ded && (this.x-t.x)**2 + (this.y-t.y)**2 < 250000 && getTeam(this.team) === getTeam(t.team)) t.hp = Math.min(t.hp+.3, t.maxHp);
+      //if (this.class === 'medic' && !t.ded && (this.x-t.x)**2 + (this.y-t.y)**2 < 250000 && getTeam(this.team) === getTeam(t.team)) t.hp = Math.min(t.hp+.3, t.maxHp);
       if (this.immune+500 < Date.now() || !t.canBashed) continue;
       if ((this.class === 'warrior' && getTeam(this.team) !== getTeam(t.team)) || (this.class === 'medic' && getTeam(this.team) === getTeam(t.team))) {
         if (!collision(this.x, this.y, 80, 80, t.x, t.y, 80, 80)) continue;
