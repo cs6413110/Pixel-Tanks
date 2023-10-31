@@ -159,7 +159,7 @@ class Engine {
         t.shields = 100;
       } else if (e.includes('airstrike')) {
         const [ax, ay] = e.replace('airstrike', '').split('x');
-        this.b.push(new Block(airstrike.x, airstrike.y, Infinity, 'airstrike', parseTeamExtras(t.team), this));
+        this.b.push(new Block(ax, ay, Infinity, 'airstrike', parseTeamExtras(t.team), this));
       }
     }
     if (fire.length > 0) {
