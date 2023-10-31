@@ -150,7 +150,7 @@ class Engine {
         const cx = Math.floor((t.x+40)/100), cy = Math.floor((t.y+40)/100);
       } else if (e === 'turret') {
         for (const ai of this.ai) {
-          if (getUsername(ai) === t.username) setTimeout(() => ai.destroy());
+          if (getUsername(ai.team) === t.username) setTimeout(() => ai.destroy());
         }
         this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
       } else if (e === 'buff') {
