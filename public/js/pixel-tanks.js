@@ -754,9 +754,7 @@ function Game() {
               ];
               for (const c of levelCoords) {
                 if (x > c[0]*1600/1049 && x < (c[0]+80)*1600/1049 && y > c[1]*1000/653 && y < (c[1]+74)*1000/653) {
-                  alert('click spotted');
                   Menus.removeListeners();
-                  alent('listeners removed');
                   PixelTanks.user.player = new Tank(levelCoords.indexOf(c)+3, false, null);
                 }
               }
@@ -925,13 +923,10 @@ function Game() {
                 [684, 884],
                 [1344, 884],
               ];
-              alert('clicked at '+x+', '+y);
               for (const c of helpCoords) {
                 if (x > c[0] && x < c[0]+80 && y > c[1] && y < c[1]+74) {
-                  alert('attempting to start level');
                   Menus.removeListeners();
                   PixelTanks.user.player = new Tank(helpCoords.indexOf(c)+1, false, null);
-                  alert('success');
                 }
               }
             }
