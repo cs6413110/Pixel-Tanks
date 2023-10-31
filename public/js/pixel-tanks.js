@@ -1595,14 +1595,6 @@ function Game() {
     }
 
     drawTank(t) {
-      if (t.class === 'medic' && !t.ded) {
-        GUI.draw.fillStyle = '#00FF00';
-        GUI.draw.beginPath();
-        GUI.draw.globalAlpha = .1;
-        GUI.draw.arc(t.x+40, t.y+40, 250, 0, 2*Math.PI);
-        GUI.draw.fill();
-        GUI.draw.globalAlpha = 1;
-      }
       const p = t.username === PixelTanks.user.username;
       let a = 1;
       if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
