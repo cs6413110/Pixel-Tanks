@@ -158,8 +158,8 @@ class Engine {
       } else if (e === 'shield') {
         t.shields = 100;
       } else if (e.includes('airstrike')) {
-        const [ax, ay] = e.replace('airstrike', '').split('x');
-        this.b.push(new Block(ax, ay, Infinity, 'airstrike', parseTeamExtras(t.team), this));
+        const a = e.replace('airstrike', '').split('x');
+        this.b.push(new Block(Number(a[0]), Number(a[1]), Infinity, 'airstrike', parseTeamExtras(t.team), this));
       }
     }
     if (fire.length > 0) {
