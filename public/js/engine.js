@@ -164,11 +164,13 @@ class Engine {
       } else if (e.includes('healwave')) {
         const a = e.replace('healwave', '').split('x');
         const hx = Math.floor(a[0]/100), hy = Math.floor(a[1]/100);
-        for (let i = hx-2; i<=hx+2; i++) for (let l = hy-2; l<=hy+2; l++) for (const entity of this.cells[i][l]) {
+        for (let i = hx-2; i<=hx+2; i++) for (let l = hy-2; l<=hy+2; l++) {
           this.logs.push({m: i+', '+l, c: '#0000FF'});
-          if (entity instanceof Tank) {
-            if (getTeam(entity.team) === getTeam(t.team)) {
-              entity.damageCalc(entity.x, entity.y, -Math.max(50, (entity.maxHp-entity.hp)/3), this.username);
+          for (const entity of this.cells[i][l]) {
+            if (entity instanceof Tank) {
+              if (getTeam(entity.team) === getTeam(t.team)) {
+                entity.damageCalc(entity.x, entity.y, -Math.max(50, (entity.maxHp-entity.hp)/3), this.username);
+              }
             }
           }
         }
