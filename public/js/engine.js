@@ -273,7 +273,7 @@ class Tank {
         if (entity.username !== this.username && this.immune && !this.ded && entity.canBashed && (entity instanceof Tank || entity instanceof AI)) {
           if ((this.class === 'warrior' && !teamMatch) || (this.class === 'medic' && teamMatch)) {
             if (collision(this.x, this.y, 80, 80, entity.x, entity.y, 80, 80)) {
-              entity.damageCalc(entity.x, entity.y, this.class === 'warrior', 75 : -30, this.username);
+              entity.damageCalc(entity.x, entity.y, this.class === 'warrior' ? 75 : -30, this.username);
               entity.canBashed = false;
               setTimeout(() => {entity.canBashed = true}, 800);
             }
