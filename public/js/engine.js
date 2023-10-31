@@ -154,14 +154,21 @@ class Engine {
       } else if (e === 'buff') {
         t.buff = true;
         setTimeout(() => { t.buff = false }, 10000);
-      } else if (e === 'healSwitch') {
       } else if (e === 'shield') {
         t.shields = 100;
       } else if (e.includes('airstrike')) {
         const a = e.replace('airstrike', '').split('x');
         this.b.push(new Block(Number(a[0]), Number(a[1]), Infinity, 'airstrike', parseTeamExtras(t.team), this));
       } else if (e.includes('healwave')) {
-        
+        const a = e.replace('healwave', '').split('x');
+        const hx = Math.floor(a[0]/100), hy = Math.floor(a[1]/100);
+        for (let i = hx-2, i<hx+2; i++) for (let l = hy-2, i<hy+2; l++) for (const entity of this.cells[i][l]) {
+          if (entity instanceof Tank) {
+            if (getTeam(entity.team) === getTeam(t.team)) {
+              entity.damageCalc(entity.x, entity.y, -300, this.username);
+            }
+          }
+        }
       }
     }
     if (fire.length > 0) {
