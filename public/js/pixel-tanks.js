@@ -906,6 +906,7 @@ function Game() {
         },
         help: {
           buttons: [
+            [44, 44, 80, 80, 'main', true],
             [684, 764, 236, 80, 'helpinventory', true],
             [1024, 764, 236, 80, 'helpcosmetic', true],
             [1344, 764, 236, 80, 'helpclass', true],
