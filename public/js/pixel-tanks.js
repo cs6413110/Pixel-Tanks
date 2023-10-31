@@ -2003,7 +2003,7 @@ function Game() {
           this.playAnimation('toolkit');
         }
         if (!this.halfSpeed && Date.now()-this.timers.toolkit < (PixelTanks.userData.class === 'medic' ? 5000 : 7500)) {
-          this.timers.toolkit = new Date("Nov 28 2006").getTime();
+          this.timers.toolkit = new Date('Nov 28 2006').getTime();
           this.canToolkit = true;
         }
       } else if (k === 70 && this.canClass) {
@@ -2022,7 +2022,7 @@ function Game() {
           this.tank.use.push('buff');
           this.timers.class = {time: Date.now(), cooldown: 40000};
         } else if (c === 'medic') {
-          this.tank.use.push('healSwitch');
+          this.tank.use.push(`healwave${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
           this.timers.class = {time: Date.now(), cooldown: 0};
         } else if (c === 'fire') {
           for (let i = -30; i < 30; i += 5) this.tank.fire.push({...toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
