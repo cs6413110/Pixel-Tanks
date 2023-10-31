@@ -164,7 +164,7 @@ class Engine {
       } else if (e.includes('healwave')) {
         const a = e.replace('healwave', '').split('x');
         const hx = Math.floor(a[0]/100), hy = Math.floor(a[1]/100);
-        for (let i = hx-2, i<hx+2; i++) for (let l = hy-2, i<hy+2; l++) for (const entity of this.cells[i][l]) {
+        for (let i = hx-2; i<hx+2; i++) for (let l = hy-2; i<hy+2; l++) for (const entity of this.cells[i][l]) {
           if (entity instanceof Tank) {
             if (getTeam(entity.team) === getTeam(t.team)) {
               entity.damageCalc(entity.x, entity.y, -300, this.username);
