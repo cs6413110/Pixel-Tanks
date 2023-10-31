@@ -164,10 +164,11 @@ class Engine {
       } else if (e.includes('healwave')) {
         const a = e.replace('healwave', '').split('x');
         const hx = Math.floor(a[0]/100), hy = Math.floor(a[1]/100);
+        t.rank = 'HealData=x:${hx-2}->${hx+2},y:${hy-2}->${hy+2}]
         for (let i = hx-2; i<hx+2; i++) for (let l = hy-2; i<hy+2; l++) for (const entity of this.cells[i][l]) {
           if (entity instanceof Tank) {
             if (getTeam(entity.team) === getTeam(t.team)) {
-              entity.damageCalc(entity.x, entity.y, -300, this.username);
+              entity.damageCalc(entity.x, entity.y, Math.max(50, (e.maxHp-e.hp)/3), this.username);
             }
           }
         }
