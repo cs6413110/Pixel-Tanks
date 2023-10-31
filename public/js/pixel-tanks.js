@@ -1959,7 +1959,7 @@ function Game() {
         this.fire('dynamite');
         cooldown = 25000;
       } else if (id === 'airstrike') {
-        this.tank.airstrike = {x: this.mouse.x+this.tank.x-850, y: this.mouse.y+this.tank.y-550};
+        this.tank.use.push(`airstrike${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
         cooldown = 20000;
       }
       this.timers.items[slot] = {cooldown: cooldown, time: Date.now()};
@@ -2079,9 +2079,9 @@ function Game() {
     }
 
     send() {
-      const {x, y, r, use, fire, airstrike} = this.tank;
+      const {x, y, r, use, fire} = this.tank;
       const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank};
-      if (x === this.lastUpdate.x && y === this.lastUpdate.y && r === this.lastUpdate.r && use.length === 0 && fire.length === 0 && airstrike === null) return;
+      if (x === this.lastUpdate.x && y === this.lastUpdate.y && r === this.lastUpdate.r && use.length === 0 && fire.length === 0) return;
       this.ops++;
       if (this.multiplayer) {
         this.socket.send(updateData);
@@ -2096,8 +2096,7 @@ function Game() {
           logs: this.world.logs.reverse(),
         }
       }
-      this.lastUpdate = {x, y, r};
-      this.tank.airstrike = null;
+      this.lastUpdate = {x, y, r}
       this.tank.fire = [];
       this.tank.use = [];
     }
