@@ -160,6 +160,8 @@ class Engine {
       } else if (e.includes('airstrike')) {
         const a = e.replace('airstrike', '').split('x');
         this.b.push(new Block(Number(a[0]), Number(a[1]), Infinity, 'airstrike', parseTeamExtras(t.team), this));
+      } else if (e.includes('healwave')) {
+        
       }
     }
     if (fire.length > 0) {
