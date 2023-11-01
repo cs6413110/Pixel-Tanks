@@ -135,7 +135,7 @@ function Game() {
         b[6] = 0;
       }
       this.render = [0, 0, 1600, 1000];
-      const oldload = PixelTanks.images.menus[this.id].onload;
+      const oldload = PixelTanks.images.menus[this.id] !== undefined ? PixelTanks.images.menus[this.id].onload : () => {};
       PixelTanks.images.menus[this.id].onload = () => {
         oldload();
         this.compile();
@@ -165,7 +165,6 @@ function Game() {
       for (const b of this.buttons) {
         const x = this.render[0]+b[0]*this.render[2]/1600, y = this.render[1]+b[1]*this.render[3]/1000, w = b[2]*this.render[2]/1600, h = b[3]*this.render[3]/1000;
         const canvas = document.createElement('canvas'), draw = canvas.getContext('2d');
-        document.body.appendChild(canvas);
         canvas.width = w*PixelTanks.resizer;
         canvas.height = h*PixelTanks.resizer;
         canvas.style = 'border: 1px solid black';
@@ -181,10 +180,6 @@ function Game() {
         this.compile();
       }
       if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3], 1);
-      GUI.draw.fillStyle = '#ffffff';
-      GUI.draw.globalAlpha = .3;
-      for (const b of this.buttons) GUI.draw.fillRect(b[0], b[1], b[2], b[3]);
-      GUI.draw.globalAlpha = 1;
       this.cdraw();
       if (!this.buttonEffect) return;
       for (const b of this.buttons) {
@@ -361,7 +356,7 @@ function Game() {
           max-height: 100vh;
           max-width: 100vw;
           padding: 0;
-          /*overflow: hidden;*/
+          overflow: hidden;
           text-align: center;
         }
         canvas {
