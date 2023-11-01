@@ -50,6 +50,7 @@ wss.on('connection', function connection(ws) {
     try {
       data = JSON.parse(data);
     } catch(e) {
+      console.log('err');
       return ws.close();
     }
     console.log('message to main');
@@ -57,7 +58,10 @@ wss.on('connection', function connection(ws) {
     if (data.op === 'database') database(data, ws);
     if (data.op === 'auth') auth(data, ws);
   });
-  ws.on('close', () => sockets.delete(ws));
+  ws.on('close', () => {
+    console.log('close');
+    sockets.delete(ws)
+  });
 });
 const multi = new WebSocketServer({server, path: '/ffa'});
 multi.on('connection', function connection(ws) {
