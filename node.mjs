@@ -58,7 +58,7 @@ wss.on('connection', function connection(ws) {
   ws.on('close', () => sockets.delete(ws));
 });
 const multi = new WebSocketServer({server, path: '/ffa'});
-wss.on('connection', function connection(ws) {
+multi.on('connection', function connection(ws) {
   ws._send = ws.send;
   ws.send = data => ws._send(JSON.stringify(data));
   multiopen(ws);
