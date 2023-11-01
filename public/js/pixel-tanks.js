@@ -135,10 +135,12 @@ function Game() {
         b[6] = 0;
       }
       this.render = [0, 0, 1600, 1000];
-      const oldload = PixelTanks.images.menus[this.id] !== undefined ? PixelTanks.images.menus[this.id].onload : () => {};
-      PixelTanks.images.menus[this.id].onload = () => {
-        oldload();
-        this.compile();
+      if (PixelTanks.images.menus[this.id] !== undefined) {
+        const oldload = PixelTanks.images.menus[this.id].onload;
+        PixelTanks.images.menus[this.id].onload = () => {
+          oldload();
+          this.compile();
+        }
       }
     }
     
