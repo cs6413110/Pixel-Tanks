@@ -531,7 +531,7 @@ function Game() {
               'Black': '/cosmetics/black',
               'Lego': '/cosmetics/lego',
               'Dead': '/cosmetics/dead',
-              "PWR-DMG'S HELM": 'cosmetics/pwr-dmg-helm',
+              "PWR-DMG'S HELM": '/cosmetics/pwr-dmg-helm',
         },
         menus: {
           ui: '/menus/ui',
