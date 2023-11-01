@@ -1182,6 +1182,7 @@ function Game() {
 
       for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
       PixelTanks.socket = new MegaSocket(window.location.protocol === 'https:' ? 'wss://'+window.location.hostname : 'ws://141.148.128.231', {keepAlive: true, reconnect: true, autoconnect: true});
+      alert('socket defined');
     }
 
     static launch() {  
