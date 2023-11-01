@@ -166,7 +166,7 @@ function Game() {
         canvas.height = h*PixelTanks.resizer;
         canvas.style = 'border: 1px solid black';
         draw.setTransform(1, 0, 0, 1, -x*PixelTanks.resizer, -y*PixelTanks.resizer);
-        if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3], 1);
+        if (PixelTanks.images.menus[this.id]) draw.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3], 1);
         this.cache.push([x, y, w, h, canvas]);
       }
     }
