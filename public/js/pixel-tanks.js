@@ -135,7 +135,11 @@ function Game() {
         b[6] = 0;
       }
       this.render = [0, 0, 1600, 1000];
-      PixelTanks.images.menus[this.id].onload = this.compile.bind(this);
+      const oldload = PixelTanks.images.menus[this.id].onload;
+      PixelTanks.images.menus[this.id].onload = () => {
+        oldload();
+        this.compile();
+      }
     }
     
     addListeners() {
