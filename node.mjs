@@ -63,7 +63,7 @@ wss.on('connection', function connection(ws) {
     sockets.delete(ws)
   });
 });
-const multi = new WebSocketServer({server, path: '/ffa'});
+/const multi = new WebSocketServer({server, path: '/ffa'});
 multi.on('connection', function connection(ws) {
   console.log('conneciton to multi');
   ws._send = ws.send;
@@ -80,6 +80,6 @@ multi.on('connection', function connection(ws) {
     multimessage(ws, data);
   });
   ws.on('close', () => multiclose(ws, null, null));
-});
+});/
 
 server.listen(80);
