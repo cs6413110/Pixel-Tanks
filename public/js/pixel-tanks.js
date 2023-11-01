@@ -192,7 +192,7 @@ function Game() {
           } else {
             b[6] = Math.max(b[6]-1, 0);
           }
-          GUI.drawImage(canvas, x-b[6], y-b[6], w+b[6]*2, h+b[6]*2, 1);
+          GUI.drawImage(canvas, x-b[6], y-b[6]*h/w, w+b[6]*2, h+b[6]*2*h/w, 1);
         }
       }
     }
@@ -1184,7 +1184,6 @@ function Game() {
 
       for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
       PixelTanks.socket = new MegaSocket(window.location.protocol === 'https:' ? 'wss://'+window.location.hostname : 'ws://141.148.128.231', {keepAlive: true, reconnect: true, autoconnect: true});
-      alert('socket defined');
     }
 
     static launch() {  
