@@ -165,7 +165,7 @@ function Game() {
         canvas.width = w*PixelTanks.resizer;
         canvas.height = h*PixelTanks.resizer;
         canvas.style = 'border: 1px solid black';
-        draw.setTransform(1, 0, 0, 1, -x*PixelTanks.resizer, -y*PixelTanks.resizer);
+        draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, -x*PixelTanks.resizer, -y*PixelTanks.resizer);
         if (PixelTanks.images.menus[this.id]) draw.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3]);
         this.cache.push([x, y, w, h, canvas]);
       }
@@ -357,7 +357,7 @@ function Game() {
           max-height: 100vh;
           max-width: 100vw;
           padding: 0;
-          overflow: hidden;
+          /*overflow: hidden;*/
           text-align: center;
         }
         canvas {
