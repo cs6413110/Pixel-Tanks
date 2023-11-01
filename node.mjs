@@ -82,7 +82,7 @@ multi.on('connection', function connection(ws) {
   ws.on('close', () => multiclose(ws, null, null));
 });
 server.on('upgrade', (request, socket, head) => {
-  const pathname = new URL(request.url).pathname;
+  const pathname = request.url;
   if (pathname === '/ffa') {
     multi.handleUpgrade(request, socket, head, (ws) => {
       multi.emite('connection', ws, request);
