@@ -46,11 +46,15 @@ const server = Bun.serve({
   websocket: {
     open(socket) {
       socket._send = socket.send;
-      socket.send = data => socket._send(JSON.stringify(data));
+      socket.send = data => {
+        ops++;
+        socket._send(JSON.stringify(data));
+      }
       sockets.add(socket);
       if (!socket.data.isMain) multiopen(socket);
     },
     message(socket, data) {
+      ips++;
       try {
         data = JSON.parse(data);
       } catch(e) {
