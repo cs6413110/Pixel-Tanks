@@ -1,6 +1,7 @@
 import {multiopen, multimessage, multiclose} from './multiplayer.mjs';
 import http from 'http';
 import fs from 'fs';
+import {MongoClient} from 'mongodb';
 import { WebSocketServer } from 'ws';
 
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
