@@ -188,15 +188,15 @@ function Game() {
       this.cdraw();
       if (!this.buttonEffect) return;
       for (const b of this.buttons) {
-        const [x, y, w, h, canvas] = this.cache[this.buttons.indexOf(b)];
         if (b[5]) {
+          const [x, y, w, h, canvas] = this.cache[this.buttons.indexOf(b)];
           if (A.collider({x, y, w, h}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
             b[6] = Math.min(b[6]+1, 10);
           } else {
             b[6] = Math.max(b[6]-1, 0);
           }
+          GUI.drawImage(canvas, x-b[6], y-b[6], w+b[6]*2, h+b[6]*2, 1);
         }
-        GUI.drawImage(canvas, x-b[6], y-b[6], w+b[6]*2, h+b[6]*2, 1);
       }
     }
   }
