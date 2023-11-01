@@ -32,6 +32,8 @@ let db, ips = 0, ops = 0;
 })();
 setInterval(() => {
   console.log('IPS: '+ips+' OPS: '+ops+' #: '+sockets.size);
+  ops = 0;
+  ips = 0;
 }, 1000);
 
 const server = Bun.serve({
