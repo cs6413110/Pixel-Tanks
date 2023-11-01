@@ -41,6 +41,7 @@ const server = http.createServer((req, res) => {
 
 const wss = new WebSocketServer({server});
 wss.on('connection', function connection(ws) {
+  console.log('connection to main');
   ws._send = ws.send;
   ws.send = data => ws._send(JSON.stringify(data));
   sockets.add(ws);
@@ -51,6 +52,7 @@ wss.on('connection', function connection(ws) {
     } catch(e) {
       return ws.close();
     }
+    console.log('message to main');
     if (!ws.username) ws.username = data.username;
     if (data.op === 'database') database(data, ws);
     if (data.op === 'auth') auth(data, ws);
@@ -59,11 +61,13 @@ wss.on('connection', function connection(ws) {
 });
 const multi = new WebSocketServer({server, path: '/ffa'});
 multi.on('connection', function connection(ws) {
+  console.log('conneciton to multi');
   ws._send = ws.send;
   ws.send = data => ws._send(JSON.stringify(data));
   multiopen(ws);
   ws.on('error', console.error);
   ws.on('message', data => {
+    console.log('message to multi');
     try {
       data = JSON.parse(data);
     } catch(e) {
