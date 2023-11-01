@@ -43,7 +43,7 @@ const wss = new WebSocketServer({server});
 wss.on('connection', function connection(ws) {
   ws._send = ws.send;
   ws.send = data => ws._send(JSON.stringify(data));
-  sockets.add(socket);
+  sockets.add(ws);
   ws.on('error', console.error);
   ws.on('message', data => {
     try {
