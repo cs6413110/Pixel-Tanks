@@ -80,6 +80,6 @@ multi.on('connection', function connection(ws) {
     multimessage(ws, data);
   });
   ws.on('close', () => multiclose(ws, null, null));
-});/
+});*/
 
 server.listen(80);
