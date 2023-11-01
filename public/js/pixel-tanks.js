@@ -522,15 +522,15 @@ function Game() {
               'Top Hat': '/cosmetics/top_hat',
               'Uno Reverse': '/cosmetics/uno_reverse',
               'Mask': '/cosmetics/victim',
-              'Present': '/cosmetics/present'
-              'Blind': '/cosmetics/blind'
-              'Gold': '/cosmetics/gold'
-              'Box': '/cosmetics/box'
-              'Straw Hat': '/cosmetics/strawhat'
-              'Evil Eyes': '/cosmetics/evileye'
-              'Black': '/cosmetics/black'
-              'Lego': '/cosmetics/lego'
-              'Dead': '/cosmetics/dead'
+              'Present': '/cosmetics/present',
+              'Blind': '/cosmetics/blind',
+              'Gold': '/cosmetics/gold',
+              'Box': '/cosmetics/box',
+              'Straw Hat': '/cosmetics/strawhat',
+              'Evil Eyes': '/cosmetics/evileye',
+              'Black': '/cosmetics/black',
+              'Lego': '/cosmetics/lego',
+              'Dead': '/cosmetics/dead',
         },
         menus: {
           ui: '/menus/ui',
