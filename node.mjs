@@ -41,6 +41,7 @@ const server = http.createServer((req, res) => {
 
 const wss = new WebSocketServer({noServer: true});
 wss.on('connection', function connection(ws) {
+  ws._send = ws.send;
   ws.send = data => ws._send(JSON.stringify(data));
   sockets.add(ws);
   ws.on('error', console.error);
