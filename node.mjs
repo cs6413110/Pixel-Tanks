@@ -41,8 +41,6 @@ const server = http.createServer((req, res) => {
 
 const wss = new WebSocketServer({noServer: true});
 wss.on('connection', function connection(ws) {
-  console.log('connection to main');
-  ws._send = ws.send;
   ws.send = data => ws._send(JSON.stringify(data));
   sockets.add(ws);
   ws.on('error', console.error);
@@ -50,10 +48,8 @@ wss.on('connection', function connection(ws) {
     try {
       data = JSON.parse(data);
     } catch(e) {
-      console.log('err: '+E);
       return ws.close();
     }
-    console.log('message to main');
     if (!ws.username) ws.username = data.username;
     if (data.op === 'database') database(data, ws);
     if (data.op === 'auth') auth(data, ws);
@@ -65,13 +61,11 @@ wss.on('connection', function connection(ws) {
 });
 const multi = new WebSocketServer({noServer: true});
 multi.on('connection', function connection(ws) {
-  console.log('conneciton to multi');
   ws._send = ws.send;
   ws.send = data => ws._send(JSON.stringify(data));
   multiopen(ws);
   ws.on('error', console.error);
   ws.on('message', data => {
-    console.log('message to multi');
     try {
       data = JSON.parse(data);
     } catch(e) {
@@ -85,10 +79,10 @@ server.on('upgrade', (request, socket, head) => {
   const pathname = request.url;
   if (pathname === '/ffa') {
     multi.handleUpgrade(request, socket, head, (ws) => {
-      multi.emite('connection', ws, request);
+      multi.emit('connection', ws, request);
     });
   } else wss.handleUpgrade(request, socket, head, (ws) => {
-      wss.emite('connection', ws, request);
+      wss.emit('connection', ws, request);
     });
 });
 
