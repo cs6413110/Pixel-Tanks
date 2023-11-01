@@ -1,9 +1,3 @@
-process.on('unhandledRejection', (reason, p) => {
-  console.error(reason, 'Unhandled Rejection at Promise', p);
-}).on('uncaughtException', err => {
-  console.error(err, 'Uncaught Exception thrown');
-  process.exit(1);
-});
 const {multiopen, multimessage, multiclose} = require('./multiplayer.js');
 const {MongoClient} = require('mongodb');
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
@@ -31,11 +25,14 @@ const database = async({token, username, type, key, value}, socket) => {
   }
 }
 
-let db;
+let db, ips = 0, ops = 0;
 (async () => {
   await client.connect();
   db = client.db('data').collection('data');
 })();
+setInterval(() => {
+  console.log('IPS: '+ips+' OPS: '+ops+' #: '+sockets.size);
+}, 1000);
 
 const server = Bun.serve({
   port: process.env.PORT || 80,
@@ -50,9 +47,8 @@ const server = Bun.serve({
     open(socket) {
       socket._send = socket.send;
       socket.send = data => socket._send(JSON.stringify(data));
-      if (socket.data.isMain) {
-        sockets.add(socket);
-      } else multiopen(socket);
+      sockets.add(socket);
+      if (!socket.data.isMain) multiopen(socket);
     },
     message(socket, data) {
       try {
@@ -67,9 +63,8 @@ const server = Bun.serve({
       } else multimessage(socket, data);
     },
     close(socket, code, reason) {
-      if (socket.data.isMain) {
-        sockets.delete(socket);
-      }  else multiclose(socket, code, reason);
+      sockets.delete(socket);
+      if (!socket.data.isMain) multiclose(socket, code, reason);
     }
   },
 });
