@@ -39,7 +39,7 @@ const server = http.createServer((req, res) => {
   res.end(fs.readFileSync('./public/js/pixel-tanks.js'));
 });
 
-const wss = new WebSocketServer({server});
+const wss = new WebSocketServer({noServer: true});
 wss.on('connection', function connection(ws) {
   console.log('connection to main');
   ws._send = ws.send;
@@ -63,7 +63,7 @@ wss.on('connection', function connection(ws) {
     sockets.delete(ws)
   });
 });
-/*const multi = new WebSocketServer({server, path: '/ffa'});
+const multi = new WebSocketServer({noServer: true});
 multi.on('connection', function connection(ws) {
   console.log('conneciton to multi');
   ws._send = ws.send;
@@ -80,6 +80,16 @@ multi.on('connection', function connection(ws) {
     multimessage(ws, data);
   });
   ws.on('close', () => multiclose(ws, null, null));
-});*/
+});
+server.on('upgrade', request, socket, head, (ws) => {
+  const pathname = new URL(request.url).pathname;
+  if (pathname === '/ffa') {
+    multi.handleUpgrade(request, socket, head, (ws) => {
+      multi.emite('connection', ws, request);
+    });
+  } else wss.handleUpgrade(request, socket, head, (ws) => {
+      wss.emite('connection', ws, request);
+    });
+});
 
 server.listen(80);
