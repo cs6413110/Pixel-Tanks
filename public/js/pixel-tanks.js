@@ -172,7 +172,7 @@ function Game() {
     }
     
     draw(render) {
-      if (render && this.render !== render) {
+      if (render && JSON.stringify(render) !== JSON.stringify(this.render)) {
         this.render = render;
         this.compile();
       }
