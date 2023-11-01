@@ -58,8 +58,8 @@ wss.on('connection', function connection(ws) {
     if (data.op === 'database') database(data, ws);
     if (data.op === 'auth') auth(data, ws);
   });
-  ws.on('close', () => {
-    console.log('close');
+  ws.on('close', (a, b, c) => {
+    console.log('close: '+a+' '+b+' '+c);
     sockets.delete(ws)
   });
 });
