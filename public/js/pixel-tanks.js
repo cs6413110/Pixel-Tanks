@@ -158,6 +158,7 @@ function Game() {
 
     compile() {
       this.cache = [];
+      if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3], 1);
       for (const b of this.buttons) {
         const x = this.render[0]+b[0]*this.render[2]/1600, y = this.render[1]+b[1]*this.render[3]/1000, w = b[2]*this.render[2]/1600, h = b[3]*this.render[3]/1000;
         const canvas = document.createElement('canvas'), draw = canvas.getContext('2d');
@@ -165,10 +166,10 @@ function Game() {
         canvas.width = w*PixelTanks.resizer;
         canvas.height = h*PixelTanks.resizer;
         canvas.style = 'border: 1px solid black';
-        draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, -x*PixelTanks.resizer, -y*PixelTanks.resizer);
+        draw.setTransform(1, 0, 0, 1, -x*PixelTanks.resizer, -y*PixelTanks.resizer);
         draw.drawImage(GUI.canvas, 0, 0);
         this.cache.push([x, y, w, h, canvas]);
-      }  
+      }
     }
     
     draw(render) {
