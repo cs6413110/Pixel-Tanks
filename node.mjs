@@ -50,7 +50,7 @@ wss.on('connection', function connection(ws) {
     try {
       data = JSON.parse(data);
     } catch(e) {
-      console.log('err');
+      console.log('err: '+E);
       return ws.close();
     }
     console.log('message to main');
