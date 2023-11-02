@@ -288,7 +288,7 @@ function Game() {
           PixelTanks.updateBootProgress(Math.round(this.loaded/this.total*100)/100);
           resolve(image);
         }
-        image.onerror = () => reject(new Error(`Failed to load image: ${source}`));
+        image.onerror = () => alert(`Failed to load image: ${source}`);
         image.src = `https://cs6413110.github.io/Pixel-Tanks/public/images${source}.png`;
         this.key[t][i] = image;
       });
