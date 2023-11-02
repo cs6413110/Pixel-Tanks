@@ -9,7 +9,7 @@ config.onload = () => {
     pathfinding.onload = () => {
       const engine = document.createElement('SCRIPT');
       engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
-      engine.onload = PixelTanks.start;
+      engine.onload = Game;
       document.head.appendChild(engine);
     }
     document.head.appendChild(pathfinding);
