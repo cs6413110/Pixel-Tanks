@@ -164,7 +164,7 @@ class Engine {
           for (const entity of this.cells[i][l]) {
             if (entity instanceof Shot) {
               const xd = entity.x-t.x+40, yd = entity.y-t.y+40, td = Math.sqrt(xd**2+yd**2);
-              if (td < 150) continue;
+              //if (td < 150) continue;
               const aspectRatio = 18/td;
               entity.xm = xd*aspectRatio;
               entity.ym = yd*aspectRatio;
