@@ -1,9 +1,8 @@
 const {multiopen, multimessage, multiclose} = require('./multiplayer.js');
 const {MongoClient} = require('mongodb');
-console.log(3);
-const msgpackr = require('msgpackr');
+import {pack, unpack} from 'msgpackr';
 console.log('existant?');
-console.log(msgpackr);
+console.log(pack, unpack);
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
 const tokens = new Set(), sockets = new Set();
 const valid = (token, username) => tokens.has(`${token}:${username}`);
@@ -54,7 +53,7 @@ const server = Bun.serve({
       socket._send = socket.send;
       socket.send = data => {
         ops++;
-        socket._send(msgpackr.pack(data));
+        socket._send(pack(data));
       }
       sockets.add(socket);
       if (!socket.data.isMain) multiopen(socket);
@@ -62,7 +61,7 @@ const server = Bun.serve({
     message(socket, data) {
       ips++;
       try {
-        data = msgpackr.unpack(data);
+        data = unpack(data);
       } catch(e) {
         return socket.close();
       }
