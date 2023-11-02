@@ -160,7 +160,7 @@ class Engine {
         t.shields = 100;
       } else if (e === 'reflector') {
         const hx = Math.floor((t.x+40)/100), hy = Math.floor((t.y+40)/100);
-        for (let i = hx-1; i<=hx+1; i++) for (let l = hy-1; l<hy+1; l++) {
+        for (let i = hx-2; i<=hx+2; i++) for (let l = hy-2; l<hy+2; l++) {
           for (const entity of this.cells[i][l]) {
             if (entity instanceof Shot) {
               const xd = entity.x-t.x+40, yd = entity.y-t.y+40, td = Math.sqrt(xd**2+yd**2);
