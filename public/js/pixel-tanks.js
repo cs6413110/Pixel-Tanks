@@ -1,17 +1,22 @@
-const msgpack = document.createElement('SCRIPT');
-msgpack.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/msgpackr.js';
-msgpack.onload = () => {
-  const pathfinding = document.createElement('SCRIPT');
-  pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
-  pathfinding.onload = () => {
-    const engine = document.createElement('SCRIPT');
-    engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
-    engine.onload = Game;
-    document.head.appendChild(engine);
+const config = document.createElement('SCRIPT');
+config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
+config.onload = () => {
+  const msgpack = document.createElement('SCRIPT');
+  msgpack.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/msgpackr.js';
+  msgpack.onload = () => {
+    const pathfinding = document.createElement('SCRIPT');
+    pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
+    pathfinding.onload = () => {
+      const engine = document.createElement('SCRIPT');
+      engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
+      engine.onload = PixelTanks.start;
+      document.head.appendChild(engine);
+    }
+    document.head.appendChild(pathfinding);
   }
-  document.head.appendChild(pathfinding);
+  document.head.appendChild(msgpack);
 }
-document.head.appendChild(msgpack);
+document.head.appendChild(config);
 function Game() {
   class MegaSocket {
     constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
@@ -686,7 +691,8 @@ function Game() {
           fireui: '/items/fireui',
         }
       };
-
+      const beta = confirm('Use beta config.js? Recommended no');
+      if (beta) PixelTanks.images = images;
       Loader.loadImages(PixelTanks.images);
 
       Menus.menus = {
@@ -1187,7 +1193,7 @@ function Game() {
           cdraw: () => {},
         },
       }
-
+      if (beta) Menus.menus = menus;
       for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
       PixelTanks.socket = new MegaSocket(window.location.protocol === 'https:' ? 'wss://'+window.location.hostname : 'ws://141.148.128.231', {keepAlive: true, reconnect: true, autoconnect: true});
     }
