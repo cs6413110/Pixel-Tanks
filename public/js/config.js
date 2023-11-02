@@ -20,6 +20,7 @@ const images = {
     grapple: '/bullets/grapple',
     dynamite: '/bullets/dynamite',
     fire: '/bullets/fire',
+    usb: '/bullets/usb',
   },
   tanks: {
     buff: '/tanks/buff',
