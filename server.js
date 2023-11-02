@@ -1,6 +1,5 @@
-console.log('start');
-const mk = require('msgpackr');
-console.log(3);
+import {pack} from 'msgpackr/pack';
+import {unpack} from 'msgpackr/unpack';
 const {multiopen, multimessage, multiclose} = require('./multiplayer.js');
 const {MongoClient} = require('mongodb');
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
@@ -53,7 +52,7 @@ const server = Bun.serve({
       socket._send = socket.send;
       socket.send = data => {
         ops++;
-        socket._send(msgpackr.pack(data));
+        socket._send(pack(data));
       }
       sockets.add(socket);
       if (!socket.data.isMain) multiopen(socket);
@@ -61,7 +60,7 @@ const server = Bun.serve({
     message(socket, data) {
       ips++;
       try {
-        data = msgpackr.unpack(data);
+        data = unpack(data);
       } catch(e) {
         return socket.close();
       }
