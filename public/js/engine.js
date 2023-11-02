@@ -158,6 +158,20 @@ class Engine {
         setTimeout(() => { t.buff = false }, 10000);
       } else if (e === 'shield') {
         t.shields = 100;
+      } else if (e === 'reflector') {
+        const hx = Math.floor((t.x+40)/100), hy = Math.floor((t.y+40)/100);
+        for (let i = hx-1; i<=hx+1; i++) for (let l = hy-1; l<hy+1; l++) {
+          for (const entity of this.cells[i][l]) {
+            if (entity instanceof Shot) {
+              const xd = entity.x-t.x+40, yd = entity.y-t.y+40, td = Math.sqrt(xd**2+yd**2);
+              if (td < 150) continue;
+              const aspectRatio = 18/td;
+              entity.xm = xd*aspectRatio;
+              entity.ym = yd*aspectRatio;
+              entity.r = toPoint(xd, yd);
+            }
+          }
+        }
       } else if (e.includes('airstrike')) {
         const a = e.replace('airstrike', '').split('x');
         this.b.push(new Block(Number(a[0]), Number(a[1]), Infinity, 'airstrike', parseTeamExtras(t.team), this));
@@ -430,6 +444,7 @@ const bullet_settings = {
     healmissle: -100,
     dynamite: 0,
     fire: 0,
+    usb: 0,
   },
   speed: {
     bullet: 1,
@@ -440,6 +455,7 @@ const bullet_settings = {
     healmissle: 1.5,
     dynamite: .8,
     fire: .9,
+    usb: .8,
   },
   size: {
     healmissle: 50,
