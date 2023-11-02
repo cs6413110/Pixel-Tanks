@@ -163,15 +163,15 @@ class Engine {
         for (let i = hx-2; i<=hx+2; i++) for (let l = hy-2; l<hy+2; l++) {
           for (const entity of this.cells[i][l]) {
             if (entity instanceof Shot) {
-              const xd = entity.x-t.x+40, yd = entity.y-t.y+40, td = Math.sqrt(xd**2+yd**2);
-              //if (td < 150) continue;
+              const xd = entity.x-(t.x+40), yd = entity.y-(t.y+40), td = Math.sqrt(xd**2+yd**2);
+              if (td < 200) continue;
               const aspectRatio = 6/td;
               entity.e = Date.now();
               entity.sx = entity.x;
               entity.sy = entity.y;
               entity.xm = xd*aspectRatio;
               entity.ym = yd*aspectRatio;
-              entity.r = toPoint(xd, yd);
+              entity.r = toAngle(xd, yd);
             }
           }
         }
