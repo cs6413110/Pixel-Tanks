@@ -165,7 +165,7 @@ class Engine {
             if (entity instanceof Shot) {
               const xd = entity.x-t.x+40, yd = entity.y-t.y+40, td = Math.sqrt(xd**2+yd**2);
               //if (td < 150) continue;
-              const aspectRatio = 18/td;
+              const aspectRatio = 6/td;
               entity.e = Date.now();
               entity.sx = entity.x;
               entity.sy = entity.y;
