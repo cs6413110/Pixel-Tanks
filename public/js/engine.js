@@ -166,6 +166,9 @@ class Engine {
               const xd = entity.x-t.x+40, yd = entity.y-t.y+40, td = Math.sqrt(xd**2+yd**2);
               //if (td < 150) continue;
               const aspectRatio = 18/td;
+              entity.e = Date.now();
+              entity.sx = entity.x;
+              entity.sy = entity.y;
               entity.xm = xd*aspectRatio;
               entity.ym = yd*aspectRatio;
               entity.r = toPoint(xd, yd);
