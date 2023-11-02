@@ -1,3 +1,4 @@
 public/js/pathfinding.js
 public/js/config.js
+public/js/msgpackr.js
 node.mjs
