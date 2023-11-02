@@ -402,10 +402,13 @@ function Game() {
       const config = document.createElement('SCRIPT');
       config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
       config.onload = () => {
+        alert(JSON.stringify(images));
+        try {
         PixelTanks.images = images;
         Menus.menus = menus;
         Loader.loadImages(PixelTanks.images);
         for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
+        } catch(e) {alert(e)}
       }
       document.head.appendChild(config);
       PixelTanks.socket = new MegaSocket(window.location.protocol === 'https:' ? 'wss://'+window.location.hostname : 'ws://141.148.128.231', {keepAlive: true, reconnect: true, autoconnect: true});
