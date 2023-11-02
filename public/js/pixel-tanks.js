@@ -404,6 +404,8 @@ function Game() {
 
     static boot() {
       PixelTanks.user = {};
+      alert(JSON.stringify(images));
+      alert(JSON.stringify(menus));
       PixelTanks.images = images;
       Menus.menus = menus;
       Loader.loadImages(PixelTanks.images);
