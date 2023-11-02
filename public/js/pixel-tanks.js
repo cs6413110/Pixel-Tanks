@@ -1298,6 +1298,8 @@ function Game() {
         GUI.draw.stroke();
       } else if (s.type === 'dynamite') {
         GUI.drawImage(PixelTanks.images.bullets.dynamite, s.x, s.y, 10, 40, 1, 5, 5, 0, 0, s.r+180);
+      } else if (s.type === 'usb') {
+        GUI.drawImage(PixelTanks.images.bullets.usb, s.x, s.y, 10, 40, 1, 5, 5, 0, 0, s.r+180);
       } else if (s.type === 'fire') {
         GUI.drawImage(PixelTanks.images.bullets.fire, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+180);
       }
