@@ -554,7 +554,8 @@ function Game() {
           inventory: '/menus/inventory',
           classTab: '/menus/classTab',
           itemTab: '/menus/itemTab',
-          cosmeticTab: '/menus/cosmeticTab', // FIX DUPLICATE USELESS(deathEffecs and cosmetic tab referenceing same imagoge);
+          cosmeticTab: '/menus/cosmeticTab',
+          cosmeticTab2: '/menus/cosmeticTab',// adding to the problem ez
           deathEffectsTab: '/menus/cosmeticTab',
           shop: '/menus/shop',
           broke: '/menus/broke',
@@ -1016,6 +1017,7 @@ function Game() {
             [576, 816, 88, 88, function() {PixelTanks.switchTab('itemTab', 3)}, false],
             [664, 816, 88, 88, function() {PixelTanks.switchTab('itemTab', 4)}, false],
             [756, 220, 88, 88, function() {PixelTanks.switchTab('cosmeticTab')}, false],
+            [644, 220, 88, 88, function() {PixelTanks.switchTab('cosmeticTab2')}, false],
             [532, 220, 88, 88, function() {PixelTanks.switchTab('deathEffectsTab')}, false],
           ],
           listeners: {
@@ -1046,6 +1048,18 @@ function Game() {
                 }
               } else if (this.cosmeticTab) {
                 if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.cosmeticTab = false;
+                for (let i = 0; i < 16; i++) {
+                  if (collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
+                    if (e.button === 0) {
+                      PixelTanks.userData.cosmetic = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
+                    } else {
+                      PixelTanks.userData.cosmetics.splice(this.cosmeticMenu*16+i, 1);
+                    }
+                    return;
+                  }
+                }
+              } else if (this.cosmeticTab2) {
+                if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.cosmeticTab2 = false;
                 for (let i = 0; i < 16; i++) {
                   if (collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
                     if (e.button === 0) {
