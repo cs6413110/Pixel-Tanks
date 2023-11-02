@@ -1,12 +1,17 @@
-const pathfinding = document.createElement('SCRIPT');
-pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
-pathfinding.onload = () => {
-  const engine = document.createElement('SCRIPT');
-  engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
-  engine.onload = Game;
-  document.head.appendChild(engine);
+const msgpack = document.createElement('SCRIPT');
+msgpack.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/msgpackr.js';
+msgpack.onload = () => {
+  const pathfinding = document.createElement('SCRIPT');
+  pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
+  pathfinding.onload = () => {
+    const engine = document.createElement('SCRIPT');
+    engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
+    engine.onload = Game;
+    document.head.appendChild(engine);
+  }
+  document.head.appendChild(pathfinding);
 }
-document.head.appendChild(pathfinding);
+document.head.appendChild(msgpack);
 function Game() {
   class MegaSocket {
     constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
@@ -30,13 +35,13 @@ function Game() {
       this.socket.onopen = () => {
         this.status = 'connected';
         if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => {
-          this.socket.send(JSON.stringify({type: 'ping', op: 'ping'}));
+          this.socket.send(msgpackr.pack({type: 'ping', op: 'ping'}));
         }, 30000);
         this.callstack.open.forEach(f => f());
       }
       this.socket.onmessage = data => {
         try {
-          data = JSON.parse(data.data);
+          data = msgpackr.unpack(new Uint8Array(data.data));
         } catch(e) {
           alert('Socket Encryption Error: ' + data.data+' | '+e);
         }
@@ -71,7 +76,7 @@ function Game() {
       if (event === 'close') this.callstack.close = [];
     }
     send(data) {
-      data = JSON.stringify(data);
+      data = msgpackr.pack(data);
       this.socket.send(data);
     }
     close() {
