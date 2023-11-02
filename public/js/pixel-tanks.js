@@ -1096,6 +1096,9 @@ function Game() {
               if (this.cosmeticTab) {
                 if (e.keyCode === 37 && this.cosmeticMenu > 0) this.cosmeticMenu--;
                 if (e.keyCode === 39 && this.cosmeticMenu+1 !== Math.ceil(PixelTanks.userData.cosmetics.length/16)) this.cosmeticMenu++;
+               if (this.cosmeticTab2) {
+                if (e.keyCode === 37 && this.cosmeticMenu > 0) this.cosmeticMenu--;
+                if (e.keyCode === 39 && this.cosmeticMenu+1 !== Math.ceil(PixelTanks.userData.cosmetics.length/16)) this.cosmeticMenu++;
               }
             }
           },
@@ -1136,7 +1139,7 @@ function Game() {
             const deathEffectData = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect+'_'];
             if (PixelTanks.userData.deathEffect) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 536, 224, 80, 80, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
             Menus.menus.inventory.buttonEffect = true;
-            if (this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.deathEffectsTab) {
+            if (this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.cosmeticTab2 ||this.deathEffectsTab) {
               Menus.menus.inventory.buttonEffect = false;
               GUI.drawImage(PixelTanks.images.blocks.void, 0, 0, 1600, 1600, .7);
             }
@@ -1152,6 +1155,17 @@ function Game() {
             } else if (this.cosmeticTab) {
               const a = this.cosmeticMenu === 0, b = this.cosmeticMenu === Math.floor(PixelTanks.userData.cosmetics.length/16);
               GUI.drawImage(PixelTanks.images.menus.cosmeticTab, 518+(a ? 62 : 0), 280, 564-(a ? 62 : 0)-(b ? 62 : 0), 440, 1, 0, 0, 0, 0, undefined, (a ? 31 : 0), 0, 282-(a ? 31 : 0)-(b ? 31 : 0), 220);
+              for (let i = this.cosmeticMenu*16; i < Math.min((this.cosmeticMenu+1)*16, PixelTanks.userData.cosmetics.length); i++) {
+                GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetics[i]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88, 1);
+                if (PixelTanks.userData.cosmetics[i] === PixelTanks.userData.cosmetic) {
+                  GUI.draw.strokeStyle = '#FFFF22';
+                  GUI.draw.lineWidth = 10;
+                  GUI.draw.strokeRect(598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88);
+                }
+              }
+            } else if (this.cosmeticTab2) {
+              const a = this.cosmeticMenu === 0, b = this.cosmeticMenu === Math.floor(PixelTanks.userData.cosmetics.length/16);
+              GUI.drawImage(PixelTanks.images.menus.cosmeticTab2, 518+(a ? 62 : 0), 280, 564-(a ? 62 : 0)-(b ? 62 : 0), 440, 1, 0, 0, 0, 0, undefined, (a ? 31 : 0), 0, 282-(a ? 31 : 0)-(b ? 31 : 0), 220);
               for (let i = this.cosmeticMenu*16; i < Math.min((this.cosmeticMenu+1)*16, PixelTanks.userData.cosmetics.length); i++) {
                 GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetics[i]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88, 1);
                 if (PixelTanks.userData.cosmetics[i] === PixelTanks.userData.cosmetic) {
@@ -1269,7 +1283,7 @@ function Game() {
     }
 
     static switchTab(id, n) {
-      if (!Menus.menus.inventory.healthTab && !Menus.menus.inventory.classTab && !Menus.menus.inventory.itemTab && !Menus.menus.inventory.cosmeticTab) Menus.menus.inventory[id] = true;
+      if (!Menus.menus.inventory.healthTab && !Menus.menus.inventory.classTab && !Menus.menus.inventory.itemTab && !Menus.menus.inventory.cosmeticTab && !Menus.menus.inventory.cosmeticTab2) Menus.menus.inventory[id] = true;
       if (n) Menus.menus.inventory.currentItem = n;
       Menus.redraw();
     } // OPTIMIZE
