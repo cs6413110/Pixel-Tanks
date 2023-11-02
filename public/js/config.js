@@ -300,6 +300,7 @@ const menus = {
       }
     },
     cdraw: function() {
+      try {
       if (!this.type) {
         this.type = 'username';
         this.username = '';
@@ -307,6 +308,7 @@ const menus = {
       }
       GUI.drawText(this.username, 574, 407, 50, '#000000', 0);
       GUI.drawText(this.password.replace(/./g, '*'), 574, 535, 50, '#000000', 0);
+      } catch(e) {alert(e)}
     },
   },
   main: {
