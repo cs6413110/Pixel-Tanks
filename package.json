@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "mongodb": "^6.2.0",
+    "msgpackr": "^1.9.9",
     "pathfinding": "^0.4.18"
   }
 }
