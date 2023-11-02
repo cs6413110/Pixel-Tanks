@@ -1,5 +1,5 @@
 console.log('start');
-const msgpackr = require('msgpackr');
+const mk = require('msgpackr');
 console.log(3);
 const {multiopen, multimessage, multiclose} = require('./multiplayer.js');
 const {MongoClient} = require('mongodb');
