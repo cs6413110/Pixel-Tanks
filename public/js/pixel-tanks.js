@@ -678,8 +678,8 @@ function Game() {
           weak: '/items/weak',
           strong: '/items/strong',
           spike: '/items/spike',
-          mine: '/items/mine',
-          fortress: '/items/fortress',
+          reflector: '/items/reflector',
+          usb: '/items/usb',
           toolkitui: '/items/toolkitui',
           boostui: '/items/boostui',
           powermissleui: '/items/powermissleui',
@@ -1041,7 +1041,7 @@ function Game() {
                 }
               } else if (this.itemTab) {
                 if (x < 580 || x > 1020 || y < 334 || y > 666) return this.itemTab = false;
-                const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], fortress: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], mine: [904, 570]};
+                const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [904, 570]};
                 for (const item in key) {
                   if (collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
                     if (!PixelTanks.userData.items.includes(item)) {
@@ -1139,7 +1139,7 @@ function Game() {
               if (PixelTanks.userData.class === 'tactical') GUI.draw.strokeRect(701, 348, 88, 88); else if (PixelTanks.userData.class === 'fire') GUI.draw.strokeRect(701, 456, 88, 88); else if (PixelTanks.userData.class === 'medic') GUI.draw.strokeRect(701, 565, 88, 88); else if (PixelTanks.userData.class === 'stealth') GUI.draw.strokeRect(814, 348, 88, 88); else if (PixelTanks.userData.class === 'builder') GUI.draw.strokeRect(814, 456, 88, 88); else if (PixelTanks.userData.class === 'warrior') GUI.draw.strokeRect(814, 565, 88, 88);
             } else if (this.itemTab) {
               GUI.drawImage(PixelTanks.images.menus.itemTab, 580, 334, 440, 332, 1);
-              const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], fortress: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], mine: [904, 570]};
+              const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [904, 570]};
               for (const item in key) GUI.drawImage(PixelTanks.images.items[item], key[item][0], key[item][1], 80, 80, 1);
             } else if (this.cosmeticTab) {
               const a = this.cosmeticMenu === 0, b = this.cosmeticMenu === Math.floor(PixelTanks.userData.cosmetics.length/16);
@@ -1898,7 +1898,7 @@ function Game() {
         clearTimeout(this.fireTimeout);
         this.fireTimeout = setTimeout(() => {this.canFire = true}, this.fireType === 1 ? 200 : 600);
       }
-      var fireType = ['grapple', 'megamissle', 'dynamite', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? (PixelTanks.userData.class === 'medic' ? 'healmissle' : 'powermissle') : (type === 0 ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
+      var fireType = ['grapple', 'megamissle', 'dynamite', 'usb', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? (PixelTanks.userData.class === 'medic' ? 'healmissle' : 'powermissle') : (type === 0 ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
       while (l<(fireType === 1 ? 1 : 15)) {
         this.tank.fire.push({...toPoint(this.tank.r+l), type: type, r: this.tank.r+l});
         l += 5;
@@ -1956,10 +1956,12 @@ function Game() {
       } else if (id === 'spike') {
         this.tank.use.push('block#spike');
         cooldown = 10000;
-      } else if (id === 'mine') {
-        // soon to be replaced
-      } else if (id === 'fortress') {
-        // soon to be replaced
+      } else if (id === 'reflector') {
+        this.tank.use.push('reflector');
+        cooldown = 10000;
+      } else if (id === 'usb') {
+        this.fire('usb');
+        cooldown = 25000;
       } else if (id === 'flashbang') {
         this.tank.use.push('flashbang');
         cooldown = 20000;
