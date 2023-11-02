@@ -1,22 +1,17 @@
-const config = document.createElement('SCRIPT');
-config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
-config.onload = () => {
-  const msgpack = document.createElement('SCRIPT');
-  msgpack.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/msgpackr.js';
-  msgpack.onload = () => {
-    const pathfinding = document.createElement('SCRIPT');
-    pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
-    pathfinding.onload = () => {
-      const engine = document.createElement('SCRIPT');
-      engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
-      engine.onload = Game;
-      document.head.appendChild(engine);
-    }
-    document.head.appendChild(pathfinding);
+const msgpack = document.createElement('SCRIPT');
+msgpack.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/msgpackr.js';
+msgpack.onload = () => {
+  const pathfinding = document.createElement('SCRIPT');
+  pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
+  pathfinding.onload = () => {
+    const engine = document.createElement('SCRIPT');
+    engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
+    engine.onload = Game;
+    document.head.appendChild(engine);
   }
-  document.head.appendChild(msgpack);
+  document.head.appendChild(pathfinding);
 }
-document.head.appendChild(config);
+document.head.appendChild(msgpack);
 function Game() {
   class MegaSocket {
     constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
@@ -404,297 +399,11 @@ function Game() {
 
     static boot() {
       PixelTanks.user = {};
-
-      PixelTanks.images = {
-        blocks: {
-          barrier: '/blocks/barrier',
-          strong: '/blocks/strong',
-          weak: '/blocks/weak',
-          spike: '/blocks/spike',
-          floor: '/blocks/floor',
-          void: '/blocks/void',
-          gold: '/blocks/gold',
-          fire: '/blocks/fire',
-          friendlyfire: '/blocks/friendlyfire',
-          airstrike: '/blocks/airstrike',
-          friendlyairstrike: '/blocks/friendlyairstrike',
-        },
-        bullets: {
-          //normal: '/bullets/normal', no image yet :(
-          shotgun: '/bullets/shotgun',
-          powermissle: '/bullets/powermissle',
-          megamissle: '/bullets/megamissle',
-          grapple: '/bullets/grapple',
-          dynamite: '/bullets/dynamite',
-          fire: '/bullets/fire',
-        },
-        tanks: {
-          buff: '/tanks/buff',
-          base: '/tanks/base',
-          destroyed: '/tanks/destroyed',
-          top: '/tanks/top',
-          bottom: '/tanks/bottom',
-          bottom2: '/tanks/bottom2',
-        },
-        cosmetics: {
-              'DarkMemeGod': '/cosmetics/meme',
-              'Aaron': '/cosmetics/aaron',
-              'Astronaut': '/cosmetics/astronaut',
-              'Onfire': '/cosmetics/onfire',
-              'Assassin': '/cosmetics/assassin',
-              'Redsus': '/cosmetics/redsus',
-              'Venom': '/cosmetics/venom',
-              'Blue Tint': '/cosmetics/blue_tint',
-              'Purple Flower': '/cosmetics/purple_flower',
-              'Leaf': '/cosmetics/leaf',
-              'Basketball': '/cosmetics/basketball',
-              'Purple Top Hat': '/cosmetics/purple_top_hat',
-              'Terminator': '/cosmetics/terminator',
-              'Dizzy': '/cosmetics/dizzy',
-              'Knife': '/cosmetics/knife',
-              'Scared': '/cosmetics/scared',
-              'Laff': '/cosmetics/laff',
-              'Hacker Hoodie': '/cosmetics/hacker_hoodie',
-              'Error': '/cosmetics/error',
-              'Purple Grad Hat': '/cosmetics/purple_grad_hat',
-              'Bat Wings': '/cosmetics/bat_wings',
-              'Back Button': '/cosmetics/back',
-              'Fisher Hat': '/cosmetics/fisher_hat',
-              'Kill = Ban': '/cosmetics/ban',
-              'Blue Ghost': '/cosmetics/blue_ghost',
-              'Pumpkin Face': '/cosmetics/pumpkin_face',
-              'Pumpkin Hat': '/cosmetics/pumpkin_hat',
-              'Red Ghost': '/cosmetics/red_ghost',
-              'Candy Corn': '/cosmetics/candy_corn',
-              'Yellow Pizza': '/cosmetics/yellow_pizza',
-              'Orange Ghost': '/cosmetics/orange_ghost',
-              'Pink Ghost': '/cosmetics/pink_ghost',
-              'Paleontologist': '/cosmetics/paleontologist',
-              'Yellow Hoodie': '/cosmetics/yellow_hoodie',
-              'X': '/cosmetics/x',
-              'Sweat': '/cosmetics/sweat',
-              'Spirals': '/cosmetics/spirals',
-              'Spikes': '/cosmetics/spikes',
-              'Rudolph': '/cosmetics/rudolph',
-              'Reindeer Hat': '/cosmetics/reindeer_hat',
-              'Red Hoodie': '/cosmetics/red_hoodie',
-              'Question Mark': '/cosmetics/question_mark',
-              'Purple-Pink Hoodie': '/cosmetics/purplepink_hoodie',
-              'Purple Hoodie': '/cosmetics/purple_hoodie',
-              'Pumpkin': '/cosmetics/pumpkin',
-              'Pickle': '/cosmetics/pickle',
-              'Orange Hoodie': '/cosmetics/orange_hoodie',
-              'Helment': '/cosmetics/helment',
-              'Green Hoodie': '/cosmetics/green_hoodie',
-              'Exclaimation Point': '/cosmetics/exclaimation_point',
-              'Eggplant': '/cosmetics/eggplant',
-              'Devil Wings': '/cosmetics/devils_wings',
-              'Christmas Tree': '/cosmetics/christmas_tree',
-              'Christmas Lights': '/cosmetics/christmas_lights',
-              'Checkmark': '/cosmetics/checkmark',
-              'Cat Hat': '/cosmetics/cat_hat',
-              'Blueberry': '/cosmetics/blueberry',
-              'Blue Hoodie': '/cosmetics/blue_hoodie',
-              'Blue Helment': '/cosmetics/blue_helment',
-              'Banana': '/cosmetics/bannana',
-              'Aqua Helment': '/cosmetics/aqua_helment',
-              'Apple': '/cosmetics/apple',
-              'Hoodie': '/cosmetics/hoodie',
-              'Purple Helment': '/cosmetics/purple_helment',
-              'Angel Wings': '/cosmetics/angel_wings',
-              'Boost': '/cosmetics/boost',
-              'Bunny Ears': '/cosmetics/bunny_ears',
-              'Cake': '/cosmetics/cake',
-              'Cancelled': '/cosmetics/cancelled',
-              'Candy Cane': '/cosmetics/candy_cane',
-              'Cat Ears': '/cosmetics/cat_ears',
-              'Christmas Hat': '/cosmetics/christmas_hat',
-              'Controller': '/cosmetics/controller',
-              'Deep Scratch': '/cosmetics/deep_scratch',
-              'Devil Horns': '/cosmetics/devil_horn',
-              'Headphones': '/cosmetics/earmuffs',
-              'Eyebrows': '/cosmetics/eyebrows',
-              'First Aid': '/cosmetics/first_aid',
-              'Flag': '/cosmetics/flag',
-              'Halo': '/cosmetics/halo',
-              'Hax': '/cosmetics/hax',
-              'Low Battery': '/cosmetics/low_battery',
-              'Mini Tank': '/cosmetics/mini_tank',
-              'MLG Glasses': '/cosmetics/mlg_glasses',
-              'Money Eyes': '/cosmetics/money_eyes',
-              'No Mercy': '/cosmetics/no_mercy',
-              'Peace': '/cosmetics/peace',
-              'Police': '/cosmetics/police',
-              'Question Mark': '/cosmetics/question_mark',
-              'Rage': '/cosmetics/rage',
-              'Small Scratch': '/cosmetics/small_scratch',
-              'Speaker': '/cosmetics/speaker',
-              'Swords': '/cosmetics/swords',
-              'Tools': '/cosmetics/tools',
-              'Top Hat': '/cosmetics/top_hat',
-              'Uno Reverse': '/cosmetics/uno_reverse',
-              'Mask': '/cosmetics/victim',
-              'Present': '/cosmetics/present',
-              'Blind': '/cosmetics/blind',
-              'Gold': '/cosmetics/gold',
-              'Box': '/cosmetics/box',
-              'Straw Hat': '/cosmetics/strawhat',
-              'Evil Eyes': '/cosmetics/evileye',
-              'Black': '/cosmetics/black',
-              'Lego': '/cosmetics/lego',
-              'Dead': '/cosmetics/dead',
-              "PWR-DMG'S HELM": '/cosmetics/pwr-dmg-helm',
-        },
-        menus: {
-          ui: '/menus/ui',
-          start: '/menus/start',
-          main: '/menus/main',
-          multiplayer: '/menus/multiplayer',
-          singleplayer: '/menus/singleplayer',
-          victory: '/menus/victory',
-          defeat: '/menus/defeat',
-          crate: '/menus/crate',
-          //settings: '/menus/settings',
-          keybinds: '/menus/keybinds',
-          inventory: '/menus/inventory',
-          classTab: '/menus/classTab',
-          itemTab: '/menus/itemTab',
-          cosmeticTab: '/menus/cosmeticTab', // FIX DUPLICATE USELESS(deathEffecs and cosmetic tab referenceing same imagoge);
-          deathEffectsTab: '/menus/cosmeticTab',
-          shop: '/menus/shop',
-          broke: '/menus/broke',
-          htp1: '/menus/htp1',
-          htp2: '/menus/htp2',
-          htp3: '/menus/htp3',
-          htp4: '/menus/htp4',
-          pause: '/menus/pause',
-          help: '/menus/help',
-          helpinventory: '/menus/helpinventory',
-          helpcosmetic: '/menus/helpcosmetic',
-          helpclass: '/menus/helpclass',
-          helpmode: '/menus/helpmode',
-          helpvocab: '/menus/helpvocab',
-          helpteam: '/menus/helpteam',
-        },
-        emotes: { // type: 0=loop 1=play once 2=static
-          speech: '/emotes/speech',
-          speech_: {speed: 50},
-          mlg: '/emotes/mlg',
-          mlg_: {type: 1, frames: 13, speed: 50},
-          wink: '/emotes/wink',
-          wink_: {type: 2, speed: 50},
-          confuzzled: '/emotes/confuzzled',
-          confuzzled_: {type: 2, speed: 50},
-          surrender: '/emotes/surrender',
-          surrender_: {type: 2, speed: 50},
-          anger: '/emotes/anger',
-          anger_: {type: 0, frames: 4, speed: 50},
-          ded: '/emotes/ded',
-          ded_: {type: 2, speed: 50},
-          mercy: '/emotes/mercy',
-          mercy_: {type: 0, frames: 1, speed: 50},
-          suffocation: '/emotes/suffocation',
-          suffocation_: {type: 0, frames: 3, speed: 50},
-          nomercy: '/emotes/nomercy',
-          nomercy_: {type: 0, frames: 1, speed: 50},
-          idea: '/emotes/idea',
-          idea_: {type: 1, frames: 6, speed: 50},
-          scared: '/emotes/scared',
-          scared_: {type: 2, speed: 50},
-          crying: '/emotes/crying',
-          crying_: {type: 0, frames: 5, speed: 50},
-          flat: '/emotes/flat',
-          flat_: {type: 0, frames: 1, speed: 50},
-          noflat: '/emotes/noflat',
-          noflat_: {type: 0, frames: 1, speed: 50},
-          rage: '/emotes/rage',
-          rage_: {type: 0, frames: 5, speed: 50},
-          sad: '/emotes/sad',
-          sad_: {type: 0, frames: 2, speed: 50},
-          sweat: '/emotes/sweat',
-          sweat_: {type: 0, frames: 10, speed: 50},
-          teamedon: '/emotes/miss',
-          teamedon_: {type: 1, frames: 28, speed: 75},
-          evanism: '/emotes/evanism',
-          evanism_: {type: 1, frames: 45, speed: 100},
-          miss: '/emotes/teamedon',
-          miss_: {type: 0, frames: 12, speed: 50},
-        },
-        animations: {
-          tape: '/animations/tape',
-          tape_: {frames: 17, speed: 50},
-          toolkit: '/animations/toolkit',
-          toolkit_: {frames: 16, speed: 50},
-          glu: '/animations/glu',
-          glu_: {frames: 45, speed: 50},
-          heal: '/animations/heal',
-          heal_: {frames: 16, speed: 25},
-          fire: '/animations/fire',
-          fire_: {frames: 1, speed: 50},
-          explosion: '/animations/explosion',
-        },
-        deathEffects: {
-          explode: '/animations/explode',
-          explode_: {frames: 17, speed: 75, kill: 8, type: 1},
-          clicked: '/animations/clicked',
-          clicked_: {frames: 29, speed: 75, kill: 28, type: 2},
-          amogus: '/animations/amogus',
-          amogus_: {frames: 47, speed: 75, kill: 21, type: 1},
-          nuke: '/animations/nuke',
-          nuke_: {frames: 26, speed: 75, kill: 12, type: 1},
-          error: '/animations/error',
-          error_: {frames: 10, speed: 250, kill: 10, type: 2},
-          magic: '/animations/magic',
-          magic_: {frames: 69, speed: 75, kill: 51, type: 2},
-          /*securly: '/animations/securly',
-          securly_: {frames: 1, speed: 9900, kill: 1, type: 3},*/
-          anvil: '/animations/anvil',
-          anvil_: {frames: 22, speed: 75, kill: 6, type: 1},
-          insta: '/animations/insta',
-          insta_: {frames: 22, speed: 75, kill: 21, type: 1},
-          cat: '/animations/cat',
-          cat_: {frames: 2, speed: 500, kill: 2, type: 1},
-          crate: '/animations/crate',
-          crate_: {frames: 31, speed: 75, kill: 21, type: 2},
-          battery: '/animations/battery',
-          battery_: {frames: 55, speed: 75, kill: 54, type: 2},
-          evan: '/animations/evan',
-          evan_: {frames: 8, speed: 500, kill: 7, type: 1},
-          minecraft: '/animations/minecraft',
-          minecraft_: {frames: 22, speed: 100, kill: 15, type: 2},
-          enderman: '/animations/enderman',
-          enderman_: {frames: 4, speed: 500, kill: 3, type: 2},
-          wakawaka: '/animations/wakawaka',
-          wakawaka_: {frames: 27, speed: 75, kill: 13, type: 2},
-        },
-        items: {
-          airstrike: '/items/airstrike',
-          duck_tape: '/items/duck-tape',
-          super_glu: '/items/super-glu',
-          shield: '/items/shield',
-          flashbang: '/items/flashbang',
-          bomb: '/items/bomb',
-          dynamite: '/items/dynamite',
-          weak: '/items/weak',
-          strong: '/items/strong',
-          spike: '/items/spike',
-          reflector: '/items/reflector',
-          usb: '/items/usb',
-          toolkitui: '/items/toolkitui',
-          boostui: '/items/boostui',
-          powermissleui: '/items/powermissleui',
-          tacticalui: '/items/tacticalui',
-          stealthui: '/items/stealthui',
-          builderui: '/items/builderui',
-          warriorui: '/items/warriorui',
-          medicui: '/items/medicui',
-          fireui: '/items/fireui',
-        }
-      };
-      const beta = confirm('Use beta config.js? Recommended no');
-      if (beta) PixelTanks.images = images;
-      Loader.loadImages(PixelTanks.images);
-
+      const config = document.createElement('SCRIPT');
+      config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
+      config.onload = () => {
+        PixelTanks.images = images;
+        Loader.loadImages(PixelTanks.images);
       Menus.menus = {
         start: {
           buttons: [
@@ -1193,8 +902,10 @@ function Game() {
           cdraw: () => {},
         },
       }
-      if (beta) Menus.menus = menus;
-      for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
+      
+        for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
+      }
+      document.head.appendChild(config);
       PixelTanks.socket = new MegaSocket(window.location.protocol === 'https:' ? 'wss://'+window.location.hostname : 'ws://141.148.128.231', {keepAlive: true, reconnect: true, autoconnect: true});
     }
 
