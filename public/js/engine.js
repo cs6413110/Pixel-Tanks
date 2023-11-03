@@ -287,7 +287,7 @@ class Tank {
     if (this.reflect) {
       const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
       for (let i = hx-2; i<=hx+2; i++) for (let l = hy-2; l<hy+2; l++) {
-        for (const entity of this.cells[i][l]) {
+        for (const entity of this.host.cells[i][l]) {
           if (entity instanceof Shot) {
             const xd = entity.x-(this.x+40), yd = entity.y-(this.y+40), td = Math.sqrt(xd**2+yd**2);
             const aspectRatio = 6/td;
