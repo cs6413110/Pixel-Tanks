@@ -147,7 +147,24 @@ class Engine {
           for (const entity of this.cells[cx][cy]) if (entity instanceof Block && collision(x, y, 80, 80, entity.x, entity.y, 100, 100)) setTimeout(() => entity.destroy());
         }
       } else if (e === 'bomb') {
-        const cx = Math.floor((t.x+40)/100), cy = Math.floor((t.y+40)/100);
+        if (t.grapple) {
+          t.grapple.bullet.destroy();
+          t.grapple = false;
+        }
+        const hx = Math.floor(a[0]/100), hy = Math.floor(a[1]/100);
+        for (let i = hx-1; i<=hx+1; i++) for (let l = hy-1; l<=hy+1; l++) {
+          for (const entity of this.cells[i][l]) {
+            if (entity instanceof Block) {
+              if (getTeam(entity.team) === getTeam(t.team)) {
+                entity.damage(150);
+              }
+            } else if (entity instanceof Shot) {
+              if (getTeam(entity.team) !== getTeam(t.team) && (entity.type === 'dynamite' || entity.type === 'usb')) {
+                entity.destroy();
+              }
+            }
+          }
+        }
       } else if (e === 'turret') {
         for (const ai of this.ai) {
           if (getUsername(ai.team) === t.username) setTimeout(() => ai.destroy());
