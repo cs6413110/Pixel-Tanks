@@ -298,6 +298,7 @@ class Tank {
             entity.xm = xd*aspectRatio;
             entity.ym = yd*aspectRatio;
             entity.r = toAngle(xd, yd);
+            if (entity.type !== 'grapple') entity.team = this.team;
           }
         }
       }
@@ -339,7 +340,8 @@ class Tank {
 
   damageCalc(x, y, a, u) {
     if ((this.immune && a > 0) || this.ded) return;
-    for (const cell of this.cells) {
+    const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
+    for (let i = hx-1; i<=hx+1; i++) for (let l = hy-1; l<hy+1; l++) for (const cell of this.host.cells[i][l]) {
       const [cx, cy] = cell.split('x');
       for (const entity of this.host.cells[cx][cy]) {
         if (entity instanceof Shot) {
@@ -1105,7 +1107,8 @@ class AI {
 
   damageCalc(x, y, d) {
     if (this.immune+500 > Date.now()) return;
-    for (const cell of this.cells) {
+    const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
+    for (let i = hx-1; i<=hx+1; i++) for (let l = hy-1; l<hy+1; l++) for (const cell of this.host.cells[i][l]) {
       const [cx, cy] = cell.split('x');
       for (const entity of this.host.cells[cx][cy]) {
         if (entity instanceof Shot) {
