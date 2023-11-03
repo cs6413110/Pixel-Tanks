@@ -1378,7 +1378,7 @@ function Game() {
       }
 
       if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
-      if (t.reflect) GUI.drawImage(PixelTanks.images.tanks.reflect, t.x-5, t.y-5, 80, 80, 1);
+      if (t.reflect) GUI.drawImage(PixelTanks.images.tanks.reflect, t.x, t.y, 80, 80, 1);
       if (t.damage) {
         const {x, y, d} = t.damage;
         for (let i = 0; i < 2; i++) {
