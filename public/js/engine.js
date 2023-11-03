@@ -552,7 +552,7 @@ class Shot {
           } else if (type === 'dynamite' || type === 'usb') {
             this.target = e;
             this.offset = [e.x-x, e.y-y];
-            this.update = () => this.dynaUpdate;
+            this.update = this.dynaUpdate;
             if (type === 'usb') setTimeout(() => this.destroy(), 15000);
             return false;
           } else if (type === 'fire') {
