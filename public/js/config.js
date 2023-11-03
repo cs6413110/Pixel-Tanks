@@ -24,6 +24,7 @@ const images = {
   },
   tanks: {
     buff: '/tanks/buff',
+    reflect: '/tanks/reflect',
     base: '/tanks/base',
     destroyed: '/tanks/destroyed',
     top: '/tanks/top',
