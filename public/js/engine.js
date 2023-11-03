@@ -165,6 +165,7 @@ class Engine {
             if (entity instanceof Shot) {
               const xd = entity.x-(t.x+40), yd = entity.y-(t.y+40), td = Math.sqrt(xd**2+yd**2);
               const aspectRatio = 6/td;
+              if (td > 150) continue;
               entity.e = Date.now();
               entity.sx = entity.x;
               entity.sy = entity.y;
@@ -332,7 +333,15 @@ class Tank {
 
   damageCalc(x, y, a, u) {
     if ((this.immune && a > 0) || this.ded) return;
-    if (this.shields > 0 &&  a > 0) return this.shields -= a;
+    for (const cell of this.cells) {
+      const [cx, cy] = cell.split('x');
+      for (const entity of this.host.cells[cx][cy]) {
+        if (entity instanceof Shot && entity.target.id === this.id) {
+          a *= getTeam(entity.team) === getTeam(this.team) ? 1.1 : .9;
+        }
+      }
+    }
+    if (this.shields > 0 && a > 0) return this.shields -= a;
     this.hp = Math.max(Math.min(this.maxHp, this.hp-a), 0);
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
@@ -538,7 +547,7 @@ class Shot {
               this.u();
             };
             return false;
-          } else if (type === 'dynamite') {
+          } else if (type === 'dynamite' || type === 'usb') {
             this.target = e;
             this.offset = [e.x-x, e.y-y];
             this.update = () => {
@@ -548,6 +557,7 @@ class Shot {
               if (this.target.ded) this.destroy();
               if (this.host.pt.find(t => t.username === getUsername(this.team))?.ded) this.destroy();
             }
+            if (type === 'usb') setTimeout(() => this.destroy(), 15000);
             return false;
           } else if (type === 'fire') {
             if (e.immune) return true;
@@ -569,12 +579,12 @@ class Shot {
           }
         } else if (e instanceof Block) {
           if (!e.c || !collision(e.x, e.y, 100, 100, x, y, 10, 10)) continue;
-          if (type === 'grapple' || type === 'dynamite') {
+          if (type === 'grapple' || type === 'dynamite' || type === 'usb') {
             if (type === 'grapple') {
               const t = this.host.pt.find(t => t.username === getUsername(this.team));
               if (t.grapple) t.grapple.bullet.destroy();
               t.grapple = {target: e, bullet: this}
-            }
+            } else if (type === 'usb') setTimeout(() => this.destroy(), 15000);
             this.update = () => {}
             return false;
           } else {
@@ -588,7 +598,7 @@ class Shot {
           }
         } else if (e instanceof AI) {
           if (!collision(x, y, 10, 10, e.x, e.y, 80, 80)) continue;
-          if (type === 'dynamite') {
+          if (type === 'dynamite' || type === 'usb') {
             this.target = e;
             this.offset = [e.x-x, e.y-y];
             this.update = () => {
@@ -596,6 +606,7 @@ class Shot {
               this.y = this.target.y - this.offset[1];
               this.u();
             }
+            if (type === 'usb') setTimeout(() => this.destroy(), 15000);
             return false;
           } else if (type === 'fire') {
             if (e.fire) clearTimeout(e.fireTimeout);
@@ -1085,6 +1096,14 @@ class AI {
 
   damageCalc(x, y, d) {
     if (this.immune+500 > Date.now()) return;
+    for (const cell of this.cells) {
+      const [cx, cy] = cell.split('x');
+      for (const entity of this.host.cells[cx][cy]) {
+        if (entity instanceof Shot && entity.target.id === this.id) {
+          d *= getTeam(entity.team) === getTeam(this.team) ? 1.1 : .9;
+        }
+      }
+    }
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
     this.damage = {d: (this.damage ? this.damage.d : 0)+d, x, y};
