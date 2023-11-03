@@ -624,6 +624,8 @@ class Shot {
   }
 
   dynaUpdate() {
+    this.oldx = this.x;
+    this.oldy = this.y;
     this.x = this.target.x - this.offset[0];
     this.y = this.target.y - this.offset[1];
     this.cellUpdate();
@@ -633,7 +635,7 @@ class Shot {
   }
 
   cellUpdate() {
-    if (Math.floor(oldx/100) !== Math.floor(this.x/100) || Math.floor(oldy/100) !== Math.floor(this.y/100) || Math.floor((oldx+10)/100) !== Math.floor((this.x+10)/100) || Math.floor((oldy+10)/100) !== Math.floor((this.y+10)/100)) { 
+    if (Math.floor(this.oldx/100) !== Math.floor(this.x/100) || Math.floor(this.oldy/100) !== Math.floor(this.y/100) || Math.floor((this.oldx+10)/100) !== Math.floor((this.x+10)/100) || Math.floor((oldy+10)/100) !== Math.floor((this.y+10)/100)) { 
       const cells = new Set();
       for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
         const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .09))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .09)));
@@ -649,7 +651,9 @@ class Shot {
   }
 
   update() {
-    const time = Math.floor((Date.now()-this.e)/5), oldx = this.x, oldy = this.y;
+    const time = Math.floor((Date.now()-this.e)/5);
+    this. oldx = this.x;
+    this. oldy = this.y;
     this.x = time*this.xm+this.sx;
     this.y = time*this.ym+this.sy;
     this.cellUpdate();
