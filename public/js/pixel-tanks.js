@@ -1672,7 +1672,7 @@ function Game() {
         cooldown = 10000;
       } else if (id === 'reflector') {
         this.tank.use.push('reflector');
-        cooldown = 50;
+        cooldown = 5000;
       } else if (id === 'usb') {
         this.fire('usb');
         cooldown = 25000;
