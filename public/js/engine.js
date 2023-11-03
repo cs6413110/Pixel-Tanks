@@ -159,22 +159,10 @@ class Engine {
       } else if (e === 'shield') {
         t.shields = 100;
       } else if (e === 'reflector') {
-        const hx = Math.floor((t.x+40)/100), hy = Math.floor((t.y+40)/100);
-        for (let i = hx-2; i<=hx+2; i++) for (let l = hy-2; l<hy+2; l++) {
-          for (const entity of this.cells[i][l]) {
-            if (entity instanceof Shot) {
-              const xd = entity.x-(t.x+40), yd = entity.y-(t.y+40), td = Math.sqrt(xd**2+yd**2);
-              const aspectRatio = 6/td;
-              if (td > 150) continue;
-              entity.e = Date.now();
-              entity.sx = entity.x;
-              entity.sy = entity.y;
-              entity.xm = xd*aspectRatio;
-              entity.ym = yd*aspectRatio;
-              entity.r = toAngle(xd, yd);
-            }
-          }
-        }
+        t.reflect = true;
+        setTimeout(() => {
+          t.reflect = false;
+        }, 500);
       } else if (e.includes('airstrike')) {
         const a = e.replace('airstrike', '').split('x');
         this.b.push(new Block(Number(a[0]), Number(a[1]), Infinity, 'airstrike', parseTeamExtras(t.team), this));
@@ -238,7 +226,7 @@ class Tank {
   constructor(data, host) {
     this.raw = {};
     this.render = {b: new Set(), s: new Set(), pt: new Set(), d: new Set(), ai: new Set()};
-    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
+    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
       Object.defineProperty(this, p, {
         get() {
           return this.raw[p];
@@ -296,6 +284,24 @@ class Tank {
     if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25, getUsername(this.fire.team));
     if (this.damage) this.damage.y--;
     if (this.grapple) this.grappleCalc();
+    if (this.reflect) {
+      const hx = Math.floor((t.x+40)/100), hy = Math.floor((t.y+40)/100);
+      for (let i = hx-2; i<=hx+2; i++) for (let l = hy-2; l<hy+2; l++) {
+        for (const entity of this.cells[i][l]) {
+          if (entity instanceof Shot) {
+            const xd = entity.x-(t.x+40), yd = entity.y-(t.y+40), td = Math.sqrt(xd**2+yd**2);
+            const aspectRatio = 6/td;
+            if (td > 150) continue;
+            entity.e = Date.now();
+            entity.sx = entity.x;
+            entity.sy = entity.y;
+            entity.xm = xd*aspectRatio;
+            entity.ym = yd*aspectRatio;
+            entity.r = toAngle(xd, yd);
+          }
+        }
+      }
+    }
     for (const cell of this.cells) {
       const [x, y] = cell.split('x');
       for (const entity of this.host.cells[x][y]) {
@@ -337,7 +343,7 @@ class Tank {
       const [cx, cy] = cell.split('x');
       for (const entity of this.host.cells[cx][cy]) {
         if (entity instanceof Shot) {
-          if (entity.target) if (entity.target.id === this.id) a *= getTeam(entity.team) === getTeam(this.team) ? 1.1 : .9;
+          if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') a *= getTeam(entity.team) === getTeam(this.team) ? 1.1 : .9;
         }
       }
     }
@@ -1100,7 +1106,7 @@ class AI {
       const [cx, cy] = cell.split('x');
       for (const entity of this.host.cells[cx][cy]) {
         if (entity instanceof Shot) {
-          if (entity.target) if (entity.target.id === this.id) d *= getTeam(entity.team) === getTeam(this.team) ? 1.1 : .9;
+          if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') d *= getTeam(entity.team) === getTeam(this.team) ? 1.1 : .9;
         }
       }
     }
