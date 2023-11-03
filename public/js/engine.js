@@ -547,22 +547,12 @@ class Shot {
             e.grapple = {target: host.pt.find(tank => tank.username === getUsername(this.team)), bullet: this};
             this.target = e;
             this.offset = [e.x-x, e.y-y];
-            this.update = () => {
-              this.x = this.target.x - this.offset[0];
-              this.y = this.target.y - this.offset[1];
-              this.u();
-            };
+            this.update = this.dynaUpdate;
             return false;
           } else if (type === 'dynamite' || type === 'usb') {
             this.target = e;
             this.offset = [e.x-x, e.y-y];
-            this.update = () => {
-              this.x = this.target.x - this.offset[0];
-              this.y = this.target.y - this.offset[1];
-              this.u();
-              if (this.target.ded) this.destroy();
-              if (this.host.pt.find(t => t.username === getUsername(this.team))?.ded) this.destroy();
-            }
+            this.update = () => this.dynaUpdate;
             if (type === 'usb') setTimeout(() => this.destroy(), 15000);
             return false;
           } else if (type === 'fire') {
@@ -585,13 +575,13 @@ class Shot {
           }
         } else if (e instanceof Block) {
           if (!e.c || !collision(e.x, e.y, 100, 100, x, y, 10, 10)) continue;
-          if (type === 'grapple' || type === 'dynamite' || type === 'usb') {
+          if (type === 'grapple' || type === 'dynamite') {
             if (type === 'grapple') {
               const t = this.host.pt.find(t => t.username === getUsername(this.team));
               if (t.grapple) t.grapple.bullet.destroy();
               t.grapple = {target: e, bullet: this}
-            } else if (type === 'usb') setTimeout(() => this.destroy(), 15000);
-            this.update = () => {}
+            }
+            this.update = () => {};
             return false;
           } else {
             if (type === 'fire') host.b.push(new Block(e.x, e.y, Infinity, 'fire', this.team, host));
@@ -607,11 +597,7 @@ class Shot {
           if (type === 'dynamite' || type === 'usb') {
             this.target = e;
             this.offset = [e.x-x, e.y-y];
-            this.update = () => {
-              this.x = this.target.x - this.offset[0];
-              this.y = this.target.y - this.offset[1];
-              this.u();
-            }
+            this.update = this.dynaUpdate;
             if (type === 'usb') setTimeout(() => this.destroy(), 15000);
             return false;
           } else if (type === 'fire') {
@@ -637,10 +623,16 @@ class Shot {
     return false;
   }
 
-  update() {
-    const time = Math.floor((Date.now()-this.e)/5), oldx = this.x, oldy = this.y;
-    this.x = time*this.xm+this.sx;
-    this.y = time*this.ym+this.sy;
+  dynaUpdate() {
+    this.x = this.target.x - this.offset[0];
+    this.y = this.target.y - this.offset[1];
+    this.cellUpdate();
+    this.u();
+    if (this.target.ded) this.destroy();
+    if (this.host.pt.find(t => t.username === getUsername(this.team))?.ded) this.destroy();
+  }
+
+  cellUpdate() {
     if (Math.floor(oldx/100) !== Math.floor(this.x/100) || Math.floor(oldy/100) !== Math.floor(this.y/100) || Math.floor((oldx+10)/100) !== Math.floor((this.x+10)/100) || Math.floor((oldy+10)/100) !== Math.floor((this.y+10)/100)) { 
       const cells = new Set();
       for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
@@ -654,6 +646,13 @@ class Shot {
       }
       this.cells = cells;
     }
+  }
+
+  update() {
+    const time = Math.floor((Date.now()-this.e)/5), oldx = this.x, oldy = this.y;
+    this.x = time*this.xm+this.sx;
+    this.y = time*this.ym+this.sy;
+    this.cellUpdate();
     if (this.collision()) this.destroy();
     if (this.type === 'shotgun') {
       this.d = Math.sqrt((this.x - this.sx) ** 2 + (this.y - this.sy) ** 2);
