@@ -336,8 +336,8 @@ class Tank {
     for (const cell of this.cells) {
       const [cx, cy] = cell.split('x');
       for (const entity of this.host.cells[cx][cy]) {
-        if (entity instanceof Shot && entity.target.id === this.id) {
-          a *= getTeam(entity.team) === getTeam(this.team) ? 1.1 : .9;
+        if (entity instanceof Shot) {
+          if (entity.target) if (entity.target.id === this.id) a *= getTeam(entity.team) === getTeam(this.team) ? 1.1 : .9;
         }
       }
     }
@@ -1099,8 +1099,8 @@ class AI {
     for (const cell of this.cells) {
       const [cx, cy] = cell.split('x');
       for (const entity of this.host.cells[cx][cy]) {
-        if (entity instanceof Shot && entity.target.id === this.id) {
-          d *= getTeam(entity.team) === getTeam(this.team) ? 1.1 : .9;
+        if (entity instanceof Shot) {
+          if (entity.target) if (entity.target.id === this.id) d *= getTeam(entity.team) === getTeam(this.team) ? 1.1 : .9;
         }
       }
     }
