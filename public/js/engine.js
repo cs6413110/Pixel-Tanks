@@ -285,11 +285,11 @@ class Tank {
     if (this.damage) this.damage.y--;
     if (this.grapple) this.grappleCalc();
     if (this.reflect) {
-      const hx = Math.floor((t.x+40)/100), hy = Math.floor((t.y+40)/100);
+      const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
       for (let i = hx-2; i<=hx+2; i++) for (let l = hy-2; l<hy+2; l++) {
         for (const entity of this.cells[i][l]) {
           if (entity instanceof Shot) {
-            const xd = entity.x-(t.x+40), yd = entity.y-(t.y+40), td = Math.sqrt(xd**2+yd**2);
+            const xd = entity.x-(this.x+40), yd = entity.y-(this.y+40), td = Math.sqrt(xd**2+yd**2);
             const aspectRatio = 6/td;
             if (td > 150) continue;
             entity.e = Date.now();
@@ -343,7 +343,7 @@ class Tank {
       const [cx, cy] = cell.split('x');
       for (const entity of this.host.cells[cx][cy]) {
         if (entity instanceof Shot) {
-          if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') a *= getTeam(entity.team) === getTeam(this.team) ? 1.1 : .9;
+          if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') a *= getTeam(entity.team) === getTeam(this.team) ? .9 : 1.1;
         }
       }
     }
@@ -1106,7 +1106,7 @@ class AI {
       const [cx, cy] = cell.split('x');
       for (const entity of this.host.cells[cx][cy]) {
         if (entity instanceof Shot) {
-          if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') d *= getTeam(entity.team) === getTeam(this.team) ? 1.1 : .9;
+          if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') d *= getTeam(entity.team) === getTeam(this.team) ? .9 : 1.1;
         }
       }
     }
