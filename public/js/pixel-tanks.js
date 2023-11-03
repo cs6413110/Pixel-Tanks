@@ -1848,6 +1848,7 @@ function Game() {
 
   class Singleplayer extends Engine {
     constructor(level) {
+      try {
       if (typeof level === 'object') { // custom level handler for breads
         this.level = level.name;
         super([level.code]);
@@ -1884,6 +1885,7 @@ function Game() {
         this.level = level;
         super([levels[level-1]]);
       }
+      } catch(e) {alert(e) }
     }
 
     ontick() {
