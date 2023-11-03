@@ -1,5 +1,5 @@
-import {pack} from 'msgpackr/pack';
-import {unpack} from 'msgpackr/unpack';
+const {pack} = require('msgpackr/pack');
+const {unpack} = require('msgpackr/unpack');
 const {multiopen, multimessage, multiclose} = require('./multiplayer.js');
 const {MongoClient} = require('mongodb');
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');

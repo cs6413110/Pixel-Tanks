@@ -600,7 +600,7 @@ const Profile = (arr, update) => {
 }
 
 let lagometer = [];
-Profile([Engine, Block, Shot, AI, Damage, FFA, Multiplayer], f => {
+Profile([Engine, Block, Shot, Tank, AI, Damage, FFA, TDM, DUELS, Multiplayer], f => {
   lagometer = f;
 });
 setInterval(() => {
