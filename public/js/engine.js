@@ -278,12 +278,12 @@ class Tank {
     const cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .79))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .79)));
-      this.cells[cx][cy].add(this);
+      this.host.cells[cx][cy].add(this);
       cells.add(`${cx}x${cy}`);
     }
     for (const cell of [...this.cells].filter(c => !cells.has(c))) {
       const [x, y] = cell.split('x');
-      this.cells[x][y].delete(this);
+      this.host.cells[x][y].delete(this);
     }
     this.cells = cells;
   }
