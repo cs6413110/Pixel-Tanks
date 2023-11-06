@@ -1,8 +1,10 @@
 const ws = require('websocket').w3cwebsocket;
 let pack;
 if (Bun !== undefined) {
-  import msgpackr from 'msgpackr/pack';
-  pack = msgpackr.pack;
+  try {
+    import msgpackr from 'msgpackr/pack';
+    pack = msgpackr.pack;
+  } catch(e) {console.log(e)}
 } else {
   const msgpackr = require('msgpackr/pack');
   pack = msgpackr.pack;
