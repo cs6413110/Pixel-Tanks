@@ -142,10 +142,10 @@ class Engine {
           t.grapple = false;
         }
         const hx = Math.floor(a[0]/100), hy = Math.floor(a[1]/100);
-        for (let i = hx-1; i<=hx+1; i++) for (let l = hy-1; l<=hy+1; l++) {
+        for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) {
           for (const entity of this.cells[i][l]) {
             if (entity instanceof Block) {
-              if (getTeam(entity.team) === getTeam(t.team)) {
+              if (getTeam(entity.team) !== getTeam(t.team)) {
                 entity.damage(150);
               }
             } else if (entity instanceof Shot) {
@@ -176,7 +176,7 @@ class Engine {
       } else if (e.includes('healwave')) {
         const a = e.replace('healwave', '').split('x');
         const hx = Math.floor(a[0]/100), hy = Math.floor(a[1]/100);
-        for (let i = hx-2; i<=hx+2; i++) for (let l = hy-2; l<=hy+2; l++) {
+        for (let i = Math.max(0, hx-2); i <= Math.min(29, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(29, hy+2); l++) {
           for (const entity of this.cells[i][l]) {
             if (entity instanceof Tank) {
               if (getTeam(entity.team) === getTeam(t.team)) {
@@ -300,7 +300,7 @@ class Tank {
     if (this.grapple) this.grappleCalc();
     if (this.reflect) {
       const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
-      for (let i = hx-2; i<=hx+2; i++) for (let l = hy-2; l<hy+2; l++) {
+      for (let i = Math.max(0, hx-2); i <= Math.min(29, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(29, hy+2); l++) {
         for (const entity of this.host.cells[i][l]) {
           if (entity instanceof Shot) {
             const xd = entity.x-(this.x+40), yd = entity.y-(this.y+40), td = Math.sqrt(xd**2+yd**2);
@@ -355,7 +355,7 @@ class Tank {
   damageCalc(x, y, a, u) {
     if ((this.immune && a > 0) || this.ded || this.reflect) return;
     const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
-    for (let i = hx-1; i<=hx+1; i++) for (let l = hy-1; l<hy+1; l++) for (const entity of this.host.cells[i][l]) {
+    for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) for (const entity of this.host.cells[i][l]) {
       if (entity instanceof Shot) if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') a *= getTeam(entity.team) === getTeam(this.team) ? .9 : 1.1;
     }
     if (this.shields > 0 && a > 0) return this.shields -= a;
@@ -1096,7 +1096,7 @@ class AI {
     console.log('damageai');
     if (this.immune+500 > Date.now() || this.reflect) return;
     const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
-    for (let i = hx-1; i<=hx+1; i++) for (let l = hy-1; l<hy+1; l++) for (const entity of this.host.cells[i][l]) {
+    for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) for (const entity of this.host.cells[i][l]) {
       if (entity instanceof Shot) if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') d *= getTeam(entity.team) === getTeam(this.team) ? .9 : 1.1;
     }
     clearTimeout(this.damageTimeout);
