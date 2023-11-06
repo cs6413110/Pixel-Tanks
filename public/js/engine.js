@@ -255,27 +255,20 @@ class Tank {
       });
     });
     this.id = Math.random();
-    this.lastUpdate = 0;
-    if (data.socket) this.socket = data.socket; // multiplayer patch
+    if (data.socket) this.socket = data.socket;
     this.username = data.username;
     this.rank = data.rank;
     this.class = data.class;
     this.cosmetic = data.cosmetic;
     this.deathEffect = data.deathEffect;
     this.color = data.color;
-    this.damage = false;
-    this.maxHp = data.rank*10+300;
-    this.hp = this.maxHp;
+    this.fire = this.damage = false;
+    this.hp = this.maxHp = this.rank*10+300;
     this.canBashed = true;
-    this.shields = 0;
     this.team = data.username+':'+Math.random();
     this.x = host.spawn.x;
     this.y = host.spawn.y;
-    this.r = 0;
-    this.pushback = 0;
-    this.baseRotation = 0;
-    this.baseFrame = 0;
-    this.fire = false;
+    this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = this.lastUpdate = 0;
     this.host = host;
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
@@ -370,8 +363,7 @@ class Tank {
   }
 
   grappleCalc() {
-    const dx = this.grapple.target.x - this.x;
-    const dy = this.grapple.target.y - this.y;
+    const dx = this.grapple.target.x - this.x, dy = this.grapple.target.y - this.y;
     if (dx ** 2 + dy ** 2 > 400) {
       const angle = Math.atan2(dy, dx);
       const mx = Math.cos(angle) * 20;
@@ -406,8 +398,7 @@ class Block {
   constructor(x, y, health, type, team, host) {
     this.x = x;
     this.y = y;
-    this.maxHp = health;
-    this.hp = health;
+    this.maxHp = this.hp = health;
     this.type = type;
     this.host = host;
     this.team = team;
@@ -504,16 +495,13 @@ class Shot {
     this.e = Date.now();
     this.raw = {};
     this.id = Math.random();
-    this.damage = bullet_settings.damage[type]*(rank*10+300)/500;
-    this.md = this.damage;
+    this.md = this.damage = bullet_settings.damage[type]*(rank*10+300)/500;
     const factor = 6/Math.sqrt(xm**2+ym**2);
     this.xm = xm*factor*bullet_settings.speed[type];
     this.ym = ym*factor*bullet_settings.speed[type];
     const data = Shot.calc(x, y, xm, ym);
-    this.x = data.x-5;
-    this.y = data.y-5;
-    this.sx = this.x;
-    this.sy = this.y;
+    this.sx = this.x = data.x-5;
+    this.sy = this.y = data.y-5;
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx+.09))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy+.09)));
@@ -758,11 +746,11 @@ class Damage {
 class AI {
   constructor(x, y, role, rank, team, host) {
     this.raw = {};
-    ['role', 'x', 'y', 'r', 'baseRotation', 'baseFrame', 'mode', 'rank', 'hp', 'maxHp', 'pushback', 'cosmetic', 'id', 'fire', 'damage', 'team', 'color'].forEach(p => {
+    ['x', 'y', 'r', 'baseRotation', 'baseFrame', 'rank', 'hp', 'maxHp', 'pushback', 'cosmetic', 'fire', 'damage', 'team', 'color'].forEach(p => {
       Object.defineProperty(this, p, {
         get() {
           return this.raw[p];
-      },
+        },
         set(v) {
           this.setValue(p, v);
         },
@@ -773,42 +761,23 @@ class AI {
     this.role = role;
     this.x = x;
     this.y = y;
-    this.r = 0;
-    this.tr = 0;
+    this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = 0;
     this.barrelSpeed = Math.random()*3+2;
     this.stupidity = Math.random()*1+1;
-    this.baseRotation = 0;
-    this.baseFrame = 0;
-    this.mode = 0;
     this.rank = rank;
     this.team = team;
     this.host = host;
-    this.hp = rank * 10 + 300;
-    this.maxHp = this.hp;
-    this.pushback = 0;
-    this.target = false;
-    this.obstruction = false;
-    this.bond = false;
-    this.path = false;
-    this.canFire = true;
-    this.canPowermissle = true;
-    this.canItem = true;
-    this.canClass = true;
-    this.canBoost = true;
-    this.color = '#'+Math.floor(Math.random()*16777215).toString(16);
-    this.damage = false;
-    this.canBashed = true;
-    this.fire = false;
-    this.immune = 0;
-    this.item = '';
-    this.class = '';
-    const t = host.pt.find(t => t.username === getUsername(this.team));
-    this.cosmetic = t ? t.cosmetic : '';
+    this.maxHp = this.hp = rank * 10 + 300;
+    this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
+    this.canFire = this.canPowermissle = this.canItem = this.canClass = this.canBoost = this.canBashed = true;
+    this.color = '#${Math.floor(Math.random()*16777215).toString(16)}'
+    this.item = this.class = '';
+    this.cosmetic = host.pt.find(t => t.username === getUsername(this.team))?.cosmetic;
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (role === 0 ? .99 : .79)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (role === 0 ? .99 : .79))));
       host.cells[cx][cy].add(this);
-      this.cells.add(cx+'x'+cy);
+      this.cells.add('${cx}x${cy}');
     }
   }
 
@@ -820,7 +789,7 @@ class AI {
 
   update() {
     if (this.mode === 3) return this.r += 3;
-    if (Math.random() <= 1/(3*this.stupidity)) this.identify();
+    this.identify();
     if (this.role !== 0) this.move();
     const cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
