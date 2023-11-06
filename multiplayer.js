@@ -8,7 +8,7 @@ const settings = {
   ups: 60,
 }
 
-const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
+import {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} from './public/js/engine.js';
 
 const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
