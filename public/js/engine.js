@@ -777,7 +777,7 @@ class AI {
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (role === 0 ? .99 : .79)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (role === 0 ? .99 : .79))));
       host.cells[cx][cy].add(this);
-      this.cells.add(`${cx}x${cy}`);
+      this.cells.add(cx+'x'+cy);
     }
   }
 
