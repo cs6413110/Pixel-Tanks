@@ -763,21 +763,21 @@ class AI {
     this.y = y;
     this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = 0;
     this.barrelSpeed = Math.random()*3+2;
-    this.stupidity = Math.random()*1+1;
     this.rank = rank;
     this.team = team;
     this.host = host;
-    this.maxHp = this.hp = rank * 10 + 300;
+    this.hp = rank * 10 + 300;
+    this.maxHp = this.hp;
     this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
     this.canFire = this.canPowermissle = this.canItem = this.canClass = this.canBoost = this.canBashed = true;
-    this.color = '#${Math.floor(Math.random()*16777215).toString(16)}'
+    this.color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
     this.item = this.class = '';
     this.cosmetic = host.pt.find(t => t.username === getUsername(this.team))?.cosmetic;
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (role === 0 ? .99 : .79)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (role === 0 ? .99 : .79))));
       host.cells[cx][cy].add(this);
-      this.cells.add('${cx}x${cy}');
+      this.cells.add(`${cx}x${cy}`);
     }
   }
 
@@ -788,20 +788,8 @@ class AI {
   }
 
   update() {
-    if (this.mode === 3) return this.r += 3;
     this.identify();
     if (this.role !== 0) this.move();
-    const cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (this.role === 0 ? .99 : .79)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (this.role === 0 ? .99 : .79))));
-      this.host.cells[cx][cy].add(this);
-      cells.add(cx+'x'+cy);
-    }
-    for (const cell of [...this.cells].filter(c => !cells.has(c))) {
-      const [x, y] = cell.split('x');
-      this.host.cells[x][y].delete(this);
-    }
-    this.cells = cells;
     if (this.obstruction && !this.target.s) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
       if (this.canPowermissle && Math.random() <= 1/(600*this.stupidity)) this.fireCalc(this.obstruction.x, this.obstruction.y, 'powermissle');
@@ -811,8 +799,10 @@ class AI {
       if (this.canPowermissle && Math.random() <= 1/(600*this.stupidity)) this.fireCalc(this.target.x, this.target.y, 'powermissle');
       if (this.canFire && Math.random() <= 1/(10*this.stupidity)) this.fireCalc(this.target.x, this.target.y);
     }
-    const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
-    this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
+    if (!(this.role === 0 && this.mode === 0)) {
+      const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
+      this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
+    }
     if (this.dedEffect) this.dedEffect.time = Date.now()-this.dedEffect.start;
     if (this.pushback !== 0) this.pushback += 0.5;
     if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25);
@@ -891,6 +881,17 @@ class AI {
     } else {
       this.path.t = this.path.o+Date.now()-this.obstruction.t;
     }
+    const cells = new Set();
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (this.role === 0 ? .99 : .79)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (this.role === 0 ? .99 : .79))));
+      this.host.cells[cx][cy].add(this);
+      cells.add(cx+'x'+cy);
+    }
+    for (const cell of [...this.cells].filter(c => !cells.has(c))) {
+      const [x, y] = cell.split('x');
+      this.host.cells[x][y].delete(this);
+    }
+    this.cells = cells;
   }
 
   collision(x, y) {
@@ -913,9 +914,9 @@ class AI {
         this.generatePath();
       }
     }
-    if (this.path.m !== this.mode) {
+    /*if (this.path.m !== this.mode) {
       this.generatePath();
-    }
+    }*/ // confusion, how has this not broken game?
   }
 
   generatePath() {
