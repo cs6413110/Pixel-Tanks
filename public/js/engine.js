@@ -792,12 +792,12 @@ class AI {
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.target.s) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
-      if (this.canPowermissle && Math.random() <= 1/(600*this.stupidity)) this.fireCalc(this.obstruction.x, this.obstruction.y, 'powermissle');
-      if (this.canFire && Math.random() <= 1/(10*this.stupidity)) this.fireCalc(this.obstruction.x, this.obstruction.y);
+      if (this.canPowermissle && Math.random() <= 1/600) this.fireCalc(this.obstruction.x, this.obstruction.y, 'powermissle');
+      if (this.canFire) this.fireCalc(this.obstruction.x, this.obstruction.y);
     } else if (this.mode !== 0) {
       this.tr = toAngle(this.target.x - this.x, this.target.y - this.y);
-      if (this.canPowermissle && Math.random() <= 1/(600*this.stupidity)) this.fireCalc(this.target.x, this.target.y, 'powermissle');
-      if (this.canFire && Math.random() <= 1/(10*this.stupidity)) this.fireCalc(this.target.x, this.target.y);
+      if (this.canPowermissle && Math.random() <= 1/600) this.fireCalc(this.target.x, this.target.y, 'powermissle');
+      if (this.canFire) this.fireCalc(this.target.x, this.target.y);
     }
     if (!(this.role === 0 && this.mode === 0)) {
       const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
@@ -871,7 +871,7 @@ class AI {
     this.tr = this.baseRotation;
     this.obstruction = this.collision(nx, ny);
     if (!this.obstruction) {
-      if (this.canBoost && Math.random() < 1/(300*this.stupidity)) {
+      if (this.canBoost && Math.random() < 1/300) {
         this.canBoost = false;
         this.immune = Date.now();
         setTimeout(() => {this.canBoost = true}, 5000);
@@ -1119,4 +1119,4 @@ class AI {
 
 try {
   module.exports = {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername};
-} catch (e) {console.log(e)}
+} catch (e) {}
