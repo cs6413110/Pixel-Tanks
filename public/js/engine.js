@@ -349,7 +349,7 @@ class Tank {
   }
 
   damageCalc(x, y, a, u) {
-    if ((this.immune && a > 0) || this.ded) return;
+    if ((this.immune && a > 0) || this.ded || this.reflect) return;
     const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
     for (let i = hx-1; i<=hx+1; i++) for (let l = hy-1; l<hy+1; l++) for (const entity of this.host.cells[i][l]) {
       if (entity instanceof Shot) if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') a *= getTeam(entity.team) === getTeam(this.team) ? .9 : 1.1;
@@ -1088,7 +1088,7 @@ class AI {
   }
 
   damageCalc(x, y, d) {
-    if (this.immune+500 > Date.now()) return;
+    if (this.immune+500 > Date.now() || this.reflect) return;
     const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
     for (let i = hx-1; i<=hx+1; i++) for (let l = hy-1; l<hy+1; l++) for (const entity of this.host.cells[i][l]) {
       if (entity instanceof Shot) if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') d *= getTeam(entity.team) === getTeam(this.team) ? .9 : 1.1;
