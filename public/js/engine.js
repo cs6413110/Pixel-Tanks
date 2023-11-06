@@ -1118,4 +1118,4 @@ class AI {
 
 try {
   module.exports = {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername};
-} catch (e) {}
+} catch (e) {console.log(e)}
