@@ -1,5 +1,12 @@
 const ws = require('websocket').w3cwebsocket;
-import {pack} from 'msgpackr/pack';
+let pack;
+if (Bun !== undefined) {
+  import msgpackr from 'msgpackr/pack';
+  pack = msgpackr.pack;
+} else {
+  const msgpackr = require('msgpackr/pack');
+  pack = msgpackr.pack;
+}
 const sockets = [];
 let interval;
 
@@ -37,16 +44,16 @@ setTimeout(() => {
     console.log('Test #2: joining tdm servers with 1k fake players with 60/s update changes and ');
     for (const socket of sockets) {
       socket.lastMessage = Date.now();
-      socket.delayMax = 0;
+      socket.delay = [];
       socket.onmessage = () => {
         const time = Date.now()-socket.lastMessage;
-        if (time > socket.delayMax) socket.delayMax = time;
+        socket.delay.push(time);
         socket.lastMessage = Date.now();
       }
       socket.username = 'bot-player#'+Math.random();
       socket.send(pack({username: socket.username, type: 'join', gamemode: 'ffa', tank: {rank: sockets.indexOf(socket), username: socket.username, color: '#FFFFFF'}}));
     }
-    setTimeout(() => {
+    //setTimeout(() => {
       console.log('Moving to random pos for 60ups');
       interval = setInterval(() => {
         for (const socket of sockets) socket.send(pack({username: socket.username, type: 'update', data: {x: Math.random()*3000, y: Math.random()*3000, fire: [], use: ['shield']}}));
@@ -56,6 +63,6 @@ setTimeout(() => {
         console.log('done');
         for (const socket of sockets) console.log(socket.delayMax);
       }, 60000);
-    }, 5000);
+    //}, 5000);
   }, 60000);
 }, 5000);
