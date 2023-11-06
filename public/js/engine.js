@@ -659,8 +659,8 @@ class Shot {
 
   update() {
     const time = Math.floor((Date.now()-this.e)/5);
-    this. oldx = this.x;
-    this. oldy = this.y;
+    this.oldx = this.x;
+    this.oldy = this.y;
     this.x = time*this.xm+this.sx;
     this.y = time*this.ym+this.sy;
     this.cellUpdate();
@@ -1093,6 +1093,7 @@ class AI {
   }
 
   damageCalc(x, y, d) {
+    console.log('damageai');
     if (this.immune+500 > Date.now() || this.reflect) return;
     const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
     for (let i = hx-1; i<=hx+1; i++) for (let l = hy-1; l<hy+1; l++) for (const entity of this.host.cells[i][l]) {
@@ -1101,7 +1102,9 @@ class AI {
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
     this.damage = {d: (this.damage ? this.damage.d : 0)+d, x, y};
+    console.log('statsofdmg');
     this.hp -= d;
+    console.log('hp: '+this.hp);
     clearInterval(this.healInterval);
     clearTimeout(this.healTimeout);
     if (this.hp <= 0) return this.destroy();
@@ -1113,12 +1116,15 @@ class AI {
   }
 
   destroy() {
+    console.log('destroy ai');
     const index = this.host.ai.indexOf(this);
     if (index !== -1) this.host.ai.splice(index, 1);
+    console.log(this.cells);
     for (const cell of this.cells) {
       const [x, y] = cell.split('x');
       this.host.cells[x][y].delete(this);
     }
+    console.log('removed');
   }
 }
 
