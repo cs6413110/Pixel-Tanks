@@ -36,7 +36,13 @@ setTimeout(() => {
     console.log('-----------------------------------');
     console.log('Test #2: joining tdm servers with 1k fake players with 60/s update changes and ');
     for (const socket of sockets) {
-      socket.onmessage = () => {}
+      socket.lastMessage = Date.now();
+      socket.delayMax = 0;
+      socket.onmessage = () => {
+        const time = Date.now()-socket.lastMessage;
+        if (time > socket.delayMax) socket.delayMax = time;
+        socket.lastMessage = Date.now();
+      }
       socket.username = 'bot-player#'+Math.random();
       socket.send(pack({username: socket.username, type: 'join', gamemode: 'ffa', tank: {rank: sockets.indexOf(socket), username: socket.username, color: '#FFFFFF'}}));
     }
@@ -48,6 +54,7 @@ setTimeout(() => {
       setTimeout(() => {
         clearInterval(interval);
         console.log('done');
+        for (const socket of sockets) console.log(socket.delayMax);
       }, 60000);
     }, 5000);
   }, 60000);
