@@ -1,8 +1,11 @@
-import {multiopen, multimessage, multiclose} from './multiplayer.js';
-import http from 'http';
-import fs from 'fs';
-import {MongoClient} from 'mongodb';
-import {WebSocketServer} from 'ws';
+const {pack} = require('msgpackr/pack');
+const {unpack} = require('msgpackr/unpack');
+const {multiopen, multimessage, multiclose} = require('./multiplayer.js');
+const {MongoClient} = require('mongodb');
+const http = require('http');
+const fs = require('fs');
+const {MongoClient} = require('mongodb');
+const {WebSocketServer} = require('ws');
 
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
 const tokens = new Set(), sockets = new Set();
@@ -42,12 +45,12 @@ const server = http.createServer((req, res) => {
 const wss = new WebSocketServer({noServer: true});
 wss.on('connection', function connection(ws) {
   ws._send = ws.send;
-  ws.send = data => ws._send(JSON.stringify(data));
+  ws.send = data => ws._send(pack(data));
   sockets.add(ws);
   ws.on('error', console.error);
   ws.on('message', data => {
     try {
-      data = JSON.parse(data);
+      data = unpack(data);
     } catch(e) {
       return ws.close();
     }
