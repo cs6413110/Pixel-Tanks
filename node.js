@@ -51,6 +51,7 @@ wss.on('connection', function connection(ws) {
     try {
       data = unpack(data);
     } catch(e) {
+      console.log(e);
       return ws.close();
     }
     if (!ws.username) ws.username = data.username;
@@ -65,12 +66,12 @@ wss.on('connection', function connection(ws) {
 const multi = new WebSocketServer({noServer: true});
 multi.on('connection', function connection(ws) {
   ws._send = ws.send;
-  ws.send = data => ws._send(JSON.stringify(data));
+  ws.send = data => ws._send(pack(data));
   multiopen(ws);
   ws.on('error', console.error);
   ws.on('message', data => {
     try {
-      data = JSON.parse(data);
+      data = unpack(data);
     } catch(e) {
       return ws.close();
     }
