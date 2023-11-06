@@ -1,4 +1,4 @@
-const {multiopen, multimessage, multiclose} = require('./multiplayer.mjs');
+const {multiopen, multimessage, multiclose} = require('./multiplayer.js');
 const http = require('http');
 const fs = require('fs');
 const {MongoClient} = require('mongodb');
