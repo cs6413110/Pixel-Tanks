@@ -73,17 +73,7 @@ class Engine {
     if (!t.grapple) {
       t.x = x;
       t.y = y;
-      const cells = new Set();
-      for (let dx = x/100, dy = y/100, i = 0; i < 4; i++) {
-        const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .79))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .79)));
-        this.cells[cx][cy].add(t);
-        cells.add(`${cx}x${cy}`);
-      }
-      for (const cell of [...t.cells].filter(c => !cells.has(c))) {
-        const [x, y] = cell.split('x');
-        this.cells[x][y].delete(t);
-      }
-      t.cells = cells;
+      t.updateCell();
     }
     t.r = r;
     if (t.ded) return;
@@ -284,6 +274,20 @@ class Tank {
     this.raw[p] = v;
   }
 
+  updateCell() {
+    const cells = new Set();
+    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
+      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .79))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .79)));
+      this.cells[cx][cy].add(this);
+      cells.add(`${cx}x${cy}`);
+    }
+    for (const cell of [...this.cells].filter(c => !cells.has(c))) {
+      const [x, y] = cell.split('x');
+      this.cells[x][y].delete(this);
+    }
+    this.cells = cells;
+  }
+
   update() {
     const team = getTeam(this.team);
     if (this.dedEffect) {
@@ -385,6 +389,7 @@ class Tank {
       this.x = Math.floor(this.x/4)*4;
       this.y = Math.floor(this.y/4)*4
     }
+    this.updateCell();
   }
 
   collision(x, y) {
@@ -1097,9 +1102,9 @@ class AI {
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
     this.damage = {d: (this.damage ? this.damage.d : 0)+d, x, y};
     this.hp -= d;
-    if (this.hp <= 0) return this.destroy();
     clearInterval(this.healInterval);
     clearTimeout(this.healTimeout);
+    if (this.hp <= 0) return this.destroy();
     this.healTimeout = setTimeout(() => {
       this.healInterval = setInterval(() => {
         this.hp = Math.min(this.hp+.4, this.maxHp);
