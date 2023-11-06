@@ -54,7 +54,7 @@ setTimeout(() => {
       setTimeout(() => {
         clearInterval(interval);
         console.log('done');
-        for (const socket of sockets) console.log(socket.delayMax);
+        for (const socket of sockets) console.log(socket.delay);
       }, 60000);
     //}, 5000);
   }, 60000);
