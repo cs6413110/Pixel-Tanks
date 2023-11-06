@@ -670,4 +670,4 @@ const multiclose = (socket, code, reason) => {
   sockets.delete(socket);
   if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
 }
-export {multiopen, multimessage, multiclose};
+module.exports = {multiopen, multimessage, multiclose};
