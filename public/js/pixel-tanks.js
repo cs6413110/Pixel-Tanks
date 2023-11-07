@@ -1533,11 +1533,18 @@ function Game() {
       }
       
       if (this.paused) {
+        let a = 1;
         GUI.draw.globalAlpha = .7;
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(0, 0, 1600, 1000);
         GUI.draw.globalAlpha = 1;
-        for (let i = 0; i < t.length; i++) GUI.drawText(t[i].username, 10, 250+i*35, 30, '#FFFFFF', 0);
+        for (let i = 0; i < t.length; i++) 
+          GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FFFFFF', 0
+          PixelTanks.renderBottom(200, 250+i*90, 80, t.color, t.baseRotation);
+          GUI.drawImage(PixelTanks.images.tanks['bottom'+(t.baseFrame ? '' : '2')], 200, 250+i*90, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
+          PixelTanks.renderTop(200, 250+i*90, 80, t.color, t.r, t.pushback);
+          GUI.drawImage(PixelTanks.images.tanks.top, 200, 250+i*90, 80, 90, a, 40, 40, 0, t.pushback, t.r);
+          if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], 200, 250+i*90, 80, 90, a, 40, 40, 0, t.pushback, t.r););
         Menus.menus.pause.draw([1200, 0, 400, 1000]);
       }
     }
