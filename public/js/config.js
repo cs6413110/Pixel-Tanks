@@ -247,6 +247,8 @@ const images = {
     anvil_: { frames: 22, speed: 75, kill: 6, type: 1 },
     insta: '/animations/insta',
     insta_: { frames: 22, speed: 75, kill: 21, type: 1 },
+    mechagodzilla: '/animations/mechagodzilla',
+    mechagodzilla_: { frames: 4, speed: 250, kill: 4, type: 1 },
     cat: '/animations/cat',
     cat_: { frames: 2, speed: 500, kill: 2, type: 1 },
     crate: '/animations/crate',
