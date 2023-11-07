@@ -998,7 +998,6 @@ class AI {
   }
 
   choosePath(p) {
-    return Math.floor(Math.random()*p);
     const r = Math.random();
     if (p === 1) return 0;
     if (p === 2) return r < .5 ? 0 : 1;
@@ -1023,77 +1022,53 @@ class AI {
   }
 
   identify() {
-    const { host, team } = this;
-    const targets = [], allies = [];
-    let target = false, previousTargetExists = false;
-    for (const t of host.pt) {
-      if (!t.ded && !t.invis) {
-        if (t.id === this.target.id) previousTargetExists = true;
-        if (getTeam(team) === getTeam(t.team)) {
-          allies.push({x: t.x, y: t.y, id: t.id, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
-        } else {
-          targets.push({x: t.x, y: t.y, id: t.id, distance: Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)});
-        }
-      }
-    }
-    for (const ai of host.ai) {
-      if (ai.id === this.target.id) previousTargetExists = true;
-      if (getTeam(team) === getTeam(ai.team)) {
-        allies.push({x: ai.x, y: ai.y, id: ai.id, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
+    let previousTargetExists = false;
+    const tanks = this.host.pt.concat(this.host.ai).sort((a, b) => {
+      if (a.id === this.target.id || b.id === this.target.id) previousTargetExists = true;
+      return (a.x-this.x)**2+(a.y-this.y)**2 > (b.x-this.x)**2+(b.y-this.y)**2;
+    });
+    let target = false, bond = false;
+    for (const t of tanks) {
+      if (t.ded || t.invis || !raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) continue;
+      if (getTeam(t.team) === getTeam(this.team)) {
+        if (!bond) bond = t;
       } else {
-        targets.push({x: ai.x, y: ai.y, id: ai.id, distance: Math.sqrt((ai.x-this.x)**2+(ai.y-this.y)**2)});
+        if (!target) target = t;
       }
-    }
-    targets.sort((a, b) => a.distance - b.distance);
-    for (const t of targets) if (raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) {
-      target = t;
-      break;
-    }
-    if (this.role === 3 && !this.bond && allies.length > 0) {
-      allies.sort((a, b) => a.distance - b.distance);
-      for (const a of allies) if (a.id !== this.id) if (raycast(this.x+40, this.y+40, a.x+40, a.y+40, this.host.b)) {
-        this.bond = a;
-        break;
-      }
+      if (target && (bond || this.role !== 3)) break;
     }
     if (!target) {
       if (this.role === 0) this.r++;
       if (this.target) {
-        this.target.s = false;
-        if (!this.target.c) this.target.c = setTimeout(() => {
+        this.seeTarget = false;
+        if (!this.seeTimeout) this.seeTimeout = setTimeout(() => {
           this.mode = 0;
           this.target = false;
         }, previousTargetExists ? 10000 : 0);
       }
-      return;
+    } else {
+      if (this.target) this.seeTimeout = clearTimeout(this.seeTimeout);
+      this.seeTarget = true;
+      this.target = target;
+      this.mode = (this.hp < .3 * this.maxHp && this.role !== 1) ? 2 : 1;
     }
-    if (this.target) this.target.c = clearTimeout(this.target.c);
-    target.s = true;
-    this.target = target;
-    this.mode = (this.hp < .3 * this.maxHp && this.role !== 1) ? 2 : 1;
   }
 
   fireCalc(tx, ty, type) {
-    if (!type) type = this.role !== 0 && Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
-    const cooldown = {powermissle: 0, shotgun: 600, bullet: 200}[type];
     this.pushback = -3;
-    let l = type === 'shotgun' ? -10 : 0;
-    while (l<(type === 'shotgun' ? 15 : 1)) {
-      const { x, y } = toPoint(this.r+l);
-      this.host.s.push(new Shot(this.x + 40, this.y + 40, x, y, type, this.r+l, this.team, this.rank, this.host));
-      l += 5;
+    type = type || this.role !== 0 && Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
+    for (let [i, len] = type === 'shotgun' ? [-10, 15] : [0, 1]; i < len; i += 5) {
+      const r = this.r+i, {x, y} = toPoint(r);
+      this.host.s.push(new Shot(this.x+40, this.y+40, x, y, type, r, this.team, this.host));
     }
-    if (type === 'powermissle') {
-      this.canPowermissle = false;
-      setTimeout(() => { this.canPowermissle = true }, 10000);
-    } else {
-      this.canFire = false;
-      setTimeout(() => { this.canFire = true }, cooldown);
-    }
+    const prop = 'can' + type === 'powermissle' ? 'Powermissle' : 'Fire';
+    this[prop] = false;
+    setTimeout(() => {
+      this[prop] = true;
+    }, {powermissle: 10000, shotgun: 600, bullet: 200}[type]);
   }
 
   damageCalc(x, y, d) {
-    console.log('damageai');
     if (this.immune+500 > Date.now() || this.reflect) return;
     const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
     for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) for (const entity of this.host.cells[i][l]) {
@@ -1102,9 +1077,7 @@ class AI {
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
     this.damage = {d: (this.damage ? this.damage.d : 0)+d, x, y};
-    console.log('statsofdmg');
     this.hp -= d;
-    console.log('hp: '+this.hp);
     clearInterval(this.healInterval);
     clearTimeout(this.healTimeout);
     if (this.hp <= 0) return this.destroy();
@@ -1116,15 +1089,12 @@ class AI {
   }
 
   destroy() {
-    console.log('destroy ai');
     const index = this.host.ai.indexOf(this);
     if (index !== -1) this.host.ai.splice(index, 1);
-    console.log(this.cells);
     for (const cell of this.cells) {
       const [x, y] = cell.split('x');
       this.host.cells[x][y].delete(this);
     }
-    console.log('removed');
   }
 }
 
