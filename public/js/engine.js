@@ -753,12 +753,8 @@ class AI {
     this.raw = {};
     ['role', 'x', 'y', 'r', 'baseRotation', 'baseFrame', 'rank', 'hp', 'maxHp', 'pushback', 'cosmetic', 'fire', 'damage', 'team', 'color'].forEach(p => {
       Object.defineProperty(this, p, {
-        get() {
-          return this.raw[p];
-        },
-        set(v) {
-          this.setValue(p, v);
-        },
+        get: () => this.raw[p],
+        set: v => this.setValue(p, v),
         configurable: true,
       });
     });
@@ -859,19 +855,16 @@ class AI {
   move() {
     const {x, y, path, baseRotation} = this;
     if ((x-10)%100 === 0 && (y-10)%100 === 0) this.onBlock();
-    if (!path) return;
-    if (!path.p.length) return;
+    if (!path || !path.p.length) return;
     const now = Date.now();
     const len = path.p.length-1;
     let frames = Math.min(Math.floor((now-path.t)/15), len*25);
     if (this.immune+500 > path.t) frames = Math.min(frames+3*Math.floor(Math.min(now-Math.max(this.immune, path.t), this.immune+500-path.t)/15), len*25);
     const f = Math.floor(frames/25);
     const n = Math.min(f+1, len);
-    const dx = path.p[n][0]-path.p[f][0];
-    const dy = path.p[n][1]-path.p[f][1];
+    const dx = path.p[n][0]-path.p[f][0], dy = path.p[n][1]-path.p[f][1];
     const offset = 4*(frames%25);
-    const nx = 10+path.p[f][0]*100+offset*dx;
-    const ny = 10+path.p[f][1]*100+offset*dy;
+    const nx = 10+path.p[f][0]*100+offset*dx, ny = 10+path.p[f][1]*100+offset*dy;
     this.baseRotation = [[135, 180, 225], [90, baseRotation, 270], [45, 0, 315]][dy+1][dx+1];
     this.tr = this.baseRotation;
     this.obstruction = this.collision(nx, ny);
@@ -910,18 +903,11 @@ class AI {
 
   onBlock() {
     if (!this.path) this.generatePath();
-    if (this.path.p.length === 0) {
-      this.generatePath();
-    }
+    if (this.path.p.length === 0) this.generatePath();
     if (this.path.p.length !== 0) {
       const final = this.path.p[this.path.p.length - 1];
-      if ((this.x - 10) / 100 === final[0] && (this.y - 10) / 100 === final[1]) {
-        this.generatePath();
-      }
+      if ((this.x - 10) / 100 === final[0] && (this.y - 10) / 100 === final[1]) this.generatePath();
     }
-    /*if (this.path.m !== this.mode) {
-      this.generatePath();
-    }*/ // confusion, how has this not broken game?
   }
 
   generatePath() {
@@ -998,27 +984,7 @@ class AI {
   }
 
   choosePath(p) {
-    const r = Math.random();
-    if (p === 1) return 0;
-    if (p === 2) return r < .5 ? 0 : 1;
-    if (p === 3) {
-      if (r < .5) return 0;
-      if (r < .75) return 1;
-      return 2;
-    }
-    if (p === 4) {
-      if (r < .5) return 0;
-      if (r < .8) return 1;
-      if (r < .9) return 2;
-      return 3;
-    }
-    if (p === 5) {
-      if (r < .5) return 0;
-      if (r < .65) return 1;
-      if (r < .8) return 2;
-      if (r < .9) return 3;
-      return 4;
-    }
+    return Math.floor(Math.random()*p);
   }
 
   identify() {
