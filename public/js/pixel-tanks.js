@@ -1537,7 +1537,7 @@ function Game() {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(0, 0, 1600, 1000);
         GUI.draw.globalAlpha = 1;
-        t.forEach(tank => GUI.drawText(t.username, 10, 250, 30, '#ffffff', 0));
+        t.forEach(tank => GUI.drawText(tank.username, 10, 250, 30, '#ffffff', 0));
         Menus.menus.pause.draw([1200, 0, 400, 1000]);
       }
     }
