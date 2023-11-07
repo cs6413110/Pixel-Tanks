@@ -1504,7 +1504,6 @@ function Game() {
       GUI.draw.globalAlpha = 1;
       GUI.drawText(this.debug, 10, 20, 30, '#ffffff', 0);
       GUI.drawText('Killstreak: '+this.kills, 10, 50, 30, '#ffffff', 0);
-      t.forEach(tank => GUI.drawText(t.username, 10, 250, 30, '#ffffff', 0));
       GUI.drawText('Crates: '+this.crates, 10, 100, 30, '#ffffff', 0);
       GUI.drawText('XP: '+this.xp, 10, 150, 30, '#ffffff', 0);
       GUI.drawText('coin$: '+this.coins, 10, 200, 30, '#ffffff', 0);
@@ -1538,6 +1537,7 @@ function Game() {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(0, 0, 1600, 1000);
         GUI.draw.globalAlpha = 1;
+        t.forEach(tank => GUI.drawText(t.username, 10, 250, 30, '#ffffff', 0));
         Menus.menus.pause.draw([1200, 0, 400, 1000]);
       }
     }
