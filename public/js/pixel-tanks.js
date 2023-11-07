@@ -991,7 +991,7 @@ function Game() {
         uncommon: ['anvil', 'insta'],
         rare: ['amogus', 'minecraft', 'magic'],
         epic: ['wakawaka', 'battery'],
-        legendary: ['error', 'enderman'],
+        legendary: ['error', 'enderman', 'mechagodzilla'],
         mythic: ['clicked', 'cat'],
       }];
       let rarity;
