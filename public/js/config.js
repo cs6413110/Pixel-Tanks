@@ -269,6 +269,10 @@ const images = {
     enderman_: { frames: 4, speed: 500, kill: 3, type: 2 },
     wakawaka: '/animations/wakawaka',
     wakawaka_: { frames: 27, speed: 75, kill: 13, type: 2 },
+    erase: '/animations/erase',
+    erase_: { frames: 28, speed: 75, kill: 18, type: 2 },
+    gameover: '/animations/gameover',
+    gameover_: { frames: 40, speed: 75, kill: 1, type: 2 },
   },
   items: {
     airstrike: '/items/airstrike',
