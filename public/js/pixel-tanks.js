@@ -1539,7 +1539,7 @@ function Game() {
         GUI.draw.fillRect(0, 0, 1600, 1000);
         GUI.draw.globalAlpha = 1;
         for (let i = 0; i < t.length; i++) 
-          GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FFFFFF', 0
+          GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FFFFFF', 0);
           PixelTanks.renderBottom(200, 250+i*90, 80, t.color, t.baseRotation);
           GUI.drawImage(PixelTanks.images.tanks['bottom'+(t.baseFrame ? '' : '2')], 200, 250+i*90, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
           PixelTanks.renderTop(200, 250+i*90, 80, t.color, t.r, t.pushback);
