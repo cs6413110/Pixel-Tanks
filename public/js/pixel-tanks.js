@@ -988,9 +988,9 @@ function Game() {
         mythic: ['Terminator', 'MLG Glasses'],
       }, {
         common: ['explode', 'nuke', 'evan'],
-        uncommon: ['anvil', 'insta'],
-        rare: ['amogus', 'minecraft', 'magic'],
-        epic: ['wakawaka', 'battery'],
+        uncommon: ['anvil', 'insta', 'knight'],
+        rare: ['amogus', 'minecraft', 'magic', 'plant'],
+        epic: ['wakawaka', 'battery', 'fix'],
         legendary: ['error', 'enderman', 'mechagodzilla'],
         mythic: ['clicked', 'cat'],
       }];
