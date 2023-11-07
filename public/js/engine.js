@@ -1024,7 +1024,8 @@ class AI {
     this.pushback = -3;
     type = type || this.role !== 0 && Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
     for (let [i, len] = type === 'shotgun' ? [-10, 15] : [0, 1]; i < len; i += 5) {
-      const r = this.r+i, {x, y} = toPoint(r);
+      const r = this.r+i;
+      const {x, y} = toPoint(r);
       this.host.s.push(new Shot(this.x+40, this.y+40, x, y, type, r, this.team, this.host));
     }
     const prop = 'can' + type === 'powermissle' ? 'Powermissle' : 'Fire';
