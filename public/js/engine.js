@@ -62,8 +62,7 @@ class Engine {
   update(data) {
     const t = this.pt.find(t => t.username === data.username);
     if (!t) return;
-    data = data.data; // reduce data copying
-    const { emote, r, baseFrame, use, x, y, fire} = data; // destructuring is lag so remove
+    const { emote, r, baseFrame, use, x, y, fire} = data.data; // destructuring is lag so remove
     t.baseRotation = data.baseRotation;
     t.immune = data.immune;
     t.animation = data.animation;
@@ -769,7 +768,7 @@ class AI {
     this.host = host;
     this.hp = rank * 10 + 300;
     this.maxHp = this.hp;
-    this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
+    this.seeUser = this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
     this.canFire = this.canPowermissle = this.canItem = this.canClass = this.canBoost = this.canBashed = true;
     this.color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
     this.item = this.class = '';
@@ -791,7 +790,7 @@ class AI {
   update() {
     this.identify();
     if (this.role !== 0) this.move();
-    if (this.obstruction && !this.target.s) {
+    if (this.obstruction && !this.seeTarget) {
       this.tr = toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
       if (this.canPowermissle && Math.random() <= 1/600) this.fireCalc(this.obstruction.x, this.obstruction.y, 'powermissle');
       if (this.canFire) this.fireCalc(this.obstruction.x, this.obstruction.y);
