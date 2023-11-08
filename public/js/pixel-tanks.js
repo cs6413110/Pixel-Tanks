@@ -1467,13 +1467,14 @@ function Game() {
         }
       }
       e.forEach(e => this.drawExplosion(e));
+
+      GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
       
       if (player.flashbanged) {
         GUI.draw.fillStyle = '#FFFFFF';
         GUI.draw.fillRect(0, 0, 1600, 1000);
       }
       
-      GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
       GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
       GUI.draw.fillStyle = PixelTanks.userData.color;
       GUI.draw.globalAlpha = 0.5;
