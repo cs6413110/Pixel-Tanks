@@ -77,13 +77,14 @@ class Engine {
     }
     t.r = r;
     if (t.ded) return;
-    if (t.immune && (t.class === 'fire' || t.class === 'builderd')) {
-      const team = parseTeamExtras(t.team), type = t.class === 'fire' ? 'fire' : 'weak';
-      if ((t.x + 80) % 100 > 80 && [45, 90, 135].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x / 100) * 100 + 100, Math.floor(t.y / 100) * 100, 100, type, team, this));
-      if (t.x % 100 < 20 && [225, 270, 315].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x / 100) * 100 - 100, Math.floor(t.y / 100) * 100, 100, type, team, this));
-      if ((t.y + 80) % 100 > 80 && [135, 180, 225].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x / 100) * 100, Math.floor(t.y / 100) * 100 + 100, 100, type, team, this));
-      if (t.y % 100 < 20 && [315, 0, 45].includes(t.baseRotation)) this.b.push(new Block(Math.floor(t.x / 100) * 100, Math.floor(t.y / 100) * 100 - 100, 100, type, team, this));
-    }
+    if (t.immune && t.class === 'fire') {
+      for (const cell of t.cells) {
+        const [cx, cy] = cell.split('x');
+        let hasFire = false;
+        for (const entity of this.host.cells[cx][cy]) if (entity instanceof Block && entity.type === 'fire' && getUsername(entity.team) === t.username && entity.x/100 === cx && entity.y/100 === cy) hasFire = true;
+        if (!hasFire) this.b.push(new Block(cx*100, cy*100, 100, 'fire', parseTeamExtras(t.team), this;
+      }
+   }
     for (const e of use) {
       if (e === 'dynamite') {
         for (let i = this.s.length-1; i >= 0; i--) {
