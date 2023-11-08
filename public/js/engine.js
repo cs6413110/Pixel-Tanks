@@ -1029,11 +1029,13 @@ class AI {
       const {x, y} = toPoint(r);
       this.host.s.push(new Shot(this.x+40, this.y+40, x, y, type, r, this.team, this.rank, this.host));
     }
-    const prop = 'can' + type === 'powermissle' ? 'Powermissle' : 'Fire';
-    this[prop] = false;
-    setTimeout(() => {
-      this[prop] = true;
-    }, {powermissle: 10000, shotgun: 600, bullet: 200}[type]);
+    if (type === 'powermissle') {
+      this.canPowermissle = false;
+      setTimeout(() => {this.canPowermissle = true}, 10000);
+    } else {
+      this.canFire = false;
+      setTimeout(() => {this.canFire = true}, type === 'shotgun' ? 600 : 200);
+    }
   }
 
   damageCalc(x, y, d) {
