@@ -140,7 +140,7 @@ class Engine {
           t.grapple.bullet.destroy();
           t.grapple = false;
         }
-        const hx = Math.floor(a[0]/100), hy = Math.floor(a[1]/100);
+        const hx = Math.floor(x/100), hy = Math.floor(y/100);
         for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) {
           for (const entity of this.cells[i][l]) {
             if (entity instanceof Block) {
