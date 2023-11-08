@@ -62,7 +62,8 @@ class Engine {
   update(data) {
     const t = this.pt.find(t => t.username === data.username);
     if (!t) return;
-    const { emote, r, baseFrame, use, x, y, fire} = data.data; // destructuring is lag so remove
+    data = data.data;
+    const { emote, r, baseFrame, use, x, y, fire} = data; // destructuring is lag so remove
     t.baseRotation = data.baseRotation;
     t.immune = data.immune;
     t.animation = data.animation;
