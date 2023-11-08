@@ -1690,6 +1690,7 @@ function Game() {
         cooldown = 20000;
       } else if (id === 'bomb') {
         this.tank.use.push('bomb');
+        this.tank.use.push('break');
         cooldown = 5000;
       } else if (id === 'dynamite') {
         this.fire('dynamite');
