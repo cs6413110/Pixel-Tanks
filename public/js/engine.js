@@ -989,7 +989,7 @@ class AI {
   identify() {
     let previousTargetExists = false;
     const tanks = this.host.pt.concat(this.host.ai).sort((a, b) => {
-      if (a.id === this.target.id || b.id === this.target.id) previousTargetExists = true;
+      if ((a.id === this.target.id && !a.ded) || (b.id === this.target.id && !b.ded)) previousTargetExists = true;
       return (a.x-this.x)**2+(a.y-this.y)**2 > (b.x-this.x)**2+(b.y-this.y)**2;
     });
     let target = false, bond = false;
