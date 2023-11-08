@@ -82,7 +82,7 @@ class Engine {
         const [cx, cy] = cell.split('x');
         let hasFire = false;
         for (const entity of this.host.cells[cx][cy]) if (entity instanceof Block && entity.type === 'fire' && getUsername(entity.team) === t.username && entity.x/100 === cx && entity.y/100 === cy) hasFire = true;
-        if (!hasFire) this.b.push(new Block(cx*100, cy*100, 100, 'fire', parseTeamExtras(t.team), this;
+        if (!hasFire) this.b.push(new Block(cx*100, cy*100, 100, 'fire', parseTeamExtras(t.team), this));
       }
    }
     for (const e of use) {
