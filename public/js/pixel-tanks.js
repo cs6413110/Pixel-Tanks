@@ -413,7 +413,7 @@ function Game() {
   
     static updateBootProgress(progress) {
       GUI.clear();
-      GUI.drawText(Math.round(progress*100)+'%', 800, 500, 50, '#ffffff', 0.5);
+      GUI.drawText(loadMessages[Math.floor(Math.random()*loadMessages.length)]+Math.round(progress*100)+'%', 800, 500, 50, '#ffffff', 0.5);
     }
 
     static boot() {
