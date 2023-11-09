@@ -1534,6 +1534,7 @@ function Game() {
         GUI.draw.fillRect(0, 830, GUI.draw.measureText(this.msg).width, 30);
         GUI.draw.globalAlpha = 1;
         GUI.drawText(this.msg, 0, 830, 30, '#ffffff', 0);
+        this.playAnimation('text');
       }
       
       if (this.paused) {
