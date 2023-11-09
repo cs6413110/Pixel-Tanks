@@ -1489,7 +1489,7 @@ function Game() {
           GUI.draw.fillStyle = '#FFFFFF';
           var l = 0, blocks = this.hostupdate.b, len = blocks.length;
           while (l<len) {
-            if ((x > blocks[l].x || x + 80 > blocks[l].x) && (x < blocks[l].x + 100 || x + 80 < blocks[l].x + 100) && (y > blocks[l].y || y + 80 > blocks[l].y) && (y < blocks[l].y + 100 || y + 80 < blocks[l].y + 100) && PixelTanks.userData.items[i] === 'bomb') {
+            if (this.collision(this.tank.x, this.tank.y) && PixelTanks.userData.items[i] === 'bomb') {
               GUI.draw.fillStyle = '#00ff00';
             }
             l++;
