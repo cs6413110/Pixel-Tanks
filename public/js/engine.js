@@ -518,14 +518,8 @@ class Shot {
   }
 
   static calc(x, y, xm, ym) {
-    const r = 70;
-    const a = xm === 0 ? 1000000 : ym / xm;
-    const b = xm === 0 ? 0 : (a > 0 ? -1 : 1);
-    const c = Math.sqrt(r**2+(r*a)**2);
-    const d = r*c;
-    const cx = -r*b*d/c**2;
-    const cy = Math.abs(r*a)*d/c**2;
-    return {x: x+cx*(ym >= 0 ? 1 : -1), y: y+cy*(ym >= 0 ? 1 : -1)};
+    const r = 70*Math.PI/180, a = Math.atan(ym/xm);
+    return {x: r*Math.cos(a)+x, y: r*Math.sin(a)+y};
   }
 
   collision() {
@@ -912,76 +906,58 @@ class AI {
   }
 
   generatePath() {
-    const {mode, role, bond, target, r} = this;
-    const sx = (this.x - 10) / 100, sy = (this.y - 10) / 100;
-    let coords, sortAsc, limiter, ranged, tpx, tpy, epx, epy, tx, ty;
-    if ([1, 2].includes(mode)) {
-      tx = Math.floor((target.x+40)/100);
-      ty = Math.floor((target.y+40)/100);
-      ranged = Math.max(sx-tx, sy-ty) > [1, 5, 5, 8][role-1];
-    }
-    if (role === 3 && bond) {
-      epx = Math.floor((bond.x+40)/100);
-      epy = Math.floor((bond.y+40)/100);
-    } else if (mode === 0 || (mode === 1 && ranged) || mode === 2) {
+    const sx = (this.x-10)/100, sy = (this.y-10)/100;
+    let cir, coords = [], limiter, ranged, tpx, tpy, epx, epy;
+    let tx = Math.floor((this.target.x+40)/100), ty = Math.floor((this.target.y+40)/100), ranged = Math.max(sx-tx, sy-ty) > [1, 5, 5][this.role-1];
+    if (this.role === 3 && this.bond) {
+      epx = Math.floor((this.bond.x+40)/100);
+      epy = Math.floor((this.bond.y+40)/100);
+    } else if (this.mode === 0 || (this.mode === 1 && ranged) || this.mode === 2) {
       epx = sx;
       epy = sy;
-    } else if (mode === 1 && !ranged) {
+    } else if (this.mode === 1) {
       epx = tx;
       epy = ty;
+    } else {
+      epx = sx;
+      epy = sy;
     }
-    if ((role === 3 && bond) || (role === 1 && mode === 1 && !ranged)) {
-      coords = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
-    } else if (mode === 0 || mode === 2) {
-      coords = [[0, -3], [1, -3], [2, -2], [3, -1], [3, 0], [3, 1], [2, 2], [1, 3], [0, 3], [-1, 3], [-2, 2], [-3, 1], [-3, 0], [-3, -1], [-2, -2], [-1, -3]];
-    } else if ((mode === 1 && (ranged || [2, 3].includes(role)))) {
-      coords = [[0, -3], [1, -3], [2, -2], [3, -1], [3, 0], [3, 1], [2, 2], [1, 3], [0, 3], [-1, 3], [-2, 2], [-3, 1], [-3, 0], [-3, -1], [-2, -2], [-1, -3]];
-    } else if (role === 4 && !ranged) {
-      coords = [[0, -8], [1, -8], [2, -8], [3, -8], [4, -7], [5, -6], [6, -5], [7, -4], [8, -3], [8, -2], [8, -1], [8, 0], [8, 1], [8, 2], [8, 3], [7, 4], [6, 5], [5, 6], [4, 7], [3, 8], [2, 8], [1, 8], [0, 8], [-1, 8], [-2, 8], [-3, 8], [-4, 7], [-5, 6], [-6, 5], [-7, 4], [-8, 3], [-8, 2], [-8, 1], [-8, 0], [-8, -1], [-8, -2], [-8, -3], [-7, -4], [-6, -5], [-5, -6], [-4, -7], [-3, -8], [-2, -8], [-1, -8]];
-    }
-    if ((role === 3 && bond) || (mode === 1 && !ranged)) {
+    if (this.role === 3 && this.bond || (this.role === 1 && this.mode === 1 && !ranged)) {
+      cir = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
+    } else cir = [[0, -3], [1, -3], [2, -2], [3, -1], [3, 0], [3, 1], [2, 2], [1, 3], [0, 3], [-1, 3], [-2, 2], [-3, 1], [-3, 0], [-3, -1], [-2, -2], [-1, -3]];
+    if ((this.role === 3 && this.bond) || (this.mode === 1 && !ranged)) {
       tpx = sx;
       tpy = sy;
-    } else if (mode === 0) {
+    } else if (this.mode === 0) {
       const d = toPoint(r);
       tpx = d.x+epx;
       tpy = d.y+epy;
-    } else if (mode === 2 || (mode === 1 && ranged)) {
+    } else if (this.mode === 2 || (this.mode === 1 && ranged)) {
       tpx = tx;
       tpy = ty;
     }
-    if (role === 3 && bond) {
-      limiter = [2];
-    } else if (([2, 3].includes(role) && !ranged) || [0, 2].includes(mode) || (mode === 1 && ranged)) {
-      limiter = [2, 3, 4];
-    } else if (role === 1 && !ranged) {
+    if (this.role === 3 && bond) limiter = [2];
+    } else if (this.role === 1 && !ranged) {
       limiter = [2, 3];
     } else {
-      limiter = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+      limiter = [2, 3, 4];
     }
-    sortAsc = mode !== 2;
-    for (const i in coords) {
-      const x = coords[i][0] + epx, y = coords[i][1] + epy;
-      if (x >= 0 && y >= 0 && x < 30 && y < 30) coords[i] = { x, y, d: Math.sqrt((x-tpx)**2+(y-tpy)**2) };
+    for (const c of cir) {
+      const x = c[0]+epx, y = c[1]+epy, d = (x-tpx)**2+(y-tpy)**2;
+      if (x >= 0 && y >= 0 && x <= 29 && y <= 29) coords.push({x, y, d});
     }
-    coords = coords.filter(c => !Array.isArray(c));
-    coords.sort((a, b) => sortAsc ? a.d - b.d : b.d - a.d);
-    this.path = false;
-    let i = 0;
-    while (!this.path) {
+    if (!coords.length) return this.path = {p: [], m: this.mode, t: Date.now(), o: Date.now()};
+    coords.sort((a, b) => mode !== 2 ? a.d - b.d : b.d - a.d);
+    for (let i = 0; i <= 5; i++) {
       const paths = coords.slice(0, Math.min(5, coords.length));
       const r = this.choosePath(paths.length);
-      const { x, y } = paths[r];
+      const {x, y} = paths[r];
       const p = pathfind(sx, sy, x, y, this.host.map.clone());
-      if (!limiter.includes(p.length)) {
-        coords.splice(r, 1);
-        i++;
-        if (i >= 5 && mode !== 0) return this.path = {p: pathfind(sx, sy, tx, ty, this.host.map.clone()).slice(0, 5), m: this.mode, t: Date.now(), o: Date.now()};
-        if (coords.length === 0) return this.path = { p: [], m: this.mode, t: Date.now(), o: Date.now()};
-      } else {
-        this.path = { p, m: this.mode, t: Date.now(), o: Date.now()};
-      }
+      if (limiter.includes(p.length)) return this.path = {p, m: this.mode, t: Date.now(), o: Date.now()};
+      coords.splice(r, 1);
+      if (!coords.length) return this.path = {p: [], m: this.mode, t: Date.now(), o: Date.now()}; 
     }
+    if (this.mode !== 0) this.path = {p: pathfind(sx, sy, tx, ty, this.host.map.clone()).slice(0, 5), m: this.mode, t: Date.now(), o: Date.now()}; 
   }
 
   choosePath(p) {
