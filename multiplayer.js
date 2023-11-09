@@ -682,7 +682,7 @@ const multimessage = (socket, data) => {
     if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
   } else if (data.type === 'command') {
     const f = Commands[data.data[0]], args = data.data;
-    if (typeof func !== 'function') {
+    if (typeof f === 'function') {
       f.bind(socket)(args);
     } else socket.send({status: 'error', message: 'Command not found.'});
   } else if (data.type === 'stats') {
