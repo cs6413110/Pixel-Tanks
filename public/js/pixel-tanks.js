@@ -1535,7 +1535,7 @@ function Game() {
         GUI.draw.fillRect(0, 830, GUI.draw.measureText(this.msg).width, 30);
         GUI.draw.globalAlpha = 1;
         GUI.drawText(this.msg, 0, 830, 30, '#ffffff', 0);
-        if (!this.tank.animation || this.tank.animation.id !== 'text') this.playAnimation('text');
+        if (this.tank.animation === false || this.tank.animation.id !== 'text') this.playAnimation('text');
       } else if (this.tank.animation) if (this.tank.animation.id === 'text') {
         this.tank.animation = false;
         clearInterval(this.animationInterval);
@@ -1656,12 +1656,12 @@ function Game() {
       this.tank.animation = {id: id, frame: 0};
       clearAnimation(this.animationTimeout);
       clearInterval(this.animationInterval);
-      this.animationInterval = setInterval(function() {
+      this.animationInterval = setInterval(() => {
         if (this.tank.animation.frame === PixelTanks.images.animations[id+'_'].frames) {
           clearInterval(this.animationInterval);
           this.animationTimeout = setTimeout(() => {this.tank.animation = false}, PixelTanks.images.animations[id+'_'].speed);
         } else this.tank.animation.frame++;
-      }.bind(this), PixelTanks.images.animations[id+'_'].speed);
+      }, PixelTanks.images.animations[id+'_'].speed);
     }
 
     useItem(id, slot) {
