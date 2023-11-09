@@ -1414,9 +1414,8 @@ function Game() {
         return  GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
       }
       if (this.multiplayer) if (this.socket.status !== 'connected' ) {
-        GUI.draw.fillStyle = '#ffffff';
-        GUI.draw.fillRect(0, 0, 1600, 1600);
-        return GUI.drawText('Server Closed', 800, 500, 100, '#000000', 0.5);
+        PixelTanks.user.player.implode();
+        Menus.trigger('main');
       }
       this.fps++;
       const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
