@@ -1488,9 +1488,9 @@ function Game() {
           GUI.draw.fillRect(c[i], 900, 100, 100);
         } else {
           GUI.draw.fillStyle = '#FFFFFF';
-          const tank = t.find(tank => tank.username === PixelTanks.user.username);
-          if (item === 'bomb' && !this.collision(tank.x, tank.y) || (item === 'shield' && tank.shields <= 0) || (item === 'tape' && tank.hp <= tank.maxHp/2) || (item === 'glu' && tank.hp <= tank.maxHp/2)) GUI.draw.fillStyle = '#00FF00';
-          GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
+          const tank = t.find(tank => tank.username === PixelTanks.user.username), blockedOn = item === 'bomb' && !this.collision(tank.x, tank.y);
+          if (blockedOn || (item === 'shield' && tank.shields <= 0) || (item === 'tape' && tank.hp <= tank.maxHp/2) || (item === 'glu' && tank.hp <= tank.maxHp/2)) GUI.draw.fillStyle = '#00FF00';
+          GUI.draw.globalAlpha = (blockedOn ? .25 : 0)+.25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
           GUI.draw.fillRect(c[i], 900, 100, 100);
         }
         GUI.draw.globalAlpha = 1;
