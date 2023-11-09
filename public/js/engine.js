@@ -907,7 +907,7 @@ class AI {
 
   generatePath() {
     const sx = (this.x-10)/100, sy = (this.y-10)/100;
-    let cir, coords = [], limiter, ranged, tpx, tpy, epx, epy;
+    let cir, coords = [], limiter, tpx, tpy, epx, epy;
     let tx = Math.floor((this.target.x+40)/100), ty = Math.floor((this.target.y+40)/100), ranged = Math.max(sx-tx, sy-ty) > [1, 5, 5][this.role-1];
     if (this.role === 3 && this.bond) {
       epx = Math.floor((this.bond.x+40)/100);
