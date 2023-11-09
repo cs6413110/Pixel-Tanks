@@ -1489,7 +1489,7 @@ function Game() {
           GUI.draw.fillStyle = '#FFFFFF';
           var l = 0, blocks = this.hostupdate.b, len = blocks.length;
           while (l<len) {
-            if (this.collision(this.tank.x, this.tank.y) && PixelTanks.userData.items[i] === 'bomb') {
+            if (!this.collision(this.tank.x, this.tank.y) && PixelTanks.userData.items[i] === 'bomb') {
               GUI.draw.fillStyle = '#00ff00';
             }
             l++;
