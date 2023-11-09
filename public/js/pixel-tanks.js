@@ -1487,14 +1487,16 @@ function Game() {
           GUI.draw.fillRect(c[i], 900, 100, 100);
         } else {
           GUI.draw.fillStyle = '#FFFFFF';
+          GUI.draw.globalAlpha = 0;
           var l = 0, blocks = this.hostupdate.b, len = blocks.length;
           while (l<len) {
             if (!this.collision(this.tank.x, this.tank.y) && PixelTanks.userData.items[i] === 'bomb') {
               GUI.draw.fillStyle = '#00ff00';
+              GUI.draw.globalAlpha = .25;
             }
             l++;
           }
-          GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
+          GUI.draw.globalAlpha += .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
           GUI.draw.fillRect(c[i], 900, 100, 100);
         }
         GUI.draw.globalAlpha = 1;
