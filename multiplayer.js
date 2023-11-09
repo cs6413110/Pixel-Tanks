@@ -505,7 +505,7 @@ class TDM extends Multiplayer {
           t.team = t.username+':'+(t.color === '#FF0000' ? 'RED' : 'BLUE');
         });
         this.levelReader(duelsLevels[0]);
-      } else this.global = 'Starting in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
+      } else if (this.pt.length >= 4) this.global = 'Starting in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
     } else if (this.mode === 1) {
       this.pt.forEach(t => {
         const spawn = getTeam(t.team) === 'BLUE' ? 0 : 1;
