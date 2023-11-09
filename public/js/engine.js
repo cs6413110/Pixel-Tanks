@@ -495,7 +495,7 @@ const bullet_settings = {
 class Shot {
   constructor(x, y, xm, ym, type, rotation, team, rank, host) {
     this.team = team;
-    this.r = rotation; // USELESS?
+    this.r = rotation;
     this.type = type;
     this.host = host;
     this.e = Date.now();
@@ -518,8 +518,8 @@ class Shot {
   }
 
   static calc(x, y, xm, ym) {
-    const r = 70, a = Math.atan((ym/xm)*180/Math.PI);
-    return {x: r*Math.cos(a*Math.PI/180)+x, y: r*Math.sin(a*Math.PI/180)+y};
+    const r = 70, a = Math.atan(ym/xm);
+    return {x: r*Math.cos(a)+x, y: r*Math.sin(a)+y};
   }
 
   collision() {
@@ -906,6 +906,7 @@ class AI {
   }
 
   generatePath() {
+    try {
     const sx = (this.x-10)/100, sy = (this.y-10)/100;
     let cir, coords = [], limiter, tpx, tpy, epx, epy;
     let tx = Math.floor((this.target.x+40)/100), ty = Math.floor((this.target.y+40)/100), ranged = Math.max(sx-tx, sy-ty) > [1, 5, 5][this.role-1];
@@ -959,6 +960,7 @@ class AI {
       if (!coords.length) return this.path = {p: [], m: this.mode, t: Date.now(), o: Date.now()}; 
     }
     if (this.mode !== 0) this.path = {p: pathfind(sx, sy, tx, ty, this.host.map.clone()).slice(0, 5), m: this.mode, t: Date.now(), o: Date.now()}; 
+    } catch(e) {console.log(e);try {alert(e)} catch(e) {}}
   }
 
   choosePath(p) {
