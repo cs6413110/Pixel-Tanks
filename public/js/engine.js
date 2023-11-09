@@ -518,8 +518,14 @@ class Shot {
   }
 
   static calc(x, y, xm, ym) {
-    const r = 70, a = Math.atan(ym/xm);
-    return {x: r*Math.cos(a)+x, y: r*Math.sin(a)+y};
+    const r = 70;
+    const a = xm === 0 ? 1000000 : ym / xm;
+    const b = xm === 0 ? 0 : (a > 0 ? -1 : 1);
+    const c = Math.sqrt(r**2+(r*a)**2);
+    const d = r*c;
+    const cx = -r*b*d/c**2;
+    const cy = Math.abs(r*a)*d/c**2;
+    return {x: x+cx*(ym >= 0 ? 1 : -1), y: y+cy*(ym >= 0 ? 1 : -1)};
   }
 
   collision() {
