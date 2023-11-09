@@ -518,8 +518,8 @@ class Shot {
   }
 
   static calc(x, y, xm, ym) {
-    const r = 70*Math.PI/180, a = Math.atan(ym/xm);
-    return {x: r*Math.cos(a)+x, y: r*Math.sin(a)+y};
+    const r = 70, a = Math.atan(ym/xm);
+    return {x: r*Math.cos(a*Math.PI/180)+x, y: r*Math.sin(a*Math.PI/180)+y};
   }
 
   collision() {
