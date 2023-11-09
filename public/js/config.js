@@ -242,7 +242,7 @@ const images = {
     error: '/animations/error',
     error_: { frames: 10, speed: 250, kill: 10, type: 2 },
     magic: '/animations/magic',
-    magic_: { frames: 69, speed: 75, kill: 51, type: 2 },
+    magic_: { frames: 69, speed: 50, kill: 51, type: 2 },
     /*securly: '/animations/securly',
     securly_: {frames: 1, speed: 9900, kill: 1, type: 3},*/
     anvil: '/animations/anvil',
