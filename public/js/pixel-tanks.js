@@ -1480,26 +1480,17 @@ function Game() {
       GUI.draw.globalAlpha = 0.5;
       const c = [500, 666, 832, 998];
       for (let i = 0; i < 4; i++) {
-        GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], c[i], 900, 100, 100, 1);
+        const item = PixelTanks.userData.items[i];
+        GUI.drawImage(PixelTanks.images.items[item], c[i], 900, 100, 100, 1);
         if (!this['canItem'+i]) {
           GUI.draw.fillStyle = '#000000';
           GUI.draw.globalAlpha = .5;
           GUI.draw.fillRect(c[i], 900, 100, 100);
         } else {
           GUI.draw.fillStyle = '#FFFFFF';
-          GUI.draw.globalAlpha = 0;
-          var l = 0, blocks = this.hostupdate.b, len = blocks.length;
-          while (l<len) {
-            if (!this.collision(this.tank.x, this.tank.y) && PixelTanks.userData.items[i] === 'bomb') {
-              GUI.draw.fillStyle = '#00ff00';
-              GUI.draw.globalAlpha = .25;
-            }
-            l++;
-          }
-          if (PixelTanks.userData.items[i] === 'shield' && t.shields <= 0) GUI.draw.fillStyle = '#00ff00';
-          if (PixelTanks.userData.items[i] === 'tape' && t.hp <= t.maxhp/2) GUI.draw.fillStyle = '#00ff00';
-          if (PixelTanks.userData.items[i] === 'glu' && t.hp <= t.maxhp/2) GUI.draw.fillStyle = '#00ff00';
-          GUI.draw.globalAlpha += .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
+          const tank = t.find(tank => tank.username === PixelTanks.user.username);
+          if (item === 'bomb' && !this.collision(tank.x, tank.y) || (item === 'shield' && tank.shields <= 0) || (item === 'tape' && tank.hp <= tank.maxHp/2) || (item === 'glu' && tank.hp <= tank.maxHp/2)) GUI.draw.fillStyle = '#00FF00';
+          GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
           GUI.draw.fillRect(c[i], 900, 100, 100);
         }
         GUI.draw.globalAlpha = 1;
