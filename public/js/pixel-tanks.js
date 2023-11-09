@@ -1498,7 +1498,6 @@ function Game() {
           }
           if (PixelTanks.userData.items[i] === 'shield' && t.shields === 0) {
             GUI.draw.fillStyle = '#00ff00';
-            GUI.draw.globalAlpha = .25;
           }
           GUI.draw.globalAlpha += .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
           GUI.draw.fillRect(c[i], 900, 100, 100);
