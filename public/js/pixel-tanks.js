@@ -30,6 +30,8 @@ const loadMessages = [
   `Placing Blocks...`,
 ];
 
+const loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)]
+
 document.head.appendChild(msgpack);
 function Game() {
   class MegaSocket {
@@ -413,7 +415,7 @@ function Game() {
   
     static updateBootProgress(progress) {
       GUI.clear();
-      GUI.drawText(loadMessages[Math.floor(Math.random()*loadMessages.length)]+Math.round(progress*100)+'%', 800, 500, 50, '#ffffff', 0.5);
+      GUI.drawText(loadMessage+Math.round(progress*100)+'%', 800, 500, 50, '#ffffff', 0.5);
     }
 
     static boot() {
