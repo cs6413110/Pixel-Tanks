@@ -518,7 +518,7 @@ class Shot {
   }
 
   static calc(x, y, xm, ym) {
-    const r = 70, a = Math.atan(ym/xm);
+    const r = 70, a = Math.atan((ym/xm)*180/Math.PI);
     return {x: r*Math.cos(a*Math.PI/180)+x, y: r*Math.sin(a*Math.PI/180)+y};
   }
 
