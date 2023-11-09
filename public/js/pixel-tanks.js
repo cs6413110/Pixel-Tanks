@@ -896,7 +896,7 @@ function Game() {
         pause: {
           buttons: [[128, 910, 1460, 76, function() {
             PixelTanks.user.player.implode();
-            Menus.trigger('main');
+            Menus.trigger('multiplayer');
           }, true]],
           listeners: {},
           cdraw: () => {},
@@ -1415,7 +1415,7 @@ function Game() {
       }
       if (this.multiplayer) if (this.socket.status !== 'connected' ) {
         PixelTanks.user.player.implode();
-        Menus.trigger('main');
+        Menus.trigger('multiplayer');
       }
       this.fps++;
       const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
