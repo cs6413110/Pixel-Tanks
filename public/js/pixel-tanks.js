@@ -1655,7 +1655,7 @@ function Game() {
     playAnimation(id) {
       try {
       this.tank.animation = {id: id, frame: 0};
-      clearAnimation(this.animationTimeout);
+      clearTimeout(this.animationTimeout);
       clearInterval(this.animationInterval);
       this.animationInterval = setInterval(() => {
         if (this.tank.animation.frame === PixelTanks.images.animations[id+'_'].frames) {
