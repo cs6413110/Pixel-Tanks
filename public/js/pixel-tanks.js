@@ -1522,6 +1522,7 @@ function Game() {
       while (l<len) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .2;
+        
         GUI.draw.fillRect(0, 800-l*30, GUI.draw.measureText(this.hostupdate.logs[l].m).width, 30);
         GUI.draw.globalAlpha = 1;
         GUI.drawText(this.hostupdate.logs[l].m, 0, 800-l*30, 30, this.hostupdate.logs[l].c, 0);
@@ -1534,7 +1535,11 @@ function Game() {
         GUI.draw.fillRect(0, 830, GUI.draw.measureText(this.msg).width, 30);
         GUI.draw.globalAlpha = 1;
         GUI.drawText(this.msg, 0, 830, 30, '#ffffff', 0);
-        this.playAnimation('text');
+        if (!this.tank.animation || this.tank.animation.id !== 'text') this.playAnimation('text');
+      } else if (this.tank.animation) if (this.tank.animation.id === 'text') {
+        this.tank.animation = false;
+        clearInterval(this.animationInterval);
+        clearTimeout(this.animationTimeout);
       }
       
       if (this.paused) {
@@ -1649,11 +1654,12 @@ function Game() {
 
     playAnimation(id) {
       this.tank.animation = {id: id, frame: 0};
+      clearAnimation(this.animationTimeout);
       clearInterval(this.animationInterval);
       this.animationInterval = setInterval(function() {
         if (this.tank.animation.frame === PixelTanks.images.animations[id+'_'].frames) {
           clearInterval(this.animationInterval);
-          setTimeout(function() {this.tank.animation = false}.bind(this), PixelTanks.images.animations[id+'_'].speed);
+          this.animationTimeout = setTimeout(() => {this.tank.animation = false}, PixelTanks.images.animations[id+'_'].speed);
         } else this.tank.animation.frame++;
       }.bind(this), PixelTanks.images.animations[id+'_'].speed);
     }
