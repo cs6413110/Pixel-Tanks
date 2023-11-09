@@ -936,7 +936,8 @@ class AI {
       tpx = tx;
       tpy = ty;
     }
-    if (this.role === 3 && bond) limiter = [2];
+    if (this.role === 3 && bond) {
+      limiter = [2];
     } else if (this.role === 1 && !ranged) {
       limiter = [2, 3];
     } else {
