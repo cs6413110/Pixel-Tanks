@@ -11,6 +11,25 @@ msgpack.onload = () => {
   }
   document.head.appendChild(pathfinding);
 }
+
+const loadMessages = [
+  `Exterminating AI Pests...`,
+  `Reloading Instas...`,
+  `Repairing Turrets...`,
+  `Sorting Cosmetics...`,
+  `Spotting Stealths...`,
+  `Putting Out Fires...`,
+  `Building Levels...`,
+  `Loading Up Crates...`,
+  `Filling Up Shop Stocks...`,
+  `Making Menus...`,
+  `Coding New Features...`,
+  `Farming Flats...`,
+  `Whipping Slaves...`,
+  `Asserting Dominance...`,
+  `Placing Blocks...`,
+];
+
 document.head.appendChild(msgpack);
 function Game() {
   class MegaSocket {
