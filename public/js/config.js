@@ -226,7 +226,7 @@ const images = {
     heal_: { frames: 16, speed: 25 },
     fire: '/animations/fire',
     fire_: { frames: 1, speed: 50 },
-    text: '/animations/textfire',
+    text: '/animations/text',
     text_: { frames: 41, speed: 50 },
     explosion: '/animations/explosion',
   },
