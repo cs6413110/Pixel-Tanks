@@ -1653,7 +1653,6 @@ function Game() {
     }
 
     playAnimation(id) {
-      try {
       this.tank.animation = {id: id, frame: 0};
       clearTimeout(this.animationTimeout);
       clearInterval(this.animationInterval);
@@ -1663,7 +1662,6 @@ function Game() {
           this.animationTimeout = setTimeout(() => {this.tank.animation = false}, PixelTanks.images.animations[id+'_'].speed);
         } else this.tank.animation.frame++;
       }, PixelTanks.images.animations[id+'_'].speed);
-      } catch(e) {alert(e)}
     }
 
     useItem(id, slot) {
