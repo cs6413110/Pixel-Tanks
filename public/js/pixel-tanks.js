@@ -13,19 +13,21 @@ msgpack.onload = () => {
 }
 
 const loadMessages = [
-  `Exterminating AI Pests...`,
-  `Reloading Instas...`,
-  `Repairing Turrets...`,
-  `Sorting Cosmetics...`,
-  `Spotting Stealths...`,
-  `Putting Out Fires...`,
-  `Building Levels...`,
-  `Loading Up Crates...`,
-  `Filling Up Shop Stocks...`,
-  `Making Menus...`,
-  `Coding New Features...`,
-  `Farming Flats...`,
-  `Placing Blocks...`,
+  'Exterminating AI Pests...',
+  'Recharging Instas...',
+  'Summoning Turrets...',
+  'Sorting Cosmetics...',
+  'Spotting Stealths...',
+  'Putting Out Fires...',
+  'Generating Levels...',
+  'Loading Up Crates...',
+  'Filling Up Shop Stocks...',
+  'Drawing Menus...',
+  'Coding New Features...',
+  'Placing Blocks...',
+  'Launching Missles...',
+  'Toasting Bread...',
+  'Booting Game Engine...',
 ];
 
 const loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)]
