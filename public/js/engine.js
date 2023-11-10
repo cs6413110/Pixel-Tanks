@@ -955,7 +955,7 @@ class AI {
       if (x >= 0 && y >= 0 && x <= 29 && y <= 29) coords.push({x, y, d});
     }
     if (!coords.length) return this.path = {p: [], m: this.mode, t: Date.now(), o: Date.now()};
-    coords.sort((a, b) => mode !== 2 ? a.d - b.d : b.d - a.d);
+    coords.sort((a, b) => this.mode !== 2 ? a.d - b.d : b.d - a.d);
     for (let i = 0; i <= 5; i++) {
       const paths = coords.slice(0, Math.min(5, coords.length));
       const r = this.choosePath(paths.length);
