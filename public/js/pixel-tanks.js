@@ -25,8 +25,6 @@ const loadMessages = [
   `Making Menus...`,
   `Coding New Features...`,
   `Farming Flats...`,
-  `Whipping Slaves...`,
-  `Asserting Dominance...`,
   `Placing Blocks...`,
 ];
 
