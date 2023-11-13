@@ -916,6 +916,7 @@ function Game() {
         },
         pause: {
           buttons: [[128, 910, 1460, 76, function() {
+            this.paused = false;
             PixelTanks.user.player.implode();
             Menus.trigger('multiplayer');
           }, true]],
