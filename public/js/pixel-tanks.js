@@ -33,7 +33,7 @@ const loadMessages = [
 let loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)];
 setInterval(() => {
   loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)];
-}, Math.floor(Math.random()*500);
+}, Math.floor(Math.random()*500));
 
 document.head.appendChild(msgpack);
 function Game() {
