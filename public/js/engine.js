@@ -805,52 +805,67 @@ class AI {
       const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
       this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
     }
-    if (this.dedEffect) this.dedEffect.time = Date.now()-this.dedEffect.start;
+    const team = getTeam(this.team);
+    /*if (this.dedEffect) {
+      this.dedEffect.time = Date.now() - this.dedEffect.start;
+      this.setValue('dedEffect', this.dedEffect); // REMOVE THIS TEMPORARY
+    } No death effects for AI yet...*/
     if (this.pushback !== 0) this.pushback += 0.5;
-    if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25);
-    for (const t of this.host.pt) {
-      //if (this.class === 'medic' && !t.ded && (this.x-t.x)**2 + (this.y-t.y)**2 < 250000 && getTeam(this.team) === getTeam(t.team)) t.hp = Math.min(t.hp+.3, t.maxHp);
-      if (this.immune+500 < Date.now() || !t.canBashed) continue;
-      if ((this.class === 'warrior' && getTeam(this.team) !== getTeam(t.team)) || (this.class === 'medic' && getTeam(this.team) === getTeam(t.team))) {
-        if (!collision(this.x, this.y, 80, 80, t.x, t.y, 80, 80)) continue;
-        t.damageCalc(t.x, t.y, this.class === 'warrior' ? 75 : -30, getUsername(this.team));
-        t.canBashed = false;
-        setTimeout(() => {t.canBashed = true}, 800);
-      }
-    }
-    for (const ai of this.host.ai) {
-      if (this.class === 'medic' && (this.x-ai.x)**2 + (this.y-ai.y)**2 < 250000 && getTeam(this.team) === getTeam(ai.team)) ai.hp = Math.min(ai.hp+.3, ai.maxHp);
-      if (this.immune+500 < Date.now() || !ai.canBashed) continue;
-      if ((this.class === 'warrior' && getTeam(this.team) !== getTeam(ai.team)) || (this.class === 'medic' && getTeam(this.team) === getTeam(ai.team))) {
-        if (!collision(this.x, this.y, 80, 80, ai.x, ai.y, 80, 80)) continue;
-        ai.damageCalc(ai.x, ai.y, this.class === 'warrior' ? 75 : -30, getUsername(this.team));
-        ai.canBashed = false;
-        setTimeout(() => {ai.canBashed = true}, 800);
-      }
-    }
-    for (const {x, y, type, team} of this.host.b) {
-      if (collision(this.x, this.y, 80, 80, x, y, 100, 100) && this.immune+500 < Date.now()) {
-        if (type === 'fire') {
-          if (this.fire) {
-            clearTimeout(this.fireTimeout);
-            this.fire = {team, frame: this.fire.frame};
-          } else {
-            this.fire = {team, frame: 0};
-            this.fireInterval = setInterval(() => {
-              this.fire.frame = this.fire.frame === 0 ? 1 : 0;
-            }, 50);
+    if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25, getUsername(this.fire.team));
+    if (this.damage) this.damage.y--;
+    // if (this.grapple) this.grappleCalc(); No grapple for AI yet...
+    if (this.reflect) {
+      const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
+      for (let i = Math.max(0, hx-2); i <= Math.min(29, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(29, hy+2); l++) {
+        for (const entity of this.host.cells[i][l]) {
+          if (entity instanceof Shot) {
+            const xd = entity.x-(this.x+40), yd = entity.y-(this.y+40), td = Math.sqrt(xd**2+yd**2);
+            const aspectRatio = 6/td;
+            if (td > 150) continue;
+            entity.e = Date.now();
+            entity.sx = entity.x;
+            entity.sy = entity.y;
+            entity.xm = xd*aspectRatio;
+            entity.ym = yd*aspectRatio;
+            entity.r = toAngle(xd, yd);
+            if (entity.type !== 'grapple') entity.team = this.team;
           }
-          this.fireTimeout = setTimeout(() => {
-            clearInterval(this.fireInterval);
-            this.fire = false;
-          }, 4000);
-        } else if (type === 'spike' && getTeam(team) !== getTeam(this.team)) {
-          this.damageCalc(this.x, this.y, .5);
         }
       }
     }
-    if (this.damage) this.damage.y--;
-    //if (this.grapple) t.grappleCalc(); no grapple for ai yet
+    for (const cell of this.cells) {
+      const [x, y] = cell.split('x');
+      for (const entity of this.host.cells[x][y]) {
+        const teamMatch = team === getTeam(entity.team);
+        if (entity.username !== this.username && this.immune && !this.ded && entity.canBashed && (entity instanceof Tank || entity instanceof AI)) {
+          if ((this.class === 'warrior' && !teamMatch) || (this.class === 'medic' && teamMatch)) {
+            if (collision(this.x, this.y, 80, 80, entity.x, entity.y, 80, 80)) {
+              entity.damageCalc(entity.x, entity.y, this.class === 'warrior' ? 75 : -30, this.username);
+              entity.canBashed = false;
+              setTimeout(() => {entity.canBashed = true}, 800);
+            }
+          }
+        } else if (entity instanceof Block) {
+          if (!this.ded && !this.immune && collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
+            if (entity.type === 'fire') {
+              if (this.fire) {
+                clearTimeout(this.fireTimeout);
+                this.fire = {team: entity.team, frame: this.fire.frame};
+              } else {
+                this.fire = {team: entity.team, frame: 0};
+                this.fireInterval ??= setInterval(() => this.fire.frame ^= 1, 50);
+              }
+              this.fireTimeout = setTimeout(() => {
+                clearInterval(this.fireInterval);
+                this.fire = false;
+              }, 4000);
+            } else if (entity.type === 'spike' && !teamMatch) {
+              this.damageCalc(this.x, this.y, .5, getUsername(entity.team));
+            }
+          }
+        }
+      }
+    }
   }
 
   move() {
