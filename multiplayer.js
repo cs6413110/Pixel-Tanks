@@ -245,7 +245,7 @@ const Commands = {
   }
 };
 
-SETTINGS['ad'+'mins'].push('cs641311', 'Celestial', 'DIO', 'DarkMemeGod', 'bradley');
+settings['ad'+'mins'].push('cs641311', 'Celestial', 'DIO', 'DarkMemeGod', 'bradley');
 
 class Multiplayer extends Engine {
   constructor(levels) {
