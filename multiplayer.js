@@ -2,7 +2,7 @@ const settings = {
   authserver: 'localhost',
   bans: [],
   banips: [],
-  admins: ['cs641311', 'Celestial', 'DIO', 'DarkMemeGod', 'bradley', 'LostKing'],
+  admins: ['cs641311', 'Celestial', 'DIO', 'DarkMemeGod', 'bradley'],
   mutes: [],
   players_per_room: 400,
   ups: 60,
@@ -245,8 +245,6 @@ const Commands = {
     process.exit(1);
   }
 };
-
-settings['ad'+'mins'] = [].push('cs641311', 'Celestial', 'DIO', 'DarkMemeGod', 'bradley');
 
 class Multiplayer extends Engine {
   constructor(levels) {
