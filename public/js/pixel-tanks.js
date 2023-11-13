@@ -11,30 +11,6 @@ msgpack.onload = () => {
   }
   document.head.appendChild(pathfinding);
 }
-
-const loadMessages = [
-  'Exterminating AI Pests...',
-  'Recharging Instas...',
-  'Summoning Turrets...',
-  'Sorting Cosmetics...',
-  'Spotting Stealths...',
-  'Putting Out Fires...',
-  'Generating Levels...',
-  'Loading Up Crates...',
-  'Filling Up Shop Stocks...',
-  'Drawing Menus...',
-  'Coding New Features...',
-  'Placing Blocks...',
-  'Launching Missles...',
-  'Toasting Bread...',
-  'Booting Game Engine...',
-];
-
-let loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)];
-setInterval(() => {
-  loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)];
-}, Math.floor(Math.random()*500));
-
 document.head.appendChild(msgpack);
 function Game() {
   class MegaSocket {
@@ -418,7 +394,8 @@ function Game() {
   
     static updateBootProgress(progress) {
       GUI.clear();
-      GUI.drawText(loadMessage, 800, 500, 50, '#ffffff', 0.5);
+      if (Math.random() < .05) PixelTanks.loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)];
+      GUI.drawText(PixelTanks.loadMessage, 800, 500, 50, '#ffffff', 0.5);
       GUI.draw.fillStyle = '#FFFFFF';
       GUI.draw.fillRect(400, 600, 800, 60);
       GUI.draw.fillStyle = '#000000';
@@ -429,6 +406,24 @@ function Game() {
 
     static boot() {
       PixelTanks.user = {};
+      const loadMessages = [
+        'Exterminating AI Pests...',
+        'Recharging Instas...',
+        'Summoning Turrets...',
+        'Sorting Cosmetics...',
+        'Spotting Stealths...',
+        'Putting Out Fires...',
+        'Generating Levels...',
+        'Loading Up Crates...',
+        'Filling Up Shop Stocks...',
+        'Drawing Menus...',
+        'Coding New Features...',
+        'Placing Blocks...',
+        'Launching Missles...',
+        'Toasting Bread...',
+        'Booting Game Engine...',
+      ];
+      PixelTanks.loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)];
       const config = document.createElement('SCRIPT');
       config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
       config.onload = () => {
