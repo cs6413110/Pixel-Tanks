@@ -1436,7 +1436,7 @@ function Game() {
       }
       if (this.multiplayer) if (this.socket.status !== 'connected' ) {
         PixelTanks.user.player.implode();
-        Menus.trigger('multiplayer');
+        Menus.trigger('start');
       }
       this.fps++;
       const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
