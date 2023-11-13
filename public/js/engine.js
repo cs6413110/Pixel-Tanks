@@ -1022,7 +1022,7 @@ class AI {
 
   fireCalc(tx, ty, type) {
     this.pushback = -3;
-    type = type || this.role !== 0 && Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
+    if (type === undefiend) type = this.role !== 0 && Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
     for (let [i, len] = type === 'shotgun' ? [-10, 15] : [0, 1]; i < len; i += 5) {
       const r = this.r+i;
       const {x, y} = toPoint(r);
@@ -1031,7 +1031,7 @@ class AI {
     if (type === 'powermissle') {
       this.canPowermissle = false;
       setTimeout(() => {this.canPowermissle = true}, 10000);
-    } else if (type === 'shotgun' || type === 'bullet') {
+    } else {
       this.canFire = false;
       setTimeout(() => {this.canFire = true}, type === 'shotgun' ? 600 : 200);
     }
