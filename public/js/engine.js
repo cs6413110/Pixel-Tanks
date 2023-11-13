@@ -927,7 +927,6 @@ class AI {
   }
 
   generatePath() {
-    try {
     const sx = (this.x-10)/100, sy = (this.y-10)/100;
     let cir, coords = [], limiter, tpx, tpy, epx, epy;
     let tx = Math.floor((this.target.x+40)/100), ty = Math.floor((this.target.y+40)/100), ranged = Math.max(sx-tx, sy-ty) > [1, 5, 5][this.role-1];
@@ -981,7 +980,6 @@ class AI {
       if (!coords.length) return this.path = {p: [], m: this.mode, t: Date.now(), o: Date.now()}; 
     }
     if (this.mode !== 0) this.path = {p: pathfind(sx, sy, tx, ty, this.host.map.clone()).slice(0, 5), m: this.mode, t: Date.now(), o: Date.now()}; 
-    } catch(e) {console.log(e);try {alert(e)} catch(e) {}}
   }
 
   choosePath(p) {
@@ -1004,6 +1002,7 @@ class AI {
       }
       if (target && (bond || this.role !== 3)) break;
     }
+    if (bond) this.bond = bond; 
     if (!target) {
       if (this.role === 0) this.r++;
       if (this.target) {
