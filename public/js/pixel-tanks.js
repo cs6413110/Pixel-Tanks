@@ -421,7 +421,7 @@ function Game() {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(405, 605, 790, 50);
       GUI.draw.fillStyle = '#FFFFFF';
-      GUI.draw.fillRect(415, 615, progress*770, 30);
+      GUI.draw.fillRect(410, 610, progress*780, 40);
     }
 
     static boot() {
