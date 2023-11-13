@@ -394,7 +394,7 @@ function Game() {
   
     static updateBootProgress(progress) {
       GUI.clear();
-      if (Math.random() < .05) PixelTanks.loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)];
+      if (Math.random() < .05) PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
       GUI.drawText(PixelTanks.loadMessage, 800, 500, 50, '#ffffff', 0.5);
       GUI.draw.fillStyle = '#FFFFFF';
       GUI.draw.fillRect(400, 600, 800, 60);
@@ -406,7 +406,7 @@ function Game() {
 
     static boot() {
       PixelTanks.user = {};
-      const loadMessages = [
+      PixelTanks.loadMessages = [
         'Exterminating AI Pests...',
         'Recharging Instas...',
         'Summoning Turrets...',
