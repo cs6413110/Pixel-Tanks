@@ -270,6 +270,37 @@ class Multiplayer extends Engine {
 
   send() {
     for (const t of this.pt) {
+      const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
+      const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;
+      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
+      let send = false;
+      if (render.logs !== t.render.logs) send = true;
+      for (const p of ['b', 'pt', 'ai', 's', 'd']) {
+        const ids = new Set(this[p].map(e => e.id));
+        this[p].filter(e => A.collider(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
+          render[p].add(e.id);
+          if (!t.render[p].has(e.id) || e.updatedLast > t.lastUpdate) {
+            message[p].push(e.raw);
+            send = true;
+          }
+        });
+        t.render[p].forEach(id => {
+          if (!render[p].has(id) || !ids.has(id)) {
+            message.delete[p].push(id);
+            send = true;
+          }
+        });
+      }
+      t.render = render;
+      t.lastUpdate = Date.now();
+      if (send) t.socket.send(message);
+      outgoing_per_second++;
+    }
+  }
+
+
+  cellSend() {
+    for (const t of this.pt) {
       const fx = Math.floor(t.x/100), fy = Math.floor(t.y/100), sy = Math.max(fy-7, 0), ey = Math.min(fy+7, 30), sx = Math.max(fx-10, 0), ex = Math.min(fx+10, 30);
       const newrender = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length, sx, sy, ex, ey};
       const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};      
