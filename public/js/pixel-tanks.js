@@ -416,6 +416,10 @@ function Game() {
     static updateBootProgress(progress) {
       GUI.clear();
       GUI.drawText(loadMessage+Math.round(progress*100)+'%', 800, 500, 50, '#ffffff', 0.5);
+      GUI.draw.fillStyle = '#000000';
+      GUI.draw.fillRect(700, 575, 200, 50);
+      GUI.draw.fillStyle = '#00FF00';
+      GUI.draw.fillRect(690, 565, 1.8*Math.round(progress*100), 30);
     }
 
     static boot() {
