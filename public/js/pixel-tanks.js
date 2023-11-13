@@ -419,9 +419,9 @@ function Game() {
       GUI.draw.fillStyle = '#FFFFFF';
       GUI.draw.fillRect(400, 600, 800, 60);
       GUI.draw.fillStyle = '#000000';
-      GUI.draw.fillRect(410, 610, 780, 40);
+      GUI.draw.fillRect(405, 605, 790, 50);
       GUI.draw.fillStyle = '#FFFFFF';
-      GUI.draw.fillRect(420, 620, progress*760, 20);
+      GUI.draw.fillRect(415, 615, progress*770, 30);
     }
 
     static boot() {
