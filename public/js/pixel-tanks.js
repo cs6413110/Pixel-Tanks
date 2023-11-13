@@ -423,7 +423,7 @@ function Game() {
         'Toasting Bread...',
         'Booting Game Engine...',
       ];
-      PixelTanks.loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)];
+      PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
       const config = document.createElement('SCRIPT');
       config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
       config.onload = () => {
