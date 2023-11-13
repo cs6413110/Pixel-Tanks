@@ -455,9 +455,9 @@ class Block {
     for (const cell of this.cells) {
       const [x, y] = cell.split('x');
       this.host.cells[x][y].delete(this);
-      let deletePathfindGrid = true;
+      let deletePathfindGrid = this.x % 100 === 0 && this.y % 100 === 0;
       for (const e of this.host.cells[x][y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) deletePathfindGrid = false;
-      if (deletePathfindGrid && this.x % 100 === 0 && this.y % 100 === 0) this.host.map.setWalkableAt(x, y, true);
+      if (deletePathfindGrid) this.host.map.setWalkableAt(x, y, true);
     }
   }
 }
@@ -1016,7 +1016,7 @@ class AI {
     } else {
       if (this.target) this.seeTimeout = clearTimeout(this.seeTimeout);
       this.seeTarget = true;
-      this.target = target;
+      this.target = {x: target.x, y: target.y};
       this.mode = (this.hp < .3 * this.maxHp && this.role !== 1) ? 2 : 1;
     }
   }
@@ -1032,7 +1032,7 @@ class AI {
     if (type === 'powermissle') {
       this.canPowermissle = false;
       setTimeout(() => {this.canPowermissle = true}, 10000);
-    } else {
+    } else if (type === 'shotgun' || type === 'bullet') {
       this.canFire = false;
       setTimeout(() => {this.canFire = true}, type === 'shotgun' ? 600 : 200);
     }
