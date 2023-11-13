@@ -1015,7 +1015,7 @@ class AI {
     } else {
       if (this.target) this.seeTimeout = clearTimeout(this.seeTimeout);
       this.seeTarget = true;
-      this.target = {x: target.x, y: target.y};
+      this.target = {x: target.x, y: target.y, id: target.id};
       this.mode = (this.hp < .3 * this.maxHp && this.role !== 1) ? 2 : 1;
     }
   }
