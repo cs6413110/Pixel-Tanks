@@ -30,9 +30,9 @@ const loadMessages = [
   'Booting Game Engine...',
 ];
 
-let loadMessage;
+let loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)];
 setInterval(() => {
-  loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)]
+  loadMessage = loadMessages[Math.floor(Math.random()*loadMessages.length)];
 }, 1000);
 
 document.head.appendChild(msgpack);
