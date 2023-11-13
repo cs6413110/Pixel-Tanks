@@ -1801,7 +1801,7 @@ function Game() {
           this.timers.class = {time: Date.now(), cooldown: 10000};
         }
         setTimeout(() => {this.canClass = true}, this.timers.class.cooldown);
-      } else if (k === 27) {
+      } else if (k === 27 && this.multiplayer) {
         this.paused = !this.paused;
         if (this.paused) {
           Menus.menus.pause.addListeners();
