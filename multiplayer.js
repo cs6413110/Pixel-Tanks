@@ -8,7 +8,7 @@ const settings = {
   ups: 60,
 }
 
-const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername} = require('./public/js/engine.js');
+const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername, collision} = require('./public/js/engine.js');
 
 const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
@@ -277,7 +277,7 @@ class Multiplayer extends Engine {
       if (render.logs !== t.render.logs) send = true;
       for (const p of ['b', 'pt', 'ai', 's', 'd']) {
         const ids = new Set(this[p].map(e => e.id));
-        this[p].filter(e => A.collider(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
+        this[p].filter(e => collision(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
           render[p].add(e.id);
           if (!t.render[p].has(e.id) || e.updatedLast > t.lastUpdate) {
             message[p].push(e.raw);
