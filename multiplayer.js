@@ -294,7 +294,6 @@ class Multiplayer extends Engine {
       t.render = render;
       t.lastUpdate = Date.now();
       if (send) t.socket.send(message);
-      outgoing_per_second++;
     }
   }
 
