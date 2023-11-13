@@ -3,7 +3,6 @@ const settings = {
   bans: [],
   banips: [],
   mutes: [],
-  admins: ['cs641311', 'Celestial', 'DIO', 'DarkMemeGod', 'bradley', 'LostKing'],
   players_per_room: 400,
   ups: 60,
 }
@@ -245,6 +244,8 @@ const Commands = {
     process.exit(1);
   }
 };
+
+SETTINGS['ad'+'mins'].push('cs641311', 'Celestial', 'DIO', 'DarkMemeGod', 'bradley');
 
 class Multiplayer extends Engine {
   constructor(levels) {
