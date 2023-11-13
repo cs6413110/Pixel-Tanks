@@ -2,7 +2,7 @@ const settings = {
   authserver: 'localhost',
   bans: [],
   banips: [],
-  admins: ['cs641311', 'Celestial', 'DIO', 'DarkMemeGod', 'bradley'],
+  admins: ['cs641311', 'Celestial', 'DIO', 'DarkMemeGod', 'bradley', 'LostKing'],
   mutes: [],
   players_per_room: 400,
   ups: 60,
@@ -32,6 +32,7 @@ const deathMessages = [
   `{victim} was fed a healthy dose of explosives by {killer}`,
   `{victim} became another number in {killer}'s kill streak`,
   `{victim} got wrecked by {killer}`,
+  `{victim} thought he was the king`
 ], joinMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
