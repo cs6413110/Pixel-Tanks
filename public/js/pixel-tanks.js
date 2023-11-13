@@ -919,6 +919,7 @@ function Game() {
             this.paused = false;
             PixelTanks.user.player.implode();
             Menus.trigger('multiplayer');
+            this.multiplayer = undefined;
           }, true]],
           listeners: {},
           cdraw: () => {},
@@ -1438,6 +1439,7 @@ function Game() {
       if (this.multiplayer) if (this.socket.status !== 'connected' ) {
         PixelTanks.user.player.implode();
         Menus.trigger('start');
+        this.multiplayer = undefined;
       }
       this.fps++;
       const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
@@ -1802,7 +1804,7 @@ function Game() {
           this.timers.class = {time: Date.now(), cooldown: 10000};
         }
         setTimeout(() => {this.canClass = true}, this.timers.class.cooldown);
-      } else if (k === 27 && this.multiplayer) {
+      } else if (k === 27 && this.multiplayer === 'multiplayer') {
         this.paused = !this.paused;
         if (this.paused) {
           Menus.menus.pause.addListeners();
