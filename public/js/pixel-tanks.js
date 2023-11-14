@@ -522,7 +522,8 @@ function Game() {
         victory: {
           buttons: [
             [656, 603, 313, 112, function() {
-            if (this.multiplayer === 'multiplayer') Menus.trigger('multiplayer'); else Menus.trigger('singleplayer');
+            let n = PixelTanks.user.player
+            if (n[2] === true) Menus.trigger('multiplayer'); else Menus.trigger('singleplayer');
           }, true],
             [558, 726, 505, 114, function() {
               alert('lol idk')
@@ -536,7 +537,8 @@ function Game() {
         defeat: {
           buttons: [
             [656, 603, 313, 112, function() {
-            if (this.multiplayer === 'multiplayer') Menus.trigger('multiplayer'); else Menus.trigger('singleplayer');
+            let n = PixelTanks.user.player
+            if (n[2] === true) Menus.trigger('multiplayer'); else Menus.trigger('singleplayer');
           }, true],
             [558, 726, 505, 114, function() {
               alert('lol idk')
@@ -924,9 +926,10 @@ function Game() {
         },
         pause: {
           buttons: [[128, 910, 1460, 76, function() {
+            let n = PixelTanks.user.player
             this.paused = false;
             PixelTanks.user.player.implode();
-            if (this.multiplayer === 'multiplayer') Menus.trigger('multiplayer'); else Menus.trigger('singleplayer');
+            if (n[2] === true) Menus.trigger('multiplayer'); else Menus.trigger('singleplayer');
             this.multiplayer = undefined;
           }, true]],
           listeners: {},
