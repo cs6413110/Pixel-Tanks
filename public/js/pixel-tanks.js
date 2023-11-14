@@ -1446,7 +1446,7 @@ function Game() {
       }
       if (this.multiplayer) if (this.socket.status !== 'connected' ) {
         PixelTanks.user.player.implode();
-        Menus.trigger('start');
+        Menus.trigger('main');
         this.multiplayer = undefined;
       }
       this.fps++;
