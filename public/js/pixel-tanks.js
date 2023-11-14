@@ -922,7 +922,7 @@ function Game() {
           buttons: [[128, 910, 1460, 76, function() {
             this.paused = false;
             PixelTanks.user.player.implode();
-            Menus.trigger('multiplayer');
+            if (this.multiplayer) Menus.trigger('multiplayer'); else Menus.trigger('singleplayer');
             this.multiplayer = undefined;
           }, true]],
           listeners: {},
