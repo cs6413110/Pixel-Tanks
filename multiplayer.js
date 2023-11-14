@@ -36,6 +36,7 @@ const deathMessages = [
 ], joinMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
+  `{idot} materialized`
 ], rageMessages = [
   `{idot} left the game`,
   `{idot} quit`,
