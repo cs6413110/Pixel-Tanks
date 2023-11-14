@@ -41,6 +41,7 @@ const deathMessages = [
   `{idot} left the game`,
   `{idot} quit`,
   `{idot} disconnected`,
+  `{idot} couldn't take it anymore`
 ];
 
 let tickspeed = ':(';
