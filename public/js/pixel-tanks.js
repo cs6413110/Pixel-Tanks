@@ -522,7 +522,7 @@ function Game() {
         victory: {
           buttons: [
             [656, 603, 313, 112, function() {
-            Menus.trigger('start');
+            Menus.trigger('main');
           }, true],
             [558, 726, 505, 114, function() {
               alert('lol idk')
@@ -536,7 +536,7 @@ function Game() {
         defeat: {
           buttons: [
             [656, 603, 313, 112, function() {
-            Menus.trigger('start');
+            Menus.trigger('main');
           }, true],
             [558, 726, 505, 114, function() {
               alert('lol idk')
@@ -926,7 +926,7 @@ function Game() {
           buttons: [[128, 910, 1460, 76, function() {
             this.paused = false;
             PixelTanks.user.player.implode();
-            Menus.trigger('start');
+            Menus.trigger('main');
             this.multiplayer = undefined;
           }, true]],
           listeners: {},
