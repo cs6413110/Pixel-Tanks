@@ -925,8 +925,8 @@ function Game() {
         pause: {
           buttons: [[128, 910, 1460, 76, function() {
             this.paused = false;
-            PixelTanks.user.player.implode();
             if (this.hostupdate.tickspeed === 'undefined') Menus.trigger('singleplayer'); else Menus.trigger('multiplayer');
+            PixelTanks.user.player.implode();
             this.multiplayer = undefined;
           }, true]],
           listeners: {},
