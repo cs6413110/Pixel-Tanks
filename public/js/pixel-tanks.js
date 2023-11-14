@@ -521,7 +521,9 @@ function Game() {
         },
         victory: {
           buttons: [
-            [656, 603, 313, 112, 'main', true],
+            [656, 603, 313, 112, function() {
+            if (this.multiplayer) Menus.trigger('multiplayer'); else Menus.trigger('singleplayer');
+          }, true],
             [558, 726, 505, 114, function() {
               alert('lol idk')
             }, true],
@@ -533,7 +535,9 @@ function Game() {
         },
         defeat: {
           buttons: [
-            [656, 603, 313, 112, 'main', true],
+            [656, 603, 313, 112, function() {
+            if (this.multiplayer) Menus.trigger('multiplayer'); else Menus.trigger('singleplayer');
+          }, true],
             [558, 726, 505, 114, function() {
               alert('lol idk')
             }, true],
