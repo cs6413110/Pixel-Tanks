@@ -227,7 +227,7 @@ const images = {
     fire: '/animations/fire',
     fire_: { frames: 1, speed: 50 },
     text: '/animations/text',
-    text_: { frames: 38, speed: 50 },
+    text_: { frames: 37, speed: 50 },
     explosion: '/animations/explosion',
   },
   deathEffects: {
