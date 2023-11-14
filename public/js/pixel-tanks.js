@@ -1584,8 +1584,8 @@ function Game() {
             GUI.drawImage(PixelTanks.images.tanks.top, 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
             if (t[i].cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t[i].cosmetic], 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
           }
-          Menus.menus.pause.draw([1200, 0, 400, 1000]);
         }
+        Menus.menus.pause.draw([1200, 0, 400, 1000]);
       }
     }
 
