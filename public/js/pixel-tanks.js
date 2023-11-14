@@ -1575,15 +1575,17 @@ function Game() {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(0, 0, 1600, 1000);
         GUI.draw.globalAlpha = 1;
-        for (let i = 0; i < t.length; i++) {
-          GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FFFFFF', 0);
-          PixelTanks.renderBottom(200, 250+i*90, 80, t[i].color, t[i].baseRotation);
-          GUI.drawImage(PixelTanks.images.tanks['bottom'+(t[i].baseFrame ? '' : '2')], 200, 250+i*90, 80, 80, 1, 40, 40, 0, 0, t[i].baseRotation);
-          PixelTanks.renderTop(200, 250+i*90, 80, t[i].color, t[i].r, t[i].pushback);
-          GUI.drawImage(PixelTanks.images.tanks.top, 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
-          if (t[i].cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t[i].cosmetic], 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
+        if (t.length >= 2) {
+          for (let i = 0; i < t.length; i++) {
+            GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FFFFFF', 0);
+            PixelTanks.renderBottom(200, 250+i*90, 80, t[i].color, t[i].baseRotation);
+            GUI.drawImage(PixelTanks.images.tanks['bottom'+(t[i].baseFrame ? '' : '2')], 200, 250+i*90, 80, 80, 1, 40, 40, 0, 0, t[i].baseRotation);
+            PixelTanks.renderTop(200, 250+i*90, 80, t[i].color, t[i].r, t[i].pushback);
+            GUI.drawImage(PixelTanks.images.tanks.top, 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
+            if (t[i].cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t[i].cosmetic], 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
+          }
+          Menus.menus.pause.draw([1200, 0, 400, 1000]);
         }
-        Menus.menus.pause.draw([1200, 0, 400, 1000]);
       }
     }
 
