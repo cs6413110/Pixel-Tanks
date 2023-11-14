@@ -422,6 +422,7 @@ function Game() {
         'Launching Missles...',
         'Toasting Bread...',
         'Booting Game Engine...',
+        'Hiding From Techers...',
       ];
       PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
       const config = document.createElement('SCRIPT');
@@ -525,7 +526,7 @@ function Game() {
             Menus.trigger('main');
           }, true],
             [558, 726, 505, 114, function() {
-              alert('lol idk')
+              alert('no')
             }, true],
           ],
           listeners: {},
@@ -541,7 +542,7 @@ function Game() {
             Menus.trigger('main');
           }, true],
             [558, 726, 505, 114, function() {
-              alert('lol idk')
+              alert('no')
             }, true],
           ],
           listeners: {},
