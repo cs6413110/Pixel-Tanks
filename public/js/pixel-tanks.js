@@ -1211,10 +1211,10 @@ function Game() {
             case 'gameover':
               this.implode();
               if (data.type === 'victory') {
-                Menus.menus.victory.stats = {coins: 1000, crates: 10, xp: 50};
+F                Menus.menus.victory.stats = {coins: 1000, crates: 100000, xp: 50};
                 Menus.trigger('victory');
               } else {
-                Menus.menus.defeat.stats = {coins: 200, crates: 1, xp: 10};
+                Menus.menus.defeat.stats = {coins: 200, crates: 100000, xp: 10};
                 Menus.trigger('defeat');
               }
               break;
