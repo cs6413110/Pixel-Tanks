@@ -2,7 +2,7 @@ const settings = {
   authserver: 'localhost',
   bans: [],
   banips: [],
-  admins: ['cs641311', 'Celestial', 'DIO', 'DarkMemeGod', 'bradley'], //do that again and u lose access LostKing.
+  admins: ['cs641311', 'Celestial', 'DIO', 'DarkMemeGod', 'bradley'], //nuh uh.
   mutes: [],
   players_per_room: 400,
   ups: 60,
