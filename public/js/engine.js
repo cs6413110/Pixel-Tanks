@@ -974,10 +974,9 @@ class AI {
     }
     if (!coords.length) return this.path = {p: [], m: this.mode, t: Date.now(), o: Date.now()};
     coords.sort((a, b) => this.mode !== 2 ? a.d - b.d : b.d - a.d);
-    for (let i = 0; i <= 5; i++) {
-      const paths = coords.slice(0, Math.min(5, coords.length));
-      const r = this.choosePath(paths.length);
-      const {x, y} = paths[r];
+    for (let i = 0; i <= this.mode === 0 ? coords.length : 5; i++) {
+      const r = this.choosePath(coords.length);
+      const {x, y} = coords[r];
       const p = pathfind(sx, sy, x, y, this.host.map.clone());
       if (limiter.includes(p.length) || true) return this.path = {p, m: this.mode, t: Date.now(), o: Date.now()};
       coords.splice(r, 1);
