@@ -994,8 +994,8 @@ class AI {
     });
     let target = false, bond = false;
     for (const t of tanks) {
-      if (t.ded || t.invis || !raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b)) continue;
-      if (getTeam(t.team) === getTeam(this.team) && t.id !== this.id) {
+      if (t.ded || t.invis || !raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b) || t.id === this.id) continue;
+      if (getTeam(t.team) === getTeam(this.team)) {
         if (!bond) bond = t;
       } else {
         if (!target) target = t;
