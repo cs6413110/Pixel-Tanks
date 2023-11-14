@@ -530,8 +530,9 @@ function Game() {
           ],
           listeners: {},
           cdraw: function() {
-            
-          },
+            GUI.drawText('Coins: '+Menus.menus.victory.stats[1], 800, 800, 50, '#ffffff', 0.5);
+            GUI.drawText('Crates: 'Menus.menus.victory.stats[2], 800, 900, 50, '#ffffff', 0.5);
+            GUI.drawText('Xp: 'Menus.menus.victory.stats[3], 800, 1000, 50, '#ffffff', 0.5);
         },
         defeat: {
           buttons: [
@@ -543,7 +544,11 @@ function Game() {
             }, true],
           ],
           listeners: {},
-          cdraw: function() {},
+          cdraw: function() {
+            GUI.drawText('Coins: '+Menus.menus.defeat.stats[1], 800, 800, 50, '#ffffff', 0.5);
+            GUI.drawText('Crates: 'Menus.menus.defeat.stats[2], 800, 900, 50, '#ffffff', 0.5);
+            GUI.drawText('Xp: 'Menus.menus.defeat.stats[3], 800, 1000, 50, '#ffffff', 0.5);
+          },
         },
         multiplayer: {
           buttons: [
@@ -1204,10 +1209,10 @@ function Game() {
             case 'gameover':
               this.implode();
               if (data.type === 'victory') {
-                Menus.menus.victory.stats = {kills: 'n/a', coins: 'n/a'};
+                Menus.menus.victory.stats = {coins: 1000, crates: 10, xp: 50};
                 Menus.trigger('victory');
               } else {
-                Menus.menus.defeat.stats = {kills: 'n/a', coins: 'n/a'};
+                Menus.menus.defeat.stats = {coins: 200, crates: 1, xp: 10};
                 Menus.trigger('defeat');
               }
               break;
