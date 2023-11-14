@@ -32,7 +32,7 @@ const deathMessages = [
   `{victim} was fed a healthy dose of explosives by {killer}`,
   `{victim} became another number in {killer}'s kill streak`,
   `{victim} got wrecked by {killer}`,
-  `{victim} thought he was the king`
+  `{victim} was reduced to atoms by {killer}`
 ], joinMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
