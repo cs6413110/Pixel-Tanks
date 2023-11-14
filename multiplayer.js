@@ -2,7 +2,7 @@ const settings = {
   authserver: 'localhost',
   bans: [],
   banips: [],
-  admins: ['cs641311', 'Celestial', 'DIO', 'DarkMemeGod', 'bradley'],
+  admins: ['cs641311', 'Celestial','LostKing', 'DIO', 'DarkMemeGod', 'bradley'],
   mutes: [],
   players_per_room: 400,
   ups: 60,
