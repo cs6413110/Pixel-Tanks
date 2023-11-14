@@ -975,7 +975,7 @@ class AI {
       const r = this.choosePath(paths.length);
       const {x, y} = paths[r];
       const p = pathfind(sx, sy, x, y, this.host.map.clone());
-      if (limiter.includes(p.length)) return this.path = {p, m: this.mode, t: Date.now(), o: Date.now()};
+      if (limiter.includes(p.length) || true) return this.path = {p, m: this.mode, t: Date.now(), o: Date.now()};
       coords.splice(r, 1);
       if (!coords.length) return this.path = {p: [], m: this.mode, t: Date.now(), o: Date.now()}; 
     }
