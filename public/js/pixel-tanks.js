@@ -531,8 +531,8 @@ function Game() {
           listeners: {},
           cdraw: function() {
             GUI.drawText('Coins: '+Menus.menus.victory.stats[1], 800, 800, 50, '#ffffff', 0.5);
-            GUI.drawText('Crates: 'Menus.menus.victory.stats[2], 800, 900, 50, '#ffffff', 0.5);
-            GUI.drawText('Xp: 'Menus.menus.victory.stats[3], 800, 1000, 50, '#ffffff', 0.5);
+            GUI.drawText('Crates: '+Menus.menus.victory.stats[2], 800, 900, 50, '#ffffff', 0.5);
+            GUI.drawText('Xp: '+Menus.menus.victory.stats[3], 800, 1000, 50, '#ffffff', 0.5);
         },
         defeat: {
           buttons: [
@@ -546,8 +546,8 @@ function Game() {
           listeners: {},
           cdraw: function() {
             GUI.drawText('Coins: '+Menus.menus.defeat.stats[1], 800, 800, 50, '#ffffff', 0.5);
-            GUI.drawText('Crates: 'Menus.menus.defeat.stats[2], 800, 900, 50, '#ffffff', 0.5);
-            GUI.drawText('Xp: 'Menus.menus.defeat.stats[3], 800, 1000, 50, '#ffffff', 0.5);
+            GUI.drawText('Crates: '+Menus.menus.defeat.stats[2], 800, 900, 50, '#ffffff', 0.5);
+            GUI.drawText('Xp: '+Menus.menus.defeat.stats[3], 800, 1000, 50, '#ffffff', 0.5);
           },
         },
         multiplayer: {
