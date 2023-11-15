@@ -947,7 +947,7 @@ class AI {
       epx = sx;
       epy = sy;
     }
-    if (this.role === 3 && this.bond || (this.role === 1 && this.mode === 1 && !ranged)) {
+    if ((this.role === 3 && this.bond) || (this.role === 1 && this.mode === 1 && !ranged)) {
       cir = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
     } else cir = [[0, -3], [1, -3], [2, -2], [3, -1], [3, 0], [3, 1], [2, 2], [1, 3], [0, 3], [-1, 3], [-2, 2], [-3, 1], [-3, 0], [-3, -1], [-2, -2], [-1, -3]];
     if ((this.role === 3 && this.bond) || (this.mode === 1 && !ranged)) {
