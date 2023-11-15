@@ -1211,7 +1211,7 @@ function Game() {
             case 'gameover':
               this.implode();
               if (data.type === 'victory') {
-F                Menus.menus.victory.stats = {coins: 1000, crates: 100000, xp: 50};
+                Menus.menus.victory.stats = {coins: 1000, crates: 100000, xp: 50};
                 Menus.trigger('victory');
               } else {
                 Menus.menus.defeat.stats = {coins: 200, crates: 100000, xp: 10};
