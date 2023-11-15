@@ -818,27 +818,27 @@ class AI {
         const item = this.items[i];
         if (item === 'airstrike') {
         } else if (item === 'super_glu') {
-          if (this.hp < this.maxHp*.75) // use glue
+          //if (this.hp < this.maxHp*.75) // use glue
         } else if (item === 'duck_tape') {
-          if (this.hp < this.maxHp*.75) // use tap
+          //if (this.hp < this.maxHp*.75) // use tap
         } else if (item === 'shield') {
-          if (this.shields === 0) // use shield
+          //if (this.shields === 0) // use shield
         } else if (item === 'flashbang') {
           // flashbang
         } else if (item === 'bomb') {
-          if (this.obstruction) // use bomb
+          //if (this.obstruction) // use bomb
         } else if (item === 'dynamite') {
           // um idk if ai can use this :/
         } else if (item === 'usb') {
           // idk
         } else if (item === 'weak') {
-          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) // enemy close enough to block
+          //if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) // enemy close enough to block
         } else if (item === 'strong') {
-          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180)
+          //if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180)
         } else if (item === 'spike') {
-          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180)
+          //if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180)
         } else if (item === 'reflector') {
-          if (this.mode !== 0)
+          //if (this.mode !== 0)
         }
       }
     }
