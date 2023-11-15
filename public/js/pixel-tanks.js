@@ -420,9 +420,12 @@ function Game() {
         'Coding New Features...',
         'Placing Blocks...',
         'Launching Missles...',
-        'Toasting Bread...',
         'Booting Game Engine...',
-        'Hiding From Techers...',
+        'Writing loading messages...',
+        'Adding Cosmetics...',
+        'Waiting...',
+        'Loading...',
+        'Still Loading...'        
       ];
       PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
       const config = document.createElement('SCRIPT');
