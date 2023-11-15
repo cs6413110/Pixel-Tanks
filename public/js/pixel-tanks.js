@@ -794,8 +794,7 @@ function Game() {
                 const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [904, 570]};
                 for (const item in key) {
                   if (collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
-                    if (!PixelTanks.userData.items.includes(item)) {
-                      PixelTanks.userData.items[this.currentItem] = item;
+                    ;
                     } else alert('You are not allowed to have more than 1 of the same item');
                     return;
                   }
