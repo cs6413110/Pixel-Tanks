@@ -59,6 +59,110 @@ class Engine {
     this.pt.push(new Tank(data, this));
   }
 
+  useAbility(t, item) {
+    if (item === 'dynamite') {
+      for (let i = this.s.length-1; i >= 0; i--) {
+        const s = this.s[i];
+        if (getUsername(s.team) !== t.username || s.type !== 'dynamite') continue;
+        this.d.push(new Damage(s.x-50, s.y-50, 100, 100, 100, s.team, this));
+        s.destroy();
+      }
+    } else if (item === 'toolkit') {
+      if (t.healTimeout !== undefined) {
+        clearTimeout(t.healTimeout);
+        t.healTimeout = undefined;
+      } else {
+        t.healTimeout = setTimeout(() => {
+          t.hp = t.maxHp;
+          t.healTimeout = undefined;
+        }, t.class === 'medic' ? 5000 : 7500);
+       }
+    } else if (e === 'tape') {
+      t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
+    } else if (e === 'glu') {
+      clearInterval(t.gluInterval);
+      clearTimeout(t.gluTimeout);
+      t.gluInterval = setInterval(() => {
+        t.hp = Math.min(t.maxHp, t.hp+.5);
+      }, 15);
+      t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
+    } else if (e.includes('block#')) {
+      const coords = [{ r: [337.5, 360], dx: -10, dy: 80 }, { r: [0, 22.5], dx: -10, dy: 80 }, { r: [22.5, 67.5], dx: -100, dy: 80 }, { r: [67.5, 112.5], dx: -100, dy: -10 }, { r: [112.5, 157.5], dx: -100, dy: -100 }, { r: [157.5, 202.5], dx: -10, dy: -100 }, { r: [202.5, 247.5], dx: 80, dy: -100 }, { r: [247.5, 292.5], dx: 80, dy: -10 }, { r: [292.5, 337.5], dx: 80, dy: 80 }];
+      const type = e.replace('block#', '');
+      for (const coord of coords) {
+        if (r >= coord.r[0] && r < coord.r[1]) {
+          this.b.push(new Block(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 50}[type], type, t.team, this));
+          break;
+        }
+      }
+    } else if (e === 'flashbang') {
+      for (const tank of this.pt) {
+        const bangTime = (500-Math.sqrt((t.x-tank.x)**2+(t.y-tank.y)**2))*5;
+        if (bangTime > 0) {
+          tank.flashbanged = true;
+          clearTimeout(tank.flashbangTimeout);
+          tank.flashbangTimeout = setTimeout(() => {
+            tank.flashbanged = false;
+          }, tank.username === t.username ? 500 : bangTime);
+        }
+      }
+    } else if (e === 'break') {
+      for (const cell of t.cells) {
+        const c = cell.split('x'), cx = c[0], cy = c[1];
+        for (const entity of this.cells[cx][cy]) if (entity instanceof Block && collision(x, y, 80, 80, entity.x, entity.y, 100, 100)) setTimeout(() => entity.destroy());
+      }
+    } else if (e === 'bomb') {
+      if (t.grapple) {
+        t.grapple.bullet.destroy();
+        t.grapple = false;
+      }
+      const hx = Math.floor(x/100), hy = Math.floor(y/100);
+      for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) {
+        for (const entity of this.cells[i][l]) {
+          if (entity instanceof Block) {
+            if (getTeam(entity.team) !== getTeam(t.team)) {
+              entity.damage(150);
+            }
+          } else if (entity instanceof Shot) {
+            if (getTeam(entity.team) !== getTeam(t.team) && (entity.type === 'dynamite' || entity.type === 'usb')) {
+              entity.destroy();
+            }
+          }
+        }
+      }
+    } else if (e === 'turret') {
+      for (const ai of this.ai) {
+        if (getUsername(ai.team) === t.username) setTimeout(() => ai.destroy());
+      }
+      this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
+    } else if (e === 'buff') {
+      t.buff = true;
+      setTimeout(() => { t.buff = false }, 10000);
+    } else if (e === 'shield') {
+      t.shields = 100;
+    } else if (e === 'reflector') {
+      t.reflect = true;
+      setTimeout(() => {
+        t.reflect = false;
+      }, 500);
+    } else if (e.includes('airstrike')) {
+      const a = e.replace('airstrike', '').split('x');
+      this.b.push(new Block(Number(a[0]), Number(a[1]), Infinity, 'airstrike', parseTeamExtras(t.team), this));
+    } else if (e.includes('healwave')) {
+      const a = e.replace('healwave', '').split('x');
+      const hx = Math.floor(a[0]/100), hy = Math.floor(a[1]/100);
+      for (let i = Math.max(0, hx-2); i <= Math.min(29, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(29, hy+2); l++) {
+        for (const entity of this.cells[i][l]) {
+          if (entity instanceof Tank) {
+            if (getTeam(entity.team) === getTeam(t.team)) {
+              entity.damageCalc(entity.x, entity.y, -(entity.maxHp-entity.hp)/3, this.username);
+            }
+          }
+        }
+      }
+    }
+  }
+
   update(data) {
     const t = this.pt.find(t => t.username === data.username);
     if (!t) return;
@@ -84,111 +188,9 @@ class Engine {
         for (const entity of this.cells[cx][cy]) if (entity instanceof Block && entity.type === 'fire' && getUsername(entity.team) === t.username && entity.x/100 === cx && entity.y/100 === cy) hasFire = true;
         if (!hasFire) this.b.push(new Block(cx*100, cy*100, 100, 'fire', parseTeamExtras(t.team), this));
       }
-   }
-    for (const e of use) {
-      if (e === 'dynamite') {
-        for (let i = this.s.length-1; i >= 0; i--) {
-          const s = this.s[i];
-          if (getUsername(s.team) !== t.username || s.type !== 'dynamite') continue;
-          this.d.push(new Damage(s.x-50, s.y-50, 100, 100, 100, s.team, this));
-          s.destroy();
-        }
-      } else if (e === 'toolkit') {
-        if (t.healTimeout !== undefined) {
-          clearTimeout(t.healTimeout);
-          t.healTimeout = undefined;
-        } else {
-          t.healTimeout = setTimeout(() => {
-            t.hp = t.maxHp;
-            t.healTimeout = undefined;
-          }, t.class === 'medic' ? 5000 : 7500);
-        }
-      } else if (e === 'tape') {
-        t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
-      } else if (e === 'glu') {
-        clearInterval(t.gluInterval);
-        clearTimeout(t.gluTimeout);
-        t.gluInterval = setInterval(() => {
-          t.hp = Math.min(t.maxHp, t.hp+.5);
-        }, 15);
-        t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
-      } else if (e.includes('block#')) {
-        const coords = [{ r: [337.5, 360], dx: -10, dy: 80 }, { r: [0, 22.5], dx: -10, dy: 80 }, { r: [22.5, 67.5], dx: -100, dy: 80 }, { r: [67.5, 112.5], dx: -100, dy: -10 }, { r: [112.5, 157.5], dx: -100, dy: -100 }, { r: [157.5, 202.5], dx: -10, dy: -100 }, { r: [202.5, 247.5], dx: 80, dy: -100 }, { r: [247.5, 292.5], dx: 80, dy: -10 }, { r: [292.5, 337.5], dx: 80, dy: 80 }];
-        const type = e.replace('block#', '');
-        for (const coord of coords) {
-          if (r >= coord.r[0] && r < coord.r[1]) {
-            this.b.push(new Block(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 50}[type], type, t.team, this));
-            break;
-          }
-        }
-      } else if (e === 'flashbang') {
-        for (const tank of this.pt) {
-          const bangTime = (500-Math.sqrt((t.x-tank.x)**2+(t.y-tank.y)**2))*5;
-          if (bangTime > 0) {
-            tank.flashbanged = true;
-            clearTimeout(tank.flashbangTimeout);
-            tank.flashbangTimeout = setTimeout(() => {
-              tank.flashbanged = false;
-            }, tank.username === t.username ? 500 : bangTime);
-          }
-        }
-      } else if (e === 'break') {
-        for (const cell of t.cells) {
-          const c = cell.split('x'), cx = c[0], cy = c[1];
-          for (const entity of this.cells[cx][cy]) if (entity instanceof Block && collision(x, y, 80, 80, entity.x, entity.y, 100, 100)) setTimeout(() => entity.destroy());
-        }
-      } else if (e === 'bomb') {
-        if (t.grapple) {
-          t.grapple.bullet.destroy();
-          t.grapple = false;
-        }
-        const hx = Math.floor(x/100), hy = Math.floor(y/100);
-        for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) {
-          for (const entity of this.cells[i][l]) {
-            if (entity instanceof Block) {
-              if (getTeam(entity.team) !== getTeam(t.team)) {
-                entity.damage(150);
-              }
-            } else if (entity instanceof Shot) {
-              if (getTeam(entity.team) !== getTeam(t.team) && (entity.type === 'dynamite' || entity.type === 'usb')) {
-                entity.destroy();
-              }
-            }
-          }
-        }
-      } else if (e === 'turret') {
-        for (const ai of this.ai) {
-          if (getUsername(ai.team) === t.username) setTimeout(() => ai.destroy());
-        }
-        this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
-      } else if (e === 'buff') {
-        t.buff = true;
-        setTimeout(() => { t.buff = false }, 10000);
-      } else if (e === 'shield') {
-        t.shields = 100;
-      } else if (e === 'reflector') {
-        t.reflect = true;
-        setTimeout(() => {
-          t.reflect = false;
-        }, 500);
-      } else if (e.includes('airstrike')) {
-        const a = e.replace('airstrike', '').split('x');
-        this.b.push(new Block(Number(a[0]), Number(a[1]), Infinity, 'airstrike', parseTeamExtras(t.team), this));
-      } else if (e.includes('healwave')) {
-        const a = e.replace('healwave', '').split('x');
-        const hx = Math.floor(a[0]/100), hy = Math.floor(a[1]/100);
-        for (let i = Math.max(0, hx-2); i <= Math.min(29, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(29, hy+2); l++) {
-          for (const entity of this.cells[i][l]) {
-            if (entity instanceof Tank) {
-              if (getTeam(entity.team) === getTeam(t.team)) {
-                entity.damageCalc(entity.x, entity.y, -(entity.maxHp-entity.hp)/3, this.username);
-              }
-            }
-          }
-        }
-      }
     }
-    if (fire.length > 0) {
+    for (const exe of use) this.useAbility(t, exe);
+    if (fire.length) {
       t.pushback = -6;
       for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank*(t.buff ? 1.2 : 1), this));
     }
@@ -775,9 +777,10 @@ class AI {
     this.hp = rank * 10 + 300;
     this.maxHp = this.hp;
     this.seeUser = this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
-    this.canFire = this.canPowermissle = this.canItem = this.canClass = this.canBoost = this.canBashed = true;
+    this.canFire = this.canPowermissle = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canClass = this.canBoost = this.canBashed = true;
+    this.items = [];
+    this.giveAbilities();
     this.color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
-    this.item = this.class = '';
     this.cosmetic = host.pt.find(t => t.username === getUsername(this.team))?.cosmetic;
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
@@ -787,13 +790,14 @@ class AI {
     }
   }
 
-  setValue(p, v) {
-    if (this.raw[p] === v) return;
-    this.updatedLast = Date.now();
-    this.raw[p] = v;
+  giveAbilities() {
+    const available = ['airstrike', 'super_glu', 'duck_tape', 'shield', 'flashbang', 'bomb', 'dynamite', 'usb', 'weak', 'strong', 'spike', 'reflector'];
+    const classes = ['tactical', 'stealth', 'warrior', 'builder', 'fire', 'medic'];
+    for (let i = 0; i < 4; i++) this.items.push(available[Math.floor(Math.random()*available.length)]);
+    this.class = classes[Math.floor(Math.random()*classes.length)];
   }
 
-  update() {
+  think() {
     this.identify();
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.seeTarget) {
@@ -809,6 +813,45 @@ class AI {
       const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
       this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
     }
+    for (let i = 0; i < 4; i++) {
+      if (this['canItem'+i]) {
+        const item = this.items[i];
+        if (item === 'airstrike') {
+        } else if (item === 'super_glu') {
+          if (this.hp < this.maxHp*.75) // use glue
+        } else if (item === 'duck_tape') {
+          if (this.hp < this.maxHp*.75) // use tap
+        } else if (item === 'shield') {
+          if (this.shields === 0) // use shield
+        } else if (item === 'flashbang') {
+          // flashbang
+        } else if (item === 'bomb') {
+          if (this.obstruction) // use bomb
+        } else if (item === 'dynamite') {
+          // um idk if ai can use this :/
+        } else if (item === 'usb') {
+          // idk
+        } else if (item === 'weak') {
+          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) // enemy close enough to block
+        } else if (item === 'strong') {
+          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180)
+        } else if (item === 'spike') {
+          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180)
+        } else if (item === 'reflector') {
+          if (this.mode !== 0)
+        }
+      }
+    }
+  }
+
+  setValue(p, v) {
+    if (this.raw[p] === v) return;
+    this.updatedLast = Date.now();
+    this.raw[p] = v;
+  }
+
+  update() {
+    this.think();
     const team = getTeam(this.team);
     /*if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
