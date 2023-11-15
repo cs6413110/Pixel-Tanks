@@ -547,6 +547,13 @@ const Commands = {
     const value = servers[this.room][data[1]];
     if (value !== undefined) servers[this.room].logs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
   }],
+  tread: [Object, 1, 3, function(data) {
+    for (const t of servers[this.room].pt) if (t.username === data[1]) {
+      const value = t[data[2]];
+      if (value !== undefined) servers[this.room].logs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
+      return;
+    }
+  }],
 };
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 
