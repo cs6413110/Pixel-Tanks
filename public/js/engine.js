@@ -59,15 +59,15 @@ class Engine {
     this.pt.push(new Tank(data, this));
   }
 
-  useAbility(t, item) {
-    if (item === 'dynamite') {
+  useAbility(t, a) {
+    if (a === 'dynamite') {
       for (let i = this.s.length-1; i >= 0; i--) {
         const s = this.s[i];
         if (getUsername(s.team) !== t.username || s.type !== 'dynamite') continue;
         this.d.push(new Damage(s.x-50, s.y-50, 100, 100, 100, s.team, this));
         s.destroy();
       }
-    } else if (item === 'toolkit') {
+    } else if (a === 'toolkit') {
       if (t.healTimeout !== undefined) {
         clearTimeout(t.healTimeout);
         t.healTimeout = undefined;
@@ -77,25 +77,25 @@ class Engine {
           t.healTimeout = undefined;
         }, t.class === 'medic' ? 5000 : 7500);
        }
-    } else if (e === 'tape') {
+    } else if (a === 'tape') {
       t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
-    } else if (e === 'glu') {
+    } else if (a === 'glu') {
       clearInterval(t.gluInterval);
       clearTimeout(t.gluTimeout);
       t.gluInterval = setInterval(() => {
         t.hp = Math.min(t.maxHp, t.hp+.5);
       }, 15);
       t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
-    } else if (e.includes('block#')) {
+    } else if (a.includes('block#')) {
       const coords = [{ r: [337.5, 360], dx: -10, dy: 80 }, { r: [0, 22.5], dx: -10, dy: 80 }, { r: [22.5, 67.5], dx: -100, dy: 80 }, { r: [67.5, 112.5], dx: -100, dy: -10 }, { r: [112.5, 157.5], dx: -100, dy: -100 }, { r: [157.5, 202.5], dx: -10, dy: -100 }, { r: [202.5, 247.5], dx: 80, dy: -100 }, { r: [247.5, 292.5], dx: 80, dy: -10 }, { r: [292.5, 337.5], dx: 80, dy: 80 }];
-      const type = e.replace('block#', '');
+      const type = a.replace('block#', '');
       for (const coord of coords) {
         if (r >= coord.r[0] && r < coord.r[1]) {
           this.b.push(new Block(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 50}[type], type, t.team, this));
           break;
         }
       }
-    } else if (e === 'flashbang') {
+    } else if (a === 'flashbang') {
       for (const tank of this.pt) {
         const bangTime = (500-Math.sqrt((t.x-tank.x)**2+(t.y-tank.y)**2))*5;
         if (bangTime > 0) {
@@ -106,12 +106,12 @@ class Engine {
           }, tank.username === t.username ? 500 : bangTime);
         }
       }
-    } else if (e === 'break') {
+    } else if (a === 'break') {
       for (const cell of t.cells) {
         const c = cell.split('x'), cx = c[0], cy = c[1];
         for (const entity of this.cells[cx][cy]) if (entity instanceof Block && collision(x, y, 80, 80, entity.x, entity.y, 100, 100)) setTimeout(() => entity.destroy());
       }
-    } else if (e === 'bomb') {
+    } else if (a === 'bomb') {
       if (t.grapple) {
         t.grapple.bullet.destroy();
         t.grapple = false;
@@ -130,26 +130,26 @@ class Engine {
           }
         }
       }
-    } else if (e === 'turret') {
+    } else if (a === 'turret') {
       for (const ai of this.ai) {
         if (getUsername(ai.team) === t.username) setTimeout(() => ai.destroy());
       }
       this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
-    } else if (e === 'buff') {
+    } else if (a === 'buff') {
       t.buff = true;
       setTimeout(() => { t.buff = false }, 10000);
-    } else if (e === 'shield') {
+    } else if (a === 'shield') {
       t.shields = 100;
-    } else if (e === 'reflector') {
+    } else if (a === 'reflector') {
       t.reflect = true;
       setTimeout(() => {
         t.reflect = false;
       }, 500);
-    } else if (e.includes('airstrike')) {
-      const a = e.replace('airstrike', '').split('x');
+    } else if (a.includes('airstrike')) {
+      const a = a.replace('airstrike', '').split('x');
       this.b.push(new Block(Number(a[0]), Number(a[1]), Infinity, 'airstrike', parseTeamExtras(t.team), this));
-    } else if (e.includes('healwave')) {
-      const a = e.replace('healwave', '').split('x');
+    } else if (a.includes('healwave')) {
+      const a = a.replace('healwave', '').split('x');
       const hx = Math.floor(a[0]/100), hy = Math.floor(a[1]/100);
       for (let i = Math.max(0, hx-2); i <= Math.min(29, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(29, hy+2); l++) {
         for (const entity of this.cells[i][l]) {
