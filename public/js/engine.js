@@ -813,32 +813,37 @@ class AI {
       const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
       this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
     }
+    if (this.canClass && this.mode !== 0) {
+      
+    }
     for (let i = 0; i < 4; i++) {
       if (this['canItem'+i]) {
         const item = this.items[i];
         if (item === 'airstrike') {
+          this.host.useAbility(this, 'airstrike#'+this.target.x+'x'+this.target.y);
         } else if (item === 'super_glu') {
-          //if (this.hp < this.maxHp*.75) // use glue
+          if (this.hp < this.maxHp*.75) this.host.useAbility(this, 'glu');
         } else if (item === 'duck_tape') {
-          //if (this.hp < this.maxHp*.75) // use tap
+          if (this.hp < this.maxHp*.75) this.host.useAbility(this, 'tape'); // use tap
         } else if (item === 'shield') {
-          //if (this.shields === 0) // use shield
+          if (this.shields === 0) this.host.useAbility(this, 'shield'); // use shield
         } else if (item === 'flashbang') {
+          this.host.useAbility(this, 'flashbang');
           // flashbang
         } else if (item === 'bomb') {
-          //if (this.obstruction) // use bomb
+          if (this.obstruction) this.host.useAbility(this, 'bomb'); // use bomb
         } else if (item === 'dynamite') {
-          // um idk if ai can use this :/
+          // lol no :)
         } else if (item === 'usb') {
           // idk
         } else if (item === 'weak') {
-          //if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) // enemy close enough to block
+          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) this.host.useAbility(this, 'block#weak');
         } else if (item === 'strong') {
-          //if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180)
+          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) this.host.useAbility(this, 'block#strong');
         } else if (item === 'spike') {
-          //if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180)
+          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) this.host.useAbility(this, 'block#spike');
         } else if (item === 'reflector') {
-          //if (this.mode !== 0)
+          if (this.mode !== 0) this.host.useAbility(this, 'reflector');
         }
       }
     }
