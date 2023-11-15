@@ -425,7 +425,9 @@ function Game() {
         'Adding Cosmetics...',
         'Waiting...',
         'Loading...',
-        'Still Loading...'        
+        'Still Loading...',
+        'Not Loading...',
+        'Wasting Time...'
       ];
       PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
       const config = document.createElement('SCRIPT');
@@ -793,7 +795,7 @@ function Game() {
                 for (const item in key) {
                   if (collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
                     if (!PixelTanks.userData.items.includes(item)) {
-                      PixelTanks.userData.items[this.currentItem-1] = item;
+                      PixelTanks.userData.items[this.currentItem] = item;
                     } else alert('You are not allowed to have more than 1 of the same item');
                     return;
                   }
