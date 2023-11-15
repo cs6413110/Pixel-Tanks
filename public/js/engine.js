@@ -146,8 +146,8 @@ class Engine {
         t.reflect = false;
       }, 500);
     } else if (a.includes('airstrike')) {
-      const a = a.replace('airstrike', '').split('x');
-      this.b.push(new Block(Number(a[0]), Number(a[1]), Infinity, 'airstrike', parseTeamExtras(t.team), this));
+      const h = a.replace('airstrike', '').split('x');
+      this.b.push(new Block(Number(h[0]), Number(h[1]), Infinity, 'airstrike', parseTeamExtras(t.team), this));
     } else if (a.includes('healwave')) {
       const a = a.replace('healwave', '').split('x');
       const hx = Math.floor(a[0]/100), hy = Math.floor(a[1]/100);
