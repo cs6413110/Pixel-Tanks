@@ -68,121 +68,6 @@ const deathMessages = [
 
 let tickspeed = 'N/A';
 
-const Commands = {
-  createteam: [FFA, 4, 2, function(data) {
-    if (servers[this.room].pt.find(t => getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
-    if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
-    servers[this.room].pt.find(t => t.username === this.username).team = this.username+':'+data[1]+'@leader';
-    servers[this.room].logs.push({m: this.username+' created team '+data[1]+'. Use /join '+data[1]+' to join.', c: '#0000FF'});
-  }],
-  join: [FFA, 4, 2, function(data) {
-    if (servers[this.room].pt.find(t => t.username === this.username).team.includes('@leader')) return this.send({status: 'error', message: 'You must disband your team to join. (/leave)'});
-    if (!servers[this.room].pt.find(t => getTeam(t.team) === data[1] && t.team.includes('@leader'))) return this.send({status: 'error', message: 'This team does not exist.'});
-    servers[this.room].pt.find(t => t.username === this.username).team += '@requestor#'+data[1];
-    servers[this.room].logs.push({m: this.username+' requested to join team '+data[1]+'. Team owner can use /accept '+this.username+' to accept them.', c: '#0000FF'});
-  }],
-  accept: [FFA, 4, 2, function(data) {
-    const leader = servers[this.room].pt.find(t => t.username === this.username), requestor = servers[this.room].pt.find(t => t.username === data[1]);
-    if (!requestor) return this.send({status: 'error', message: 'Player not found.'});
-    if (leader.team.includes('@leader') && requestor.team.includes('@requestor#') && getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
-      requestor.team = data[1]+':'+getTeam(leader.team);
-      servers[this.room].logs.push({ m: data[1]+' has joined team '+getTeam(leader.team), c: '#40C4FF' });
-    }
-  }],
-  leave: [FFA, 4, 1, function(data) {
-    const target = servers[this.room].pt.find(t => t.username === this.username);
-    if (target.team.includes('@leader')) servers[this.room].pt.forEach(t => {
-      if (getTeam(t.team) === getTeam(target.team)) t.team = t.username+':'+Math.random();
-    });
-    target.team = this.username+':'+Math.random();
-  }],
-  newmap: [FFA, 4, 1, function(data) {
-    servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
-    servers[this.room].pt.forEach(t => {
-      t.x = servers[this.room].spawn.x;
-      t.y = servers[this.room].spawn.y;
-      t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
-    });
-  }],
-  ipban: [Object, 2, 2, function(data) {
-    return this.send({status: 'error', messsage: 'stale command'});
-    if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    var ip;
-    try {
-      var ip = servers[this.room].pt.find(t => t.username === data[1]).socket.ip;
-    } catch(e) {
-      return this.send({status: 'error', message: 'Player not found.'});
-    }
-    settings.banips.push(ip);
-    sockets.forEach(s => {
-      if (!s.ip === ip) return;
-      s.send({status: 'error', message: 'You were just ip banned!'});
-      setTimeout(() => s.close());
-    });
-    servers[this.room].logs.push({m: data[1]+`'s ip, `+ip+`, has been banned.`, c: '#FF0000'});
-  }],
-  ippardon: [Object, 2, 2, function(data) {
-    if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    if (settings.banips.indexOf(data[1]) !== -1) settings.banips.splice(settings.banips.indexOf(data[1]), 1);
-    servers[this.room].logs.push({m: data[1]+' ip has been unbanned.', c: '#0000FF'});
-  }],
-  ban: [Object, 2, 2, function(data) {
-    if (settings.admins.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
-    settings.bans.push(data[1]);
-    server.logs.push({m: data[1]+' was banned by '+this.username, c: '#FF0000'});
-    for (const socket of sockets) if (s.username === data[1]) {
-      socket.send({status: 'error', message: 'You were just banned!'});
-      setTimeout(() => socket.close());
-    }
-  }],
-  pardon: [Object, 2, 2, function(data) {
-    settings.bans.splice(settings.bans.indexOf(data[1]), 1);
-    servers[this.room].logs.push({m: data[1]+' was pardoned by '+this.username, c: '#0000FF'});
-  }],
-  mute: [Object, 2, 2, function(data) {
-    settings.mutes.push(data[1]);
-    servers[this.room].logs.push({m: data[1]+' was muted by '+this.username, c: '#FFFF22'});
-  }],
-  unmute: [Object, 2, 2, function(data) {
-    settings.mutes.splice(settings.mutes.indexOf(data[1]), 1);
-    servers[this.room].logs.push({m: data[1]+' was unmuted by '+this.username, c: '#0000FF'});
-  }],
-  kick: [Object, 2, 2, function(data) {
-    for (const socket of sockets) if (socket.username === data[1]) {
-      socket.send({status: 'error', message: 'You have been kicked by '+this.username});
-      setTimeout(() => socket.close());
-    }
-  }],
-  kill: [FFA, 2, 2, function(data) {
-    for (const server of Object.values(servers)) for (const t of server.pt) if (data[1] === t.username) t.damageCalc(t.x, t.y, 6000, this.username);
-  }],
-  ai: [Object, 2, 7, function(data) {
-    for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), ':'+data[6], servers[this.room]));
-  }],
-  spectate: [Object, 3, 2, function(data) {
-    for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = true;
-  }],
-  live: [Object, 3, 2, function(data) {
-    for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = false;
-  }],
-  switch: [TDM, 4, 2, function(data) {
-    if (servers[this.room].mode === 0) for (const t of servers[this.room].pt) if (t.username === (data.length === 1 ? this.username : data[1])) t.color = t.color === '#FF0000' ? '#0000FF' : '#FF0000';
-  }],
-  start: [TDM, 2, 1, function() {
-    if (servers[this.room].mode === 0) {
-      servers[this.room].readytime = Date.now();
-      servers[this.room].time = 0;
-    }
-  }],
-  reboot: [Object, 2, 1, function() {
-    process.exit(1);
-  }],
-  sread: [Object, 1, 2, function(data) {
-    const value = servers[this.room][data[1]];
-    if (value !== undefined) servers[this.room].logs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
-  }],
-};
-
 class Multiplayer extends Engine {
   constructor(levels) {
     super(levels);
@@ -546,6 +431,122 @@ class TDM extends Multiplayer {
     }
   }
 }
+
+
+const Commands = {
+  createteam: [FFA, 4, 2, function(data) {
+    if (servers[this.room].pt.find(t => getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
+    if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
+    servers[this.room].pt.find(t => t.username === this.username).team = this.username+':'+data[1]+'@leader';
+    servers[this.room].logs.push({m: this.username+' created team '+data[1]+'. Use /join '+data[1]+' to join.', c: '#0000FF'});
+  }],
+  join: [FFA, 4, 2, function(data) {
+    if (servers[this.room].pt.find(t => t.username === this.username).team.includes('@leader')) return this.send({status: 'error', message: 'You must disband your team to join. (/leave)'});
+    if (!servers[this.room].pt.find(t => getTeam(t.team) === data[1] && t.team.includes('@leader'))) return this.send({status: 'error', message: 'This team does not exist.'});
+    servers[this.room].pt.find(t => t.username === this.username).team += '@requestor#'+data[1];
+    servers[this.room].logs.push({m: this.username+' requested to join team '+data[1]+'. Team owner can use /accept '+this.username+' to accept them.', c: '#0000FF'});
+  }],
+  accept: [FFA, 4, 2, function(data) {
+    const leader = servers[this.room].pt.find(t => t.username === this.username), requestor = servers[this.room].pt.find(t => t.username === data[1]);
+    if (!requestor) return this.send({status: 'error', message: 'Player not found.'});
+    if (leader.team.includes('@leader') && requestor.team.includes('@requestor#') && getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
+      requestor.team = data[1]+':'+getTeam(leader.team);
+      servers[this.room].logs.push({ m: data[1]+' has joined team '+getTeam(leader.team), c: '#40C4FF' });
+    }
+  }],
+  leave: [FFA, 4, 1, function(data) {
+    const target = servers[this.room].pt.find(t => t.username === this.username);
+    if (target.team.includes('@leader')) servers[this.room].pt.forEach(t => {
+      if (getTeam(t.team) === getTeam(target.team)) t.team = t.username+':'+Math.random();
+    });
+    target.team = this.username+':'+Math.random();
+  }],
+  newmap: [FFA, 4, 1, function(data) {
+    servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
+    servers[this.room].pt.forEach(t => {
+      t.x = servers[this.room].spawn.x;
+      t.y = servers[this.room].spawn.y;
+      t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
+    });
+  }],
+  ipban: [Object, 2, 2, function(data) {
+    return this.send({status: 'error', messsage: 'stale command'});
+    if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
+    var ip;
+    try {
+      var ip = servers[this.room].pt.find(t => t.username === data[1]).socket.ip;
+    } catch(e) {
+      return this.send({status: 'error', message: 'Player not found.'});
+    }
+    settings.banips.push(ip);
+    sockets.forEach(s => {
+      if (!s.ip === ip) return;
+      s.send({status: 'error', message: 'You were just ip banned!'});
+      setTimeout(() => s.close());
+    });
+    servers[this.room].logs.push({m: data[1]+`'s ip, `+ip+`, has been banned.`, c: '#FF0000'});
+  }],
+  ippardon: [Object, 2, 2, function(data) {
+    if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
+    if (settings.banips.indexOf(data[1]) !== -1) settings.banips.splice(settings.banips.indexOf(data[1]), 1);
+    servers[this.room].logs.push({m: data[1]+' ip has been unbanned.', c: '#0000FF'});
+  }],
+  ban: [Object, 2, 2, function(data) {
+    if (settings.admins.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
+    settings.bans.push(data[1]);
+    server.logs.push({m: data[1]+' was banned by '+this.username, c: '#FF0000'});
+    for (const socket of sockets) if (s.username === data[1]) {
+      socket.send({status: 'error', message: 'You were just banned!'});
+      setTimeout(() => socket.close());
+    }
+  }],
+  pardon: [Object, 2, 2, function(data) {
+    settings.bans.splice(settings.bans.indexOf(data[1]), 1);
+    servers[this.room].logs.push({m: data[1]+' was pardoned by '+this.username, c: '#0000FF'});
+  }],
+  mute: [Object, 2, 2, function(data) {
+    settings.mutes.push(data[1]);
+    servers[this.room].logs.push({m: data[1]+' was muted by '+this.username, c: '#FFFF22'});
+  }],
+  unmute: [Object, 2, 2, function(data) {
+    settings.mutes.splice(settings.mutes.indexOf(data[1]), 1);
+    servers[this.room].logs.push({m: data[1]+' was unmuted by '+this.username, c: '#0000FF'});
+  }],
+  kick: [Object, 2, 2, function(data) {
+    for (const socket of sockets) if (socket.username === data[1]) {
+      socket.send({status: 'error', message: 'You have been kicked by '+this.username});
+      setTimeout(() => socket.close());
+    }
+  }],
+  kill: [FFA, 2, 2, function(data) {
+    for (const server of Object.values(servers)) for (const t of server.pt) if (data[1] === t.username) t.damageCalc(t.x, t.y, 6000, this.username);
+  }],
+  ai: [Object, 2, 7, function(data) {
+    for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), ':'+data[6], servers[this.room]));
+  }],
+  spectate: [Object, 3, 2, function(data) {
+    for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = true;
+  }],
+  live: [Object, 3, 2, function(data) {
+    for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = false;
+  }],
+  switch: [TDM, 4, 2, function(data) {
+    if (servers[this.room].mode === 0) for (const t of servers[this.room].pt) if (t.username === (data.length === 1 ? this.username : data[1])) t.color = t.color === '#FF0000' ? '#0000FF' : '#FF0000';
+  }],
+  start: [TDM, 2, 1, function() {
+    if (servers[this.room].mode === 0) {
+      servers[this.room].readytime = Date.now();
+      servers[this.room].time = 0;
+    }
+  }],
+  reboot: [Object, 2, 1, function() {
+    process.exit(1);
+  }],
+  sread: [Object, 1, 2, function(data) {
+    const value = servers[this.room][data[1]];
+    if (value !== undefined) servers[this.room].logs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
+  }],
+};
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 
 const Profile = (arr, update) => {
