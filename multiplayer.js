@@ -661,6 +661,7 @@ const multimessage = (socket, data) => {
     if (!f) return socket.send({status: 'error', message: 'Command not found.'});
     if (!(servers[socket.room] instanceof f[0])) return socket.send({status: 'error', message: 'This command is not available in this server type.'});
     if (data.data.length !== f[2]) return socket.send({status: 'error', message: 'Wrong number of arguments.'});
+    if (!hasAccess(socket.username, f[1])) return socket.send({status: 'error', message: `You don't have access to this.`});
     f[3].bind(socket)(data.data);
   } else if (data.type === 'stats') {
     let gamemodes = {FFA: [], DUELS: [], TDM: [], tickspeed, event: 'stats'};
