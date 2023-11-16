@@ -2,9 +2,9 @@ const settings = {
   authserver: 'localhost',
   bans: [],
   banips: [],
-  full_auth: ['cs641311'],
-  admins: ['Celestial', 'bradley'],
-  vips: ['DIO', 'DarkMemeGod', 'LostKing'], //what does this mean?? -LostKing
+  full_auth: ['cs641311'],                  //supreme admin
+  admins: ['Celestial', 'bradley'],         //higher access admin
+  vips: ['DIO', 'DarkMemeGod', 'LostKing'], //lower access admin
   mutes: [],
   players_per_room: 400,
   ups: 60,
