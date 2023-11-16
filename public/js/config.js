@@ -275,6 +275,8 @@ const images = {
     erase_: { frames: 28, speed: 75, kill: 18, type: 2 },
     gameover: '/animations/gameover',
     gameover_: { frames: 40, speed: 75, kill: 1, type: 2 },
+    ghost: '/animations/ghost',
+    ghost_: { frames: 13, speed: 75, kill: 1, type: 1 },
   },
   items: {
     airstrike: '/items/airstrike',
