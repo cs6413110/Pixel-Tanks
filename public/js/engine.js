@@ -673,10 +673,6 @@ class Shot {
       this.damage = this.md - (this.d / 300) * this.md;  
       if (this.d >= 300) this.destroy();
     } else if (this.type === 'dynamite') this.r += 5;
-    if (this.type === 'fire') {
-      this.d = Math.sqrt((this.x - this.sx) ** 2 + (this.y - this.sy) ** 2); 
-      if (this.d >= 350) this.destroy();
-    } else if (this.type === 'dynamite') this.r += 5;
     this.u();
   }
 
