@@ -1024,7 +1024,7 @@ function Game() {
         legendary: ['Blind', 'Lego', 'Redsus', 'Uno Reverse', 'Christmas Hat', 'Mini Tank', 'Paleontologist', 'Yellow Pizza'],
         mythic: ['Terminator', 'MLG Glasses'],
       }, {
-        common: ['erase', 'explode', 'nuke', 'evan'],
+        common: ['erase', 'explode', 'nuke', 'evan'], //bruh why am i common :(
         uncommon: ['ghost', 'anvil', 'insta', 'knight', 'gameover'],
         rare: ['amogus', 'minecraft', 'magic', 'plant'],
         epic: ['wakawaka', 'battery', 'fix'],
