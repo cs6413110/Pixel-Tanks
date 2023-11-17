@@ -407,7 +407,6 @@ function Game() {
     static boot() {
       PixelTanks.user = {};
       PixelTanks.loadMessages = [
-        'Exterminating AI Pests...',
         'Recharging Instas...',
         'Summoning Turrets...',
         'Sorting Cosmetics...',
@@ -415,14 +414,14 @@ function Game() {
         'Putting Out Fires...',
         'Generating Levels...',
         'Loading Up Crates...',
-        'Filling Up Shop Stocks...',
+        'Filling Up Stocks...',
         'Drawing Menus...',
-        'Coding New Features...',
         'Placing Blocks...',
         'Launching Missles...',
-        'Toasting Bread...',
         'Booting Game Engine...',
-        'Hiding From Techers...',
+        'Loading...',
+        'Still Loading...',
+        'Moving the loading bar...'
       ];
       PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
       const config = document.createElement('SCRIPT');
