@@ -47,7 +47,7 @@ function Game() {
           alert('Socket Encryption Error: ' + data.data+' | '+e);
         }
         if (data.status === 'error') {
-          if (data.message === 'Invalid token.') {
+          if (data.message === 'Invalid Token.') {
             clearInterval(PixelTanks.autosave);
             if (PixelTanks.user.player) PixelTanks.user.player.implode();
             PixelTanks.user.token = undefined;
