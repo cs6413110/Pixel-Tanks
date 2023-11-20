@@ -2,10 +2,10 @@ const settings = {
   authserver: 'localhost',
   bans: [],
   banips: [],
-  full_auth: ['cs641311'],                  //supreme admin
-  admins: ['Celestial', 'bradley'],         //higher access admin
-  vips: ['DIO', 'DarkMemeGod', 'LostKing'], //lower access admin
-  mutes: [],
+  full_auth: ['cs641311'],
+  admins: ['Celestial', 'bradley'],
+  vips: ['DIO', 'DarkMemeGod', 'LostKing'], 
+  mutes: ['bradley'],
   players_per_room: 400,
   ups: 60,
 }
@@ -652,6 +652,7 @@ const multimessage = (socket, data) => {
     socket.send({event: 'ping', id: data.id});
   } else if (data.type === 'chat') {
     // handle mutes and filtering here
+    if (settings.mutes.includes(socket.username)) return socket.send({status: 'error', message: 'You are muted!'});
     if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${data.msg}`, c: '#ffffff'});
     if (servers[data.room]) servers[data.room].logs.push({m: `[${data.username}] ${data.msg}`, c: '#ffffff'});
   } else if (data.type === 'logs') {
