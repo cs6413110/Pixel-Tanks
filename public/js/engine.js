@@ -810,10 +810,28 @@ class AI {
       this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
     }
     if (this.canClass && this.mode !== 0) {
-      
+      /*if (this.class === 'stealth' && !this.halfSpeed) {
+        this.tank.invis = !this.tank.invis;
+        this.timers.class = {time: Date.now(), cooldown: 50};
+      } else if (c === 'tactical') {
+        this.fire('megamissle');
+        this.timers.class = {time: Date.now(), cooldown: 25000};
+      } else if (c === 'builder') {
+        this.tank.use.push('turret');
+        this.timers.class = {time: Date.now(), cooldown: 30000};
+      } else if (c === 'warrior') {
+        this.tank.use.push('buff');
+        this.timers.class = {time: Date.now(), cooldown: 40000};
+      } else if (c === 'medic') {
+        this.tank.use.push(`healwave${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
+        this.timers.class = {time: Date.now(), cooldown: 30000};
+      } else if (c === 'fire') {
+        for (let i = -30; i < 30; i += 5) this.tank.fire.push({...toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
+        this.timers.class = {time: Date.now(), cooldown: 10000};
+      }*/
     }
     for (let i = 0; i < 4; i++) {
-      if (this['canItem'+i]) {
+      if (this['canItem'+i] && Math.random() < 1/500) {
         const item = this.items[i];
         let cooldown = 0;
         if (item === 'airstrike') {
