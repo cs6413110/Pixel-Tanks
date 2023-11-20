@@ -5,7 +5,7 @@ const settings = {
   full_auth: ['cs641311'],
   admins: ['Celestial', 'bradley'],
   vips: ['DIO', 'DarkMemeGod', 'LostKing'], 
-  mutes: [],
+  mutes: ['bradley'],
   players_per_room: 400,
   ups: 60,
 }
@@ -554,12 +554,6 @@ const Commands = {
       return;
     }
   }],
-  help: [Object, 2, 1, function(data) {
-    servers[this.room].logs.push({m: 'Commands: /createteam <name>, /join <name>, /accept <player>, /leave, /start, /switch <player>', c: '#0000FF'});
-    servers[this.room].logs.push({m: '/reboot, /live <player>, /spectate <player>, /ai <x> <y> <type> <rank> <amount> <team>, /newmap', c: '#0000FF'});
-    servers[this.room].logs.push({m: '/kill <player>, /kick <player>, /mute <player> <time>, /unmute <player>, /ban <player> /pardon <player>', c: '#0000FF'});
-    servers[this.room].logs.push({m: '/ipban <player>, /pardon <player>, /help', c: '#0000FF'});
-  }],
 };
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 
@@ -647,6 +641,7 @@ const multimessage = (socket, data) => {
     if (!server) {
       server = Math.random();
       servers[server] = new joinKey[data.gamemode]();
+      settings.mutes.push('bradley');
     }
     if (servers[server].pt.some(t => t.username === socket.username)) {
       socket.send({status: 'error', message: 'You are already in the server!'});
