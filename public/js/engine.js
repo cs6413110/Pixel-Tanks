@@ -814,7 +814,6 @@ class AI {
     }
     for (let i = 0; i < 4; i++) {
       if (this['canItem'+i]) {
-        this['canItem'+i] = false;
         const item = this.items[i];
         let cooldown = 0;
         if (item === 'airstrike') {
@@ -870,7 +869,12 @@ class AI {
             cooldown = 10000;
           }
         }
-        
+        if (cooldown !== 0) {
+          this['canItem'+i] = false;
+          setTimeout(() => {
+            this['canItem'+i] = true;
+          }, cooldown);
+        }
       }
     }
   }
