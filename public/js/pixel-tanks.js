@@ -1788,6 +1788,7 @@ function Game() {
         }
         if (this.canToolkit) {
           this.canToolkit = false;
+          if (this.tank.invis) this.tank.invis = !this.tank.invis;
           this.timers.toolkit = new Date();
           setTimeout(() => {this.canToolkit = true}, 40000);
           setTimeout(() => {this.halfSpeed = false}, PixelTanks.userData.class === 'medic' ? 5000 : 7500);
