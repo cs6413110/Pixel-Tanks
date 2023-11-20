@@ -814,33 +814,61 @@ class AI {
     }
     for (let i = 0; i < 4; i++) {
       if (this['canItem'+i]) {
+        this['canItem'+i] = false;
         const item = this.items[i];
+        let cooldown = 0;
         if (item === 'airstrike') {
           this.host.useAbility(this, 'airstrike#'+this.target.x+'x'+this.target.y);
+          cooldown = 20000;
         } else if (item === 'super_glu') {
-          if (this.hp < this.maxHp*.75) this.host.useAbility(this, 'glu');
+          if (this.hp < this.maxHp*.75) {
+            this.host.useAbility(this, 'glu');
+            cooldown = 30000;
+          }
         } else if (item === 'duck_tape') {
-          if (this.hp < this.maxHp*.75) this.host.useAbility(this, 'tape'); // use tap
+          if (this.hp < this.maxHp*.75) {
+            this.host.useAbility(this, 'tape');
+            cooldown = 30000;
+          }
         } else if (item === 'shield') {
-          if (this.shields === 0) this.host.useAbility(this, 'shield'); // use shield
+          if (this.shields === 0) {
+            this.host.useAbility(this, 'shield');
+            cooldown = 30000;
+          }
         } else if (item === 'flashbang') {
           this.host.useAbility(this, 'flashbang');
-          // flashbang
+          cooldown = 20000;
         } else if (item === 'bomb') {
-          if (this.obstruction) this.host.useAbility(this, 'bomb'); // use bomb
+          if (this.obstruction) {
+            this.host.useAbility(this, 'bomb');
+            cooldown = 5000;
+          }
         } else if (item === 'dynamite') {
           // lol no :)
         } else if (item === 'usb') {
           // idk
         } else if (item === 'weak') {
-          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) this.host.useAbility(this, 'block#weak');
+          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) {
+            this.host.useAbility(this, 'block#weak');
+            cooldown = 4000;
+          }
         } else if (item === 'strong') {
-          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) this.host.useAbility(this, 'block#strong');
+          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) {
+            this.host.useAbility(this, 'block#strong');
+            cooldown = 8000;
+          }
         } else if (item === 'spike') {
-          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) this.host.useAbility(this, 'block#spike');
+          if (this.mode !== 0 && ((this.target.x-this.x)**2+(this.target.y-this.y)**2)**.5 < 180) {
+            this.host.useAbility(this, 'block#spike');
+            cooldown = 10000;
+          }
         } else if (item === 'reflector') {
-          if (this.mode !== 0) this.host.useAbility(this, 'reflector');
+          if (this.mode !== 0) {
+            this.host.useAbility(this, 'reflector');
+            cooldown = 10000;
+          }
         }
+        
       }
     }
   }
