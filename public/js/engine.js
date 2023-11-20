@@ -818,8 +818,10 @@ class AI {
         const item = this.items[i];
         let cooldown = 0;
         if (item === 'airstrike') {
-          this.host.useAbility(this, 'airstrike'+this.target.x+'x'+this.target.y);
-          cooldown = 20000;
+          if (this.mode !== 0) {
+            this.host.useAbility(this, 'airstrike'+this.target.x+'x'+this.target.y);
+            cooldown = 20000;
+          }
         } else if (item === 'super_glu') {
           if (this.hp < this.maxHp*.75) {
             this.host.useAbility(this, 'glu');
