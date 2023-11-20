@@ -167,7 +167,7 @@ class Engine {
     const t = this.pt.find(t => t.username === data.username);
     if (!t) return;
     data = data.data;
-    const { emote, r, baseFrame, use, x, y, fire} = data; // destructuring is lag so remove
+    const { emote, r, baseFrame, use, x, y, fire} = data;
     t.baseRotation = data.baseRotation;
     t.immune = data.immune;
     t.animation = data.animation;
@@ -327,7 +327,7 @@ class Tank {
         if (entity.username !== this.username && this.immune && !this.ded && entity.canBashed && (entity instanceof Tank || entity instanceof AI)) {
           if ((this.class === 'warrior' && !teamMatch) || (this.class === 'medic' && teamMatch)) {
             if (collision(this.x, this.y, 80, 80, entity.x, entity.y, 80, 80)) {
-              entity.damageCalc(entity.x, entity.y, this.class === 'warrior' ? 75 : -30, this.username);
+              /entity.damageCalc(entity.x, entity.y, this.class === 'warrior' ? 75 : -30, this.username);
               entity.canBashed = false;
               setTimeout(() => {entity.canBashed = true}, 800);
             }
@@ -810,7 +810,7 @@ class AI {
       this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
     }
     if (this.canClass && this.mode !== 0) {
-      /*if (this.class === 'stealth' && !this.halfSpeed) {
+      /*if (this.class === 'stealth') {
         this.tank.invis = !this.tank.invis;
         this.timers.class = {time: Date.now(), cooldown: 50};
       } else if (c === 'tactical') {
@@ -940,7 +940,7 @@ class AI {
         if (entity.username !== this.username && this.immune && !this.ded && entity.canBashed && (entity instanceof Tank || entity instanceof AI)) {
           if ((this.class === 'warrior' && !teamMatch) || (this.class === 'medic' && teamMatch)) {
             if (collision(this.x, this.y, 80, 80, entity.x, entity.y, 80, 80)) {
-              entity.damageCalc(entity.x, entity.y, this.class === 'warrior' ? 75 : -30, this.username);
+              //entity.damageCalc(entity.x, entity.y, this.class === 'warrior' ? 75 : -30, this.username);
               entity.canBashed = false;
               setTimeout(() => {entity.canBashed = true}, 800);
             }
