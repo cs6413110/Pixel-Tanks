@@ -825,7 +825,7 @@ class AI {
         this.host.useAbility(this, `healwave${this.x}x${this.y}`); // greedy self-heal :D
         cooldown = 30000;
       } else if (this.class === 'fire') {
-        for (let [i, len] = type === 'shotgun' ? [-10, 15] : [0, 1]; i < len; i += 5) {
+        for (let i = -30, len = 30; i < len; i += 5) {
           const r = this.r+i;
           const {x, y} = toPoint(r);
           this.host.s.push(new Shot(this.x+40, this.y+40, x, y, 'fire', r, this.team, this.rank, this.host));
