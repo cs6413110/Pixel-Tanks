@@ -1367,7 +1367,10 @@ function Game() {
       }
     }
 
+    
+
     drawTank(t) {
+      if (!t.username) t.username = 'Ai.bot.renderer.beta';
       const p = t.username === PixelTanks.user.username;
       let a = 1;
       if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
@@ -1493,7 +1496,7 @@ function Game() {
 
       b.forEach(block => this.drawBlock(block));
       s.forEach(shot => this.drawShot(shot));
-      a.forEach(ai => this.drawAI(ai));
+      a.forEach(ai => this.drawTank(ai));
       t.forEach(tank => this.drawTank(tank));
       for (const block of b) {
         if (block.s) {
