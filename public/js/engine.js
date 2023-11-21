@@ -1102,7 +1102,7 @@ class AI {
     for (const t of tanks) {
       if (t.ded || t.invis || !raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b) || t.id === this.id) continue;
       if (getTeam(t.team) === getTeam(this.team)) {
-        if (!bond) bond = t;
+        if (!bond && t.role !== 3 && t.role !== 0) bond = t;
       } else {
         if (!target) target = t;
       }
