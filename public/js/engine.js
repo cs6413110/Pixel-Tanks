@@ -775,7 +775,8 @@ class AI {
     this.seeUser = this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
     this.canFire = this.canPowermissle = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canClass = this.canBoost = this.canBashed = true;
     this.items = [];
-    this.giveAbilities();
+    if (this.role !== 0) this.giveAbilities();
+    this.invis = this.class === 'stealth';
     this.color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
     this.cosmetic = host.pt.find(t => t.username === getUsername(this.team))?.cosmetic;
     this.cells = new Set();
@@ -809,26 +810,32 @@ class AI {
       const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
       this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
     }
-    if (this.canClass && this.mode !== 0) {
-      /*if (this.class === 'stealth') {
-        this.tank.invis = !this.tank.invis;
-        this.timers.class = {time: Date.now(), cooldown: 50};
-      } else if (c === 'tactical') {
-        this.fire('megamissle');
-        this.timers.class = {time: Date.now(), cooldown: 25000};
-      } else if (c === 'builder') {
-        this.tank.use.push('turret');
-        this.timers.class = {time: Date.now(), cooldown: 30000};
-      } else if (c === 'warrior') {
-        this.tank.use.push('buff');
-        this.timers.class = {time: Date.now(), cooldown: 40000};
-      } else if (c === 'medic') {
-        this.tank.use.push(`healwave${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
-        this.timers.class = {time: Date.now(), cooldown: 30000};
-      } else if (c === 'fire') {
-        for (let i = -30; i < 30; i += 5) this.tank.fire.push({...toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
-        this.timers.class = {time: Date.now(), cooldown: 10000};
-      }*/
+    if (this.canClass && this.mode !== 0 && Math.random() < 1/500) {
+      let cooldown = 0;
+      if (this.class === 'tactical') {
+        this.fireCalc(this.target.x, this.target.y, 'megamissle');
+        cooldown = 25000;
+      } else if (this.class === 'builder') {
+        this.host.useAbility(this, 'turret');
+        cooldown = 30000;
+      } else if (this.class === 'warrior') {
+        this.host.useAbility(this, 'buff');
+        cooldown = 40000;
+      } else if (this.class === 'medic') {
+        this.tank.use.push(`healwave${this.x}x${this.y}`); // greedy self-heal :D
+        cooldown = 30000;
+      } else if (this.class === 'fire') {
+        for (let [i, len] = type === 'shotgun' ? [-10, 15] : [0, 1]; i < len; i += 5) {
+          const r = this.r+i;
+          const {x, y} = toPoint(r);
+          this.host.s.push(new Shot(this.x+40, this.y+40, x, y, 'fire', r, this.team, this.rank, this.host));
+        }
+        cooldown = 10000;
+      }
+      this.canClass = false;
+      setTimeout(() => {
+        this.canClass = true;
+      }, cooldown);
     }
     for (let i = 0; i < 4; i++) {
       if (this['canItem'+i] && Math.random() < 1/500) {
