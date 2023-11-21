@@ -250,7 +250,7 @@ const images = {
     insta: '/animations/insta',
     insta_: { frames: 22, speed: 75, kill: 21, type: 1 },
     mechagodzilla: '/animations/mechagodzilla',
-    mechagodzilla_: { frames: 4, speed: 250, kill: 4, type: 1 },
+    mechagodzilla_: { frames: 23, speed: 75, kill: 12, type: 1 },
     fix: '/animations/fix',
     fix_: { frames: 4, speed: 250, kill: 4, type: 1 },
     plant: '/animations/plant',
