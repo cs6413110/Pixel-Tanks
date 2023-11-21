@@ -822,7 +822,7 @@ class AI {
         this.host.useAbility(this, 'buff');
         cooldown = 40000;
       } else if (this.class === 'medic') {
-        this.tank.use.push(`healwave${this.x}x${this.y}`); // greedy self-heal :D
+        this.host.useAbility(this, `healwave${this.x}x${this.y}`); // greedy self-heal :D
         cooldown = 30000;
       } else if (this.class === 'fire') {
         for (let [i, len] = type === 'shotgun' ? [-10, 15] : [0, 1]; i < len; i += 5) {
