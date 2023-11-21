@@ -5,7 +5,7 @@ const settings = {
   full_auth: ['cs641311'],
   admins: ['Celestial', 'bradley'],
   vips: ['DIO', 'DarkMemeGod', 'LostKing'], 
-  mutes: ['bradley'],
+  mutes: [],
   players_per_room: 400,
   ups: 60,
 }
