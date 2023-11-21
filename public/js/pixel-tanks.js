@@ -1680,7 +1680,7 @@ function Game() {
     collision(x, y) {
       if (this.ded) return true;
       if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return false;
-      if (this.tank.invis && this.tank.immune) return true;
+      if (this.tank.invis && this.tank.immune && !this.halfSpeed) return true;
       var l = 0, blocks = this.hostupdate.b, len = blocks.length;
       while (l<len) {
         if ((x > blocks[l].x || x + 80 > blocks[l].x) && (x < blocks[l].x + 100 || x + 80 < blocks[l].x + 100) && (y > blocks[l].y || y + 80 > blocks[l].y) && (y < blocks[l].y + 100 || y + 80 < blocks[l].y + 100)) {
@@ -1788,7 +1788,6 @@ function Game() {
         }
         if (this.canToolkit) {
           this.canToolkit = false;
-          if (this.tank.invis) this.tank.invis = !this.tank.invis;
           this.timers.toolkit = new Date();
           setTimeout(() => {this.canToolkit = true}, 40000);
           setTimeout(() => {this.halfSpeed = false}, PixelTanks.userData.class === 'medic' ? 5000 : 7500);
