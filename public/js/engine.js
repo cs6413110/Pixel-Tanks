@@ -810,7 +810,7 @@ class AI {
       const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
       this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
     }
-    if (this.canClass && this.mode !== 0 && Math.random() < 1/500) {
+    if (this.canClass && this.mode !== 0 && Math.random() < 1/300) {
       let cooldown = 0;
       if (this.class === 'tactical') {
         this.fireCalc(this.target.x, this.target.y, 'megamissle');
@@ -838,7 +838,7 @@ class AI {
       }, cooldown);
     }
     for (let i = 0; i < 4; i++) {
-      if (this['canItem'+i] && Math.random() < 1/500) {
+      if (this['canItem'+i] && Math.random() < 1/300) {
         const item = this.items[i];
         let cooldown = 0;
         if (item === 'airstrike') {
