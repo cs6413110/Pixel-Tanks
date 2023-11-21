@@ -647,7 +647,6 @@ const multimessage = (socket, data) => {
     if (!server) {
       server = Math.random();
       servers[server] = new joinKey[data.gamemode]();
-      settings.mutes.push('bradley');
     }
     if (servers[server].pt.some(t => t.username === socket.username)) {
       socket.send({status: 'error', message: 'You are already in the server!'});
