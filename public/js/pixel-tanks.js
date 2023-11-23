@@ -1161,11 +1161,14 @@ function Game() {
       this.multiplayer = multiplayer;
       this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
       this.tank.invis = PixelTanks.userData.class === 'stealth';
-      this.ops = 0;
-      this.ups = 0;
-      this.fps = 0;
-      this.ping = 0;
-      this.debug = '';
+      this._ops = 0;
+      this._ups = 0;
+      this._fps = 0;
+      this.ops = [];
+      this.ups = [];
+      this.fps = [];
+      this.pings = [];
+      this.debugMode = 0;
       this.reset();
 
       const joinData = {
@@ -1248,9 +1251,6 @@ function Game() {
               this.timers.toolkit = -1;
               this.timers.items = [{time: 0, cooldown: -1}, {time: 0, cooldown: -1,}, {time: 0, cooldown: -1}, {time: 0, cooldown: -1}]
               break;
-            case 'ping':
-              if (data.id === this.pingId) this.ping = Date.now()-this.pingStart;
-              break;
           }
         });
 
@@ -1266,15 +1266,12 @@ function Game() {
         });
       }
       this.pinger = setInterval(() =>  {
-        if (multiplayer) {
-          this.pingId = Math.random();
-          this.pingStart = Date.now();
-          this.socket.send({type: 'ping', id: this.pingId});
-        }
-        this.debug = 'T='+this.hostupdate.tickspeed+' P='+this.ping+' F='+this.fps+' U='+this.ups+' O='+this.ops;
-        this.ops = 0;
-        this.ups = 0;
-        this.fps = 0;
+        this.ops = this.ops.conat(this._ops).slice(-100);
+        this.ups = this.ups.concat(this._ups).slice(-100);
+        this.fps = this.fps.concat(this._fps).slice(-100);
+        this._ops = 0;
+        this._ups = 0;
+        this._fps = 0;
       }, 1000);
 
       document.addEventListener('keydown', this.keydown.bind(this));
@@ -1283,6 +1280,7 @@ function Game() {
       document.addEventListener('mousedown', this.mousedown.bind(this));
       document.addEventListener('mouseup', this.mouseup.bind(this));
       this.render = requestAnimationFrame(this.frame.bind(this));
+      this.getPing();
     }
 
     reset() {
@@ -1313,6 +1311,18 @@ function Game() {
       const size = b.type === 'airstrike' ? 200 : 100;
       const type = ['airstrike', 'fire'].includes(b.type) && getTeam(this.team) === getTeam(b.team) ? 'friendly'+b.type : b.type;
       GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1);
+    }
+
+    getPing() {
+      const start = Date.now();
+      this.socket.send({type: 'ping'});
+      this.socket.on('message', (data) => {
+        if (data.event === 'ping') {
+          const end = Date.now();
+          this.pings = this.pings.concat(end-start).slice(-100);
+          setTimeout(() => this.getPing(), 100); 
+        }
+      });
     }
 
     drawShot(s) {
@@ -1551,7 +1561,6 @@ function Game() {
       GUI.draw.globalAlpha = .2;
       GUI.draw.fillRect(0, 0, 180, 250);
       GUI.draw.globalAlpha = 1;
-      GUI.drawText(this.debug, 10, 20, 30, '#ffffff', 0);
       GUI.drawText('Killstreak: '+this.kills, 10, 50, 30, '#ffffff', 0);
       GUI.drawText('Crates: '+this.crates, 10, 100, 30, '#ffffff', 0);
       GUI.drawText('XP: '+this.xp, 10, 150, 30, '#ffffff', 0);
@@ -1580,6 +1589,17 @@ function Game() {
         this.tank.animation = false;
         clearInterval(this.animationInterval);
         clearTimeout(this.animationTimeout);
+      }
+
+      if (this.debugMode) {// 0 = disabled, 1 = ping, 2 = fps, 3 = ops, 4 = ups
+        const infoset = [null, this.pings, this.fps, this.ops, this.ups][this.debugMode];
+        for (const i in infoset) {
+          const info = infoset[i];
+          if (info >= 100) draw.fillStyle = '#FF0000';
+          if (info >= 50) draw.fillStyle = '#FFA500';
+          if (info < 50) draw.fillStyle = '#00FF00';
+          draw.fillRect(800+i*10, 800-info, 10, info);
+        }
       }
       
       if (this.paused) {
@@ -1830,7 +1850,10 @@ function Game() {
         } else {
           Menus.removeListeners();
         }
-      }// else if (k === 18) document.write(JSON.stringify(this.hostupdate));
+      } else if (k === 18) {
+        this.debugMode++;
+        if (this.debugMode >= 5) this.debugMode = 0; 
+      }
     }
 
     keyLoop(e) {
