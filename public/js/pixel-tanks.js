@@ -1191,7 +1191,7 @@ function Game() {
         this.socket.on('message', data => {
           switch (data.event) {
             case 'hostupdate':
-              this.ups++;
+              this._ups++;
               this.hostupdate.tickspeed = data.tickspeed;
               this.hostupdate.global = data.global;
               this.hostupdate.logs = data.logs.reverse();
@@ -1251,6 +1251,11 @@ function Game() {
               this.timers.toolkit = -1;
               this.timers.items = [{time: 0, cooldown: -1}, {time: 0, cooldown: -1,}, {time: 0, cooldown: -1}, {time: 0, cooldown: -1}]
               break;
+            case 'ping':
+              this.pings = this.pings.concat(Date.now()-this.pingstart).slice(-100);
+              this.socket.no('message');
+              setTimeout(() => this.getPing(), 100); 
+              break;
           }
         });
 
@@ -1273,6 +1278,7 @@ function Game() {
         this._ups = 0;
         this._fps = 0;
       }, 1000);
+      this.getPing();
 
       document.addEventListener('keydown', this.keydown.bind(this));
       document.addEventListener('keyup', this.keyup.bind(this));
@@ -1280,7 +1286,6 @@ function Game() {
       document.addEventListener('mousedown', this.mousedown.bind(this));
       document.addEventListener('mouseup', this.mouseup.bind(this));
       this.render = requestAnimationFrame(this.frame.bind(this));
-      this.getPing();
     }
 
     reset() {
@@ -1314,15 +1319,8 @@ function Game() {
     }
 
     getPing() {
-      const start = Date.now();
+      this.pingstart = Date.now();
       this.socket.send({type: 'ping'});
-      this.socket.on('message', (data) => {
-        if (data.event === 'ping') {
-          const end = Date.now();
-          this.pings = this.pings.concat(end-start).slice(-100);
-          setTimeout(() => this.getPing(), 100); 
-        }
-      });
     }
 
     drawShot(s) {
@@ -1468,7 +1466,7 @@ function Game() {
         Menus.trigger('main');
         this.multiplayer = undefined;
       }
-      this.fps++;
+      this._fps++;
       const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
       if (this.dx) {
         var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : (this.buffed ? 1.5 : 1));
@@ -1897,7 +1895,7 @@ function Game() {
       const {x, y, r, use, fire, animation} = this.tank;
       const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank};
       //if (x === this.lastUpdate.x && y === this.lastUpdate.y && r === this.lastUpdate.r && use.length === 0 && fire.length === 0 && !animation) return;
-      this.ops++;
+      this._ops++;
       if (this.multiplayer) {
         this.socket.send(updateData);
       } else {
