@@ -1598,7 +1598,7 @@ function Game() {
           if (info >= 100) draw.fillStyle = '#FF0000';
           if (info >= 50) draw.fillStyle = '#FFA500';
           if (info < 50) draw.fillStyle = '#00FF00';
-          draw.fillRect(800+i*10, 800-info, 10, info);
+          GUI.draw.fillRect(800+i*10, 800-info, 10, info);
         }
       }
       
