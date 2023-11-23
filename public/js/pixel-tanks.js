@@ -1595,9 +1595,9 @@ function Game() {
         const infoset = [null, this.pings, this.fps, this.ops, this.ups][this.debugMode];
         for (const i in infoset) {
           const info = infoset[i];
-          if (info >= 100) draw.fillStyle = '#FF0000';
-          if (info >= 50) draw.fillStyle = '#FFA500';
-          if (info < 50) draw.fillStyle = '#00FF00';
+          if (info >= 100) GUI.draw.fillStyle = '#FF0000';
+          if (info >= 50) GUI.draw.fillStyle = '#FFA500';
+          if (info < 50) GUI.draw.fillStyle = '#00FF00';
           GUI.draw.fillRect(800+i*10, 800-info, 10, info);
         }
       }
