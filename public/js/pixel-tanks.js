@@ -1586,7 +1586,7 @@ function Game() {
         clearInterval(this.animationInterval);
         clearTimeout(this.animationTimeout);
       }
-      if (this.debugMode || true) {// 0 = disabled, 1 = ping, 2 = fps, 3 = ops, 4 = ups
+      if (this.debugMode) {// 0 = disabled, 1 = ping, 2 = fps, 3 = ops, 4 = ups
         const infoset = [null, this.pings, this.fps, this.ops, this.ups][this.debugMode];
         for (const i in infoset) {
           const info = infoset[i];
