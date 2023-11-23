@@ -1262,6 +1262,7 @@ function Game() {
         this.socket.on('connect', () => {
           this.socket.send(joinData);
           this.sendInterval = setInterval(this.send.bind(this), 1000/30);
+          this.getPing();
         });
       } else {
         this.world = new Singleplayer(ip);
@@ -1278,7 +1279,6 @@ function Game() {
         this._ups = 0;
         this._fps = 0;
       }, 1000);
-      this.getPing();
 
       document.addEventListener('keydown', this.keydown.bind(this));
       document.addEventListener('keyup', this.keyup.bind(this));
@@ -1286,6 +1286,11 @@ function Game() {
       document.addEventListener('mousedown', this.mousedown.bind(this));
       document.addEventListener('mouseup', this.mouseup.bind(this));
       this.render = requestAnimationFrame(this.frame.bind(this));
+    }
+    
+    getPing() {
+      this.pingstart = Date.now();
+      this.socket.send({type: 'ping'});
     }
 
     reset() {
@@ -1316,11 +1321,6 @@ function Game() {
       const size = b.type === 'airstrike' ? 200 : 100;
       const type = ['airstrike', 'fire'].includes(b.type) && getTeam(this.team) === getTeam(b.team) ? 'friendly'+b.type : b.type;
       GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1);
-    }
-
-    getPing() {
-      this.pingstart = Date.now();
-      this.socket.send({type: 'ping'});
     }
 
     drawShot(s) {
