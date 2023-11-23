@@ -1015,7 +1015,6 @@ function Game() {
     } // OPTIMIZE
     
     static openCrate(type) {
-      try {
       const price = type ? 5 : 1, name = type ? 'deathEffects' : 'cosmetics', rand = Math.floor(Math.random()*1001), crate = [{
         common: ['X', 'Red Hoodie', 'Devil Wings', 'Devil Horns', 'Exclaimation Point', 'Orange Hoodie', 'Yellow Hoodie', 'Green Hoodie', 'Leaf', 'Blue Hoodie', 'Purple Hoodie', 'Purple Flower', 'Boost', 'Cancelled', 'Spirals', 'Laff', 'Speaker', 'Spikes', 'Bat Wings', 'Christmas Tree', 'Candy Cane', 'Pumpkin Face', 'Top Hat', 'Mask', 'Purple-Pink Hoodie', 'Bunny Ears', 'Red Ghost', 'Blue Ghost', 'Pink Ghost', 'Orange Ghost'],
         uncommon: ['Present', 'Dead', 'Apple', 'Pumpkin', 'Basketball', 'Banana', 'Pickle', 'Blueberry', 'Eggplant', 'Peace', 'Question Mark', 'Small Scratch', 'Kill = Ban', 'Headphones', 'Reindeer Hat', 'Pumpkin Hat', 'Cat Ears', 'Cake', 'Cat Hat', 'First Aid', 'Fisher Hat'],
@@ -1065,7 +1064,6 @@ function Game() {
       }, 5000);
       PixelTanks.userData[name].push(crate[type][rarity][number]);
       PixelTanks.save();
-      } catch(e) {alert(e)}
     }
 
     static upgrade() {
@@ -1588,8 +1586,6 @@ function Game() {
         clearInterval(this.animationInterval);
         clearTimeout(this.animationTimeout);
       }
-      alert(this.debugMode+' : pings => '+JSON.stringify(this.pings)+' : fps => '+JSON.stringify(this.fps)+' : ops => '+JSON.stringify(this.ops)+' : ups => '+JSON.stringify(this.ups));
-      try {
       if (this.debugMode || true) {// 0 = disabled, 1 = ping, 2 = fps, 3 = ops, 4 = ups
         const infoset = [null, this.pings, this.fps, this.ops, this.ups][this.debugMode];
         for (const i in infoset) {
@@ -1600,7 +1596,6 @@ function Game() {
           GUI.draw.fillRect(800+i*10, 800-info, 10, info);
         }
       }
-      } catch(e) {alert(e)}
       
       if (this.paused) {
         let a = 1;
