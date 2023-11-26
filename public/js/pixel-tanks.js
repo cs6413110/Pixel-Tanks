@@ -1452,7 +1452,6 @@ function Game() {
     }
 
     frame() {
-      try {
       this.render = requestAnimationFrame(this.frame.bind(this));
       GUI.clear();
       if (this.hostupdate.pt.length === 0) {
@@ -1616,7 +1615,6 @@ function Game() {
         }
         Menus.menus.pause.draw([1200, 0, 400, 1000]);
       }
-      } catch(e) {alert(e)}
     }
 
     chat(e) {
