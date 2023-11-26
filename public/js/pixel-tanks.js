@@ -1270,7 +1270,7 @@ function Game() {
         });
       }
       this.pinger = setInterval(() =>  {
-        this.ops = this.ops.conat(this._ops).slice(-100);
+        this.ops = this.ops.concat(this._ops).slice(-100);
         this.ups = this.ups.concat(this._ups).slice(-100);
         this.fps = this.fps.concat(this._fps).slice(-100);
         this._ops = 0;
