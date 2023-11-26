@@ -1,4 +1,4 @@
-
+(() => {
   class MegaSocket {
     constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
       this.url = url;
@@ -2007,4 +2007,4 @@
   }
 
   window.onload = PixelTanks.start;
-//};
+})();
