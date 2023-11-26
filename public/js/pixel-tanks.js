@@ -1251,7 +1251,6 @@ function Game() {
               break;
             case 'ping':
               this.pings = this.pings.concat(Date.now()-this.pingstart).slice(-100);
-              this.socket.no('message');
               setTimeout(() => this.getPing(), 100); 
               break;
           }
