@@ -1,18 +1,4 @@
-const msgpack = document.createElement('SCRIPT');
-msgpack.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/msgpackr.js';
-msgpack.onload = () => {
-  const pathfinding = document.createElement('SCRIPT');
-  pathfinding.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/pathfinding.js';
-  pathfinding.onload = () => {
-    const engine = document.createElement('SCRIPT');
-    engine.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/engine.js';
-    engine.onload = Game;
-    document.head.appendChild(engine);
-  }
-  document.head.appendChild(pathfinding);
-}
-document.head.appendChild(msgpack);
-//function Game() {
+
   class MegaSocket {
     constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
       this.url = url;
