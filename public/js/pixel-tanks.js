@@ -175,7 +175,6 @@ function Game() {
         const canvas = document.createElement('canvas'), draw = canvas.getContext('2d');
         canvas.width = w*PixelTanks.resizer;
         canvas.height = h*PixelTanks.resizer;
-        canvas.style = 'border: 1px solid black';
         draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, -x*PixelTanks.resizer, -y*PixelTanks.resizer);
         if (PixelTanks.images.menus[this.id]) draw.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3]);
         this.cache.push([x, y, w, h, canvas]);
@@ -366,6 +365,7 @@ function Game() {
           padding: 0;
           overflow: hidden;
           text-align: center;
+          background-color: black;
         }
         canvas {
           display: inline;
