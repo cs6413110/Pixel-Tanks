@@ -498,7 +498,7 @@
               for (const c of levelCoords) {
                 if (x > c[0]*1600/1049 && x < (c[0]+80)*1600/1049 && y > c[1]*1000/653 && y < (c[1]+74)*1000/653) {
                   Menus.removeListeners();
-                  PixelTanks.user.player = new Tank(levelCoords.indexOf(c)+10, false, null);
+                  PixelTanks.user.player = new Client(levelCoords.indexOf(c)+10, false, null);
                 }
               }
             }
@@ -545,7 +545,7 @@
             [340, 688, 416, 116, function() {this.gamemode = 'tdm'}, true],
             [340, 844, 416, 116, function() {this.gamemode = 'juggernaut'}, true],
             [868, 848, 368, 88, function() {
-              PixelTanks.user.player = new Tank(this.ip, true, this.gamemode);
+              PixelTanks.user.player = new Client(this.ip, true, this.gamemode);
               Menus.removeListeners();
             }, true],
           ],
@@ -679,7 +679,7 @@
               for (const c of helpCoords) {
                 if (x > c[0] && x < c[0]+80 && y > c[1] && y < c[1]+74) {
                   Menus.removeListeners();
-                  PixelTanks.user.player = new Tank(helpCoords.indexOf(c)+1, false, null);
+                  PixelTanks.user.player = new Client(helpCoords.indexOf(c)+1, false, null);
                 }
               }
             }
@@ -1118,7 +1118,7 @@
     }
   }
 
-  class Tank {
+  class Client {
     constructor(ip, multiplayer, gamemode) {
       this.xp = 0;
       this.crates = 0;
@@ -1959,10 +1959,10 @@
         How to use custom levels with custom names(for tutorials):
         
         When creating the tank, do:
-        ...new Tank({name: 'bread-level#128372183213', code: *insert code NO COMMA*}, false, null)
+        ...new Client({name: 'bread-level#128372183213', code: *insert code NO COMMA*}, false, null)
 
         To run a normal level do:
-        ...new Tank(1, false, null);
+        ...new Client(1, false, null);
         *runs the first level in existance*
 
         HOW DO I DRAW MEH TEXT:
