@@ -1592,7 +1592,7 @@ function Game() {
           if (info >= 100) GUI.draw.fillStyle = '#FF0000';
           if (info >= 50) GUI.draw.fillStyle = '#FFA500';
           if (info < 50) GUI.draw.fillStyle = '#00FF00';
-          GUI.draw.fillRect(800+i*10, 800-info, 10, info);
+          GUI.draw.fillRect(1600-infoset.length*8+i*8, 800-info, 10, info);
         }
       }
       
