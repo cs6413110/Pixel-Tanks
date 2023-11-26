@@ -1177,7 +1177,7 @@ document.head.appendChild(msgpack);
         tank: {
           rank: PixelTanks.userData.stats[4],
           username: PixelTanks.user.username,
-          class: PixelTanks.userData.class,        canvas.style = 'border: 1px solid black';
+          class: PixelTanks.userData.class,
           cosmetic: PixelTanks.userData.cosmetic,
           deathEffect: PixelTanks.userData.deathEffect,
           color: PixelTanks.userData.color,
