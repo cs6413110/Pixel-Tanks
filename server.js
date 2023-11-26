@@ -39,7 +39,7 @@ setInterval(() => {
 }, 1000);
 
 const server = Bun.serve({
-  port: process.env.PORT || 80,
+  port: process.env.PORT || 8080,
   fetch(req, server) {
     const url = new URL(req.url);
     if (server.upgrade(req, {data: {isMain: url.pathname === '/'}})) return;
