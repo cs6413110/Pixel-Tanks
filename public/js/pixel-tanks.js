@@ -10,13 +10,11 @@
         this.socket.onclose();
       });
       if (this.options.reconnect) window.addEventListener('online', this.connect.bind(this));
-      if (this.options.autoconnect) {
-        this.status = 'connecting';
-        this.connect();
-      }
+      if (this.options.autoconnect) this.connect();
     }
 
     connect() {
+      this.status = 'connecting';
       this.socket = new WebSocket(this.url);
       this.socket.binaryType = 'arraybuffer';
       this.socket.onopen = () => {
