@@ -1571,12 +1571,12 @@
       }
       if (this.debugMode) {// 0 = disabled, 1 = ping, 2 = fps, 3 = ops, 4 = ups
         const infoset = [null, this.pings, this.fps, this.ops, this.ups][this.debugMode];
+        const colorset = [null, {50: '#FFA500', 100: '#FF0000'}, {0: '#FF0000', 30: '#FFFF00', 60: '#00FF00'}, {60: '#FF0000'}, {60: '#FF0000'}][this.debugMode];
         for (const i in infoset) {
           const info = infoset[i];
-          if (info >= 100) GUI.draw.fillStyle = '#FF0000';
-          if (info >= 50) GUI.draw.fillStyle = '#FFA500';
-          if (info < 50) GUI.draw.fillStyle = '#00FF00';
-          GUI.draw.fillRect(1600-infoset.length*8+i*8, 800-info, 10, info);
+          GUI.draw.fillStyle = '#00FF00';
+          for (const key in colorset) if (info >= key) GUI.draw.fillStyle = colorset[key];
+          GUI.draw.fillRect(1600-infoset.length*8+i*8, 800-info*.2, 10, info*.2);
         }
       }
       
