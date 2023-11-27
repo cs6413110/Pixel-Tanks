@@ -38,7 +38,7 @@ let db;
 })();
 
 const server = http.createServer((req, res) => {
-  res.end(fs.readFileSync('./public/js/play.js'));
+  res.end(fs.readFileSync('./public/js/pixel-tanks.js'));
 });
 
 const wss = new WebSocketServer({noServer: true});
