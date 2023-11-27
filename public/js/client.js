@@ -1235,7 +1235,7 @@
               break;
             case 'ping':
               this.pings = this.pings.concat(Date.now()-this.pingstart).slice(-100);
-              setTimeout(() => this.getPing(), 100); 
+              this.getPing(); 
               break;
           }
         });
