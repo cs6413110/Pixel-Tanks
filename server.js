@@ -43,8 +43,7 @@ const server = Bun.serve({
   fetch(req, server) {
     const url = new URL(req.url);
     if (server.upgrade(req, {data: {isMain: url.pathname === '/'}})) return;
-    if (url.pathname === '/') return new Response(Bun.file('./public/js/play.js'));
-    if (url.pathname === '/play') return new Response(Bun.file('./play.html'));
+    if (url.pathname === '/') return new Response(Bun.file('./public/js/pixel-tanks.js'));
     if (url.pathname === '/verify') return new Reponse(valid(req.query.token, req.query.username).toString());
   },
   websocket: {
