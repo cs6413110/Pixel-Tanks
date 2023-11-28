@@ -438,7 +438,7 @@ class Block {
 
   damage(d) {
     if (this.hp === Infinity) return;
-    this.hp = Math.max(this.hp-d, 0);
+    this.hp = Math.max(this.hp-Math.abs(d), 0);
     this.s = true;
     clearTimeout(this.bar);
     this.bar = setTimeout(() => {
@@ -722,9 +722,7 @@ class Damage {
         } else if (e instanceof Block) {
           if (collision(x, y, w, h, e.x, e.y, 100, 100)) e.damage(a);
         } else if (e instanceof AI) {
-          if (collision(x, y, w, h, e.x, e.y, e.role === 0 ? 100 : 80, e.role === 0 ? 100 : 80)) {
-            if (getTeam(team) !== getTeam(e.team)) e.damageCalc(e.x, e.y, a);
-          }
+          if (collision(x, y, w, h, e.x, e.y, e.role === 0 ? 100 : 80, e.role === 0 ? 100 : 80)) e.damageCalc(e.x, e.y, getTeam(team) !== getTeam(e.team) ? Math.abs(a) : Math.min(a, 0));
         }
       }
     }
