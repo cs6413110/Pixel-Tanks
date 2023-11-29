@@ -1,9 +1,1 @@
-const key = ['msgpackr', 'pathfinding', 'engine', 'client'];
-const loadNext = i => {
-  const script = document.createElement('SCRIPT');
-  script.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/'+key[i]+'.js';
-  if (i+1 < key.length) script.onload = () => loadNext(i+1);
-  document.head.appendChild(script);
-  alert('added script with id of '+script.src);
-}
-loadNext(0);
+(load = i => document.head.appendChild(Object.assign(document.createElement('SCRIPT'), {src: 'https://cs6413110.github.io/Pixel-Tanks/public/js/'+['msgpackr', 'pathfinding', 'engine', 'client'][i]+'.js', onload: i < 4 ? () => load(i+1) : () => {}})))(0);
