@@ -148,17 +148,12 @@ class Engine {
     } else if (a.includes('airstrike')) {
       const h = a.replace('airstrike', '').split('x');
       this.b.push(new Block(Number(h[0]), Number(h[1]), Infinity, 'airstrike', parseTeamExtras(t.team), this));
-    } else if (a.includes('healwave')) {
-      const m = a.replace('healwave', '').split('x');
-      const hx = Math.floor(m[0]/100), hy = Math.floor(m[1]/100);
-      for (let i = Math.max(0, hx-2); i <= Math.min(29, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(29, hy+2); l++) {
-        for (const entity of this.cells[i][l]) {
-          if (entity instanceof Tank) {
-            if (getTeam(entity.team) === getTeam(t.team)) {
-              entity.damageCalc(entity.x, entity.y, -(entity.maxHp-entity.hp)/3, this.username);
-            }
-          }
-        }
+    } else if (a === 'healwave') {
+      let healage = 500;
+      for (const tank of this.pt) if (getTeam(tank.team) === getTeam(t.team)) {
+        
+      }
+      for (const ai of this.ai) {
       }
     }
   }
@@ -1135,7 +1130,7 @@ class AI {
     if (type === 'powermissle') {
       this.canPowermissle = false;
       setTimeout(() => {this.canPowermissle = true}, 10000);
-    } else {
+    } else if (type !== 'megamissle') {
       this.canFire = false;
       setTimeout(() => {this.canFire = true}, type === 'shotgun' ? 600 : 200);
     }
