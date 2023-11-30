@@ -817,6 +817,10 @@
                 if (e.keyCode === 37 && this.cosmeticMenu > 0) this.cosmeticMenu--;
                 if (e.keyCode === 39 && this.cosmeticMenu+1 !== Math.ceil(PixelTanks.userData.cosmetics.length/16)) this.cosmeticMenu++;
               }
+              if (this.deathEffectsTab) {
+                if (e.keyCode === 37 && this.deathEffectsMenu > 0) this.deathEffectsMenu--;
+                if (e.keyCode === 39 && this.deathEffectsMenu+1 !== Math.ceil(PixelTanks.userData.deathEffects.length/16)) this.deathEffectsMenu++;
+              }
             }
           },
           cdraw: function() {
@@ -1813,7 +1817,7 @@
           this.tank.use.push('buff');
           this.timers.class = {time: Date.now(), cooldown: 40000};
         } else if (c === 'medic') {
-          this.tank.use.push(`healwave${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
+          this.tank.use.push('healwave');
           this.timers.class = {time: Date.now(), cooldown: 30000};
         } else if (c === 'fire') {
           for (let i = -30; i < 30; i += 5) this.tank.fire.push({...toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
