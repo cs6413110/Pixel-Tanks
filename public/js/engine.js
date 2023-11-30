@@ -137,7 +137,7 @@ class Engine {
       this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
     } else if (a === 'buff') {
       t.buff = true;
-      setTimeout(() => { t.buff = false }, 10000);
+      setTimeout(() => { t.buff = false }, 5000);
     } else if (a === 'shield') {
       t.shields = 100;
     } else if (a === 'reflector') {
@@ -188,7 +188,7 @@ class Engine {
     for (const exe of use) this.useAbility(t, exe);
     if (fire.length) {
       t.pushback = -6;
-      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank*(t.buff ? 1.2 : 1), this));
+      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank*(t.buff ? 1.5 : 1), this));
     }
   }
 
