@@ -1137,7 +1137,7 @@
       this.key = [];
       this.left = null;
       this.up = null;
-      this.canGrapple = true;
+      this.canGrapple = false;
       this.showChat = false;
       this.msg = '';
       this.multiplayer = multiplayer;
