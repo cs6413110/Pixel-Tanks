@@ -427,7 +427,7 @@ class TDM extends Multiplayer {
           this.s = [];
           this.ai = [];
           this.d = [];
-          this.levelReader(duelsLevels[0]);
+          this.levelReader(tdmLevels[Math.floor(Math.random()*tdmLevels.length)]);
           this.round++;
           this.mode = 1; 
           this.readytime = Date.now();
