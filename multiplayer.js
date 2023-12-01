@@ -361,7 +361,7 @@ class TDM extends Multiplayer {
         this.pt.forEach(t => {
           t.team = t.username+':'+(t.color === '#FF0000' ? 'RED' : 'BLUE');
         });
-        this.levelReader(tdmLevels[tdmLevels[Math.floor(Math.random()*tdmLevels.length)]]);
+        this.levelReader(tdmLevels[Math.floor(Math.random()*tdmLevels.length)]);
       } else if (this.pt.length >= 4) this.global = 'Starting in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
     } else if (this.mode === 1) {
       this.pt.forEach(t => {
