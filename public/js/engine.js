@@ -188,7 +188,7 @@ class Engine {
     for (const exe of use) this.useAbility(t, exe);
     if (fire.length) {
       t.pushback = -6;
-      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank*(t.buff ? 1.5 : 1), this));
+      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank*(t.buff ? (1.5*t.rank+15)/t.rank : 1), this));
     }
   }
 
@@ -816,7 +816,7 @@ class AI {
         this.host.useAbility(this, 'buff');
         cooldown = 40000;
       } else if (this.class === 'medic') {
-        this.host.useAbility(this, `healwave${this.x}x${this.y}`); // greedy self-heal :D
+        this.host.useAbility(this, 'healwave'); // greedy self-heal :D
         cooldown = 30000;
       } else if (this.class === 'fire') {
         for (let i = -30, len = 30; i < len; i += 5) {
@@ -1126,7 +1126,7 @@ class AI {
     for (let [i, len] = type === 'shotgun' ? [-10, 15] : [0, 1]; i < len; i += 5) {
       const r = this.r+i;
       const {x, y} = toPoint(r);
-      this.host.s.push(new Shot(this.x+40, this.y+40, x, y, type, r, this.team, this.rank, this.host));
+      this.host.s.push(new Shot(this.x+40, this.y+40, x, y, type, r, this.team, this.rank*(this.buff ? (1.5*this.rank+15)/this.rank : 1), this.host));
     }
     if (type === 'powermissle') {
       this.canPowermissle = false;
