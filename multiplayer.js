@@ -410,7 +410,7 @@ class TDM extends Multiplayer {
         this.global = winner+' Wins!';
         setTimeout(() => {
           this.pt.forEach(t => {
-            t.socket.send({event: 'gameover', type: winner === t.team ? 'victory' : 'defeat'});
+            t.socket.send({event: 'gameover', type: winner === getTeam(t.team) ? 'victory' : 'defeat'});
             t.socket.close();
           });
         }, 5000);
