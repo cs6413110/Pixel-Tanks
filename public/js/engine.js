@@ -318,15 +318,7 @@ class Tank {
       const [x, y] = cell.split('x');
       for (const entity of this.host.cells[x][y]) {
         const teamMatch = team === getTeam(entity.team);
-        if (entity.username !== this.username && this.immune && !this.ded && entity.canBashed && (entity instanceof Tank || entity instanceof AI)) {
-          if ((this.class === 'warrior' && !teamMatch) || (this.class === 'medic' && teamMatch)) {
-            if (collision(this.x, this.y, 80, 80, entity.x, entity.y, 80, 80)) {
-              //entity.damageCalc(entity.x, entity.y, this.class === 'warrior' ? 75 : -30, this.username);
-              entity.canBashed = false;
-              setTimeout(() => {entity.canBashed = true}, 800);
-            }
-          }
-        } else if (entity instanceof Block) {
+        if (entity instanceof Block) {
           if (!this.ded && !this.immune && collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
             if (entity.type === 'fire') {
               if (this.fire) {
@@ -617,7 +609,7 @@ class Shot {
             if (bullet_settings.size[type]) {
               host.d.push(new Damage(x - bullet_settings.size[type] / 2 + 10, y - bullet_settings.size[type] / 2 + 10, bullet_settings.size[type], bullet_settings.size[type], this.damage, this.team, host));
             } else if (getTeam(e.team) !== getTeam(this.team)) {
-              e.damageCalc(x, y, this.damage);
+              e.damageCalc(x, y, this.damage, getUsername(this.team));
             }
             return true;
           }
@@ -716,7 +708,7 @@ class Damage {
         } else if (e instanceof Block) {
           if (collision(x, y, w, h, e.x, e.y, 100, 100)) e.damage(a);
         } else if (e instanceof AI) {
-          if (collision(x, y, w, h, e.x, e.y, e.role === 0 ? 100 : 80, e.role === 0 ? 100 : 80)) e.damageCalc(e.x, e.y, getTeam(team) !== getTeam(e.team) ? Math.abs(a) : Math.min(a, 0));
+          if (collision(x, y, w, h, e.x, e.y, e.role === 0 ? 100 : 80, e.role === 0 ? 100 : 80)) e.damageCalc(e.x, e.y, getTeam(team) !== getTeam(e.team) ? Math.abs(a) : Math.min(a, 0), getUsername(team));
         }
       }
     }
@@ -936,15 +928,7 @@ class AI {
       const [x, y] = cell.split('x');
       for (const entity of this.host.cells[x][y]) {
         const teamMatch = team === getTeam(entity.team);
-        if (entity.username !== this.username && this.immune && !this.ded && entity.canBashed && (entity instanceof Tank || entity instanceof AI)) {
-          if ((this.class === 'warrior' && !teamMatch) || (this.class === 'medic' && teamMatch)) {
-            if (collision(this.x, this.y, 80, 80, entity.x, entity.y, 80, 80)) {
-              //entity.damageCalc(entity.x, entity.y, this.class === 'warrior' ? 75 : -30, this.username);
-              entity.canBashed = false;
-              setTimeout(() => {entity.canBashed = true}, 800);
-            }
-          }
-        } else if (entity instanceof Block) {
+        if (entity instanceof Block) {
           if (!this.ded && !this.immune && collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
             if (entity.type === 'fire') {
               if (this.fire) {
