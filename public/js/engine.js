@@ -171,7 +171,7 @@ class Engine {
       t.x = x;
       t.y = y;
       t.updateCell();
-      if (t.class === 'warrior' && t.immune) this.useAbility(t, 'break');
+      if (t.class === 'warrior' && t.immune && !t.ded) this.useAbility(t, 'break');
     }
     t.r = r;
     if (t.ded) return;
