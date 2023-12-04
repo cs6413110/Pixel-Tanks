@@ -1135,19 +1135,22 @@ class AI {
     }
   }
 
-  damageCalc(x, y, d) {
+  damageCalc(x, y, a, u) {
     if (this.immune+500 > Date.now() || this.reflect) return;
     const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
     for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) for (const entity of this.host.cells[i][l]) {
-      if (entity instanceof Shot) if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') d *= getTeam(entity.team) === getTeam(this.team) ? .9 : 1.1;
+      if (entity instanceof Shot) if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') a *= getTeam(entity.team) === getTeam(this.team) ? .9 : 1.1;
     }
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
-    this.damage = {d: (this.damage ? this.damage.d : 0)+d, x, y};
-    this.hp -= d;
+    this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y};
+    this.hp -= a;
     clearInterval(this.healInterval);
     clearTimeout(this.healTimeout);
-    if (this.hp <= 0) return this.destroy();
+    if (this.hp <= 0) {
+      if (this.host.ondeath) this.host.ondeath(this, this.host.pt.find(t => t.username === u));
+      return this.destroy();
+    }
     this.healTimeout = setTimeout(() => {
       this.healInterval = setInterval(() => {
         this.hp = Math.min(this.hp+.4, this.maxHp);
