@@ -99,9 +99,9 @@ class Multiplayer extends Engine {
     for (const t of this.pt) {
       const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
       const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;      
-      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs.slice(t?.render.logs.length || 0), global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
+      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs.slice(t?.render.logs || 0), global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
       let send = false;
-      if (render.logs.length) send = true;
+      if (message.logs.length) send = true;
       for (const p of ['b', 'pt', 'ai', 's', 'd']) {
         const ids = new Set(this[p].map(e => e.id));
         this[p].filter(e => collision(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
