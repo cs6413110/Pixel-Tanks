@@ -1297,7 +1297,7 @@
       this.canItem1 = true;
       this.canItem2 = true;
       this.canItem3 = true;
-      this.canGrapple = false;
+      this.canGrapple = true;
       this.kills = 0;
     }
 
