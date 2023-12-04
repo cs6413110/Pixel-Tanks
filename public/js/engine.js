@@ -1,4 +1,4 @@
-if (window === undefined) PF = require('pathfinding');
+if (!window) PF = require('pathfinding');
 
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
 const pathfind = (sx, sy, tx, ty, map) => finder.findPath(sx, sy, tx, ty, map);
