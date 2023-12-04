@@ -1179,7 +1179,7 @@
               this._ups++;
               this.hostupdate.tickspeed = data.tickspeed;
               this.hostupdate.global = data.global;
-              this.hostupdate.logs = this.hostupdate.logs.concat(data.logs.reverse());
+              this.hostupdate.logs.unshift(...data.logs.reverse());
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
                 if (data[p].length) data[p].forEach(e => {
                  const index = this.hostupdate[p].findIndex(obj => obj.id === e.id);
