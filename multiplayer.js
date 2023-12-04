@@ -64,11 +64,13 @@ const deathMessages = [
 ], joinMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
-  `{idot} materialized`
+  `{idot} materialized`,
+  `{idot} is here`
 ], rageMessages = [
   `{idot} left the game`,
   `{idot} quit`,
   `{idot} disconnected`,
+  `{idot} will return soon`
 ];
 
 let tickspeed = 'N/A';
