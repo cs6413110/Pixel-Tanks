@@ -549,6 +549,12 @@ const Commands = {
     servers[this.room].logs.push({m: '/ipban <player>, /pardon <player>, /help', c: '#0000FF'});
   }],
 };
+
+process.on('uncaughtException', function (err) {
+  console.log('Caught exception: ' + err);
+  for (const socket of sockets) socket.send({status: 'error', message: 'ServerCrash: '+err})
+});
+
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 
 const Profile = (arr, update) => {
