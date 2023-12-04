@@ -2,7 +2,7 @@ const settings = {
   authserver: 'localhost',
   bans: [],
   banips: [],
-  full_auth: ['cs641311'],
+  full_auth: ['cs641311','3foe'],
   admins: ['Celestial', 'bradley'],
   vips: ['DIO', 'DarkMemeGod', 'LostKing', 'OneWingedAngel'], 
   mutes: [],
