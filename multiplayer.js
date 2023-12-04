@@ -550,10 +550,7 @@ const Commands = {
   }],
 };
 
-process.on('uncaughtException', function (err) {
-  console.log('Caught exception: ' + err);
-  for (const socket of sockets) socket.send({status: 'error', message: 'ServerCrash: '+err})
-});
+process.on('uncaughtException', (err, origin) => sockets.forEach(socket => socket.send({status: 'error', message: `Caught exception: ${err}\nException origin: ${origin}`})));
 
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 
