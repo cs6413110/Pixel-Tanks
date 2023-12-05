@@ -1989,7 +1989,10 @@
     }
 
     ondeath(t, m) {
-      if (t.username !== PixelTanks.userData.username) return;
+      if (t.username !== PixelTanks.userData.username) {
+        PixelTanks.user.player.reset();
+        PixelTanks.user.player.kills++;
+      };
       t.ded = true;
       setTimeout(() => {
         PixelTanks.user.player.implode();
