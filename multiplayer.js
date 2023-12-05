@@ -4,7 +4,7 @@ const settings = {
   banips: [],
   full_auth: ['cs641311','3foe'],
   admins: ['Celestial', 'bradley','DarkMemeGod'],
-  vips: ['DIO', 'LostKing', 'OneWingedAngel'], 
+  vips: ['DIO', 'LostKing', 'OneWingedAngel', 'PWR-LightMemeGod'], 
   mutes: [],
   players_per_room: 400,
   ups: 60,
