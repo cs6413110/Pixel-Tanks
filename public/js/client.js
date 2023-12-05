@@ -1992,6 +1992,7 @@
       if (t.username !== PixelTanks.userData.username) {
         PixelTanks.user.player.reset();
         PixelTanks.user.player.kills++;
+        return;
       };
       t.ded = true;
       setTimeout(() => {
