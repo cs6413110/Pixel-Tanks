@@ -141,9 +141,7 @@ class Engine {
         }
       }
     } else if (a === 'turret') {
-      for (const ai of this.ai) {
-        if (getUsername(ai.team) === t.username) setTimeout(() => ai.destroy());
-      }
+      for (const ai of this.ai) if (getUsername(ai.team) === t.username) setTimeout(() => ai.destroy());
       this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
     } else if (a === 'buff') {
       t.buff = true;
@@ -756,6 +754,7 @@ class AI {
       });
     });
     this.id = Math.random();
+    this.username = 'Bot'+this.id;
     this.role = role;
     this.x = x;
     this.y = y;
