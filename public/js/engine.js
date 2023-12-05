@@ -108,7 +108,7 @@ class Engine {
       }
       for (const ai of this.ai) {
         const bangTime = (500-Math.sqrt((t.x-ai.x)**2+(t.y-ai.y)**2))*5;
-        if (bangTime > 0 && (getTeam(ai.team) !== getTeam(t.team) || ai.id === t.id) {
+        if (bangTime > 0 && (getTeam(ai.team) !== getTeam(t.team) || ai.id === t.id)) {
           ai.stunned = true;
           clearTimeout(ai.flashbangTimeout);
           ai.flashbangTimeout = setTimeout(() => {
