@@ -761,7 +761,7 @@ class AI {
     this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = 0;
     this.barrelSpeed = Math.random()*3+2;
     this.rank = rank;
-    this.team = this.username+':'+team;
+    this.team = team.includes(':') ? team : this.username+':'+team;
     this.host = host;
     this.hp = rank * 10 + 300;
     this.maxHp = this.hp;
