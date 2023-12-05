@@ -1365,9 +1365,9 @@
       const p = t.username === PixelTanks.user.username;
       let a = 1;
       if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
-      if ((t.invis && p) || t.ded) a = .5;
+      if (t.invis && p) a = .5;
       GUI.draw.globalAlpha = a;
-      PixelTanks.renderBottom(t.x, t.y, 80, t.color, t.baseRotation);
+      if (t.role !== 0) PixelTanks.renderBottom(t.x, t.y, 80, t.color, t.baseRotation);
       GUI.drawImage(PixelTanks.images.tanks['bottom'+(t.baseFrame ? '' : '2')], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
       if (t.fire) GUI.drawImage(PixelTanks.images.animations.fire, t.x, t.y, 80, 80, 1, 0, 0, 0, 0, undefined, t.fire.frame*29, 0, 29, 29);
       GUI.draw.globalAlpha = a;
