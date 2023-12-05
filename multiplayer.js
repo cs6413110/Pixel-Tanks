@@ -588,8 +588,6 @@ const Commands = {
   }],
 };
 
-process.on('uncaughtException', (err, origin) => sockets.forEach(socket => socket.send({status: 'error', message: `Caught exception: ${err}\nException origin: ${origin}`})));
-
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
 
 const Profile = (arr, update) => {
