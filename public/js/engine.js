@@ -360,7 +360,7 @@ class Tank {
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
     this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y};
-    if (this.hp <= 0 && this.host.ondeath) this.host.ondeath(this, this.host.pt.find(t => t.username === u));
+    if (this.hp <= 0 && this.host.ondeath) this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
   }
 
   grappleCalc() {
@@ -1146,7 +1146,7 @@ class AI {
     clearInterval(this.healInterval);
     clearTimeout(this.healTimeout);
     if (this.hp <= 0) {
-      if (this.host.ondeath) this.host.ondeath(this, this.host.pt.find(t => t.username === u));
+      if (this.host.ondeath) this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
       return this.destroy();
     }
     this.healTimeout = setTimeout(() => {
