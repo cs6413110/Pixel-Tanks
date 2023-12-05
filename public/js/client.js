@@ -1362,7 +1362,6 @@
     
 
     drawTank(t) {
-      if (!t.username) t.username = 'Ai.bot.renderer.beta';
       const p = t.username === PixelTanks.user.username;
       let a = 1;
       if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
@@ -1989,15 +1988,14 @@
       }
     }
 
-    ondeath() {
-      this.ai.forEach(ai => {
-        ai.mode = 3;
-      });
+    ondeath(t, m) {
+      if (t.username !== PixelTanks.userData.username) return;
+      t.ded = true;
       setTimeout(() => {
         PixelTanks.user.player.implode();
         Menus.menus.defeat.stats = {kills: 'n/a', coins: 'n/a'};
         Menus.trigger('defeat');
-      }, 10000);
+      }, 2000);
     }
 
     override(data) {
