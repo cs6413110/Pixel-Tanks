@@ -65,6 +65,7 @@ const deathMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
   `{idot} materialized`,
+  `{idot} is ready to breadspam`,
   `{idot} is here`
 ], rageMessages = [
   `{idot} left the game`,
