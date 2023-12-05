@@ -106,6 +106,16 @@ class Engine {
           }, tank.username === t.username ? 500 : bangTime);
         }
       }
+      for (const ai of this.ai) {
+        const bangTime = (500-Math.sqrt((t.x-ai.x)**2+(t.y-ai.y)**2))*5;
+        if (bangTime > 0 && (getTeam(ai.team) !== getTeam(t.team) || ai.id === t.id) {
+          ai.stunned = true;
+          clearTimeout(ai.flashbangTimeout);
+          ai.flashbangTimeout = setTimeout(() => {
+            ai.stunned = false;
+          }, ai.id === t.id ? 500 : bangTime);
+        }
+      }
     } else if (a === 'break') {
       for (const cell of t.cells) {
         const c = cell.split('x'), cx = c[0], cy = c[1];
@@ -756,6 +766,10 @@ class AI {
     this.host = host;
     this.hp = rank * 10 + 300;
     this.maxHp = this.hp;
+    this.stunned = this.role === 0;
+    setTimeout(() => {
+      this.stunned = false;
+    }, this.role === 0 ? 5000 : 0);
     this.seeUser = this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
     this.canFire = this.canPowermissle = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canClass = this.canBoost = this.canBashed = true;
     this.items = [];
@@ -779,6 +793,7 @@ class AI {
   }
 
   think() {
+    if (this.stunned) return this.r++;
     this.identify();
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.seeTarget) {
