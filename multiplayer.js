@@ -2,9 +2,9 @@ const settings = {
   authserver: 'localhost',
   bans: [],
   banips: [],
-  full_auth: ['cs641311'], //STOP MESSING WITH WHO'S ADMIN
-  admins: ['Celestial', 'bradley'],
-  vips: ['DIO', 'DarkMemeGod'], 
+  full_auth: ['cs641311', 'Celestial'], //STOP MESSING WITH WHO'S ADMIN NEVER
+  admins: ['bradley', 'DarkMemeGod'],
+  vips: ['DIO'], 
   mutes: [],
   players_per_room: 400,
   ups: 60,
