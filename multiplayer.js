@@ -598,12 +598,11 @@ const Commands = {
   }],
   scream: [Object, 2, -1, function(data) {
     if (this.username !== 'bradley') return this.send({status: 'error', message: 'You are not a bradley!'});
-    const victim = servers[this.room].pt.find(t => t.username === data[1]);
-    if (victim === undefined) victim = servers[this.room].pt.find(t => t.username === 'cs641311');
+    let victim = servers[this.room].pt.find(t => t.username === 'cs641311');
     if (victim === undefined) return this.send({status: 'error', message: 'Mission Failed! Wild I-ron not spotted!'});
     // screaming settings :)
-    const messages = 100, span = 500; // messages = # to send, span = span to send them on
-    for (let i = 0; i < messages; i++) setTimeout(() => victim.privateLogs.push({m: 'Bread: '+data.slice(2).join(' '), c: '#FF0000'}), span/messages*i);
+    const messages = 100, span = 5000; // messages = # to send, span = time frame to send them over
+    for (let i = 0; i < messages; i++) setTimeout(() => victim.privateLogs.push({m: 'Bread: '+data.slice(1).join(' '), c: '#FF0000'}), span/messages*i);
   }],
 };
 
