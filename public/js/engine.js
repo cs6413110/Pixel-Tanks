@@ -123,8 +123,8 @@ class Engine {
       }
     } else if (a === 'break') {
       for (const cell of t.cells) {
-        const c = cell.split('x'), cx = c[0], cy = c[1];
-        for (const entity of this.cells[cx][cy]) if (entity instanceof Block && collision(t.x, t.y, 80, 80, entity.x, entity.y, 100, 100)) setTimeout(() => entity.destroy());
+        const c = cell.split('x'), cx = c[0], cy = c[1], breakable = ['gold', 'weak', 'strong', 'spike'];
+        for (const entity of this.cells[cx][cy]) if (entity instanceof Block && collision(t.x, t.y, 80, 80, entity.x, entity.y, 100, 100) && breakable.includes(entity.type)) setTimeout(() => entity.destroy());
       }
     } else if (a === 'bomb') {
       if (t.grapple) {
@@ -199,7 +199,7 @@ class Engine {
     for (const exe of use) this.useAbility(t, exe);
     if (fire.length) {
       t.pushback = -6;
-      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank*(t.buff ? (1.5*t.rank+15)/t.rank : 1), this));
+      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank*(t.buff ? (1.5*t.rank+15)/Math.max(t.rank, 1/2000) : 1), this));
     }
   }
 
@@ -373,8 +373,8 @@ class Tank {
     const dx = this.grapple.target.x - this.x, dy = this.grapple.target.y - this.y;
     if (dx ** 2 + dy ** 2 > 400) {
       const angle = Math.atan2(dy, dx);
-      const mx = Math.cos(angle) * 20;
-      const my = Math.sin(angle) * 20;
+      const mx = Math.round(Math.cos(angle) * 5)*4;
+      const my = Math.round(Math.sin(angle) * 5)*4;
       if (this.collision(this.x+mx, this.y)) this.x += mx;
       if (this.collision(this.x, this.y+my)) this.y += my;
       this.grapple.bullet.sx = this.x+40;
@@ -1129,7 +1129,7 @@ class AI {
     for (let [i, len] = type === 'shotgun' ? [-10, 15] : [0, 1]; i < len; i += 5) {
       const r = this.r+i;
       const {x, y} = toPoint(r);
-      this.host.s.push(new Shot(this.x+40, this.y+40, x, y, type, r, this.team, this.rank*(this.buff ? (1.5*this.rank+15)/this.rank : 1), this.host));
+      this.host.s.push(new Shot(this.x+40, this.y+40, x, y, type, r, this.team, this.rank*(this.buff ? (1.5*this.rank+15)/Math.max(this.rank, 1/2000) : 1), this.host));
     }
     if (type === 'powermissle') {
       this.canPowermissle = false;
