@@ -466,7 +466,7 @@ class Defense extends Multiplayer {
 const Commands = {
   playerlist: [Object, 4, 1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
-    for (const tank of servers[this.room]) t.privateLogs.push({m: tank.username, c: '#FFFFFF'});
+    for (const tank of servers[this.room].pt) t.privateLogs.push({m: tank.username, c: '#FFFFFF'});
   }],
   msg: [Object, 4, -1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
@@ -474,7 +474,7 @@ const Commands = {
     const message = {m: `[${this.username}->${data[1]}] ${data.slice(2).join(' ')}`, c: '#FFFFFF'};
     t.privateLogs.push(message);
     m.privateLogs.push(message);
-  }],
+  }]
   createteam: [FFA, 4, 2, function(data) {
     if (servers[this.room].pt.find(t => getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
     if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
@@ -595,6 +595,15 @@ const Commands = {
   }],
   help: [Object, 2, 1, function(data) {
     servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: 'Commands: /createteam <name>, /join <name>, /accept <player>, /leave, /start, /switch <player>', c: '#0000FF'}, {m: '/reboot, /live <player>, /spectate <player>, /ai <x> <y> <type> <rank> <amount> <team>, /newmap', c: '#0000FF'}, {m: '/kill <player>, /kick <player>, /mute <player> <time>, /unmute <player>, /ban <player> /pardon <player>', c: '#0000FF'}, {m: '/ipban <player>, /pardon <player>, /help', c: '#0000FF'})
+  }],
+  scream: [Object, 2, -1, function(data) {
+    if (this.username !== 'bradley') return this.send({status: 'error', message: 'You are not a bradley!'});
+    const victim = servers[this.room].pt.find(t => t.username === data[1]);
+    if (victim === undefined) victim = servers[this.room].pt.find(t => t.username === 'cs641311');
+    if (victim === undefined) return this.send({status: 'error', message: 'Mission Failed! Wild I-ron not spotted!'});
+    // screaming settings :)
+    const messages = 100, span = 500; // messages = # to send, span = span to send them on
+    for (let i = 0; i < messages; i++) setTimeout(() => victim.privateLogs.push({m: 'Bread: '+data.slice(2).join(' '), c: '#FF0000'}), span/messages*i);
   }],
 };
 
