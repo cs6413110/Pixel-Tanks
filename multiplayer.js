@@ -514,7 +514,7 @@ const Commands = {
     
   }],
   ippardon: [Object, 2, 2, function(data) {
-    settings.ipbans.splice(settings.ipbans.indexOf(data[1])
+    settings.ipbans.splice(settings.ipbans.indexOf(data[1]));
   }],
   ban: [Object, 2, 2, function(data) {
     if (settings.admins.includes(data[1]) || settings.full_auth.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
