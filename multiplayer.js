@@ -675,16 +675,14 @@ const multiopen = (socket) => {
   // banip here
 }
 const multimessage = (socket, data) => {
-  if (!socket.username) {
+  if (!socket.username) socket.username = data.username;
+  if (data.type === 'update') {
+    servers[socket.room].update(data);
+  } else if (data.type === 'join') {
     if (settings.bans.includes(data.username)) {
       socket.send({status: 'error', message: 'You are banned!'});
       return setTimeout(() => socket.close());
     }
-    socket.username = data.username;
-  }
-  if (data.type === 'update') {
-    servers[socket.room].update(data);
-  } else if (data.type === 'join') {
     let server;
     for (const id in servers) {
       if (servers[id] instanceof joinKey[data.gamemode]) {
