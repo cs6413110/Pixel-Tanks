@@ -10,7 +10,7 @@ const settings = {
   ups: 60,
 }
 
-const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername, collision} = require('./public/js/engine.js');
+const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername, getRandomColor, collision} = require('./public/js/engine.js');
 
 let sockets = new Set(), servers = {}, ffaLevels = [
   [["B4","B4","B4","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B4","B4","B4"],["B4","B0","B0","B0","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B0","B0","B0","B4"],["B4","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B4"],["B4","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B4"],["B5","B4","B0","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B2","B2","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B0","B4","B5"],["B5","B5","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B5","B5"],["B5","B5","B4","B2","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B2","B4","B5","B5"],["B5","B5","B4","B2","B4","B0","B0","B0","B0","B0","B4","B4","B0","B2","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B2","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B0","B0","B0","B0","B1","B4","B4","B4","B2","B2","B4","B4","B4","B1","B0","B0","B0","B0","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B4","B0","B0","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B0","B0","B4","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B4","B4","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B4","B4","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B0","B1","B1","B0","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B1","B1","B1","B1","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B2","B0","B0","B0","B2","B0","B0","B0","B1","B1","S","B0","B1","B1","B0","B0","B0","B2","B0","B0","B0","B2","B0","B4","B5","B5"],["B5","B5","B4","B0","B2","B0","B0","B0","B2","B0","B0","B0","B1","B1","B0","B0","B1","B1","B0","B0","B0","B2","B0","B0","B0","B2","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B1","B1","B1","B1","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B0","B1","B1","B0","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B0","B4","B4","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B4","B4","B0","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B4","B0","B0","B1","B1","B0","B0","B0","B0","B0","B0","B0","B0","B1","B1","B0","B0","B4","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B0","B4","B4","B0","B0","B0","B0","B1","B4","B4","B4","B2","B2","B4","B4","B4","B1","B0","B0","B0","B0","B4","B4","B0","B4","B5","B5"],["B5","B5","B4","B2","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B2","B4","B5","B5"],["B5","B5","B4","B2","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B2","B4","B5","B5"],["B5","B5","B4","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B0","B0","B0","B0","B0","B4","B5","B5"],["B5","B4","B0","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B2","B2","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B0","B4","B5"],["B4","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B2","B2","B0","B0","B0","B0","B0","B4"],["B4","B0","B0","B0","B0","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B4","B0","B0","B0","B0","B4"],["B4","B0","B0","B0","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B0","B0","B0","B4"],["B4","B4","B4","B4","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B5","B4","B4","B4","B4"]],
@@ -57,7 +57,7 @@ const deathMessages = [
   `{victim} was outplayed by {killer}`,
   `{victim} was obliterated by {killer}`,
   `{victim} fell prey to {killer}`,
-  `{victim} was fed an unhealthy dose of explosives by {killer}`,
+  `{victim} was fed a healthy dose of explosives by {killer}`,
   `{victim} became another number in {killer}'s kill streak`,
   `{victim} got wrecked by {killer}`,
   `{victim} was reduced to atoms by {killer}`
@@ -65,10 +65,11 @@ const deathMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
   `{idot} materialized`,
+  `{idot} is ready to breadspam`,
   `{idot} is here`
 ], rageMessages = [
   `{idot} left the game`,
-  `{idot} rage-quit`',
+  `{idot} got gogaurdianed`,
   `{idot} quit`,
   `{idot} disconnected`,
   `{idot} will return soon`
@@ -599,9 +600,8 @@ const Commands = {
     if (this.username !== 'bradley') return this.send({status: 'error', message: 'You are not a bradley!'});
     let victim = servers[this.room].pt.find(t => t.username === 'cs641311');
     if (victim === undefined) return this.send({status: 'error', message: 'Mission Failed! Wild I-ron not spotted!'});
-    // screaming settings :)
     const messages = 100, span = 5000; // messages = # to send, span = time frame to send them over
-    for (let i = 0; i < messages; i++) setTimeout(() => victim.privateLogs.push({m: 'Bread: '+data.slice(1).join(' '), c: '#FF0000'}), span/messages*i);
+    for (let i = 0; i < messages; i++) setTimeout(() => victim.privateLogs.push({m: 'Bread: '+data.slice(1).join(' ').toUpperCase(), c: getRandomColor()}), span/messages*i);
   }],
 };
 
