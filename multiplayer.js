@@ -535,7 +535,7 @@ const Commands = {
   ban: [Object, 2, 2, function(data) {
     if (settings.admins.includes(data[1]) || settings.full_auth.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
     settings.bans.push(data[1]);
-    server.logs.push({m: data[1]+' was banned by '+this.username, c: '#FF0000'});
+    servers.logs.push({m: data[1]+' was banned by '+this.username, c: '#FF0000'});
     for (const socket of sockets) if (s.username === data[1]) {
       socket.send({status: 'error', message: 'You were just banned!'});
       setTimeout(() => socket.close());
@@ -546,6 +546,7 @@ const Commands = {
     servers[this.room].logs.push({m: data[1]+' was pardoned by '+this.username, c: '#0000FF'});
   }],
   mute: [Object, 2, 2, function(data) {
+    if (settings.mutes.includes(data[1])) return socket.send({status: 'error', message: 'bro is already muted, calm down'});
     settings.mutes.push(data[1]);
     servers[this.room].logs.push({m: data[1]+' was muted by '+this.username, c: '#FFFF22'});
   }],
