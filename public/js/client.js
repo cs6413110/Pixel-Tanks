@@ -5,11 +5,8 @@
       this.options = options;
       this.callstack = {open: [], close: [], message: []};
       this.status = 'idle';
-      window.addEventListener('offline', () => {
-        this.socket.close();
-        this.socket.onclose();
-      });
-      if (this.options.reconnect) window.addEventListener('online', this.connect.bind(this));
+      window.addEventListener('offline', () => this.socket.close());
+      if (this.options.reconnect) window.addEventListener('online', () => this.connect());
       if (this.options.autoconnect) this.connect();
     }
 
@@ -19,10 +16,8 @@
       this.socket.binaryType = 'arraybuffer';
       this.socket.onopen = () => {
         this.status = 'connected';
-        if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => {
-          this.socket.send(msgpackr.pack({type: 'ping', op: 'ping'}));
-        }, 30000);
-        this.callstack.open.forEach(f => f());
+        if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => this.socket.send(msgpackr.pack({type: 'ping', op: 'ping'})), 30000);
+        for (const f of this.callstack.open) f();
       }
       this.socket.onmessage = data => {
         try {
@@ -34,8 +29,7 @@
           if (data.message === 'Invalid Token.') {
             clearInterval(PixelTanks.autosave);
             if (PixelTanks.user.player) PixelTanks.user.player.implode();
-            PixelTanks.user.token = undefined;
-            PixelTanks.user.username = undefined;
+            PixelTanks.user.token = PixelTanks.user.username = undefined;
             return Menus.trigger('start');
           }
           return alert(data.message);
@@ -60,12 +54,10 @@
       if (event === 'message') this.callstack.message = [];
       if (event === 'close') this.callstack.close = [];
     }
-    send(data) {
-      data = msgpackr.pack(data);
-      this.socket.send(data);
-    }
+    send(data) => this.socket.send(msgpackr.pack(data));
     close() {
       this.socket.close();
+      this.socket.onclose();
     }
   }
 
@@ -1364,8 +1356,8 @@
     drawTank(t) {
       const p = t.username === PixelTanks.user.username;
       let a = 1;
-      if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 ? 0 : .2;
-      if (t.invis && p) a = .5;
+      if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
+      if ((t.invis && p) || t.ded) a = .5;
       GUI.draw.globalAlpha = a;
       if (t.role !== 0) PixelTanks.renderBottom(t.x, t.y, 80, t.color, t.baseRotation);
       GUI.drawImage(PixelTanks.images.tanks['bottom'+(t.baseFrame ? '' : '2')], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
@@ -1374,7 +1366,7 @@
       PixelTanks.renderTop(t.x, t.y, 80, t.color, t.r, t.pushback);
       GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
       if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
-      if ((!t.ded && getTeam(this.team) === getTeam(t.team)) || (this.ded && !t.ded) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
+      if ((!t.ded && getTeam(this.team) === getTeam(t.team)) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
         GUI.draw.fillStyle = '#FF0000';
