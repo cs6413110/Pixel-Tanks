@@ -677,6 +677,10 @@ const multiopen = (socket) => {
 const multimessage = (socket, data) => {
   if (!socket.username) socket.username = data.username;
   if (data.type === 'update') {
+    if (settings.bans.includes(data.username)) {
+      socket.send({status: 'error', message: 'You are banned!'});
+      return setTimeout(() => socket.close());
+    }
     servers[socket.room].update(data);
   } else if (data.type === 'join') {
     if (settings.bans.includes(data.username)) {
