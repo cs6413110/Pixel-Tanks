@@ -471,7 +471,7 @@ const Commands = {
   msg: [Object, 4, -1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     const m = servers[this.room].pt.find(t => t.username === data[1]);
-    const message = {m: `[${this.username}->${data[1]}] ${data.slice(1).join(' ')}`, c: '#FFFFFF'};
+    const message = {m: `[${this.username}->${data[1]}] ${data.slice(2).join(' ')}`, c: '#FFFFFF'};
     t.privateLogs.push(message);
     m.privateLogs.push(message);
   }],
@@ -535,7 +535,7 @@ const Commands = {
   ban: [Object, 2, 2, function(data) {
     if (settings.admins.includes(data[1]) || settings.full_auth.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
     settings.bans.push(data[1]);
-    servers.logs.push({m: data[1]+' was banned by '+this.username, c: '#FF0000'});
+    servers[this.room].logs.push({m: data[1]+' was banned by '+this.username, c: '#FF0000'});
     for (const socket of sockets) if (s.username === data[1]) {
       socket.send({status: 'error', message: 'You were just banned!'});
       setTimeout(() => socket.close());
