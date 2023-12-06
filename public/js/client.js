@@ -54,7 +54,9 @@
       if (event === 'message') this.callstack.message = [];
       if (event === 'close') this.callstack.close = [];
     }
-    send(data) => this.socket.send(msgpackr.pack(data));
+    send(data) {
+      this.socket.send(msgpackr.pack(data));
+    }
     close() {
       this.socket.close();
       this.socket.onclose();
