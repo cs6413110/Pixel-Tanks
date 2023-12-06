@@ -511,26 +511,10 @@ const Commands = {
     });
   }],
   ipban: [Object, 2, 2, function(data) {
-    return this.send({status: 'error', messsage: 'stale command'});
-    if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    var ip;
-    try {
-      var ip = servers[this.room].pt.find(t => t.username === data[1]).socket.ip;
-    } catch(e) {
-      return this.send({status: 'error', message: 'Player not found.'});
-    }
-    settings.banips.push(ip);
-    sockets.forEach(s => {
-      if (!s.ip === ip) return;
-      s.send({status: 'error', message: 'You were just ip banned!'});
-      setTimeout(() => s.close());
-    });
-    servers[this.room].logs.push({m: data[1]+`'s ip, `+ip+`, has been banned.`, c: '#FF0000'});
+    
   }],
   ippardon: [Object, 2, 2, function(data) {
-    if (data.length !== 2) return this.send({status: 'error', message: 'Command has invalid arguments.'});
-    if (settings.banips.indexOf(data[1]) !== -1) settings.banips.splice(settings.banips.indexOf(data[1]), 1);
-    servers[this.room].logs.push({m: data[1]+' ip has been unbanned.', c: '#0000FF'});
+    settings.ipbans.splice(settings.ipbans.indexOf(data[1])
   }],
   ban: [Object, 2, 2, function(data) {
     if (settings.admins.includes(data[1]) || settings.full_auth.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
@@ -538,6 +522,11 @@ const Commands = {
     servers[this.room].logs.push({m: data[1]+' was banned by '+this.username, c: '#FF0000'});
     servers[this.room].pt.find(t => t.username === data[1]).socket.send({status: 'error', message: 'You are banned!'});
     for (const socket of sockets) if (socket.username === data[1]) setTimeout(() => socket.close());
+  }],
+  banlist: [Object, 2, 2, function(data) {
+    const t = servers[this.room].pt.find(t => t.username === this.username);
+    t.privateLogs.push({m: '-----Ban List-----', c: '#00FF00'});
+    for (const ban of settings.bans) t.privateLogs.push({m: ban, c: '#00FF00'});
   }],
   pardon: [Object, 2, 2, function(data) {
     settings.bans.splice(settings.bans.indexOf(data[1]), 1);
