@@ -2,7 +2,7 @@ const settings = {
   authserver: 'localhost',
   bans: [],
   banips: [],
-  full_auth: ['cs641311'], //STOP MESSING WITH WHO'S ADMIN NEVER
+  full_auth: ['cs641311'],
   admins: ['bradley', 'Celestial'],
   vips: ['DarkMemeGod'], 
   mutes: [],
@@ -103,7 +103,8 @@ class Multiplayer extends Engine {
     for (const t of this.pt) {
       const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
       const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;      
-      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs.slice(t?.render.logs || 0), global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
+      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs.slice(t?.render.logs || 0).concat(t.privateLogs), global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
+      t.privateLogs = [];
       let send = false;
       if (message.logs.length) send = true;
       for (const p of ['b', 'pt', 'ai', 's', 'd']) {
@@ -333,7 +334,7 @@ class TDM extends Multiplayer {
     if (red < blue) t.color = '#FF0000';
     if (red === blue) t.color = (Math.random() < .5 ? '#FF0000' : '#0000FF');
     t.team = t.username+':LOBBY';
-    if (this.pt.length === 4) { // once four players, begin the countdow
+    if (this.pt.length === 4) {
       this.readytime = Date.now();
       this.time = 60; // 1 minute starting time
       this.global = 'Starting in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
@@ -463,6 +464,17 @@ class Defense extends Multiplayer {
 
 
 const Commands = {
+  playerlist: [Object, 4, 1, function(data) {
+    const t = servers[this.room].pt.find(t => t.username === this.username);
+    for (const tank of servers[this.room]) t.privateLogs.push({m: tank.username, c: '#FFFFFF'});
+  }],
+  msg: [Object, 4, -1, function(data) {
+    const t = servers[this.room].pt.find(t => t.username === this.username);
+    const m = servers[this.room].pt.find(t => t.username === data[1]);
+    const message = {m: `[${this.username}->${data[1]}] ${data.slice(1).join(' ')}`, c: '#FFFFFF'};
+    t.privateLogs.push(message);
+    m.privateLogs.push(message);
+  }],
   createteam: [FFA, 4, 2, function(data) {
     if (servers[this.room].pt.find(t => getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
     if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
@@ -583,10 +595,7 @@ const Commands = {
     }
   }],
   help: [Object, 2, 1, function(data) {
-    servers[this.room].logs.push({m: 'Commands: /createteam <name>, /join <name>, /accept <player>, /leave, /start, /switch <player>', c: '#0000FF'});
-    servers[this.room].logs.push({m: '/reboot, /live <player>, /spectate <player>, /ai <x> <y> <type> <rank> <amount> <team>, /newmap', c: '#0000FF'});
-    servers[this.room].logs.push({m: '/kill <player>, /kick <player>, /mute <player> <time>, /unmute <player>, /ban <player> /pardon <player>', c: '#0000FF'});
-    servers[this.room].logs.push({m: '/ipban <player>, /pardon <player>, /help', c: '#0000FF'});
+    servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: 'Commands: /createteam <name>, /join <name>, /accept <player>, /leave, /start, /switch <player>', c: '#0000FF'}, {m: '/reboot, /live <player>, /spectate <player>, /ai <x> <y> <type> <rank> <amount> <team>, /newmap', c: '#0000FF'}, {m: '/kill <player>, /kick <player>, /mute <player> <time>, /unmute <player>, /ban <player> /pardon <player>', c: '#0000FF'}, {m: '/ipban <player>, /pardon <player>, /help', c: '#0000FF'})
   }],
 };
 
@@ -653,6 +662,8 @@ setInterval(() => {
 
 const multiopen = (socket) => {
   sockets.add(socket);
+  console.log(socket.remoteAddress);
+  console.log(socket._socket?.remoteAddress || '_socket is undefined');
   // banip here
 }
 const multimessage = (socket, data) => {
@@ -696,7 +707,7 @@ const multimessage = (socket, data) => {
     const f = Commands[data.data[0]];
     if (!f) return socket.send({status: 'error', message: 'Command not found.'});
     if (!(servers[socket.room] instanceof f[0])) return socket.send({status: 'error', message: 'This command is not available in this server type.'});
-    if (data.data.length !== f[2]) return socket.send({status: 'error', message: 'Wrong number of arguments.'});
+    if (data.data.length !== f[2] && f[2] !== -1) return socket.send({status: 'error', message: 'Wrong number of arguments.'});
     if (!hasAccess(socket.username, f[1])) return socket.send({status: 'error', message: `You don't have access to this.`});
     f[3].bind(socket)(data.data);
   } else if (data.type === 'stats') {
