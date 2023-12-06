@@ -502,6 +502,9 @@ const Commands = {
     });
     target.team = this.username+':'+Math.random();
   }],
+  nuke: [Object, 2, 1, function(data) {
+    for (let x = 0; x < 30; x += 2) for (let y = 0; y < 30; y += 2) this.b.push(new Block(x*100, y*100, Infinity, 'airstrike', 'server.admin.commands.nuke:_', servers[this.room]));
+  }],
   newmap: [FFA, 4, 1, function(data) {
     servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
     servers[this.room].pt.forEach(t => {
@@ -575,12 +578,26 @@ const Commands = {
     const value = servers[this.room][data[1]];
     if (value !== undefined) servers[this.room].logs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
   }],
+  swrite: [Object, 1, 3, function(data) {
+    eval(`try {
+      servers['${this.room}']['${data[1]}'] = ${data[2]};
+    } catch(e) {
+      servers['${this.room}'].pt.find(t => t.username === '${this.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
+    }`);
+  }],
   tread: [Object, 1, 3, function(data) {
     for (const t of servers[this.room].pt) if (t.username === data[1]) {
       const value = t[data[2]];
       if (value !== undefined) servers[this.room].logs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
       return;
     }
+  }],
+  twrite: [Object, 1, 4, function(data) {
+    eval(`try {
+      servers['${this.room}'].pt.find(t => t.username === '${data[1]}')['${data[2]}'] = ${data[3]};
+    } catch(e) {
+      servers['${this.room}'].pt.find(t => t.username === '${this.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
+    }`);
   }],
   help: [Object, 2, 1, function(data) {
     servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: 'Commands: /createteam <name>, /join <name>, /accept <player>, /leave, /start, /switch <player>', c: '#0000FF'}, {m: '/reboot, /live <player>, /spectate <player>, /ai <x> <y> <type> <rank> <amount> <team>, /newmap', c: '#0000FF'}, {m: '/kill <player>, /kick <player>, /mute <player> <time>, /unmute <player>, /ban <player> /pardon <player>', c: '#0000FF'}, {m: '/ipban <player>, /pardon <player>, /help', c: '#0000FF'})
