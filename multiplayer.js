@@ -657,9 +657,8 @@ setInterval(() => {
 
 const multiopen = (socket) => {
   sockets.add(socket);
-  console.log(socket.remoteAddress);
-  console.log(socket._socket?.remoteAddress || '_socket is undefined');
-  // banip here
+  console.log(JSON.stringify(socket));
+  console.log(socket);
 }
 const multimessage = (socket, data) => {
   if (!socket.username) socket.username = data.username;
