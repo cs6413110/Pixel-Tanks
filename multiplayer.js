@@ -57,7 +57,7 @@ const deathMessages = [
   `{victim} was outplayed by {killer}`,
   `{victim} was obliterated by {killer}`,
   `{victim} fell prey to {killer}`,
-  `{victim} was fed a healthy dose of explosives by {killer}`,
+  `{victim} was fed an unhealthy dose of explosives by {killer}`,
   `{victim} became another number in {killer}'s kill streak`,
   `{victim} got wrecked by {killer}`,
   `{victim} was reduced to atoms by {killer}`
@@ -65,11 +65,10 @@ const deathMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
   `{idot} materialized`,
-  `{idot} is ready to breadspam`,
   `{idot} is here`
 ], rageMessages = [
   `{idot} left the game`,
-  `{idot} got gogaurdianed`,
+  `{idot} rage-quit`',
   `{idot} quit`,
   `{idot} disconnected`,
   `{idot} will return soon`
