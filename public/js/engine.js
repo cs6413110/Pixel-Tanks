@@ -2,6 +2,11 @@ try {
   PF = require('pathfinding');
 } catch(e) {}
 
+const getRandomColor = () => {
+  const letters = '0123456789ABCDEF', color = '#';
+  for (var i = 0; i < 6; i++) color += letters[Math.floor(Math.random() * 16)];
+  return color;
+}
 const finder = new PF.AStarFinder({ allowDiagonal: true, dontCrossCorners: true });
 const pathfind = (sx, sy, tx, ty, map) => finder.findPath(sx, sy, tx, ty, map);
 const raycast = (x1, y1, x2, y2, walls) => {
@@ -775,7 +780,7 @@ class AI {
     this.items = [];
     if (this.role !== 0) this.giveAbilities();
     this.invis = this.class === 'stealth';
-    this.color = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+    this.color = getRandomColor();
     this.cosmetic = host.pt.find(t => t.username === getUsername(this.team))?.cosmetic;
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
@@ -1169,5 +1174,5 @@ class AI {
 }
 
 try {
-  module.exports = {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername, collision};
+  module.exports = {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername, getRandomColor, collision};
 } catch (e) {}
