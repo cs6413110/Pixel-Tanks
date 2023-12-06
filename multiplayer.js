@@ -474,7 +474,7 @@ const Commands = {
     const message = {m: `[${this.username}->${data[1]}] ${data.slice(2).join(' ')}`, c: '#FFFFFF'};
     t.privateLogs.push(message);
     m.privateLogs.push(message);
-  }]
+  }],
   createteam: [FFA, 4, 2, function(data) {
     if (servers[this.room].pt.find(t => getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
     if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
