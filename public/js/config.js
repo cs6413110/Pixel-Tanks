@@ -68,7 +68,7 @@ const images = {
     'Yellow Hoodie': '/cosmetics/yellow_hoodie',
     'X': '/cosmetics/x',
     'Sweat': '/cosmetics/sweat',
-    'ShieldGold': '/cosmetics/ShieldGold',
+    'Gold Shield': '/cosmetics/gold_shield',
     'Spirals': '/cosmetics/spirals',
     'Spikes': '/cosmetics/spikes',
     'Rudolph': '/cosmetics/rudolph',
