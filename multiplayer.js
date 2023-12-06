@@ -536,7 +536,7 @@ const Commands = {
     if (settings.admins.includes(data[1]) || settings.full_auth.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
     settings.bans.push(data[1]);
     servers[this.room].logs.push({m: data[1]+' was banned by '+this.username, c: '#FF0000'});
-    servers[this.room].pt.find(t => t.username === this.username).socket.send({status: 'error', message: 'You are banned!'});
+    servers[this.room].pt.find(t => t.username === data[1]).socket.send({status: 'error', message: 'You are banned!'});
     for (const socket of sockets) if (socket.username === data[1]) setTimeout(() => socket.close());
   }],
   pardon: [Object, 2, 2, function(data) {
@@ -676,7 +676,10 @@ const multiopen = (socket) => {
 }
 const multimessage = (socket, data) => {
   if (!socket.username) {
-    // check for ban or invalid username here
+    if (settings.bans.includes(data.username)) {
+      socket.send({status: 'error', message: 'You are banned!'});
+      return setTimeout(() => socket.close());
+    }
     socket.username = data.username;
   }
   if (data.type === 'update') {
