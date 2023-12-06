@@ -536,17 +536,15 @@ const Commands = {
     if (settings.admins.includes(data[1]) || settings.full_auth.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
     settings.bans.push(data[1]);
     servers[this.room].logs.push({m: data[1]+' was banned by '+this.username, c: '#FF0000'});
-    for (const socket of sockets) if (s.username === data[1]) {
-      socket.send({status: 'error', message: 'You were just banned!'});
-      setTimeout(() => socket.close());
-    }
+    servers[this.room].pt.find(t => t.username === this.username).socket.send({status: 'error', message: 'You are banned!'});
+    for (const socket of sockets) if (socket.username === data[1]) setTimeout(() => socket.close());
   }],
   pardon: [Object, 2, 2, function(data) {
     settings.bans.splice(settings.bans.indexOf(data[1]), 1);
     servers[this.room].logs.push({m: data[1]+' was pardoned by '+this.username, c: '#0000FF'});
   }],
   mute: [Object, 2, 2, function(data) {
-    if (settings.mutes.includes(data[1])) return socket.send({status: 'error', message: 'bro is already muted, calm down'});
+    if (settings.mutes.includes(data[1])) return this.send({status: 'error', message: 'bro is already muted, calm down'});
     settings.mutes.push(data[1]);
     servers[this.room].logs.push({m: data[1]+' was muted by '+this.username, c: '#FFFF22'});
   }],
