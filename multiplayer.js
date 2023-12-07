@@ -674,8 +674,6 @@ setInterval(() => {
 
 const multiopen = (socket) => {
   sockets.add(socket);
-  //console.log(JSON.stringify(socket));
-  console.log(socket);
 }
 const multimessage = (socket, data) => {
   if (!socket.username) socket.username = data.username;
