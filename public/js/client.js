@@ -1173,7 +1173,20 @@
               this._ups++;
               this.hostupdate.tickspeed = data.tickspeed;
               this.hostupdate.global = data.global;
-              this.hostupdate.logs.unshift(...data.logs.reverse());
+              let compiledLogs = [];
+              for (const log of this.hostupdate.logs) {
+                let words = logs.m.split(' '), len = 0, line = '';
+                for (const word of words) {
+                  len += GUI.draw.measureText(word).width;
+                  if (len > 800) {
+                    compiledLogs.push({m: line, c: log.c});
+                    line = '';
+                  }
+                  line += word+' ';
+                }
+                compiledLogs.push({m: line, c: log.c});
+              }
+              this.hostupdate.logs.unshift(...compiledLogs.reverse());
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
                 if (data[p].length) data[p].forEach(e => {
                  const index = this.hostupdate[p].findIndex(obj => obj.id === e.id);
@@ -1545,7 +1558,6 @@
       GUI.drawText('XP: '+this.xp, 10, 150, 30, '#ffffff', 0);
       GUI.drawText('coin$: '+this.coins, 10, 200, 30, '#ffffff', 0);
       if (this.hostupdate.global) GUI.drawText(this.hostupdate.global, 800, 30, 60, '#ffffff', .5);
-
       var l = 0, len = Math.min((this.showChat || this.hostupdate.logs.length<3) ? this.hostupdate.logs.length : 3, 30);
       while (l<len) {
         GUI.draw.fillStyle = '#000000';
