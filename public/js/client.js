@@ -1186,7 +1186,7 @@
                 }
                 compiledLogs.push({m: line, c: log.c});
               }
-              alert(compiledLogs);
+              if (compiledLogs.length) alert(compiledLogs);
               this.hostupdate.logs.unshift(...compiledLogs.reverse());
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
                 if (data[p].length) data[p].forEach(e => {
@@ -1563,7 +1563,6 @@
       while (l<len) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .2;
-        
         GUI.draw.fillRect(0, 800-l*30, GUI.draw.measureText(this.hostupdate.logs[l].m).width, 30);
         GUI.draw.globalAlpha = 1;
         GUI.drawText(this.hostupdate.logs[l].m, 0, 800-l*30, 30, this.hostupdate.logs[l].c, 0);
