@@ -347,7 +347,8 @@ class Tank {
                 this.fire = false;
               }, 4000);
             } else if (entity.type === 'spike' && !teamMatch) {
-              this.damageCalc(this.x, this.y, .5, getUsername(entity.team));
+              this.damageCalc(this.x, this.y, 100, getUsername(entity.team));
+              this.destroy();
             }
           }
         }
