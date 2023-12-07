@@ -348,7 +348,7 @@ class Tank {
               }, 4000);
             } else if (entity.type === 'spike' && !teamMatch) {
               this.damageCalc(this.x, this.y, 100, getUsername(entity.team));
-              this.destroy();
+              entity.destroy();
             }
           }
         }
@@ -965,7 +965,7 @@ class AI {
               }, 4000);
             } else if (entity.type === 'spike' && !teamMatch) {
               this.damageCalc(this.x, this.y, 100, getUsername(entity.team));
-              this.destroy();
+              entity.destroy();
             }
           }
         }
