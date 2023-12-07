@@ -1180,6 +1180,7 @@
                   len += GUI.draw.measureText(word).width;
                   if (len > 800) {
                     compiledLogs.push({m: line, c: log.c});
+                    len = 0;
                     line = '';
                   }
                   line += word+' ';
