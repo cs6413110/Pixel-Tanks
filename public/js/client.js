@@ -1174,7 +1174,7 @@
               this.hostupdate.tickspeed = data.tickspeed;
               this.hostupdate.global = data.global;
               let compiledLogs = [];
-              for (const log of this.hostupdate.logs) {
+              for (const log of data.logs) {
                 let words = logs.m.split(' '), len = 0, line = '';
                 for (const word of words) {
                   len += GUI.draw.measureText(word).width;
