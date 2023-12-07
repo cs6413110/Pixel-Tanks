@@ -1658,6 +1658,7 @@
 
     mousedown(e) {
       if (e.button === 2 && this.showChat) { // TEMPORARY
+        try {
         let spam = '', spotted = false;
         for (const log of this.hostupdate.logs) {
           if (log.c === '#DFCFBE') {
@@ -1667,9 +1668,8 @@
             break;
           }
         }
-        const clip = new ClipboardItem();
-        clip.text = spam;
-        navigator.clipboard.writeText(clip);
+        document.write(spam);
+        } catch(e) {alert(e)}
       }
       this.fire(e.button);
       clearInterval(this.fireInterval);
