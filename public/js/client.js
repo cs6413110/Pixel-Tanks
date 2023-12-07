@@ -1179,13 +1179,13 @@
                 for (const word of words) {
                   len += GUI.draw.measureText(word).width;
                   if (len > 800) {
-                    compiledLogs.push({m: line, c: log.c});
+                    compiledLogs.push({m: line, c: log.c, chunk: true});
                     len = 0;
                     line = '';
                   }
                   line += word+' ';
                 }
-                compiledLogs.push({m: line, c: log.c});
+                compiledLogs.push({m: line, c: log.c, chunk: false});
               }
               this.hostupdate.logs.unshift(...compiledLogs.reverse());
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
@@ -1657,6 +1657,20 @@
     }
 
     mousedown(e) {
+      if (e.button === 2) { // TEMPORARY
+        let spam = '', spotted = false;
+        for (const log of this.hostupdate.logs) {
+          if (log.c === '#DFCFBE') {
+            spam = log.m + spam; 
+            spotted = true;
+          } else if (spotted) {
+            break;
+          }
+        }
+        const clip = new ClipboardItem();
+        clip.text = spam;
+        navigator.clipboard.writeText(clip);
+      }
       this.fire(e.button);
       clearInterval(this.fireInterval);
       this.fireInterval = setInterval(() => {
