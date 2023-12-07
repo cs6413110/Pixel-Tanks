@@ -1186,6 +1186,7 @@
                 }
                 compiledLogs.push({m: line, c: log.c});
               }
+              alert(compiledLogs);
               this.hostupdate.logs.unshift(...compiledLogs.reverse());
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
                 if (data[p].length) data[p].forEach(e => {
