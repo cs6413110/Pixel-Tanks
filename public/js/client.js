@@ -1657,7 +1657,7 @@
     }
 
     mousedown(e) {
-      if (e.button === 2) { // TEMPORARY
+      if (e.button === 2 && this.showChat) { // TEMPORARY
         let spam = '', spotted = false;
         for (const log of this.hostupdate.logs) {
           if (log.c === '#DFCFBE') {
