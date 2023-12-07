@@ -1174,16 +1174,20 @@
               this.hostupdate.tickspeed = data.tickspeed;
               this.hostupdate.global = data.global;
               let compiledLogs = [];
+              if (data.logs) alert(data.logs);
               for (const log of data.logs) {
                 let words = logs.m.split(' '), len = 0, line = '';
                 for (const word of words) {
+                  alert('word '+word);
                   len += GUI.draw.measureText(word).width;
                   if (len > 800) {
+                    alert('newline');
                     compiledLogs.push({m: line, c: log.c});
                     line = '';
                   }
                   line += word+' ';
                 }
+                alert('done');
                 compiledLogs.push({m: line, c: log.c});
               }
               if (compiledLogs.length) alert(compiledLogs);
