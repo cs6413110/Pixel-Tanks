@@ -1213,22 +1213,7 @@
               }
               break;
             case 'kill':
-              const crates = Math.floor(Math.random()*2)+1, coins = Math.floor(Math.random()*1000);
-              this.kills++;
-              this.xp += 10;
-              this.crates += crates;
-              this.coins += coins;
-              PixelTanks.userData.stats[1] += crates;
-              PixelTanks.userData.stats[3] += 10;
-              PixelTanks.userData.stats[0] += coins;
-              PixelTanks.save();
-              this.canItem0 = true;
-              this.canItem1 = true;
-              this.canItem2 = true;
-              this.canItem3 = true;
-              this.canToolkit = true;
-              this.timers.toolkit = -1;
-              this.timers.items = [{time: 0, cooldown: -1}, {time: 0, cooldown: -1,}, {time: 0, cooldown: -1}, {time: 0, cooldown: -1}]
+              this.killRewards();
               break;
             case 'ping':
               this.pings = this.pings.concat(Date.now()-this.pingstart).slice(-100);
@@ -1264,6 +1249,25 @@
       document.addEventListener('mousedown', this.mousedown.bind(this));
       document.addEventListener('mouseup', this.mouseup.bind(this));
       this.render = requestAnimationFrame(this.frame.bind(this));
+    }
+
+    killRewards() {
+      const crates = Math.floor(Math.random()*2)+1, coins = Math.floor(Math.random()*1000);
+      this.kills++;
+      this.xp += 10;
+      this.crates += crates;
+      this.coins += coins;
+      PixelTanks.userData.stats[1] += crates;
+      PixelTanks.userData.stats[3] += 10;
+      PixelTanks.userData.stats[0] += coins;
+      PixelTanks.save();
+      this.canItem0 = true;
+      this.canItem1 = true;
+      this.canItem2 = true;
+      this.canItem3 = true;
+      this.canToolkit = true;
+      this.timers.toolkit = -1;
+      this.timers.items = [{time: 0, cooldown: -1}, {time: 0, cooldown: -1,}, {time: 0, cooldown: -1}, {time: 0, cooldown: -1}]
     }
     
     getPing() {
@@ -1362,7 +1366,7 @@
       if ((t.invis && p) || t.ded) a = .5;
       GUI.draw.globalAlpha = a;
       if (t.role !== 0) PixelTanks.renderBottom(t.x, t.y, 80, t.color, t.baseRotation);
-      GUI.drawImage(PixelTanks.images.tanks['bottom'+(t.baseFrame ? '' : '2')], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
+      GUI.drawImage(PixelTanks.images.tanks[t.role === 0 ? 'base' : 'bottom'+(t.baseFrame ? '' : '2')], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
       if (t.fire) GUI.drawImage(PixelTanks.images.animations.fire, t.x, t.y, 80, 80, 1, 0, 0, 0, 0, undefined, t.fire.frame*29, 0, 29, 29);
       GUI.draw.globalAlpha = a;
       PixelTanks.renderTop(t.x, t.y, 80, t.color, t.r, t.pushback);
@@ -1983,11 +1987,7 @@
     }
 
     ondeath(t, m) {
-      if (t.username !== PixelTanks.userData.username) {
-        PixelTanks.user.player.reset();
-        PixelTanks.user.player.kills++;
-        return;
-      };
+      if (t.username !== PixelTanks.userData.username) return PixelTanks.user.player.killRewards();
       t.ded = true;
       setTimeout(() => {
         PixelTanks.user.player.implode();
