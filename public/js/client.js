@@ -1172,26 +1172,20 @@
             case 'hostupdate':
               this._ups++;
               this.hostupdate.tickspeed = data.tickspeed;
-              //this.hostupdate.global = data.global;
-              if (this.hostupdate.global === undefined) this.hostupdate.global = '';
+              this.hostupdate.global = data.global;
               let compiledLogs = [];
-              if (data.logs) this.hostupdate.global += JSON.stringify(data.logs);
               for (const log of data.logs) {
-                let words = logs.m.split(' '), len = 0, line = '';
+                let words = log.m.split(' '), len = 0, line = '';
                 for (const word of words) {
-                  alert('word '+word);
                   len += GUI.draw.measureText(word).width;
                   if (len > 800) {
-                    alert('newline');
                     compiledLogs.push({m: line, c: log.c});
                     line = '';
                   }
                   line += word+' ';
                 }
-                alert('done');
                 compiledLogs.push({m: line, c: log.c});
               }
-              if (compiledLogs.length) alert(compiledLogs);
               this.hostupdate.logs.unshift(...compiledLogs.reverse());
               ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
                 if (data[p].length) data[p].forEach(e => {
