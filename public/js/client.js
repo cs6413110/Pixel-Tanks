@@ -1172,9 +1172,10 @@
             case 'hostupdate':
               this._ups++;
               this.hostupdate.tickspeed = data.tickspeed;
-              this.hostupdate.global = data.global;
+              //this.hostupdate.global = data.global;
+              if (this.hostupdate.global === undefined) this.hostupdate.global = '';
               let compiledLogs = [];
-              if (data.logs) alert(data.logs);
+              if (data.logs) this.hostupdate.global += JSON.stringify(data.logs);
               for (const log of data.logs) {
                 let words = logs.m.split(' '), len = 0, line = '';
                 for (const word of words) {
