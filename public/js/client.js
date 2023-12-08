@@ -1607,7 +1607,7 @@
     }
 
     mousewheel(e) {
-      if (this.showChat) this.chatScroll += e.wheelDeltaY;
+      if (this.showChat) this.chatScroll = Math.min(this.hostupdate.logs.length*30, Math.max(0, this.chatScroll+Math.e.wheelDeltaY));
     }
 
     paste(e) {
@@ -1922,6 +1922,7 @@
       document.removeEventListener('mousedown', this.mousedown.bind(this));
       document.removeEventListener('mouseup', this.mouseup.bind(this));
       document.removeEventListener('paste', this.paste.bind(this));
+      document.removeEventListener('mousewheel', this.mousewheel.bind(this)); 
       cancelAnimationFrame(this.render);
       Menus.menus.pause.removeListeners();
       PixelTanks.user.player = undefined;
@@ -1932,6 +1933,7 @@
     constructor(level) {
       if (typeof level === 'object') { // custom level handler for breads
         super([level.code]);
+        
         this.level = level.name;
       } else {
         const levels = [
