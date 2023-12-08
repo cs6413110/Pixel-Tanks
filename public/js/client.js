@@ -1610,11 +1610,13 @@
     }
 
     paste(e) {
+      e.preventDefault();
       if (this.showChat) this.msg += e.clipboardData.getData('text');
     }
 
     keydown(e) {
       e.preventDefault();
+      if (e.ctrlKey || e.metaKey) return false;
       if (!this.key[e.keyCode]) {
         if (this.showChat) return this.chat(e);
         this.keyStart(e);
