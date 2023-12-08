@@ -1545,7 +1545,7 @@
         const log = this.hostupdate.logs[i];
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .2;
-        GUI.draw.fillRect(0, this.chatScroll+800-i*30, 30, GUI.draw.measureText(log.m).width, 30);
+        GUI.draw.fillRect(0, this.chatScroll+800-i*30, GUI.draw.measureText(log.m).width, 30);
         GUI.draw.globalAlpha = 1;
         GUI.drawText(log.m, 0, this.chatScroll+800-i*30, 30, log.c, 0);
       }
