@@ -1611,8 +1611,6 @@
     }
 
     paste(e) {
-      alert('paste!');
-      alert('data => '+e.clipboardData.getData('text'));
       e.preventDefault();
       if (this.showChat) this.msg += e.clipboardData.getData('text');
     }
