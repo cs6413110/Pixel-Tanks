@@ -1618,8 +1618,8 @@
     }
 
     keydown(e) {
+      if (e.ctrlKey || e.metaKey) return;
       e.preventDefault();
-      if (e.ctrlKey || e.metaKey) return false;
       if (!this.key[e.keyCode]) {
         if (this.showChat) return this.chat(e);
         this.keyStart(e);
