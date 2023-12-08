@@ -1540,14 +1540,14 @@
       GUI.drawText('XP: '+this.xp, 10, 150, 30, '#ffffff', 0);
       GUI.drawText('coin$: '+this.coins, 10, 200, 30, '#ffffff', 0);
       if (this.hostupdate.global) GUI.drawText(this.hostupdate.global, 800, 30, 60, '#ffffff', .5);
-      var l = 0, len = Math.min((this.showChat || this.hostupdate.logs.length<3) ? this.hostupdate.logs.length : 3, 30);
-      while (l<len) {
+
+      for (let i = 0; i < Math.min(this.hostupdate.logs.length, this.showChat ? 30 : 3); i++) {
+        const log = this.hostupdate.logs[i];
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .2;
-        GUI.draw.fillRect(0, 800-l*30, GUI.draw.measureText(this.hostupdate.logs[l].m).width, 30);
+        GUI.draw.fillRect(0, this.chatScroll+800-i*30, 30, GUI.draw.measureText(log.m).width, 30);
         GUI.draw.globalAlpha = 1;
-        GUI.drawText(this.hostupdate.logs[l].m, 0, 800-l*30, 30, this.hostupdate.logs[l].c, 0);
-        l++;
+        GUI.drawText(log.m, 0, this.chatScroll+800-i*30, 30, log.c, 0);
       }
 
       if (this.showChat) {
@@ -1562,6 +1562,7 @@
         clearInterval(this.animationInterval);
         clearTimeout(this.animationTimeout);
       }
+      
       if (this.debugMode) {// 0 = disabled, 1 = ping, 2 = fps, 3 = ops, 4 = ups
         const infoset = [null, this.pings, this.fps, this.ops, this.ups][this.debugMode];
         const colorset = [null, {50: '#FFA500', 100: '#FF0000'}, {0: '#FF0000', 30: '#FFFF00', 60: '#00FF00'}, {60: '#FF0000'}, {60: '#FF0000'}][this.debugMode];
