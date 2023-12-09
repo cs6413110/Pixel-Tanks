@@ -1116,157 +1116,98 @@
 
   class Client {
     constructor(ip, multiplayer, gamemode) {
-      this.xp = 0;
-      this.crates = 0;
-      this.kills = 0;
-      this.coins = 0;
-      this.lastUpdate = {};
-      this.hostupdate = {
-        b: [],
-        s: [],
-        pt: [],
-        d: [],
-        ai: [],
-        logs: [],
-        tickspeed: -1,
-      };
-      this.paused = false;
-      this.speed = 4;
-      this.key = [];
-      this.left = null;
-      this.up = null;
-      this.showChat = false;
-      this.msg = '';
-      this.chatScroll = 0;
+      this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
+      this.tank = {use: [], fire: [], r: 0, x: 0, y: 0, invis: PixelTanks.userData.class === 'stealth'};
+      this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], logs: [], tickspeed: -1};
+      this.paused = this.showChat = false;
       this.multiplayer = multiplayer;
-      this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
-      this.tank.invis = PixelTanks.userData.class === 'stealth';
-      this._ops = 0;
-      this._ups = 0;
-      this._fps = 0;
+      this.left = this.up = null;
+      this.lastUpdate = {};
+      this.speed = 4;
+      this.msg = '';
+      this.key = [];
       this.ops = [];
       this.ups = [];
       this.fps = [];
       this.pings = [];
-      this.debugMode = 0;
       this.reset();
+      if (this.multiplayer) this.connect();
+      if (!this.multiplayer) this.generateWorld();
+      this.bindings = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
+      for (const binding of this.bindings) document.addEventListener(binding, () => this[binding]());
+      this.render = requestAnimationFrame(() => this.frame());
+    }
 
-      const joinData = {
-        username: PixelTanks.user.username,
-        token: PixelTanks.user.token,
-        type: 'join',
-        gamemode: gamemode,
-        tank: {
-          rank: PixelTanks.userData.stats[4],
-          username: PixelTanks.user.username,
-          class: PixelTanks.userData.class,
-          cosmetic: PixelTanks.userData.cosmetic,
-          deathEffect: PixelTanks.userData.deathEffect,
-          color: PixelTanks.userData.color,
-        },
-      }
-
-      if (multiplayer) {
-        this.socket = new MegaSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://')+ip, {keepAlive: false, reconnect: false, autoconnect: true});
-        this.socket.on('message', data => {
-          switch (data.event) {
-            case 'hostupdate':
-              this._ups++;
-              this.hostupdate.tickspeed = data.tickspeed;
-              this.hostupdate.global = data.global;
-              let compiledLogs = [];
-              GUI.draw.font = '30px Font';
-              for (const log of data.logs) {
-                let words = log.m.split(' '), len = 0, line = '';
-                for (const word of words) {
-                  len += GUI.draw.measureText(word).width;
-                  if (len > 800) {
-                    compiledLogs.push({m: line, c: log.c, chunk: true});
-                    len = 0;
-                    line = '';
-                  }
-                  line += word+' ';
-                }
-                compiledLogs.push({m: line, c: log.c, chunk: false});
+    connect() {
+      const entities = ['pt', 'b', 's', 'ai', 'd'];
+      const joinData = {username: PixelTanks.user.username, token: PixelTanks.user.token, type: 'join', gamemode: gamemode, tank: {rank: PixelTanks.userData.stats[4], username: PixelTanks.user.username, class: PixelTanks.userData.class, cosmetic: PixelTanks.userData.cosmetic, deathEffect: PixelTanks.userData.deathEffect, color: PixelTanks.userData.color}}
+      this.socket = new MegaSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://')+ip, {keepAlive: false, reconnect: false, autoconnect: true});
+      this.socket.on('message', data => {
+        if (data.event === 'hostupdate') {
+          this._ups++;
+          this.hostupdate.tickspeed = data.tickspeed;
+          this.hostupdate.global = data.global;
+          let compiledLogs = [];
+          GUI.draw.font = '30px Font';
+          for (const log of data.logs) {
+            let words = log.m.split(' '), len = 0, line = '';
+            for (const word of words) {
+              len += GUI.draw.measureText(word).width;
+              if (len > 800) {
+                compiledLogs.push({m: line, c: log.c, chunk: true});
+                len = 0;
+                line = '';
               }
-              this.hostupdate.logs.unshift(...compiledLogs.reverse());
-              ['pt', 'b', 's', 'ai', 'd'].forEach(p => {
-                if (data[p].length) data[p].forEach(e => {
-                 const index = this.hostupdate[p].findIndex(obj => obj.id === e.id);
-                 if (index !== -1) {
-                   this.hostupdate[p][index] = e;
-                 } else {
-                   this.hostupdate[p].push(e);
-                 }
-                });
-                if (data.delete[p].length) this.hostupdate[p] = this.hostupdate[p].filter(e => !data.delete[p].includes(e.id));
-              });
-              break;
-            case 'ded':
-              this.reset();
-              break;
-            case 'gameover':
-              this.implode();
-              if (data.type === 'victory') {
-                Menus.menus.victory.stats = {coins: 1000, crates: 10, xp: 50};
-                Menus.trigger('victory');
-              } else {
-                Menus.menus.defeat.stats = {coins: 200, crates: 2, xp: 10};
-                Menus.trigger('defeat');
-              }
-              break;
-            case 'override':
-              data.data.forEach(d => {
-                this.tank[d.key] = d.value;
-              });
-              if (this.dx) {
-                this.dx.t = Date.now();
-                this.dx.o = this.tank.x;
-              }
-              if (this.dy) {
-                this.dy.t = Date.now();
-                this.dy.o = this.tank.y;
-              }
-              break;
-            case 'kill':
-              this.killRewards();
-              break;
-            case 'ping':
-              this.pings = this.pings.concat(Date.now()-this.pingstart).slice(-100);
-              this.getPing(); 
-              break;
+              line += word+' ';
+            }
+            compiledLogs.push({m: line, c: log.c, chunk: false});
           }
-        });
-
-        this.socket.on('connect', () => {
-          this.socket.send(joinData);
-          this.sendInterval = setInterval(this.send.bind(this), 1000/30);
+          this.hostupdate.logs.unshift(...compiledLogs.reverse());
+          entities.forEach(p => {
+            if (data[p].length) data[p].forEach(e => {
+              const index = this.hostupdate[p].findIndex(obj => obj.id === e.id);
+              if (index !== -1) {
+                this.hostupdate[p][index] = e;
+              } else this.hostupdate[p].push(e);
+            });
+            if (data.delete[p].length) this.hostupdate[p] = this.hostupdate[p].filter(e => !data.delete[p].includes(e.id));
+          });
+        } else if (data.event === 'ded') {
+          this.reset();
+        } else if (data.event === 'gameover') {
+          this.implode();
+          Menus.menus[data.type].stats = {};
+          Menus.trigger(data.type);
+        } else if (data.event === 'override') {
+          for (const d of data.data) this.tank[d.key] = d.value;
+          if (this.dx) this.dx = {t: Date.now(), o: this.tank.x};
+          if (this.dy) this.dy = {t: Date.now(), o: this.tank.y};
+        } else if (data.event === 'kill') {
+          this.killRewards();
+        } else if (data.event === 'ping') {
+          this.pings = this.pings.concat(Date.now()-this.pingstart).slice(-100);
           this.getPing();
-        });
-      } else {
-        this.world = new Singleplayer(ip);
-        setTimeout(() => {
-          this.world.add(joinData.tank);
-          setInterval(this.send.bind(this), 1000/60);
-        });
-      }
+        }
+      });
+      this.socket.on('connect', () => {
+        this.socket.send(joinData);
+        this.sendInterval = setInterval(() => this.send(), 1000/60);
+        this.getPing();
+      });
       this.pinger = setInterval(() =>  {
         this.ops = this.ops.concat(this._ops).slice(-100);
         this.ups = this.ups.concat(this._ups).slice(-100);
         this.fps = this.fps.concat(this._fps).slice(-100);
-        this._ops = 0;
-        this._ups = 0;
-        this._fps = 0;
+        this._ops = this._ups = this._fps = 0;
       }, 1000);
+    }
 
-      document.addEventListener('keydown', this.keydown.bind(this));
-      document.addEventListener('keyup', this.keyup.bind(this));
-      document.addEventListener('mousemove', this.mousemove.bind(this));
-      document.addEventListener('mousedown', this.mousedown.bind(this));
-      document.addEventListener('mouseup', this.mouseup.bind(this));
-      document.addEventListener('paste', this.paste.bind(this));
-      document.addEventListener('mousewheel', this.mousewheel.bind(this)); 
-      this.render = requestAnimationFrame(this.frame.bind(this));
+    generateWorld() {
+      this.world = new Singleplayer(ip);
+      setTimeout(() => {
+        this.world.add(joinData.tank);
+        setInterval(() => this.send(), 1000/60);
+      });
     }
 
     killRewards() {
@@ -1279,11 +1220,7 @@
       PixelTanks.userData.stats[3] += 10;
       PixelTanks.userData.stats[0] += coins;
       PixelTanks.save();
-      this.canItem0 = true;
-      this.canItem1 = true;
-      this.canItem2 = true;
-      this.canItem3 = true;
-      this.canToolkit = true;
+      this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canToolkit = true;
       this.timers.toolkit = -1;
       this.timers.items = [{time: 0, cooldown: -1}, {time: 0, cooldown: -1,}, {time: 0, cooldown: -1}, {time: 0, cooldown: -1}]
     }
@@ -1295,31 +1232,15 @@
 
     reset() {
       const time = new Date('Nov 28 2006').getTime();
-      this.timers = {
-        boost: time,
-        powermissle: time,
-        toolkit: time,
-        class: {time: time, cooldown: -1},
-        items: [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}],
-      };
+      this.timers = {boost: time, powermissle: time, toolkit: time, class: {time: time, cooldown: -1}, items: [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}]};
       this.fireType = 1;
       this.halfSpeed = false;
-      this.canClass = true;
-      this.canFire = true;
-      this.canBoost = true;
-      this.canToolkit = true;
-      this.canPowermissle = true;
-      this.canItem0 = true;
-      this.canItem1 = true;
-      this.canItem2 = true;
-      this.canItem3 = true;
-      this.canGrapple = true;
+      this.canClass = this.canFire = this.canBoost = this.canToolkit = this.canPowermissle = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canGrapple = true;
       this.kills = 0;
     }
 
     drawBlock(b) {
-      const size = b.type === 'airstrike' ? 200 : 100;
-      const type = ['airstrike', 'fire'].includes(b.type) && getTeam(this.team) === getTeam(b.team) ? 'friendly'+b.type : b.type;
+      const size = b.type === 'airstrike' ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && getTeam(this.team) === getTeam(b.team) ? 'friendly'+b.type : b.type;
       GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1);
     }
 
@@ -1430,19 +1351,19 @@
     }
 
     frame() {
-      this.render = requestAnimationFrame(this.frame.bind(this));
       GUI.clear();
-      if (this.hostupdate.pt.length === 0) {
+      this._fps++;
+      this.render = requestAnimationFrame(this.frame.bind(this));
+      if (!this.hostupdate.pt.length) {
         GUI.draw.fillStyle = '#ffffff';
         GUI.draw.fillRect(0, 0, 1600, 1600);
-        return  GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
+        return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
       }
       if (this.multiplayer) if (this.socket.status !== 'connected' ) {
         PixelTanks.user.player.implode();
         Menus.trigger('main');
         this.multiplayer = undefined;
       }
-      this._fps++;
       const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
       if (this.dx) {
         var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : (this.buffed ? 1.5 : 1));
@@ -1475,25 +1396,20 @@
         this.ded = player.ded;
       }
       GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
-
       GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
-
       b.forEach(block => this.drawBlock(block));
       s.forEach(shot => this.drawShot(shot));
       a.forEach(ai => this.drawTank(ai));
       t.forEach(tank => this.drawTank(tank));
-      for (const block of b) {
-        if (block.s) {
-          GUI.draw.fillStyle = '#000000';
-          GUI.draw.fillRect(block.x-2, block.y+108, 104, 11);
-          GUI.draw.fillStyle = '#0000FF';
-          GUI.draw.fillRect(block.x, block.y+110, 100*block.hp/block.maxHp, 5);
-        }
+      for (const block of b) if (block.s) {
+        GUI.draw.fillStyle = '#000000';
+        GUI.draw.fillRect(block.x-2, block.y+108, 104, 11);
+        GUI.draw.fillStyle = '#0000FF';
+        GUI.draw.fillRect(block.x, block.y+110, 100*block.hp/block.maxHp, 5);
       }
       e.forEach(e => this.drawExplosion(e));
 
       GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
-      
       if (player.flashbanged) {
         GUI.draw.fillStyle = '#FFFFFF';
         GUI.draw.fillRect(0, 0, 1600, 1000);
@@ -1541,7 +1457,7 @@
       GUI.drawText('coin$: '+this.coins, 10, 200, 30, '#ffffff', 0);
       if (this.hostupdate.global) GUI.drawText(this.hostupdate.global, 800, 30, 60, '#ffffff', .5);
 
-      for (let i = 0; i < Math.min(this.hostupdate.logs.length, this.showChat ? 30 : 3); i++) {
+      for (let i = ; i < Math.min(this.hostupdate.logs.length, this.showChat ? 30 : 3); i++) {
         const log = this.hostupdate.logs[i];
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .2;
