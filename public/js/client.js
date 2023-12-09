@@ -1607,7 +1607,7 @@
     }
 
     mousewheel(e) {
-      if (this.showChat) this.chatScroll = Math.min(this.hostupdate.logs.length*30, Math.max(0, this.chatScroll+Math.e.wheelDeltaY));
+      if (this.showChat) this.chatScroll = Math.min(this.hostupdate.logs.length*30, Math.max(0, this.chatScroll+e.wheelDeltaY));
     }
 
     paste(e) {
