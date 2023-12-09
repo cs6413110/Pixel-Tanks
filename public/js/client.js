@@ -1541,7 +1541,7 @@
       GUI.drawText('coin$: '+this.coins, 10, 200, 30, '#ffffff', 0);
       if (this.hostupdate.global) GUI.drawText(this.hostupdate.global, 800, 30, 60, '#ffffff', .5);
 
-      for (let i = 0; i < Math.min(this.hostupdate.logs.length, this.showChat ? 30 : 3); i++) {
+      for (let i = 0; i < this.showChat || this.hostupdate.logs.length < 3 ? this.hostupdate.logs.length : 3; i++) {
         const log = this.hostupdate.logs[i];
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .2;
