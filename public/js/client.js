@@ -127,7 +127,7 @@
       for (const b of this.buttons) {
         if (b[5]) {
           const [x, y, w, h, canvas] = this.cache[this.buttons.indexOf(b)];
-          if (collision(x, y, w, h, Menus.x, Menus.y, 0, 0) {
+          if (collision(x, y, w, h, Menus.x, Menus.y, 0, 0)) {
             b[6] = Math.min(b[6]+1, 10);
           } else {
             b[6] = Math.max(b[6]-1, 0);
