@@ -868,7 +868,11 @@
 
     static getData(callback) {
         Network.get(data => {
-          PixelTanks.playerData = JSON.parse(data.playerdata);
+          try {
+            PixelTanks.playerData = JSON.parse(data.playerdata);
+          } catch(e) {
+            PixelTanks.playerData = data.playerdata;
+          }
           PixelTanks.userData = PixelTanks.playerData['pixel-tanks'];
           if (!PixelTanks.userData) {
             PixelTanks.userData = {
