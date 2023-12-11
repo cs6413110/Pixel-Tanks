@@ -1182,8 +1182,14 @@
           Menus.trigger(data.type);
         } else if (data.event === 'override') {
           for (const d of data.data) this.tank[d.key] = d.value;
-          if (this.dx) this.dx = {t: Date.now(), o: this.tank.x};
-          if (this.dy) this.dy = {t: Date.now(), o: this.tank.y};
+          if (this.dx) {
+            this.dx.t = Date.now()
+            this.dx.o = this.tank.x;
+          }
+          if (this.dy) {
+            this.dy.t = Date.now();
+            this.dy.o = this.tank.y;
+          }
         } else if (data.event === 'kill') {
           this.killRewards();
         } else if (data.event === 'ping') {
