@@ -863,7 +863,7 @@
 
     static save() {
       PixelTanks.playerData['pixel-tanks'] = PixelTanks.userData;
-      Network.update('playerdata', PixelTanks.playerData);
+      Network.update('playerdata', JSON.stringify(PixelTanks.playerData));
     }
 
     static getData(callback) {
