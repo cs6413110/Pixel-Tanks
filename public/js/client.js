@@ -1122,6 +1122,7 @@
       this.paused = this.showChat = false;
       this.multiplayer = multiplayer;
       this.gamemode = gamemode;
+      this.ip = ip;
       this.left = this.up = null;
       this.lastUpdate = {};
       this.speed = 4;
@@ -1142,7 +1143,7 @@
     connect() {
       const entities = ['pt', 'b', 's', 'ai', 'd'];
       const joinData = {username: PixelTanks.user.username, token: PixelTanks.user.token, type: 'join', gamemode: this.gamemode, tank: {rank: PixelTanks.userData.stats[4], username: PixelTanks.user.username, class: PixelTanks.userData.class, cosmetic: PixelTanks.userData.cosmetic, deathEffect: PixelTanks.userData.deathEffect, color: PixelTanks.userData.color}}
-      this.socket = new MegaSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://')+ip, {keepAlive: false, reconnect: false, autoconnect: true});
+      this.socket = new MegaSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://')+this.ip, {keepAlive: false, reconnect: false, autoconnect: true});
       this.socket.on('message', data => {
         if (data.event === 'hostupdate') {
           this._ups++;
