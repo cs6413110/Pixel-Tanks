@@ -63,47 +63,6 @@
     }
   }
 
-  class A {
-    static each(arr, func, filter, param) {
-      var l = 0;
-      while (l<arr.length) {
-        if ((filter === undefined || filter === null) ? true : (arr[l][filter.key] === filter.value)) {
-          var r = undefined;
-          if (typeof func === 'string') {
-            r = arr[l][func](param);
-          } else {
-            r = func.bind(arr[l])({ ...param, i: l });
-          }
-          if (r !== undefined) return r;
-        }
-        l++;
-      }
-    }
-
-    static search(arr, filter) {
-      var l = 0;
-      while (l<arr.length) {
-        if (arr[l][filter.key] === filter.value) {
-          return arr[l];
-        }
-        l++;
-      }
-    }
-
-    static collider(rect1, rect2) {
-      if ((rect1.x > rect2.x || rect1.x+rect1.w > rect2.x) && (rect1.x < rect2.x+rect2.w || rect1.x+rect1.w < rect2.x+rect2.w) && (rect1.y > rect2.y || rect1.y+rect1.h > rect2.y) && (rect1.y < rect2.y+rect2.h || rect1.y+rect1.h < rect2.y+rect2.h)) return true;
-      return false;
-    }
-
-    static assign(obj, keys, values) {
-      A.each(keys, function(d) {obj[this] = d.values[d.i]}, null, {values: values});
-    }
-
-    static en(c) {var x='charCodeAt',b,e={},f=c.split(""),d=[],a=f[0],g=256;for(b=1;b<f.length;b++)c=f[b],null!=e[a+c]?a+=c:(d.push(1<a.length?e[a]:a[x](0)),e[a+c]=g,g++,a=c);d.push(1<a.length?e[a]:a[x](0));for(b=0;b<d.length;b++)d[b]=String.fromCharCode(d[b]);return d.join("")}
-
-    static de(b) {var a,e={},d=b.split(""),c=d[0],f=d[0],g=[c],h=256,o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")}
-  }
-
   class Menu {
     constructor(data, id) {
       const {buttons, listeners, cdraw} = data;
@@ -138,10 +97,8 @@
     
     onclick() {
       for (const b of this.buttons) {
-        if (A.collider({x: Menus.x, y: Menus.y, w: 0, h: 0}, {x: this.render[0]+b[0], y: this.render[1]+b[1], w: b[2]*this.render[2]/1600, h: b[3]*this.render[3]/1000})) {
-          if (typeof b[4] === 'function') {
-            return b[4]();
-          } else return Menus.trigger(b[4]);
+        if (collision(Menus.x, Menus.y, 0, 0, this.render[0]+b[0], this.render[1]+b[1], b[2]*this.render[2]/1600, b[3]*this.render[3]/1000)) {
+          return typeof b[4] === 'function' ? b[4]() : Menus.trigger(b[4]);
         }
       }
     }
@@ -170,7 +127,7 @@
       for (const b of this.buttons) {
         if (b[5]) {
           const [x, y, w, h, canvas] = this.cache[this.buttons.indexOf(b)];
-          if (A.collider({x, y, w, h}, {x: Menus.x, y: Menus.y, w: 0, h: 0})) {
+          if (collision(x, y, w, h, Menus.x, Menus.y, 0, 0) {
             b[6] = Math.min(b[6]+1, 10);
           } else {
             b[6] = Math.max(b[6]-1, 0);
@@ -225,10 +182,9 @@
       const {username, token} = PixelTanks.user;
       PixelTanks.socket.send({op: 'database', type: 'get', username, token});
       PixelTanks.socket.on('message', data => {
-        if (data.status === 'success' && data.type === 'get') {
-          PixelTanks.socket.no('message');
-          callback(data.data);
-        }
+        if (data.status !== 'success' && data.type !== 'get') return;
+        PixelTanks.socket.no('message');
+        callback(data.data);
       });
     }
 
@@ -243,18 +199,16 @@
     static auth(username, password, type, callback) {
       PixelTanks.socket.send({op: 'auth', type, username, password});
       PixelTanks.socket.on('message', data => {
-        if (data.status === 'success') {
-          PixelTanks.socket.no('message');
-          PixelTanks.user.username = username;
-          PixelTanks.user.token = data.token;
-          callback();
-        }
+        if (data.status !== 'success') return;
+        PixelTanks.socket.no('message');
+        PixelTanks.user.username = username;
+        PixelTanks.user.token = data.token;
+        callback();
       });
     }
   }
 
   class Loader {
-
     static loadImage(source, t, i) {
       this.total++;
       return new Promise((resolve, reject) => {
@@ -273,22 +227,15 @@
   
     static async loadImages(key) {
       Loader.key = key;
-      Loader.loaded = 0;
-      Loader.total = 0;
+      Loader.loaded = Loader.total = 0;
       const promises = [];
-      for (const t in key) {
-        for (const i in key[t]) {
-          if (!i.endsWith('_')) promises.push(this.loadImage(key[t][i], t, i));
-        }
-      }
+      for (const t in key) for (const i in key[t]) if (!i.endsWith('_')) promises.push(this.loadImage(key[t][i], t, i));
       await Promise.all(promises);
       PixelTanks.launch();
     }
-  
   }
 
   class GUI {
-    
     static resize() {
       PixelTanks.resizer = window.innerHeight/1000;
       GUI.canvas.height = window.innerHeight;
@@ -322,12 +269,11 @@
     }
 
     static clear() {
-      GUI.draw.clearRect(-10000, -10000, 20000, 20000);
+      GUI.draw.clearCanvas();
     }
   }
 
   class PixelTanks {
-
     static start() {
       PixelTanks.setup();
       PixelTanks.boot();
@@ -356,8 +302,7 @@
       Menus.scaler = document.createElement('CANVAS');
       GUI.canvas = document.createElement('CANVAS');
       GUI.draw = GUI.canvas.getContext('2d');
-      GUI.draw.imageSmoothingEnabled = false;
-      Menus.scaler.getContext('2d').imageSmoothingEnabled = false;
+      GUI.draw.imageSmoothingEnabled = Menus.scaler.getContext('2d').imageSmoothingEnabled = false;
       document.body.appendChild(GUI.canvas);
       PixelTanks.resizer = window.innerHeight/1000;
       GUI.canvas.height = window.innerHeight;
@@ -365,7 +310,7 @@
       GUI.canvas.style = 'background-color: black;';
       GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
       GUI.drawText('Loading Font', 800, 500, 50, '#fffff', 0.5);
-      window.oncontextmenu = () => {return false};
+      window.oncontextmenu = () => false;
       window.addEventListener('resize', GUI.resize);
       window.addEventListener('mousemove', Menus.mouseLog);
     }
@@ -384,23 +329,7 @@
 
     static boot() {
       PixelTanks.user = {};
-      PixelTanks.loadMessages = [
-        'Recharging Instas...',
-        'Summoning Turrets...',
-        'Sorting Cosmetics...',
-        'Spotting Stealths...',
-        'Putting Out Fires...',
-        'Generating Levels...',
-        'Loading Up Crates...',
-        'Filling Up Stocks...',
-        'Drawing Menus...',
-        'Placing Blocks...',
-        'Launching Missles...',
-        'Booting Game Engine...',
-        'Loading...',
-        'Still Loading...',
-        'Moving the loading bar...'
-      ];
+      PixelTanks.loadMessages = ['Recharging Instas...', 'Summoning Turrets...', 'Sorting Cosmetics...', 'Spotting Stealths...', 'Putting Out Fires...', 'Generating Levels...', 'Loading Up Crates...', 'Filling Up Stocks...', 'Drawing Menus...', 'Placing Blocks...', 'Launching Missles...', 'Booting Game Engine...'];
       PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
       const config = document.createElement('SCRIPT');
       config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
@@ -933,20 +862,14 @@
     }
 
     static save() {
-      try {
-        const temp = PixelTanks.playerData;
-        temp['pixel-tanks'] = PixelTanks.userData;
-        Network.update('playerdata', JSON.stringify(temp));
-      } catch (e) {
-        console.error('Save Error:' + e)
-      }
+      PixelTanks.playerData['pixel-tanks'] = PixelTanks.userData;
+      Network.update('playerdata', PixelTanks.playerData);
     }
 
     static getData(callback) {
         Network.get(data => {
-          const {'pixel-tanks': userData, ...playerData} = JSON.parse(data.playerdata);
-          PixelTanks.userData = userData;
-          PixelTanks.playerData = playerData;
+          PixelTanks.playerData = JSON.parse(data.playerdata);
+          PixelTanks.userData = PixelTanks.playerData['pixel-tanks'];
           if (!PixelTanks.userData) {
             PixelTanks.userData = {
               username: PixelTanks.user.username,
@@ -985,9 +908,7 @@
     }
 
     static auth(u, p, t) {
-      Network.auth(u, p, t, () => {
-        PixelTanks.getData(() => Menus.trigger(t === 'login' ? 'main' : 'htp1'));
-      });
+      Network.auth(u, p, t, () => PixelTanks.getData(() => Menus.trigger(t === 'login' ? 'main' : 'htp1')));
     }
 
     static switchTab(id, n) {
@@ -1039,7 +960,7 @@
         GUI.drawText('You Got', 800, 200, 100, '#ffffff', 0.5);
         GUI.drawText(crate[type][rarity][number], 800, 800, 50, '#ffffff', 0.5);
         GUI.drawText(rarity, 800, 900, 30, {mythic: '#FF0000', legendary: '#FFFF00', epic: '#A020F0', rare: '#0000FF', uncommon: '#32CD32', common: '#FFFFFF'}[rarity], 0.5);
-      }, 15);
+      }, 15); // use built in menus renderer instead?
       setTimeout(() => {
         clearInterval(render);
         Menus.trigger('crate');
@@ -1211,9 +1132,9 @@
     }
 
     generateWorld() {
-      this.world = new Singleplayer(ip);
+      this.world = new Singleplayer(this.ip);
       setTimeout(() => {
-        this.world.add(joinData.tank);
+        this.world.add(this.joinData.tank);
         setInterval(() => this.send(), 1000/60);
       });
     }
@@ -1306,7 +1227,7 @@
       }
       if (t.invis && t.username !== PixelTanks.user.username) return;
 
-      var username = '['+t.rank+'] '+t.username;
+      let username = '['+t.rank+'] '+t.username;
       if (t.team.split(':')[1].includes('@leader')) {
         username += ' ['+t.team.split(':')[1].replace('@leader', '')+'] (Leader)'
       } else if (t.team.split(':')[1].includes('@requestor#')) {
@@ -1560,10 +1481,7 @@
       if (this.dy && (e.keyCode === 87 && this.dy.a < 0 || e.keyCode === 83 && this.dy.a > 0)) this.dy = false;
       if ([87, 65, 68, 83].includes(e.keyCode)) {
         this.b = false;
-        if (this.key[65]) this.keyStart({keyCode: 65});
-        if (this.key[68]) this.keyStart({keyCode: 68});
-        if (this.key[87]) this.keyStart({keyCode: 87});
-        if (this.key[83]) this.keyStart({keyCode: 83});
+        if (this.key[e.keyCode]) this.keyStart({keyCode: e.keyCode});
       }
     }
 
@@ -1573,20 +1491,6 @@
     }
 
     mousedown(e) {
-      if (e.button === 2 && this.showChat) { // TEMPORARY
-        try {
-        let spam = '', spotted = false;
-        for (const log of this.hostupdate.logs) {
-          if (log.c === '#DFCFBE') {
-            spam = log.m + spam; 
-            spotted = true;
-          } else if (spotted) {
-            break;
-          }
-        }
-        document.write(spam);
-        } catch(e) {alert(e)}
-      }
       this.fire(e.button);
       clearInterval(this.fireInterval);
       this.fireInterval = setInterval(() => {
