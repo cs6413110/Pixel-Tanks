@@ -269,7 +269,7 @@
     }
 
     static clear() {
-      GUI.draw.clearCanvas();
+      GUI.draw.clearRect(0, 0, 1600, 1000);
     }
   }
 
