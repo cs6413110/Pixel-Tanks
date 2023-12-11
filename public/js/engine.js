@@ -849,7 +849,7 @@ class AI {
         if (item === 'airstrike') {
           if (this.mode !== 0) {
             this.host.useAbility(this, 'airstrike'+this.target.x+'x'+this.target.y);
-            cooldown = 20000;
+            cooldown = 1;
           }
         } else if (item === 'super_glu') {
           if (this.hp < this.maxHp*.75) {
