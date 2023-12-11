@@ -1136,7 +1136,7 @@
       if (this.multiplayer) this.connect();
       if (!this.multiplayer) this.generateWorld();
       this.bindings = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
-      for (const binding of this.bindings) document.addEventListener(binding, () => this[binding]());
+      for (const binding of this.bindings) document.addEventListener(binding, e => this[binding](e));
       this.render = requestAnimationFrame(() => this.frame());
     }
 
