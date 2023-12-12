@@ -1099,14 +1099,6 @@
             if (data.delete[p].length) this.hostupdate[p] = this.hostupdate[p].filter(e => !data.delete[p].includes(e.id));
           });
         } else if (data.event === 'ded') {
-          alert('ded=true');
-          if (this.gamemode === 'ffa') {
-            alert('gamemode=ffa');
-            setTimeout(() => {
-              alert('canRespawn=true')
-              this.canRespawn = true
-            }, 10000);
-          }
           this.reset();
         } else if (data.event === 'gameover') {
           this.implode();
@@ -1333,6 +1325,7 @@
         player.baseRotation = this.tank.baseRotation;
         player.baseFrame = this.tank.baseFrame;
         this.team = player.team;
+        if (!this.ded && player.ded && this.gamemode === 'ffa') setTimeout(() => {this.canRespawn = true}, 10000);
         this.ded = player.ded;
       }
       GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
@@ -1653,7 +1646,7 @@
           this.canToolkit = true;
         }
       } else if (k === 70) {
-        if (this.canRespawn) this.tank.use.push('respawn');
+        if (this.canRespawn) return this.tank.use.push('respawn');
         if (!this.canClass) return;
         this.canClass = false;
         const c = PixelTanks.userData.class;
