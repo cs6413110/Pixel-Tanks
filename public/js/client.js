@@ -1044,7 +1044,7 @@
       this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
       this.tank = {use: [], fire: [], r: 0, x: 0, y: 0, invis: PixelTanks.userData.class === 'stealth'};
       this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], logs: [], tickspeed: -1};
-      this.paused = this.showChat = false;
+      this.paused = this.showChat = this.canRespawn = false;
       this.multiplayer = multiplayer;
       this.gamemode = gamemode;
       this.ip = ip;
@@ -1099,6 +1099,11 @@
             if (data.delete[p].length) this.hostupdate[p] = this.hostupdate[p].filter(e => !data.delete[p].includes(e.id));
           });
         } else if (data.event === 'ded') {
+          if (this.gamemode === 'FFA') {
+            setTimeout(() => {
+              this.canRespawn = true;
+            }, 10000);
+          }
           this.reset();
         } else if (data.event === 'gameover') {
           this.implode();
@@ -1387,7 +1392,7 @@
       GUI.drawText('Crates: '+this.crates, 10, 100, 30, '#ffffff', 0);
       GUI.drawText('XP: '+this.xp, 10, 150, 30, '#ffffff', 0);
       GUI.drawText('coin$: '+this.coins, 10, 200, 30, '#ffffff', 0);
-      if (this.hostupdate.global) GUI.drawText(this.hostupdate.global, 800, 30, 60, '#ffffff', .5);
+      GUI.drawText(this.canRespawn ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
 
       for (let i = 0; i < Math.min(this.hostupdate.logs.length, this.showChat ? 1000 : 3); i++) {
         const log = this.hostupdate.logs[i];
@@ -1644,7 +1649,9 @@
           this.timers.toolkit = new Date('Nov 28 2006').getTime();
           this.canToolkit = true;
         }
-      } else if (k === 70 && this.canClass) {
+      } else if (k === 70) {
+        if (this.canRespawn) this.tank.use.push('respawn');
+        if (!this.canClass) return;
         this.canClass = false;
         const c = PixelTanks.userData.class;
         if (c === 'stealth') {
