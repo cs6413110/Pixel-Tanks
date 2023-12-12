@@ -1646,7 +1646,10 @@
           this.canToolkit = true;
         }
       } else if (k === 70) {
-        if (this.canRespawn) return this.tank.use.push('respawn');
+        if (this.canRespawn) {
+          this.canRespawn = false;
+          return this.tank.use.push('respawn');
+        }
         if (!this.canClass) return;
         this.canClass = false;
         const c = PixelTanks.userData.class;
