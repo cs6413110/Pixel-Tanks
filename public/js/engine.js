@@ -187,7 +187,7 @@ class Engine {
       if (t.class === 'warrior' && t.immune && !t.ded) this.useAbility(t, 'break');
     }
     t.r = r;
-    if (t.use && t.use.includes('respawn')) {
+    if (use.includes('respawn')) {
       t.socket.send({event: 'ded'});
       t.socket.send({event: 'override', data: [{key: 'x', value: this.spawn.x}, {key: 'y', value: this.spawn.y}]});
       t.x = this.spawn.x;
