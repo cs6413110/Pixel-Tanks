@@ -203,8 +203,7 @@ class FFA extends Multiplayer {
   ondeath(t, m={}) {
     this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
     for (const ai of this.ai) if (getUsername(ai.team) === t.username) this.ai.splice(this.ai.indexOf(ai), 1);
-    t.ded = true;
-    if (t.socket) t.socket.send({event: 'ded'});
+    if (t.socket) t.ded = true;
     if (m.socket) m.socket.send({event: 'kill'});
     if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
   }
