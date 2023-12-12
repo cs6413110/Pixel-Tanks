@@ -1122,7 +1122,7 @@
         }
       });
       this.socket.on('connect', () => {
-        this.socket.send(joinData);
+        this.socket.send(this.joinData);
         this.sendInterval = setInterval(() => this.send(), 1000/60);
         this.getPing();
       });
