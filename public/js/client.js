@@ -1099,7 +1099,14 @@
             if (data.delete[p].length) this.hostupdate[p] = this.hostupdate[p].filter(e => !data.delete[p].includes(e.id));
           });
         } else if (data.event === 'ded') {
-          if (this.gamemode === 'ffa') setTimeout(() => {this.canRespawn = true}, 10000);
+          alert('ded=true');
+          if (this.gamemode === 'ffa') {
+            alert('gamemode=ffa');
+            setTimeout(() => {
+              alert('canRespawn=true')
+              this.canRespawn = true
+            }, 10000);
+          }
           this.reset();
         } else if (data.event === 'gameover') {
           this.implode();
