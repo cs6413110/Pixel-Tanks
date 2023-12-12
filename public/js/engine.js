@@ -187,6 +187,14 @@ class Engine {
       if (t.class === 'warrior' && t.immune && !t.ded) this.useAbility(t, 'break');
     }
     t.r = r;
+    if (t.use.includes('respawn')) {
+      t.socket.send({event: 'ded'});
+      t.socket.send({event: 'override', data: [{key: 'x', value: this.spawn.x}, {key: 'y', value: this.spawn.y}]});
+      t.x = this.spawn.x;
+      t.y = this.spawn.y;
+      t.ded = false;
+      t.hp = t.maxHp;
+    }
     if (t.ded) return;
     if (t.immune && t.class === 'fire') {
       for (const cell of t.cells) {
