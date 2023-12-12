@@ -1057,6 +1057,7 @@
       this.ups = [];
       this.fps = [];
       this.pings = [];
+      this.joinData = {username: PixelTanks.user.username, token: PixelTanks.user.token, type: 'join', gamemode: this.gamemode, tank: {rank: PixelTanks.userData.stats[4], username: PixelTanks.user.username, class: PixelTanks.userData.class, cosmetic: PixelTanks.userData.cosmetic, deathEffect: PixelTanks.userData.deathEffect, color: PixelTanks.userData.color}};
       this.reset();
       if (this.multiplayer) this.connect();
       if (!this.multiplayer) this.generateWorld();
@@ -1066,9 +1067,7 @@
     }
 
     connect() {
-      const entities = ['pt', 'b', 's', 'ai', 'd'];
-      const joinData = {username: PixelTanks.user.username, token: PixelTanks.user.token, type: 'join', gamemode: this.gamemode, tank: {rank: PixelTanks.userData.stats[4], username: PixelTanks.user.username, class: PixelTanks.userData.class, cosmetic: PixelTanks.userData.cosmetic, deathEffect: PixelTanks.userData.deathEffect, color: PixelTanks.userData.color}}
-      this.socket = new MegaSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://')+this.ip, {keepAlive: false, reconnect: false, autoconnect: true});
+      const entities = ['pt', 'b', 's', 'ai', 'd'];      this.socket = new MegaSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://')+this.ip, {keepAlive: false, reconnect: false, autoconnect: true});
       this.socket.on('message', data => {
         if (data.event === 'hostupdate') {
           this._ups++;
@@ -1485,7 +1484,7 @@
       if (this.dy && (e.keyCode === 87 && this.dy.a < 0 || e.keyCode === 83 && this.dy.a > 0)) this.dy = false;
       if ([87, 65, 68, 83].includes(e.keyCode)) {
         this.b = false;
-        if (this.key[e.keyCode]) this.keyStart({keyCode: e.keyCode});
+        for (const key of [87, 65, 68, 83]) if (this.key[key]) this.keyStart({keyCode: key});
       }
     }
 
@@ -1512,9 +1511,7 @@
         if (!this.canPowermissle) return;
         this.canPowermissle = false;
         this.timers.powermissle = Date.now();
-        setTimeout(() => {
-          this.canPowermissle = true;
-        }, 10000);
+        setTimeout(() => {this.canPowermissle = true;}, 10000);
       } else if (type === 0) {
         if (!this.canFire) return;
         this.canFire = false;
