@@ -901,7 +901,6 @@
               items: ['duck_tape', 'weak', 'bomb', 'flashbang'],
               keybinds: {
                 items: [49, 50, 51, 52],
-                emotes: [53, 54, 55, 56, 57, 48],    
               },
             };
           }
@@ -1067,7 +1066,8 @@
     }
 
     connect() {
-      const entities = ['pt', 'b', 's', 'ai', 'd'];      this.socket = new MegaSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://')+this.ip, {keepAlive: false, reconnect: false, autoconnect: true});
+      const entities = ['pt', 'b', 's', 'ai', 'd'];
+      this.socket = new MegaSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://')+this.ip, {keepAlive: false, reconnect: false, autoconnect: true});
       this.socket.on('message', data => {
         if (data.event === 'hostupdate') {
           this._ups++;
@@ -1262,11 +1262,6 @@
           GUI.drawText((d < 0 ? '+' : '-')+Math.round(d), x, y, Math.round(d/5)+[20, 15][i], ['#ffffff', getTeam(this.team) === getTeam(t.team) ? '#ff0000' : '#0000ff'][i], 0.5);
         }
       }
-      
-      if (t.emote) {
-        GUI.drawImage(PixelTanks.images.emotes.speech, t.x+90, t.y-15, 100, 100, 1);
-        GUI.drawImage(PixelTanks.images.emotes[t.emote.a], t.x+90, t.y-15, 100, 100, 1, 0, 0, 0, 0, undefined, t.emote.f*50, 0, 50, 50);
-      }
 
       if (t.dedEffect) {
         const {speed, frames, kill} = PixelTanks.images.deathEffects[t.dedEffect.id+'_'];
@@ -1370,24 +1365,11 @@
         GUI.draw.fillStyle = PixelTanks.userData.color;
         GUI.draw.fillRect(c[i], 900+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*100, 100, 100);
       }
-      GUI.drawImage(PixelTanks.images.items["powermissleui"], 422, 950, 50, 50, 1);
-      GUI.drawImage(PixelTanks.images.items["toolkitui"], 1127, 950, 50, 50, 1);
-      GUI.drawImage(PixelTanks.images.items["boostui"], 1205, 950, 50, 50, 1);
       for (let i = 0; i < 3; i++) {
         GUI.draw.fillRect([422, 1127, 1205][i], 950+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost'][i]])/[10000, 40000, 5000][i], 1)*50, 50, 50);
       }
-      GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.class+"ui"], 345, 950, 50, 50, 1);
       GUI.draw.fillRect(345, 950+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*50, 50, 50);
       GUI.draw.globalAlpha = 1;
-
-      GUI.draw.fillStyle = '#000000';
-      GUI.draw.globalAlpha = .2;
-      GUI.draw.fillRect(0, 0, 180, 250);
-      GUI.draw.globalAlpha = 1;
-      GUI.drawText('Killstreak: '+this.kills, 10, 50, 30, '#ffffff', 0);
-      GUI.drawText('Crates: '+this.crates, 10, 100, 30, '#ffffff', 0);
-      GUI.drawText('XP: '+this.xp, 10, 150, 30, '#ffffff', 0);
-      GUI.drawText('coin$: '+this.coins, 10, 200, 30, '#ffffff', 0);
       GUI.drawText(this.canRespawn ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
 
       for (let i = 0; i < Math.min(this.hostupdate.logs.length, this.showChat ? 1000 : 3); i++) {
@@ -1615,12 +1597,7 @@
         this.dy = {o: this.tank.y, t: Date.now(), a: k === 87 ? -1 : 1, b: false};
         this.b = {o: this.tank.baseFrame, t: Date.now()};
       }
-      for (let i = 0; i < 4; i++) {
-        if (k === PixelTanks.userData.keybinds.items[i]) this.useItem(PixelTanks.userData.items[i], i);
-      }
-      for (let i = 0; i < 6; i++) {
-        if (k === PixelTanks.userData.keybinds.emotes[i]) this.emote(Pixel.userData.emotes[i]);
-      }
+      for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds.items[i]) this.useItem(PixelTanks.userData.items[i], i);
       if (k === 13) this.showChat = true;
       if (k === 9) {
         this.fireType = this.fireType < 2 ? 2 : 1;
@@ -1701,24 +1678,6 @@
           setTimeout(() => {this.canBoost = true}, 5000);
         }
       }
-    }
-
-    emote(id) {
-      clearInterval(this.emoteAnimation);
-      clearTimeout(this.emoteTimeout);
-      const {type, frames} = PixelTanks.images.emotes[id+'_'];
-      this.tank.emote = {a: id, f: 0};
-      if (type !== 2) this.emoteAnimation = setInterval(() => {
-        if (this.tank.emote.f !== frames) {
-          this.tank.emote.f++;
-        } else if (type === 0) {
-          this.tank.emote.f = 0;
-        }
-      }, 50);
-      this.emoteTimeout = setTimeout(() => {
-        clearInterval(this.emoteAnimation);
-        this.tank.emote = null;
-      }, type < 2 ? 5000 : 1500+50*frames);
     }
 
     send() {
