@@ -67,12 +67,14 @@ const deathMessages = [
   `{idot} is now online`,
   `{idot} materialized`,
   `{idot} is ready to breadspam`,
+  `{idot} is here to prove that he is the best in the world`,
   `{idot} is here`
 ], rageMessages = [
   `{idot} left the game`,
   `{idot} got gogaurdianed`,
   `{idot} quit`,
   `{idot} disconnected`,
+  `{idot} got techered`,
   `{idot} will return soon`
 ];
 
