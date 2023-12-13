@@ -198,7 +198,7 @@ class AI {
       for (const entity of this.host.cells[x][y]) {
         const teamMatch = team === getTeam(entity.team);
         if (entity instanceof Block) {
-          if (!this.ded && !this.immune && collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
+          if (!this.ded && !this.immune && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
             if (entity.type === 'fire') {
               if (this.fire) {
                 clearTimeout(this.fireTimeout);
@@ -262,11 +262,7 @@ class AI {
   }
 
   collision(x, y) {
-    for (const b of this.host.b) {
-      if (collision(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) {
-        return {x: b.x+50, y: b.y+50, t: this.obstruction ? this.obstruction.t : Date.now()};
-      }
-    }
+    for (const b of this.host.b) if (Engine.collision(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) return {x: b.x+50, y: b.y+50, t: this.obstruction ? this.obstruction.t : Date.now()};
     return false;
   }
 
