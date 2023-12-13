@@ -417,4 +417,4 @@ class AI {
     }
   }
 }
-module?.exports = AI;
+if (module) module.exports = AI;
