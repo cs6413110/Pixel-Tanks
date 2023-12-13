@@ -1,3 +1,7 @@
+try {
+  PF = require('pathfinding');
+} catch(e) {}
+
 class Engine {
   constructor(levels) {
     this.spawn = {x: 0, y: 0};
@@ -263,3 +267,4 @@ class Engine {
     return x === 0 ? {x, y: y/Math.abs(y)} : {x: x/Math.abs(x), y: y/Math.abs(x)}
   }
 }
+module?.exports = Engine;
