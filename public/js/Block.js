@@ -1,4 +1,5 @@
 try {
+  Engine = require('./Engine.js');
   Block = require('./Block.js');
   Tank = require('./Tank.js');
   Damage = require('./Damage.js');
