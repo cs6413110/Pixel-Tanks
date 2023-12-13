@@ -1,3 +1,12 @@
+try {
+  Engine = require('./Engine.js');
+  Block = require('./Block.js');
+  Tank = require('./Tank.js');
+  Damage = require('./Damage.js');
+  AI = require('./AI.js');
+  Shot = require('./Shot.js');
+} catch(e) {}
+
 class Damage {
   constructor(x, y, w, h, a, team, host) {
     this.x = x;
