@@ -68,7 +68,7 @@ class Shot {
     const { host, x, y, type, cells} = this;
     if (x < 0 || x > 3000 || y < 0 || y > 3000) {
       if (type === 'grapple') {
-        const t = host.pt.find(t => t.username === getUsername(this.team));
+        const t = host.pt.find(t => t.username === Engine.getUsername(this.team));
         if (t.grapple) t.grapple.bullet.destroy();
         t.grapple = { target: { x: x, y: y }, bullet: this };
         this.update = () => {};
@@ -85,10 +85,10 @@ class Shot {
       const [cx, cy] = cell.split('x');
       for (const e of host.cells[cx][cy]) {
         if (e instanceof Tank) {
-          if (e.ded || !collision(x, y, 10, 10, e.x, e.y, 80, 80)) continue;
+          if (e.ded || !Engine.collision(x, y, 10, 10, e.x, e.y, 80, 80)) continue;
           if (type === 'grapple') {
             if (e.grapple) e.grapple.bullet.destroy();
-            e.grapple = {target: host.pt.find(tank => tank.username === getUsername(this.team)), bullet: this};
+            e.grapple = {target: host.pt.find(tank => tank.username === Engine.getUsername(this.team)), bullet: this};
             this.target = e;
             this.offset = [e.x-x, e.y-y];
             this.update = this.dynaUpdate;
@@ -112,16 +112,16 @@ class Shot {
           } else {
             if (Shot.settings.size[type]) {
               host.d.push(new Damage(x - Shot.settings.size[type] / 2 + 10, y - Shot.settings.size[type] / 2 + 10, Shot.settings.size[type], Shot.settings.size[type], this.damage, this.team, host));
-            } else if (getTeam(e.team) !== getTeam(this.team)) {
-              e.damageCalc(x, y, this.damage, getUsername(this.team));
+            } else if (Engine.getTeam(e.team) !== Engine.getTeam(this.team)) {
+              e.damageCalc(x, y, this.damage, Engine.getUsername(this.team));
             }
             return true;
           }
         } else if (e instanceof Block) {
-          if (!e.c || !collision(e.x, e.y, 100, 100, x, y, 10, 10)) continue;
+          if (!e.c || !Engine.collision(e.x, e.y, 100, 100, x, y, 10, 10)) continue;
           if (type === 'grapple' || type === 'dynamite') {
             if (type === 'grapple') {
-              const t = this.host.pt.find(t => t.username === getUsername(this.team));
+              const t = this.host.pt.find(t => t.username === Engine.getUsername(this.team));
               if (t.grapple) t.grapple.bullet.destroy();
               t.grapple = {target: e, bullet: this}
             }
@@ -137,7 +137,7 @@ class Shot {
             return true;
           }
         } else if (e instanceof AI) {
-          if (!collision(x, y, 10, 10, e.x, e.y, 80, 80)) continue;
+          if (!Engine.collision(x, y, 10, 10, e.x, e.y, 80, 80)) continue;
           if (type === 'dynamite' || type === 'usb') {
             this.target = e;
             this.offset = [e.x-x, e.y-y];
@@ -156,8 +156,8 @@ class Shot {
           } else {
             if (Shot.settings.size[type]) {
               host.d.push(new Damage(x - Shot.settings.size[type] / 2 + 10, y - Shot.settings.size[type] / 2 + 10, Shot.settings.size[type], Shot.settings.size[type], this.damage, this.team, host));
-            } else if (getTeam(e.team) !== getTeam(this.team)) {
-              e.damageCalc(x, y, this.damage, getUsername(this.team));
+            } else if (Engine.getTeam(e.team) !== Engine.getTeam(this.team)) {
+              e.damageCalc(x, y, this.damage, Engine.getUsername(this.team));
             }
             return true;
           }
@@ -175,7 +175,7 @@ class Shot {
     this.cellUpdate();
     this.u();
     if (this.target.ded) this.destroy();
-    if (this.host.pt.find(t => t.username === getUsername(this.team))?.ded) this.destroy();
+    if (this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded) this.destroy();
   }
 
   cellUpdate() {
