@@ -224,3 +224,4 @@ class Shot {
     }
   }
 }
+module?.exports = Shot;
