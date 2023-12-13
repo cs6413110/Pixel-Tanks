@@ -1,6 +1,6 @@
 class Engine {
   constructor(levels) {
-    this.spawn = { x: 0, y: 0 };
+    this.spawn = {x: 0, y: 0};
     this.spawns = [{x: 0, y: 0}, {x: 0, y: 0}];
     this.ai = [];
     this.s = [];
@@ -21,7 +21,7 @@ class Engine {
     if (a === 'dynamite') {
       for (let i = this.s.length-1; i >= 0; i--) {
         const s = this.s[i];
-        if (getUsername(s.team) !== t.username || s.type !== 'dynamite') continue;
+        if (Engine.getUsername(s.team) !== t.username || s.type !== 'dynamite') continue;
         this.d.push(new Damage(s.x-50, s.y-50, 100, 100, 100, s.team, this));
         s.destroy();
       }
@@ -56,7 +56,7 @@ class Engine {
     } else if (a === 'flashbang') {
       for (const tank of this.pt) {
         const bangTime = (500-Math.sqrt((t.x-tank.x)**2+(t.y-tank.y)**2))*5;
-        if (bangTime > 0 && (getTeam(tank.team) !== getTeam(t.team) || tank.username === t.username)) {
+        if (bangTime > 0 && (Engine.getTeam(tank.team) !== Engine.getTeam(t.team) || tank.username === t.username)) {
           tank.flashbanged = true;
           clearTimeout(tank.flashbangTimeout);
           tank.flashbangTimeout = setTimeout(() => {
@@ -66,7 +66,7 @@ class Engine {
       }
       for (const ai of this.ai) {
         const bangTime = (500-Math.sqrt((t.x-ai.x)**2+(t.y-ai.y)**2))*5;
-        if (bangTime > 0 && (getTeam(ai.team) !== getTeam(t.team) || ai.id === t.id)) {
+        if (bangTime > 0 && (Engine.getTeam(ai.team) !== Engine.getTeam(t.team) || ai.id === t.id)) {
           ai.stunned = true;
           clearTimeout(ai.flashbangTimeout);
           ai.flashbangTimeout = setTimeout(() => {
@@ -77,7 +77,7 @@ class Engine {
     } else if (a === 'break') {
       for (const cell of t.cells) {
         const c = cell.split('x'), cx = c[0], cy = c[1], breakable = ['gold', 'weak', 'strong', 'spike', 'barrier', 'void'];
-        for (const entity of this.cells[cx][cy]) if (entity instanceof Block && collision(t.x, t.y, 80, 80, entity.x, entity.y, 100, 100) && breakable.includes(entity.type)) setTimeout(() => entity.destroy());
+        for (const entity of this.cells[cx][cy]) if (entity instanceof Block && Engine.collision(t.x, t.y, 80, 80, entity.x, entity.y, 100, 100) && breakable.includes(entity.type)) setTimeout(() => entity.destroy());
       }
     } else if (a === 'bomb') {
       if (t.grapple) {
@@ -88,18 +88,18 @@ class Engine {
       for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) {
         for (const entity of this.cells[i][l]) {
           if (entity instanceof Block) {
-            if (getTeam(entity.team) !== getTeam(t.team)) {
+            if (Engine.getTeam(entity.team) !== Engine.getTeam(t.team)) {
               entity.damage(150);
             }
           } else if (entity instanceof Shot) {
-            if (getTeam(entity.team) !== getTeam(t.team) && (entity.type === 'dynamite' || entity.type === 'usb')) {
+            if (Engine.getTeam(entity.team) !== Engine.getTeam(t.team) && (entity.type === 'dynamite' || entity.type === 'usb')) {
               entity.destroy();
             }
           }
         }
       }
     } else if (a === 'turret') {
-      for (const ai of this.ai) if (getUsername(ai.team) === t.username) setTimeout(() => ai.destroy());
+      for (const ai of this.ai) if (Engine.getUsername(ai.team) === t.username) setTimeout(() => ai.destroy());
       this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
     } else if (a === 'buff') {
       t.buff = true;
@@ -113,11 +113,11 @@ class Engine {
       }, 500);
     } else if (a.includes('airstrike')) {
       const h = a.replace('airstrike', '').split('x');
-      this.b.push(new Block(Number(h[0]), Number(h[1]), Infinity, 'airstrike', parseTeamExtras(t.team), this));
+      this.b.push(new Block(Number(h[0]), Number(h[1]), Infinity, 'airstrike', Engine.parseTeamExtras(t.team), this));
     } else if (a === 'healwave') {
       let allies = [];
-      for (const tank of this.pt) if (getTeam(tank.team) === getTeam(t.team) && (tank.x-t.x)**2+(tank.y-t.y)**2 < 40000) allies.push(tank);
-      for (const ai of this.ai) if (getTeam(ai.team) === getTeam(t.team) && (ai.x-t.x)**2+(ai.y-t.y)**2 < 40000) allies.push(ai);
+      for (const tank of this.pt) if (Engine.getTeam(tank.team) === Engine.getTeam(t.team) && (tank.x-t.x)**2+(tank.y-t.y)**2 < 40000) allies.push(tank);
+      for (const ai of this.ai) if (Engine.getTeam(ai.team) === Engine.getTeam(t.team) && (ai.x-t.x)**2+(ai.y-t.y)**2 < 40000) allies.push(ai);
       for (const fren of allies) fren.hp += (fren.maxHp-fren.hp)/Math.max(2, allies.length);
     }
   }
@@ -153,14 +153,14 @@ class Engine {
       for (const cell of t.cells) {
         const [cx, cy] = cell.split('x');
         let hasFire = false;
-        for (const entity of this.cells[cx][cy]) if (entity instanceof Block && entity.type === 'fire' && getUsername(entity.team) === t.username && entity.x/100 === cx && entity.y/100 === cy) hasFire = true;
-        if (!hasFire) this.b.push(new Block(cx*100, cy*100, 100, 'fire', parseTeamExtras(t.team), this));
+        for (const entity of this.cells[cx][cy]) if (entity instanceof Block && entity.type === 'fire' && Engine.getUsername(entity.team) === t.username && entity.x/100 === cx && entity.y/100 === cy) hasFire = true;
+        if (!hasFire) this.b.push(new Block(cx*100, cy*100, 100, 'fire', Engine.parseTeamExtras(t.team), this));
       }
     }
     for (const exe of use) this.useAbility(t, exe);
     if (fire.length) {
       t.pushback = -6;
-      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, parseTeamExtras(t.team), t.rank*(t.buff ? (1.5*t.rank+15)/Math.max(t.rank, 1/2000) : 1), this));
+      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, Engine.parseTeamExtras(t.team), t.rank*(t.buff ? (1.5*t.rank+15)/Math.max(t.rank, 1/2000) : 1), this));
     }
   }
 
@@ -215,8 +215,8 @@ class Engine {
     const dx = x1-x2, dy = y1-y2, adx = Math.abs(dx), ady = Math.abs(dy), minx = Math.min(x1, x2), miny = Math.min(y1, y2), maxx = Math.max(x1, x2), maxy = Math.max(y1, y2), px = [], py = [];
     walls = walls.filter(({x, y, type}) => {
       if (!['void', 'barrier', 'strong', 'weak', 'gold'].includes(type)) return;
-      if (collision(x, y, 100, 100, minx, miny, adx, ady)) {
-        if (collision(x, y, 100, 100, x1-1, y1-1, 2, 2) || collision(x, y, 100, 100, x2-1, y2-1, 2, 2)) return false;
+      if (Engine.collision(x, y, 100, 100, minx, miny, adx, ady)) {
+        if (Engine.collision(x, y, 100, 100, x1-1, y1-1, 2, 2) || Engine.collision(x, y, 100, 100, x2-1, y2-1, 2, 2)) return false;
         const xw = x + 100, yw = y + 100;
         if (x >= minx && x <= maxx) px.push(x);
         if (xw >= minx && xw <= maxx) px.push(xw);
@@ -227,12 +227,12 @@ class Engine {
       return false;
     });
     if (dx === 0) {
-      for (const p of py) for (const {x, y} of walls) if (collision(x, y, 100, 100, x1-.5, p-.5, 1, 1)) return false;
+      for (const p of py) for (const {x, y} of walls) if (Engine.collision(x, y, 100, 100, x1-.5, p-.5, 1, 1)) return false;
     } else {
       const s = dy/dx, o = y1-s*x1;
       for (const {x, y} of walls) {
-        for (const p of py) if (collision(x, y, 100, 100, (p-o)/s-1, p-1, 2, 2)) return false;
-        for (const p of px) if (collision(x, y, 100, 100, p-1, s*p+o-1, 2, 2)) return false;
+        for (const p of py) if (Engine.collision(x, y, 100, 100, (p-o)/s-1, p-1, 2, 2)) return false;
+        for (const p of px) if (Engine.collision(x, y, 100, 100, p-1, s*p+o-1, 2, 2)) return false;
       }
     }
     return true;
