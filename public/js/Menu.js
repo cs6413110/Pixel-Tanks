@@ -32,7 +32,7 @@ class Menu {
   
   onclick() {
     for (const b of this.buttons) {
-      if (collision(Menus.x, Menus.y, 0, 0, this.render[0]+b[0], this.render[1]+b[1], b[2]*this.render[2]/1600, b[3]*this.render[3]/1000)) {
+      if (Engine.collision(Menus.x, Menus.y, 0, 0, this.render[0]+b[0], this.render[1]+b[1], b[2]*this.render[2]/1600, b[3]*this.render[3]/1000)) {
         return typeof b[4] === 'function' ? b[4]() : Menus.trigger(b[4]);
       }
     }
@@ -62,7 +62,7 @@ class Menu {
     for (const b of this.buttons) {
       if (b[5]) {
         const [x, y, w, h, canvas] = this.cache[this.buttons.indexOf(b)];
-        if (collision(x, y, w, h, Menus.x, Menus.y, 0, 0)) {
+        if (Engine.collision(x, y, w, h, Menus.x, Menus.y, 0, 0)) {
           b[6] = Math.min(b[6]+1, 10);
         } else {
           b[6] = Math.max(b[6]-1, 0);
