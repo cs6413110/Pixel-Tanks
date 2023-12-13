@@ -1,4 +1,4 @@
-class WS {
+class MegaSocket {
   constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
     this.url = url;
     this.options = options;
