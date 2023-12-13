@@ -59,4 +59,4 @@ class Block {
     }
   }
 }
-module?.exports = Block;
+if (module) module.exports = Block;
