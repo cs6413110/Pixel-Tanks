@@ -55,3 +55,4 @@ class Damage {
     }
   }
 }
+module?.exports = Damage;
