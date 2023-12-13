@@ -132,7 +132,7 @@ class Client {
   }
 
   drawBlock(b) {
-    const size = b.type === 'airstrike' ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && getTeam(this.team) === getTeam(b.team) ? 'friendly'+b.type : b.type;
+    const size = b.type === 'airstrike' ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
     GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1);
   }
 
@@ -180,7 +180,7 @@ class Client {
     PixelTanks.renderTop(t.x, t.y, 80, t.color, t.r, t.pushback);
     GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
     if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
-    if ((!t.ded && getTeam(this.team) === getTeam(t.team)) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
+    if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
       GUI.draw.fillStyle = '#FF0000';
@@ -219,7 +219,7 @@ class Client {
     if (t.damage) {
       const {x, y, d} = t.damage;
       for (let i = 0; i < 2; i++) {
-        GUI.drawText((d < 0 ? '+' : '-')+Math.round(d), x, y, Math.round(d/5)+[20, 15][i], ['#ffffff', getTeam(this.team) === getTeam(t.team) ? '#ff0000' : '#0000ff'][i], 0.5);
+        GUI.drawText((d < 0 ? '+' : '-')+Math.round(d), x, y, Math.round(d/5)+[20, 15][i], ['#ffffff', Engine.getTeam(this.team) === Engine.getTeam(t.team) ? '#ff0000' : '#0000ff'][i], 0.5);
       }
     }
 
