@@ -433,7 +433,7 @@ class Client {
 
   mousemove(e) {
     this.mouse = {x: (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer, y: e.clientY/PixelTanks.resizer};
-    this.tank.r = toAngle(e.clientX-window.innerWidth/2, e.clientY-window.innerHeight/2);
+    this.tank.r = Engine.toAngle(e.clientX-window.innerWidth/2, e.clientY-window.innerHeight/2);
   }
 
   mousedown(e) {
@@ -463,7 +463,7 @@ class Client {
     }
     var fireType = ['grapple', 'megamissle', 'dynamite', 'usb', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? (PixelTanks.userData.class === 'medic' ? 'healmissle' : 'powermissle') : (type === 0 ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
     while (l<(fireType === 1 ? 1 : 15)) {
-      this.tank.fire.push({...toPoint(this.tank.r+l), type: type, r: this.tank.r+l});
+      this.tank.fire.push({...Engine.toPoint(this.tank.r+l), type: type, r: this.tank.r+l});
       l += 5;
     }
   }
@@ -606,7 +606,7 @@ class Client {
         this.tank.use.push('healwave');
         this.timers.class = {time: Date.now(), cooldown: 30000};
       } else if (c === 'fire') {
-        for (let i = -30; i < 30; i += 5) this.tank.fire.push({...toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
+        for (let i = -30; i < 30; i += 5) this.tank.fire.push({...Engine.toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
         this.timers.class = {time: Date.now(), cooldown: 10000};
       }
       setTimeout(() => {this.canClass = true}, this.timers.class.cooldown);
