@@ -29,7 +29,7 @@ class AI {
     this.items = [];
     if (this.role !== 0) this.giveAbilities();
     this.invis = this.class === 'stealth';
-    this.color = getRandomColor();
+    this.color = Engine.getRandomColor();
     this.cosmetic = host.pt.find(t => t.username === getUsername(this.team))?.cosmetic;
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
