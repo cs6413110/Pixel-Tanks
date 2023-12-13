@@ -238,15 +238,15 @@ class Engine {
     return true;
   }
   
-  static parseTeamExtras() {
+  static parseTeamExtras(s) {
     return s.replace('@leader', '').split('@requestor#')[0];
   }
 
-  static getUsername() {
+  static getUsername(s) {
     return Engine.parseTeamExtras(s).split(':')[0];
   }
 
-  static getTeam() {
+  static getTeam(s) {
     return Engine.parseTeamExtras(s).split(':')[1];
   }
 
