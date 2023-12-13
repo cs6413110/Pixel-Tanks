@@ -30,7 +30,7 @@ class AI {
     if (this.role !== 0) this.giveAbilities();
     this.invis = this.class === 'stealth';
     this.color = Engine.getRandomColor();
-    this.cosmetic = host.pt.find(t => t.username === getUsername(this.team))?.cosmetic;
+    this.cosmetic = host.pt.find(t => t.username === Engine.getUsername(this.team))?.cosmetic;
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (role === 0 ? .99 : .79)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (role === 0 ? .99 : .79))));
@@ -165,13 +165,13 @@ class AI {
 
   update() {
     this.think();
-    const team = getTeam(this.team);
+    const team = Engine.getTeam(this.team);
     /*if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
       this.setValue('dedEffect', this.dedEffect); // REMOVE THIS TEMPORARY
     } No death effects for AI yet...*/
     if (this.pushback !== 0) this.pushback += 0.5;
-    if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25, getUsername(this.fire.team));
+    if (this.fire && Engine.getTeam(this.fire.team) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire.team));
     if (this.damage) this.damage.y--;
     // if (this.grapple) this.grappleCalc(); No grapple for AI yet...
     if (this.reflect) {
@@ -196,7 +196,7 @@ class AI {
     for (const cell of this.cells) {
       const [x, y] = cell.split('x');
       for (const entity of this.host.cells[x][y]) {
-        const teamMatch = team === getTeam(entity.team);
+        const teamMatch = team === Engine.getTeam(entity.team);
         if (entity instanceof Block) {
           if (!this.ded && !this.immune && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
             if (entity.type === 'fire') {
@@ -212,7 +212,7 @@ class AI {
                 this.fire = false;
               }, 4000);
             } else if (entity.type === 'spike' && !teamMatch) {
-              this.damageCalc(this.x, this.y, 100, getUsername(entity.team));
+              this.damageCalc(this.x, this.y, 100, Engine.getUsername(entity.team));
               entity.destroy();
             }
           }
@@ -343,7 +343,7 @@ class AI {
     let target = false, bond = false;
     for (const t of tanks) {
       if (t.ded || t.invis || !raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b) || t.id === this.id) continue;
-      if (getTeam(t.team) === getTeam(this.team)) {
+      if (Engine.getTeam(t.team) === Engine.getTeam(this.team)) {
         if (!bond && t.role !== 3 && t.role !== 0) bond = t;
       } else {
         if (!target) target = t;
@@ -389,7 +389,7 @@ class AI {
     if (this.immune+500 > Date.now() || this.reflect) return;
     const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
     for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) for (const entity of this.host.cells[i][l]) {
-      if (entity instanceof Shot) if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') a *= getTeam(entity.team) === getTeam(this.team) ? .9 : 1.1;
+      if (entity instanceof Shot) if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') a *= Engine.getTeam(entity.team) === Engine.getTeam(this.team) ? .9 : 1.1;
     }
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
