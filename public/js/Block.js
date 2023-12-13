@@ -1,3 +1,11 @@
+try {
+  Block = require('./Block.js');
+  Tank = require('./Tank.js');
+  Damage = require('./Damage.js');
+  AI = require('./AI.js');
+  Shot = require('./Shot.js');
+} catch(e) {}
+
 class Block {
   constructor(x, y, health, type, team, host) {
     this.x = x;
