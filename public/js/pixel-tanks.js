@@ -1,1 +1,1 @@
-(load = i => document.head.appendChild(Object.assign(document.createElement('SCRIPT'), {src: 'https://cs6413110.github.io/Pixel-Tanks/public/js/'+['msgpackr', 'pathfinding', 'engine', 'client'][i]+'.js', onload: i < 4 ? () => load(i+1) : () => {}})))(0);
+(load = i => document.head.appendChild(Object.assign(document.createElement('SCRIPT'), {src: 'https://cs6413110.github.io/Pixel-Tanks/public/js/'+['msgpackr', 'pathfinding', 'engine', 'client'][i]+'.js', onload: ++i < 4 ? () => load(i) : () => {}})))(0);
