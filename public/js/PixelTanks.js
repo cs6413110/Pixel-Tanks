@@ -417,7 +417,7 @@ class PixelTanks {
               if (x < 688 || x > 912 || y < 334 || y > 666) return this.classTab = false;
               for (let xm = 0; xm < 2; xm++) {
                 for (let ym = 0; ym < 3; ym++) {
-                  if (collision(x, y, 0, 0, [702, 810][xm], [348, 456, 564][ym], 88, 88)) {
+                  if (Engine.collision(x, y, 0, 0, [702, 810][xm], [348, 456, 564][ym], 88, 88)) {
                     if (PixelTanks.userData.classes[[[0, 5, 3], [1, 4, 2]][xm][ym]]) {
                       PixelTanks.userData.class = [['tactical', 'fire', 'medic'], ['stealth', 'builder', 'warrior']][xm][ym];
                     } else alert('You need to buy this first!');
@@ -429,7 +429,7 @@ class PixelTanks {
               if (x < 580 || x > 1020 || y < 334 || y > 666) return this.itemTab = false;
               const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [904, 570]};
               for (const item in key) {
-                if (collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
+                if (Engine.collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
                   if (!PixelTanks.userData.items.includes(item)) {
                     PixelTanks.userData.items[this.currentItem-1] = item;
                   } else alert('You are not allowed to have more than 1 of the same item');
@@ -439,7 +439,7 @@ class PixelTanks {
             } else if (this.cosmeticTab) {
               if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.cosmeticTab = false;
               for (let i = 0; i < 16; i++) {
-                if (collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
+                if (Engine.collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
                   if (e.button === 0) {
                     PixelTanks.userData.cosmetic = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
                   } else {
@@ -451,7 +451,7 @@ class PixelTanks {
             } else if (this.deathEffectsTab) {
               if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.deathEffectsTab = false;
               for (let i = 0; i < 16; i++) {
-                if (collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
+                if (Engine.collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
                   if (e.button === 0) {
                     PixelTanks.userData.deathEffect = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i];
                   } else {
