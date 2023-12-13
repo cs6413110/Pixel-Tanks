@@ -59,13 +59,13 @@ class Tank {
   }
 
   update() {
-    const team = getTeam(this.team);
+    const team = Engine.getTeam(this.team);
     if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
       this.setValue('dedEffect', this.dedEffect); // REMOVE THIS TEMPORARY
     }
     if (this.pushback !== 0) this.pushback += 0.5;
-    if (this.fire && getTeam(this.fire.team) !== getTeam(this.team)) this.damageCalc(this.x, this.y, .25, getUsername(this.fire.team));
+    if (this.fire && Engine.getTeam(this.fire.team) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire.team));
     if (this.damage) this.damage.y--;
     if (this.grapple) this.grappleCalc();
     if (this.reflect) {
@@ -90,9 +90,9 @@ class Tank {
     for (const cell of this.cells) {
       const [x, y] = cell.split('x');
       for (const entity of this.host.cells[x][y]) {
-        const teamMatch = team === getTeam(entity.team);
+        const teamMatch = team === Engine.getTeam(entity.team);
         if (entity instanceof Block) {
-          if (!this.ded && !this.immune && collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
+          if (!this.ded && !this.immune && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
             if (entity.type === 'fire') {
               if (this.fire) {
                 clearTimeout(this.fireTimeout);
@@ -106,7 +106,7 @@ class Tank {
                 this.fire = false;
               }, 4000);
             } else if (entity.type === 'spike' && !teamMatch) {
-              this.damageCalc(this.x, this.y, 100, getUsername(entity.team));
+              this.damageCalc(this.x, this.y, 100, Engine.getUsername(entity.team));
               entity.destroy();
             }
           }
@@ -119,7 +119,7 @@ class Tank {
     if ((this.immune && a > 0) || this.ded || this.reflect) return;
     const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
     for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) for (const entity of this.host.cells[i][l]) {
-      if (entity instanceof Shot) if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') a *= getTeam(entity.team) === getTeam(this.team) ? .9 : 1.1;
+      if (entity instanceof Shot) if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') a *= Engine.getTeam(entity.team) === Engine.getTeam(this.team) ? .9 : 1.1;
     }
     if (this.shields > 0 && a > 0) return this.shields -= a;
     this.hp = Math.max(Math.min(this.maxHp, this.hp-a), 0);
@@ -157,7 +157,7 @@ class Tank {
 
   collision(x, y) {
     if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return false;
-    for (const b of this.host.b) if (collision(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) return false;
+    for (const b of this.host.b) if (Engine.collision(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) return false;
     return true;
   }
 }
