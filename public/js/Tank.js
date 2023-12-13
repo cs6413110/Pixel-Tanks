@@ -161,3 +161,4 @@ class Tank {
     return true;
   }
 }
+module?.exports = Tank;
