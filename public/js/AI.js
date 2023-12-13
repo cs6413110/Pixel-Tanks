@@ -322,12 +322,12 @@ class AI {
     for (let i = 0; i <= this.mode === 0 ? coords.length : 5; i++) {
       const r = this.choosePath(coords.length);
       const {x, y} = coords[r];
-      const p = pathfind(sx, sy, x, y, this.host.map.clone());
+      const p = Engine.pathfind(sx, sy, x, y, this.host.map.clone());
       if (limiter.includes(p.length) || true) return this.path = {p, m: this.mode, t: Date.now(), o: Date.now()};
       coords.splice(r, 1);
       if (!coords.length) return this.path = {p: [], m: this.mode, t: Date.now(), o: Date.now()}; 
     }
-    if (this.mode !== 0) this.path = {p: pathfind(sx, sy, tx, ty, this.host.map.clone()).slice(0, 5), m: this.mode, t: Date.now(), o: Date.now()}; 
+    if (this.mode !== 0) this.path = {p: Engine.pathfind(sx, sy, tx, ty, this.host.map.clone()).slice(0, 5), m: this.mode, t: Date.now(), o: Date.now()}; 
   }
 
   choosePath(p) {
