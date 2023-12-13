@@ -224,4 +224,4 @@ class Shot {
     }
   }
 }
-module?.exports = Shot;
+if (module) module.exports = Shot;
