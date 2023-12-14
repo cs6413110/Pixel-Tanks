@@ -13,7 +13,7 @@ class AI {
     this.role = role;
     this.x = x;
     this.y = y;
-    this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = 0;
+    this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = this.shields = 0;
     this.barrelSpeed = Math.random()*3+2;
     this.rank = rank;
     this.team = team.includes(':') ? team : this.username+':'+team;
