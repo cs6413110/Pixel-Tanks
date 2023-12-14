@@ -1,12 +1,3 @@
-try {
-  PF = require('pathfinding');
-  Block = require('./Block.js');
-  Tank = require('./Tank.js');
-  Damage = require('./Damage.js');
-  AI = require('./AI.js');
-  Shot = require('./Shot.js');
-} catch(e) {}
-
 class Engine {
   constructor(levels) {
     this.spawn = {x: 0, y: 0};
