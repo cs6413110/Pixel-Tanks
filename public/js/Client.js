@@ -124,7 +124,7 @@ class Client {
 
   reset() {
     const time = new Date('Nov 28 2006').getTime();
-    this.timers = {boost: time, powermissle: time, toolkit: time, class: {time: time, cooldown: -1}, items: [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}]};
+    this.timers = {boost: time, powermissle: time, grapple: time, toolkit: time, class: {time: time, cooldown: -1}, items: [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}]};
     this.fireType = 1;
     this.halfSpeed = false;
     this.canClass = this.canFire = this.canBoost = this.canToolkit = this.canPowermissle = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canGrapple = true;
@@ -310,21 +310,21 @@ class Client {
     const c = [508, 672, 836, 1000]; // x coords of items
     for (let i = 0; i < 4; i++) {
       const item = PixelTanks.userData.items[i];
-      GUI.drawImage(PixelTanks.images.items[item], c[i], 952, 92, 92, 1);
+      GUI.drawImage(PixelTanks.images.items[item], c[i], 908, 92, 92, 1);
       if (!this['canItem'+i]) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .5;
-        GUI.draw.fillRect(c[i], 952, 92, 92);
+        GUI.draw.fillRect(c[i], 908, 92, 92);
       } else {
         GUI.draw.fillStyle = '#FFFFFF';
         const tank = t.find(tank => tank.username === PixelTanks.user.username), blockedOn = item === 'bomb' && !this.collision(tank.x, tank.y);
         if (blockedOn || (item === 'shield' && tank.shields <= 0) || (item === 'duck_tape' && tank.hp <= tank.maxHp/2) || (item === 'super_glu' && tank.hp <= tank.maxHp/2)) GUI.draw.fillStyle = '#00FF00';
         GUI.draw.globalAlpha = (blockedOn ? .5 : 0)+.25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
-        GUI.draw.fillRect(c[i], 952, 92, 92);
+        GUI.draw.fillRect(c[i], 908, 92, 92);
       }
       GUI.draw.globalAlpha = 1;
       GUI.draw.fillStyle = PixelTanks.userData.color;
-      GUI.draw.fillRect(c[i], 952+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*92, 92, 92);
+      GUI.draw.fillRect(c[i], 908+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*92, 92, 92);
     }
     for (let i = 0; i < 5; i++) {
       GUI.draw.fillRect([408, 1120, 1196, 1268][i], 952+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost', 'grapple'][i]])/[10000, 40000, 5000, 5000][i], 1)*48, 48, 48);
@@ -566,6 +566,7 @@ class Client {
     } else if (k === 82 && this.canGrapple) {
       this.fire('grapple');
       this.canGrapple = false;
+      this.timers.grapple = new Date();
       setTimeout(() => {this.canGrapple = true}, 5000);
     } else if (k === 81) {
       if (this.halfSpeed || this.canToolkit) {
