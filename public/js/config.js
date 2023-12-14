@@ -147,6 +147,7 @@ const images = {
     main: '/menus/main',
     multiplayer: '/menus/multiplayer',
     singleplayer: '/menus/singleplayer',
+    singleplayer2: '/menus/singleplayer2',
     victory: '/menus/victory',
     defeat: '/menus/defeat',
     crate: '/menus/crate',
