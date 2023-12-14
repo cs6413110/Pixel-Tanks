@@ -307,29 +307,29 @@ class Client {
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
     GUI.draw.fillStyle = PixelTanks.userData.color;
     GUI.draw.globalAlpha = 0.5;
-    const c = [500, 666, 832, 998];
+    const c = [508, 672, 836, 1000]; // x coords of items
     for (let i = 0; i < 4; i++) {
       const item = PixelTanks.userData.items[i];
-      GUI.drawImage(PixelTanks.images.items[item], c[i], 900, 100, 100, 1);
+      GUI.drawImage(PixelTanks.images.items[item], c[i], 952, 92, 92, 1);
       if (!this['canItem'+i]) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .5;
-        GUI.draw.fillRect(c[i], 900, 100, 100);
+        GUI.draw.fillRect(c[i], 952, 92, 92);
       } else {
         GUI.draw.fillStyle = '#FFFFFF';
         const tank = t.find(tank => tank.username === PixelTanks.user.username), blockedOn = item === 'bomb' && !this.collision(tank.x, tank.y);
         if (blockedOn || (item === 'shield' && tank.shields <= 0) || (item === 'duck_tape' && tank.hp <= tank.maxHp/2) || (item === 'super_glu' && tank.hp <= tank.maxHp/2)) GUI.draw.fillStyle = '#00FF00';
         GUI.draw.globalAlpha = (blockedOn ? .5 : 0)+.25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
-        GUI.draw.fillRect(c[i], 900, 100, 100);
+        GUI.draw.fillRect(c[i], 952, 92, 92);
       }
       GUI.draw.globalAlpha = 1;
       GUI.draw.fillStyle = PixelTanks.userData.color;
-      GUI.draw.fillRect(c[i], 900+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*100, 100, 100);
+      GUI.draw.fillRect(c[i], 952+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*92, 92, 92);
     }
-    for (let i = 0; i < 3; i++) {
-      GUI.draw.fillRect([422, 1127, 1205][i], 950+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost'][i]])/[10000, 40000, 5000][i], 1)*50, 50, 50);
+    for (let i = 0; i < 5; i++) {
+      GUI.draw.fillRect([408, 1120, 1196, 1268][i], 952+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost', 'grapple'][i]])/[10000, 40000, 5000, 5000][i], 1)*48, 48, 48);
     }
-    GUI.draw.fillRect(345, 950+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*50, 50, 50);
+    GUI.draw.fillRect(308, 952+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*48, 48, 48);
     GUI.draw.globalAlpha = 1;
     GUI.drawText(this.canRespawn ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
 
