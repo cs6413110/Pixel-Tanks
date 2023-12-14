@@ -81,7 +81,7 @@ class Tank {
             entity.sy = entity.y;
             entity.xm = xd*aspectRatio;
             entity.ym = yd*aspectRatio;
-            entity.r = toAngle(xd, yd);
+            entity.r = Engine.toAngle(xd, yd);
             if (entity.type !== 'grapple') entity.team = this.team;
           }
         }
