@@ -208,7 +208,7 @@ class Engine {
   static finder = new PF.AStarFinder({allowDiagonal: true, dontCrossCorners: true});
 
   static pathfind(sx, sy, tx, ty, map) {
-    Engine.finder.findPath(sx, sy, tx, ty, map);
+    return Engine.finder.findPath(sx, sy, tx, ty, map);
   }
 
   static raycast(x1, y1, x2, y2, walls) {
