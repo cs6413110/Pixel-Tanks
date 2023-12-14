@@ -10,7 +10,11 @@ const settings = {
   ups: 60,
 }
 
-const {Engine, AI, Block, Shot, Damage, Tank, getTeam, parseTeamExtras, getUsername, getRandomColor, collision} = require('./public/js/engine.js');
+const fs = require('fs');
+console.log('Compiling Game Engine...');
+fs.writeFileSync('engine.js', [`const PF = require('pathfinding');`, fs.readFileSync('./public/js/Engine.js'), fs.readFileSync('./public/js/Tank.js'), fs.readFileSync('./public/js/Block.js'), fs.readFileSync('./public/js/Shot.js'), fs.readFileSync('./public/js/AI.js'), fs.readFileSync('./public/js/Damage.js'), 'module.exports = {Engine, Tank, Block, Shot, AI, Damage}'].join(''));
+console.log('Done!');
+const {Engine, Tank, Block, Shot, AI, Damage} = require('./engine.js');
 const {gpt} = require('gpti');
 
 let sockets = new Set(), servers = {}, ffaLevels = [
@@ -61,18 +65,21 @@ const deathMessages = [
   `{victim} was fed a healthy dose of explosives by {killer}`,
   `{victim} became another number in {killer}'s kill streak`,
   `{victim} got wrecked by {killer}`,
+  `{victim} found out that {killer} was the best in the world`,
   `{victim} was reduced to atoms by {killer}`
 ], joinMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
   `{idot} materialized`,
   `{idot} is ready to breadspam`,
+  `{idot} is here to prove that he is the best in the world`,
   `{idot} is here`
 ], rageMessages = [
   `{idot} left the game`,
   `{idot} got gogaurdianed`,
   `{idot} quit`,
   `{idot} disconnected`,
+  `{idot} got techered`,
   `{idot} will return soon`
 ];
 
@@ -110,7 +117,7 @@ class Multiplayer extends Engine {
       if (message.logs.length) send = true;
       for (const p of ['b', 'pt', 'ai', 's', 'd']) {
         const ids = new Set(this[p].map(e => e.id));
-        this[p].filter(e => collision(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
+        this[p].filter(e => Engine.collision(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
           render[p].add(e.id);
           if (!t.render[p].has(e.id) || e.updatedLast > t.lastUpdate) {
             message[p].push(e.raw);
@@ -174,7 +181,7 @@ class Multiplayer extends Engine {
       }
       return true;
     });
-    this.ai = this.ai.filter(ai => getUsername(ai.team) !== socket.username);
+    this.ai = this.ai.filter(ai => Engine.getUsername(ai.team) !== socket.username);
     this.logs.push({m: this.rageMsg(socket.username), c: '#E10600'});
     if (this.pt.length === 0) {
       this.i.forEach(i => clearInterval(i));
@@ -202,20 +209,10 @@ class FFA extends Multiplayer {
 
   ondeath(t, m={}) {
     this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
+    for (const ai of this.ai) if (Engine.getUsername(ai.team) === t.username) this.ai.splice(this.ai.indexOf(ai), 1);
+    if (t.socket) t.ded = true;
     if (m.socket) m.socket.send({event: 'kill'});
-    for (const ai of this.ai) if (getUsername(ai.team) === t.username) this.ai.splice(this.ai.indexOf(ai), 1);
-    if (t.socket) {
-      t.ded = true;
-      if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
-      setTimeout(() => {
-        t.socket.send({event: 'ded'});
-        t.socket.send({event: 'override', data: [{key: 'x', value: this.spawn.x}, {key: 'y', value: this.spawn.y}]});
-        t.x = this.spawn.x;
-        t.y = this.spawn.y;
-        t.ded = false;
-        t.hp = t.maxHp;
-      }, 10000);
-    }
+    if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
   }
 
   ontick() {}
@@ -263,7 +260,7 @@ class DUELS extends Multiplayer {
     if (m.username) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
     if (m.socket) m.socket.send({event: 'kill'});
     for (const ai of this.ai) {
-      if (getUsername(ai.team) === t.username) {
+      if (Engine.getUsername(ai.team) === t.username) {
         this.ai.splice(this.ai.indexOf(ai), 1);
       }
     }
@@ -355,7 +352,7 @@ class TDM extends Multiplayer {
       } else if (this.pt.length >= 4) this.global = 'Starting in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
     } else if (this.mode === 1) {
       this.pt.forEach(t => {
-        const spawn = getTeam(t.team) === 'BLUE' ? 0 : 1;
+        const spawn = Engine.getTeam(t.team) === 'BLUE' ? 0 : 1;
         t.x = this.spawns[spawn].x;
         t.y = this.spawns[spawn].y;
         this.override(t);
@@ -381,26 +378,26 @@ class TDM extends Multiplayer {
     if (m.username) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
     if (m.socket) m.socket.send({event: 'kill'});
     for (const ai of this.ai) {
-      if (getUsername(ai.team) === t.username) {
+      if (Engine.getUsername(ai.team) === t.username) {
         this.ai.splice(this.ai.indexOf(ai), 1);
       }
     }
     let allies = 0;
     this.pt.forEach(tank => {
       if (!tank.ded) {
-        if (getTeam(tank.team) === getTeam(t.team)) {
+        if (Engine.getTeam(tank.team) === Engine.getTeam(t.team)) {
           allies++;
         }
       }
     });
     if (allies === 0) {
-      const winner = getTeam(m.team);
+      const winner = Engine.getTeam(m.team);
       this.wins[winner]++;
       if (this.wins[winner] === 3) {
         this.global = winner+' Wins!';
         setTimeout(() => {
           this.pt.forEach(t => {
-            t.socket.send({event: 'gameover', type: winner === getTeam(t.team) ? 'victory' : 'defeat'});
+            t.socket.send({event: 'gameover', type: winner === Engine.getTeam(t.team) ? 'victory' : 'defeat'});
             t.socket.close();
           });
         }, 5000);
@@ -477,29 +474,29 @@ const Commands = {
     m.privateLogs.push(message);
   }],
   createteam: [FFA, 4, 2, function(data) {
-    if (servers[this.room].pt.find(t => getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
+    if (servers[this.room].pt.find(t => Engine.getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
     if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
     servers[this.room].pt.find(t => t.username === this.username).team = this.username+':'+data[1]+'@leader';
     servers[this.room].logs.push({m: this.username+' created team '+data[1]+'. Use /join '+data[1]+' to join.', c: '#0000FF'});
   }],
   join: [FFA, 4, 2, function(data) {
     if (servers[this.room].pt.find(t => t.username === this.username).team.includes('@leader')) return this.send({status: 'error', message: 'You must disband your team to join. (/leave)'});
-    if (!servers[this.room].pt.find(t => getTeam(t.team) === data[1] && t.team.includes('@leader'))) return this.send({status: 'error', message: 'This team does not exist.'});
+    if (!servers[this.room].pt.find(t => Engine.getTeam(t.team) === data[1] && t.team.includes('@leader'))) return this.send({status: 'error', message: 'This team does not exist.'});
     servers[this.room].pt.find(t => t.username === this.username).team += '@requestor#'+data[1];
     servers[this.room].logs.push({m: this.username+' requested to join team '+data[1]+'. Team owner can use /accept '+this.username+' to accept them.', c: '#0000FF'});
   }],
   accept: [FFA, 4, 2, function(data) {
     const leader = servers[this.room].pt.find(t => t.username === this.username), requestor = servers[this.room].pt.find(t => t.username === data[1]);
     if (!requestor) return this.send({status: 'error', message: 'Player not found.'});
-    if (leader.team.includes('@leader') && requestor.team.includes('@requestor#') && getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
-      requestor.team = data[1]+':'+getTeam(leader.team);
-      servers[this.room].logs.push({ m: data[1]+' has joined team '+getTeam(leader.team), c: '#40C4FF' });
+    if (leader.team.includes('@leader') && requestor.team.includes('@requestor#') && Engine.getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
+      requestor.team = data[1]+':'+Engine.getTeam(leader.team);
+      servers[this.room].logs.push({ m: data[1]+' has joined team '+Engine.getTeam(leader.team), c: '#40C4FF' });
     }
   }],
   leave: [FFA, 4, 1, function(data) {
     const target = servers[this.room].pt.find(t => t.username === this.username);
     if (target.team.includes('@leader')) servers[this.room].pt.forEach(t => {
-      if (getTeam(t.team) === getTeam(target.team)) t.team = t.username+':'+Math.random();
+      if (Engine.getTeam(t.team) === Engine.getTeam(target.team)) t.team = t.username+':'+Math.random();
     });
     target.team = this.username+':'+Math.random();
   }],
@@ -612,7 +609,7 @@ const Commands = {
     let victim = servers[this.room].pt.find(t => t.username === 'cs641311');
     if (victim === undefined) return this.send({status: 'error', message: 'Mission Failed! Wild I-ron not spotted!'});
     const messages = 100, span = 5000; // messages = # to send, span = time frame to send them over
-    for (let i = 0; i < messages; i++) setTimeout(() => victim.privateLogs.push({m: 'Bread: '+data.slice(1).join(' ').toUpperCase(), c: getRandomColor()}), span/messages*i);
+    for (let i = 0; i < messages; i++) setTimeout(() => victim.privateLogs.push({m: 'Bread: '+data.slice(1).join(' ').toUpperCase(), c: Engine.getRandomColor()}), span/messages*i);
   }],
 };
 
