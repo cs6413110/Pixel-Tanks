@@ -1,12 +1,3 @@
-try {
-  Engine = require('./Engine.js');
-  Block = require('./Block.js');
-  Tank = require('./Tank.js');
-  Damage = require('./Damage.js');
-  AI = require('./AI.js');
-  Shot = require('./Shot.js');
-} catch(e) {}
-
 class AI {
   constructor(x, y, role, rank, team, host) {
     this.raw = {};
@@ -351,7 +342,7 @@ class AI {
     });
     let target = false, bond = false;
     for (const t of tanks) {
-      if (t.ded || t.invis || !raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b) || t.id === this.id) continue;
+      if (t.ded || t.invis || !Engine.raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b) || t.id === this.id) continue;
       if (Engine.getTeam(t.team) === Engine.getTeam(this.team)) {
         if (!bond && t.role !== 3 && t.role !== 0) bond = t;
       } else {
