@@ -170,6 +170,7 @@ class Client {
   drawTank(t) {
     const p = t.username === PixelTanks.user.username;
     let a = 1;
+    if (this.ded && t.invis) return;
     if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
     if ((t.invis && p) || t.ded) a = .5;
     GUI.draw.globalAlpha = a;
@@ -180,7 +181,7 @@ class Client {
     PixelTanks.renderTop(t.x, t.y, 80, t.color, t.r, t.pushback);
     GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
     if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
-    if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
+    if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || this.ded || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
       GUI.draw.fillStyle = '#FF0000';
