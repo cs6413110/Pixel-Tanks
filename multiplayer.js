@@ -12,7 +12,7 @@ const settings = {
 
 const fs = require('fs');
 console.log('Compiling Game Engine...');
-fs.writeFileSync('engine.js', [`try {PF = require('pathfinding')} catch(e) {}`, fs.readFileSync('./public/js/Engine.js'), fs.readFileSync('./public/js/Tank.js'), fs.readFileSync('./public/js/Block.js'), fs.readFileSync('./public/js/Shot.js'), fs.readFileSync('./public/js/AI.js'), fs.readFileSync('./public/js/Damage.js'), 'module.exports = {Engine, Tank, Block, Shot, AI, Damage}'].join());
+fs.writeFileSync('engine.js', [`try {PF = require('pathfinding')} catch(e) {}`, fs.readFileSync('./public/js/Engine.js'), fs.readFileSync('./public/js/Tank.js'), fs.readFileSync('./public/js/Block.js'), fs.readFileSync('./public/js/Shot.js'), fs.readFileSync('./public/js/AI.js'), fs.readFileSync('./public/js/Damage.js'), 'module.exports = {Engine, Tank, Block, Shot, AI, Damage}'].join(''));
 console.log('Done!');
 const {Engine, Tank, Block, Shot, AI, Damage} = require('./engine.js');
 const {gpt} = require('gpti');
