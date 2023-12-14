@@ -198,7 +198,7 @@ class AI {
       for (const entity of this.host.cells[x][y]) {
         const teamMatch = team === Engine.getTeam(entity.team);
         if (entity instanceof Block) {
-          if (!this.ded && !this.immune && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
+          if (!this.ded && this.immune+500 < Date.now() && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
             if (entity.type === 'fire') {
               if (this.fire) {
                 clearTimeout(this.fireTimeout);
