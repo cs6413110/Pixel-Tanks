@@ -4,7 +4,7 @@ const settings = {
   banips: [],
   full_auth: ['cs641311'],
   admins: ['Celestial', 'bradley],
-  vips: ['DakMemeGod'], //FINAL WARNING
+  vips: ['DarkMemeGod'], //FINAL WARNING
   mutes: [],
   players_per_room: 400,
   ups: 60,
