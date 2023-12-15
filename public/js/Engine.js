@@ -99,7 +99,6 @@ class Engine {
         }
       }
     } else if (a === 'turret') {
-      for (const ai of this.ai) if (Engine.getUsername(ai.team) === t.username) setTimeout(() => ai.destroy());
       this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
     } else if (a === 'buff') {
       t.buff = true;
