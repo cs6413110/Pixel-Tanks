@@ -19,11 +19,12 @@ class AI {
     this.team = team.includes(':') ? team : this.username+':'+team;
     this.host = host;
     this.hp = rank * 10 + 300;
+    if (role === 0) this.hp *= .5;
     this.maxHp = this.hp;
     this.stunned = this.role === 0;
     setTimeout(() => {
       this.stunned = false;
-    }, this.role === 0 ? 5000 : 0);
+    }, 0);
     this.seeUser = this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
     this.canFire = this.canPowermissle = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canClass = this.canBoost = this.canBashed = true;
     this.items = [];
