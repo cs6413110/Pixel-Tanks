@@ -170,7 +170,7 @@ class Client {
   drawTank(t) {
     const p = t.username === PixelTanks.user.username;
     let a = 1;
-    if (this.ded && t.invis) return;
+    if (this.ded && t.invis && !p) return;
     if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
     if ((t.invis && p) || t.ded) a = .5;
     GUI.draw.globalAlpha = a;
