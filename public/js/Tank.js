@@ -23,7 +23,7 @@ class Tank {
     this.color = data.color;
     this.fire = this.damage = false;
     this.hp = this.maxHp = this.rank*10+300;
-    this.canBashed = true;
+    this.canBashed = this.canInvis = true;
     this.team = data.username+':'+Math.random();
     this.x = host.spawn.x;
     this.y = host.spawn.y;
