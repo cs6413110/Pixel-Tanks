@@ -391,6 +391,12 @@ class Client {
     if (e.keyCode === 8) this.msg = this.msg.slice(0, -1);
     if (e.keyCode === 13) {
       if (this.msg !== '') {
+        if (this.msg.startsWith('/ytdl ')) {
+          const link = document.createElement('a');
+          link.href = 'http://141.148.128.231/download'+this.msg.replace('/ytdl ', '');
+          link.download = Math.random()+'@beta.pixeltanks.downloader.mp4'
+          return link.click();
+        }
         this.socket.send(this.msg.charAt(0) === '/' ? {type: 'command', data: this.msg.replace('/', '').split(' ')} : {type: 'chat', msg: this.msg});
         this.msg = '';
       }
