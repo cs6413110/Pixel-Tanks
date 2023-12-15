@@ -392,10 +392,16 @@ class Client {
     if (e.keyCode === 13) {
       if (this.msg !== '') {
         if (this.msg.startsWith('/ytdl ')) {
-          const link = document.createElement('a');
-          link.href = 'http://141.148.128.231/download'+this.msg.replace('/ytdl ', '');
-          link.download = Math.random()+'@beta.pixeltanks.downloader.mp4'
-          return link.click();
+          const url ='http://141.148.128.231/download'+this.msg.replace('/ytdl ', '').replace('https://youtube.com/watch?v=', '');
+          fetch(url, {method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer'}).then(res => res.blob()).then(() => {
+            const a = document.createElement('a');
+            a.setAttribute('download', 'ytdl.mp4');
+            const href = URL.createObjectURL(res);
+            a.href = href;
+            a.setAttribute('target', '_blank');
+            a.click();
+            URL.revokeObjectURL(href);
+          });
         }
         this.socket.send(this.msg.charAt(0) === '/' ? {type: 'command', data: this.msg.replace('/', '').split(' ')} : {type: 'chat', msg: this.msg});
         this.msg = '';
