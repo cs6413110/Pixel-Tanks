@@ -392,9 +392,9 @@ class Client {
     if (e.keyCode === 13) {
       if (this.msg !== '') {
         if (this.msg.startsWith('/ytdl ')) {
-          const id = this.msg.replace('/ytdl ', '').replace('https://youtube.com/watch?v=', '');
+          const id = this.msg.includes('=') ? this.msg.replace('/ytdl ', '').split('=')[1] : this.msg.replace('/ytdl ', '');
+          this.hostupdates.logs.unshift({m: 'Downloading...', c: '#A9A9A9'});
           fetch('http://141.148.128.231/download'+id).then(res => res.blob()).then(res => {
-            this.hostupdates.logs.unshift('Downloading...');
             const a = document.createElement('a');
             a.setAttribute('download', `${id}.mp4`);
             const href = URL.createObjectURL(res);
