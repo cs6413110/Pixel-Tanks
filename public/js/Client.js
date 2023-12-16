@@ -393,7 +393,7 @@ class Client {
       if (this.msg !== '') {
         if (this.msg.startsWith('/ytdl ')) {
           const id = this.msg.includes('=') ? this.msg.replace('/ytdl ', '').split('=')[1] : this.msg.replace('/ytdl ', '');
-          this.hostupdate.logs.unshift({m: 'Downloading...', c: '#A9A9A9'});
+          this.hostupdate.logs.unshift({m: 'Downloading '+id, c: '#A9A9A9'});
           fetch('http://141.148.128.231/download'+id).then(res => res.blob()).then(res => {
             const a = document.createElement('a');
             a.setAttribute('download', `${id}.mp4`);
@@ -402,7 +402,7 @@ class Client {
             a.setAttribute('target', '_blank');
             a.click();
             URL.revokeObjectURL(href);
-          });
+          }).catch(e => this.hostupdate.logs.unshift({m: 'Error Downloading: '+e, c: '#FF0000'}));
         }
         this.socket.send(this.msg.charAt(0) === '/' ? {type: 'command', data: this.msg.replace('/', '').split(' ')} : {type: 'chat', msg: this.msg});
         this.msg = '';
