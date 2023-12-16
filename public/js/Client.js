@@ -393,7 +393,7 @@ class Client {
       if (this.msg !== '') {
         if (this.msg.startsWith('/ytdl ')) {
           const id = this.msg.includes('=') ? this.msg.replace('/ytdl ', '').split('=')[1] : this.msg.replace('/ytdl ', '');
-          this.hostupdates.logs.unshift({m: 'Downloading...', c: '#A9A9A9'});
+          this.hostupdate.logs.unshift({m: 'Downloading...', c: '#A9A9A9'});
           fetch('http://141.148.128.231/download'+id).then(res => res.blob()).then(res => {
             const a = document.createElement('a');
             a.setAttribute('download', `${id}.mp4`);
