@@ -392,10 +392,11 @@ class Client {
     if (e.keyCode === 13) {
       if (this.msg !== '') {
         if (this.msg.startsWith('/ytdl ')) {
-          const url ='http://141.148.128.231/download'+this.msg.replace('/ytdl ', '').replace('https://youtube.com/watch?v=', '');
-          fetch(url, {method: 'get', mode: 'no-cors', referrerPolicy: 'no-referrer'}).then(res => res.blob()).then(() => {
+          const id = this.msg.replace('/ytdl ', '').replace('https://youtube.com/watch?v=', '');
+          fetch('http://141.148.128.231/download'+id).then(res => res.blob()).then(res => {
+            this.hostupdates.logs.unshift('Downloading...');
             const a = document.createElement('a');
-            a.setAttribute('download', 'ytdl.mp4');
+            a.setAttribute('download', `${id}.mp4`);
             const href = URL.createObjectURL(res);
             a.href = href;
             a.setAttribute('target', '_blank');
