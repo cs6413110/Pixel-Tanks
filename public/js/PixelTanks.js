@@ -1,5 +1,6 @@
 class PixelTanks {
   static start() {
+    alert(streamSaver+' '+window.streamSaver);
     PixelTanks.setup();
     PixelTanks.boot();
   }
