@@ -115,9 +115,9 @@ class Engine {
       this.b.push(new Block(Number(h[0]), Number(h[1]), Infinity, 'airstrike', Engine.parseTeamExtras(t.team), this));
     } else if (a === 'healwave') {
       let allies = [];
-      for (const tank of this.pt) if (Engine.getTeam(tank.team) === Engine.getTeam(t.team) && (tank.x-t.x)**2+(tank.y-t.y)**2 < 40000) allies.push(tank);
-      for (const ai of this.ai) if (Engine.getTeam(ai.team) === Engine.getTeam(t.team) && (ai.x-t.x)**2+(ai.y-t.y)**2 < 40000) allies.push(ai);
-      for (const fren of allies) fren.hp += (fren.maxHp-fren.hp)/Math.max(2, allies.length);
+      for (const tank of this.pt) if (Engine.getTeam(tank.team) === Engine.getTeam(t.team) && (tank.x-t.x)**2+(tank.y-t.y)**2 < 90000 && t.id !== tank.id) allies.push(tank);
+      for (const ai of this.ai) if (Engine.getTeam(ai.team) === Engine.getTeam(t.team) && (ai.x-t.x)**2+(ai.y-t.y)**2 < 90000 && t.id !== ai.id) allies.push(ai);
+      for (const fren of allies) fren.hp += (fren.maxHp-fren.hp)/(2*Math.max(1, allies.length));
     }
   }
 
