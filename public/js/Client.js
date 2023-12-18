@@ -91,11 +91,6 @@ class Client {
       this.sendInterval = setInterval(() => this.send(), 1000/60);
       this.getPing();
     });
-    this.socket.on('close', () => {
-      PixelTanks.user.player.implode();
-      Menus.trigger('main');
-      this.multiplayer = undefined;
-    });
     this.pinger = setInterval(() =>  {
       this.ops = this.ops.concat(this._ops).slice(-100);
       this.ups = this.ups.concat(this._ups).slice(-100);
@@ -251,7 +246,7 @@ class Client {
   frame() {
     GUI.clear();
     this._fps++;
-    this.render = requestAnimationFrame(() => this.frame());
+    this.render = requestAnimationFrame(this.frame.bind(this));
     if (!this.hostupdate.pt.length) {
       GUI.draw.fillStyle = '#ffffff';
       GUI.draw.fillRect(0, 0, 1600, 1600);
