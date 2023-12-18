@@ -86,6 +86,11 @@ class Client {
       this.sendInterval = setInterval(() => this.send(), 1000/60);
       this.getPing();
     });
+    this.socket.on('close', () => {
+      PixelTanks.user.player.implode();
+      Menus.trigger('main');
+      this.multiplayer = undefined;
+    });
     this.pinger = setInterval(() =>  {
       this.ops = this.ops.concat(this._ops).slice(-100);
       this.ups = this.ups.concat(this._ups).slice(-100);
@@ -241,16 +246,11 @@ class Client {
   frame() {
     GUI.clear();
     this._fps++;
-    this.render = requestAnimationFrame(this.frame.bind(this));
+    this.render = requestAnimationFrame(() => this.frame());
     if (!this.hostupdate.pt.length) {
       GUI.draw.fillStyle = '#ffffff';
       GUI.draw.fillRect(0, 0, 1600, 1600);
       return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
-    }
-    if (this.multiplayer) if (this.socket.status !== 'connected' ) {
-      PixelTanks.user.player.implode();
-      Menus.trigger('main');
-      this.multiplayer = undefined;
     }
     const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
     if (this.dx) {
@@ -286,17 +286,17 @@ class Client {
     }
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
     GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
-    b.forEach(block => this.drawBlock(block));
-    s.forEach(shot => this.drawShot(shot));
-    a.forEach(ai => this.drawTank(ai));
-    t.forEach(tank => this.drawTank(tank));
+    for (const block of b) this.drawBlock(block);
+    for (const shot of s) this.drawShot(shot);
+    for (const ai of a) this.drawTank(ai);
+    for (const tank of t) this.drawTank(tank);
     for (const block of b) if (block.s) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(block.x-2, block.y+108, 104, 11);
       GUI.draw.fillStyle = '#0000FF';
       GUI.draw.fillRect(block.x, block.y+110, 100*block.hp/block.maxHp, 5);
     }
-    e.forEach(e => this.drawExplosion(e));
+    for (const ex of e) this.drawExplosion(ex);
 
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
     if (player.flashbanged) {
@@ -349,7 +349,7 @@ class Client {
       GUI.draw.globalAlpha = 1;
       GUI.drawText(this.msg, 0, 830, 30, '#ffffff', 0);
       if (this.tank.animation === false || this.tank.animation.id !== 'text') this.playAnimation('text');
-    } else if (this.tank.animation) if (this.tank.animation.id === 'text') {
+    } else if (this.tank.animation && this.tank.animation.id === 'text') {
       this.tank.animation = false;
       clearInterval(this.animationInterval);
       clearTimeout(this.animationTimeout);
