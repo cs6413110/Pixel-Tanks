@@ -194,7 +194,7 @@ class Shot {
       this.cells = cells;
     }
     } catch(e) {
-      this.host.logs.push({m: `Bullet Cell Updating error occurred. Destroying bullet + logging debug info. Bullet was a ${this.type} bullet. Its coords were ${this.x}, ${this.y} and its old position was ${this.oldx}, ${this.oldy}. Its delta coords were ${this.dx}, ${this.dy}. `, c: '#FFFFFF});
+      this.host.logs.push({m: `Bullet Cell Updating error occurred. Destroying bullet + logging debug info. Bullet was a ${this.type} bullet. Its coords were ${this.x}, ${this.y} and its old position was ${this.oldx}, ${this.oldy}. Its delta coords were ${this.dx}, ${this.dy}. `, c: '#FF0000'});
       this.destroy();
     }
   }
