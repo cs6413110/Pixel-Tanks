@@ -34,6 +34,7 @@ const images = {
   cosmetics: {
     'DarkMemeGod': '/cosmetics/meme',
     'UnionJack': '/cosmetics/UnionJack',
+    'SKOTTISH': '/cosmetics/SKOTTISH',
     'Aaron': '/cosmetics/aaron',
     'Astronaut': '/cosmetics/astronaut',
     'Onfire': '/cosmetics/onfire',
