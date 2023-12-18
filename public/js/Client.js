@@ -181,7 +181,7 @@ class Client {
     PixelTanks.renderTop(t.x, t.y, 80, t.color, t.r, t.pushback);
     GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
     if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
-    if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || (this.ded && !p) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
+    if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || (this.ded && !p && !t.ded) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
       GUI.draw.fillStyle = '#FF0000';
@@ -393,16 +393,10 @@ class Client {
       if (this.msg !== '') {
         if (this.msg.startsWith('/ytdl ')) {
           const id = this.msg.includes('=') ? this.msg.replace('/ytdl ', '').split('=')[1] : this.msg.replace('/ytdl ', '');
-          this.hostupdate.logs.unshift({m: 'Downloading '+id, c: '#A9A9A9'});
-          fetch('http://141.148.128.231/download'+id).then(res => res.blob()).then(res => {
-            const a = document.createElement('a');
-            a.setAttribute('download', `${id}.mp4`);
-            const href = URL.createObjectURL(res);
-            a.href = href;
-            a.setAttribute('target', '_blank');
-            a.click();
-            URL.revokeObjectURL(href);
-          }).catch(e => this.hostupdate.logs.unshift({m: 'Error Downloading: '+e, c: '#FF0000'}));
+          this.hostupdate.logs.unshift({m: 'Downloading '+id, c: '#00FF00'});
+          fetch('http://141.148.128.231/download'+id).then(res => {
+            res.body.pipeTo(streamSaver.createWriteStream(`${id}.mp4`)).then(() => this.hostupdate.logs.unshift({m: `Finished Downloading ${id}!`, c: '#00FF00'}));
+          }).catch(e => this.hostupdate.logs.unshift({m: 'Error Downloading. Try using Chrome. Error Info: '+e, c: '#FF0000'}));
         }
         this.socket.send(this.msg.charAt(0) === '/' ? {type: 'command', data: this.msg.replace('/', '').split(' ')} : {type: 'chat', msg: this.msg});
         this.msg = '';
