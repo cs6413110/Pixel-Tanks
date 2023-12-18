@@ -40,15 +40,12 @@ let db;
 
 const server = http.createServer((req, res) => {
   if (req.url.includes('/download')) {
+    if (!ytdl.validateID(req.url.replace('/download', ''))) return res.end('Bad ID format');
     res.setHeader('Content-Type', 'octet-stream');
     res.setHeader('Content-Disposition', 'attachment');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', '*');
-    try {
-      ytdl(`https://youtube.com/watch?v=${req.url.replace('/download', '')}`, {filter: 'videoandaudio', quality: 'highest'}).pipe(res);
-    } catch(e) {
-      res.end();
-    }
+    ytdl(`https://youtube.com/watch?v=${req.url.replace('/download', '')}`, {filter: 'videoandaudio', quality: 'highest'}).pipe(res);
   } else {
     res.end(fs.readFileSync('./public/js/pixel-tanks.js'));
   }
