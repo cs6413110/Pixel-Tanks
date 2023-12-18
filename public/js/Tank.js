@@ -73,6 +73,7 @@ class Tank {
       for (let i = Math.max(0, hx-2); i <= Math.min(29, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(29, hy+2); l++) {
         for (const entity of this.host.cells[i][l]) {
           if (entity instanceof Shot) {
+            if (entity.target) return;
             const xd = entity.x-(this.x+40), yd = entity.y-(this.y+40), td = Math.sqrt(xd**2+yd**2);
             const aspectRatio = 6/td;
             if (td > 150) continue;
