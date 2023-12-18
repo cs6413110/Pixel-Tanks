@@ -4,7 +4,7 @@ const settings = {
   banips: [],
   full_auth: ['cs641311'],
   admins: ['Celestial', 'bradley'],
-  vips: ['DarkMemeGod'], //FINAL WARNING
+  vips: ['DarkMemeGod'],
   mutes: [],
   players_per_room: 400,
   ups: 60,
@@ -595,7 +595,7 @@ const Commands = {
   tread: [Object, 1, 3, function(data) {
     for (const t of servers[this.room].pt) if (t.username === data[1]) {
       const value = t[data[2]];
-      if (value !== undefined) servers[this.room].logs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
+      if (value !== undefined) servers[this.room].pt.find(tank => tank.username === this.username).privateLogs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
       return;
     }
   }],
