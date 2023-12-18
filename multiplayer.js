@@ -277,6 +277,7 @@ class DUELS extends Multiplayer {
       this.global = m.username+' Wins Round '+this.round;
       setTimeout(() => {
         this.pt.forEach(tank => {
+          tank.fire = false;
           tank.hp = tank.maxHp;
           tank.shields = 0;
           tank.ded = false;
@@ -343,9 +344,13 @@ class TDM extends Multiplayer {
     if (this.mode === 0) {
       if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
         this.mode = 1; // game start
+        this.s = [];
+        this.ai = [];
         this.readytime = Date.now();
         this.time = 5;
         this.pt.forEach(t => {
+          t.fire = false;
+          t.shields = 0;
           t.team = t.username+':'+(t.color === '#FF0000' ? 'RED' : 'BLUE');
         });
         this.levelReader(tdmLevels[Math.floor(Math.random()*tdmLevels.length)]);
@@ -405,6 +410,7 @@ class TDM extends Multiplayer {
         this.global = winner+' Wins Round '+this.round;
         setTimeout(() => {
           this.pt.forEach(tank => {
+            tank.fire = false;
             tank.hp = tank.maxHp;
             tank.shields = 0;
             tank.ded = false;
