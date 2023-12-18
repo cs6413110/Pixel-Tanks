@@ -679,6 +679,7 @@ class Client {
   }
 
   implode() {
+    try {
     if (this.multiplayer) {
       clearInterval(this.sendInterval);
       this.socket.close();
@@ -693,5 +694,6 @@ class Client {
     cancelAnimationFrame(this.render);
     Menus.menus.pause.removeListeners();
     PixelTanks.user.player = undefined;
+    } catch(e) {alert(e)}
   }
 }
