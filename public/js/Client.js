@@ -395,7 +395,7 @@ class Client {
           const id = this.msg.includes('=') ? this.msg.replace('/ytdl ', '').split('=')[1] : this.msg.replace('/ytdl ', '');
           this.hostupdate.logs.unshift({m: 'Downloading '+id, c: '#00FF00'});
           fetch('http://141.148.128.231/download'+id).then(res => {
-            res.body.pipeTo(streamSaver.createWriteStream(`${id}.mp4`)).then(() => this.hostupdate.logs.unshift({m: `Finished Downloading ${id}!`, c: '#00FF00'}));
+            res.body.pipeTo(window.streamSaver.createWriteStream(`${id}.mp4`)).then(() => this.hostupdate.logs.unshift({m: `Finished Downloading ${id}!`, c: '#00FF00'}));
           }).catch(e => this.hostupdate.logs.unshift({m: 'Error Downloading. Try using Chrome. Error Info: '+e, c: '#FF0000'}));
         }
         this.socket.send(this.msg.charAt(0) === '/' ? {type: 'command', data: this.msg.replace('/', '').split(' ')} : {type: 'chat', msg: this.msg});
