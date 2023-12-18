@@ -21,7 +21,7 @@ class Client {
     if (this.multiplayer) this.connect();
     if (!this.multiplayer) this.generateWorld();
     this.bindings = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
-    for (const binding of this.bindings) document.addEventListener(binding, e => this[binding](e));
+    for (const binding of this.bindings) document.addEventListener(binding, this[binding].bind(e));
     this.render = requestAnimationFrame(() => this.frame());
   }
 
@@ -678,7 +678,7 @@ class Client {
       clearInterval(this.sendInterval);
       this.socket.close();
     } else this.world.i.forEach(i => clearInterval(i));
-    for (const binding of this.bindings) document.removeEventListener(binding, e => this[binding](e));
+    for (const binding of this.bindings) document.removeEventListener(binding, this[binding].bind(e));
     cancelAnimationFrame(this.render);
     Menus.menus.pause.removeListeners();
     PixelTanks.user.player = undefined;
