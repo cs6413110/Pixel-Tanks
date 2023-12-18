@@ -40,7 +40,10 @@ let db;
 
 const server = http.createServer((req, res) => {
   if (req.url.includes('/download')) {
-    if (!ytdl.validateID(req.url.replace('/download', ''))) return res.end('Bad ID format');
+    if (!ytdl.validateID(req.url.replace('/download', ''))) {
+      res.statusCode = 404;
+      return res.end('Bad ID format');
+    }
     res.setHeader('Content-Type', 'octet-stream');
     res.setHeader('Content-Disposition', 'attachment');
     res.setHeader('Access-Control-Allow-Origin', '*');
