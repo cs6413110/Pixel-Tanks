@@ -6,10 +6,6 @@ class PixelTanks {
 
   static setup() {
     document.body.innerHTML += `
-    <script src='https://jimmywarting.github.io/StreamSaver.js/StreamSaver.js'></script>
-    <script>
-    alert('t.d=>'+window.streamSaver);
-    </script>
     <style>
       html, body {
         margin: 0;
