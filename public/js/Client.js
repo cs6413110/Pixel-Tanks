@@ -653,7 +653,7 @@ class Client {
   send() {
     const {x, y, r, use, fire, animation} = this.tank;
     const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank};
-    if (x === this.lastUpdate.x && y === this.lastUpdate.y && r === this.lastUpdate.r && use.length === 0 && fire.length === 0 && animation !== this.lastUpdate.animation) return;
+    if (x === this.lastUpdate.x && y === this.lastUpdate.y && r === this.lastUpdate.r && use.length === 0 && fire.length === 0 && animation === this.lastUpdate.animation) return;
     this._ops++;
     if (this.multiplayer) {
       this.socket.send(updateData);
