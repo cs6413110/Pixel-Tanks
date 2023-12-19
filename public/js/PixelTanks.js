@@ -108,7 +108,9 @@ class PixelTanks {
           GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
           PixelTanks.renderTop(1200, 600, 160, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.top, 1200, 600, 160, 180, 1);
-          if (PixelTanks.userData.cosmetic !== '' && PixelTanks.userData.cosmetic !== undefined) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 1200, 600, 160, 180, 1);
+          if (PixelTanks.userData.cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 1200, 600, 160, 180, 1);
+          if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 1200, 600, 160, 180, 1);
+          if (PixelTanks.userData.cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 1200, 600, 160, 180, 1);
           GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
         },
       },
@@ -441,9 +443,9 @@ class PixelTanks {
               for (let i = 0; i < 16; i++) {
                 if (Engine.collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
                   if (e.button === 0) {
-                    if (prompt('Do you want this cosmetic to be top layer?')) PixelTanks.userData.cosmetic_hat = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
-                    if (prompt('Do you want this cosmetic to be middle layer?')) PixelTanks.userData.cosmetic = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
-                    if (prompt('Do you want this cosmetic to be base layer?')) PixelTanks.userData.cosmetic_body = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
+                    if (confirm('Do you want this cosmetic to be top layer?')) PixelTanks.userData.cosmetic_hat = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
+                    if (confirm('Do you want this cosmetic to be middle layer?')) PixelTanks.userData.cosmetic = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
+                    if (confirm('Do you want this cosmetic to be base layer?')) PixelTanks.userData.cosmetic_body = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
                   } else {
                     PixelTanks.userData.cosmetics.splice(this.cosmeticMenu*16+i, 1);
                   }
@@ -513,10 +515,15 @@ class PixelTanks {
           GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
           PixelTanks.renderTop(680, 380, 240, PixelTanks.userData.color, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
           GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
+          if (PixelTanks.userData.cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
           if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
+          if (PixelTanks.userData.cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
+          
           const key = {tactical: [7, 7], fire: [7, 61], medic: [7, 115], stealth: [61, 7], builder: [61, 61], warrior: [61, 115]};
           if (PixelTanks.userData.class) GUI.drawImage(PixelTanks.images.menus.classTab, 1112, 816, 88, 88, 1, 0, 0, 0, 0, undefined, key[PixelTanks.userData.class][0], key[PixelTanks.userData.class][1], 44, 44);
+          if (PixelTanks.userData.cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 760, 224, 80, 80, 1);
           if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 760, 224, 80, 80, 1);
+          if (PixelTanks.userData.cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 760, 224, 80, 80, 1);
           const deathEffectData = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect+'_'];
           if (PixelTanks.userData.deathEffect) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 536, 224, 80, 80, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
           Menus.menus.inventory.buttonEffect = true;
