@@ -150,6 +150,11 @@ const images = {
     'Triple Gun': '/cosmetics/triplegun',
     'Hard Hat': '/cosmetics/hardhat',
     'Elf': '/cosmetics/elf',
+    'Spooked': '/cosmetics/spooked',
+    'Locked': '/cosmetics/locked',
+    'Angry Eyes': '/cosmetics/angryeyes',
+    'Cute Eyes': '/cosmetics/cuteeyes',
+    'Stripes': '/cosmetics/stripe',
   },
   menus: {
     ui: '/menus/ui',
