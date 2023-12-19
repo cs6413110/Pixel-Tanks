@@ -91,7 +91,7 @@ class Multiplayer extends Engine {
     super(levels);
     this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
-    if (!settings.fps_boost) this.i.push(setInterval(() => this.send(), 1000/settings.UPS));
+    if (!settings.fps_boost) this.i.push(setInterval(() => this.cellSend(), 1000/settings.UPS));
   }
 
   override(t) {
@@ -114,8 +114,7 @@ class Multiplayer extends Engine {
       const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;      
       const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs.slice(t?.render.logs || 0).concat(t.privateLogs), global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
       t.privateLogs = [];
-      let send = false;
-      if (message.logs.length) send = true;
+      let send = message.logs.length > 0;
       for (const p of ['b', 'pt', 'ai', 's', 'd']) {
         const ids = new Set(this[p].map(e => e.id));
         this[p].filter(e => Engine.collision(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
@@ -142,14 +141,15 @@ class Multiplayer extends Engine {
   cellSend() {
     for (const t of this.pt) {
       const fx = Math.floor(t.x/100), fy = Math.floor(t.y/100), sy = Math.max(fy-7, 0), ey = Math.min(fy+7, 30), sx = Math.max(fx-10, 0), ex = Math.min(fx+10, 30);
-      const newrender = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length, sx, sy, ex, ey};
-      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs, global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};      
-      let send = t.render.logs !== newrender.logs;
+      const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
+      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs.slice(t?.render.logs || 0).concat(t.privateLogs), global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};      
+      t.privateLogs = [];
+      let send = message.logs.length > 0;
       for (let cy = sy; cy < ey; cy++) {
         for (let cx = sx; cx < ex; cx++) {
           for (const entity of this.cells[cx][cy]) {
             const type = this.sendkey[entity.constructor.name];
-            newrender[type].add(entity.id);
+            render[type].add(entity.id);
             if (!t.render[type].has(entity.id) || entity.updatedLast > t.lastUpdate) {
               message[type].push(entity.raw);
               send = true;
@@ -159,13 +159,13 @@ class Multiplayer extends Engine {
       }
       for (const entity of this.sendkeyValues) {
         for (const id of t.render[entity]) {
-          if (!newrender[entity].has(id)) {
+          if (!render[entity].has(id)) {
             message.delete[entity].push(id);
             send = true;
           }
         }
       }
-      t.render = newrender;
+      t.render = render;
       t.lastUpdate = Date.now();
       if (send) t.socket.send(message);
     }
