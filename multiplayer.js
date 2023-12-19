@@ -133,7 +133,7 @@ class Multiplayer extends Engine {
       }
       t.render = render;
       t.lastUpdate = Date.now();
-      if (send) t.socket.send(message);
+      if (send || true) t.socket.send(message);
     }
   }
 
