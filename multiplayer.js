@@ -510,7 +510,10 @@ const Commands = {
     gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
   }],
   nuke: [Object, 2, 1, function(data) {
-    for (let x = 0; x < 30; x += 2) for (let y = 0; y < 30; y += 2) servers[this.room].b.push(new Block(x*100, y*100, Infinity, 'airstrike', 'server.admin.commands.nuke:_', servers[this.room]));
+    for (let x = 0; x < 30; x += 2) for (let y = 0; y < 30; y += 2) servers[this.room].b.push(new Block(x*100, y*100, Infinity, 'airstrike', ':', servers[this.room]));
+  }],
+  arson: [Object, 2, 1, function(data) {
+    for (let x = 0; x < 30; x++) for(let y = 0; y < 30, y++) servers[this.room].b.push(new Block(x*100, y*100, Infinity, 'fire', ':', servers[this.room]));
   }],
   newmap: [FFA, 4, 1, function(data) {
     servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
