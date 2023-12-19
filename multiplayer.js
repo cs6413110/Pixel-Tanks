@@ -91,7 +91,7 @@ class Multiplayer extends Engine {
     super(levels);
     this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
-    if (!settings.fps_boost) this.i.push(setInterval(() => this.cellSend(), 1000/settings.UPS));
+    if (!settings.fps_boost) this.i.push(setInterval(() => this.cellSend(), 1000/settings.ups));
     this.sps = 0;
     setInterval(() => {
       this.logs.push({m: 'sps => '+this.sps, c: '#FFFFFF'});
@@ -172,7 +172,7 @@ class Multiplayer extends Engine {
       }
       t.render = render;
       t.lastUpdate = Date.now();
-      if (send || true) t.socket.send(message);
+      if (send) t.socket.send(message);
     }
   }
 
