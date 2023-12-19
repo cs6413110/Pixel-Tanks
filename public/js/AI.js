@@ -1,7 +1,7 @@
 class AI {
   constructor(x, y, role, rank, team, host) {
     this.raw = {};
-    ['role', 'rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
+    ['role', 'rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
       Object.defineProperty(this, p, {
         get: () => this.raw[p],
         set: v => this.setValue(p, v),
@@ -13,24 +13,30 @@ class AI {
     this.role = role;
     this.x = x;
     this.y = y;
-    this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = 0;
+    this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = this.shields = 0;
     this.barrelSpeed = Math.random()*3+2;
     this.rank = rank;
     this.team = team.includes(':') ? team : this.username+':'+team;
     this.host = host;
     this.hp = rank * 10 + 300;
+    if (role === 0) this.hp *= .5;
     this.maxHp = this.hp;
     this.stunned = this.role === 0;
     setTimeout(() => {
       this.stunned = false;
-    }, this.role === 0 ? 5000 : 0);
+    }, 0);
     this.seeUser = this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
     this.canFire = this.canPowermissle = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canClass = this.canBoost = this.canBashed = true;
     this.items = [];
     if (this.role !== 0) this.giveAbilities();
     this.invis = this.class === 'stealth';
     this.color = Engine.getRandomColor();
-    this.cosmetic = host.pt.find(t => t.username === Engine.getUsername(this.team))?.cosmetic;
+    const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
+    if (summoner) {
+      this.cosmetic_hat = summoner.cosmetic_hat;
+      this.cosmetic = summoner.cosmetic;
+      this.cosmetic_body = summoner.cosmetic_body;
+    }
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (role === 0 ? .99 : .79)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (role === 0 ? .99 : .79))));
@@ -198,7 +204,7 @@ class AI {
       for (const entity of this.host.cells[x][y]) {
         const teamMatch = team === Engine.getTeam(entity.team);
         if (entity instanceof Block) {
-          if (!this.ded && !this.immune && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
+          if (!this.ded && this.immune+500 < Date.now() && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
             if (entity.type === 'fire') {
               if (this.fire) {
                 clearTimeout(this.fireTimeout);
@@ -398,7 +404,7 @@ class AI {
     clearInterval(this.healInterval);
     clearTimeout(this.healTimeout);
     if (this.hp <= 0) {
-      if (this.host.ondeath) this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
+      if (this.host.ondeath && this.role !== 0) this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
       return this.destroy();
     }
     this.healTimeout = setTimeout(() => {

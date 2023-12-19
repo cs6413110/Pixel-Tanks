@@ -16,12 +16,17 @@ class Client {
     this.ups = [];
     this.fps = [];
     this.pings = [];
-    this.joinData = {username: PixelTanks.user.username, token: PixelTanks.user.token, type: 'join', gamemode: this.gamemode, tank: {rank: PixelTanks.userData.stats[4], username: PixelTanks.user.username, class: PixelTanks.userData.class, cosmetic: PixelTanks.userData.cosmetic, deathEffect: PixelTanks.userData.deathEffect, color: PixelTanks.userData.color}};
+    this.joinData = {username: PixelTanks.user.username, token: PixelTanks.user.token, type: 'join', gamemode: this.gamemode, tank: {rank: PixelTanks.userData.stats[4], username: PixelTanks.user.username, class: PixelTanks.userData.class, cosmetic_hat: PixelTanks.userData.cosmetic_hat, cosmetic: PixelTanks.userData.cosmetic, cosmetic_body: PixelTanks.userData.cosmetic_body, deathEffect: PixelTanks.userData.deathEffect, color: PixelTanks.userData.color}};
     this.reset();
     if (this.multiplayer) this.connect();
     if (!this.multiplayer) this.generateWorld();
-    this.bindings = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
-    for (const binding of this.bindings) document.addEventListener(binding, e => this[binding](e));
+    document.addEventListener('keydown', this.keydown.bind(this));
+    document.addEventListener('keyup', this.keyup.bind(this));
+    document.addEventListener('mousemove', this.mousemove.bind(this));
+    document.addEventListener('mousedown', this.mousedown.bind(this));
+    document.addEventListener('mouseup', this.mouseup.bind(this));
+    document.addEventListener('paste', this.paste.bind(this));
+    document.addEventListener('mousewheel', this.mousewheel.bind(this)); 
     this.render = requestAnimationFrame(() => this.frame());
   }
 
@@ -124,7 +129,7 @@ class Client {
 
   reset() {
     const time = new Date('Nov 28 2006').getTime();
-    this.timers = {boost: time, powermissle: time, toolkit: time, class: {time: time, cooldown: -1}, items: [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}]};
+    this.timers = {boost: time, powermissle: time, grapple: time, toolkit: time, class: {time: time, cooldown: -1}, items: [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}]};
     this.fireType = 1;
     this.halfSpeed = false;
     this.canClass = this.canFire = this.canBoost = this.canToolkit = this.canPowermissle = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canGrapple = true;
@@ -170,7 +175,7 @@ class Client {
   drawTank(t) {
     const p = t.username === PixelTanks.user.username;
     let a = 1;
-    if (this.ded && t.invis) return;
+    if (this.ded && t.invis && !p) return;
     if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
     if ((t.invis && p) || t.ded) a = .5;
     GUI.draw.globalAlpha = a;
@@ -180,8 +185,10 @@ class Client {
     GUI.draw.globalAlpha = a;
     PixelTanks.renderTop(t.x, t.y, 80, t.color, t.r, t.pushback);
     GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
+    if (t.cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic_body], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
     if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
-    if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || this.ded || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
+    if (t.cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic_hat], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
+    if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || (this.ded && !p && !t.ded) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
       GUI.draw.fillStyle = '#FF0000';
@@ -230,7 +237,9 @@ class Client {
       if (t.dedEffect.time/speed < kill) {
         GUI.drawImage(PixelTanks.images.tanks.bottom, t.dedEffect.x, t.dedEffect.y, 80, 80, 1, 40, 40, 0, 0, 0);
         GUI.drawImage(PixelTanks.images.tanks.destroyed, t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
+        if (t.cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic_body], t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
         if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
+        if (t.cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic_hat], t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
       }
       GUI.drawImage(PixelTanks.images.deathEffects[t.dedEffect.id], t.dedEffect.x-60, t.dedEffect.y-60, 200, 200, 1, 0, 0, 0, 0, undefined, Math.floor(t.dedEffect.time/speed)*200, 0, 200, 200);
     }
@@ -246,11 +255,6 @@ class Client {
       GUI.draw.fillStyle = '#ffffff';
       GUI.draw.fillRect(0, 0, 1600, 1600);
       return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
-    }
-    if (this.multiplayer) if (this.socket.status !== 'connected' ) {
-      PixelTanks.user.player.implode();
-      Menus.trigger('main');
-      this.multiplayer = undefined;
     }
     const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
     if (this.dx) {
@@ -286,17 +290,17 @@ class Client {
     }
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
     GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
-    b.forEach(block => this.drawBlock(block));
-    s.forEach(shot => this.drawShot(shot));
-    a.forEach(ai => this.drawTank(ai));
-    t.forEach(tank => this.drawTank(tank));
+    for (const block of b) this.drawBlock(block);
+    for (const shot of s) this.drawShot(shot);
+    for (const ai of a) this.drawTank(ai);
+    for (const tank of t) this.drawTank(tank);
     for (const block of b) if (block.s) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(block.x-2, block.y+108, 104, 11);
       GUI.draw.fillStyle = '#0000FF';
       GUI.draw.fillRect(block.x, block.y+110, 100*block.hp/block.maxHp, 5);
     }
-    e.forEach(e => this.drawExplosion(e));
+    for (const ex of e) this.drawExplosion(ex);
 
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
     if (player.flashbanged) {
@@ -307,29 +311,29 @@ class Client {
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
     GUI.draw.fillStyle = PixelTanks.userData.color;
     GUI.draw.globalAlpha = 0.5;
-    const c = [500, 666, 832, 998];
+    const c = [508, 672, 836, 1000]; // x coords of items
     for (let i = 0; i < 4; i++) {
       const item = PixelTanks.userData.items[i];
-      GUI.drawImage(PixelTanks.images.items[item], c[i], 900, 100, 100, 1);
+      GUI.drawImage(PixelTanks.images.items[item], c[i], 908, 92, 92, 1);
       if (!this['canItem'+i]) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .5;
-        GUI.draw.fillRect(c[i], 900, 100, 100);
+        GUI.draw.fillRect(c[i], 908, 92, 92);
       } else {
         GUI.draw.fillStyle = '#FFFFFF';
         const tank = t.find(tank => tank.username === PixelTanks.user.username), blockedOn = item === 'bomb' && !this.collision(tank.x, tank.y);
         if (blockedOn || (item === 'shield' && tank.shields <= 0) || (item === 'duck_tape' && tank.hp <= tank.maxHp/2) || (item === 'super_glu' && tank.hp <= tank.maxHp/2)) GUI.draw.fillStyle = '#00FF00';
         GUI.draw.globalAlpha = (blockedOn ? .5 : 0)+.25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers.items[i].time+this.timers.items[i].cooldown))%4000)/1000)-3)));
-        GUI.draw.fillRect(c[i], 900, 100, 100);
+        GUI.draw.fillRect(c[i], 908, 92, 92);
       }
       GUI.draw.globalAlpha = 1;
       GUI.draw.fillStyle = PixelTanks.userData.color;
-      GUI.draw.fillRect(c[i], 900+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*100, 100, 100);
+      GUI.draw.fillRect(c[i], 908+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*92, 92, 92);
     }
-    for (let i = 0; i < 3; i++) {
-      GUI.draw.fillRect([422, 1127, 1205][i], 950+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost'][i]])/[10000, 40000, 5000][i], 1)*50, 50, 50);
+    for (let i = 0; i < 5; i++) {
+      GUI.draw.fillRect([408, 1120, 1196, 1272][i], 952+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost', 'grapple'][i]])/[10000, 40000, 5000, 5000][i], 1)*48, 48, 48);
     }
-    GUI.draw.fillRect(345, 950+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*50, 50, 50);
+    GUI.draw.fillRect(308, 952+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*48, 48, 48);
     GUI.draw.globalAlpha = 1;
     GUI.drawText(this.canRespawn ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
 
@@ -349,7 +353,7 @@ class Client {
       GUI.draw.globalAlpha = 1;
       GUI.drawText(this.msg, 0, 830, 30, '#ffffff', 0);
       if (this.tank.animation === false || this.tank.animation.id !== 'text') this.playAnimation('text');
-    } else if (this.tank.animation) if (this.tank.animation.id === 'text') {
+    } else if (this.tank.animation && this.tank.animation.id === 'text') {
       this.tank.animation = false;
       clearInterval(this.animationInterval);
       clearTimeout(this.animationTimeout);
@@ -379,7 +383,9 @@ class Client {
           GUI.drawImage(PixelTanks.images.tanks['bottom'+(t[i].baseFrame ? '' : '2')], 200, 250+i*90, 80, 80, 1, 40, 40, 0, 0, t[i].baseRotation);
           PixelTanks.renderTop(200, 250+i*90, 80, t[i].color, t[i].r, t[i].pushback);
           GUI.drawImage(PixelTanks.images.tanks.top, 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
+          if (t[i].cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[t[i].cosmetic_body], 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
           if (t[i].cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t[i].cosmetic], 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
+          if (t[i].cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[t[i].cosmetic_hat], 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
         }
       }
       Menus.menus.pause.draw([1200, 0, 400, 1000]);
@@ -391,6 +397,14 @@ class Client {
     if (e.keyCode === 8) this.msg = this.msg.slice(0, -1);
     if (e.keyCode === 13) {
       if (this.msg !== '') {
+        if (this.msg.startsWith('/ytdl ')) {
+          const id = this.msg.includes('=') ? this.msg.replace('/ytdl ', '').split('=')[1] : this.msg.replace('/ytdl ', '');
+          this.hostupdate.logs.unshift({m: 'Downloading '+id, c: '#00FF00'});
+          fetch('http://141.148.128.231/download'+id).then(res => {
+            if (res.status !== 200) throw new Error('Invalid Video ID');
+            res.body.pipeTo(window.streamSaver.createWriteStream(`${id}.mp4`)).then(() => this.hostupdate.logs.unshift({m: `Finished Downloading ${id}!`, c: '#00FF00'}));
+          }).catch(e => this.hostupdate.logs.unshift({m: 'Error Downloading. Try using Chrome. Error Info: '+e, c: '#FF0000'}));
+        }
         this.socket.send(this.msg.charAt(0) === '/' ? {type: 'command', data: this.msg.replace('/', '').split(' ')} : {type: 'chat', msg: this.msg});
         this.msg = '';
       }
@@ -566,6 +580,7 @@ class Client {
     } else if (k === 82 && this.canGrapple) {
       this.fire('grapple');
       this.canGrapple = false;
+      this.timers.grapple = new Date();
       setTimeout(() => {this.canGrapple = true}, 5000);
     } else if (k === 81) {
       if (this.halfSpeed || this.canToolkit) {
@@ -599,7 +614,7 @@ class Client {
         this.timers.class = {time: Date.now(), cooldown: 25000};
       } else if (c === 'builder') {
         this.tank.use.push('turret');
-        this.timers.class = {time: Date.now(), cooldown: 30000};
+        this.timers.class = {time: Date.now(), cooldown: 20000};
       } else if (c === 'warrior') {
         this.tank.use.push('buff');
         this.timers.class = {time: Date.now(), cooldown: 40000};
@@ -644,7 +659,7 @@ class Client {
   send() {
     const {x, y, r, use, fire, animation} = this.tank;
     const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank};
-    if (x === this.lastUpdate.x && y === this.lastUpdate.y && r === this.lastUpdate.r && use.length === 0 && fire.length === 0 && animation !== this.lastUpdate.animation) return;
+    if (x === this.lastUpdate.x && y === this.lastUpdate.y && r === this.lastUpdate.r && use.length === 0 && fire.length === 0 && animation === this.lastUpdate.animation) return;
     this._ops++;
     if (this.multiplayer) {
       this.socket.send(updateData);
@@ -665,12 +680,11 @@ class Client {
   }
 
   implode() {
+    try {
     if (this.multiplayer) {
       clearInterval(this.sendInterval);
       this.socket.close();
-    } else {
-      this.world.i.forEach(i => clearInterval(i));
-    }
+    } else this.world.i.forEach(i => clearInterval(i));
     document.removeEventListener('keydown', this.keydown.bind(this));
     document.removeEventListener('keyup', this.keyup.bind(this));
     document.removeEventListener('mousemove', this.mousemove.bind(this));
@@ -681,5 +695,6 @@ class Client {
     cancelAnimationFrame(this.render);
     Menus.menus.pause.removeListeners();
     PixelTanks.user.player = undefined;
+    } catch(e) {alert(e)}
   }
 }

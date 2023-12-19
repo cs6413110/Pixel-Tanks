@@ -5,6 +5,7 @@ const {MongoClient} = require('mongodb');
 const http = require('http');
 const fs = require('fs');
 const {WebSocketServer} = require('ws');
+const ytdl = require('ytdl-core');
 
 const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn.mongodb.net/?retryWrites=true&w=majority');
 const tokens = new Set(), sockets = new Set();
@@ -38,7 +39,19 @@ let db;
 })();
 
 const server = http.createServer((req, res) => {
-  res.end(fs.readFileSync('./public/js/pixel-tanks.js'));
+  if (req.url.includes('/download')) {
+    if (!ytdl.validateID(req.url.replace('/download', ''))) {
+      res.statusCode = 404;
+      return res.end('Bad ID format');
+    }
+    res.setHeader('Content-Type', 'octet-stream');
+    res.setHeader('Content-Disposition', 'attachment');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', '*');
+    ytdl(`https://youtube.com/watch?v=${req.url.replace('/download', '')}`, {filter: 'videoandaudio', quality: 'highest'}).pipe(res);
+  } else {
+    res.end(fs.readFileSync('./public/js/pixel-tanks.js'));
+  }
 });
 
 const wss = new WebSocketServer({noServer: true});

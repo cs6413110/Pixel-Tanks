@@ -2,7 +2,7 @@ class Tank {
   constructor(data, host) {
     this.raw = {};
     this.render = {b: new Set(), s: new Set(), pt: new Set(), d: new Set(), ai: new Set()};
-    ['rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
+    ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
       Object.defineProperty(this, p, {
         get() {
           return this.raw[p];
@@ -19,11 +19,13 @@ class Tank {
     this.rank = data.rank;
     this.class = data.class;
     this.cosmetic = data.cosmetic;
+    this.cosmetic_hat = data.cosmetic_hat;
+    this.cosmetic_body = data.cosmetic_body;
     this.deathEffect = data.deathEffect;
     this.color = data.color;
     this.fire = this.damage = false;
     this.hp = this.maxHp = this.rank*10+300;
-    this.canBashed = true;
+    this.canBashed = this.canInvis = true;
     this.team = data.username+':'+Math.random();
     this.x = host.spawn.x;
     this.y = host.spawn.y;
@@ -73,6 +75,7 @@ class Tank {
       for (let i = Math.max(0, hx-2); i <= Math.min(29, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(29, hy+2); l++) {
         for (const entity of this.host.cells[i][l]) {
           if (entity instanceof Shot) {
+            if (entity.target) return;
             const xd = entity.x-(this.x+40), yd = entity.y-(this.y+40), td = Math.sqrt(xd**2+yd**2);
             const aspectRatio = 6/td;
             if (td > 150) continue;

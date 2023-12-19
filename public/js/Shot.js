@@ -179,6 +179,7 @@ class Shot {
   }
 
   cellUpdate() {
+    try {
     if (Math.floor(this.oldx/100) !== Math.floor(this.x/100) || Math.floor(this.oldy/100) !== Math.floor(this.y/100) || Math.floor((this.oldx+10)/100) !== Math.floor((this.x+10)/100) || Math.floor((this.oldy+10)/100) !== Math.floor((this.y+10)/100)) { 
       const cells = new Set();
       for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
@@ -191,6 +192,10 @@ class Shot {
         this.host.cells[x][y].delete(this);
       }
       this.cells = cells;
+    }
+    } catch(e) {
+      this.host.logs.push({m: `Bullet Cell Updating error occurred. Destroying bullet + logging debug info. Bullet was a ${this.type} bullet. Its coords were ${this.x}, ${this.y} and its old position was ${this.oldx}, ${this.oldy}. Its delta coords were ${this.dx}, ${this.dy}. `, c: '#FF0000'});
+      this.destroy();
     }
   }
 

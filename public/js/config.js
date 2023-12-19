@@ -33,6 +33,8 @@ const images = {
   },
   cosmetics: {
     'DarkMemeGod': '/cosmetics/meme',
+    'UnionJack': '/cosmetics/UnionJack',
+    'SKOTTISH': '/cosmetics/SKOTTISH',
     'Aaron': '/cosmetics/aaron',
     'Astronaut': '/cosmetics/astronaut',
     'Onfire': '/cosmetics/onfire',
@@ -140,6 +142,14 @@ const images = {
     'Lego': '/cosmetics/lego',
     'Dead': '/cosmetics/dead',
     "PWR-DMG'S HELM": '/cosmetics/pwr-dmg-helm',
+    'Sun Roof': '/cosmetics/sunroof',
+    'Army': '/cosmetics/army',
+    'Peashooter': '/cosmetics/peashooter',
+    'America': '/cosmetics/america',
+    'Stamp': '/cosmetics/stamp',
+    'Triple Gun': '/cosmetics/triplegun',
+    'Hard Hat': '/cosmetics/hardhat',
+    'Elf': '/cosmetics/elf',
   },
   menus: {
     ui: '/menus/ui',

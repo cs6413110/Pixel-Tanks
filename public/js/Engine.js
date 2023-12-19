@@ -99,7 +99,6 @@ class Engine {
         }
       }
     } else if (a === 'turret') {
-      for (const ai of this.ai) if (Engine.getUsername(ai.team) === t.username) setTimeout(() => ai.destroy());
       this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
     } else if (a === 'buff') {
       t.buff = true;
@@ -116,9 +115,9 @@ class Engine {
       this.b.push(new Block(Number(h[0]), Number(h[1]), Infinity, 'airstrike', Engine.parseTeamExtras(t.team), this));
     } else if (a === 'healwave') {
       let allies = [];
-      for (const tank of this.pt) if (Engine.getTeam(tank.team) === Engine.getTeam(t.team) && (tank.x-t.x)**2+(tank.y-t.y)**2 < 40000) allies.push(tank);
-      for (const ai of this.ai) if (Engine.getTeam(ai.team) === Engine.getTeam(t.team) && (ai.x-t.x)**2+(ai.y-t.y)**2 < 40000) allies.push(ai);
-      for (const fren of allies) fren.hp += (fren.maxHp-fren.hp)/Math.max(2, allies.length);
+      for (const tank of this.pt) if (Engine.getTeam(tank.team) === Engine.getTeam(t.team) && (tank.x-t.x)**2+(tank.y-t.y)**2 < 90000 && t.id !== tank.id) allies.push(tank);
+      for (const ai of this.ai) if (Engine.getTeam(ai.team) === Engine.getTeam(t.team) && (ai.x-t.x)**2+(ai.y-t.y)**2 < 90000 && t.id !== ai.id) allies.push(ai);
+      for (const fren of allies) fren.hp += (fren.maxHp-fren.hp)/(2*Math.max(1, allies.length));
     }
   }
 
@@ -131,7 +130,7 @@ class Engine {
     t.immune = data.immune;
     t.animation = data.animation;
     t.emote = emote;
-    t.invis = data.invis;
+    if (t.canInvis) t.invis = data.invis;
     t.baseFrame = data.baseFrame;
     if (!t.grapple) {
       t.x = x;
@@ -159,6 +158,8 @@ class Engine {
     }
     for (const exe of use) this.useAbility(t, exe);
     if (fire.length) {
+      t.canInvis = t.invis = false;
+      setTimeout(() => {t.canInvis = true}, 100);
       t.pushback = -6;
       for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, Engine.parseTeamExtras(t.team), t.rank*(t.buff ? (1.5*t.rank+15)/Math.max(t.rank, 1/2000) : 1), this));
     }

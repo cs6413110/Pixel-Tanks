@@ -3,8 +3,8 @@ const settings = {
   bans: [],
   banips: [],
   full_auth: ['cs641311'],
-  admins: ['bradley', 'Celestial'],
-  vips: ['DarkMemeGod'], 
+  admins: ['Celestial', 'bradley'],
+  vips: ['DarkMemeGod'],
   mutes: [],
   players_per_room: 400,
   ups: 60,
@@ -277,6 +277,7 @@ class DUELS extends Multiplayer {
       this.global = m.username+' Wins Round '+this.round;
       setTimeout(() => {
         this.pt.forEach(tank => {
+          tank.fire = false;
           tank.hp = tank.maxHp;
           tank.shields = 0;
           tank.ded = false;
@@ -343,9 +344,13 @@ class TDM extends Multiplayer {
     if (this.mode === 0) {
       if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
         this.mode = 1; // game start
+        this.s = [];
+        this.ai = [];
         this.readytime = Date.now();
         this.time = 5;
         this.pt.forEach(t => {
+          t.fire = false;
+          t.shields = 0;
           t.team = t.username+':'+(t.color === '#FF0000' ? 'RED' : 'BLUE');
         });
         this.levelReader(tdmLevels[Math.floor(Math.random()*tdmLevels.length)]);
@@ -405,6 +410,7 @@ class TDM extends Multiplayer {
         this.global = winner+' Wins Round '+this.round;
         setTimeout(() => {
           this.pt.forEach(tank => {
+            tank.fire = false;
             tank.hp = tank.maxHp;
             tank.shields = 0;
             tank.ded = false;
@@ -504,7 +510,10 @@ const Commands = {
     gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
   }],
   nuke: [Object, 2, 1, function(data) {
-    for (let x = 0; x < 30; x += 2) for (let y = 0; y < 30; y += 2) servers[this.room].b.push(new Block(x*100, y*100, Infinity, 'airstrike', 'server.admin.commands.nuke:_', servers[this.room]));
+    for (let x = 0; x < 30; x += 2) for (let y = 0; y < 30; y += 2) servers[this.room].b.push(new Block(x*100, y*100, Infinity, 'airstrike', ':', servers[this.room]));
+  }],
+  arson: [Object, 2, 1, function(data) {
+    for (let x = 0; x < 30; x++) for(let y = 0; y < 30, y++) servers[this.room].b.push(new Block(x*100, y*100, Infinity, 'fire', ':', servers[this.room]));
   }],
   newmap: [FFA, 4, 1, function(data) {
     servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
@@ -589,7 +598,7 @@ const Commands = {
   tread: [Object, 1, 3, function(data) {
     for (const t of servers[this.room].pt) if (t.username === data[1]) {
       const value = t[data[2]];
-      if (value !== undefined) servers[this.room].logs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
+      if (value !== undefined) servers[this.room].pt.find(tank => tank.username === this.username).privateLogs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
       return;
     }
   }],
