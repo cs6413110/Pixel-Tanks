@@ -137,7 +137,6 @@ class Multiplayer extends Engine {
     }
   }
 
-
   cellSend() {
     for (const t of this.pt) {
       const fx = Math.floor(t.x/100), fy = Math.floor(t.y/100), sy = Math.max(fy-7, 0), ey = Math.min(fy+7, 30), sx = Math.max(fx-10, 0), ex = Math.min(fx+10, 30);
@@ -213,6 +212,7 @@ class FFA extends Multiplayer {
     for (const ai of this.ai) if (Engine.getUsername(ai.team) === t.username) this.ai.splice(this.ai.indexOf(ai), 1);
     if (t.socket) t.ded = true;
     if (m.socket) m.socket.send({event: 'kill'});
+    if (m.class === 'warrior') this.ai.push(new AI(Math.floor(m.x/100)*100, Math.floor(m.y/100)*100, 3, 1, Engine.getTeam(m.team), this));
     if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
   }
 
@@ -383,6 +383,7 @@ class TDM extends Multiplayer {
     }
     if (m.username) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
     if (m.socket) m.socket.send({event: 'kill'});
+    if (m.class === 'warrior') this.ai.push(new AI(Math.floor(m.x/100)*100, Math.floor(m.y/100)*100, 3, 1, Engine.getTeam(m.team), this));
     for (const ai of this.ai) {
       if (Engine.getUsername(ai.team) === t.username) {
         this.ai.splice(this.ai.indexOf(ai), 1);
