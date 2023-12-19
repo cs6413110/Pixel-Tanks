@@ -92,6 +92,11 @@ class Multiplayer extends Engine {
     this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
     if (!settings.fps_boost) this.i.push(setInterval(() => this.cellSend(), 1000/settings.UPS));
+    this.sps = 0;
+    setInterval(() => {
+      this.logs.push({m: 'sps => '+this.sps, c: '#FFFFFF'});
+      this.sps = 0;
+    }, 1000);
   }
 
   override(t) {
@@ -138,6 +143,7 @@ class Multiplayer extends Engine {
   }
 
   cellSend() {
+    this.sps++;
     for (const t of this.pt) {
       const fx = Math.floor(t.x/100), fy = Math.floor(t.y/100), sy = Math.max(fy-7, 0), ey = Math.min(fy+7, 30), sx = Math.max(fx-10, 0), ex = Math.min(fx+10, 30);
       const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
