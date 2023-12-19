@@ -63,6 +63,7 @@ const deathMessages = [
   `{victim} was obliterated by {killer}`,
   `{victim} fell prey to {killer}`,
   `{victim} was fed a healthy dose of explosives by {killer}`,
+  `{victim} was not smarter than {killer}`,
   `{victim} became another number in {killer}'s kill streak`,
   `{victim} got wrecked by {killer}`,
   `{victim} found out that {killer} was the best in the world`,
