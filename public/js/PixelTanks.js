@@ -442,7 +442,7 @@ class PixelTanks {
                 if (Engine.collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
                   if (e.button === 0) {
                     if (prompt('Do you want this cosmetic to be top layer?')) PixelTanks.userData.cosmetic_hat = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
-                    if (prompt('Do you want this cosmetic to be middle layer?)) PixelTanks.userData.cosmetic = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
+                    if (prompt('Do you want this cosmetic to be middle layer?')) PixelTanks.userData.cosmetic = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
                     if (prompt('Do you want this cosmetic to be base layer?')) PixelTanks.userData.cosmetic_body = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
                   } else {
                     PixelTanks.userData.cosmetics.splice(this.cosmeticMenu*16+i, 1);
