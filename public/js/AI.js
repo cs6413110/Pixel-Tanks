@@ -1,7 +1,7 @@
 class AI {
   constructor(x, y, role, rank, team, host) {
     this.raw = {};
-    ['role', 'rank', 'username', 'cosmetic', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
+    ['role', 'rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
       Object.defineProperty(this, p, {
         get: () => this.raw[p],
         set: v => this.setValue(p, v),
@@ -31,7 +31,12 @@ class AI {
     if (this.role !== 0) this.giveAbilities();
     this.invis = this.class === 'stealth';
     this.color = Engine.getRandomColor();
-    this.cosmetic = host.pt.find(t => t.username === Engine.getUsername(this.team))?.cosmetic;
+    const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
+    if (summoner) {
+      this.cosmetic_hat = summoner.cosmetic_hat;
+      this.cosmetic = summoner.cosmetic;
+      this.cosmetic_body = summoner.cosmetic_body;
+    }
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (role === 0 ? .99 : .79)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (role === 0 ? .99 : .79))));
