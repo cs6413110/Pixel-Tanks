@@ -77,6 +77,10 @@ const deathMessages = [
   `{idot} is here`
 ], rageMessages = [
   `{idot} left the game`,
+  `{idot} had to go do classwork`,
+  `{idot} got assigned work`,
+  `{idot} fell asleep`,
+  `{idot} got tired of bread`,
   `{idot} got gogaurdianed`,
   `{idot} quit`,
   `{idot} disconnected`,
