@@ -1,4 +1,3 @@
-require('appmetrics-dash').attach();
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
 const {multiopen, multimessage, multiclose} = require('./multiplayer.js');
