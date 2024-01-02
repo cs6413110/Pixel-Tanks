@@ -8,7 +8,6 @@ class MegaSocket {
     if (this.options.reconnect) window.addEventListener('online', () => this.connect());
     if (this.options.autoconnect) this.connect();
   }
-
   connect() {
     this.status = 'connecting';
     this.socket = new WebSocket(this.url);
@@ -20,39 +19,18 @@ class MegaSocket {
     }
     this.socket.onmessage = data => {
       data = msgpackr.unpack(new Uint8Array(data.data));
-      if (data.status === 'error') {
-        if (data.message === 'Invalid Token.') {
-          clearInterval(PixelTanks.autosave);
-          if (PixelTanks.user.player) PixelTanks.user.player.implode();
-          PixelTanks.user.token = PixelTanks.user.username = undefined;
-          return Menus.trigger('start');
-        }
-        return alert(data.message);
-      }
+      if (data.status === 'error') return alert(data.message);
       this.callstack.message.forEach(f => f(data));
     }
     this.socket.onclose = e => {
       clearInterval(this.socket.keepAlive);
       this.status = 'disconnected';
-      this.callstack.close.forEach(f => f());
+      for (const f of this.callstack.close) f();
       if (this.options.reconnect) this.connect();
     }
   }
-
-  on(event, operation) {
-    this.callstack[event].push(operation);
-  }
-  
-  no(event) {
-    this.callstack[event] = [];
-  }
-  
-  send(data) {
-    this.socket.send(msgpackr.pack(data));
-  }
-  
-  close() {
-    this.socket.close();
-    this.socket.onclose();
-  }
+  on = (e, o) => this.callstack[e].push(o);
+  no = e => this.callstack[e] = [];
+  send = d => this.socket.send(msgpackr.pack(d));
+  close = () => this.socket.close();
 }
