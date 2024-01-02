@@ -239,27 +239,12 @@ class Engine {
     return true;
   }
   
-  static parseTeamExtras(s) {
-    return s.replace('@leader', '').split('@requestor#')[0];
-  }
-
-  static getUsername(s) {
-    return Engine.parseTeamExtras(s).split(':')[0];
-  }
-
-  static getTeam(s) {
-    return Engine.parseTeamExtras(s).split(':')[1];
-  }
-
-  static collision(x, y, w, h, x2, y2, w2, h2) {
-    return (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
-  }
-
-  static toAngle(x, y) {
-    return (-Math.atan2(x, y)*180/Math.PI+360)%360;
-  }
-
-  static toPoint(angle) {
+  static parseTeamExtras = s => s.replace('@leader', '').split('@requestor#')[0];
+  static getUsername = s => Engine.parseTeamExtras(s).split(':')[0];
+  static getTeam = s => Engine.parseTeamExtras(s).split(':')[1];
+  static collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
+  static toAngle = (x, y) => (-Math.atan2(x, y)*180/Math.PI+360)%360;
+  static toPoint = angle => {
     const theta = (-angle) * Math.PI / 180, y = Math.cos(theta), x = Math.sin(theta);
     return x === 0 ? {x, y: y/Math.abs(y)} : {x: x/Math.abs(x), y: y/Math.abs(x)}
   }
