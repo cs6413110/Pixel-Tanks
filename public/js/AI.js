@@ -21,10 +21,6 @@ class AI {
     this.hp = rank * 10 + 300;
     if (role === 0) this.hp *= .5;
     this.maxHp = this.hp;
-    this.stunned = this.role === 0;
-    setTimeout(() => {
-      this.stunned = false;
-    }, 0);
     this.seeUser = this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
     this.canFire = this.canPowermissle = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canClass = this.canBoost = this.canBashed = true;
     this.items = [];
@@ -53,7 +49,6 @@ class AI {
   }
 
   think() {
-    if (this.stunned) return this.r++;
     this.identify();
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.seeTarget) {
