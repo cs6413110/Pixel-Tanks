@@ -2,7 +2,7 @@ class MegaSocket {
   constructor(url, options={keepAlive: true, autoconnect: true, reconnect: false}) {
     this.url = url;
     this.options = options;
-    this.callstack = {open: [], close: [], message: []};
+    this.callstack = {connect: [], close: [], message: []};
     this.status = 'idle';
     window.addEventListener('offline', () => this.socket.close());
     if (this.options.reconnect) window.addEventListener('online', () => this.connect());
@@ -16,7 +16,7 @@ class MegaSocket {
     this.socket.onopen = () => {
       this.status = 'connected';
       if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => this.socket.send(msgpackr.pack({type: 'ping', op: 'ping'})), 30000);
-      for (const f of this.callstack.open) f();
+      for (const f of this.callstack.connect) f();
     }
     this.socket.onmessage = data => {
       data = msgpackr.unpack(new Uint8Array(data.data));
@@ -40,15 +40,11 @@ class MegaSocket {
   }
 
   on(event, operation) {
-    if (event === 'connect') this.callstack.open.push(operation);
-    if (event === 'message') this.callstack.message.push(operation);
-    if (event === 'close') this.callstack.close.push(operation);
+    this.callstack[event].push(operation);
   }
   
   no(event) {
-    if (event === 'connect') this.callstack.open = [];
-    if (event === 'message') this.callstack.message = [];
-    if (event === 'close') this.callstack.close = [];
+    this.callstack[event] = [];
   }
   
   send(data) {
