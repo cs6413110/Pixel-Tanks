@@ -210,9 +210,15 @@ class Client {
     GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
 
     if (t.shields > 0 && (!t.invis || (t.invis && p))) {
+      const p = t.username === PixelTanks.user.username;
+      let a = 1;
+      if (this.ded && t.invis && !p) return;
+      if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
+      if ((t.invis && p) || t.ded) a = .5;
+      GUI.draw.globalAlpha = a;
       GUI.draw.beginPath();
       GUI.draw.fillStyle = '#7DF9FF';
-      GUI.draw.globalAlpha = (t.shields/100)*.4; // .2 max, .1 min
+      if (a !== 0) GUI.draw.globalAlpha = (t.shields/100)*.4; // .2 max, .1 min
       GUI.draw.arc(t.x+40, t.y+40, 66, 0, 2*Math.PI);
       GUI.draw.fill();
       GUI.draw.globalAlpha = 1;
