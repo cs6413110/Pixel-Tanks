@@ -209,7 +209,7 @@ class Client {
 
     GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
 
-    if (t.shields > 0 && (!t.invis || (t.invis && p))) {
+    if (t.shields > 0) {
       const p = t.username === PixelTanks.user.username;
       let a = 1;
       if (this.ded && t.invis && !p) return;
