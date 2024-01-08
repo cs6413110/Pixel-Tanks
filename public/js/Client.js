@@ -196,7 +196,6 @@ class Client {
       GUI.draw.fillStyle = '#00FF00';
       GUI.draw.fillRect(t.x, t.y+100, 80*t.hp/t.maxHp, 5);
     }
-    if (t.invis && t.username !== PixelTanks.user.username) return;
 
     let username = '['+t.rank+'] '+t.username;
     if (t.team.split(':')[1].includes('@leader')) {
@@ -206,8 +205,6 @@ class Client {
     } else if (new Number(t.team.split(':')[1]) < 1) {} else {
       username += ' ['+t.team.split(':')[1]+']';
     }
-
-    GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
 
     if (t.shields > 0) {
       const p = t.username === PixelTanks.user.username;
@@ -226,6 +223,10 @@ class Client {
       GUI.draw.fillStyle = '#00FFFF';
       GUI.draw.fillRect(t.x, t.y+115, 80*t.shields/100, 5);
     }
+
+    if (t.invis && t.username !== PixelTanks.user.username) return;
+
+    GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
 
     if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
     if (t.reflect) GUI.drawImage(PixelTanks.images.tanks.reflect, t.x, t.y, 80, 80, 1);
