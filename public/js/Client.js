@@ -215,9 +215,9 @@ class Client {
       if (this.ded && t.invis && !p) a = .5;
       if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
       if ((t.invis && p) || t.ded) a = .5;
-      GUI.draw.globalAlpha = a*((t.shields/100)*.4); // .2 max, .1 min
       GUI.draw.beginPath();
       GUI.draw.fillStyle = '#7DF9FF';
+      GUI.draw.globalAlpha = a*((t.shields/100)*.4); // .2 max, .1 min
       GUI.draw.arc(t.x+40, t.y+40, 66, 0, 2*Math.PI);
       GUI.draw.fill();
       GUI.draw.globalAlpha = 1;
