@@ -197,15 +197,6 @@ class Client {
       GUI.draw.fillRect(t.x, t.y+100, 80*t.hp/t.maxHp, 5);
     }
 
-    let username = '['+t.rank+'] '+t.username;
-    if (t.team.split(':')[1].includes('@leader')) {
-      username += ' ['+t.team.split(':')[1].replace('@leader', '')+'] (Leader)'
-    } else if (t.team.split(':')[1].includes('@requestor#')) {
-      username += ' [Requesting...] ('+t.team.split(':')[1].split('@requestor#')[1]+')';
-    } else if (new Number(t.team.split(':')[1]) < 1) {} else {
-      username += ' ['+t.team.split(':')[1]+']';
-    }
-
     if (t.shields > 0) {
       const p = t.username === PixelTanks.user.username;
       let a = 1;
@@ -225,6 +216,15 @@ class Client {
     }
 
     if (t.invis && t.username !== PixelTanks.user.username) return;
+
+    let username = '['+t.rank+'] '+t.username;
+    if (t.team.split(':')[1].includes('@leader')) {
+      username += ' ['+t.team.split(':')[1].replace('@leader', '')+'] (Leader)'
+    } else if (t.team.split(':')[1].includes('@requestor#')) {
+      username += ' [Requesting...] ('+t.team.split(':')[1].split('@requestor#')[1]+')';
+    } else if (new Number(t.team.split(':')[1]) < 1) {} else {
+      username += ' ['+t.team.split(':')[1]+']';
+    }
 
     GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
 
