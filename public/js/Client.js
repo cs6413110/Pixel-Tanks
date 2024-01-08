@@ -218,7 +218,7 @@ class Client {
       GUI.draw.globalAlpha = a;
       GUI.draw.beginPath();
       GUI.draw.fillStyle = '#7DF9FF';
-      if (a !== 0) GUI.draw.globalAlpha = (t.shields/100)*.4; // .2 max, .1 min
+      GUI.draw.globalAlpha *= (t.shields/100)*.4; // .2 max, .1 min
       GUI.draw.arc(t.x+40, t.y+40, 66, 0, 2*Math.PI);
       GUI.draw.fill();
       GUI.draw.globalAlpha = 1;
