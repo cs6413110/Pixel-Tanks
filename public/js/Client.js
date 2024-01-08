@@ -200,9 +200,10 @@ class Client {
     if (t.shields > 0) {
       const p = t.username === PixelTanks.user.username;
       let a = 1;
-      if (this.ded && t.invis && !p) a = .5;
+      if (this.ded && t.invis && !p) return;
       if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
       if ((t.invis && p) || t.ded) a = .5;
+      if (a === 0) return;
       GUI.draw.beginPath();
       GUI.draw.fillStyle = '#7DF9FF';
       GUI.draw.globalAlpha = a*((t.shields/100)*.4); // .2 max, .1 min
