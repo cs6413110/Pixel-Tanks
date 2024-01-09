@@ -2,11 +2,11 @@ class Engine {
   constructor(levels) {
     if (!A.templates.Block) {
       A.createTemplate('Block', Block);
-      A.createTemplate('Shot', Shot);
-      A.createTemplate('Damage', Damage);
-      A.createTemplate('AI', AI);
-      A.createTemplate('arr', Array, a => (a.length = 0), 100); // batch size of 100, will inc upon higher demand. Startup value may vary depending on use case.
-      A.createTemplate('set', Set, s => s.clear(), 100);
+      //A.createTemplate('Shot', Shot);
+      //A.createTemplate('Damage', Damage);
+      //A.createTemplate('AI', AI);
+      //A.createTemplate('arr', Array, a => (a.length = 0), 100); // batch size of 100, will inc upon higher demand. Startup value may vary depending on use case.
+      //A.createTemplate('set', Set, s => s.clear(), 100);
       // add templates for sets and obj too :)
       //A.createTemplate('Tank', Tank); ...players aren't created or destroyed often enough for this to really matter
     }
