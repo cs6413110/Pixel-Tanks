@@ -49,7 +49,7 @@ class AI {
   }
 
   think() {
-    this.identify();
+    //this.identify();
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.seeTarget) {
       this.tr = Engine.toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
