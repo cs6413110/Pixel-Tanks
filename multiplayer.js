@@ -14,7 +14,7 @@ const fs = require('fs');
 console.log('Compiling Game Engine...');
 fs.writeFileSync('engine.js', [`const PF = require('pathfinding');`, fs.readFileSync('./public/js/Engine.js'), fs.readFileSync('./public/js/Tank.js'), fs.readFileSync('./public/js/Block.js'), fs.readFileSync('./public/js/Shot.js'), fs.readFileSync('./public/js/AI.js'), fs.readFileSync('./public/js/Damage.js'), fs.readFileSync('./public/js/A.js'), 'module.exports = {Engine, Tank, Block, Shot, AI, Damage, A}'].join(''));
 console.log('Done!');
-const {Engine, Tank, Block, Shot, AI, Damage} = require('./engine.js');
+const {Engine, Tank, Block, Shot, AI, Damage, A} = require('./engine.js');
 const {gpt} = require('gpti');
 
 let sockets = new Set(), servers = {}, ffaLevels = [
@@ -691,6 +691,7 @@ setInterval(() => {
 }, 10000);
 
 const multiopen = (socket) => {
+  console.log('opened');
   sockets.add(socket);
 }
 const multimessage = (socket, data) => {
