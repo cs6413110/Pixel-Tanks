@@ -1,4 +1,3 @@
-window.onerror = alert;
 class Client {
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
@@ -174,7 +173,6 @@ class Client {
   }
 
   drawTank(t) {
-    try {
     const p = t.username === PixelTanks.user.username;
     let a = 1;
     if (this.ded && t.invis && !p) return;
@@ -254,7 +252,6 @@ class Client {
     }
 
     if (t.animation) GUI.drawImage(PixelTanks.images.animations[t.animation.id], t.x, t.y, 80, 90, 1, 0, 0, 0, 0, undefined, t.animation.frame*40, 0, 40, 45);
-    } catch(e) {alert(e)}
   }
 
   frame() {
@@ -341,26 +338,17 @@ class Client {
       GUI.draw.fillRect(c[i], 908+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*92, 92, 92);
     }
     for (let i = 0; i < 5; i++) {
-      GUI.draw.fillStyle = '#000000';
-      GUI.draw.globalAlpha = .5;
-      GUI.draw.fillRect([408, 1120, 1196, 1272][i], 952, 48, 48);
-      if (Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost', 'grapple'][i]] > 0) GUI.draw.fillRect([408, 1120, 1196, 1272][i], 952, 48, 48);
-      if (Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown > 0) GUI.draw.fillRect(308, 952, 48, 48);                                                                                                               
-      GUI.draw.globalAlpha = 1;
-      GUI.draw.fillStyle = PixelTanks.userData.color;                                                                                                               
       GUI.draw.fillRect([408, 1120, 1196, 1272][i], 952+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost', 'grapple'][i]])/[10000, 40000, 5000, 5000][i], 1)*48, 48, 48);
     }
-    
     GUI.draw.fillRect(308, 952+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*48, 48, 48);
     GUI.draw.globalAlpha = 1;
     GUI.drawText(this.canRespawn ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
 
     for (let i = 0; i < Math.min(this.hostupdate.logs.length, this.showChat ? 1000 : 3); i++) {
       const log = this.hostupdate.logs[i];
-      t = i === 0 ? .5 : 1; // sir this is a very bad temp way to fix :/
       GUI.draw.fillStyle = '#000000';
       GUI.draw.globalAlpha = .2;
-      GUI.draw.fillRect(0, this.chatScroll+800-i*30, (GUI.draw.measureText(log.m).width)*t, 30);
+      GUI.draw.fillRect(0, this.chatScroll+800-i*30, GUI.draw.measureText(log.m).width, 30);
       GUI.draw.globalAlpha = 1;
       GUI.drawText(log.m, 0, this.chatScroll+800-i*30, 30, log.c, 0);
     }
