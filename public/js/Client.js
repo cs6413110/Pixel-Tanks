@@ -346,9 +346,13 @@ class Client {
 
     for (let i = 0; i < Math.min(this.hostupdate.logs.length, this.showChat ? 1000 : 3); i++) {
       const log = this.hostupdate.logs[i];
+      if (i === 0) {
+        t = .5
+      else {
+        t = 1
       GUI.draw.fillStyle = '#000000';
       GUI.draw.globalAlpha = .2;
-      GUI.draw.fillRect(0, this.chatScroll+800-i*30, GUI.draw.measureText(log.m).width, 30);
+      GUI.draw.fillRect(0, this.chatScroll+800-i*30, (GUI.draw.measureText(log.m).width)*t, 30);
       GUI.draw.globalAlpha = 1;
       GUI.drawText(log.m, 0, this.chatScroll+800-i*30, 30, log.c, 0);
     }
