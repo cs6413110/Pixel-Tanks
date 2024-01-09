@@ -343,7 +343,7 @@ class Client {
     GUI.draw.fillRect(308, 952+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*48, 48, 48);
     GUI.draw.globalAlpha = 1;
     GUI.drawText(this.canRespawn ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
-
+    GUI.drawText('', 0, 0, 30, '#ffffff', 0);
     for (let i = 0; i < Math.min(this.hostupdate.logs.length, this.showChat ? 1000 : 3); i++) {
       const log = this.hostupdate.logs[i];
       GUI.draw.fillStyle = '#000000';
