@@ -1,6 +1,6 @@
 class Engine {
   constructor(levels) {
-    /*if (!A.templates.Block) {
+    if (!A.templates.Block) {
       A.createTemplate('Block', Block);
       //A.createTemplate('Shot', Shot);
       //A.createTemplate('Damage', Damage);
@@ -9,7 +9,7 @@ class Engine {
       //A.createTemplate('set', Set, s => s.clear(), 100);
       // add templates for sets and obj too :)
       //A.createTemplate('Tank', Tank); ...players aren't created or destroyed often enough for this to really matter
-    }*/
+    }
     this.spawn = {x: 0, y: 0};
     this.spawns = [{x: 0, y: 0}, {x: 0, y: 0}];
     for (const property of ['ai', 's', 'pt', 'd', 'i', 'logs']) this[property] = [];
@@ -160,7 +160,7 @@ class Engine {
         const [cx, cy] = cell.split('x');
         let hasFire = false;
         for (const entity of this.cells[cx][cy]) if (entity instanceof Block && entity.type === 'fire' && Engine.getUsername(entity.team) === t.username && entity.x/100 === cx && entity.y/100 === cy) hasFire = true;
-        //if (!hasFire) this.b.push(A.template('Block').init(cx*100, cy*100, 100, 'fire', Engine.parseTeamExtras(t.team), this));
+        if (!hasFire) this.b.push(A.template('Block').init(cx*100, cy*100, 100, 'fire', Engine.parseTeamExtras(t.team), this));
       }
     }
     for (const exe of use) this.useAbility(t, exe);
@@ -201,7 +201,7 @@ class Engine {
         } else if (e.split('')[0] === 'A' && e.split('').length === 2) {
           this.ai.push(new AI(q*100+10, l*100+10, Number(e.split('')[1]), 0/*rank*/, 'squad', this));
         } else if (key[e]) {
-          //this.b.push(A.template('Block').init(q*100, l*100, key[e][1], key[e][0], ':', this));
+          this.b.push(A.template('Block').init(q*100, l*100, key[e][1], key[e][0], ':', this));
         }
       }
     }
