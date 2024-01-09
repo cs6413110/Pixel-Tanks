@@ -1,16 +1,21 @@
 class Engine {
   constructor(levels) {
+    if (!A.templates.Block) {
+      A.createTemplate('Block', Block);
+      A.createTemplate('Shot', Shot);
+      A.createTemplate('Damage', Damage);
+      A.createTemplate('AI', AI);
+      A.createTemplate('arr', Array, a => (a.length = 0), 100); // batch size of 100, will inc upon higher demand. Startup value may vary depending on use case.
+      A.createTemplate('set', Set, s => s.clear(), 100);
+      // add templates for sets and obj too :)
+      //A.createTemplate('Tank', Tank); ...players aren't created or destroyed often enough for this to really matter
+    }
     this.spawn = {x: 0, y: 0};
     this.spawns = [{x: 0, y: 0}, {x: 0, y: 0}];
-    this.ai = [];
-    this.s = [];
-    this.pt = [];
-    this.d = [];
-    this.i = [];
-    this.logs = [];
+    for (const property of ['ai', 's', 'pt', 'd', 'i', 'logs']) this[property] = [];
     this.map = new PF.Grid(30, 30);
-    this.levelReader(levels[Math.floor(Math.random() * levels.length)]);
-    this.i.push(setInterval(() => this.tick(), 1000 / 60));
+    this.levelReader(levels[Math.floor(Math.random()*levels.length)]);
+    this.i.push(setInterval(() => this.tick(), 1000/60));
   }
 
   add(data) {
@@ -49,7 +54,9 @@ class Engine {
       const type = a.replace('block#', '');
       for (const coord of coords) {
         if (t.r >= coord.r[0] && t.r < coord.r[1]) {
-          this.b.push(new Block(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 50}[type], type, t.team, this));
+          const block = A.template('Block');
+          block.init(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 50}[type], type, t.team, this);
+          this.b.push(block);
           break;
         }
       }
@@ -112,7 +119,7 @@ class Engine {
       }, 500);
     } else if (a.includes('airstrike')) {
       const h = a.replace('airstrike', '').split('x');
-      this.b.push(new Block(Number(h[0]), Number(h[1]), Infinity, 'airstrike', Engine.parseTeamExtras(t.team), this));
+      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'airstrike', Engine.parseTeamExtras(t.team), this));
     } else if (a === 'healwave') {
       let allies = [];
       for (const tank of this.pt) if (Engine.getTeam(tank.team) === Engine.getTeam(t.team) && (tank.x-t.x)**2+(tank.y-t.y)**2 < 90000 && t.id !== tank.id) allies.push(tank);
@@ -153,7 +160,7 @@ class Engine {
         const [cx, cy] = cell.split('x');
         let hasFire = false;
         for (const entity of this.cells[cx][cy]) if (entity instanceof Block && entity.type === 'fire' && Engine.getUsername(entity.team) === t.username && entity.x/100 === cx && entity.y/100 === cy) hasFire = true;
-        if (!hasFire) this.b.push(new Block(cx*100, cy*100, 100, 'fire', Engine.parseTeamExtras(t.team), this));
+        if (!hasFire) this.b.push(A.template('Block').init(cx*100, cy*100, 100, 'fire', Engine.parseTeamExtras(t.team), this));
       }
     }
     for (const exe of use) this.useAbility(t, exe);
@@ -194,7 +201,7 @@ class Engine {
         } else if (e.split('')[0] === 'A' && e.split('').length === 2) {
           this.ai.push(new AI(q*100+10, l*100+10, Number(e.split('')[1]), 0/*rank*/, 'squad', this));
         } else if (key[e]) {
-          this.b.push(new Block(q * 100, l * 100, key[e][1], key[e][0], ':', this));
+          this.b.push(A.template('Block').init(q*100, l*100, key[e][1], key[e][0], ':', this));
         }
       }
     }
