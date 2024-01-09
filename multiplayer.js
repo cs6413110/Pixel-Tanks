@@ -639,8 +639,8 @@ A.createTemplate('render', class {b = new Set(); pt = new Set(); ai = new Set();
 });
 A.createTemplate('message', class {b = []; pt = []; ai = []; s = []; d = []; event = 'hostupdate'; delete = {b: [], pt: [], ai: [], s: [], d: []}}, m => {
   for (const property of ['b', 'pt', 'ai', 's', 'd']) {
-    r[property].length = 0;
-    r.delete[property].length = 0;
+    m[property].length = 0;
+    m.delete[property].length = 0;
   }
 });
 A.createTemplate('arr', Array, a => (a.length = 0));
