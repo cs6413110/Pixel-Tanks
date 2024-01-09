@@ -145,9 +145,12 @@ class Multiplayer extends Engine {
   cellSend() {
     for (const t of this.pt) {
       const fx = Math.floor(t.x/100), fy = Math.floor(t.y/100), sy = Math.max(fy-7, 0), ey = Math.min(fy+7, 30), sx = Math.max(fx-10, 0), ex = Math.min(fx+10, 30);
-      const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
-      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs.slice(t?.render.logs || 0).concat(t.privateLogs), global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};      
-      t.privateLogs = [];
+      const render = A.template('render'), message = A.template('message');
+      render.logs = this.logs.length;
+      message.logs = this.logs.slice(t?.render.logs || 0).concat(t.privateLogs);
+      message.global = this.global;
+      message.tickspeed = tickspeed;
+      t.privateLogs.length = 0;
       let send = message.logs.length > 0;
       for (let cy = sy; cy < ey; cy++) {
         for (let cx = sx; cx < ex; cx++) {
@@ -169,9 +172,11 @@ class Multiplayer extends Engine {
           }
         }
       }
+      if (t.render) t.render.release();
       t.render = render;
       t.lastUpdate = Date.now();
       if (send) t.socket.send(message);
+      message.release();
     }
   }
 
@@ -517,10 +522,10 @@ const Commands = {
     gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
   }],
   nuke: [Object, 2, 1, function(data) {
-    for (let x = 0; x < 30; x += 2) for (let y = 0; y < 30; y += 2) servers[this.room].b.push(new Block(x*100, y*100, Infinity, 'airstrike', ':', servers[this.room]));
+    for (let x = 0; x < 30; x += 2) for (let y = 0; y < 30; y += 2) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'airstrike', ':', servers[this.room]));
   }],
   arson: [Object, 2, 1, function(data) {
-    for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(new Block(x*100, y*100, Infinity, 'fire', ':', servers[this.room]));
+    for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'fire', ':', servers[this.room]));
   }],
   newmap: [FFA, 4, 1, function(data) {
     servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
@@ -629,8 +634,17 @@ const Commands = {
   }],
 };
 
+A.createTemplate('render', class {b = new Set(); pt = new Set(); ai = new Set(); s = new Set(); d = new Set()}, r => {
+  for (const property of ['b', 'pt', 'ai', 's', 'd']) r[property].clear();
+});
+A.createTemplate('message', class {b = []; pt = []; ai = []; s = []; d = []; event = 'hostupdate'; delete = {b: [], pt: [], ai: [], s: [], d: []}}, m => {
+  for (const property of ['b', 'pt', 'ai', 's', 'd']) {
+    r[property].length = 0;
+    r.delete[property].length = 0;
+  }
+});
+A.createTemplate('arr', Array, a => (a.length = 0));
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
-
 const Profile = (arr, update) => {
   const functions = [];
   for (let e of arr) {
