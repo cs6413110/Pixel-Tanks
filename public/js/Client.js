@@ -216,7 +216,7 @@ class Client {
       GUI.draw.fillRect(t.x, t.y+115, 80*t.shields/100, 5);
     }
 
-    if (t.invis && t.username !== PixelTanks.user.username) return;
+    if (t.invis && Engine.getTeam(this.team) !== Engine.getTeam(t.team)) return;
 
     let username = '['+t.rank+'] '+t.username;
     if (t.team.split(':')[1].includes('@leader')) {
