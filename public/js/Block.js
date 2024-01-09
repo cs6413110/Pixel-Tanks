@@ -1,5 +1,5 @@
 class Block {
-  constructor(x, y, health, type, team, host) {
+  init(x, y, health, type, team, host) {
     this.x = x;
     this.y = y;
     this.maxHp = this.hp = health;
@@ -45,11 +45,14 @@ class Block {
     if (this.hp === 0) this.destroy();
   }
 
+  reset() {
+    for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'host', 'team', 'raw', 'id', 's' ,'c', 'cells', 'updatedLast']) this[property] = undefined;
+  }
+
   destroy() {
     clearTimeout(this.sd);
     clearTimeout(this.bar);
-    const index = this.host.b.indexOf(this);
-    if (index !== -1) this.host.b.splice(index, 1);
+    this.host.b.splice(this.host.b.indexOf(this), 1);
     for (const cell of this.cells) {
       const [x, y] = cell.split('x');
       this.host.cells[x][y].delete(this);
@@ -57,6 +60,6 @@ class Block {
       for (const e of this.host.cells[x][y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) deletePathfindGrid = false;
       if (deletePathfindGrid) this.host.map.setWalkableAt(x, y, true);
     }
+    this.release();
   }
 }
-if (module) module.exports = Block;
