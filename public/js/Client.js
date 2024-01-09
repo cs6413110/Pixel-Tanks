@@ -355,7 +355,7 @@ class Client {
     for (let i = 0; i < Math.min(this.hostupdate.logs.length, this.showChat ? 1000 : 3); i++) {
       const log = this.hostupdate.logs[i];
       if (i === 0) {
-        t = .5
+        t = .5:
       else {
         t = 1
       GUI.draw.fillStyle = '#000000';
