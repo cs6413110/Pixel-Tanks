@@ -690,10 +690,7 @@ setInterval(() => {
   for (const t of top) console.log(t.name+': Min='+t.min+'Avg='+t.t+' Max='+t.max+' Runs='+t.i);
 }, 10000);
 
-const multiopen = (socket) => {
-  console.log('opened');
-  sockets.add(socket);
-}
+const multiopen = (socket) => sockets.add(socket);
 const multimessage = (socket, data) => {
   if (!socket.username) socket.username = data.username;
   if (data.type === 'update') {
