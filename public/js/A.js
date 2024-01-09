@@ -1,27 +1,15 @@
 class A {
-  static objTemplates = {};
-  static classTemplates = {};
+  static templates = {};
   static createTemplate(n, v, r, p) {
-    const isClass = /^\s*class\s+/.test(v.toString());
-    A[(isClass ? 'class' : 'obj')+'Templates'][n] = isClass ? v : [v, r];
+    A.templates[n] = [v, r];
     A[n] = [];
-    for (let i = 0; i < p; i++) A[(isClass ? 'class' : 'obj')+'Template'](n);
+    for (let i = 0; i < p; i++) A.template(n);
   }
-  static objTemplate(n) {
-    if (!A[n].length) {
-      let e = {...A.objTemplates[n][0]};
-      e.release = () => {
-        A.objTemplates[n][1](e);
-        A[n].push(e);
-      };
-      return e;
-    } else return A[n].shift();
-  }
-  static classTemplate(n) {
+  static template(n) {
     if (!A[n].length) {
       let e = new A.classTemplates[n]();
       e.release = () => {
-        e.reset();
+        if (!A.templates[n][1]) A.templates[n][1](e); else e.reset();
         A[n].push(e);
       };
       return e;
