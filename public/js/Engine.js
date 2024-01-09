@@ -54,9 +54,7 @@ class Engine {
       const type = a.replace('block#', '');
       for (const coord of coords) {
         if (t.r >= coord.r[0] && t.r < coord.r[1]) {
-          //const block = A.template('Block');
-          //block.init(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 50}[type], type, t.team, this);
-          //this.b.push(block);
+          this.b.push(A.template('Block').init(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 50}[type], type, t.team, this));
           break;
         }
       }
