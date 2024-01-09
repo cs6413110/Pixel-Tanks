@@ -39,6 +39,7 @@ class AI {
       host.cells[cx][cy].add(this);
       this.cells.add(cx+'x'+cy);
     }
+    this.lookInterval = setInterval(() => this.identify(), 200);
   }
 
   giveAbilities() {
@@ -49,7 +50,6 @@ class AI {
   }
 
   think() {
-    //this.identify();
     if (this.role !== 0) this.move();
     if (this.obstruction && !this.seeTarget) {
       this.tr = Engine.toAngle(this.obstruction.x-(this.x+40), this.obstruction.y-(this.y+40));
@@ -410,6 +410,7 @@ class AI {
   }
 
   destroy() {
+    clearInterval(this.lookInterval);
     const index = this.host.ai.indexOf(this);
     if (index !== -1) this.host.ai.splice(index, 1);
     for (const cell of this.cells) {
