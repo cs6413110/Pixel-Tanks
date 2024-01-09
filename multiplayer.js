@@ -147,7 +147,7 @@ class Multiplayer extends Engine {
       const fx = Math.floor(t.x/100), fy = Math.floor(t.y/100), sy = Math.max(fy-7, 0), ey = Math.min(fy+7, 30), sx = Math.max(fx-10, 0), ex = Math.min(fx+10, 30);
       const render = A.template('render'), message = A.template('message');
       render.logs = this.logs.length;
-      message.logs = this.logs.slice(t?.render.logs || 0).concat(t.privateLogs);
+      message.logs = this.logs.slice(t.render?.logs || 0).concat(t.privateLogs);
       message.global = this.global;
       message.tickspeed = tickspeed;
       t.privateLogs.length = 0;
