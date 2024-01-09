@@ -49,6 +49,7 @@ const images = {
     'Terminator': '/cosmetics/terminator',
     'Dizzy': '/cosmetics/dizzy',
     'Knife': '/cosmetics/knife',
+    'oneeye': '/cosmetics/oneeye',
     'Scared': '/cosmetics/scared',
     'Laff': '/cosmetics/laff',
     'Hacker Hoodie': '/cosmetics/hacker_hoodie',
