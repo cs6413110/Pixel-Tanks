@@ -10,23 +10,19 @@ class MegaSocket {
   }
   connect() {
     this.status = 'connecting';
-    alert('Outgoing socket to '+this.url);
     this.socket = new WebSocket(this.url);
     this.socket.binaryType = 'arraybuffer';
     this.socket.onopen = () => {
-      alert('Socket connected');
       this.status = 'connected';
       if (this.options.keepAlive) this.socket.keepAlive = setInterval(() => this.socket.send(msgpackr.pack({type: 'ping', op: 'ping'})), 30000);
       for (const f of this.callstack.connect) f();
     }
     this.socket.onmessage = data => {
-      alert('Socket data!');
       data = msgpackr.unpack(new Uint8Array(data.data));
       if (data.status === 'error') return alert(data.message);
       this.callstack.message.forEach(f => f(data));
     }
     this.socket.onclose = e => {
-      alert('Socket closed');
       clearInterval(this.socket.keepAlive);
       this.status = 'disconnected';
       for (const f of this.callstack.close) f();
