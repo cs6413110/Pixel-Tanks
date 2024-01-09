@@ -165,6 +165,7 @@ class AI {
   }
 
   update() {
+    this.think();
     const team = Engine.getTeam(this.team);
     /*if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
