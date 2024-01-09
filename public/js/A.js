@@ -1,6 +1,6 @@
 class A {
   static templates = {};
-  static createTemplate(n, v, r, p) {
+  static createTemplate(n, v, r, p=0) {
     A.templates[n] = [v, r];
     A[n] = [];
     for (let i = 0; i < p; i++) A.template(n);
