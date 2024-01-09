@@ -176,7 +176,7 @@ class Client {
     const p = t.username === PixelTanks.user.username;
     let a = 1;
     if (this.ded && t.invis && !p) return;
-    if ((t.invis && !t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || t.ded) a = .5;
+    if ((t.invis && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || t.ded) a = .5;
     if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
     GUI.draw.globalAlpha = a;
     if (t.role !== 0) PixelTanks.renderBottom(t.x, t.y, 80, t.color, t.baseRotation);
@@ -201,7 +201,7 @@ class Client {
       const p = t.username === PixelTanks.user.username;
       let a = 1;
       if (this.ded && t.invis && !p) return;
-      if ((t.invis && !t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || t.ded) a = .5;
+      if ((t.invis && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || t.ded) a = .5;
       if (t.invis && !p) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
       if (a === 0) return;
       GUI.draw.beginPath();
