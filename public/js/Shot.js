@@ -181,7 +181,7 @@ class Shot {
   cellUpdate() {
     try {
     if (Math.floor(this.oldx/100) !== Math.floor(this.x/100) || Math.floor(this.oldy/100) !== Math.floor(this.y/100) || Math.floor((this.oldx+10)/100) !== Math.floor((this.x+10)/100) || Math.floor((this.oldy+10)/100) !== Math.floor((this.y+10)/100)) { 
-      const cells = A.template('set');
+      const cells = new Set();
       for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
         const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .09))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .09)));
         this.host.cells[cx][cy].add(this);
@@ -191,7 +191,6 @@ class Shot {
         const [x, y] = cell.split('x');
         this.host.cells[x][y].delete(this);
       }
-      if (this.cells) this.cells.release();
       this.cells = cells;
     }
     } catch(e) {
