@@ -130,7 +130,7 @@ class Engine {
     const t = this.pt.find(t => t.username === data.username);
     if (!t) return;
     data = data.data;
-    const { emote, r, baseFrame, use, x, y, fire} = data;
+    const {emote, r, baseFrame, use, x, y, fire} = data;
     t.baseRotation = data.baseRotation;
     t.immune = data.immune;
     t.animation = data.animation;
