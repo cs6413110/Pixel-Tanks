@@ -173,6 +173,7 @@ class Client {
   }
 
   drawTank(t) {
+    try {
     const p = t.username === PixelTanks.user.username;
     let a = 1;
     if (this.ded && t.invis && !p) return;
@@ -252,6 +253,7 @@ class Client {
     }
 
     if (t.animation) GUI.drawImage(PixelTanks.images.animations[t.animation.id], t.x, t.y, 80, 90, 1, 0, 0, 0, 0, undefined, t.animation.frame*40, 0, 40, 45);
+    } catch(e) {alert(e)}
   }
 
   frame() {
