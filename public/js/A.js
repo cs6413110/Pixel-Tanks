@@ -9,7 +9,7 @@ class A {
     if (!A[n].length) {
       let e = new A.templates[n][0]();
       e.release = () => {
-        if (!A.templates[n][1]) A.templates[n][1](e); else e.reset();
+        if (A.templates[n][1]) A.templates[n][1](e); else e.reset();
         A[n].push(e);
       };
       return e;
