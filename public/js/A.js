@@ -1,5 +1,5 @@
 class A {
-  static objTemplates = {'arr': [[], a => {a.length = 0}]};
+  static objTemplates = {};
   static classTemplates = {};
   static createTemplate(n, v, r, p) {
     const isClass = /^\s*class\s+/.test(v.toString());
