@@ -48,8 +48,8 @@ class Shot {
     },
     size: {
       healmissle: 50,
-      powermissle: 50,
-      megamissle: 100,
+      powermissle: 500,
+      megamissle: 1000,
     }
   }
 
