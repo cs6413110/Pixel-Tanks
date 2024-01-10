@@ -61,7 +61,7 @@ class Engine {
       for (const tank of this.pt) {
         const bangTime = (500-Math.sqrt((t.x-tank.x)**2+(t.y-tank.y)**2))*5;
         if (bangTime > 0 && (Engine.getTeam(tank.team) !== Engine.getTeam(t.team) || tank.username === t.username)) {
-          tank.flashbanged = true;
+          tank.flashbanged = false;
           clearTimeout(tank.flashbangTimeout);
           tank.flashbangTimeout = setTimeout(() => {
             tank.flashbanged = false;
