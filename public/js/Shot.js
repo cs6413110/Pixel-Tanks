@@ -27,7 +27,7 @@ class Shot {
     damage: {
       bullet: 2,
       shotgun: 20,
-      grapple: 0,
+      grapple: 10,
       powermissle: 100,
       megamissle: 200,
       healmissle: -100,
@@ -36,7 +36,7 @@ class Shot {
       usb: 0,
     },
     speed: {
-      bullet: 10,
+      bullet: 1,
       shotgun: .8,
       grapple: 2,
       powermissle: 1.5,
