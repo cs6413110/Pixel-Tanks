@@ -549,7 +549,7 @@ class Client {
       cooldown = 25000;
     } else if (id === 'flashbang') {
       this.tank.use.push('flashbang');
-      cooldown = 20000;
+      cooldown = 10;
     } else if (id === 'bomb') {
       this.tank.use.push('bomb');
       this.tank.use.push('break');
