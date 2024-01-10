@@ -693,17 +693,6 @@ const Profile = (arr, update) => {
   }
 }
 
-let lagometer = [];
-Profile([Engine, Block, Shot, Tank, AI, Damage, FFA, TDM, DUELS, Multiplayer], f => {
-  lagometer = f;
-});
-setInterval(() => {
-  lagometer.sort((a, b) => b.t - a.t);
-  const top = lagometer.slice(0, Math.min(15, lagometer.length));
-  console.log('-----PROFILING REPORT-----');
-  for (const t of top) console.log(t.name+': Min='+t.min+'Avg='+t.t+' Max='+t.max+' Runs='+t.i);
-}, 10000);
-
 const multiopen = (socket) => sockets.add(socket);
 const multimessage = (socket, data) => {
   if (!socket.username) socket.username = data.username;
