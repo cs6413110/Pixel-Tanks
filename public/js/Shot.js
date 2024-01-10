@@ -25,7 +25,7 @@ class Shot {
 
   static settings = {
     damage: {
-      bullet: 20,
+      bullet: 200,
       shotgun: 20,
       grapple: 0,
       powermissle: 100,
