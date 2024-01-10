@@ -549,7 +549,7 @@ class Client {
       cooldown = 25000;
     } else if (id === 'flashbang') {
       this.tank.use.push('flashbang');
-      cooldown = 10;
+      cooldown = 10000;
     } else if (id === 'bomb') {
       this.tank.use.push('bomb');
       this.tank.use.push('break');
@@ -621,7 +621,7 @@ class Client {
         this.timers.class = {time: Date.now(), cooldown: 25000};
       } else if (c === 'builder') {
         this.tank.use.push('turret');
-        this.timers.class = {time: Date.now(), cooldown: 20000};
+        this.timers.class = {time: Date.now(), cooldown: 2000};
       } else if (c === 'warrior') {
         this.tank.use.push('buff');
         this.timers.class = {time: Date.now(), cooldown: 40000};
