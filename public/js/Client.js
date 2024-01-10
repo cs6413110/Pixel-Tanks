@@ -477,7 +477,7 @@ class Client {
       this.canPowermissle = false;
       this.timers.powermissle = Date.now();
       setTimeout(() => {this.canPowermissle = true;}, 10000);
-    } else if (type === 0) {
+    } else {
       if (!this.canFire) return;
       this.canFire = false;
       clearTimeout(this.fireTimeout);
