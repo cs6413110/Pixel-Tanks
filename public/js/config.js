@@ -33,9 +33,10 @@ const images = {
   },
   cosmetics: {
     'DarkMemeGod': '/cosmetics/meme',
+    'Venominator': '/cosmetics/Venominator',
     'UnionJack': '/cosmetics/UnionJack',
     'SKOTTISH': '/cosmetics/SKOTTISH',
-    'purple helmet' '/cosmetics/purple_helment',
+    'purple helment' '/cosmetics/purple_helment',
     'Aaron': '/cosmetics/aaron',
     'Astronaut': '/cosmetics/astronaut',
     'Onfire': '/cosmetics/onfire',
