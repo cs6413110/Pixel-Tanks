@@ -30,7 +30,7 @@ class Shot {
       grapple: 10,
       powermissle: 100,
       megamissle: 200,
-      healmissle: -100,
+      healmissle: -300,
       dynamite: 0,
       fire: 0,
       usb: 0,
