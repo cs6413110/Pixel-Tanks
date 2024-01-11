@@ -37,7 +37,7 @@ const images = {
     'Venominator': '/cosmetics/Venominator',
     'UnionJack': '/cosmetics/UnionJack',
     'SKOTTISH': '/cosmetics/SKOTTISH',
-    'purple helment': '/cosmetics/purple_helment',
+    'purple_helment': '/cosmetics/purple_helment',
     'Scoped': '/cosmetics/scoped',
     'Aaron': '/cosmetics/aaron',
     'Astronaut': '/cosmetics/astronaut',
