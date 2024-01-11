@@ -509,7 +509,7 @@ const Commands = {
     if (!requestor) return this.send({status: 'error', message: 'Player not found.'});
     if (leader.team.includes('@leader') && requestor.team.includes('@requestor#') && Engine.getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
       requestor.team = data[1]+':'+Engine.getTeam(leader.team);
-      for (const ai of servers[this.room].ai) if (Engine.getUsername(ai.team) === this.username) ai.team = this.username+':'+Engine.getTeam(requestor.team);
+      for (const ai of servers[this.room].ai) if (Engine.getUsername(ai.team) === requestor.username) ai.team = requestor.username+':'+Engine.getTeam(requestor.team);
       servers[this.room].logs.push({ m: data[1]+' has joined team '+Engine.getTeam(leader.team), c: '#40C4FF' });
     }
   }],
