@@ -162,6 +162,7 @@ class AI {
 
   update() {
     this.think();
+    if (!this.target && this.role === 0) this.r++;
     if (!(this.role === 0 && this.mode === 0)) {
       const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
       this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
@@ -353,7 +354,6 @@ class AI {
     }
     if (bond) this.bond = bond; 
     if (!target) {
-      if (this.role === 0) this.r++;
       if (this.target) {
         this.seeTarget = false;
         if (!this.seeTimeout) this.seeTimeout = setTimeout(() => {
