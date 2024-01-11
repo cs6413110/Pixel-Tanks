@@ -515,13 +515,13 @@ const Commands = {
   }],
   leave: [FFA, 4, 1, function(data) {
     const target = servers[this.room].pt.find(t => t.username === this.username), team = Engine.getTeam(target.team);
+    target.team = this.username+':'+Math.random();
     if (target.team.includes('@leader')) servers[this.room].pt.forEach(t => {
       if (Engine.getTeam(t.team) === team) {
         t.team = t.username+':'+Math.random();
         for (const ai of servers[this.room].ai) if (Engine.getUsername(ai.team) === t.username) ai.team = t.username+':'+Engine.getTeam(t.team);
       }
     });
-    target.team = this.username+':'+Math.random();
   }],
   gpt: [Object, 4, -1, function(data) {
     gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
