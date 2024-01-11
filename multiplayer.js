@@ -515,9 +515,8 @@ const Commands = {
   }],
   leave: [FFA, 4, 1, function(data) {
     const target = servers[this.room].pt.find(t => t.username === this.username), team = Engine.getTeam(target.team);
-    target.team = this.username+':'+Math.random();
-    if (target.team.includes('@leader')) servers[this.room].pt.forEach(t => {
-      if (Engine.getTeam(t.team) === team) {
+    servers[this.room].pt.forEach(t => {
+      if (Engine.getTeam(t.team) === team && (target.team.includes('@leader') || this.username === t.username)) {
         t.team = t.username+':'+Math.random();
         for (const ai of servers[this.room].ai) if (Engine.getUsername(ai.team) === t.username) ai.team = t.username+':'+Engine.getTeam(t.team);
       }
