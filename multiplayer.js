@@ -495,6 +495,7 @@ const Commands = {
     if (servers[this.room].pt.find(t => Engine.getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
     if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
     servers[this.room].pt.find(t => t.username === this.username).team = this.username+':'+data[1]+'@leader';
+    for (const ai of servers[this.room].ai) if (Engine.getUsername(ai.team) === this.username) ai.team = this.username+':'+data[1];
     servers[this.room].logs.push({m: this.username+' created team '+data[1]+'. Use /join '+data[1]+' to join.', c: '#0000FF'});
   }],
   join: [FFA, 4, 2, function(data) {
@@ -508,13 +509,17 @@ const Commands = {
     if (!requestor) return this.send({status: 'error', message: 'Player not found.'});
     if (leader.team.includes('@leader') && requestor.team.includes('@requestor#') && Engine.getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
       requestor.team = data[1]+':'+Engine.getTeam(leader.team);
+      for (const ai of servers[this.room].ai) if (Engine.getUsername(ai.team) === this.username) ai.team = this.username+':'+Engine.getTeam(requestor.team);
       servers[this.room].logs.push({ m: data[1]+' has joined team '+Engine.getTeam(leader.team), c: '#40C4FF' });
     }
   }],
   leave: [FFA, 4, 1, function(data) {
-    const target = servers[this.room].pt.find(t => t.username === this.username);
+    const target = servers[this.room].pt.find(t => t.username === this.username), team = Engine.getTeam(target.team);
     if (target.team.includes('@leader')) servers[this.room].pt.forEach(t => {
-      if (Engine.getTeam(t.team) === Engine.getTeam(target.team)) t.team = t.username+':'+Math.random();
+      if (Engine.getTeam(t.team) === team) {
+        t.team = t.username+':'+Math.random();
+        for (const ai of servers[this.room].ai) if (Engine.getUsername(ai.team) === t.username) ai.team = t.username+':'+Engine.getTeam(t.team);
+      }
     });
     target.team = this.username+':'+Math.random();
   }],
