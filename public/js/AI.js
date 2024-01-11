@@ -60,10 +60,6 @@ class AI {
       if (this.canPowermissle && Math.random() <= 1/600) this.fireCalc(this.target.x, this.target.y, 'powermissle');
       if (this.canFire) this.fireCalc(this.target.x, this.target.y);
     }
-    if (!(this.role === 0 && this.mode === 0)) {
-      const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
-      this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
-    }
     if (this.canClass && this.mode !== 0 && Math.random() < 1/300) {
       let cooldown = 0;
       if (this.class === 'tactical') {
@@ -166,6 +162,10 @@ class AI {
 
   update() {
     this.think();
+    if (!(this.role === 0 && this.mode === 0)) {
+      const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
+      this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
+    }
     const team = Engine.getTeam(this.team);
     /*if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
