@@ -166,8 +166,6 @@ class AI {
 
   update() {
     this.think();
-    const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
-    if (summoner) this.team = summoner.team;
     const team = Engine.getTeam(this.team);
     /*if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
