@@ -76,7 +76,8 @@ const deathMessages = [
   `{idot} materialized`,
   `{idot} is ready to breadspam`,
   `{idot} is here to prove that he is the best in the world`,
-  `{idot} is here`
+  `{idot} is here`,
+  `{idot} is here to annoy others`
 ], rageMessages = [
   `{idot} left the game`,
   `{idot} had to go do classwork`,
