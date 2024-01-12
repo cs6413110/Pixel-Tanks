@@ -108,10 +108,7 @@ class Tank {
                 clearInterval(this.fireInterval);
                 this.fire = false;
               }, 4000);
-            } else if (entity.type === 'spike' && !teamMatch) {
-              this.damageCalc(this.x, this.y, 100, Engine.getUsername(entity.team));
-              entity.destroy();
-            }
+            } else if (entity.type === 'spike' && !teamMatch) this.damageCalc(this.x, this.y, 1, Engine.getUsername(entity.team));
           }
         }
       }
