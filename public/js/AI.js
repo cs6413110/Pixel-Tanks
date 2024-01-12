@@ -57,7 +57,7 @@ class AI {
       if (this.canFire) this.fireCalc(this.obstruction.x, this.obstruction.y);
     } else if (this.mode !== 0) {
       this.tr = Engine.toAngle(this.target.x - this.x, this.target.y - this.y);
-      if (this.canPowermissle && && this.role !== 0 && Math.random() <= 1/600) this.fireCalc(this.target.x, this.target.y, 'powermissle');
+      if (this.canPowermissle && this.role !== 0 && Math.random() <= 1/600) this.fireCalc(this.target.x, this.target.y, 'powermissle');
       if (this.canFire) this.fireCalc(this.target.x, this.target.y);
     }
     if (this.canClass && this.mode !== 0 && Math.random() < 1/300) {
