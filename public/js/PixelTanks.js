@@ -549,7 +549,7 @@ class PixelTanks {
                 GUI.draw.fillStyle = '#FF0000';
                 GUI.draw.fillRect(598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88);
               }
-              if (PixelTanks.userData.cosmetics[i] === PixelTanks.userData.cosmetic) {
+              if (PixelTanks.userData.cosmetics[i] === PixelTanks.userData[Menus.menus.inventory.cosmeticType]) {
                 GUI.draw.strokeStyle = '#FFFF22';
                 GUI.draw.lineWidth = 10;
                 GUI.draw.strokeRect(598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88);
