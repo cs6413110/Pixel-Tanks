@@ -66,7 +66,7 @@ class AI {
         cooldown = 25000;
       } else if (this.class === 'builder') {
         this.host.useAbility(this, 'turret');
-        cooldown = 30000;
+        cooldown = 20000;
       } else if (this.class === 'warrior') {
         this.host.useAbility(this, 'buff');
         cooldown = 40000;
