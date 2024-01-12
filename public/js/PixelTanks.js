@@ -412,7 +412,7 @@ class PixelTanks {
           [448, 360, 88, 88, function() {PixelTanks.switchTab('cosmeticTab', 'cosmetic_hat')}, false],
           [448, 460, 88, 88, function() {PixelTanks.switchTab('cosmeticTab', 'cosmetic')}, false],
           [448, 560, 88, 88, function() {PixelTanks.switchTab('cosmeticTab', 'cosmetic_body')}, false],
-          [532, 220, 88, 88, function() {PixelTanks.switchTab('deathEffectsTab')}, false],
+          [448, 220, 88, 88, function() {PixelTanks.switchTab('deathEffectsTab')}, false],
         ],
         listeners: {
           mousedown: function(e) {
