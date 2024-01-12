@@ -409,7 +409,9 @@ class PixelTanks {
           [488, 816, 88, 88, function() {PixelTanks.switchTab('itemTab', 2)}, false],
           [576, 816, 88, 88, function() {PixelTanks.switchTab('itemTab', 3)}, false],
           [664, 816, 88, 88, function() {PixelTanks.switchTab('itemTab', 4)}, false],
-          [756, 220, 88, 88, function() {PixelTanks.switchTab('cosmeticTab')}, false],
+          [448, 360, 88, 88, function() {PixelTanks.switchTab('cosmeticTab', 'cosmetic_hat')}, false],
+          [448, 460, 88, 88, function() {PixelTanks.switchTab('cosmeticTab', 'cosmetic')}, false],
+          [448, 560, 88, 88, function() {PixelTanks.switchTab('cosmeticTab', 'cosmetic_body')}, false],
           [532, 220, 88, 88, function() {PixelTanks.switchTab('deathEffectsTab')}, false],
         ],
         listeners: {
@@ -443,9 +445,7 @@ class PixelTanks {
               for (let i = 0; i < 16; i++) {
                 if (Engine.collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
                   if (e.button === 0) {
-                    if (confirm('Do you want this cosmetic to be top layer?')) PixelTanks.userData.cosmetic_hat = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
-                    if (confirm('Do you want this cosmetic to be middle layer?')) PixelTanks.userData.cosmetic = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
-                    if (confirm('Do you want this cosmetic to be base layer?')) PixelTanks.userData.cosmetic_body = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
+                    PixelTanks.userData[Menus.menus.inventory.cosmeticType] = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i];
                   } else {
                     PixelTanks.userData.cosmetics.splice(this.cosmeticMenu*16+i, 1);
                   }
@@ -498,9 +498,9 @@ class PixelTanks {
           GUI.draw.fillStyle = this.color;
           GUI.draw.fillRect(1008, 260, 32, 32);
           GUI.drawText(this.color, 1052, 260, 30, '#000000', 0);
-          GUI.drawText(PixelTanks.user.username, 300, 420, 80, '#000000', .5);
-          GUI.drawText('Coins: '+coins, 300, 500, 50, '#FFE900', .5);
-          GUI.drawText('Rank: '+rank, 300, 550, 50, '#FF2400', .5);
+          GUI.drawText(PixelTanks.user.username, 280, 420, 80, '#000000', .5);
+          GUI.drawText('Coins: '+coins, 280, 500, 50, '#FFE900', .5);
+          GUI.drawText('Rank: '+rank, 280, 550, 50, '#FF2400', .5);
           GUI.drawText('Level Up Progress', 1400, 400, 50, '#000000', .5);
           GUI.drawText((rank < 20 ? coins+'/'+coinsUP : 'MAXED')+' Coins', 1400, 500, 50, rank < 20 ? (coins < coinsUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
           GUI.drawText((rank < 20 ? xp+'/'+xpUP : 'MAXED')+' XP', 1400, 550, 50, rank < 20 ? (xp < xpUP ? '#FF2400' : '#90EE90') : '#63666A', .5);
@@ -518,14 +518,13 @@ class PixelTanks {
           if (PixelTanks.userData.cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
           if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
           if (PixelTanks.userData.cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
-          
           const key = {tactical: [7, 7], fire: [7, 61], medic: [7, 115], stealth: [61, 7], builder: [61, 61], warrior: [61, 115]};
           if (PixelTanks.userData.class) GUI.drawImage(PixelTanks.images.menus.classTab, 1112, 816, 88, 88, 1, 0, 0, 0, 0, undefined, key[PixelTanks.userData.class][0], key[PixelTanks.userData.class][1], 44, 44);
-          if (PixelTanks.userData.cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 760, 224, 80, 80, 1);
-          if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 760, 224, 80, 80, 1);
-          if (PixelTanks.userData.cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 760, 224, 80, 80, 1);
+          if (PixelTanks.userData.cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 448, 360, 88, 88, 1);
+          if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 448, 460, 88, 88, 1);
+          if (PixelTanks.userData.cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 448, 560, 88, 88, 1);
           const deathEffectData = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect+'_'];
-          if (PixelTanks.userData.deathEffect) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 536, 224, 80, 80, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
+          if (PixelTanks.userData.deathEffect) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 448, 220, 88, 88, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
           Menus.menus.inventory.buttonEffect = true;
           if (this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.deathEffectsTab) {
             Menus.menus.inventory.buttonEffect = false;
@@ -665,7 +664,8 @@ class PixelTanks {
 
   static switchTab(id, n) {
     if (!Menus.menus.inventory.healthTab && !Menus.menus.inventory.classTab && !Menus.menus.inventory.itemTab && !Menus.menus.inventory.cosmeticTab) Menus.menus.inventory[id] = true;
-    if (n) Menus.menus.inventory.currentItem = n;
+    if (n && id === 'itemTab') Menus.menus.inventory.currentItem = n;
+    if (n && id === 'cosmeticTab') Menus.menus.inventory.cosmeticType = n;
     Menus.redraw();
   } // OPTIMIZE
   
