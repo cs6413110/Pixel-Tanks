@@ -610,7 +610,7 @@ class Client {
         this.canRespawn = false;
         return this.tank.use.push('respawn');
       }
-      if (!this.canClass || this.class === 'stealth') return;
+      if (!this.canClass || this.class !== 'stealth') return;
       this.canClass = false;
       const c = PixelTanks.userData.class;
       if (c === 'stealth') {
@@ -624,7 +624,7 @@ class Client {
               this.canInvis = true;
             }, 30000);  
           }, 30000);
-        } else if (this.tank.invis) {
+        } else if =(this.tank.invis) {
           setTimeout(() => {
             this.canInvis = true;
           }, 30000-(Date.now()-this.timers.class.time));
