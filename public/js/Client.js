@@ -614,16 +614,17 @@ class Client {
       this.canClass = false;
       const c = PixelTanks.userData.class;
       if (c === 'stealth') {
+        alert('canInvis '+this.canInvis);
         if (this.canInvis)  {
           this.tank.invis = true;
           this.canInvis = false;
           this.timers.class = {time: Date.now(), cooldown: 30000};
           this.invis = setTimeout(() => {
             this.tank.invis = false;
-            this.timers.class = {time: Date.now(), cooldown: 30000};
+            this.timers.class = {time: Date.now(), cooldown: 15000};
             this.invis = setTimeout(() => {
               this.canInvis = true;
-            }, 30000);  
+            }, 15000);
           }, 30000);
         } else if (this.tank.invis) {
           this.tank.invis = false;
