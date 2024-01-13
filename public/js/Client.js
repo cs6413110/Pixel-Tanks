@@ -630,8 +630,8 @@ class Client {
           clearTimeout(this.invis);
           setTimeout(() => {
             this.canInvis = true;
-          }, 1.5*(Date.now()-this.timers.class.time));
-          this.timers.class = {time: Date.now(), cooldown: 1.5*(Date.now()-this.timers.class.time)};
+          }, .5*(Date.now()-this.timers.class.time));
+          this.timers.class = {time: Date.now(), cooldown: .5*(Date.now()-this.timers.class.time)};
         }
       } else if (c === 'tactical') {
         this.fire('megamissle');
