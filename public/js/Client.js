@@ -1,7 +1,7 @@
 class Client {
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
-    this.tank = {use: [], fire: [], r: 0, x: 0, y: 0, invis: PixelTanks.userData.class === 'stealth'};
+    this.tank = {use: [], fire: [], r: 0, x: 0, y: 0, invis: false};
     this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], logs: [], tickspeed: -1};
     this.paused = this.showChat = this.canRespawn = false;
     this.multiplayer = multiplayer;
