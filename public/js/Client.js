@@ -132,7 +132,7 @@ class Client {
     this.timers = {boost: time, powermissle: time, grapple: time, toolkit: time, class: {time: time, cooldown: -1}, items: [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}]};
     this.fireType = 1;
     this.halfSpeed = false;
-    this.canClass = this.canFire = this.canBoost = this.canToolkit = this.canPowermissle = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canGrapple = true;
+    this.canClass = this.canFire = this.canBoost = this.canToolkit = this.canPowermissle = this.canInvis = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canGrapple = true;
     this.kills = 0;
   }
 
@@ -610,12 +610,25 @@ class Client {
         this.canRespawn = false;
         return this.tank.use.push('respawn');
       }
-      if (!this.canClass) return;
+      if (!this.canClass || this.class === 'stealth') return;
       this.canClass = false;
       const c = PixelTanks.userData.class;
       if (c === 'stealth') {
-        this.tank.invis = !this.tank.invis;
-        this.timers.class = {time: Date.now(), cooldown: 50};
+        if (this.canInvis)  {
+          this.canInvis = false;
+          this.timers.class = {time: Date.now(), cooldown: 30000};
+          this.invis = setTimeout(() => {
+            this.tank.invis = false;
+            this.timers.class = {time: Date.now(), cooldown: 30000};
+            this.invis = setTimeout(() => {
+              this.canInvis = true;
+            }, 30000);  
+          }, 30000);
+        } else if (this.tank.invis) {
+          setTimeout(() => {
+            this.canInvis = true;
+          }, 30000-(Date.now()-this.timers.class.time));
+        }
       } else if (c === 'tactical') {
         this.fire('megamissle');
         this.timers.class = {time: Date.now(), cooldown: 25000};
