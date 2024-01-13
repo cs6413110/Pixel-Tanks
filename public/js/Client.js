@@ -610,6 +610,7 @@ class Client {
         this.canRespawn = false;
         return this.tank.use.push('respawn');
       }
+      alert(this.class);
       if (!this.canClass && this.class !== 'stealth') return;
       this.canClass = false;
       const c = PixelTanks.userData.class;
