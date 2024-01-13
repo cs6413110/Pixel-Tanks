@@ -624,7 +624,7 @@ class Client {
               this.canInvis = true;
             }, 30000);  
           }, 30000);
-        } else if =(this.tank.invis) {
+        } else if (this.tank.invis) {
           setTimeout(() => {
             this.canInvis = true;
           }, 30000-(Date.now()-this.timers.class.time));
