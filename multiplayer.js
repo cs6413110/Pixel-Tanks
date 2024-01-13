@@ -527,9 +527,7 @@ const Commands = {
   }],
   t: [Object, 4, -1, function(data) {
     const team = Engine.getTeam(servers[this.room].pt.find(t => t.username === this.username).team), msg = {m: '[TEAM]['+this.username+'] '+data.slice(1).join(' '), c: '#FFFFFF'};
-    for (const t of servers[this.room].pt) {
-      if (t.username !== this.username && Engine.getTeam(t.team) === team) t.privateLogs.push(msg); 
-    }
+    for (const t of servers[this.room].pt) if (Engine.getTeam(t.team) === team) t.privateLogs.push(msg);
   }],
   gpt: [Object, 4, -1, function(data) {
     gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
