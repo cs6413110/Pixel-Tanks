@@ -615,6 +615,7 @@ class Client {
       const c = PixelTanks.userData.class;
       if (c === 'stealth') {
         if (this.canInvis)  {
+          this.tank.invis = true;
           this.canInvis = false;
           this.timers.class = {time: Date.now(), cooldown: 30000};
           this.invis = setTimeout(() => {
