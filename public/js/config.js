@@ -33,6 +33,7 @@ const images = {
   },
   cosmetics: {
     'DarkMemeGod': '/cosmetics/meme',
+    'LostKing': '/cosmetics/Jonas',
     'hacker_hoodie': '/cosmetics/hacker_hoodie',
     'totem': '/cosmetics/totem',
     'Venominator': '/cosmetics/Venominator',
