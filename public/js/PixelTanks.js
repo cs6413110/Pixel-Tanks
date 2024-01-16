@@ -492,6 +492,21 @@ class PixelTanks {
             this.target = {x: 0, y: 0};
             this.cosmeticMenu = 0;
             this.deathEffectsMenu = 0;
+            if (!PixelTanks.userData.cosmetics[0].includes('#')) {
+              if (prompt('Ignore this. This is a beta testing thing. Im working on cosmetic stacking. Just click ok and move on.') === 'stack') {
+                let cosmetics = {};
+                for (const cosmetic of PixelTanks.userData.cosmetics) {
+                  if (cosmetics[cosmetic] === undefined) {
+                    cosmetics[cosmetic] = 1;
+                  } else cosmetics[cosmetic]++;
+                }
+                alert(JSON.stringify(cosmetics));
+                let cosmeticData = [];
+                for (const cosmetic of cosmetics) cosmeticData.push(cosmetic+'#'+cosmetics[cosmetic]);
+                alert(JSON.stringify(cosmeticData));
+                if (confirm('Override account cosmetics?')) PixelTanks.userData.cosmetics = cosmeticData;
+              }
+            }
           }
           const coins = PixelTanks.userData.stats[0], xp = PixelTanks.userData.stats[3], rank = PixelTanks.userData.stats[4];
           const coinsUP = (rank+1)*1000, xpUP = (rank+1)*100;
