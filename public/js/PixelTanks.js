@@ -502,7 +502,7 @@ class PixelTanks {
                 }
                 alert(JSON.stringify(cosmetics));
                 let cosmeticData = [];
-                for (const cosmetic of cosmetics) cosmeticData.push(cosmetic+'#'+cosmetics[cosmetic]);
+                for (const cosmetic of Object.keys(cosmetics)) cosmeticData.push(cosmetic+'#'+cosmetics[cosmetic]);
                 alert(JSON.stringify(cosmeticData));
                 if (confirm('Override account cosmetics?')) PixelTanks.userData.cosmetics = cosmeticData;
               }
