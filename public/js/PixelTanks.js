@@ -462,7 +462,7 @@ class PixelTanks {
                     PixelTanks.userData.deathEffect = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i].split('#')[0];
                   } else {
                     const [deathEffect, amount] = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i].split('#');
-                    if (amount === undefined || NUmber(amount) <= 1) PixelTanks.userData.deathEffects.splice(this.deathEffectsMenu*16+i, 1);
+                    if (amount === undefined || Number(amount) <= 1) PixelTanks.userData.deathEffects.splice(this.deathEffectsMenu*16+i, 1);
                     PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i] = deathEffect+'#'+(Number(amount)-1);
                   }
                   return;
