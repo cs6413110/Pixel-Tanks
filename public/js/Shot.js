@@ -30,7 +30,7 @@ class Shot {
       grapple: 10,
       powermissle: 100,
       megamissle: 200,
-      healmissle: -100,
+      healmissle: -200,
       dynamite: 0,
       fire: 0,
       usb: 0,
@@ -47,7 +47,7 @@ class Shot {
       usb: .8,
     },
     size: {
-      healmissle: 50,
+      healmissle: 100,
       powermissle: 50,
       megamissle: 100,
     }
