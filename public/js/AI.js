@@ -38,7 +38,7 @@ class AI {
       host.cells[cx][cy].add(this);
       this.cells.add(cx+'x'+cy);
     }
-    this.lookInterval = setInterval(() => this.identify(), 200);
+    this.lookInterval = setInterval(() => this.identify(), 500);
   }
 
   giveAbilities() {
@@ -340,7 +340,7 @@ class AI {
     });
     let target = false, bond = false;
     for (const t of tanks) {
-      if (t.ded || t.invis || !Engine.raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b) || t.id === this.id) continue;
+      if (t.ded || t.invis || !Engine.raycast(this.x+40, this.y+40, t.x+40, t.y+40, this.host.b) || t.id === this.id || ((t.x-this.x)**2+(t.y-this.y)**2)**.5 > 800) continue;
       if (Engine.getTeam(t.team) === Engine.getTeam(this.team)) {
         if (!bond && t.role !== 3 && t.role !== 0) bond = t;
       } else {
