@@ -1,7 +1,7 @@
 class Client {
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
-    this.tank = {use: [], fire: [], r: 0, x: 0, y: 0, invis: false};
+    this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
     this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], logs: [], tickspeed: -1};
     this.paused = this.showChat = this.canRespawn = false;
     this.multiplayer = multiplayer;
@@ -132,6 +132,7 @@ class Client {
     this.timers = {boost: time, powermissle: time, grapple: time, toolkit: time, class: {time: time, cooldown: -1}, items: [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}]};
     this.fireType = 1;
     this.halfSpeed = false;
+    this.tank.invis = false;
     this.canClass = this.canFire = this.canBoost = this.canToolkit = this.canPowermissle = this.canInvis = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canGrapple = true;
     this.kills = 0;
   }
