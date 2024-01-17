@@ -16,6 +16,7 @@ const images = {
     //normal: '/bullets/normal', no image yet :(
     shotgun: '/bullets/shotgun',
     powermissle: '/bullets/powermissle',
+    healmissle: '/bullets/healmissle',
     megamissle: '/bullets/megamissle',
     grapple: '/bullets/grapple',
     dynamite: '/bullets/dynamite',
