@@ -145,8 +145,10 @@ class Client {
   drawShot(s) {
     if (s.type == 'bullet') {
       GUI.drawImage(PixelTanks.images.blocks.void, s.x, s.y, 10, 10, .7, 5, 5, 0, 0, s.r+180);
-    } else if (['powermissle', 'healmissle'].includes(s.type)) {
+    } else if (s.type === 'powermissle') {
       GUI.drawImage(PixelTanks.images.bullets.powermissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+180);
+    } else if (s.type === 'healmissle') {
+      GUI.drawImage(PixelTanks.images.bullets.healmissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+180);
     } else if (s.type === 'megamissle') {
       GUI.drawImage(PixelTanks.images.bullets.megamissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+180);
     } else if (s.type === 'shotgun') {
