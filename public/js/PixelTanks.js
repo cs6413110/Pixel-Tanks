@@ -104,6 +104,28 @@ class PixelTanks {
         ],
         listeners: {},
         cdraw: function() {
+          if (!PixelTanks.userData.cosmetics[0].includes('#')) {
+            let cosmetics = {};
+            for (const cosmetic of PixelTanks.userData.cosmetics) {
+              if (cosmetics[cosmetic] === undefined) {
+                cosmetics[cosmetic] = 1;
+              } else cosmetics[cosmetic]++;
+            }
+            let cosmeticData = [];
+            for (const cosmetic of Object.keys(cosmetics)) cosmeticData.push(cosmetic+'#'+cosmetics[cosmetic]);
+            PixelTanks.userData.cosmetics = cosmeticData;
+          }
+          if (!PixelTanks.userData.deathEffects[0].includes('#')) {
+            let deathEffects = {};
+            for (const deathEffect of PixelTanks.userData.deathEffects) {
+              if (deathEffects[deathEffect] === undefined) {
+                deathEffects[deathEffect] = 1;
+              } else deathEffects[deathEffect]++;
+            }
+            let deathEffectData = [];
+            for (const deathEffect of Object.keys(deathEffects)) deathEffectData.push(deathEffect+'#'+deathEffects[deathEffect]);
+            PixelTanks.userData.deathEffects = deathEffectData;
+          }
           PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
           PixelTanks.renderTop(1200, 600, 160, PixelTanks.userData.color);
@@ -496,21 +518,6 @@ class PixelTanks {
             this.target = {x: 0, y: 0};
             this.cosmeticMenu = 0;
             this.deathEffectsMenu = 0;
-            if (!PixelTanks.userData.cosmetics[0].includes('#')) {
-              if (prompt('Ignore this. This is a beta testing thing. Im working on cosmetic stacking. Just click ok and move on.') === 'stack') {
-                let cosmetics = {};
-                for (const cosmetic of PixelTanks.userData.cosmetics) {
-                  if (cosmetics[cosmetic] === undefined) {
-                    cosmetics[cosmetic] = 1;
-                  } else cosmetics[cosmetic]++;
-                }
-                alert(JSON.stringify(cosmetics));
-                let cosmeticData = [];
-                for (const cosmetic of Object.keys(cosmetics)) cosmeticData.push(cosmetic+'#'+cosmetics[cosmetic]);
-                alert(JSON.stringify(cosmeticData));
-                if (confirm('Override account cosmetics?')) PixelTanks.userData.cosmetics = cosmeticData;
-              }
-            }
           }
           const coins = PixelTanks.userData.stats[0], xp = PixelTanks.userData.stats[3], rank = PixelTanks.userData.stats[4];
           const coinsUP = (rank+1)*1000, xpUP = (rank+1)*100;
@@ -738,7 +745,15 @@ class PixelTanks {
       clearInterval(render);
       Menus.trigger('crate');
     }, 250);
-    PixelTanks.userData[name].push(crate[type][rarity][number]);
+    let done = false;
+    for (const i in PixelTanks.userData[name]) {
+      const [item, amount] = PixelTanks.userData[name][i];
+      if (item === crate[type][rarity][number]) {
+        done = true;
+        PixelTanks.userData[name][i] = item+'#'+(Number(amount)+1);
+      }
+    }
+    if (!done) PixelTanks.userData[name][i].unshift(crate[type][rarity][number]+'#1');
     PixelTanks.save();
   }
 
