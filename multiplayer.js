@@ -3,7 +3,7 @@ const settings = {
   bans: [],
   banips: [],
   full_auth: ['cs641311'],
-  admins: ['Celestial', 'bradley'],
+  admins: ['Celestial', 'bradley','LostKing'],
   vips: ['DarkMemeGod', 'LostKing'],
   mutes: [],
   players_per_room: 400,
