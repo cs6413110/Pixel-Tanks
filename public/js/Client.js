@@ -486,7 +486,7 @@ class Client {
       clearTimeout(this.fireTimeout);
       this.fireTimeout = setTimeout(() => {this.canFire = true}, this.fireType === 1 ? 200 : 600);
     }
-    var fireType = ['grapple', 'megamissle', 'dynamite', 'usb', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? 'powermissle' : (!isNaN(type) ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
+    var fireType = ['grapple', 'megamissle', 'dynamite', 'usb', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? (PixelTanks.userData.class === 'medic' ? 'healmissle' : 'powermissle') : (!isNaN(type) ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
     while (l<(fireType === 1 ? 1 : 15)) {
       this.tank.fire.push({...Engine.toPoint(this.tank.r+l), type: type, r: this.tank.r+l});
       l += 5;
@@ -601,10 +601,10 @@ class Client {
         this.canToolkit = false;
         this.timers.toolkit = new Date();
         setTimeout(() => {this.canToolkit = true}, 40000);
-        setTimeout(() => {this.halfSpeed = false}, PixelTanks.userData.class === 'medic' ? 5000 : 7500);
+        setTimeout(() => {this.halfSpeed = false}, 7500);
         this.playAnimation('toolkit');
       }
-      if (!this.halfSpeed && Date.now()-this.timers.toolkit < (PixelTanks.userData.class === 'medic' ? 5000 : 7500)) {
+      if (!this.halfSpeed && Date.now()-this.timers.toolkit < 7500) {
         this.timers.toolkit = new Date('Nov 28 2006').getTime();
         this.canToolkit = true;
       }
@@ -647,7 +647,7 @@ class Client {
         this.timers.class = {time: Date.now(), cooldown: 40000};
       } else if (c === 'medic') {
         this.fire('healmissle');
-        this.timers.class = {time: Date.now(), cooldown: 0};
+        this.timers.class = {time: Date.now(), cooldown: 10000};
       } else if (c === 'fire') {
         for (let i = -30; i < 30; i += 5) this.tank.fire.push({...Engine.toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
         this.timers.class = {time: Date.now(), cooldown: 10000};
