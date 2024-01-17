@@ -588,7 +588,7 @@ class PixelTanks {
             for (let i = this.deathEffectsMenu*16; i < Math.min((this.deathEffectsMenu+1)*16, PixelTanks.userData.deathEffects.length); i++) {
               const d = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[i].split('#')[0]+'_'];
               GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[i].split('#')[0]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/d.speed)%d.frames)*200, 0, 200, 200);
-              GUI.drawText(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[i].split('#')[1]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 30, '#FFE900', .5);
+              GUI.drawText(PixelTanks.userData.deathEffects[i].split('#')[1], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 30, '#FFE900', .5);
               if (PixelTanks.userData.deathEffects[i].split('#')[0] === PixelTanks.userData.deathEffect) {
                 GUI.draw.strokeStyle = 0xffff22;
                 GUI.draw.lineWidth = 10;
