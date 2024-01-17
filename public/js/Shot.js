@@ -47,7 +47,7 @@ class Shot {
       usb: .8,
     },
     size: {
-      healmissle: 50,
+      healmissle: 75,
       powermissle: 50,
       megamissle: 100,
     }
