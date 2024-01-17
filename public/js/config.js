@@ -209,6 +209,7 @@ const images = {
     text: '/animations/text',
     text_: { frames: 37, speed: 50 },
     explosion: '/animations/explosion',
+    healexplosion: '/animations/healexplosion',
   },
   deathEffects: {
     explode: '/animations/explode',
