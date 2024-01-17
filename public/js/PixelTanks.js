@@ -747,13 +747,13 @@ class PixelTanks {
     }, 250);
     let done = false;
     for (const i in PixelTanks.userData[name]) {
-      const [item, amount] = PixelTanks.userData[name][i];
+      const [item, amount] = PixelTanks.userData[name][i].split('#');
       if (item === crate[type][rarity][number]) {
         done = true;
         PixelTanks.userData[name][i] = item+'#'+(Number(amount)+1);
       }
     }
-    if (!done) PixelTanks.userData[name][i].unshift(crate[type][rarity][number]+'#1');
+    if (!done) PixelTanks.userData[name].unshift(crate[type][rarity][number]+'#1');
     PixelTanks.save();
   }
 
