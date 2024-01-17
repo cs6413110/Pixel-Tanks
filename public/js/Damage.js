@@ -24,11 +24,11 @@ class Damage {
         cache.add(e.id);
         const teamMatch = Engine.getTeam(team) === Engine.getTeam(e.team);
         if (e instanceof Tank) {
-          if ((!teamMatch || (teamMatch && a < 0)) && Engine.collision(x, y, w, h, e.x, e.y, 80, 80)) e.damageCalc(x, y, a, Engine.getUsername(team));
+          if (((!teamMatch && a > 0) || (teamMatch && a < 0)) && Engine.collision(x, y, w, h, e.x, e.y, 80, 80)) e.damageCalc(x, y, a, Engine.getUsername(team));
         } else if (e instanceof Block) {
           if (Engine.collision(x, y, w, h, e.x, e.y, 100, 100)) e.damage(a);
         } else if (e instanceof AI) {
-          if ((!teamMatch || (teamMatch && a < 0)) && Engine.collision(x, y, w, h, e.x, e.y, e.role === 0 ? 100 : 80, e.role === 0 ? 100 : 80)) e.damageCalc(e.x, e.y, a, Engine.getUsername(team));
+          if (((!teamMatch && a > 0) || (teamMatch && a < 0)) && Engine.collision(x, y, w, h, e.x, e.y, e.role === 0 ? 100 : 80, e.role === 0 ? 100 : 80)) e.damageCalc(e.x, e.y, a, Engine.getUsername(team));
         }
       }
     }
