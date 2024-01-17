@@ -486,7 +486,7 @@ class Client {
       clearTimeout(this.fireTimeout);
       this.fireTimeout = setTimeout(() => {this.canFire = true}, this.fireType === 1 ? 200 : 600);
     }
-    var fireType = ['grapple', 'megamissle', 'dynamite', 'usb', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? (PixelTanks.userData.class === 'medic' ? 'healmissle' : 'powermissle') : (!isNaN(type) ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
+    var fireType = ['grapple', 'megamissle', 'dynamite', 'usb', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? 'powermissle' : (!isNaN(type) ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
     while (l<(fireType === 1 ? 1 : 15)) {
       this.tank.fire.push({...Engine.toPoint(this.tank.r+l), type: type, r: this.tank.r+l});
       l += 5;
@@ -646,8 +646,8 @@ class Client {
         this.tank.use.push('buff');
         this.timers.class = {time: Date.now(), cooldown: 40000};
       } else if (c === 'medic') {
-        this.tank.use.push('healwave');
-        this.timers.class = {time: Date.now(), cooldown: 30000};
+        this.fire('healmissle');
+        this.timers.class = {time: Date.now(), cooldown: 8000};
       } else if (c === 'fire') {
         for (let i = -30; i < 30; i += 5) this.tank.fire.push({...Engine.toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
         this.timers.class = {time: Date.now(), cooldown: 10000};
