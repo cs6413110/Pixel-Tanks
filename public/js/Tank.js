@@ -90,6 +90,7 @@ class Tank {
         }
       }
     }
+    let spikeLimiter = true;
     for (const cell of this.cells) {
       const [x, y] = cell.split('x');
       for (const entity of this.host.cells[x][y]) {
@@ -108,7 +109,7 @@ class Tank {
                 clearInterval(this.fireInterval);
                 this.fire = false;
               }, 4000);
-            } else if (entity.type === 'spike' && !teamMatch) this.damageCalc(this.x, this.y, 1, Engine.getUsername(entity.team));
+            } else if (entity.type === 'spike' && !teamMatch && spikeLimiter !== undefined) spikeLimiter = this.damageCalc(this.x, this.y, 1, Engine.getUsername(entity.team));
           }
         }
       }
