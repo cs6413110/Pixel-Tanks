@@ -18,7 +18,7 @@ class AI {
     this.rank = rank;
     this.team = team.includes(':') ? team : this.username+':'+team;
     this.host = host;
-    this.hp = rank * 10 + 300;
+    this.hp = this.role === 0 ? ((rank * 10 + 300)*3/5) : rank * 10 + 300;
     this.maxHp = this.hp;
     this.seeUser = this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
     this.canFire = this.canPowermissle = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canClass = this.canBoost = this.canBashed = true;
@@ -371,7 +371,7 @@ class AI {
     for (let [i, len] = type === 'shotgun' ? [-10, 15] : [0, 1]; i < len; i += 5) {
       const r = this.r+i;
       const {x, y} = Engine.toPoint(r);
-      this.host.s.push(new Shot(this.x+40, this.y+40, x, y, type, r, this.team, this.rank*(this.buff ? (1.5*this.rank+15)/Math.max(this.rank, 1/2000) : 1), this.host));
+      this.host.s.push(new Shot(this.x+40, this.y+40, x, y, type, r, this.team, this.rank*(this.buff ? (1.5*this.rank+15)/Math.max(this.rank, 1/2000) : 1)-(this.role === 0 ? (this.rank*0.4)+12 : 0), this.host));
     }
     if (type === 'powermissle') {
       this.canPowermissle = false;
