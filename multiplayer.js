@@ -538,6 +538,9 @@ const Commands = {
   arson: [Object, 2, 1, function(data) {
     for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'fire', ':', servers[this.room]));
   }],
+  acupuncture: [Object, 2, 1, function(data) {
+    for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'spike', ':', servers[this.room]));
+  }],
   newmap: [FFA, 4, 1, function(data) {
     servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
     servers[this.room].pt.forEach(t => {
@@ -634,7 +637,7 @@ const Commands = {
     }`);
   }],
   help: [Object, 2, 1, function(data) {
-    servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: 'Commands: /createteam <name>, /join <name>, /accept <player>, /leave, /start, /switch <player>', c: '#0000FF'}, {m: '/reboot, /live <player>, /spectate <player>, /ai <x> <y> <type> <rank> <amount> <team>, /newmap', c: '#0000FF'}, {m: '/kill <player>, /kick <player>, /mute <player> <time>, /unmute <player>, /ban <player> /pardon <player>', c: '#0000FF'}, {m: '/ipban <player>, /pardon <player>, /help', c: '#0000FF'})
+    servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: 'Commands: /nuke, /arson, /createteam <name>, /join <name>, /accept <player>, /leave, /start, /switch <player>, /reboot, /live <player>, /spectate <player>, /ai <x> <y> <type> <rank> <amount> <team>, /newmap, /kill <player>, /kick <player>, /mute <player> <time>, /unmute <player>, /ban <player> /pardon <player>, /ipban <player>, /pardon <player>, /acupuncture, /help,', c: '#0000FF'})
   }],
   scream: [Object, 2, -1, function(data) {
     if (this.username !== 'bradley') return this.send({status: 'error', message: 'You are not a bradley!'});
