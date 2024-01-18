@@ -3,7 +3,7 @@ const settings = {
   bans: [],
   banips: [],
   full_auth: ['cs641311'],
-  admins: ['Celestial', 'bradley'],
+  admins: ['Celestial', 'bradley', '3foenation'], // bro is managing seventh grade flats
   vips: ['DarkMemeGod', 'LostKing'],
   mutes: [],
   players_per_room: 400,
@@ -589,7 +589,7 @@ const Commands = {
     for (const server of Object.values(servers)) for (const t of server.pt) if (data[1] === t.username) for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username);
   }],
   killall: [Object, 2, 1, function(data) {
-    for (const t of servers[this.room].pt) for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username)
+    for (const t of servers[this.room].pt) for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username);
   }],
   killai: [Object, 2, 1, function(data) {
     for (const ai of servers[this.room].ai.reverse()) ai.destroy();
