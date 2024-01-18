@@ -77,6 +77,7 @@ const images = {
     'Pink Ghost': '/cosmetics/pink_ghost',
     'Paleontologist': '/cosmetics/paleontologist',
     'Yellow Hoodie': '/cosmetics/yellow_hoodie',
+    'bluekatana': '/cosmetics/bluekatana',
     'X': '/cosmetics/x',
     'Sweat': '/cosmetics/sweat',
     'Gold Shield': '/cosmetics/gold_shield',
