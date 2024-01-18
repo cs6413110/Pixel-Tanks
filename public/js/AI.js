@@ -372,7 +372,7 @@ class AI {
     for (let [i, len] = type === 'shotgun' ? [-10, 15] : [0, 1]; i < len; i += 5) {
       const r = this.r+i;
       const {x, y} = Engine.toPoint(r);
-      this.host.s.push(new Shot(this.x+40, this.y+40, x, y, type, r, this.team, this.rank*(this.buff ? (1.5*this.rank+15)/Math.max(this.rank, 1/2000) : 1), this.host));
+      this.host.s.push(new Shot(this.x+40, this.y+40, x, y, type, r, this.team, this.rank*(this.buff ? (1.5*this.rank+15)/Math.max(this.rank, 1/2000) : 1)-(this.role === 0 ? (0.4*this.rank)+12 : 0), this.host));
     }
     if (type === 'powermissle') {
       this.canPowermissle = false;
