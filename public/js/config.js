@@ -55,7 +55,7 @@ const images = {
     'Purple Top Hat': '/cosmetics/purple_top_hat',
     'Terminator': '/cosmetics/terminator',
     'Dizzy': '/cosmetics/dizzy',
-    'Katana': '/cosmetics/Katana',
+    'Katana': '/cosmetics/katana',
     'Knife': '/cosmetics/knife',
     'oneeye': '/cosmetics/oneeye',
     'Scared': '/cosmetics/scared',
