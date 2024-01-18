@@ -3,8 +3,8 @@ const settings = {
   bans: [],
   banips: [],
   full_auth: ['cs641311'],
-  admins: ['Celestial', 'bradley', 'LostKing', 'DarkMemeGod', 'Bread'],
-  vips: [],
+  admins: ['Celestial', 'bradley'], // I'll make vip have stuff soon but STOP GIVING URSELF ADIMIN :(
+  vips: ['DarkMemeGod', 'LostKing'],
   mutes: [],
   players_per_room: 400,
   ups: 60,
