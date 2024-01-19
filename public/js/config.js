@@ -38,6 +38,8 @@ const images = {
     'hacker_hoodie': '/cosmetics/hacker_hoodie',
     'totem': '/cosmetics/totem',
     'Venominator': '/cosmetics/Venominator',
+    'brain': '/cosmetics/brain',
+    'hands': '/cosmetics/hands',
     'UnionJack': '/cosmetics/UnionJack',
     'SKOTTISH': '/cosmetics/SKOTTISH',
     'Purple helment': '/cosmetics/purple_helment',
