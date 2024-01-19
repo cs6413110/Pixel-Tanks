@@ -465,7 +465,7 @@ class Defense extends Multiplayer {
   startNewWave() {
     let wavePoints = 50;
     // spawn generation will be based off of this.cells
-    for (let i = 0; i < Math.ceil(Math.random()*20); i++) this.ai.push(new AI(1500, 1500, 1, 0, 'AI', this));
+    for (let i = 0; i < Math.ceil(Math.random()*20); i++) this.ai.push(new AI(1510, 1510, 1, 0, 'AI', this));
     
   }
 
@@ -473,10 +473,10 @@ class Defense extends Multiplayer {
     if (this.mode === 0) {
       if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
         this.mode++;
+        this.levelReader([]);
         this.i.push(setTimeout(() => {
-          this.levelReader([]); // put tdm level gen round 1 here
           this.mode++;
-          this.i.push(setTimeout(() => this.startNewWave(), 10000));
+          this.i.push(setInterval(() => this.startNewWave(), 10000));
         }, 10000));
       }
       this.global = 'Starting in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
