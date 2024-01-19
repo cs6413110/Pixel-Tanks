@@ -760,7 +760,7 @@ const multimessage = (socket, data) => {
     if (!hasAccess(socket.username, f[1])) return socket.send({status: 'error', message: `You don't have access to this.`});
     f[3].bind(socket)(data.data);
   } else if (data.type === 'stats') {
-    let gamemodes = {FFA: [], DUELS: [], TDM: [], tickspeed, event: 'stats'};
+    let gamemodes = {FFA: [], DUELS: [], TDM: [], Defense: [], tickspeed, event: 'stats'};
     for (const id in servers) {
       gamemodes[servers[id].constructor.name][id] = [];
       for (const pt of servers[id].pt) {
