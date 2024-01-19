@@ -456,8 +456,10 @@ class Defense extends Multiplayer {
     super.add(socket, data);
     const len = this.pt.length, t = this.pt[len-1];
     t.team = t.username+':LOBBY';
-    this.readytime = Date.now();
-    this.time = 90;
+    if (len === 1) {
+      this.readytime = Date.now();
+      this.time = 10;
+    }
   }
 
   startNewWave() {
@@ -474,8 +476,8 @@ class Defense extends Multiplayer {
         this.i.push(setTimeout(() => {
           this.levelReader([]); // put tdm level gen round 1 here
           this.mode++;
-          this.i.push(setTimeout(() => this.startNewWave(), 30000));
-        }, 90000));
+          this.i.push(setTimeout(() => this.startNewWave(), 10000));
+        }, 10000));
       }
       this.global = 'Starting in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
     } else if (this.mode === 1) {
