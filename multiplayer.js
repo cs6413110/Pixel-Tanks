@@ -455,10 +455,6 @@ class Defense extends Multiplayer {
   add(socket, data) {
     super.add(socket, data);
     const len = this.pt.length, t = this.pt[len-1];
-    if (t.class === 'stealth') {
-      t.socket.send({status: 'error', message: 'Sorry sir, but stealth is too op for this '});
-      setTimeout(() => t.socket.close());
-    }
     t.team = t.username+':LOBBY';
     this.readytime = Date.now();
     this.time = 90;
@@ -663,7 +659,7 @@ A.createTemplate('message', class {b = []; pt = []; ai = []; s = []; d = []; eve
   }
 });
 A.createTemplate('arr', Array, a => (a.length = 0));
-const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM};
+const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM, 'defense': Defense};
 const Profile = (arr, update) => {
   const functions = [];
   for (let e of arr) {
@@ -732,6 +728,7 @@ const multimessage = (socket, data) => {
         if (data.gamemode === 'ffa' && servers[id].pt.length >= settings.players_per_room) continue;
         if (data.gamemode === 'duels' && servers[id].pt.length !== 1) continue;
         if (data.gamemode === 'tdm' && servers[id].mode !== 0) continue;
+        if (data.gamemode === 'defense' && servers[id].pt.length > 10) continue;
         server = id;
         break;
       }
