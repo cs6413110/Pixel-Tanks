@@ -461,7 +461,9 @@ class Defense extends Multiplayer {
   }
 
   startNewWave() {
-    for (const ai of this.ai) ai.destroy();
+    let wavePoints = 50;
+    // spawn generation will be based off of this.cells
+    for (let i = 0; i < Math.ceil(Math.random()*20); i++) this.ai.push(new AI(1500, 1500, 1, 0, 'AI', this));
     
   }
 
@@ -469,9 +471,19 @@ class Defense extends Multiplayer {
     if (this.mode === 0) {
       if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
         this.mode++;
-      } else if (this.pt.length > 4) this.global = 'Starting in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
+        this.i.push(setTimeout(() => {
+          this.levelReader([]); // put tdm level gen round 1 here
+          this.mode++;
+          this.i.push(setTimeout(() => this.startNewWave(), 30000));
+        }, 90000));
+      }
+      this.global = 'Starting in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
     } else if (this.mode === 1) {
-      
+      this.global = '===Preare for next wave===';
+    } else if (this.mode === 2) {
+      let enemies = 0;
+      for (const ai of this.ai) if (Engine.getTeam(ai.team) === 'AI') enemies++;
+      this.global = '===Wave #'+this.wave+' ('+enemies+' Enemies Left)===';
     }
   }
 }
