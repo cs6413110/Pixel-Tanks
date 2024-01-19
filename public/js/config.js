@@ -265,6 +265,8 @@ const images = {
     gameover_: { frames: 40, speed: 75, kill: 1, type: 2 },
     ghost: '/animations/ghost',
     ghost_: { frames: 13, speed: 75, kill: 1, type: 1 },
+    pokeball: '/animations/pokeball',
+    pokeball_: { frames: 85, speed: 50, kill: 18, type: 2 },
   },
   items: {
     airstrike: '/items/airstrike',
