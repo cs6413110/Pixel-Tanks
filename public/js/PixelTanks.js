@@ -223,7 +223,7 @@ class PixelTanks {
           [340, 376, 416, 116, function() {this.gamemode = 'ffa'}, true],
           [340, 532, 416, 116, function() {this.gamemode = 'duels'}, true],
           [340, 688, 416, 116, function() {this.gamemode = 'tdm'}, true],
-          [340, 844, 416, 116, function() {this.gamemode = 'juggernaut'}, true],
+          [340, 844, 416, 116, function() {this.gamemode = 'defense'}, true],
           [868, 848, 368, 88, function() {
             PixelTanks.user.player = new Client(this.ip, true, this.gamemode);
             Menus.removeListeners();
