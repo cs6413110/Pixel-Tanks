@@ -165,6 +165,8 @@ const images = {
     'Angry Eyes': '/cosmetics/angryeyes',
     'Cute Eyes': '/cosmetics/cuteeyes',
     'Stripes': '/cosmetics/stripe',
+    'Hazard': '/cosmetics/hazard',
+    'Anime Eyes': '/cosmetics/animeeyes',
   },
   menus: {
     ui: '/menus/ui',
