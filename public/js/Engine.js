@@ -105,7 +105,7 @@ class Engine {
     } else if (a === 'turret') {
       this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
       let turrets = 0;
-      for (const ai of this.ai) if (ai.role === 0 && Engine.getUsername(ai.team) === t.username && ++turrets > 3) ai.destroy();
+      for (const ai of this.ai.reverse()) if (ai.role === 0 && Engine.getUsername(ai.team) === t.username && ++turrets > 3) ai.destroy();
     } else if (a === 'buff') {
       t.buff = true;
       setTimeout(() => { t.buff = false }, 5000);
