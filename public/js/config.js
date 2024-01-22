@@ -44,7 +44,7 @@ const images = {
     'UnionJack': '/cosmetics/UnionJack',
     'SKOTTISH': '/cosmetics/SKOTTISH',
     'Purple helment': '/cosmetics/purple_helment',
-    'Scoped': '/cosmetics/scoped',
+    'scoped': '/cosmetics/scoped',
     'Aaron': '/cosmetics/aaron',
     'Astronaut': '/cosmetics/astronaut',
     'Onfire': '/cosmetics/onfire',
