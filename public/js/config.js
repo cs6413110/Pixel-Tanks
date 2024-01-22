@@ -37,6 +37,8 @@ const images = {
     'LostKing': '/cosmetics/Jonas',
     'hacker_hoodie': '/cosmetics/hacker_hoodie',
     'totem': '/cosmetics/totem',
+    'venomeme': '/cosmetics/venomeme',
+    'carnage': '/cosmetics/carnage',
     'Venominator': '/cosmetics/Venominator',
     'brain': '/cosmetics/brain',
     'hands': '/cosmetics/hands',
