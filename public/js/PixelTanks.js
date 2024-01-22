@@ -684,7 +684,7 @@ class PixelTanks {
         PixelTanks.autosave = setInterval(() => PixelTanks.save(), 5000);
         callback();
       });
-  }`
+  }
 
   static auth(u, p, t) {
     Network.auth(u, p, t, () => PixelTanks.getData(() => Menus.trigger(t === 'login' ? 'main' : 'htp1')));
