@@ -87,22 +87,21 @@ const deathMessages = [
   `{idot} left the game`,
   `{idot} had to go do classwork`,
   `{idot} got kidnapped HELP!`,
-  `{idot} was ubducted by aliens`,
-  `{idot} was taken by terrorists`,
+  `{idot} was abducted by aliens`,
   `{idot} was called to the office`,
   `{idot} got assigned work`,
   `{idot} fell asleep`,
   `{idot} got tired of bread`,
-  `{idot} was taken hostage by sullivan`,
+  `{idot} was taken hostage by Sullivan`,
   `{idot} had to go, his people needed him`,
   `{idot} got gogaurdianed`,
   `{idot} quit`,
   `{idot} disconnected`,
   `{idot} got techered`,
-  `{idot} read the epstien list`,
-  `{idot} was caught by the cia`,
-  `{idot} got hi chromebook taken`,
-  `{idot} will return soon`
+  `{idot} was caught by the CIA`,
+  `{idot} got his Chromebook taken`,
+  `{idot} will return soon`,
+  `{idot} got lost`,
 ];
 
 let tickspeed = 'N/A';
