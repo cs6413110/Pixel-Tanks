@@ -463,7 +463,7 @@ class Defense extends Multiplayer {
   startNewWave() {
     let wavePoints = 50;
     // spawn generation will be based off of this.cells
-    for (let i = 0; i < Math.ceil(Math.random()*20); i++) this.ai.push(new AI(1500, 1500, 1, 0, 'AI', this));
+    for (let i = 0; i < Math.ceil(Math.random()*20); i++) this.ai.push(new AI(1510, 1510, 1, 0, 'AI', this));
   }
 
   ontick() {
