@@ -457,7 +457,7 @@ class Defense extends Multiplayer {
     for (const x in this.cells) {
       for (const y in this.cells[row]) {
         let canSpawn = true;
-        for (const entity of this.cells[x][y]) if (entity typeof Block) canSpawn = false;
+        for (const entity of this.cells[x][y]) if (entity instanceof Block) canSpawn = false;
         if (canSpawn) spawnable.push({x, y});
       }
     }
