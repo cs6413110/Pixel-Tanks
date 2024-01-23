@@ -450,33 +450,31 @@ class Defense extends Multiplayer {
     this.global = 'Waiting for Players...';
     this.wave = 1;
     this.mode = 0; // 0 -> Lobby/Waiting for players, 1 -> Interwave period, 2 -> in game
+    this.readytime = Date.now();
+    this.time = 10;
   }
 
   add(socket, data) {
     super.add(socket, data);
     const len = this.pt.length, t = this.pt[len-1];
     t.team = t.username+':LOBBY';
-    if (len === 1) {
-      this.readytime = Date.now();
-      this.time = 10;
-    }
   }
 
   startNewWave() {
     let wavePoints = 50;
     // spawn generation will be based off of this.cells
-    for (let i = 0; i < Math.ceil(Math.random()*20); i++) this.ai.push(new AI(1510, 1510, 1, 0, 'AI', this));
-    
+    for (let i = 0; i < Math.ceil(Math.random()*20); i++) this.ai.push(new AI(1500, 1500, 1, 0, 'AI', this));
   }
 
   ontick() {
     if (this.mode === 0) {
       if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
         this.mode++;
-        this.levelReader([]);
+        for (const t of this.pt) t.team = t.team.split(':')[0]+':PLAYERS';
+        this.levelReader([["B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B3","B3","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B3","B0","B3","B0","B0","B0","B0","B4","B4","B4","B4","B0"],["B0","B1","B1","B4","B0","B3","B3","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B3","B0","B3","B0","B3","B0","B0","B0","B4","B0","B0","B4","B0"],["B0","B0","B0","B0","B0","B3","B0","B4","B0","B0","B0","B0","B0","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B0","B4","B0"],["B0","B4","B0","B3","B0","B0","B0","B0","B2","B2","B2","B2","B2","B2","B0","B0","B4","B0","B0","B0","B0","B0","B4","B0","B4","B0","B0","B0","B4","B0"],["B0","B0","B0","B0","B0","B0","B0","B2","B2","B2","B2","B2","B2","B2","B0","B0","B2","B2","B2","B2","B2","B2","B0","B0","B4","B4","B4","B4","B4","B0"],["B0","B1","B1","B4","B0","B0","B0","B2","B2","B1","B1","B1","B0","B0","B0","B0","B2","B2","B2","B2","B2","B2","B2","B0","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B0","B2","B2","B1","B1","B1","B0","B0","B0","B0","B0","B0","B1","B1","B1","B2","B2","B0","B0","B0","B4","B1","B1","B0"],["B0","B4","B0","B3","B0","B0","B0","B2","B2","B1","B1","B4","B4","B4","B4","B0","B0","B0","B1","B1","B1","B2","B2","B0","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B4","B2","B2","B0","B0","B4","B0","B0","B0","B0","B4","B4","B4","B1","B1","B2","B2","B0","B0","B0","B3","B0","B4","B0"],["B0","B1","B1","B4","B0","B0","B4","B2","B2","B0","B0","B4","B0","B0","B0","B4","B0","B0","B4","B0","B0","B2","B2","B4","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B4","B2","B2","B0","B0","B4","B0","B0","B0","B0","B0","B0","B4","B0","B0","B2","B2","B4","B0","B0","B4","B1","B1","B0"],["B0","B4","B0","B3","B0","B0","B4","B2","B2","B0","B0","B4","B0","B0","B0","B0","B0","B0","B4","B0","B0","B2","B2","B4","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B4","B2","B2","B0","B0","B4","B4","B4","B0","B0","B4","B4","B4","B0","B0","B2","B2","B4","B0","B0","B3","B0","B4","B0"],["B0","B1","B1","B4","B0","B0","B0","B0","B0","B0","B0","B4","B0","B0","S","B0","B0","B0","B4","B0","B0","B2","B2","B4","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B0","B0","B0","B0","B0","B0","B4","B0","B0","B0","B0","B0","B0","B0","B4","B1","B1","B0"],["B0","B4","B0","B3","B0","B0","B4","B2","B2","B0","B0","B4","B4","B4","B0","B0","B4","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B4","B2","B2","B0","B0","B4","B0","B0","B0","B0","B0","B0","B4","B0","B0","B2","B2","B4","B0","B0","B3","B0","B4","B0"],["B0","B1","B1","B4","B0","B0","B4","B2","B2","B0","B0","B4","B0","B0","B0","B0","B0","B0","B4","B0","B0","B2","B2","B4","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B4","B2","B2","B0","B0","B4","B0","B0","B4","B0","B0","B0","B4","B0","B0","B2","B2","B4","B0","B0","B4","B1","B1","B0"],["B0","B4","B0","B3","B0","B0","B4","B2","B2","B1","B1","B4","B4","B4","B0","B0","B0","B0","B4","B0","B0","B2","B2","B4","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B0","B2","B2","B1","B1","B1","B0","B0","B0","B4","B4","B4","B4","B1","B1","B2","B2","B4","B0","B0","B3","B0","B4","B0"],["B0","B1","B1","B4","B0","B0","B0","B2","B2","B1","B1","B1","B0","B0","B0","B0","B0","B0","B1","B1","B1","B2","B2","B0","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B0","B2","B2","B2","B2","B2","B2","B2","B0","B0","B0","B0","B1","B1","B1","B2","B2","B0","B0","B0","B4","B1","B1","B0"],["B0","B4","B4","B4","B4","B4","B0","B0","B2","B2","B2","B2","B2","B2","B0","B0","B2","B2","B2","B2","B2","B2","B2","B0","B0","B0","B0","B0","B0","B0"],["B0","B4","B0","B0","B0","B4","B0","B4","B0","B0","B0","B0","B0","B4","B0","B0","B2","B2","B2","B2","B2","B2","B0","B0","B0","B0","B3","B0","B4","B0"],["B0","B4","B0","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B0","B0","B0","B0","B0","B4","B0","B3","B0","B0","B0","B0","B0"],["B0","B4","B0","B0","B4","B0","B0","B0","B3","B0","B3","B0","B3","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B3","B3","B0","B4","B1","B1","B0"],["B0","B4","B4","B4","B4","B0","B0","B0","B0","B3","B0","B3","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B3","B3","B0","B0","B0","B0","B0","B0"],["B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0"]]);
         this.i.push(setTimeout(() => {
           this.mode++;
-          this.i.push(setInterval(() => this.startNewWave(), 10000));
+          this.startNewWave();
         }, 10000));
       }
       this.global = 'Starting in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
@@ -486,10 +484,16 @@ class Defense extends Multiplayer {
       let enemies = 0;
       for (const ai of this.ai) if (Engine.getTeam(ai.team) === 'AI') enemies++;
       this.global = '===Wave #'+this.wave+' ('+enemies+' Enemies Left)===';
+      if (enemies === 0) {
+        this.mode = 1;
+        this.i.push(setTimeout(() => {
+          this.mode++;
+          this.startNewWave();
+        }, 10000));
+      }
     }
   }
 }
-
 
 const Commands = {
   playerlist: [Object, 4, 1, function(data) {
