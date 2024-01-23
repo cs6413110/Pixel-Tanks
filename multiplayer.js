@@ -455,7 +455,7 @@ class Defense extends Multiplayer {
     let wavePoints = this.wave*50, spawnable = [];
     // spawn generation will be based off of this.cells
     for (const x in this.cells) {
-      for (const y in this.cells[row]) {
+      for (const y in this.cells[x]) {
         let canSpawn = true;
         for (const entity of this.cells[x][y]) if (entity instanceof Block) canSpawn = false;
         if (canSpawn) spawnable.push({x, y});
