@@ -3,8 +3,8 @@ const settings = {
   bans: [],
   banips: [],
   full_auth: ['cs641311'],
-  admins: ['Celestial', 'bradley', '3foenation', 'DarkMemeGod', 'LostKing'], // bro is managing seventh grade flats
-  vips: [],
+  admins: ['Celestial', 'bradley'],
+  vips: ['DarkMemeGod'],
   mutes: [],
   players_per_room: 400,
   ups: 60,
