@@ -225,7 +225,6 @@ class FFA extends Multiplayer {
     for (const ai of this.ai) if (Engine.getUsername(ai.team) === t.username) this.ai.splice(this.ai.indexOf(ai), 1);
     if (t.socket) t.ded = true;
     if (m.socket) m.socket.send({event: 'kill'});
-    if (m.class === 'warrior') this.ai.push(new AI(Math.floor(m.x/100)*100, Math.floor(m.y/100)*100, 3, 1, Engine.getTeam(m.team), this));
     if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
   }
 
@@ -395,7 +394,6 @@ class TDM extends Multiplayer {
     }
     if (m.username) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
     if (m.socket) m.socket.send({event: 'kill'});
-    if (m.class === 'warrior') this.ai.push(new AI(Math.floor(m.x/100)*100, Math.floor(m.y/100)*100, 3, 1, Engine.getTeam(m.team), this));
     for (const ai of this.ai) {
       if (Engine.getUsername(ai.team) === t.username) {
         this.ai.splice(this.ai.indexOf(ai), 1);
