@@ -94,5 +94,13 @@ class Singleplayer extends Engine {
   override(data) {
     PixelTanks.user.player.tank.x = data.x;
     PixelTanks.user.player.tank.y = data.y;
+    if (PixelTanks.user.player.dx) {
+      PixelTanks.user.player.dx.t = Date.now()
+      PixelTanks.user.player.dx.o = this.tank.x;
+    }
+    if (PixelTanks.user.player.dy) {
+      PixelTanks.user.player.dy.t = Date.now();
+      PixelTanks.user.player.dy.o = this.tank.y;
+    }
   }
 }
