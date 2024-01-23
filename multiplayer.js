@@ -451,7 +451,7 @@ class Defense extends Multiplayer {
     t.team = t.username+(this.mode === 0 ? ':LOBBY' : ':PLAYERS');
   }
 
-  startNewWave() 
+  startNewWave() {
     let wavePoints = this.wave*50, spawnable = [];
     // spawn generation will be based off of this.cells
     for (const x in this.cells) {
