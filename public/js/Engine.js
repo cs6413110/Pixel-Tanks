@@ -183,6 +183,7 @@ class Engine {
     for (let y = 0; y < 30; y++) {
       this.cells[y] = [];
       for (let x = 0; x < 30; x++) {
+        this.map.setWalkableAt(x, y, true);
         this.cells[y][x] = new Set();
       }
     }
