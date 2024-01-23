@@ -99,6 +99,7 @@ const deathMessages = [
   `{idot} disconnected`,
   `{idot} got techered`,
   `{idot} was caught by the CIA`,
+  `{idot} was on epstiens list`,
   `{idot} got his Chromebook taken`,
   `{idot} will return soon`,
   `{idot} got lost`,
