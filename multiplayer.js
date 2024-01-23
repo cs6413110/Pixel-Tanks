@@ -448,10 +448,11 @@ class Defense extends Multiplayer {
   add(socket, data) {
     super.add(socket, data);
     const len = this.pt.length, t = this.pt[len-1];
-    t.team = t.username+':LOBBY';
+    t.team = t.username+(this.mode === 0 ? ':LOBBY' : ':PLAYERS');
   }
 
   startNewWave() {
+    this.global = '===Wave #'+this.wave+' ('+enemies+' Enemies Left)===';
     let wavePoints = this.wave*50, spawnable = [];
     // spawn generation will be based off of this.cells
     for (const x in this.cells) {
@@ -485,19 +486,34 @@ class Defense extends Multiplayer {
       this.global = 'Starting in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
     } else if (this.mode === 1) {
       this.global = '===Preare for next wave===';
-    } else if (this.mode === 2) {
-      let enemies = 0;
-      for (const ai of this.ai) if (Engine.getTeam(ai.team) === 'AI') enemies++;
-      this.global = '===Wave #'+this.wave+' ('+enemies+' Enemies Left)===';
-      if (enemies === 0) {
-        this.mode = 1;
-        this.i.push(setTimeout(() => {
-          this.mode++;
-          this.wave++;
-          this.startNewWave();
-        }, 10000));
-      }
     }
+  }
+
+  useAbility(t, a) {
+    super.useAbility(t, a);
+    this.updateStatus();
+  }
+
+  updateStatus() {
+    let enemies = 0;
+    for (const ai of this.ai) if (Engine.getTeam(ai.team) === 'AI') enemies++;
+    this.global = '===Wave #'+this.wave+' ('+enemies+' Enemies Left)===';
+    if (enemies > 0) return;
+    this.mode = 1;
+    this.i.push(setTimeout(() => {
+      this.mode++;
+      this.wave++;
+      this.startNewWave();
+    }, 10000));
+  }
+  
+  ondeath(t, m={}) {
+    this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
+    for (const ai of this.ai) if (Engine.getUsername(ai.team) === t.username) this.ai.splice(this.ai.indexOf(ai), 1);
+    this.updateStatus();
+    if (t.socket) t.ded = true;
+    if (m.socket) m.socket.send({event: 'ded'}); // reset cooldowns without giving loot
+    if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
   }
 }
 
