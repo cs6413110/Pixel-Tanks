@@ -85,6 +85,8 @@ const deathMessages = [
 ], rageMessages = [
   `{idot} left the game`,
   `{idot} had to go do classwork`,
+  `{idot} got kidnapped HELP!`,
+  `{idot} was ubducted by aliens`,
   `{idot} got assigned work`,
   `{idot} fell asleep`,
   `{idot} got tired of bread`,
