@@ -88,6 +88,8 @@ const deathMessages = [
   `{idot} had to go do classwork`,
   `{idot} got kidnapped HELP!`,
   `{idot} was ubducted by aliens`,
+  `{idot} was taken by terrorists`,
+  `{idot} was called to the office`,
   `{idot} got assigned work`,
   `{idot} fell asleep`,
   `{idot} got tired of bread`,
@@ -99,6 +101,7 @@ const deathMessages = [
   `{idot} got techered`,
   `{idot} read the epstien list`,
   `{idot} was caught by the cia`,
+  `{idot} got hi chromebook taken`,
   `{idot} will return soon`
 ];
 
