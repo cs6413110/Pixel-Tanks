@@ -96,11 +96,11 @@ class Singleplayer extends Engine {
     PixelTanks.user.player.tank.y = data.y;
     if (PixelTanks.user.player.dx) {
       PixelTanks.user.player.dx.t = Date.now()
-      PixelTanks.user.player.dx.o = this.tank.x;
+      PixelTanks.user.player.dx.o = PixelTanks.user.player.tank.x;
     }
     if (PixelTanks.user.player.dy) {
       PixelTanks.user.player.dy.t = Date.now();
-      PixelTanks.user.player.dy.o = this.tank.y;
+      PixelTanks.user.player.dy.o = PixelTanks.user.player.tank.y;
     }
   }
 }
