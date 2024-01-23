@@ -446,9 +446,8 @@ class Defense extends Multiplayer {
   }
 
   add(socket, data) {
+    data.team = data.username+(this.mode === 0 ? ':LOBBY' : ':PLAYERS');
     super.add(socket, data);
-    const len = this.pt.length, t = this.pt[len-1];
-    t.team = t.username+(this.mode === 0 ? ':LOBBY' : ':PLAYERS');
   }
 
   startNewWave() {
@@ -485,13 +484,13 @@ class Defense extends Multiplayer {
       }
       this.global = 'Starting in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
     } else if (this.mode === 1) {
-      this.global = '===Preare for next wave===';
+      this.global = '===Prepare for next wave===';
     }
   }
 
   useAbility(t, a) {
     super.useAbility(t, a);
-    this.updateStatus();
+    if (this.mode === 2) this.updateStatus();
   }
 
   updateStatus() {
