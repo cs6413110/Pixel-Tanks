@@ -451,8 +451,7 @@ class Defense extends Multiplayer {
     t.team = t.username+(this.mode === 0 ? ':LOBBY' : ':PLAYERS');
   }
 
-  startNewWave() {
-    this.global = '===Wave #'+this.wave+' ('+enemies+' Enemies Left)===';
+  startNewWave() 
     let wavePoints = this.wave*50, spawnable = [];
     // spawn generation will be based off of this.cells
     for (const x in this.cells) {
@@ -470,6 +469,7 @@ class Defense extends Multiplayer {
       wavePoints -= rank*2;
       this.ai.push(new AI(spawn.x+10, spawn.y+10, 1, rank, 'AI', this));
     }
+    this.updateStatus();
   }
 
   ontick() {
