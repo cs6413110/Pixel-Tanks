@@ -89,6 +89,8 @@ const deathMessages = [
   `{idot} quit`,
   `{idot} disconnected`,
   `{idot} got techered`,
+  `{idot} read the epstien list`,
+  `{idot} was caught by the cia`,
   `{idot} will return soon`
 ];
 
