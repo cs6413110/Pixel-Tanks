@@ -438,8 +438,9 @@ class Defense extends Multiplayer {
   }
 
   add(socket, data) {
-    data.team = data.username+(this.mode === 0 ? ':LOBBY' : ':PLAYERS');
     super.add(socket, data);
+    const t = this.pt[this.pt.length-1];
+    t.team = data.username+(this.mode === 0 ? ':LOBBY' : ':PLAYERS');
   }
 
   startNewWave() {
