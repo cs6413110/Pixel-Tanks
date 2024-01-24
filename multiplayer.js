@@ -67,22 +67,14 @@ const deathMessages = [
   `{victim} was fed a healthy dose of explosives by {killer}`,
   `{victim} became another number in {killer}'s kill streak`,
   `{victim} got wrecked by {killer}`,
-  `{victim} was reduced to atoms by {killer}`,
 ], joinMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
-  `{idot} materialized`,
-  `{idot} is here to spread misinformation`,
   `{idot} has joined the battle`,
-  `{idot}`,
-  `{idot} is here`,
 ], rageMessages = [
   `{idot} left the game`,
-  `{idot} had to go, his people needed him`,
   `{idot} quit`,
   `{idot} disconnected`,
-  `{idot} will return soon`,
-  `{idot} got lost`,
 ];
 
 let tickspeed = 'N/A';
