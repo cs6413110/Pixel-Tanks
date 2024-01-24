@@ -444,6 +444,15 @@ class Defense extends Multiplayer {
   }
 
   startNewWave() {
+    for (const t of this.pt) {
+      this.pt.forEach(tank => {
+        tank.fire = false;
+        tank.hp = tank.maxHp;
+        tank.shields = 0;
+        tank.ded = false;
+        tank.socket.send({event: 'ded'});
+      });
+    }
     let wavePoints = this.wave*50, spawnable = [];
     // spawn generation will be based off of this.cells
     for (const x in this.cells) {
@@ -500,10 +509,18 @@ class Defense extends Multiplayer {
   }
   
   ondeath(t, m={}) {
-    this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
+    if (t instanceof Tank) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
     for (const ai of this.ai) if (Engine.getUsername(ai.team) === t.username) this.ai.splice(this.ai.indexOf(ai), 1);
     this.updateStatus();
-    if (t.socket) t.ded = true;
+    if (t.socket) {
+      t.ded = true;
+      let playerAlive = false;
+      for (const t of this.pt) if (!t.ded) playerAlive = true;
+      if (!playerAlive) {
+        this.logs.push({m: 'You lost so crashing :) bc no rewards bc breadley is lazzzyyyyy', c: '#FFFFFF'});
+        for (const t of this.pt) t.socket.close();
+      }
+    }
     if (m.socket) m.socket.send({event: 'ded'}); // reset cooldowns without giving loot
     if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
   }
