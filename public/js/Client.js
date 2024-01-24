@@ -10,6 +10,7 @@ class Client {
     this.left = this.up = null;
     this.lastUpdate = {};
     this.speed = 4;
+    this.fireType = 1;
     this.msg = '';
     this.key = [];
     this.ops = [];
@@ -130,7 +131,6 @@ class Client {
   reset() {
     const time = new Date('Nov 28 2006').getTime();
     this.timers = {boost: time, powermissle: time, grapple: time, toolkit: time, class: {time: time, cooldown: -1}, items: [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}]};
-    this.fireType = 1;
     this.halfSpeed = false;
     this.tank.invis = false;
     this.canClass = this.canFire = this.canBoost = this.canToolkit = this.canPowermissle = this.canInvis = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canGrapple = true;
