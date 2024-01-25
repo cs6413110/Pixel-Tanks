@@ -319,6 +319,7 @@ class Client {
     }
     
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
+    GUI.drawText('annoying text', 950, 20, 10, '#FFFFFF', 1);
     GUI.draw.fillStyle = PixelTanks.userData.color;
     GUI.draw.globalAlpha = 0.5;
     const c = [508, 672, 836, 1000]; // x coords of items
