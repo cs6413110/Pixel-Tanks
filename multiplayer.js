@@ -2,8 +2,8 @@ const settings = {
   authserver: 'localhost',
   bans: [],
   banips: [],
-  full_auth: ['cs641311' '3foe'],
-  admins: ['Celestial', 'bradley', '3foenation', 'LostKing', 'DarkMemeGod' '3foe' ], // I am terrified of DarkMemeGod having admin, he was just abusing yesterday and nobody did anything about it.
+  full_auth: ['cs641311'],
+  admins: ['Celestial', 'bradley', '3foenation', 'LostKing', 'DarkMemeGod'], // I am terrified of DarkMemeGod having admin, he was just abusing yesterday and nobody did anything about it.
   vips: [], 
   mutes: [],
   players_per_room: 400,
