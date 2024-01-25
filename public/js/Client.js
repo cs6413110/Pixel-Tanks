@@ -376,7 +376,7 @@ class Client {
         const info = infoset[i];
         GUI.draw.fillStyle = '#00FF00';
         for (const key in colorset) if (info >= key) GUI.draw.fillStyle = colorset[key];
-        GUI.draw.fillRect(1600-infoset.length*8+i*8, 800-info*.2, 10, info*.2);
+        GUI.draw.fillRect(1600-infoset.length*8+i*8, 800-info, 10, info*.2);
       }
     }
     
