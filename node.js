@@ -12,6 +12,8 @@ const tokens = new Set(), sockets = new Set();
 const valid = (token, username) => tokens.has(`${token}:${username}`);
 const auth = async({username, type, password}, socket) => {
   if (username === undefined || username === '') return socket.send({status: 'error', message: 'Blank account.'});
+  if (password === undefined || password === '') return socket.send({status: 'error', message: 'Invalid password.'});
+  if (userame.split('').some(a => [' ', '@', '[', ']', '#'].includes(a))) return socket.send({status: 'error', message: 'Invalid username.'});
   const item = await db.findOne({username}), token = Math.random();
   if (type === 'signup') {
     if (item !== null) return socket.send({status: 'error', message: 'This account already exists.'});
