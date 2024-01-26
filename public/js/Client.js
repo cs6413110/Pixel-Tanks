@@ -319,7 +319,11 @@ class Client {
     }
     
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
-    GUI.drawText('annoying text', 1550, 50, 30, '#FFFFFF', 1);
+    GUI.drawText(ths.kills, 1550, 30, 30, '#FFFFFF', 1);
+    GUI.drawText(this.xp/10, 1550, 60, 30, '#FFFFFF', 1);
+    GUI.drawText(this.crates, 1550, 60, 30, '#FFFFFF', 1);
+    GUI.drawText(this.coins, 1550, 60, 30, '#FFFFFF', 1);
+    GUI.drawText(this.xp, 1550, 60, 30, '#FFFFFF', 1);
     GUI.draw.fillStyle = PixelTanks.userData.color;
     GUI.draw.globalAlpha = 0.5;
     const c = [508, 672, 836, 1000]; // x coords of items
@@ -377,7 +381,7 @@ class Client {
         const info = infoset[i];
         GUI.draw.fillStyle = '#00FF00';
         for (const key in colorset) if (info >= key) GUI.draw.fillStyle = colorset[key];
-        GUI.draw.fillRect(1600-infoset.length*8+i*8, 800-info, 10, info*.2);
+        GUI.draw.fillRect(1600-infoset.length*8+i*8, 800-info, 10, info);
       }
     }
     
