@@ -319,7 +319,7 @@ class Client {
     }
     
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
-    GUI.drawText(ths.kills, 1550, 30, 30, '#FFFFFF', 1);
+    GUI.drawText(this.kills, 1550, 30, 30, '#FFFFFF', 1);
     GUI.drawText(this.xp/10, 1550, 60, 30, '#FFFFFF', 1);
     GUI.drawText(this.crates, 1550, 60, 30, '#FFFFFF', 1);
     GUI.drawText(this.coins, 1550, 60, 30, '#FFFFFF', 1);
