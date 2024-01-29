@@ -44,7 +44,7 @@ class AI {
   giveAbilities() {
     const available = ['airstrike', 'super_glu', 'duck_tape', 'shield', 'flashbang', 'bomb', 'dynamite', 'usb', 'weak', 'strong', 'spike', 'reflector'];
     const classes = ['tactical', 'stealth', 'warrior', 'builder', 'fire', 'medic'];
-    (for (let i = 0; i < 4; i++) if (this.canItem[i]) this.items.push(available[Math.floor(Math.random()*available.length)]);
+    for (let i = 0; i < 4; i++) if (this.canItem[i]) this.items.push(available[Math.floor(Math.random()*available.length)]);
     if (this.canClass) this.class = classes[Math.floor(Math.random()*classes.length)];
   }
 
