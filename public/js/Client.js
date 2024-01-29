@@ -320,8 +320,8 @@ class Client {
     
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
     GUI.drawText(this.kills, 1530, 40, 30, '#FFFFFF', 1);
-    GUI.drawText(this.xp/10, 1530, 100, 30, '#FFFFFF', 1);
-    GUI.drawText(this.crates, 1530, 160, 30, '#FFFFFF', 1);
+    GUI.drawText(this.xp/10, 1530, 110, 30, '#FFFFFF', 1);
+    GUI.drawText(this.crates, 1530, 150, 30, '#FFFFFF', 1);
     GUI.drawText(this.coins, 1530, 200, 30, '#FFFFFF', 1);
     GUI.drawText(this.xp, 1530, 260, 30, '#FFFFFF', 1);
     GUI.draw.fillStyle = PixelTanks.userData.color;
