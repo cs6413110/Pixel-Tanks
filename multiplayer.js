@@ -657,6 +657,7 @@ const Commands = {
     }
   }],
   reboot: [Object, 2, 1, function() {
+    for (const socket of sockets) socket.send({status: 'error', message: 'Restarting Server!'});
     process.exit(1);
   }],
   sread: [Object, 1, 2, function(data) {
