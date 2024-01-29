@@ -319,11 +319,11 @@ class Client {
     }
     
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
-    GUI.drawText(this.kills, 1550, 30, 30, '#FFFFFF', 1);
-    GUI.drawText(this.xp/10, 1550, 60, 30, '#FFFFFF', 1);
-    GUI.drawText(this.crates, 1550, 60, 30, '#FFFFFF', 1);
-    GUI.drawText(this.coins, 1550, 60, 30, '#FFFFFF', 1);
-    GUI.drawText(this.xp, 1550, 60, 30, '#FFFFFF', 1);
+    GUI.drawText(this.kills, 1500, 40, 30, '#FFFFFF', 1);
+    GUI.drawText(this.xp/10, 1500, 80, 30, '#FFFFFF', 1);
+    GUI.drawText(this.crates, 1500, 120, 30, '#FFFFFF', 1);
+    GUI.drawText(this.coins, 1500, 160, 30, '#FFFFFF', 1);
+    GUI.drawText(this.xp, 1500, 200, 30, '#FFFFFF', 1);
     GUI.draw.fillStyle = PixelTanks.userData.color;
     GUI.draw.globalAlpha = 0.5;
     const c = [508, 672, 836, 1000]; // x coords of items
