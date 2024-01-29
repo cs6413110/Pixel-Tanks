@@ -1,6 +1,6 @@
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
-const {multiopen, multimessage, multiclose} = require('./multiplayer.js');
+require('./multiplayer.js');
 const {MongoClient} = require('mongodb');
 const http = require('http');
 const fs = require('fs');
@@ -43,21 +43,15 @@ let db;
 
 const server = http.createServer((req, res) => {
   if (req.url.includes('/download')) {
-    if (!ytdl.validateID(req.url.replace('/download', ''))) {
-      res.statusCode = 404;
-      return res.end('Bad ID format');
-    }
+    if (!ytdl.validateID(req.url.replace('/download', ''))) return res.end('Bad ID format');
     res.setHeader('Content-Type', 'octet-stream');
     res.setHeader('Content-Disposition', 'attachment');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', '*');
     ytdl(`https://youtube.com/watch?v=${req.url.replace('/download', '')}`, {filter: 'videoandaudio', quality: 'highest'}).pipe(res);
-  } else {
-    res.end(fs.readFileSync('./public/js/pixel-tanks.js'));
-  }
+  } else res.end(fs.readFileSync('./public/js/pixel-tanks.js'));
 });
-
-const wss = new WebSocketServer({noServer: true});
+const wss = new WebSocketServer({server});
 wss.on('connection', function connection(ws) {
   ws._send = ws.send;
   ws.send = data => ws._send(pack(data));
@@ -67,7 +61,6 @@ wss.on('connection', function connection(ws) {
     try {
       data = unpack(data);
     } catch(e) {
-      console.log(e);
       return ws.close();
     }
     if (!ws.username) ws.username = data.username;
@@ -79,31 +72,4 @@ wss.on('connection', function connection(ws) {
     sockets.delete(ws)
   });
 });
-const multi = new WebSocketServer({noServer: true});
-multi.on('connection', function connection(ws) {
-  ws._send = ws.send;
-  ws.send = data => ws._send(pack(data));
-  multiopen(ws);
-  ws.on('error', console.error);
-  ws.on('message', data => {
-    try {
-      data = unpack(data);
-    } catch(e) {
-      return ws.close();
-    }
-    multimessage(ws, data);
-  });
-  ws.on('close', () => multiclose(ws, null, null));
-});
-server.on('upgrade', (request, socket, head) => {
-  const pathname = request.url;
-  if (pathname === '/ffa') {
-    multi.handleUpgrade(request, socket, head, (ws) => {
-      multi.emit('connection', ws, request);
-    });
-  } else wss.handleUpgrade(request, socket, head, (ws) => {
-      wss.emit('connection', ws, request);
-    });
-});
-
 server.listen(80);
