@@ -760,6 +760,7 @@ const Profile = (arr, update) => {
 
 const wss = new WebSocketServer({port: 8022});
 wss.on('connection', socket => {
+  console.log('CONNECTION!');
   sockets.add(socket);
   socket.on('message', (socket, data) => {
     if (!socket.username) socket.username = data.username;
