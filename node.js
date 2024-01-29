@@ -1,6 +1,5 @@
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
-require('./multiplayer.js');
 const {MongoClient} = require('mongodb');
 const http = require('http');
 const fs = require('fs');
