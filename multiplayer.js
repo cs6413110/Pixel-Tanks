@@ -11,6 +11,7 @@ const settings = {
 }
 
 const fs = require('fs');
+const {WebSocketServer} = require('ws');
 console.log('Compiling Game Engine...');
 fs.writeFileSync('engine.js', [`const PF = require('pathfinding');`, fs.readFileSync('./public/js/Engine.js'), fs.readFileSync('./public/js/Tank.js'), fs.readFileSync('./public/js/Block.js'), fs.readFileSync('./public/js/Shot.js'), fs.readFileSync('./public/js/AI.js'), fs.readFileSync('./public/js/Damage.js'), fs.readFileSync('./public/js/A.js'), 'module.exports = {Engine, Tank, Block, Shot, AI, Damage, A}'].join(''));
 console.log('Done!');
@@ -757,70 +758,72 @@ const Profile = (arr, update) => {
   }
 }
 
-const multiopen = (socket) => sockets.add(socket);
-const multimessage = (socket, data) => {
-  if (!socket.username) socket.username = data.username;
-  if (data.type === 'update') {
-    if (settings.bans.includes(data.username)) {
-      socket.send({status: 'error', message: 'You are banned!'});
-      return setTimeout(() => socket.close());
-    }
-    servers[socket.room].update(data);
-  } else if (data.type === 'join') {
-    if (settings.bans.includes(data.username)) {
-      socket.send({status: 'error', message: 'You are banned!'});
-      return setTimeout(() => socket.close());
-    }
-    let server;
-    for (const id in servers) {
-      if (servers[id] instanceof joinKey[data.gamemode]) {
-        if (data.gamemode === 'ffa' && servers[id].pt.length >= settings.players_per_room) continue;
-        if (data.gamemode === 'duels' && servers[id].pt.length !== 1) continue;
-        if (data.gamemode === 'tdm' && servers[id].mode !== 0) continue;
-        if (data.gamemode === 'defense' && servers[id].pt.length > 10) continue;
-        server = id;
-        break;
+const wss = new WebSocketServer({port: 8022});
+wss.on('connection', socket => {
+  sockets.add(socket);
+  socket.on('message', (socket, data) => {
+    if (!socket.username) socket.username = data.username;
+    if (data.type === 'update') {
+      if (settings.bans.includes(data.username)) {
+        socket.send({status: 'error', message: 'You are banned!'});
+        return setTimeout(() => socket.close());
       }
-    }
-    if (!server) {
-      server = Math.random();
-      servers[server] = new joinKey[data.gamemode]();
-    }
-    if (servers[server].pt.some(t => t.username === socket.username)) {
-      socket.send({status: 'error', message: 'You are already in the server!'});
-      return setImmediate(() => socket.close());
-    }
-    socket.room = server;
-    servers[server].add(socket, data.tank);
-  } else if (data.type === 'ping') {
-    socket.send({event: 'ping', id: data.id});
-  } else if (data.type === 'chat') {
-    // handle mutes and filtering here
-    if (settings.mutes.includes(socket.username)) return socket.send({status: 'error', message: 'You are muted!'});
-    if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${data.msg}`, c: '#ffffff'});
-    if (servers[data.room]) servers[data.room].logs.push({m: `[${data.username}] ${data.msg}`, c: '#ffffff'});
-  } else if (data.type === 'logs') {
-    if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
-  } else if (data.type === 'command') {
-    const f = Commands[data.data[0]];
-    if (!f) return socket.send({status: 'error', message: 'Command not found.'});
-    if (!(servers[socket.room] instanceof f[0])) return socket.send({status: 'error', message: 'This command is not available in this server type.'});
-    if (data.data.length !== f[2] && f[2] !== -1) return socket.send({status: 'error', message: 'Wrong number of arguments.'});
-    if (!hasAccess(socket.username, f[1])) return socket.send({status: 'error', message: `You don't have access to this.`});
-    f[3].bind(socket)(data.data);
-  } else if (data.type === 'stats') {
-    let gamemodes = {FFA: [], DUELS: [], TDM: [], Defense: [], tickspeed, event: 'stats'};
-    for (const id in servers) {
-      gamemodes[servers[id].constructor.name][id] = [];
-      for (const pt of servers[id].pt) {
-        gamemodes[servers[id].constructor.name][id].push(pt.username);
+      servers[socket.room].update(data);
+    } else if (data.type === 'join') {
+      if (settings.bans.includes(data.username)) {
+        socket.send({status: 'error', message: 'You are banned!'});
+        return setTimeout(() => socket.close());
       }
+      let server;
+      for (const id in servers) {
+        if (servers[id] instanceof joinKey[data.gamemode]) {
+          if (data.gamemode === 'ffa' && servers[id].pt.length >= settings.players_per_room) continue;
+          if (data.gamemode === 'duels' && servers[id].pt.length !== 1) continue;
+          if (data.gamemode === 'tdm' && servers[id].mode !== 0) continue;
+          if (data.gamemode === 'defense' && servers[id].pt.length > 10) continue;
+          server = id;
+          break;
+        }
+      }
+      if (!server) {
+        server = Math.random();
+        servers[server] = new joinKey[data.gamemode]();
+      }
+      if (servers[server].pt.some(t => t.username === socket.username)) {
+        socket.send({status: 'error', message: 'You are already in the server!'});
+        return setImmediate(() => socket.close());
+      }
+      socket.room = server;
+      servers[server].add(socket, data.tank);
+    } else if (data.type === 'ping') {
+      socket.send({event: 'ping', id: data.id});
+    } else if (data.type === 'chat') {
+      // handle mutes and filtering here
+      if (settings.mutes.includes(socket.username)) return socket.send({status: 'error', message: 'You are muted!'});
+      if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${data.msg}`, c: '#ffffff'});
+      if (servers[data.room]) servers[data.room].logs.push({m: `[${data.username}] ${data.msg}`, c: '#ffffff'});
+    } else if (data.type === 'logs') {
+      if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
+    } else if (data.type === 'command') {
+      const f = Commands[data.data[0]];
+      if (!f) return socket.send({status: 'error', message: 'Command not found.'});
+      if (!(servers[socket.room] instanceof f[0])) return socket.send({status: 'error', message: 'This command is not available in this server type.'});
+      if (data.data.length !== f[2] && f[2] !== -1) return socket.send({status: 'error', message: 'Wrong number of arguments.'});
+      if (!hasAccess(socket.username, f[1])) return socket.send({status: 'error', message: `You don't have access to this.`});
+      f[3].bind(socket)(data.data);
+    } else if (data.type === 'stats') {
+      let gamemodes = {FFA: [], DUELS: [], TDM: [], Defense: [], tickspeed, event: 'stats'};
+      for (const id in servers) {
+        gamemodes[servers[id].constructor.name][id] = [];
+        for (const pt of servers[id].pt) {
+          gamemodes[servers[id].constructor.name][id].push(pt.username);
+        }
+      }
+      socket.send(gamemodes);
     }
-    socket.send(gamemodes);
-  }
-}
-const multiclose = (socket, code, reason) => {
-  sockets.delete(socket);
-  if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
-}
-module.exports = {multiopen, multimessage, multiclose};
+  });
+  socket.on('close', (socket, code, reason) => {
+    sockets.delete(socket);
+    if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
+  });
+});
