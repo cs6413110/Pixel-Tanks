@@ -37,7 +37,7 @@ class Engine {
         t.healTimeout = setTimeout(() => {
           t.hp = t.maxHp;
           t.healTimeout = undefined;
-        }, t.class === 'medic' ? 5000 : 7500);
+        }, 7500);
        }
     } else if (a === 'tape') {
       t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
