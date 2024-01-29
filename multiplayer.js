@@ -758,7 +758,7 @@ const Profile = (arr, update) => {
   }
 }
 
-const wss = new WebSocketServer({port: 8022});
+const wss = new WebSocketServer({port: 8080});
 wss.on('connection', socket => {
   console.log('CONNECTION!');
   sockets.add(socket);
