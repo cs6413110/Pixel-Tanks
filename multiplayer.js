@@ -759,10 +759,9 @@ const Profile = (arr, update) => {
 }
 
 const wss = new WebSocketServer({port: 8080});
-wss.on('connection', socket => {
-  console.log('CONNECTION!');
+wss.on('connection', ws => {
   sockets.add(socket);
-  socket.on('message', (socket, data) => {
+  ws.on('message', (socket, data) => {
     if (!socket.username) socket.username = data.username;
     if (data.type === 'update') {
       if (settings.bans.includes(data.username)) {
@@ -823,7 +822,7 @@ wss.on('connection', socket => {
       socket.send(gamemodes);
     }
   });
-  socket.on('close', (socket, code, reason) => {
+  ws.on('close', (socket, code, reason) => {
     sockets.delete(socket);
     if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
   });
