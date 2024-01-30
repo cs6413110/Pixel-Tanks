@@ -167,7 +167,7 @@ class Engine {
       t.canInvis = t.invis = false;
       setTimeout(() => {t.canInvis = true}, 100);
       t.pushback = -6;
-      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, Engine.parseTeamExtras(t.team), t.rank*(t.buff ? (1.5*t.rank+15)/Math.max(t.rank, 1/2000) : 1), this));
+      for (const s of fire) this.s.push(new Shot(t.x + 40, t.y + 40, s.x, s.y, s.type, s.r, Engine.parseTeamExtras(t.team), t.rank, this));
     }
   }
 
