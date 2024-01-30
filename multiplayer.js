@@ -759,6 +759,11 @@ const Profile = (arr, update) => {
     }
   }
 }
+process.on('uncaughtException', function (err) {
+  for (const socket of sockets) if (['bradley', 'Celestial', 'cs641311'].includes(socket.username)) socket.send({status: 'error', message: err});
+  console.error(err);
+  process.exit(0);
+});
 
 const wss = new WebSocketServer({port: 8080});
 wss.on('connection', socket => {
