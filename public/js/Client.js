@@ -472,7 +472,7 @@ class Client {
     this.fireInterval = setInterval(() => {
       this.canFire = true;
       this.fire(e.button);
-    }, PixelTanks.userData.class === 'warrior' ? this.fireType === 1 ? 133 : 400 : this.fireType === 1 ? 200 : 600);
+    }, this.buff ? this.fireType === 1 ? 133 : 400 : this.fireType === 1 ? 200 : 600);
   }
 
   mouseup() {
@@ -489,7 +489,7 @@ class Client {
       if (!this.canFire) return;
       this.canFire = false;
       clearTimeout(this.fireTimeout);
-      this.fireTimeout = setTimeout(() => {this.canFire = true}, PixelTanks.userData.class === 'warrior' ? this.fireType === 1 ? 133 : 400 : this.fireType === 1 ? 200 : 600);
+      this.fireTimeout = setTimeout(() => {this.canFire = true}, this.buff ? this.fireType === 1 ? 133 : 400 : this.fireType === 1 ? 200 : 600);
     }
     var fireType = ['grapple', 'megamissle', 'dynamite', 'usb', 'healmissle', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? 'powermissle' : (!isNaN(type) ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
     while (l<(fireType === 1 ? 1 : 15)) {
