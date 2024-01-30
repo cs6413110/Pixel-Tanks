@@ -779,7 +779,6 @@ wss.on('connection', socket => {
       }
       servers[socket.room].update(data);
     } else if (data.type === 'join') {
-      console.log('joining');
       if (settings.bans.includes(data.username)) {
         socket.send({status: 'error', message: 'You are banned!'});
         return setTimeout(() => socket.close());
@@ -832,7 +831,7 @@ wss.on('connection', socket => {
       socket.send(gamemodes);
     }
   });
-  socket.on('close', (socket, code, reason) => {
+  socket.on('close', (code, reason) => {
     sockets.delete(socket);
     if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
   });
