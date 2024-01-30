@@ -653,7 +653,7 @@ class Client {
         }, 10000);
       } else if (c === 'warrior') {
         this.tank.use.push('buff');
-        this.timers.class = {time: Date.now(), cooldown: 40000};
+        this.timers.class = {time: Date.now(), cooldown: 0};
       } else if (c === 'medic') {
         this.fire('healmissle');
         this.timers.class = {time: Date.now(), cooldown: 15000};//stop it ur wasting time :/
