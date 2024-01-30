@@ -11,6 +11,8 @@ const settings = {
 }
 
 const fs = require('fs');
+const {pack} = require('msgpackr/pack');
+const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
 console.log('Compiling Game Engine...');
 fs.writeFileSync('engine.js', [`const PF = require('pathfinding');`, fs.readFileSync('./public/js/Engine.js'), fs.readFileSync('./public/js/Tank.js'), fs.readFileSync('./public/js/Block.js'), fs.readFileSync('./public/js/Shot.js'), fs.readFileSync('./public/js/AI.js'), fs.readFileSync('./public/js/Damage.js'), fs.readFileSync('./public/js/A.js'), 'module.exports = {Engine, Tank, Block, Shot, AI, Damage, A}'].join(''));
@@ -760,8 +762,15 @@ const Profile = (arr, update) => {
 
 const wss = new WebSocketServer({port: 8080});
 wss.on('connection', ws => {
+  ws._send = ws.send;
+  ws.send = data => ws._send(pack(data));
   sockets.add(socket);
   ws.on('message', (socket, data) => {
+    try {
+      data = unpack(data);
+    } catch(e) {
+      return ws.close();
+    }
     if (!socket.username) socket.username = data.username;
     if (data.type === 'update') {
       if (settings.bans.includes(data.username)) {
