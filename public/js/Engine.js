@@ -108,7 +108,7 @@ class Engine {
       for (let i = this.ai.length-1, turrets = 0; i >= 0; i--) if (this.ai[i].role === 0 && Engine.getUsername(this.ai[i].team) === t.username && ++turrets > 3) this.ai[i].destroy();
     } else if (a === 'buff') {
       t.buff = true;
-      setTimeout(() => { t.buff = false }, 5000);
+      setTimeout(() => { t.buff = false }, 10000);
     } else if (a === 'shield') {
       t.shields = 100;
     } else if (a === 'reflector') {
