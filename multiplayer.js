@@ -764,7 +764,7 @@ const wss = new WebSocketServer({port: 8080});
 wss.on('connection', ws => {
   ws._send = ws.send;
   ws.send = data => ws._send(pack(data));
-  sockets.add(socket);
+  sockets.add(ws);
   ws.on('message', (socket, data) => {
     try {
       data = unpack(data);
