@@ -761,18 +761,15 @@ const Profile = (arr, update) => {
 }
 
 const wss = new WebSocketServer({port: 8080});
-wss.on('connection', ws => {
-  console.log('socket connected!');
-  ws._send = ws.send;
-  ws.send = data => ws._send(pack(data));
-  sockets.add(ws);
-  ws.on('message', (socket, data) => {
+wss.on('connection', socket => {
+  socket._send = socket.send;
+  socket.send = data => socket._send(pack(data));
+  sockets.add(socket);
+  socket.on('message', data => {
     try {
       data = unpack(data);
-      console.log('msg: '+data);
     } catch(e) {
-      console.log('err '+e);
-      return ws.close();
+      return socket.close();
     }
     if (!socket.username) socket.username = data.username;
     if (data.type === 'update') {
@@ -835,7 +832,7 @@ wss.on('connection', ws => {
       socket.send(gamemodes);
     }
   });
-  ws.on('close', (socket, code, reason) => {
+  socket.on('close', (socket, code, reason) => {
     sockets.delete(socket);
     if (servers[socket.room]) servers[socket.room].disconnect(socket, code, reason);
   });
