@@ -762,13 +762,16 @@ const Profile = (arr, update) => {
 
 const wss = new WebSocketServer({port: 8080});
 wss.on('connection', ws => {
+  console.log('socket connected!');
   ws._send = ws.send;
   ws.send = data => ws._send(pack(data));
   sockets.add(ws);
   ws.on('message', (socket, data) => {
     try {
       data = unpack(data);
+      console.log('msg: '+data);
     } catch(e) {
+      console.log('err '+e);
       return ws.close();
     }
     if (!socket.username) socket.username = data.username;
@@ -779,6 +782,7 @@ wss.on('connection', ws => {
       }
       servers[socket.room].update(data);
     } else if (data.type === 'join') {
+      console.log('joining');
       if (settings.bans.includes(data.username)) {
         socket.send({status: 'error', message: 'You are banned!'});
         return setTimeout(() => socket.close());
