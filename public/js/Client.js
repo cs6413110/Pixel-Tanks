@@ -561,7 +561,7 @@ class Client {
     } else if (id === 'bomb') {
       this.tank.use.push('bomb');
       this.tank.use.push('break');
-      cooldown = 5000;
+      cooldown = 0;
     } else if (id === 'dynamite') {
       this.fire('dynamite');
       cooldown = 25000;
@@ -653,7 +653,7 @@ class Client {
         }, 10000);
       } else if (c === 'warrior') {
         this.tank.use.push('buff');
-        this.timers.class = {time: Date.now(), cooldown: 0};
+        this.timers.class = {time: Date.now(), cooldown: 30000};
       } else if (c === 'medic') {
         this.fire('healmissle');
         this.timers.class = {time: Date.now(), cooldown: 15000};//stop it ur wasting time :/
