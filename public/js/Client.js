@@ -561,7 +561,7 @@ class Client {
     } else if (id === 'bomb') {
       this.tank.use.push('bomb');
       this.tank.use.push('break');
-      cooldown = 2000;
+      cooldown = 3000;
     } else if (id === 'dynamite') {
       this.fire('dynamite');
       cooldown = 25000;
