@@ -639,7 +639,7 @@ const Commands = {
     for (const t of servers[this.room].pt) for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username);
   }],
   killai: [Object, 2, 1, function(data) {
-    for (const ai of servers[this.room].ai) ai.destroy();
+    for (let i = servers[this.room].ai.length; i >= 0; i--) servers[this.room].ai[i].destroy();
   }],
   /*ai: [Object, 2, 7, function(data) {
     for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), data[6], servers[this.room]));
