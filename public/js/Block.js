@@ -53,13 +53,7 @@ class Block {
   destroy() {
     clearTimeout(this.sd);
     clearTimeout(this.bar);
-    try {
-      this.host.b.splice(this.host.b.indexOf(this), 1);
-    } catch(e) {
-      console.log('blok.err');
-      console.log('id='+this.id+' x='+this.x+' y='+this.y);
-      return;
-    }
+    this.host.b.splice(this.host.b.indexOf(this), 1);
     for (const cell of this.cells) {
       const [x, y] = cell.split('x');
       this.host.cells[x][y].delete(this);
