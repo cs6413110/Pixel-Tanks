@@ -407,9 +407,8 @@ class TDM extends Multiplayer {
             tank.ded = false;
             t.socket.send({event: 'ded'});
           });
-          this.b = [];
           this.s = [];
-          this.ai = [];
+          this.ai = []; // actaully destroy these later :/
           this.d = [];
           this.levelReader(tdmLevels[Math.floor(Math.random()*tdmLevels.length)]);
           this.round++;
