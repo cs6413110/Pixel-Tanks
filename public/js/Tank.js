@@ -162,4 +162,3 @@ class Tank {
     return true;
   }
 }
-if (module) module.exports = Tank;
