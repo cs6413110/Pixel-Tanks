@@ -54,4 +54,3 @@ class Damage {
     }
   }
 }
-if (module) module.exports = Damage;
