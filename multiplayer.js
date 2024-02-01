@@ -209,7 +209,7 @@ class FFA extends Multiplayer {
 
   ondeath(t, m={}) {
     this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
-    for (const ai of this.ai) if (Engine.getUsername(ai.team) === t.username) this.ai.splice(this.ai.indexOf(ai), 1);
+    for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     if (t.socket) t.ded = true;
     if (m.socket) m.socket.send({event: 'kill'});
     if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
@@ -259,11 +259,7 @@ class DUELS extends Multiplayer {
     if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
     if (m.username) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
     if (m.socket) m.socket.send({event: 'kill'});
-    for (const ai of this.ai) {
-      if (Engine.getUsername(ai.team) === t.username) {
-        this.ai.splice(this.ai.indexOf(ai), 1);
-      }
-    }
+    for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     this.wins[m.username] = this.wins[m.username] === undefined ? 1 : this.wins[m.username]+1;
     if (this.wins[m.username] === 3) {
       this.global = m.username+' Wins!';
@@ -381,11 +377,7 @@ class TDM extends Multiplayer {
     }
     if (m.username) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
     if (m.socket) m.socket.send({event: 'kill'});
-    for (const ai of this.ai) {
-      if (Engine.getUsername(ai.team) === t.username) {
-        this.ai.splice(this.ai.indexOf(ai), 1);
-      }
-    }
+    for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     let allies = 0;
     this.pt.forEach(tank => {
       if (!tank.ded) {
@@ -512,7 +504,7 @@ class Defense extends Multiplayer {
   
   ondeath(t, m={}) {
     if (t instanceof Tank) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
-    for (const ai of this.ai) if (Engine.getUsername(ai.team) === t.username) this.ai.splice(this.ai.indexOf(ai), 1);
+    for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     this.updateStatus();
     if (t.socket) {
       t.ded = true;
@@ -639,7 +631,7 @@ const Commands = {
     for (const t of servers[this.room].pt) for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username);
   }],
   killai: [Object, 2, 1, function(data) {
-    for (let i = servers[this.room].ai.length; i >= 0; i--) servers[this.room].ai[i].destroy();
+    for (let i = servers[this.room].ai.length-1; i >= 0; i--) servers[this.room].ai[i].destroy();
   }],
   /*ai: [Object, 2, 7, function(data) {
     for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), data[6], servers[this.room]));
