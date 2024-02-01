@@ -179,15 +179,7 @@ class Engine {
   }
 
   levelReader(level) {
-    this.b = [];
-    this.cells = [];
-    for (let y = 0; y < 30; y++) {
-      this.cells[y] = [];
-      for (let x = 0; x < 30; x++) {
-        this.map.setWalkableAt(x, y, true);
-        this.cells[y][x] = new Set();
-      }
-    }
+    for (const b of this.b) b.destroy();
     const key = {'B5': ['void', Infinity], 'B4': ['barrier', Infinity], 'B3': ['gold', 300], 'B2': ['strong', 200], 'B1': ['weak', 100]};
     for (let l = 0; l < level.length; l++) {
       for (let q = 0; q < level[l].length; q++) {
