@@ -416,4 +416,3 @@ class AI {
     }
   }
 }
-if (module) module.exports = AI;
