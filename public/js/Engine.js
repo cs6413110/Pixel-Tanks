@@ -11,7 +11,7 @@ class Engine {
     }
     this.spawn = {x: 0, y: 0};
     this.spawns = [{x: 0, y: 0}, {x: 0, y: 0}];
-    for (const property of ['ai', 's', 'pt', 'd', 'i', 'logs']) this[property] = [];
+    for (const property of ['ai', 's', 'pt', 'b', 'd', 'i', 'logs']) this[property] = [];
     this.map = new PF.Grid(30, 30);
     this.levelReader(levels[Math.floor(Math.random()*levels.length)]);
     this.i.push(setInterval(() => this.tick(), 1000/60));
