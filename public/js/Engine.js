@@ -184,7 +184,7 @@ class Engine {
   }
 
   levelReader(level) {
-    for (const b of this.b.slice().reverse()) b.destroy();
+    for (let i = this.b.length-1; i >= 0; i--) this.b[i].destroy();
     const key = {'B5': ['void', Infinity], 'B4': ['barrier', Infinity], 'B3': ['gold', 300], 'B2': ['strong', 200], 'B1': ['weak', 100]};
     for (let l = 0; l < level.length; l++) {
       for (let q = 0; q < level[l].length; q++) {
