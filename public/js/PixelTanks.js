@@ -708,7 +708,7 @@ class PixelTanks {
     }, {
       common: ['erase', 'explode', 'nuke', 'evan'], //bruh why am i common :(
       uncommon: ['ghost', 'anvil', 'insta', 'knight', 'gameover'],
-      rare: ['amogus', 'minecraft', 'magic', 'plant'],
+      rare: ['amogus', 'minecraft', 'magic', 'kermit', 'plant'],
       epic: ['wakawaka', 'battery', 'fix', 'mechagodzilla'],
       legendary: ['error', 'enderman', 'crate'],
       mythic: ['pokeball', 'clicked', 'cat'],
