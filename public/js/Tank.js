@@ -111,8 +111,8 @@ class Tank {
               }, 4000);
             } else if (entity.type === 'spike' && !teamMatch && spikeLimiter !== undefined) spikeLimiter = this.damageCalc(this.x, this.y, 1, Engine.getUsername(entity.team));
           }
-        } else if (entity instanceof Tank) {
-          if (entity.buff && !this.ded && !this.immune && this.canBashed && Engine.getTeam(entity.team) !== Engine.getTeam(this.team) && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
+        } else if (entity instanceof Tank || entity instanceof AI) {
+          if (entity.buff && !this.ded && !this.immune && this.canBashed && Engine.getTeam(entity.team) !== Engine.getTeam(this.team) && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 80, 80)) {
             this.canBashed = false;
             setTimeout(() => {this.canBashed = true}, 1000);
             this.damageCalc(this.x, this.y, 100, Engine.getUsername(entity.team));
