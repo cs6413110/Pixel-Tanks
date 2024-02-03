@@ -646,11 +646,7 @@ class Client {
         this.timers.class = {time: Date.now(), cooldown: 25000};
       } else if (c === 'builder') {
         this.tank.use.push('turret');
-        this.timers.class = {time: Date.now(), cooldown: 50}
-        if (!this.turretSpam) this.turretSpam = setTimeout(() => {
-          this.turretSpam = undefined;
-          this.timers.class = {time: Date.now(), cooldown: 25000};
-        }, 10000);
+        this.timers.class = {time: Date.now(), cooldown: 20000}
       } else if (c === 'warrior') {
         this.tank.use.push('buff');
         this.timers.class = {time: Date.now(), cooldown: 30000};
