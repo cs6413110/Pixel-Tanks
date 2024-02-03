@@ -113,8 +113,8 @@ class Tank {
           }
         } else if (entity instanceof Tank) {
           if (entity.buff && !this.ded && !this.immune && this.canBashed && Engine.getTeam(entity.team) !== Engine.getTeam(this.team) && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
-            this.canBashed = true;
-            setTimeout(() => {this.canBashed = false}, 1000);
+            this.canBashed = false;
+            setTimeout(() => {this.canBashed = true}, 1000);
             this.damageCalc(this.x, this.y, 100, Engine.getUsername(entity.team));
           }
         }
