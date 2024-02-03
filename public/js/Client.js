@@ -650,7 +650,6 @@ class Client {
       } else if (c === 'warrior') {
         this.tank.use.push('bash');
         clearTimeout(this.booster);
-        clearTimeout(this.boostTimeout);
         this.speed = 16;
         this.tank.immune = true;
         this.booster = setTimeout(() => {
