@@ -504,7 +504,7 @@ class Client {
     var l = 0, blocks = this.hostupdate.b, len = blocks.length;
     while (l<len) {
       if ((x > blocks[l].x || x + 80 > blocks[l].x) && (x < blocks[l].x + 100 || x + 80 < blocks[l].x + 100) && (y > blocks[l].y || y + 80 > blocks[l].y) && (y < blocks[l].y + 100 || y + 80 < blocks[l].y + 100)) {
-        if ((['barrier', 'weak', 'strong', 'gold', 'spike'].includes(blocks[l].type) && !(PixelTanks.userData.class === 'warrior' && this.tank.immune)) || ['barrier', 'void'].includes(blocks[l].type)) return false;
+        if ((['barrier', 'weak', 'strong', 'gold', 'spike'].includes(blocks[l].type)) || ['barrier', 'void'].includes(blocks[l].type)) return false;
       }
       l++;
     }
@@ -648,7 +648,13 @@ class Client {
         this.tank.use.push('turret');
         this.timers.class = {time: Date.now(), cooldown: 20000}
       } else if (c === 'warrior') {
-        this.tank.use.push('buff');
+        this.tank.use.push('bash');
+        clearTimeout(this.booster);
+        clearTimeout(this.boostTimeout);
+        this.booster = setTimeout(() => {
+          this.speed = 4;
+          this.tank.immune = false;
+        }, 1000);
         this.timers.class = {time: Date.now(), cooldown: 30000};
       } else if (c === 'medic') {
         this.fire('healmissle');
@@ -678,12 +684,14 @@ class Client {
         this.canBoost = false;
         this.tank.immune = true;
         this.timers.boost = Date.now();
-        setTimeout(() => {
+        clearTimeout(this.booster);
+        clearTimeout(this.boostTimeout);
+        this.booster = setTimeout(() => {
           this.speed = 4;
           this.tank.immune = false;
           if (PixelTanks.userData.class === 'stealth') this.tank.use.push('break');
-        }, PixelTanks.userData.class === 'warrior' ? 750 : 500);
-        setTimeout(() => {this.canBoost = true}, 5000);
+        }, 500);
+        this.boostTimeout = setTimeout(() => {this.canBoost = true}, 5000);
       }
     }
   }
