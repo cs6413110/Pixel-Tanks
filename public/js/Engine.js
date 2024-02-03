@@ -63,25 +63,9 @@ class Engine {
         }
       }
     } else if (a === 'flashbang') {
-      for (const tank of this.pt) {
-        const bangTime = (500-Math.sqrt((t.x-tank.x)**2+(t.y-tank.y)**2))*5;
-        if (bangTime > 0 && (Engine.getTeam(tank.team) !== Engine.getTeam(t.team) || tank.username === t.username)) {
-          tank.flashbanged = false;
-          clearTimeout(tank.flashbangTimeout);
-          tank.flashbangTimeout = setTimeout(() => {
-            tank.flashbanged = false;
-          }, tank.username === t.username ? 500 : bangTime);
-        }
-      }
-      for (const ai of this.ai) {
-        const bangTime = (500-Math.sqrt((t.x-ai.x)**2+(t.y-ai.y)**2))*5;
-        if (bangTime > 0 && (Engine.getTeam(ai.team) !== Engine.getTeam(t.team) || ai.id === t.id)) {
-          ai.stunned = true;
-          clearTimeout(ai.flashbangTimeout);
-          ai.flashbangTimeout = setTimeout(() => {
-            ai.stunned = false;
-          }, ai.id === t.id ? 500 : bangTime);
-        }
+      for (const t of this.pt) {
+        t.flashbanged = true;
+        t.flashbangTimeout = setTimeout(() => {t.flashbanged = false}, 10);
       }
     } else if (a === 'break') {
       for (const cell of t.cells) {
