@@ -563,7 +563,7 @@ const Commands = {
     });
   }],
   freeze: [Object, 2, 2, function(data) {
-    const t = servers[this.room].find(t => t.username === data[1]);
+    const t = servers[this.room].pt.find(t => t.username === data[1]);
     if (t) {
       const x = t.x, y = t.y;
       t.freezeInterval = setInterval(() => {
@@ -574,7 +574,7 @@ const Commands = {
     }
   }],
   unfreeze: [Object, 2, 2, function(data) {
-    const t = servers[this.room].find(t => t.username === data[1]);
+    const t = servers[this.room].pt.find(t => t.username === data[1]);
     if (t) clearInterval(t.freezeInterval);
   }],
   t: [Object, 4, -1, function(data) {
