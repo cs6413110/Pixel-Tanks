@@ -97,7 +97,7 @@ class Shot {
             this.target = e;
             this.offset = [e.x-x, e.y-y];
             this.update = this.dynaUpdate;
-            if (type === 'usb') setTimeout(() => this.destroy(), 30000);
+            if (type === 'usb') setTimeout(() => this.destroy(), 20000);
             return false;
           } else if (type === 'fire') {
             if (e.immune) return true;
