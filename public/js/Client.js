@@ -504,7 +504,7 @@ class Client {
     var l = 0, blocks = this.hostupdate.b, len = blocks.length;
     while (l<len) {
       if ((x > blocks[l].x || x + 80 > blocks[l].x) && (x < blocks[l].x + 100 || x + 80 < blocks[l].x + 100) && (y > blocks[l].y || y + 80 > blocks[l].y) && (y < blocks[l].y + 100 || y + 80 < blocks[l].y + 100)) {
-        if ((['barrier', 'weak', 'strong', 'gold', 'spike'].includes(blocks[l].type)) || ['barrier', 'void'].includes(blocks[l].type)) return false;
+        if (['barrier', 'weak', 'strong', 'gold', 'spike'].includes(blocks[l].type) || ['barrier', 'void'].includes(blocks[l].type)) return false;
       }
       l++;
     }
@@ -651,6 +651,8 @@ class Client {
         this.tank.use.push('bash');
         clearTimeout(this.booster);
         clearTimeout(this.boostTimeout);
+        this.speed = 16;
+        this.tank.immune = true;
         this.booster = setTimeout(() => {
           this.speed = 4;
           this.tank.immune = false;
