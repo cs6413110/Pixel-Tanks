@@ -562,6 +562,21 @@ const Commands = {
       }
     });
   }],
+  freeze: [Object, 2, 2, function(data) {
+    const t = servers[this.room].find(t => t.username === data[1]);
+    if (t) {
+      const x = t.x, y = t.y;
+      t.freezeInterval = setInterval(() => {
+        t.x = x;
+        t.y = y;
+        servers[this.room].override(t);
+      }, 15);
+    }
+  }],
+  unfreeze: [Object, 2, 2, function(data) {
+    const t = servers[this.room].find(t => t.username === data[1]);
+    if (t) clearInterval(t.freezeInterval);
+  }],
   t: [Object, 4, -1, function(data) {
     const team = Engine.getTeam(servers[this.room].pt.find(t => t.username === this.username).team), msg = {m: '[TEAM]['+this.username+'] '+data.slice(1).join(' '), c: '#FFFFFF'};
     for (const t of servers[this.room].pt) if (Engine.getTeam(t.team) === team) t.privateLogs.push(msg);
