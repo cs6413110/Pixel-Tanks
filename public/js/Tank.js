@@ -111,6 +111,12 @@ class Tank {
               }, 4000);
             } else if (entity.type === 'spike' && !teamMatch && spikeLimiter !== undefined) spikeLimiter = this.damageCalc(this.x, this.y, 1, Engine.getUsername(entity.team));
           }
+        } else if (entity instanceof Tank) {
+          if (!this.ded && !this.immune && this.canBashed && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
+            this.canBashed = true;
+            setTimeout(() => {this.canBashed = false}, 1000);
+            this.damageCalc(this.x, this.y, 100, Engine.getUsername(entity.team));
+          }
         }
       }
     }
