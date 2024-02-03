@@ -147,7 +147,6 @@ class Engine {
       t.x = x;
       t.y = y;
       t.updateCell();
-      if (t.class === 'warrior' && t.immune && !t.ded) this.useAbility(t, 'break');
     }
     t.r = r;
     if (use.includes('respawn')) {
