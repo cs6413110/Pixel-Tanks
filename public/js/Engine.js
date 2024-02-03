@@ -111,9 +111,9 @@ class Engine {
     } else if (a === 'turret') {
       this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
       for (let i = this.ai.length-1, turrets = 0; i >= 0; i--) if (this.ai[i].role === 0 && Engine.getUsername(this.ai[i].team) === t.username && ++turrets > 3) this.ai[i].destroy();
-    } else if (a === 'buff') {
-      t.buff = true;
-      setTimeout(() => { t.buff = false }, 10000);
+    } else if (a === 'bash') {
+      t.buff = true; // name fix
+      setTimeout(() => { t.buff = false }, 500);
     } else if (a === 'shield') {
       t.shields = 100;
     } else if (a === 'reflector') {
