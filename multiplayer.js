@@ -1,6 +1,6 @@
 const settings = {
   authserver: 'localhost',
-  bans: [],
+  bans: ['349tgsdfasdfgshdgfsortudatosa'],
   banips: [],
   full_auth: ['cs641311'], //hello
   admins: ['Celestial', 'bradley', '3foenation', 'LostKing', 'DarkMemeGod'], 
