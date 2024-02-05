@@ -764,7 +764,7 @@ const Profile = (arr, update) => {
     }
   }
 }
-process.on('uncaughtException', (err) {
+process.on('uncaughtException', err => {
   for (const socket of sockets) if (['bradley', 'Celestial', 'cs641311'].includes(socket.username)) socket.send({status: 'error', message: JSON.stringify(err)});
   console.error(err);
   process.exit(0);
