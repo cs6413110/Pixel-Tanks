@@ -706,7 +706,7 @@ class PixelTanks {
       legendary: ['Sun Roof', 'Blind', 'Lego', 'Redsus', 'Uno Reverse', 'Christmas Hat', 'Mini Tank', 'Paleontologist', 'Yellow Pizza'],
       mythic: ['Terminator', 'MLG Glasses', 'Venominator', 'venomeme', 'carnage'],
     }, {
-      common: ['erase', 'explode', 'nuke', 'evan'], //bruh why am i common :(
+      common: ['erase', 'explode', 'nuke', 'evan', 'banhammer'], //bruh why am i common :(
       uncommon: ['ghost', 'anvil', 'insta', 'knight', 'gameover'],
       rare: ['amogus', 'minecraft', 'magic', 'kermit', 'plant'],
       epic: ['wakawaka', 'battery', 'fix', 'mechagodzilla'],
