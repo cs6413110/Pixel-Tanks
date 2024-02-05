@@ -1,14 +1,11 @@
 class Block {
+  static args = ['x', 'y', 'hp', 'type', 'team', host'];
   constructor() {
     this.cells = new Set();
   }
   init(x, y, hp, type, team, host) {
-    this.x = x;
-    this.y = y;
-    this.maxHp = this.hp = health;
-    this.type = type;
-    this.host = host;
-    this.team = team;
+    for (const e in arguments) this[t.args[e]] = arguments[e]
+    this.maxHp = this.hp;
     this.raw = {};
     this.id = Math.random();
     this.s = false;
