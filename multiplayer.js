@@ -3,8 +3,8 @@ const settings = {
   bans: [],
   banips: [],
   full_auth: ['cs641311'], //hello
-  admins: ['Celestial', 'bradley', '3foenation', 'LostKing', 'DarkMemeGod'], 
-  vips: [], 
+  admins: ['Celestial', 'bradley', '3foenation'], 
+  vips: ['LostKing', 'DarkMemeGod'], 
   mutes: ['3foe'],
   players_per_room: 400,
   ups: 60,
@@ -72,11 +72,9 @@ const deathMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
   `{idot} has joined the battle`,
-  `{idot} is here to spread disinformation`,
   `{idot}`, //plz leave
 ], rageMessages = [
   `{idot} left the game`,
-  `{idot} has fallen asleep`,
   `{idot} quit`,
   `{idot} disconnected`,
 ];
@@ -766,8 +764,8 @@ const Profile = (arr, update) => {
     }
   }
 }
-process.on('uncaughtException', function (err) {
-  for (const socket of sockets) if (['bradley', 'Celestial', 'cs641311'].includes(socket.username)) socket.send({status: 'error', message: err});
+process.on('uncaughtException', (err) {
+  for (const socket of sockets) if (['bradley', 'Celestial', 'cs641311'].includes(socket.username)) socket.send({status: 'error', message: JSON.stringify(err)});
   console.error(err);
   process.exit(0);
 });
