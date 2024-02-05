@@ -1,5 +1,10 @@
 class Block {
+  static args = ['x', 'y', 'hp', 'type', 'team', 'host'];
+  constructor() {
+    this.cells = new Set();
+  }
   init(x, y, health, type, team, host) {
+    for (const p of Block.args) []
     this.x = x;
     this.y = y;
     this.maxHp = this.hp = health;
@@ -9,8 +14,7 @@ class Block {
     this.raw = {};
     this.id = Math.random();
     this.s = false;
-    this.c = !['fire', 'airstrike'].includes(type);
-    if (type === 'fire' || type === 'airstrike') this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
+    if (!(this.c = type !== 'fire' && type !== 'airstrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
     if (type === 'airstrike') {
       for (let i = 0; i < 80; i++) setTimeout(() => {
         if (this.host.b.includes(this)) this.host.d.push(new Damage(this.x + Math.floor(Math.random()*250)-50, this.y + Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host));
@@ -23,7 +27,7 @@ class Block {
       host.cells[cx][cy].add(this);
       this.cells.add(cx+'x'+cy);
     }
-    if (this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && this.y <= 2900) host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
+    if (this.c && this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && this.y <= 2900) host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
     this.u();
     return this;
   }
@@ -47,7 +51,8 @@ class Block {
   }
 
   reset() {
-    for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'host', 'team', 'raw', 'id', 's' ,'c', 'cells', 'updatedLast']) this[property] = undefined;
+    for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'host', 'team', 'raw', 'id', 's' ,'c', 'updatedLast']) this[property] = undefined;
+    this.cells.clear();
   }
 
   destroy() {
