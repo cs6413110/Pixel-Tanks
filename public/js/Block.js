@@ -4,7 +4,7 @@ class Block {
     this.cells = new Set();
   }
   init(x, y, health, type, team, host) {
-    for (const p of Block.args) []
+    for (const i in Block.args) this[Block.args[i]] = arguments[i]
     this.x = x;
     this.y = y;
     this.maxHp = this.hp = health;
