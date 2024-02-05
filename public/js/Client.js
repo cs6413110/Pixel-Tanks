@@ -697,7 +697,7 @@ class Client {
           this.tank.immune = false;
           if (PixelTanks.userData.class === 'stealth') this.tank.use.push('break');
         }, 500);
-        this.boostTimeout = setTimeout(() => {this.canBoost = true}, 5000);
+        this.boostTimeout = setTimeout(() => {this.canBoost = true}, this.ded ? 0 : 5000);
       }
     }
   }
