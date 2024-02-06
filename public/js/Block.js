@@ -12,7 +12,7 @@ class Block {
     this.maxHp = health;
     this.raw = {};
     if (!(this.c = type !== 'fire' && type !== 'airstrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 5000);
-    if (type === 'airstrike') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500);
+    if (type === 'airstrike') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
     let dxmin = Math.floor(this.x/100), dymin = Math.floor(this.y/100), dxmax = Math.floor((this.x+99)/100), dymax = Math.floor((this.y+99)/100);
     for (let x = dxmin; x <= dxmax; x++) for (let y = dymin; y <= dymax; y++) {
       host.cells[x][y].add(this);
