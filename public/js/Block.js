@@ -2,12 +2,12 @@ class Block {
   static args = ['x', 'y', 'hp', 'type', 'team', 'host'];
   static raw = ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team', 'id'];
   constructor() {
-    this.id = Math.random();
     this.cells = new Set();
     this.t = [];
     for (const p of Block.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
   init(x, y, health, type, team, host) {
+    this.id = Math.random();
     this.raw = {};
     for (const i in Block.args) this[Block.args[i]] = arguments[i];
     this.maxHp = health;
