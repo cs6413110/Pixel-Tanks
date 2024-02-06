@@ -258,15 +258,28 @@ class Client {
     if (t.animation) GUI.drawImage(PixelTanks.images.animations[t.animation.id], t.x, t.y, 80, 90, 1, 0, 0, 0, 0, undefined, t.animation.frame*40, 0, 40, 45);
   }
 
+  drawStatus(msg) {
+    GUI.draw.fillStyle = '#ffffff';
+    GUI.draw.fillRect(0, 0, 1600, 1600);
+    GUI.drawText(msg, 800, 500, 100, '#000000', 0.5);
+  }
+
   frame() {
     GUI.clear();
     this._fps++;
     this.render = requestAnimationFrame(this.frame.bind(this));
-    if (!this.hostupdate.pt.length) {
-      GUI.draw.fillStyle = '#ffffff';
-      GUI.draw.fillRect(0, 0, 1600, 1600);
-      return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
-    }
+    const renderMsg 
+    if (this.socket.status === 'connecting') {
+      return this.drawStatus('Connecting...');
+    } else if (this.socket.status === 'disconnected') {
+      return this.drawStatus('Disconnected!');
+    } else if (this.socket.status === 'connected') {
+      if (!this.hostupdate.pt.length) {
+        GUI.draw.fillStyle = '#ffffff';
+        GUI.draw.fillRect(0, 0, 1600, 1600);
+        return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
+      }
+    } else return this.drawStatus('Loading...');
     const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
     if (this.dx) {
       var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : (this.buffed ? 1.5 : 1));
