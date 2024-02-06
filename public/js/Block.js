@@ -16,7 +16,7 @@ class Block {
     let dxmin = Math.floor(this.x/100), dymin = Math.floor(this.y/100), dxmax = Math.floor((this.x+99)/100), dymax = Math.floor((this.y+99)/100);
     for (let x = dxmin; x <= dxmax; x++) for (let y = dymin; y <= dymax; y++) {
       host.cells[x][y].add(this);
-      this.cells.add(cx+'x'+cy);
+      this.cells.add(x+'x'+y);
     }
     if (this.c && this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && this.y <= 2900) host.map.setWalkableAt(dxmin, dymin, false);
     return this;
