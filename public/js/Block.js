@@ -10,7 +10,7 @@ class Block {
     this.raw = {};
     this.id = Math.random();
     for (const i in Block.args) this[Block.args[i]] = arguments[i];
-    host.logs.push({m: this.hp, c: '#FFFFFF'});
+    host.logs.push({m: JSON.stringify(this.hp), c: '#FFFFFF'});
     this.maxHp = hp;
     if (!(this.c = type !== 'fire' && type !== 'airstrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 5000);
     if (type === 'airstrike') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
