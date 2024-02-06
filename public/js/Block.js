@@ -7,8 +7,8 @@ class Block {
     for (const p of Block.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
   init(x, y, health, type, team, host) {
-    this.id = Math.random();
     this.raw = {};
+    this.id = Math.random();
     for (const i in Block.args) this[Block.args[i]] = arguments[i];
     this.maxHp = health;
     if (!(this.c = type !== 'fire' && type !== 'airstrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 5000);
