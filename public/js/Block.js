@@ -1,70 +1,49 @@
 class Block {
   static args = ['x', 'y', 'hp', 'type', 'team', 'host'];
+  static raw = ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team', 'id'];
   constructor() {
+    this.id = Math.random();
     this.cells = new Set();
+    this.t = [];
+    for (const p of Block.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
   init(x, y, health, type, team, host) {
-    for (const i in Block.args) this[Block.args[i]] = arguments[i]
-    this.x = x;
-    this.y = y;
-    this.maxHp = this.hp = health;
-    this.type = type;
-    this.host = host;
-    this.team = team;
+    for (const i in Block.args) this[Block.args[i]] = arguments[i];
+    this.maxHp = health;
     this.raw = {};
-    this.id = Math.random();
-    this.s = false;
-    if (!(this.c = type !== 'fire' && type !== 'airstrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
-    if (type === 'airstrike') {
-      for (let i = 0; i < 80; i++) setTimeout(() => {
-        if (this.host.b.includes(this)) this.host.d.push(new Damage(this.x + Math.floor(Math.random()*250)-50, this.y + Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host));
-      }, 5000+Math.random()*500);
-    }
-    this.cells = new Set();
-    let dx = this.x/100, dy = this.y/100;
-    for (let i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .99))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 === 0 ? dy : dy + .99)));
-      host.cells[cx][cy].add(this);
+    if (!(this.c = type !== 'fire' && type !== 'airstrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 5000);
+    if (type === 'airstrike') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500);
+    let dxmin = Math.floor(this.x/100), dymin = Math.floor(this.y/100), dxmax = Math.floor((this.x+99)/100), dymax = Math.floor((this.y+99)/100);
+    for (let x = dxmin; x <= dxmax; x++) for (let y = dymin; y <= dymax; y++) {
+      host.cells[x][y].add(this);
       this.cells.add(cx+'x'+cy);
     }
-    if (this.c && this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && this.y <= 2900) host.map.setWalkableAt(Math.floor(dx), Math.floor(dy), false);
-    this.u();
+    if (this.c && this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && this.y <= 2900) host.map.setWalkableAt(dxmin, dymin, false);
     return this;
   }
-
-  u() {
+  setValue(p, v) {
     this.updatedLast = Date.now();
-    for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team', 'id']) this.raw[property] = this[property];
+    this.raw[p] = v;
   }
-
   damage(d) {
     if (this.hp === Infinity) return;
-    this.hp = Math.min(this.maxHp, Math.max(this.hp-d, 0));
-    this.s = true;
-    clearTimeout(this.bar);
-    this.bar = setTimeout(() => {
-      this.s = false;
-      this.u();
-    }, 3000);
-    this.u();
-    if (this.hp === 0) this.destroy();
+    this.s = Date.now();
+    if (this.hp = Math.min(this.maxHp, Math.max(this.hp-d, 0))) < 0) this.destroy();
   }
-
   reset() {
-    for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'host', 'team', 'raw', 'id', 's' ,'c', 'updatedLast']) this[property] = undefined;
+    for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'host', 'team', 'raw', 's' ,'c', 'updatedLast']) this[property] = undefined;
     this.cells.clear();
+    this.t.length = 0;
   }
-
   destroy() {
+    for (const t of this.t) clearTimeout(t);
     clearTimeout(this.sd);
-    clearTimeout(this.bar);
     this.host.b.splice(this.host.b.indexOf(this), 1);
-    for (const cell of this.cells) {
-      const [x, y] = cell.split('x');
-      this.host.cells[x][y].delete(this);
-      let deletePathfindGrid = this.x % 100 === 0 && this.y % 100 === 0;
-      for (const e of this.host.cells[x][y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) deletePathfindGrid = false;
-      if (deletePathfindGrid) this.host.map.setWalkableAt(x, y, true);
+    cell: for (const cell of this.cells) {
+      const c = cell.split('x');
+      this.host.cells[c[0]][c[1]].delete(this);
+      for (const e of this.host.cells[x][y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) continue cell;
+      this.host.map.setWalkableAt(x, y, true);
     }
     this.release();
   }
