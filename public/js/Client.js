@@ -268,7 +268,6 @@ class Client {
     GUI.clear();
     this._fps++;
     this.render = requestAnimationFrame(this.frame.bind(this));
-    const renderMsg 
     if (this.socket.status === 'connecting') {
       return this.drawStatus('Connecting...');
     } else if (this.socket.status === 'disconnected') {
