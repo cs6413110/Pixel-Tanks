@@ -29,7 +29,7 @@ class Block {
   damage(d) {
     if (this.hp === Infinity) return;
     this.s = Date.now();
-    if (this.hp = Math.min(this.maxHp, Math.max(this.hp-d, 0)) === 0) this.destroy();
+    if ((this.hp = Math.min(this.maxHp, this.hp-d)) <= 0) this.destroy();
   }
   reset() {
     for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'host', 'team', 's' ,'c', 'updatedLast', 'raw']) this[property] = undefined;
