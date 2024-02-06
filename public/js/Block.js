@@ -6,11 +6,11 @@ class Block {
     this.t = [];
     for (const p of Block.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
-  init(x, y, health, type, team, host) {
+  init(x, y, hp, type, team, host) {
     this.raw = {};
     this.id = Math.random();
     for (const i in Block.args) this[Block.args[i]] = arguments[i];
-    this.maxHp = health;
+    this.maxHp = hp;
     if (!(this.c = type !== 'fire' && type !== 'airstrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 5000);
     if (type === 'airstrike') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
     let dxmin = Math.floor(this.x/100), dymin = Math.floor(this.y/100), dxmax = Math.floor((this.x+99)/100), dymax = Math.floor((this.y+99)/100);
@@ -40,8 +40,8 @@ class Block {
     clearTimeout(this.sd);
     this.host.b.splice(this.host.b.indexOf(this), 1);
     cell: for (const cell of this.cells) {
-      const c = cell.split('x');
-      this.host.cells[c[0]][c[1]].delete(this);
+      const [x, y] = cell.split('x');
+      this.host.cells[x][y].delete(this);
       for (const e of this.host.cells[x][y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) continue cell;
       this.host.map.setWalkableAt(x, y, true);
     }
