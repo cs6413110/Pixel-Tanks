@@ -17,7 +17,6 @@ class Block {
     for (let x = dxmin; x <= dxmax; x++) for (let y = dymin; y <= dymax; y++) {
       host.cells[x][y].add(this);
       this.cells.add(x+'x'+y);
-      host.logs.push({m: 'block at '+x+'x'+y, c: '#FFFFFF'});
     }
     if (this.c && this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && this.y <= 2900) host.map.setWalkableAt(dxmin, dymin, false);
     return this;
@@ -40,6 +39,7 @@ class Block {
     for (const t of this.t) clearTimeout(t);
     clearTimeout(this.sd);
     this.host.b.splice(this.host.b.indexOf(this), 1);
+    this.host.logs.push({m: 'block destroyed!', c: '#FFFFFF'});
     cell: for (const cell of this.cells) {
       const [x, y] = cell.split('x');
       this.host.cells[x][y].delete(this);
