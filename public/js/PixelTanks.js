@@ -467,7 +467,8 @@ class PixelTanks {
               for (let i = 0; i < 16; i++) {
                 if (Engine.collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
                   if (e.button === 0) {
-                    PixelTanks.userData[Menus.menus.inventory.cosmeticType] = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i].split('#')[0];
+                    let co = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i].split('#')[0]
+                    PixelTanks.userData[Menus.menus.inventory.cosmeticType] = PixelTanks.userData[Menus.menus.inventory.cosmeticType] === co ? '' : co;
                   } else {
                     const [cosmetic, amount] = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i].split('#');
                     if (amount === undefined || Number(amount) <= 1) return PixelTanks.userData.cosmetics.splice(this.cosmeticMenu*16+i, 1);
@@ -481,7 +482,8 @@ class PixelTanks {
               for (let i = 0; i < 16; i++) {
                 if (Engine.collision(x, y, 0, 0, 598+(i%4)*108, 298+Math.floor(i/4)*108, 88, 88)) {
                   if (e.button === 0) {
-                    PixelTanks.userData.deathEffect = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i].split('#')[0];
+                    let de = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i].split('#')[0];
+                    PixelTanks.userData.deathEffect = PixelTanks.userData.deathEffect === de ? '' : de;
                   } else {
                     const [deathEffect, amount] = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i].split('#');
                     if (amount === undefined || Number(amount) <= 1) return PixelTanks.userData.deathEffects.splice(this.deathEffectsMenu*16+i, 1);
