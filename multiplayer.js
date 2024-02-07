@@ -592,7 +592,7 @@ const Commands = {
   acupuncture: [Object, 2, 1, function(data) {
     for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, 50, 'spike', ':', servers[this.room]));
   }],
-  newmap: [FFA, 4, 1, function(data) {
+  newmap: [FFA, 3, 1, function(data) {
     servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
     servers[this.room].pt.forEach(t => {
       t.x = servers[this.room].spawn.x;
