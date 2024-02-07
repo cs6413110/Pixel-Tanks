@@ -114,7 +114,7 @@ class Client {
     this.xp += 10;
     this.crates += crates;
     this.coins += coins;
-    PixelTanks.userData.stats[1] += crates;
+    PixelTanks.userData.stats[1000] += crates;
     PixelTanks.userData.stats[3] += 10;
     PixelTanks.userData.stats[0] += coins;
     PixelTanks.save();
