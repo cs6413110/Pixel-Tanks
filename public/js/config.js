@@ -41,7 +41,7 @@ const images = {
     'carnage': '/cosmetics/carnage',
     'Venominator': '/cosmetics/Venominator',
     'brain': '/cosmetics/brain',
-    'hands': '/cosmetics/hands',
+    'Hands': '/cosmetics/Hands',
     'silver': '/cosmetics/silver',
     'UnionJack': '/cosmetics/UnionJack',
     'SKOTTISH': '/cosmetics/SKOTTISH',
