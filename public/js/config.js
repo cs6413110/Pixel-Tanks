@@ -85,7 +85,7 @@ const images = {
     'bluekatana': '/cosmetics/bluekatana',
     'X': '/cosmetics/x',
     'Sweat': '/cosmetics/sweat',
-    'Gold Shield': '/cosmetics/gold_shield',
+    'GoldShield': '/cosmetics/GoldShield',
     'Spirals': '/cosmetics/spirals',
     'Spikes': '/cosmetics/spikes',
     'Rudolph': '/cosmetics/rudolph',
