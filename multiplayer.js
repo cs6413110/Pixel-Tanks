@@ -177,11 +177,12 @@ class Multiplayer extends Engine {
           const [x, y] = cell.split('x');
           this.cells[x][y].delete(t);
         }
+        if (t.grapple) t.grapple.bullet.destroy();
         return false;
       }
       return true;
     });
-    this.ai = this.ai.filter(ai => Engine.getUsername(ai.team) !== socket.username);
+    for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === socket.username) this.ai[i].destroy();
     this.logs.push({m: this.rageMsg(socket.username), c: '#E10600'});
     if (this.pt.length === 0) {
       this.i.forEach(i => clearInterval(i));
