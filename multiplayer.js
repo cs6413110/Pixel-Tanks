@@ -528,8 +528,8 @@ const Commands = {
   copylist: [Object, 4, 1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username)
     let s = '';
-    for (const tank of servers[this.room].pt) s += tank.username+'\n';
-    t.socket.send({status: 'error', message: JSON.stringify(s)});
+    for (const tank of servers[this.room].pt) s += tank.username+'\r\n';
+    t.socket.send({status: 'error', message: s});
   }],
   msg: [Object, 4, -1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
