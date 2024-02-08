@@ -82,6 +82,7 @@ class PixelTanks {
             this.username = '';
             this.password = '';
           }
+          if (this.username.length > 20) return;
           GUI.drawText(this.username, 574, 407, 50, '#000000', 0);
           GUI.drawText(this.password.replace(/./g, '*'), 574, 535, 50, '#000000', 0);
         },
