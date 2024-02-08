@@ -219,6 +219,13 @@ class Client {
       GUI.draw.fillRect(t.x, t.y+115, 80*t.shields/100, 5);
     }
 
+    if (t.damage) {
+      const {x, y, d} = t.damage;
+      for (let i = 0; i < 2; i++) {
+        GUI.drawText((d < 0 ? '+' : '-')+Math.round(d), x, y, Math.round(d/5)+[20, 15][i], ['#ffffff', Engine.getTeam(this.team) === Engine.getTeam(t.team) ? '#ff0000' : '#0000ff'][i], 0.5);
+      }
+    }
+
     if (t.invis && Engine.getTeam(this.team) !== Engine.getTeam(t.team)) return;
 
     let username = '['+t.rank+'] '+t.username;
@@ -234,12 +241,6 @@ class Client {
 
     if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
     if (t.reflect) GUI.drawImage(PixelTanks.images.tanks.reflect, t.x, t.y, 80, 80, 1);
-    if (t.damage) {
-      const {x, y, d} = t.damage;
-      for (let i = 0; i < 2; i++) {
-        GUI.drawText((d < 0 ? '+' : '-')+Math.round(d), x, y, Math.round(d/5)+[20, 15][i], ['#ffffff', Engine.getTeam(this.team) === Engine.getTeam(t.team) ? '#ff0000' : '#0000ff'][i], 0.5);
-      }
-    }
 
     if (t.dedEffect) {
       const {speed, frames, kill} = PixelTanks.images.deathEffects[t.dedEffect.id+'_'];
