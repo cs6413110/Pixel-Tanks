@@ -524,6 +524,12 @@ const Commands = {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     for (const tank of servers[this.room].pt) t.privateLogs.push({m: tank.username, c: '#FFFFFF'});
   }],
+  copylist: [Object, 4, 1, function(data) {
+    const t = servers[this.room].pt.find(t => t.username === this.username)
+    let s = '';
+    for (const tank of servers[this.room].pt) s += tank.username+'\n';
+    t.socket.send({status: 'error', message: s});
+  }],
   msg: [Object, 4, -1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     const m = servers[this.room].pt.find(t => t.username === data[1]);
