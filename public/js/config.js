@@ -231,7 +231,7 @@ const images = {
     amogus: '/animations/amogus',
     amogus_: { frames: 47, speed: 75, kill: 21, type: 1 },
     nuke: '/animations/nuke',
-    nuke_: { frames: 12, speed: 100, kill: 6, type: 1 },
+    nuke_: { frames: 12, speed: 75, kill: 6, type: 1 },
     error: '/animations/error',
     error_: { frames: 10, speed: 300, kill: 10, type: 2 },
     magic: '/animations/magic',
