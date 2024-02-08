@@ -212,8 +212,6 @@ const images = {
     toolkit_: { frames: 16, speed: 50 },
     glu: '/animations/glu',
     glu_: { frames: 45, speed: 50 },
-    heal: '/animations/heal',
-    heal_: { frames: 16, speed: 25 },
     fire: '/animations/fire',
     fire_: { frames: 1, speed: 50 },
     text: '/animations/text',
