@@ -73,7 +73,6 @@ const images = {
     'Pumpkin Hat': '/cosmetics/pumpkin_hat',
     'Red Ghost': '/cosmetics/red_ghost',
     'Candy Corn': '/cosmetics/candy_corn',
-    'Yellow Pizza': '/cosmetics/yellow_pizza',
     'Orange Ghost': '/cosmetics/orange_ghost',
     'Pink Ghost': '/cosmetics/pink_ghost',
     'Paleontologist': '/cosmetics/paleontologist',
