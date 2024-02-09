@@ -39,7 +39,7 @@ let sockets = new Set(), servers = {}, ffaLevels = [
 
 const hasAccess = (username, clearanceLevel) => {
   // 1 => full auth only, 2 => admins and above, 3 => vips and above, 4 => any
-  const isAdmin = settings.admins.includes(username), isVIP = settings.admins.includes(username);
+  const isAdmin = settings.admins.includes(username), isVIP = settings.vips.includes(username);
   if (clearanceLevel === 4 || settings.full_auth.includes(username)) return true;
   if (clearanceLevel === 3 && (isVIP || isAdmin)) return true;
   if (clearanceLevel === 2 && isAdmin) return true;
