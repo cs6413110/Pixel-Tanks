@@ -33,7 +33,7 @@ const images = {
     bottom2: '/tanks/bottom2',
   },
   cosmetics: {
-    //'dmgcrown': '/cosmetics/dmgcrown',
+    'dmgcrown': '/cosmetics/dmgcrown',
     //'LostKing': '/cosmetics/Jonas',
     'hacker_hoodie': '/cosmetics/hacker_hoodie',
     'totem': '/cosmetics/totem',
