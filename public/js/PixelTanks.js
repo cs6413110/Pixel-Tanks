@@ -707,7 +707,7 @@ class PixelTanks {
       rare: ['Stripes', 'scoped', 'brain', 'Hands', 'Straw Hat', 'Hax', 'Tools', 'Money Eyes', 'Dizzy', 'Checkmark', 'Sweat', 'Scared', 'Blue Tint', 'Purple Top Hat', 'Purple Grad Hat', 'Eyebrows', 'Helment', 'Rudolph', 'Candy Corn', 'Flag', 'Katana',  'Swords'],
       epic: ['Hazard', 'Locked', 'Elf', 'Triple Gun', 'Evil Eyes', 'Gold', 'Rage', 'Onfire', 'Halo', 'Police', 'Deep Scratch', 'bluekatana', 'Assassin', 'Astronaut', 'Christmas Lights', 'No Mercy', 'Error'],
       legendary: ['Sun Roof', 'Blind', 'Lego', 'Redsus', 'Uno Reverse', 'Christmas Hat', 'Mini Tank', 'Paleontologist'],
-      mythic: ['Terminator', 'MLG Glasses', 'Venominator', 'venomeme', 'dmgcrown', 'carnage'],
+      mythic: ['Terminator', 'MLG Glasses', 'Venominator', 'venomeme', 'carnage'],
     }, {
       common: ['erase', 'explode', 'nuke', 'evan'], //bruh why am i common :(
       uncommon: ['ghost', 'anvil', 'insta', 'knight', 'gameover'],
