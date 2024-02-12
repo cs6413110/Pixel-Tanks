@@ -33,6 +33,11 @@ const images = {
     bottom2: '/tanks/bottom2',
   },
   cosmetics: {
+    'blue horns': '/cosmetics/blue_horns',
+    'blue wings': '/cosmetics/blue_wings',
+    'gold horns': '/cosmetics/gold_horns',
+    'gold wings': '/cosmetics/gold_wings',
+    'White helment': '/cosmetics/white_helment',
     'dmgcrown': '/cosmetics/dmgcrown',
     'LostKing': '/cosmetics/Jonas',
     'hacker_hoodie': '/cosmetics/hacker_hoodie',
