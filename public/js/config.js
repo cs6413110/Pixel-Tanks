@@ -96,6 +96,7 @@ const images = {
     'Question Mark': '/cosmetics/question_mark',
     'Purple-Pink Hoodie': '/cosmetics/purplepink_hoodie',
     'Purple Hoodie': '/cosmetics/purple_hoodie',
+    'Aaron': '/cosmetics/aaron',
     'Pumpkin': '/cosmetics/pumpkin',
     'Pickle': '/cosmetics/pickle',
     'Orange Hoodie': '/cosmetics/orange_hoodie',
