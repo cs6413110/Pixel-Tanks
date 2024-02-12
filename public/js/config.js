@@ -33,6 +33,8 @@ const images = {
     bottom2: '/tanks/bottom2',
   },
   cosmetics: {
+    'white horns': '/cosmetics/white_horns',
+    'white wings': '/cosmetics/white_wings',
     'blue horns': '/cosmetics/blue_horns',
     'blue wings': '/cosmetics/blue_wings',
     'gold horns': '/cosmetics/gold_horns',
