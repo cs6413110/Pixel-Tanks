@@ -34,7 +34,7 @@ const images = {
   },
   cosmetics: {
     'dmgcrown': '/cosmetics/dmgcrown',
-    //'LostKing': '/cosmetics/Jonas',
+    'LostKing': '/cosmetics/Jonas',
     'hacker_hoodie': '/cosmetics/hacker_hoodie',
     'totem': '/cosmetics/totem',
     'venomeme': '/cosmetics/venomeme',
