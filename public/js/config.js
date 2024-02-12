@@ -53,7 +53,6 @@ const images = {
     'silver': '/cosmetics/silver',
     'Purple helmet': '/cosmetics/purple_helment',
     'scoped': '/cosmetics/scoped',
-    'Aaron': '/cosmetics/aaron',
     'Astronaut': '/cosmetics/astronaut',
     'Onfire': '/cosmetics/onfire',
     'Assassin': '/cosmetics/assassin',
