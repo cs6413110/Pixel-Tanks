@@ -704,10 +704,10 @@ class PixelTanks {
     const price = type ? 5 : 1, name = type ? 'deathEffects' : 'cosmetics', rand = Math.floor(Math.random()*1001), crate = [{
       common: ['white horns', 'white wings', 'blue horns', 'gold horns', 'blue wings', 'gold wings', 'Spooked', 'Cute Eyes', 'Army', 'Top Hat', 'X', 'Red Hoodie', 'Devil Wings', 'Devil Horns', 'Exclaimation Point', 'Orange Hoodie', 'GoldShield', 'Yellow Hoodie', 'Green Hoodie', 'Blue Hoodie', 'Purple Hoodie', 'Cancelled', 'Spirals', 'Speaker', 'Spikes', 'Candy Cane', 'Pumpkin Face', 'Mask', 'Purple-Pink Hoodie', 'Bunny Ears'],
       uncommon: ['Anime Eyes', 'Angry Eyes', 'Hard Hat', 'Present', 'Dead', 'Peace', 'Question Mark', 'Small Scratch', 'Kill = Ban', 'Reindeer Hat', 'Pumpkin Hat', 'Cat Ears', 'Cake', 'Cat Hat', 'First Aid', 'silver', 'Fisher Hat'],
-      rare: ['gold helmet', 'White helmet', 'Blue Helmet', 'Aqua Helmet', 'Purple helmet', 'Stripes', 'scoped', 'brain', 'Hands', 'Straw Hat', 'Hax', 'Tools', 'Money Eyes', 'Dizzy', 'Checkmark', 'Sweat', 'Scared', 'Blue Tint', 'Purple Top Hat', 'Purple Grad Hat', 'Eyebrows', 'Helmet', 'Rudolph', 'Candy Corn', 'Flag', 'Katana',  'Swords'],
+      rare: ['White helmet', 'Blue Helmet', 'Aqua Helmet', 'Purple helmet', 'Stripes', 'scoped', 'brain', 'Hands', 'Straw Hat', 'Hax', 'Tools', 'Money Eyes', 'Dizzy', 'Checkmark', 'Sweat', 'Scared', 'Blue Tint', 'Purple Top Hat', 'Purple Grad Hat', 'Eyebrows', 'Helmet', 'Rudolph', 'Candy Corn', 'Flag', 'Katana',  'Swords'],
       epic: ['Aaron', 'hacker_hoodie', 'Hazard', 'Locked', 'Elf', 'Triple Gun', 'Evil Eyes', 'Gold', 'Rage', 'Onfire', 'Halo', 'Police', 'Deep Scratch', 'bluekatana', 'Assassin', 'Astronaut', 'Christmas Lights', 'No Mercy', 'Error'],
-      legendary: ['Sun Roof', 'Blind', 'Lego', 'Redsus', 'Uno Reverse', 'Christmas Hat', 'Mini Tank', 'Paleontologist'],
-      mythic: ['Terminator', 'MLG Glasses', 'Venominator', 'venomeme', 'carnage'],
+      legendary: ['Sun Roof', 'Blind', 'Lego', 'Redsus', 'Uno Reverse', 'Christmas Hat', 'Mini Tank', 'Paleontologist', 'carnage'],
+      mythic: ['Terminator', 'MLG Glasses',],
     }, {
       common: ['erase', 'explode', 'nuke', 'insta', 'evan'], //bruh why am i common :(
       uncommon: ['ghost', 'anvil', 'knight', 'gameover'],
