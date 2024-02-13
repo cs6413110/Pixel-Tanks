@@ -25,12 +25,14 @@ class AI {
     this.items = [];
     if (this.role !== 0) this.giveAbilities();
     this.invis = this.class === 'stealth';
-    this.color = Engine.getRandomColor();
     const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
     if (summoner) {
       this.cosmetic_hat = summoner.cosmetic_hat;
       this.cosmetic = summoner.cosmetic;
       this.cosmetic_body = summoner.cosmetic_body;
+      this.color = summoner.color;
+    } else {
+      this.color = Engine.getRandomColor();
     }
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
