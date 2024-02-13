@@ -296,3 +296,11 @@ const images = {
     fireui: '/items/fireui',
   }
 };
+const sounds = {
+  movement: '/movement_sound',
+  hurt: '/hurt_sound',
+  boom: '/boom_sound',
+  insta: '/insta_sound',
+  death: '/death_sound',
+  menu: '/menu_sound',
+};
