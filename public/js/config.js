@@ -220,7 +220,7 @@ const images = {
     text: '/animations/text',
     text_: { frames: 37, speed: 50 },
     detonate: '/animations/detonate',
-    detonate_: { frames: 28, speed: 50 },
+    detonate_: { frames: 28, speed: 20 },
     explosion: '/animations/explosion',
     healexplosion: '/animations/healexplosion',
   },
