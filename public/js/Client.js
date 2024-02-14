@@ -544,7 +544,10 @@ class Client {
 
   useItem(id, slot) {
     if (!this['canItem'+slot]) {
-      if (id === 'dynamite') this.tank.use.push('dynamite');
+      if (id === 'dynamite') {
+        this.tank.use.push('dynamite');
+        this.playAnimation('detonate');
+      }
       return;
     }
     let cooldown = 0;
