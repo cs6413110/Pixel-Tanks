@@ -21,6 +21,13 @@ class Client {
     this.reset();
     if (this.multiplayer) this.connect();
     if (!this.multiplayer) this.generateWorld();
+    this.keydown = this.keydown.bind(this);
+    this.keyup = this.keyup.bind(this);
+    this.mousemove = this.mousemove.bind(this);
+    this.mousedown = this.mousedown.bind(this);
+    this.mouseup = this.mouseup.bind(this);
+    this.paste = this.paste.bind(this);
+    this.mousewheel = this.mousewheel.bind(this);
     document.addEventListener('keydown', this.keydown);
     document.addEventListener('keyup', this.keyup);
     document.addEventListener('mousemove', this.mousemove);
