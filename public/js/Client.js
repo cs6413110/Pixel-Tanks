@@ -21,14 +21,15 @@ class Client {
     this.reset();
     if (this.multiplayer) this.connect();
     if (!this.multiplayer) this.generateWorld();
-    document.addEventListener('keydown', this.keydown.bind(this));
-    document.addEventListener('keyup', this.keyup.bind(this));
-    document.addEventListener('mousemove', this.mousemove.bind(this));
-    document.addEventListener('mousedown', this.mousedown.bind(this));
-    document.addEventListener('mouseup', this.mouseup.bind(this));
-    document.addEventListener('paste', this.paste.bind(this));
-    document.addEventListener('mousewheel', this.mousewheel.bind(this)); 
+    document.addEventListener('keydown', this.keydown);
+    document.addEventListener('keyup', this.keyup);
+    document.addEventListener('mousemove', this.mousemove);
+    document.addEventListener('mousedown', this.mousedown);
+    document.addEventListener('mouseup', this.mouseup);
+    document.addEventListener('paste', this.paste);
+    document.addEventListener('mousewheel', this.mousewheel); 
     this.render = requestAnimationFrame(() => this.frame());
+    this.animate = Date.now();
   }
 
   connect() {
@@ -240,7 +241,7 @@ class Client {
     GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
 
     if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
-    if (t.reflect) GUI.drawImage(PixelTanks.images.tanks.reflect, t.x, t.y, 80, 80, 1);
+    if (t.reflect) GUI.drawImage(PixelTanks.images.tanks.reflect, t.x, t.y, 80, 80, 1, 40, 40, 0, 0, Math.sin((Date.now()-this.animate)/1000*4*Math.PI));,
 
     if (t.dedEffect) {
       const {speed, frames, kill} = PixelTanks.images.deathEffects[t.dedEffect.id+'_'];
@@ -748,13 +749,13 @@ class Client {
       clearInterval(this.sendInterval);
       this.socket.close();
     } else this.world.i.forEach(i => clearInterval(i));
-    document.removeEventListener('keydown', this.keydown.bind(this));
-    document.removeEventListener('keyup', this.keyup.bind(this));
-    document.removeEventListener('mousemove', this.mousemove.bind(this));
-    document.removeEventListener('mousedown', this.mousedown.bind(this));
-    document.removeEventListener('mouseup', this.mouseup.bind(this));
-    document.removeEventListener('paste', this.paste.bind(this));
-    document.removeEventListener('mousewheel', this.mousewheel.bind(this)); 
+    document.removeEventListener('keydown', this.keydown);
+    document.removeEventListener('keyup', this.keyup);
+    document.removeEventListener('mousemove', this.mousemove);
+    document.removeEventListener('mousedown', this.mousedown);
+    document.removeEventListener('mouseup', this.mouseup);
+    document.removeEventListener('paste', this.paste);
+    document.removeEventListener('mousewheel', this.mousewheel); 
     cancelAnimationFrame(this.render);
     Menus.menus.pause.removeListeners();
     PixelTanks.user.player = undefined;
