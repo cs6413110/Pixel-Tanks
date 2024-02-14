@@ -276,6 +276,8 @@ class DUELS extends Multiplayer {
       this.global = m.username+' Wins Round '+this.round;
       setTimeout(() => {
         this.pt.forEach(tank => {
+          clearInterval(tank.fireInterval);
+          clearTimeout(tank.fireTimeout);
           tank.fire = false;
           tank.hp = tank.maxHp;
           tank.shields = 0;
@@ -346,6 +348,8 @@ class TDM extends Multiplayer {
         this.readytime = Date.now();
         this.time = 5;
         this.pt.forEach(t => {
+          clearInterval(t.fireInterval);
+          clearTimeout(t.fireTimeout);
           t.fire = false;
           t.shields = 0;
           t.team = t.username+':'+(t.color === '#FF0000' ? 'RED' : 'BLUE');
@@ -403,6 +407,8 @@ class TDM extends Multiplayer {
         this.global = winner+' Wins Round '+this.round;
         setTimeout(() => {
           this.pt.forEach(tank => {
+            clearInterval(tank.fireInterval);
+            clearTimeout(tank.fireTimeout);
             tank.fire = false;
             tank.hp = tank.maxHp;
             tank.shields = 0;
@@ -441,6 +447,8 @@ class Defense extends Multiplayer {
   startNewWave() {
     for (const t of this.pt) {
       this.pt.forEach(tank => {
+        clearInterval(tank.fireInterval);
+        clearTimeout(tank.fireTimeout);
         tank.fire = false;
         tank.hp = tank.maxHp;
         tank.shields = 0;
