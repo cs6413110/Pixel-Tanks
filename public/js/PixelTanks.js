@@ -735,7 +735,7 @@ class PixelTanks {
     PixelTanks.userData.stats[1] -= price; 
     let number = Math.floor(Math.random()*(crate[type][rarity].length)), item;
     for (const e in this.images[name]) if (e === crate[type][rarity][number]) item = this.images[name][e];
-    if (item === undefined) document.write('Game Crash!<br>Crashed while trying to give you cosmetic id "'+crate[type][rarity][number]+'". Report this to cs641311, bradley, or Celestial.');
+    if (item === undefined) return alert('Error while trying to give you cosmetic id "'+crate[type][rarity][number]+'"');
     Menus.removeListeners();
     const start = Date.now(), render = setInterval(function() {
       GUI.clear();
@@ -745,10 +745,6 @@ class PixelTanks {
       GUI.drawText(crate[type][rarity][number], 800, 800, 50, '#ffffff', 0.5);
       GUI.drawText(rarity, 800, 900, 30, {mythic: '#FF0000', legendary: '#FFFF00', epic: '#A020F0', rare: '#0000FF', uncommon: '#32CD32', common: '#FFFFFF'}[rarity], 0.5);
     }, 15); // use built in menus renderer instead?
-    setTimeout(() => {
-      clearInterval(render);
-      Menus.trigger('crate');
-    }, 250);
     let done = false;
     for (const i in PixelTanks.userData[name]) {
       const [item, amount] = PixelTanks.userData[name][i].split('#');
@@ -758,6 +754,10 @@ class PixelTanks {
       }
     }
     if (!done) PixelTanks.userData[name].unshift(crate[type][rarity][number]+'#1');
+    setTimeout(() => {
+      clearInterval(render);
+      Menus.trigger('crate');
+    }, done ? 250 : 5000);
     PixelTanks.save();
   }
 
