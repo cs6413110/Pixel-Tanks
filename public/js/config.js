@@ -219,6 +219,8 @@ const images = {
     fire_: { frames: 1, speed: 50 },
     text: '/animations/text',
     text_: { frames: 37, speed: 50 },
+    detonate: '/animations/detonate',
+    detonate_: { frames: 28, speed: 50 },
     explosion: '/animations/explosion',
     healexplosion: '/animations/healexplosion',
   },
