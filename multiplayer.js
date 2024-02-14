@@ -249,6 +249,8 @@ class DUELS extends Multiplayer {
       this.override(this.pt[1]);
       this.global = 'Round '+this.round+' in '+(5-Math.floor((Date.now()-this.readytime)/1000));
       if (5-(Date.now()-this.readytime)/1000 <= 0) {
+        for (let i = this.s.length-1; i >= 0; i--) if (this.s[i].type !== 'grapple') this.s[i].destroy();
+        for (let i = this.ai.length-1; i >= 0; i--) this.ai[i].destroy();
         this.global = '======FIGHT======';
         this.mode = 2;
       }
@@ -280,9 +282,8 @@ class DUELS extends Multiplayer {
           tank.ded = false;
           tank.socket.send({event: 'ded'});
         });
-        this.b = [];
-        this.s = [];
-        this.ai = [];
+        for (let i = this.s.length-1; i >= 0; i--) this.s[i].destroy();
+        for (let i = this.ai.length-1; i >= 0; i--) this.ai[i].destroy();
         this.d = [];
         this.levelReader(duelsLevels[0]);
         this.round++;
@@ -340,8 +341,8 @@ class TDM extends Multiplayer {
     if (this.mode === 0) {
       if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
         this.mode = 1; // game start
-        this.s = [];
-        this.ai = [];
+        for (let i = this.s.length-1; i >= 0; i--) this.s[i].destroy();
+        for (let i = this.ai.length-1; i >= 0; i--) this.ai[i].destroy();
         this.readytime = Date.now();
         this.time = 5;
         this.pt.forEach(t => {
@@ -408,8 +409,8 @@ class TDM extends Multiplayer {
             tank.ded = false;
             t.socket.send({event: 'ded'});
           });
-          this.s = [];
-          this.ai = []; // actaully destroy these later :/
+          for (let i = this.s.length-1; i >= 0; i--) this.s[i].destroy();
+          for (let i = this.ai.length-1; i >= 0; i--) this.ai[i].destroy();
           this.d = [];
           this.levelReader(tdmLevels[Math.floor(Math.random()*tdmLevels.length)]);
           this.round++;
