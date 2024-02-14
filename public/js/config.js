@@ -33,6 +33,10 @@ const images = {
     bottom2: '/tanks/bottom2',
   },
   cosmetics: {
+    'watermelon': '/cosmetics/watermelon',
+    'eye': '/cosmetics/eye',
+    'half glitch': '/cosmetics/half_glitch',
+    'glitch': '/cosmetics/glitch',
     'gold helment': '/cosmetics/gold_helment',
     'white horns': '/cosmetics/white_horns',
     'white wings': '/cosmetics/white_wings',
