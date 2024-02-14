@@ -1,4 +1,5 @@
 class Client {
+  static listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
@@ -21,20 +22,7 @@ class Client {
     this.reset();
     if (this.multiplayer) this.connect();
     if (!this.multiplayer) this.generateWorld();
-    this.keydown = this.keydown.bind(this);
-    this.keyup = this.keyup.bind(this);
-    this.mousemove = this.mousemove.bind(this);
-    this.mousedown = this.mousedown.bind(this);
-    this.mouseup = this.mouseup.bind(this);
-    this.paste = this.paste.bind(this);
-    this.mousewheel = this.mousewheel.bind(this);
-    document.addEventListener('keydown', this.keydown);
-    document.addEventListener('keyup', this.keyup);
-    document.addEventListener('mousemove', this.mousemove);
-    document.addEventListener('mousedown', this.mousedown);
-    document.addEventListener('mouseup', this.mouseup);
-    document.addEventListener('paste', this.paste);
-    document.addEventListener('mousewheel', this.mousewheel); 
+    for (const listener of Client.listeners) document.addEventListener(listener, this[listener] = this[listener].bind(this));
     this.render = requestAnimationFrame(() => this.frame());
     this.animate = Date.now();
   }
@@ -751,21 +739,13 @@ class Client {
   }
 
   implode() {
-    try {
     if (this.multiplayer) {
       clearInterval(this.sendInterval);
       this.socket.close();
     } else this.world.i.forEach(i => clearInterval(i));
-    document.removeEventListener('keydown', this.keydown);
-    document.removeEventListener('keyup', this.keyup);
-    document.removeEventListener('mousemove', this.mousemove);
-    document.removeEventListener('mousedown', this.mousedown);
-    document.removeEventListener('mouseup', this.mouseup);
-    document.removeEventListener('paste', this.paste);
-    document.removeEventListener('mousewheel', this.mousewheel); 
+    for (const listener of Client.listeners) document.removeEventListener(listener, this[listener]);
     cancelAnimationFrame(this.render);
     Menus.menus.pause.removeListeners();
     PixelTanks.user.player = undefined;
-    } catch(e) {alert(e)}
   }
 }
