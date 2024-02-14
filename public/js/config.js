@@ -275,6 +275,8 @@ const images = {
     pokeball_: { frames: 85, speed: 50, kill: 18, type: 2 },
     banhammer: '/animations/banhammer',
     banhammer_: { frames: 29, speed: 50, kill: 7, type: 1 },
+    skull: '/animations/skull',
+    skull_: { frames: 11, speed: 50, kill: 1, type: 1 },
   },
   items: {
     airstrike: '/items/airstrike',
