@@ -37,11 +37,11 @@ class Block {
   }
   destroy() {
     for (const t of this.t) clearTimeout(t);
+    if (type === 'barrel') this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x-50, this.y-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
     clearTimeout(this.sd);
     this.host.b.splice(this.host.b.indexOf(this), 1);
     cell: for (const cell of this.cells) {
       const [x, y] = cell.split('x');
-      if (type === 'barrel') this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x-50, this.y-50, 300, 300, 50, this.team, this.host)), 5000+Math.random()*500));
       this.host.cells[x][y].delete(this);
       for (const e of this.host.cells[x][y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) continue cell;
       this.host.map.setWalkableAt(x, y, true);
