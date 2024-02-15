@@ -202,7 +202,7 @@ class Engine {
   static raycast(x1, y1, x2, y2, walls) {
     const dx = x1-x2, dy = y1-y2, adx = Math.abs(dx), ady = Math.abs(dy), minx = Math.min(x1, x2), miny = Math.min(y1, y2), maxx = Math.max(x1, x2), maxy = Math.max(y1, y2), px = [], py = [];
     walls = walls.filter(({x, y, type}) => {
-      if (!['barrel', 'void', 'barrier', 'strong', 'weak', 'gold', 'halfbarrier'].includes(type)) return;
+      if (!['barrel', 'void', 'barrier', 'strong', 'weak', 'gold'].includes(type)) return;
       if (Engine.collision(x, y, 100, 100, minx, miny, adx, ady)) {
         if (Engine.collision(x, y, 100, 100, x1-1, y1-1, 2, 2) || Engine.collision(x, y, 100, 100, x2-1, y2-1, 2, 2)) return false;
         const xw = x + 100, yw = y + 100;
