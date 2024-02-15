@@ -28,10 +28,7 @@ class Block {
   damage(d, type) {
     if (this.hp === Infinity) return;
     this.s = Date.now();
-    if ((this.hp = Math.min(this.maxHp, this.hp-d)) <= 0) {
-      if (type === 'barrel') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
-      this.destroy();
-    }
+    if ((this.hp = Math.min(this.maxHp, this.hp-d)) <= 0) this.destroy();
   }
   reset() {
     for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'host', 'team', 's' ,'c', 'updatedLast']) this[property] = undefined;
