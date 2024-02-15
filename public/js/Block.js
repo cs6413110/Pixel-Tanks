@@ -29,7 +29,7 @@ class Block {
     if (this.hp === Infinity) return;
     this.s = Date.now();
     if ((this.hp = Math.min(this.maxHp, this.hp-d)) <= 0) {
-      this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x-50, this.y-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
+      this.host.d.push(new Damage(this.x-50, this.y-50, 100, 100, 50, this.team, this.host));
       this.destroy();
     }
   }
