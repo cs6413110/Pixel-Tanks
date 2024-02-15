@@ -36,6 +36,7 @@ const images = {
   },
   cosmetics: {
     'watermelon': '/cosmetics/watermelon',
+    'bread': '/cosmetics/bread',
     'eye': '/cosmetics/eye',
     'half glitch': '/cosmetics/half_glitch',
     'glitch': '/cosmetics/glitch',
