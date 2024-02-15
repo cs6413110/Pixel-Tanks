@@ -447,7 +447,7 @@ class Defense extends Multiplayer {
   startNewWave() {
     for (const t of this.pt) {
       clearInterval(t.fireInterval);
-      clearTimeout(.fireTimeout);
+      clearTimeout(t.fireTimeout);
       t.fire = t.ded = false;
       t.hp = t.maxHp;
       t.shields = 0;
