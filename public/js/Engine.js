@@ -58,7 +58,7 @@ class Engine {
       const type = a.replace('block#', '');
       for (const coord of coords) {
         if (t.r >= coord.r[0] && t.r < coord.r[1]) {
-          this.b.push(A.template('Block').init(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 100}[type], type, t.team, this));
+          this.b.push(A.template('Block').init(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 100, barrel: 100}[type], type, t.team, this));
           break;
         }
       }
@@ -69,7 +69,7 @@ class Engine {
       }
     } else if (a === 'break') {
       for (const cell of t.cells) {
-        const c = cell.split('x'), cx = c[0], cy = c[1], breakable = ['gold', 'weak', 'strong', 'spike', 'barrier', 'void'];
+        const c = cell.split('x'), cx = c[0], cy = c[1], breakable = ['gold', 'weak', 'strong', 'spike', 'barrier', 'void', 'barrel'];
         for (const entity of this.cells[cx][cy]) if (entity instanceof Block && Engine.collision(t.x, t.y, 80, 80, entity.x, entity.y, 100, 100) && breakable.includes(entity.type)) entity.destroy();
       }
     } else if (a === 'bomb') {
@@ -168,7 +168,7 @@ class Engine {
 
   levelReader(level) {
     for (let i = this.b.length-1; i >= 0; i--) this.b[i].destroy();
-    const key = {'B5': ['void', Infinity], 'B4': ['barrier', Infinity], 'B3': ['gold', 300], 'B2': ['strong', 200], 'B1': ['weak', 100]};
+    const key = {'B6': ['barrel', 100], 'B5': ['void', Infinity], 'B4': ['barrier', Infinity], 'B3': ['gold', 300], 'B2': ['strong', 200], 'B1': ['weak', 100]};
     for (let l = 0; l < level.length; l++) {
       for (let q = 0; q < level[l].length; q++) {
         const e = level[l][q];
@@ -202,7 +202,7 @@ class Engine {
   static raycast(x1, y1, x2, y2, walls) {
     const dx = x1-x2, dy = y1-y2, adx = Math.abs(dx), ady = Math.abs(dy), minx = Math.min(x1, x2), miny = Math.min(y1, y2), maxx = Math.max(x1, x2), maxy = Math.max(y1, y2), px = [], py = [];
     walls = walls.filter(({x, y, type}) => {
-      if (!['void', 'barrier', 'strong', 'weak', 'gold'].includes(type)) return;
+      if (!['barrel', 'void', 'barrier', 'strong', 'weak', 'gold'].includes(type)) return;
       if (Engine.collision(x, y, 100, 100, minx, miny, adx, ady)) {
         if (Engine.collision(x, y, 100, 100, x1-1, y1-1, 2, 2) || Engine.collision(x, y, 100, 100, x2-1, y2-1, 2, 2)) return false;
         const xw = x + 100, yw = y + 100;
