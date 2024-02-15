@@ -12,7 +12,7 @@ class Block {
     for (const i in Block.args) this[Block.args[i]] = arguments[i];
     this.maxHp = hp;
     if (!(this.c = type !== 'fire' && type !== 'airstrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
-    if (type === 'airstrike' || 'barrel') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
+    if (type === 'airstrike') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
     let dxmin = Math.max(0, Math.min(29, Math.floor(this.x/100))), dymin = Math.max(0, Math.min(29, Math.floor(this.y/100))), dxmax = Math.max(0, Math.min(29, Math.floor((this.x+99)/100))), dymax = Math.max(0, Math.min(29, Math.floor((this.y+99)/100)));
     for (let x = dxmin; x <= dxmax; x++) for (let y = dymin; y <= dymax; y++) {
       host.cells[x][y].add(this);
@@ -41,6 +41,7 @@ class Block {
     this.host.b.splice(this.host.b.indexOf(this), 1);
     cell: for (const cell of this.cells) {
       const [x, y] = cell.split('x');
+      if (type === 'barrel') this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x-50, this.y-50, 300, 300, 50, this.team, this.host)), 5000+Math.random()*500));
       this.host.cells[x][y].delete(this);
       for (const e of this.host.cells[x][y]) if (e instanceof Block && e.x % 100 === 0 && e.y % 100 === 0) continue cell;
       this.host.map.setWalkableAt(x, y, true);
