@@ -28,7 +28,10 @@ class Block {
   damage(d) {
     if (this.hp === Infinity) return;
     this.s = Date.now();
-    if ((this.hp = Math.min(this.maxHp, this.hp-d)) <= 0) this.destroy();
+    if ((this.hp = Math.min(this.maxHp, this.hp-d)) <= 0) {
+      if (type === 'barrel') this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x-50, this.y-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
+      this.destroy();
+    }
   }
   reset() {
     for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'host', 'team', 's' ,'c', 'updatedLast']) this[property] = undefined;
@@ -37,7 +40,6 @@ class Block {
   }
   destroy() {
     for (const t of this.t) clearTimeout(t);
-    if (type === 'barrel') this.t.push(setTimeout(() => this.host.d.push(new Damage(this.x-50, this.y-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
     clearTimeout(this.sd);
     this.host.b.splice(this.host.b.indexOf(this), 1);
     cell: for (const cell of this.cells) {
