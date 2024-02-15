@@ -12,6 +12,7 @@ const images = {
     airstrike: '/blocks/airstrike',
     friendlyairstrike: '/blocks/friendlyairstrike',
     barrel: '/blocks/barrel',
+    halfbarrier: '/blocks/halfbarrier',
   },
   bullets: {
     //normal: '/bullets/normal', no image yet :(
