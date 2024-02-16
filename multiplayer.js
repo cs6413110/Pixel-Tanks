@@ -663,7 +663,7 @@ const Commands = {
   live: [Object, 3, 2, function(data) {
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = false;
   }],
-  switch: [TDM, 4, 2, function(data) {
+  switch: [TDM, 3, 2, function(data) {
     if (servers[this.room].mode === 0) for (const t of servers[this.room].pt) if (t.username === (data.length === 1 ? this.username : data[1])) t.color = t.color === '#FF0000' ? '#0000FF' : '#FF0000';
   }],
   start: [TDM, 2, 1, function() {
@@ -675,6 +675,12 @@ const Commands = {
   reboot: [Object, 2, 1, function() {
     for (const socket of sockets) socket.send({status: 'error', message: 'Restarting Server!'});
     process.exit(1);
+  }],
+  announce: [Object, 3, 2, function(data) {
+    for (const server of Object.values(servers)) server.logs.push({m: '[Announcement]['+this.username+'] '+data.slice(1).join(' ')});
+  }],
+  global: [Object, 4, 2, function(data) {
+    for (const socket of sockets) socket.send({status: 'error', message: '[Global]['+this.username+'] '+data.slice(1).join(' ')});
   }],
   sread: [Object, 1, 2, function(data) {
     const value = servers[this.room][data[1]];
