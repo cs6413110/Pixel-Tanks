@@ -232,6 +232,8 @@ const images = {
     explode_: { frames: 17, speed: 75, kill: 8, type: 1 },
     clicked: '/animations/clicked',
     clicked_: { frames: 29, speed: 75, kill: 28, type: 2 },
+    Cactus: '/animations/Cactus',
+    Cactus_: { frames: 19, speed: 23, kill: 9, type: 2 },
     kermit: '/animations/kermit',
     kermit_: { frames: 14, speed: 75, kill: 28, type: 2 },
     amogus: '/animations/amogus',
