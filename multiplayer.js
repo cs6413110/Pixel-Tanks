@@ -676,10 +676,10 @@ const Commands = {
     for (const socket of sockets) socket.send({status: 'error', message: 'Restarting Server!'});
     process.exit(1);
   }],
-  announce: [Object, 3, 2, function(data) {
+  announce: [Object, 3, -1, function(data) {
     for (const server of Object.values(servers)) server.logs.push({m: '[Announcement]['+this.username+'] '+data.slice(1).join(' ')});
   }],
-  global: [Object, 4, 2, function(data) {
+  global: [Object, 4, -1, function(data) {
     for (const socket of sockets) socket.send({status: 'error', message: '[Global]['+this.username+'] '+data.slice(1).join(' ')});
   }],
   sread: [Object, 1, 2, function(data) {
