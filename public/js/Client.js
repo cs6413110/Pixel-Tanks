@@ -361,11 +361,11 @@ class Client {
       GUI.draw.fillRect(c[i], 908+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*92, 92, 92);
     }
     for (let i = 0; i < 5; i++) {
-      if (Date.now()-this.timers[['powermissle', 'toolkit', 'boost', 'grapple'][i]].time > 1) {
-        GUI.draw.fillStyle = '#000000';
-        GUI.draw.globalAlpha = .5;
-        GUI.draw.fillRect([408, 1120, 1196, 1272][i], 956, 48, 48);
-      }
+      //if (Date.now()-this.timers[['powermissle', 'toolkit', 'boost', 'grapple'][i]].time > 1) {
+        //GUI.draw.fillStyle = '#000000';
+        //GUI.draw.globalAlpha = .5;
+        //GUI.draw.fillRect([408, 1120, 1196, 1272][i], 956, 48, 48);
+      //}
       GUI.draw.globalAlpha = 1;
       GUI.draw.fillStyle = PixelTanks.userData.color;
       GUI.draw.fillRect([408, 1120, 1196, 1272][i], 952+Math.min((Date.now()-this.timers[['powermissle', 'toolkit', 'boost', 'grapple'][i]])/[10000, 40000, 5000, 5000][i], 1)*48, 48, 48);
