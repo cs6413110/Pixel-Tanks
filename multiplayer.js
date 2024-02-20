@@ -3,7 +3,7 @@ const settings = {
   bans: [],
   banips: [],
   full_auth: ['cs641311'], //hello
-  admins: ['Celestial', 'bradley', '3foenation'], 
+  admins: ['Celestial', 'bradley'], 
   vips: ['LostKing', 'DarkMemeGod'], 
   mutes: ['3foe'],
   players_per_room: 400,
@@ -638,7 +638,6 @@ const Commands = {
   unmute: [Object, 2, 2, function(data) {
     settings.mutes.splice(settings.mutes.indexOf(data[1]), 1);
     servers[this.room].logs.push({m: data[1]+' was unmuted by '+this.username, c: '#0000FF'});
-    for (const socket of sockets) if (socket.username === 'cs641311' && data[1] === '3foe') socket.send({status: 'error', message: '3foe was unmuted by '+this.username});
   }],
   kick: [Object, 2, 2, function(data) {
     for (const socket of sockets) if (socket.username === data[1]) {
