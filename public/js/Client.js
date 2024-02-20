@@ -361,7 +361,7 @@ class Client {
       GUI.draw.fillRect(c[i], 908+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*92, 92, 92);
     }
     for (let i = 0; i < 5; i++) {
-      if (this.timers[['powermissle', 'toolkit', 'boost', 'grapple'][i]].time > 1) {
+      if (this.timers[['powermissle', 'toolkit', 'boost', 'grapple'][i]] > 1) {
         GUI.draw.globalAlpha = .5;
         GUI.draw.fillRect([408, 1120, 1196, 1272][i], 956, 48, 48);
       }
