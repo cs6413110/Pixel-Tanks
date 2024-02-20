@@ -178,6 +178,7 @@ const images = {
     'Stripes': '/cosmetics/stripe',
     'Hazard': '/cosmetics/hazard',
     'Anime Eyes': '/cosmetics/animeeyes',
+    'chip': '/cosmetics/chip',
   },
   menus: {
     ui: '/menus/ui',
