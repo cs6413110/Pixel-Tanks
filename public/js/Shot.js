@@ -66,7 +66,7 @@ class Shot {
   }
   update() {
     const time = (Date.now()-this.e)/15, x = this.target?.x || time*this.xm+this.sx, y = this.target?.y || time*this.ym+this.sy, x1 = Math.floor(x/100), x2 = Math.floor((x+10)/100), y1 = Math.floor(y/100), y2 = Math.floor((y+10)/100);
-    if (this.collision(x, y) || (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded)) return this.destroy();
+    if (this.collision(x, y)/* || (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded)*/) return this.destroy();
     if (Math.floor(this.x/100) !== x1 || Math.floor(this.y/100) !== y2 || Math.floor((this.x+10)/100) !== x2 || Math.floor((this.y+10)/100) !== y2) {
       del: for (const cell of this.cells) {
         let c = cell.split('x'), xv = c[0], yv = c[1];
