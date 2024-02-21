@@ -87,9 +87,11 @@ class Shot {
     } else if (this.type === 'dynamite') this.r += 5;
   }
   setValue(p, v) {
-    console.log(this.raw);
     this.updatedLast = Date.now();
     this.raw[p] = v;
+  }
+  reset() {
+    this.cells.clear();
   }
   destroy() {
     this.host.s.splice(this.host.s.indexOf(this), 1);
