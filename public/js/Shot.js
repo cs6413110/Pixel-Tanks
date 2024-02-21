@@ -87,6 +87,7 @@ class Shot {
     } else if (this.type === 'dynamite') this.r += 5;
   }
   setValue(p, v) {
+    console.log(this.raw);
     this.updatedLast = Date.now();
     this.raw[p] = v;
   }
