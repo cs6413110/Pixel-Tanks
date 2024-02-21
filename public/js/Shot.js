@@ -3,11 +3,12 @@ class Shot {
   static args = ['x', 'y', 'r', 'type', 'team', 'rank', 'host'];
   static raw = ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id'];
   constructor() {
-    for (const p of Shot.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
     this.cells = new Set();
+    for (const p of Shot.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
   init(x, y, r, type, team, rank, host) {
     this.raw = {};
+    console.log(this.raw);
     for (const i in Shot.args) this[Shot.args[i]] = arguments[i];
     this.e = Date.now();
     this.id = Math.random();
@@ -20,6 +21,7 @@ class Shot {
         this.cells.add(`${x}x${y}`);
       }
     }
+    console.log(this.raw);
     return this;
   }
   collide(e) {
