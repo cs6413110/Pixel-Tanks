@@ -1,5 +1,5 @@
 class Shot {
-  static settings = {bullet: [20, 6], shotgun: [20, 4.8], grapple: [0, 12], powermissle: [100, 9, 50], megamissle: [200, 9, 100], healmissle: [-150, 9, 99]};
+  static settings = {bullet: [20, 18], shotgun: [20, 14.4], grapple: [0, 36], powermissle: [100, 27, 50], megamissle: [200, 27, 100], healmissle: [-150, 27, 99]};
   static args = ['x', 'y', 'r', 'type', 'team', 'rank', 'host'];
   static raw = ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id'];
   constructor() {
