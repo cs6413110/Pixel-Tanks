@@ -62,8 +62,7 @@ class Shot {
     return false;
   }
   update() {
-    console.log(this.x, this.y);
-    const time = Math.floor((Date.now()-this.e)/5), x = this.target?.x || time*this.xm+this.sx, y = this.target?.y || time*this.ym+this.sy, x1 = 0|(x/100), x2 = 0|((x+10)/100), y1 = 0|(y/100), y2 = 0|((y+10)/100);
+    const time = Math.floor((Date.now()-this.e)/15)/100, x = this.target?.x || time*this.xm+this.sx, y = this.target?.y || time*this.ym+this.sy, x1 = 0|(x/100), x2 = 0|((x+10)/100), y1 = 0|(y/100), y2 = 0|((y+10)/100);
     if (0|(this.x/100) !== x1 || 0|(this.y/100) !== y2 || 0|((this.x+10)/100) !== x2 || 0|((this.y+10)/100) !== y2) {
       del: for (const cell of this.cells) {
         let c = cell.split('x'), xv = c[0], yv = c[1];
