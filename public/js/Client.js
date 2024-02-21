@@ -523,7 +523,7 @@ class Client {
     }
     var fireType = ['grapple', 'megamissle', 'dynamite', 'usb', 'healmissle', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? 'powermissle' : (!isNaN(type) ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
     while (l<(fireType === 1 ? 1 : 15)) {
-      this.tank.fire.push({type: type, r: this.tank.r-90+l});
+      this.tank.fire.push({type: type, r: this.tank.r+90+l});
       l += 5;
     }
   }
