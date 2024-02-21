@@ -232,8 +232,12 @@ class Client {
     } else if (new Number(t.team.split(':')[1]) < 1) {} else {
       username += ' ['+t.team.split(':')[1]+']';
     }
-
-    GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
+    
+    if (Engine.getTeam(t.team) === RED) {
+      GUI.drawText(username, t.x+40, t.y-25, 50, '#ff0000', 0.5);
+    } else if (Engine.getTeam(t.team) === BLUE) {
+      GUI.drawText(username, t.x+40, t.y-25, 50, '#00ff00', 0.5);
+    } else GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
 
     if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
     if (t.reflect) GUI.drawImage(PixelTanks.images.tanks.reflect, t.x, t.y, 80, 80, 1, 40, 40, 0, 0, Math.sin((Date.now()-this.animate)/1000*4*Math.PI));
