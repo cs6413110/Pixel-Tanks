@@ -222,7 +222,9 @@ class Client {
       }
     }
 
-    if (t.invis && Engine.getTeam(this.team) !== Engine.getTeam(t.team)) return;
+    let team = Engine.getTeam(t.team);
+    
+    if (t.invis && Engine.getTeam(this.team) !== team) return;
 
     let username = '['+t.rank+'] '+t.username;
     if (t.team.split(':')[1].includes('@leader')) {
@@ -233,9 +235,9 @@ class Client {
       username += ' ['+t.team.split(':')[1]+']';
     }
     
-    if (Engine.getTeam(t.team) === 'RED') {
+    if (team === 'RED') {
       GUI.drawText(username, t.x+40, t.y-25, 50, '#ff0000', 0.5);
-    } else if (Engine.getTeam(t.team) === 'BLUE') {
+    } else if (team === 'BLUE') {
       GUI.drawText(username, t.x+40, t.y-25, 50, '#0000ff', 0.5);
     } else GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
 
