@@ -233,9 +233,9 @@ class Client {
       username += ' ['+t.team.split(':')[1]+']';
     }
     
-    if (Engine.getTeam(t.team) === RED) {
+    if (t.team.split(':')[1].includes('@RED#')) {
       GUI.drawText(username, t.x+40, t.y-25, 50, '#ff0000', 0.5);
-    } else if (Engine.getTeam(t.team) === BLUE) {
+    } else if (t.team.split(':')[1].includes('@BLUE#')) {
       GUI.drawText(username, t.x+40, t.y-25, 50, '#00ff00', 0.5);
     } else GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
 
