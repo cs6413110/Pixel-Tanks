@@ -51,19 +51,20 @@ class Shot {
     if (e instanceof Tank) return (this.type === 'grapple' ? 0 : 1)+(Engine.getTeam(e.team) === Engine.getTeam(this.team) ? 4 : 3);
   }
   collision() {
-    for (const cell of this.cells) {
+    /*for (const cell of this.cells) {
       const c = cell.split('x');
       for (const e of [...this.host.cells[c[0]][c[1]]].sort((a, b) => this.score(b) - this.score(a))) {
         let size = e instanceof Block || e.role === 0 ? 100 : 80;
         if (!e.ded && !e.c && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, size, size)) return this.collide(e);
       }
-    }
+    }*/
     if (this.x < 0 || this.y < 0 || this.x > 3000 || this.y > 3000) return this.collide();
     return false;
   }
   update() {
-    const time = Math.floor((Date.now()-this.e)/15)/100, x = this.target?.x || time*this.xm+this.sx, y = this.target?.y || time*this.ym+this.sy, x1 = Math.floor(x/100), x2 = Math.floor((x+10)/100), y1 = Math.floor(y/100), y2 = Math.floor((y+10)/100);
+    const time = (Date.now()-this.e)/15, x = this.target?.x || time*this.xm+this.sx, y = this.target?.y || time*this.ym+this.sy, x1 = Math.floor(x/100), x2 = Math.floor((x+10)/100), y1 = Math.floor(y/100), y2 = Math.floor((y+10)/100);
     if (Math.floor(this.x/100) !== x1 || Math.floor(this.y/100) !== y2 || Math.floor((this.x+10)/100) !== x2 || Math.floor((this.y+10)/100) !== y2) {
+      console.log(x1, y2, x2, y2);
       del: for (const cell of this.cells) {
         let c = cell.split('x'), xv = c[0], yv = c[1];
         for (let x = x1; x < x2; x++) for (let y = y1; y < y2; y++) if (x === xv && y === yv) continue del;
@@ -71,10 +72,9 @@ class Shot {
         this.cells.delete(`${xv}x${yv}`);
       }
       for (let x = x1; x < x2; x++) for (let y = y1; y < y2; y++) {
-        if (!this.cells.has(x+'x'+y)) {
-          this.host.cells[x][y].add(this);
-          this.cells.add(`${x}x${y}`);
-        }
+        if (this.cells.has(`${x}x${y}`)) continue;
+        this.host.cells[x][y].add(this);
+        this.cells.add(`${x}x${y}`);
       }
     }
     this.x = x;
