@@ -1,5 +1,5 @@
 class Shot {
-  static settings = {bullet: [20, 18], shotgun: [20, 14.4], grapple: [0, 36], powermissle: [100, 27, 50], megamissle: [200, 27, 100], healmissle: [-150, 27, 99]};
+  static settings = {bullet: [20, 18], shotgun: [20, 14.4], grapple: [0, 36], fire: [0, 16.2], dynamite: [0, 14.4], usb: [0, 14.4], powermissle: [100, 27, 50], megamissle: [200, 27, 100], healmissle: [-150, 27, 99]};
   static args = ['x', 'y', 'r', 'type', 'team', 'rank', 'host'];
   static raw = ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id'];
   constructor() {
@@ -63,7 +63,7 @@ class Shot {
   }
   update() {
     const time = Math.floor((Date.now()-this.e)/15), x = this.target?.x || time*this.xm+this.sx, y = this.target?.y || time*this.ym+this.sy, x1 = Math.floor(x/100), x2 = Math.floor((x+10)/100), y1 = Math.floor(y/100), y2 = Math.floor((y+10)/100);
-    if (this.collision(x, y) || (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded)) return this.destroy();
+    if (this.collision(this.x, this.y) || (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded)) return this.destroy();
     if (Math.floor(this.x/100) !== x1 || Math.floor(this.y/100) !== y2 || Math.floor((this.x+10)/100) !== x2 || Math.floor((this.y+10)/100) !== y2) {
       del: for (const cell of this.cells) {
         let c = cell.split('x'), xv = c[0], yv = c[1];
