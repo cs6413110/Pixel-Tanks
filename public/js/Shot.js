@@ -39,7 +39,7 @@ class Shot {
       if (isBlock) return this.host.b.push(A.template('Block').init(e.x, e.y, Infinity, 'fire', this.team, this.host));
       if (!e.immune) e.fire = {team: this.team, time: Date.now()};
     } else if (size) {
-      this.host.d.push(new Damage(x-o, y-o, size, size, this.damage, this.team, this.host));
+      this.host.d.push(new Damage(this.x-o, this.y-o, size, size, this.damage, this.team, this.host));
     } else if (e && Engine.getTeam(e.team) !== Engine.getTeam(this.team)) {
       if (isBlock) e.damage(this.damage); else e.damageCalc(this.x, this.y, this.damage, Engine.getUsername(this.team));
     }
@@ -62,6 +62,7 @@ class Shot {
     return false;
   }
   update() {
+    console.log(this.x, this.y);
     const time = Math.floor((Date.now()-this.e)/5), x = this.target?.x || time*this.xm+this.sx, y = this.target?.y || time*this.ym+this.sy, x1 = 0|(x/100), x2 = 0|((x+10)/100), y1 = 0|(y/100), y2 = 0|((y+10)/100);
     if (0|(this.x/100) !== x1 || 0|(this.y/100) !== y2 || 0|((this.x+10)/100) !== x2 || 0|((this.y+10)/100) !== y2) {
       del: for (const cell of this.cells) {
