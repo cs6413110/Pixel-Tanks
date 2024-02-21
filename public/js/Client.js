@@ -140,17 +140,17 @@ class Client {
 
   drawShot(s) {
     if (s.type == 'bullet') {
-      GUI.drawImage(PixelTanks.images.blocks.void, s.x, s.y, 10, 10, .7, 5, 5, 0, 0, s.r+180);
+      GUI.drawImage(PixelTanks.images.blocks.void, s.x, s.y, 10, 10, .7, 5, 5, 0, 0, s.r);
     } else if (s.type === 'powermissle') {
-      GUI.drawImage(PixelTanks.images.bullets.powermissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+180);
+      GUI.drawImage(PixelTanks.images.bullets.powermissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r);
     } else if (s.type === 'healmissle') {
-      GUI.drawImage(PixelTanks.images.bullets.healmissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+180);
+      GUI.drawImage(PixelTanks.images.bullets.healmissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r);
     } else if (s.type === 'megamissle') {
-      GUI.drawImage(PixelTanks.images.bullets.megamissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+180);
+      GUI.drawImage(PixelTanks.images.bullets.megamissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r);
     } else if (s.type === 'shotgun') {
-      GUI.drawImage(PixelTanks.images.bullets.shotgun, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+180);
+      GUI.drawImage(PixelTanks.images.bullets.shotgun, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r);
     } else if (s.type === 'grapple') {
-      GUI.drawImage(PixelTanks.images.bullets.grapple, s.x, s.y, 45, 45, 1, 22.5, 22.5, 0, 0, s.r+180);
+      GUI.drawImage(PixelTanks.images.bullets.grapple, s.x, s.y, 45, 45, 1, 22.5, 22.5, 0, 0, s.r);
       GUI.draw.lineWidth = 10;
       GUI.draw.beginPath();
       GUI.draw.strokeStyle = '#A9A9A9';
@@ -159,11 +159,11 @@ class Client {
       if (t) GUI.draw.lineTo(t.x+40, t.y+40);
       GUI.draw.stroke();
     } else if (s.type === 'dynamite') {
-      GUI.drawImage(PixelTanks.images.bullets.dynamite, s.x, s.y, 10, 40, 1, 5, 5, 0, 0, s.r+180);
+      GUI.drawImage(PixelTanks.images.bullets.dynamite, s.x, s.y, 10, 40, 1, 5, 5, 0, 0, s.r);
     } else if (s.type === 'usb') {
-      GUI.drawImage(PixelTanks.images.bullets.usb, s.x, s.y, 10, 40, 1, 5, 5, 0, 0, s.r+180);
+      GUI.drawImage(PixelTanks.images.bullets.usb, s.x, s.y, 10, 40, 1, 5, 5, 0, 0, s.r);
     } else if (s.type === 'fire') {
-      GUI.drawImage(PixelTanks.images.bullets.fire, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+180);
+      GUI.drawImage(PixelTanks.images.bullets.fire, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r);
     }
   }
 
@@ -694,7 +694,7 @@ class Client {
         this.fire('healmissle');
         this.timers.class = {time: Date.now(), cooldown: 25000};//stop it ur wasting time :/
       } else if (c === 'fire') {
-        for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+i});
+        for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+90+i});
         this.timers.class = {time: Date.now(), cooldown: 10000};
       }
       setTimeout(() => {this.canClass = true}, this.timers.class.cooldown);
