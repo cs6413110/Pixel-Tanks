@@ -67,11 +67,11 @@ class Shot {
       console.log(this.cells);
       del: for (const cell of this.cells) {
         let c = cell.split('x'), xv = c[0], yv = c[1];
-        for (let x = x1; x < x2; x++) for (let y = y1; y < y2; y++) if (x === xv && y === yv) continue del;
+        for (let x = x1; x <= x2; x++) for (let y = y1; y <= y2; y++) if (x === xv && y === yv) continue del;
         this.host.cells[xv][yv].delete(this);
         this.cells.delete(`${xv}x${yv}`);
       }
-      for (let x = x1; x < x2; x++) for (let y = y1; y < y2; y++) {
+      for (let x = x1; x <= x2; x++) for (let y = y1; y <= y2; y++) {
         if (this.cells.has(`${x}x${y}`)) continue;
         this.host.cells[x][y].add(this);
         this.cells.add(`${x}x${y}`);
