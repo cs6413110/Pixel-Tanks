@@ -58,7 +58,7 @@ class Shot {
         if (!e.ded && !e.c && Engine.collision(x, y, 10, 10, e.x, e.y, size, size)) return this.collide(e);
       }
     }*/
-    if (x < 0 || y < 0 || x > 3000 || y > 3000) return this.collide();
+    if (x < 0 || y < 0 || x+10 >= 3000 || y+10 >= 3000) return this.collide();
     return false;
   }
   update() {
