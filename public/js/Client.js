@@ -523,7 +523,7 @@ class Client {
     }
     var fireType = ['grapple', 'megamissle', 'dynamite', 'usb', 'healmissle', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? 'powermissle' : (!isNaN(type) ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
     while (l<(fireType === 1 ? 1 : 15)) {
-      this.tank.fire.push({...Engine.toPoint(this.tank.r+l), type: type, r: this.tank.r+l});
+      this.tank.fire.push({type: type, r: this.tank.r+l});
       l += 5;
     }
   }
@@ -694,7 +694,7 @@ class Client {
         this.fire('healmissle');
         this.timers.class = {time: Date.now(), cooldown: 25000};//stop it ur wasting time :/
       } else if (c === 'fire') {
-        for (let i = -30; i < 30; i += 5) this.tank.fire.push({...Engine.toPoint(this.tank.r+i), type: 'fire', r: this.tank.r+i});
+        for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+i});
         this.timers.class = {time: Date.now(), cooldown: 10000};
       }
       setTimeout(() => {this.canClass = true}, this.timers.class.cooldown);
