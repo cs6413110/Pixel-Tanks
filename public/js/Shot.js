@@ -54,7 +54,7 @@ class Shot {
     for (const cell of this.cells) {
       const c = cell.split('x');
       for (const e of [...this.host.cells[c[0]][c[1]]].sort((a, b) => this.score(b) - this.score(a))) {
-        let size === e instanceof Block || e.role === 0 ? 100 : 80;
+        let size = e instanceof Block || e.role === 0 ? 100 : 80;
         if (!e.ded && e.c !== false && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, size, size)) return this.collide(e);
       }
     }
