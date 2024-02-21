@@ -50,12 +50,12 @@ class Shot {
     if (e instanceof AI) return Engine.getTeam(e.team) === Engine.getTeam(this.team) || this.type === 'grapple' ? 5 : 2;
     if (e instanceof Tank) return (this.type === 'grapple' ? 0 : 1)+(Engine.getTeam(e.team) === Engine.getTeam(this.team) ? 4 : 3);
   }
-  collision() {
+  collision(x, y) {
     /*for (const cell of this.cells) {
       const c = cell.split('x');
       for (const e of [...this.host.cells[c[0]][c[1]]].sort((a, b) => this.score(b) - this.score(a))) {
         let size = e instanceof Block || e.role === 0 ? 100 : 80;
-        if (!e.ded && !e.c && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, size, size)) return this.collide(e);
+        if (!e.ded && !e.c && Engine.collision(x, y, 10, 10, e.x, e.y, size, size)) return this.collide(e);
       }
     }*/
     if (this.x < 0 || this.y < 0 || this.x > 3000 || this.y > 3000) return this.collide();
@@ -63,6 +63,7 @@ class Shot {
   }
   update() {
     const time = (Date.now()-this.e)/15, x = this.target?.x || time*this.xm+this.sx, y = this.target?.y || time*this.ym+this.sy, x1 = Math.floor(x/100), x2 = Math.floor((x+10)/100), y1 = Math.floor(y/100), y2 = Math.floor((y+10)/100);
+    if (this.collision(x, y) || (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded)) return this.destroy();
     if (Math.floor(this.x/100) !== x1 || Math.floor(this.y/100) !== y2 || Math.floor((this.x+10)/100) !== x2 || Math.floor((this.y+10)/100) !== y2) {
       console.log(this.cells);
       del: for (const cell of this.cells) {
@@ -79,7 +80,6 @@ class Shot {
     }
     this.x = x;
     this.y = y;
-    if (this.collision() || (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded)) return this.destroy();
     if (this.type === 'shotgun') {
       this.d = Math.sqrt((this.x-this.sx)**2+(this.y-this.sy)**2);
       if (this.d >= 300) return this.destroy();
