@@ -40,7 +40,7 @@ class Shot {
       if (!e.immune) e.fire = {team: this.team, time: Date.now()};
     } else if (size) {
       this.host.d.push(new Damage(x-o, y-o, size, size, this.damage, this.team, this.host));
-    } else if (Engine.getTeam(e.team) !== Engine.getTeam(this.team) && e) {
+    } else if (e && Engine.getTeam(e.team) !== Engine.getTeam(this.team)) {
       if (isBlock) e.damage(this.damage); else e.damageCalc(this.x, this.y, this.damage, Engine.getUsername(this.team));
     }
     return true;
@@ -51,7 +51,6 @@ class Shot {
     if (e instanceof Tank) return (this.type === 'grapple' ? 0 : 1)+(Engine.getTeam(e.team) === Engine.getTeam(this.team) ? 4 : 3);
   }
   collision() {
-    if (this.x < 0 || this.y < 0 || this.x > 3000 || this.y > 3000) this.collide();
     for (const cell of this.cells) {
       const c = cell.split('x');
       for (const e of [...this.host.cells[c[0]][c[1]]].sort((a, b) => this.score(b) - this.score(a))) {
@@ -59,6 +58,7 @@ class Shot {
         if (!e.ded && !e.c && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, size, size)) return this.collide(e);
       }
     }
+    if (this.x < 0 || this.y < 0 || this.x > 3000 || this.y > 3000) this.collide();
     return false;
   }
   update() {
