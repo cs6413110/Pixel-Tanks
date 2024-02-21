@@ -8,7 +8,6 @@ class Shot {
   }
   init(x, y, r, type, team, rank, host) {
     this.raw = {};
-    console.log(this.raw);
     for (const i in Shot.args) this[Shot.args[i]] = arguments[i];
     this.e = Date.now();
     this.id = Math.random();
@@ -21,7 +20,6 @@ class Shot {
         this.cells.add(`${x}x${y}`);
       }
     }
-    console.log(this.raw);
     return this;
   }
   collide(e) {
