@@ -3,7 +3,14 @@ class Shot {
   static args = ['x', 'y', 'r', 'type', 'team', 'rank', 'host'];
   static raw = ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id'];
   constructor() {
-    for (const p of Shot.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
+    for (const p of Shot.raw) Object.defineProperty(this, p, {get: () => {
+      try {
+        return this.raw[p]
+      } catch(e) {
+        console.log(this.id);
+        console.log(this.raw);
+      }
+    }, set: v => this.setValue(p, v), configurable: true});
     this.cells = new Set();
   }
   init(x, y, r, type, team, rank, host) {
