@@ -677,7 +677,7 @@ const Commands = {
     process.exit(1);
   }],
   announce: [Object, 3, -1, function(data) {
-    for (const server of Object.values(servers)) server.logs.push({m: '[Announcement]['+this.username+'] '+data.slice(1).join(' ')});
+    for (const server of Object.values(servers)) server.logs.push({m: '[Announcement]['+this.username+'] '+data.slice(1).join(' '), c: '#FFF87D});
   }],
   global: [Object, 4, -1, function(data) {
     for (const socket of sockets) socket.send({status: 'error', message: '[Global]['+this.username+'] '+data.slice(1).join(' ')});
