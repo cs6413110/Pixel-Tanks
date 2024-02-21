@@ -86,7 +86,7 @@ class Multiplayer extends Engine {
     super(levels);
     this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
-    if (!settings.fps_boost) this.i.push(setInterval(() => this.send(), 1000/settings.ups));
+    if (!settings.fps_boost) this.i.push(setInterval(() => this.cellSend(), 1000/settings.ups));
   }
 
   override(t) {
