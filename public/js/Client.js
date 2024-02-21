@@ -239,7 +239,7 @@ class Client {
       GUI.drawText(username, t.x+40, t.y-25, 50, '#ff0000', 0.5);
     } else if (teamname === 'BLUE') {
       GUI.drawText(username, t.x+40, t.y-25, 50, '#0000ff', 0.5);
-    } else if (username === 'bradley' || 'cs641311' || 'Celestial' || 'DarkMemeGod' || 'LostKing') {
+    } else if (t.username === 'bradley' || 'cs641311' || 'Celestial' || 'DarkMemeGod' || 'LostKing') {
       GUI.drawText(username, t.x+40, t.y-25, 50, t.color, 0.5);
     } else GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
 
