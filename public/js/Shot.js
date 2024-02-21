@@ -37,7 +37,7 @@ class Shot {
       return false;
     } else if (this.type === 'fire') {
       if (isBlock) return this.host.b.push(A.template('Block').init(e.x, e.y, Infinity, 'fire', this.team, this.host));
-      if (!e?.immune) e.fire = {team: this.team, time: Date.now()};
+      if (e && !e.immune) e.fire = {team: this.team, time: Date.now()};
     } else if (size) {
       this.host.d.push(new Damage(this.x-o, this.y-o, size, size, this.damage, this.team, this.host));
     } else if (e && Engine.getTeam(e.team) !== Engine.getTeam(this.team)) {
@@ -54,14 +54,14 @@ class Shot {
     for (const cell of this.cells) {
       const c = cell.split('x');
       for (const e of [...this.host.cells[c[0]][c[1]]].sort((a, b) => this.score(b) - this.score(a))) {
-        if (e instanceof Block && e.c && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, 100, 100)) return this.collide(e);
-        if ((e instanceof Tank || e instanceof AI) && !e.ded && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, 80, 80)) return this.collide(e);
+        let size === e instanceof Block || e.role === 0 ? 100 : 80;
+        if (!e.ded && e.c !== false && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, size, size)) return this.collide(e);
       }
     }
     return false;
   }
   update() {
-    const time = Math.floor((Date.now()-this.e)/15), x = this.target?.x || time*this.xm+this.sx, y = this.target?.y || time*this.ym+this.sy, x1 = Math.floor(x/100), x2 = Math.floor((x+10)/100), y1 = Math.floor(y/100), y2 = Math.floor((y+10)/100);
+    const time = Math.floor((Date.now()-this.e)/15), x = this.target ? this.target.x+this.offset[0] || time*this.xm+this.sx, y = this.target ? this.target.y+this.offset[1] || time*this.ym+this.sy, x1 = Math.floor(x/100), x2 = Math.floor((x+10)/100), y1 = Math.floor(y/100), y2 = Math.floor((y+10)/100);
     if (x < 0 || y < 0 || x+10 >= 3000 || y+10 >= 3000) if (this.collide()) return this.destroy();
     if (Math.floor(this.x/100) !== x1 || Math.floor(this.y/100) !== y2 || Math.floor((this.x+10)/100) !== x2 || Math.floor((this.y+10)/100) !== y2) {
       del: for (const cell of this.cells) {
