@@ -7,7 +7,6 @@ class Shot {
       try {
         return this.raw[p]
       } catch(e) {
-        console.log(this.id);
         console.log(this.raw);
       }
     }, set: v => this.setValue(p, v), configurable: true});
