@@ -51,14 +51,14 @@ class Shot {
     if (e instanceof Tank) return (this.type === 'grapple' ? 0 : 1)+(Engine.getTeam(e.team) === Engine.getTeam(this.team) ? 4 : 3);
   }
   collision() {
-    for (const cell of this.cells) {
+    /*for (const cell of this.cells) {
       const c = cell.split('x');
       for (const e of [...this.host.cells[c[0]][c[1]]].sort((a, b) => this.score(b) - this.score(a))) {
         let size = e instanceof Block || e.role === 0 ? 100 : 80;
         if (!e.ded && !e.c && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, size, size)) return this.collide(e);
       }
-    }
-    if (this.x < 0 || this.y < 0 || this.x > 3000 || this.y > 3000) this.collide();
+    }*/
+    if (this.x < 0 || this.y < 0 || this.x > 3000 || this.y > 3000) return this.collide();
     return false;
   }
   update() {
