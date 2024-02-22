@@ -27,13 +27,13 @@ class Shot {
     if (size) this.host.d.push(new Damage(this.x-o, this.y-o, size, size, this.damage, this.team, this.host)); // damage change to square instead of rect hitbox?
     if (this.type === 'dynamite' || this.type === 'usb' || this.type === 'grapple') {
       const g = pullGrapple ? this.host.pt.find(t => t.username === Engine.getUsername(this.team)) : e;
-      if (!(this.target = g)) return true;
+      if (!(this.target = g) || (this.type === 'usb' && isBlock)) return true;
       this.offset = [g.x-this.x, g.y-this.y];
       if (pullGrapple) this.update = () => {};
       if (this.type === 'grapple') {
         if (g.grapple) g.grapple.bullet.destroy();
         g.grapple = {target: pullGrapple ? {x: e.x, y: e.y} : this.host.pt.find(t => t.username === Engine.getUsername(this.team)), bullet: this};
-      }
+      } else if (this.type === 'usb') setTimeout(() => this.destroy, 20000);
       return false;
     } else if (this.type === 'fire') {
       if (isBlock) return this.host.b.push(A.template('Block').init(e.x, e.y, Infinity, 'fire', this.team, this.host));
@@ -53,7 +53,7 @@ class Shot {
   collision() {
     for (const cell of this.cells) {
       const c = cell.split('x');
-      for (const e of [...this.host.cells[c[0]][c[1]]].sort((a, b) => this.score(b) - this.score(a))) {
+      for (const e of [...this.host.cells[c[0]][c[1]]].sort((a, b) => this.score(a) - this.score(b))) {
         let size = e instanceof Block || e.role === 0 ? 100 : 80;
         if (e instanceof Block && e.c && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, size, size)) return this.collide(e);
         if ((e instanceof Tank || e instanceof AI) && !e.ded && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, size, size)) return this.collide(e);
