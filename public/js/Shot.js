@@ -27,7 +27,7 @@ class Shot {
     if (size) this.host.d.push(new Damage(this.x-o, this.y-o, size, size, this.damage, this.team, this.host)); // damage change to square instead of rect hitbox?
     if (this.type === 'dynamite' || this.type === 'usb' || this.type === 'grapple') {
       const g = pullGrapple ? this.host.pt.find(t => t.username === Engine.getUsername(this.team)) : e;
-      this.target = g;
+      if (!(this.target = g)) return true;
       this.offset = [g.x-this.x, g.y-this.y];
       if (pullGrapple) this.update = () => {};
       if (this.type === 'grapple') {
