@@ -67,11 +67,11 @@ class Shot {
     if (Math.floor(this.x/100) !== x1 || Math.floor(this.y/100) !== y2 || Math.floor((this.x+10)/100) !== x2 || Math.floor((this.y+10)/100) !== y2) {
       del: for (const cell of this.cells) {
         let c = cell.split('x'), xv = c[0], yv = c[1];
-        for (let x = x1; x <= x2; x = Math.min(29, Math.max(0, x+1))) for (let y = y1; y <= y2; y = Math.min(29, Math.max(0, x+1))) if (x === xv && y === yv) continue del;
+        for (let x = Math.min(29, Math.max(0, x1)); x <= Math.min(29, Math.max(0, x2)); x++)) for (let y = Math.min(29, Math.max(0, y1)); y <= Math.min(29, Math.max(0, y2)); y++) if (x === xv && y === yv) continue del;
         this.host.cells[xv][yv].delete(this);
         this.cells.delete(`${xv}x${yv}`);
       }
-      for (let x = x1; x <= x2; x = Math.min(29, Math.max(0, x+1))) for (let y = y1; y <= y2; y = Math.min(29, Math.max(0, y+1))) {
+      for (let x = Math.min(29, Math.max(0, x1)); x <= Math.min(29, Math.max(0, x2)); x++)) for (let y = Math.min(29, Math.max(0, y1)); y <= Math.min(29, Math.max(0, y2)); y++) {
         if (this.cells.has(`${x}x${y}`)) continue;
         this.host.cells[x][y].add(this);
         this.cells.add(`${x}x${y}`);
