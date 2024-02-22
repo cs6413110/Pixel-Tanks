@@ -89,7 +89,7 @@ class Shot {
     this.updatedLast = Date.now();
     this.raw[p] = v;
   }
-  reset: () => this.cells.clear();
+  reset: () => this.cells.clear()
   destroy() {
     this.host.s.splice(this.host.s.indexOf(this), 1);
     for (const cell of this.cells) {
