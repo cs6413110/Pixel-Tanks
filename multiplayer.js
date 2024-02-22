@@ -603,8 +603,10 @@ const Commands = {
   acupuncture: [Object, 2, 1, function(data) {
     for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, 50, 'spike', ':', servers[this.room]));
   }],
-  newmap: [FFA, 3, 1, function(data) {
-    servers[this.room].levelReader(ffaLevels[Math.floor(Math.random()*ffaLevels.length)]);
+  newmap: [FFA, 3, -1, function(data) {
+    let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
+    if (isNaN(levelId) || levelID % 1 !== 0 || levelID >= ffaLevels.length) return this.send({status: 'error', message: 'Out of range or invalid input.'});
+    servers[this.room].levelReader(ffaLevels[levelID]);
     servers[this.room].pt.forEach(t => {
       t.x = servers[this.room].spawn.x;
       t.y = servers[this.room].spawn.y;
