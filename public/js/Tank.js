@@ -70,7 +70,7 @@ class Tank {
           if (entity instanceof Shot) {
             if (entity.target) return;
             const xd = entity.x-(this.x+40), yd = entity.y-(this.y+40), td = Math.sqrt(xd**2+yd**2);
-            const aspectRatio = 6/td;
+            const aspectRatio = Shot.settings[entity.type][1]/td;
             if (td > 150) continue;
             entity.e = Date.now();
             entity.sx = entity.x;
