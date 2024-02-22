@@ -20,7 +20,7 @@ class Shot {
         this.cells.add(`${x}x${y}`);
       }
     }
-    this.s.push(this);
+    host.s.push(this);
     if (this.collision()) this.destroy();
   }
   collide(e) {
