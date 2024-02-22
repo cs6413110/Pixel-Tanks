@@ -155,7 +155,7 @@ class Engine {
       t.canInvis = t.invis = false;
       setTimeout(() => {t.canInvis = true}, 100);
       t.pushback = -6;
-      for (const s of fire) this.s.push(A.template('Shot').init(t.x+40, t.y+40, s.r, s.type, Engine.parseTeamExtras(t.team), t.rank, this));
+      for (const s of fire) A.template('Shot').init(t.x+40, t.y+40, s.r, s.type, Engine.parseTeamExtras(t.team), t.rank, this);
     }
   }
 
