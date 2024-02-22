@@ -77,9 +77,7 @@ class AI {
         cooldown = 30000;
       } else if (this.class === 'fire') {
         for (let i = -30, len = 30; i < len; i += 5) {
-          const r = this.r+i;
-          const {x, y} = Engine.toPoint(r);
-          this.host.s.push(new Shot(this.x+40, this.y+40, x, y, 'fire', r, this.team, this.rank, this.host));
+          this.host.s.push(A.template('Shot').init(this.x+40, this.y+40, this.r+i, 'fire', this.team, this.rank, this.host));
         }
         cooldown = 10000;
       }
@@ -378,9 +376,7 @@ class AI {
     this.pushback = -3;
     if (type === undefined) type = this.role !== 0 && Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
     for (let [i, len] = type === 'shotgun' ? [-10, 15] : [0, 1]; i < len; i += 5) {
-      const r = this.r+i;
-      const {x, y} = Engine.toPoint(r);
-      this.host.s.push(new Shot(this.x+40, this.y+40, x, y, type, r, this.team, this.rank*(this.buff ? (1.5*this.rank+15)/Math.max(this.rank, 1/2000) : 1), this.host));
+      this.host.s.push(A.template('Shot').init(this.x+40, this.y+40, this.r+i, type, this.team, this.rank, this.host));
     }
     if (type === 'powermissle') {
       this.canPowermissle = false;
