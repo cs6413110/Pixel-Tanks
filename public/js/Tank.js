@@ -3,15 +3,7 @@ class Tank {
     this.raw = {};
     this.render = {release: () => {}, b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
     ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
-      Object.defineProperty(this, p, {
-        get() {
-          return this.raw[p];
-        },
-        set(v) {
-          this.setValue(p, v);
-        },
-        configurable: true,
-      });
+      Object.defineProperty(this, p, {get: () => this.raw[p], set: (v) => this.setValue(p, v), configurable: true});
     });
     this.id = Math.random();
     if (data.socket) this.socket = data.socket;
@@ -23,7 +15,8 @@ class Tank {
     this.cosmetic_body = data.cosmetic_body;
     this.deathEffect = data.deathEffect;
     this.color = data.color;
-    this.fire = this.damage = false;
+    this.fire = {time: 0, team: this.team};
+    this.damage = false;
     this.hp = this.maxHp = this.rank*10+300;
     this.canBashed = this.canInvis = true;
     this.team = data.username+':'+Math.random();
@@ -67,7 +60,7 @@ class Tank {
       this.setValue('dedEffect', this.dedEffect); // REMOVE THIS TEMPORARY
     }
     if (this.pushback !== 0) this.pushback += 0.5;
-    if (this.fire && Engine.getTeam(this.fire.team) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire.team));
+    if (Date.now()-this.fire.time < 4000 && Engine.getTeam(this.fire.team) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire.team));
     if (this.damage) this.damage.y--;
     if (this.grapple) this.grappleCalc();
     if (this.reflect) {
@@ -98,17 +91,8 @@ class Tank {
         if (entity instanceof Block) {
           if (!this.ded && !this.immune && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
             if (entity.type === 'fire') {
-              if (this.fire) {
-                clearTimeout(this.fireTimeout);
-                this.fire = {team: entity.team, frame: this.fire.frame};
-              } else {
-                this.fire = {team: entity.team, frame: 0};
-                this.fireInterval ??= setInterval(() => this.fire.frame ^= 1, 50);
-              }
-              this.fireTimeout = setTimeout(() => {
-                clearInterval(this.fireInterval);
-                this.fire = false;
-              }, 4000);
+              this.fire.team = entity.team;
+              this.fire.time = Date.now();
             } else if (entity.type === 'spike' && !teamMatch && spikeLimiter !== undefined) spikeLimiter = this.damageCalc(this.x, this.y, 1, Engine.getUsername(entity.team));
           }
         } else if (entity instanceof Tank || entity instanceof AI) {
