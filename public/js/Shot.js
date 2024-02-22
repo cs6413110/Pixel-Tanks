@@ -25,7 +25,7 @@ class Shot {
   }
   collide(e) {
     let size = Shot.settings[this.type][2], o = size/2+10, isBlock = e instanceof Block, pullGrapple = (isBlock || !e) && this.type === 'grapple';
-    if (size) this.host.d.push(new Damage(this.x-o, this.y-o, size, size, this.damage, this.team, this.host)); // damage change to square instead of rect hitbox?
+    if (size) return this.host.d.push(new Damage(this.x-o, this.y-o, size, size, this.damage, this.team, this.host)); // damage change to square instead of rect hitbox?
     if (this.type === 'dynamite' || this.type === 'usb' || this.type === 'grapple') {
       const g = pullGrapple ? this.host.pt.find(t => t.username === Engine.getUsername(this.team)) : e;
       if (!(this.target = g) || (this.type === 'usb' && isBlock)) return true;
@@ -40,10 +40,8 @@ class Shot {
     } else if (this.type === 'fire') {
       if (isBlock) return this.host.b.push(A.template('Block').init(e.x, e.y, Infinity, 'fire', this.team, this.host));
       if (e && !e.immune) e.fire = {team: this.team, time: Date.now()};
-    } else if (size) {
-      this.host.d.push(new Damage(this.x-o, this.y-o, size, size, this.damage, this.team, this.host));
-    } else if (e && Engine.getTeam(e.team) !== Engine.getTeam(this.team)) {
-      if (isBlock) e.damage(this.damage); else e.damageCalc(this.x, this.y, this.damage, Engine.getUsername(this.team));
+    } else if (e) {
+      if (!isBlock && Engine.getTeam(e.team) !== Engine.getTeam(this.team)) e.damageCalc(this.x, this.y, this.damage, Engine.getUsername(this.team)); else e.damage(this.damage);
     }
     return true;
   }
