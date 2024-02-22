@@ -20,7 +20,8 @@ class Shot {
         this.cells.add(`${x}x${y}`);
       }
     }
-    /*if (this.collision()) this.destroy(); else */host.s.push(this);
+    this.s.push(this);
+    if (this.collision()) this.destroy();
   }
   collide(e) {
     let size = Shot.settings[this.type][2], o = size/2+10, isBlock = e instanceof Block, pullGrapple = (isBlock || !e) && this.type === 'grapple';
