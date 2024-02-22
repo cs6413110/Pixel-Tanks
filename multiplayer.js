@@ -445,7 +445,7 @@ class Defense extends Multiplayer {
     for (const t of this.pt) {
       clearInterval(t.fireInterval);
       clearTimeout(t.fireTimeout);
-      t.fire = t.ded = false;
+      t.ded = false;
       t.hp = t.maxHp;
       t.shields = 0;
       t.socket.send({event: 'ded'});
