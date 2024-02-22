@@ -78,8 +78,9 @@ class Shot {
     }
     this.x = x;
     this.y = y;
-    if (this.target) return;
-    if (this.collision() || (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded)) return this.destroy();
+    
+    if (this.target) if (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded) return this.destroy(); else return;
+    if (this.collision()) return this.destroy();
     if (this.type === 'shotgun') {
       this.d = Math.sqrt((this.x-this.sx)**2+(this.y-this.sy)**2);
       if (this.d >= 300) return this.destroy();
