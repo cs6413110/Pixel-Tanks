@@ -20,7 +20,7 @@ class Shot {
         this.cells.add(`${x}x${y}`);
       }
     }
-    return this;
+    if (this.collision()) this.destroy(); else host.s.push(this);
   }
   collide(e) {
     let size = Shot.settings[this.type][2], o = size/2+10, isBlock = e instanceof Block, pullGrapple = (isBlock || !e) && this.type === 'grapple';
@@ -54,9 +54,7 @@ class Shot {
     for (const cell of this.cells) {
       const c = cell.split('x');
       for (const e of [...this.host.cells[c[0]][c[1]]].sort((a, b) => this.score(a) - this.score(b))) {
-        let size = e instanceof Block || e.role === 0 ? 100 : 80;
-        if (e instanceof Block && e.c && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, size, size)) return this.collide(e);
-        if ((e instanceof Tank || e instanceof AI) && !e.ded && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, size, size)) return this.collide(e);
+        if ((e instanceof Block && e.c) || ((e instanceof Tank || e instanceof AI) && !e.ded) && Engine.collision(this.x, this.y, 10, 10, e.x, e.y, size = e instanceof Block || e.role === 0 ? 100 : 80, size)) return this.collide(e);
       }
     }
     return false;
@@ -91,9 +89,7 @@ class Shot {
     this.updatedLast = Date.now();
     this.raw[p] = v;
   }
-  reset() {
-    this.cells.clear();
-  }
+  reset: () => this.cells.clear();
   destroy() {
     this.host.s.splice(this.host.s.indexOf(this), 1);
     for (const cell of this.cells) {
