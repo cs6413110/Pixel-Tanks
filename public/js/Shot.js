@@ -33,7 +33,7 @@ class Shot {
       if (pullGrapple) this.update = () => {};
       if (this.type === 'grapple') {
         if (g.grapple) g.grapple.bullet.destroy();
-        g.grapple = {target: pullGrapple ? {x: e.x, y: e.y} : this.host.pt.find(t => t.username === Engine.getUsername(this.team)), bullet: this};
+        g.grapple = {target: pullGrapple ? {x: e ? e.x : this.x, y: e ? e.y : this.y} : this.host.pt.find(t => t.username === Engine.getUsername(this.team)), bullet: this};
       } else if (this.type === 'usb') setTimeout(() => this.destroy, 20000);
       return false;
     } else if (this.type === 'fire') {
