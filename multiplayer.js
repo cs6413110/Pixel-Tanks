@@ -278,7 +278,6 @@ class DUELS extends Multiplayer {
         this.pt.forEach(tank => {
           clearInterval(tank.fireInterval);
           clearTimeout(tank.fireTimeout);
-          tank.fire = false;
           tank.hp = tank.maxHp;
           tank.shields = 0;
           tank.ded = false;
@@ -350,7 +349,6 @@ class TDM extends Multiplayer {
         this.pt.forEach(t => {
           clearInterval(t.fireInterval);
           clearTimeout(t.fireTimeout);
-          t.fire = false;
           t.shields = 0;
           t.team = t.username+':'+(t.color === '#FF0000' ? 'RED' : 'BLUE');
         });
@@ -409,7 +407,6 @@ class TDM extends Multiplayer {
           this.pt.forEach(tank => {
             clearInterval(tank.fireInterval);
             clearTimeout(tank.fireTimeout);
-            tank.fire = false;
             tank.hp = tank.maxHp;
             tank.shields = 0;
             tank.ded = false;
