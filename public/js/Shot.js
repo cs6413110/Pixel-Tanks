@@ -63,7 +63,7 @@ class Shot {
   }
   update() {
     const time = Math.floor((Date.now()-this.e)/15), x = this.target ? this.target.x+this.offset[0] : time*this.xm+this.sx, y = this.target ? this.target.y+this.offset[1] : time*this.ym+this.sy, x1 = Math.floor(x/100), x2 = Math.floor((x+10)/100), y1 = Math.floor(y/100), y2 = Math.floor((y+10)/100);
-    if (x < 0 || y < 0 || x+10 >= 3000 || y+10 >= 3000) if (this.collide()) return this.destroy();
+    if (x < 0 || y < 0 || x+10 >= 3000 || y+10 >= 3000) if (!this.target && this.collide()) return this.destroy();
     if (Math.floor(this.x/100) !== x1 || Math.floor(this.y/100) !== y2 || Math.floor((this.x+10)/100) !== x2 || Math.floor((this.y+10)/100) !== y2) {
       del: for (const cell of this.cells) {
         let c = cell.split('x'), xv = c[0], yv = c[1];
@@ -79,6 +79,7 @@ class Shot {
     }
     this.x = x;
     this.y = y;
+    if (this.target) return;
     if (this.collision() || (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded)) return this.destroy();
     if (this.type === 'shotgun') {
       this.d = Math.sqrt((this.x-this.sx)**2+(this.y-this.sy)**2);
