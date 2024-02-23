@@ -4,7 +4,7 @@ const settings = {
   banips: [],
   full_auth: ['cs641311'], //hello
   admins: ['Celestial', 'bradley', '3foenation', 'DarkMemeGod'], 
-  vips: ['LostKing', 'tony34'],
+  vips: ['LostKing'],
   mutes: ['3foe'],
   players_per_room: 400,
   ups: 60,
@@ -708,7 +708,7 @@ const Commands = {
     }`);
   }],
   help: [Object, 2, 1, function(data) {
-    servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: 'Commands: /nuke, /arson, /createteam <name>, /join <name>, /accept <player>, /leave, /start, /switch <player>, /reboot, /live <player>, /spectate <player>, /ai <x> <y> <type> <rank> <amount> <team>, /newmap, /kill <player>, /kick <player>, /mute <player> <time>, /unmute <player>, /ban <player> /pardon <player>, /ipban <player>, /pardon <player>, /acupuncture, /help,', c: '#0000FF'})
+    servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: Commands, c: '#0000FF'})
   }],
   scream: [Object, 2, -1, function(data) {
     if (this.username !== 'bradley') return this.send({status: 'error', message: 'You are not a bradley!'});
