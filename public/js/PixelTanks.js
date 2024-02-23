@@ -710,12 +710,12 @@ class PixelTanks {
       legendary: ['Sun Roof', 'Blind', 'Lego', 'Redsus', 'Uno Reverse', 'Christmas Hat', 'Mini Tank', 'Paleontologist', 'carnage'],
       mythic: ['Terminator', 'MLG Glasses',],
     }, {
-      common: ['erase', 'explode', 'nuke', 'insta', 'evan'], //bruh why am i common :(
-      uncommon: ['ghost', 'anvil', 'knight', 'gameover'],
-      rare: ['minecraft', 'magic', 'Cactus', 'plant'],
-      epic: ['battery', 'fix', 'skull'],
-      legendary: ['error', 'enderman', 'banhammer'],
-      mythic: ['pokeball', 'clicked', 'cat'],
+      common: ['explode', 'nuke', 'insta', 'evan'], //bruh why am i common :(
+      uncommon: ['anvil', 'gameover'],
+      rare: ['minecraft', 'magic', 'Cactus'],
+      epic: ['battery', 'skull'],
+      legendary: ['error',],
+      mythic: ['clicked', 'cat'],
     }];
     let rarity;
     if (rand < 1) { // .1%
