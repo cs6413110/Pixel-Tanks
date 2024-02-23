@@ -524,8 +524,6 @@ class Defense extends Multiplayer {
   }
 }
 
-const helpList = 'ez';
-
 const Commands = {
   playerlist: [Object, 4, 1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
@@ -710,8 +708,8 @@ const Commands = {
     }`);
   }],
   help: [Object, 2, 1, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === this.username);
-    for (const command of helpList) t.privateLogs.push({m: helpList, c: '#00FF00'});
+    const t = servers[this.room].pt.find(t => t.username === this.username), authKey = ['n/a', 'Owner', 'Admin', 'VIP', 'Everyone']
+    for (const command of Object.keys(Commands)) t.privateLogs.push({m: `/${command} - ${Commands[command][2]} parameters. [${authKey[Commands[command][1]}]`, c: '#00FF00'});
   }],
   scream: [Object, 2, -1, function(data) {
     if (this.username !== 'bradley') return this.send({status: 'error', message: 'You are not a bradley!'});
