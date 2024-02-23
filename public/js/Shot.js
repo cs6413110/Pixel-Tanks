@@ -78,7 +78,6 @@ class Shot {
     }
     this.x = x;
     this.y = y;
-    
     if (this.target) if (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded) return this.destroy(); else return;
     if (this.collision()) return this.destroy();
     if (this.type === 'shotgun') {
