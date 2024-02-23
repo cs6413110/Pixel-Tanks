@@ -524,7 +524,7 @@ class Defense extends Multiplayer {
   }
 }
 
-const helpList = {};
+const helpList = 'ez';
 
 const Commands = {
   playerlist: [Object, 4, 1, function(data) {
