@@ -629,16 +629,16 @@ const Commands = {
     settings.bans.splice(settings.bans.indexOf(data[1]), 1);
     servers[this.room].logs.push({m: data[1]+' was pardoned by '+this.username, c: '#0000FF'});
   }],
-  mute: [Object, 2, 2, function(data) {
-    if (settings.mutes.includes(data[1])) return this.send({status: 'error', message: 'bro is already muted, calm down'});
+  mute: [Object, 3, 2, function(data) {
+    if (settings.mutes.includes(data[1])) return this.send({status: 'error', message: 'They are already muted!'});
     settings.mutes.push(data[1]);
     servers[this.room].logs.push({m: data[1]+' was muted by '+this.username, c: '#FFFF22'});
   }],
-  unmute: [Object, 2, 2, function(data) {
+  unmute: [Object, 3, 2, function(data) {
     settings.mutes.splice(settings.mutes.indexOf(data[1]), 1);
     servers[this.room].logs.push({m: data[1]+' was unmuted by '+this.username, c: '#0000FF'});
   }],
-  kick: [Object, 2, 2, function(data) {
+  kick: [Object, 3, 2, function(data) {
     for (const socket of sockets) if (socket.username === data[1]) {
       socket.send({status: 'error', message: 'You have been kicked by '+this.username});
       setTimeout(() => socket.close());
@@ -665,7 +665,7 @@ const Commands = {
   switch: [TDM, 3, 2, function(data) {
     if (servers[this.room].mode === 0) for (const t of servers[this.room].pt) if (t.username === (data.length === 1 ? this.username : data[1])) t.color = t.color === '#FF0000' ? '#0000FF' : '#FF0000';
   }],
-  start: [TDM, 2, 1, function() {
+  start: [TDM, 3, 1, function() {
     if (servers[this.room].mode === 0) {
       servers[this.room].readytime = Date.now();
       servers[this.room].time = 0;
