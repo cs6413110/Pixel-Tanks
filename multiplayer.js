@@ -835,7 +835,7 @@ wss.on('connection', socket => {
     } else if (data.type === 'chat') {
       // handle mutes and filtering here
       if (settings.mutes.includes(socket.username)) return socket.send({status: 'error', message: 'You are muted!'});
-      gpt({model: 'gpt-3.5-turbo', prompt: 'Filter the following message of any profanity, insults, or bullying. It should be suitable for 13+. If it contains any profanity, filter it out. Then return only the processed message with nothing extra added. Here is the message: '+data.msg, markdown: false}, (err, data) => {
+      gpt({model: 'gpt-3.5-turbo', prompt: 'Filter the following message of any profanity, insults, or bullying. It should be suitable for 13+. If it contains any profanity, filter it out. Then return only the processed message with nothing extra added. Your output goes directly to the chat so it must only contain the user's message and nothing else. Here is the message: '+data.msg, markdown: false}, (err, data) => {
         if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${data.gpt}`, c: '#ffffff'});
       });
     } else if (data.type === 'logs') {
