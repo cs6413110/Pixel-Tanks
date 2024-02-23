@@ -835,7 +835,7 @@ wss.on('connection', socket => {
     } else if (data.type === 'chat') {
       // handle mutes and filtering here
       if (settings.mutes.includes(socket.username)) return socket.send({status: 'error', message: 'You are muted!'});
-      gpt({prompt: 'Filter the following message of any profanity or insults. It should be suitable for children of any age. If it contains any profanity, output [CENSORED]. If the message is fine, output only the message back exactly as given. Here is the message: '+data.msg, markdown: false}, (err, data) => {
+      gpt({prompt: 'Filter the following message of any profanity, insults, or bullying. It should be suitable for 13+. If it contains any profanity, filter it out. If the message is fine, output only the exact word for word of the message and nothing else. Here is the message: '+data.msg, markdown: false}, (err, data) => {
         if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${data.gpt}`, c: '#ffffff'});
       });
     } else if (data.type === 'logs') {
