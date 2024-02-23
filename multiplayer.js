@@ -708,7 +708,7 @@ const Commands = {
     }`);
   }],
   help: [Object, 2, 1, function(data) {
-    servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: Commands, c: '#0000FF'})
+    for (const command of Commands) t.privateLogs.push({m: command, c: '#00FF00'});
   }],
   scream: [Object, 2, -1, function(data) {
     if (this.username !== 'bradley') return this.send({status: 'error', message: 'You are not a bradley!'});
