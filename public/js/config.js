@@ -229,6 +229,8 @@ const images = {
     healexplosion: '/animations/healexplosion',
   },
   deathEffects: {
+    banhammer:'/animations/banhammer',
+    pokeball:'/animations/pokeball',
     explode: '/animations/explode',
     explode_: { frames: 17, speed: 75, kill: 8, type: 1 },
     clicked: '/animations/clicked',
