@@ -620,7 +620,7 @@ const Commands = {
     servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You are banned!'});
     for (const socket of sockets) if (socket.username === data[1]) setTimeout(() => socket.close());
   }],
-  banlist: [Object, 2, 2, function(data) {
+  banlist: [Object, 2, -1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     t.privateLogs.push({m: '-----Ban List-----', c: '#00FF00'});
     for (const ban of settings.bans) t.privateLogs.push({m: ban, c: '#00FF00'});
