@@ -230,7 +230,9 @@ const images = {
   },
   deathEffects: {
     banhammer:'/animations/banhammer',
+    banhammer_: { frames: 17, speed: 75, kill: 8, type: 1 },
     pokeball:'/animations/pokeball',
+    pokeball_: { frames: 17, speed: 75, kill: 8, type: 1 },
     explode: '/animations/explode',
     explode_: { frames: 17, speed: 75, kill: 8, type: 1 },
     clicked: '/animations/clicked',
