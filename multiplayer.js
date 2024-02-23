@@ -835,7 +835,7 @@ wss.on('connection', socket => {
     } else if (data.type === 'chat') {
       // handle mutes and filtering here
       if (settings.mutes.includes(socket.username)) return socket.send({status: 'error', message: 'You are muted!'});
-      gpt({model: 'gpt-3.5-turbo', prompt: 'You are a chat filterer for an online chat implemented in a game engine. Filter the following message accordingly of any profanity or bullying, but stay within reason. Your outputs should be in a simple text format of only the processed text. Do not have any commentary of any kind preceding the filtered message. Here is the message: '+data.msg, markdown: false}, (err, data) => {
+      gpt({model: 'gpt-3.5-turbo', prompt: 'You are a chat filterer for an online chat implemented in a game engine. Filter the following message accordingly of any profanity or bullying, but stay within reason. Your outputs should be in a simple single-line json format of {"msg":"<filtered message>"}. Do not have any commentary of any kind preceding the filtered message. Here is the message: '+JSON.parse(data.msg).msg, markdown: false}, (err, data) => {
         if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${data.gpt}`, c: '#ffffff'});
       });
     } else if (data.type === 'logs') {
