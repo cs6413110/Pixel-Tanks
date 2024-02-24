@@ -595,8 +595,8 @@ const Commands = {
     gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
   }],
   dalle: [Object, 3, -1, function(data) {
-    dalle.v1({prompt: data.slice(1).join(' ')}, (err, data) => {
-      for (const image of data.images) this.send({event: 'link', link: image});
+    dalle.mini({prompt: data.slice(1).join(' ')}, (err, data) => {
+      if (data.images) for (const image of data.images) this.send({event: 'link', link: image});
     });
   }], 
   nuke: [Object, 2, 1, function(data) {
