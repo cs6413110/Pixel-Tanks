@@ -81,6 +81,8 @@ class Client {
       } else if (data.event === 'ping') {
         this.pings = this.pings.concat(Date.now()-this.pingstart).slice(-100);
         this.getPing();
+      } else if (data.event === 'link') {
+        if (confirm('Are you sure you want to go to this page?\n'+data.link)) window.open(data.link);
       }
     });
     this.socket.on('connect', () => {
