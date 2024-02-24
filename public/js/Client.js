@@ -82,7 +82,14 @@ class Client {
         this.pings = this.pings.concat(Date.now()-this.pingstart).slice(-100);
         this.getPing();
       } else if (data.event === 'link') {
-        if (confirm('Are you sure you want to go to this page?\n'+data.link)) window.open(data.link);
+        if (confirm('Are you sure you want to go to this page?\n'+data.link)) {
+          let w = window.open(data.link);
+          if (data.link.includes('data:image/')) {
+            let image = new Image();
+            image.src = data.link;
+            w.document.write(image.outerHTML);
+          }
+        }
       }
     });
     this.socket.on('connect', () => {
