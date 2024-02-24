@@ -594,7 +594,7 @@ const Commands = {
   gpt: [Object, 4, -1, function(data) {
     gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
   }],
-  dalle: [Object, 2, -1, function(data) {
+  dalle: [Object, 3, -1, function(data) {
     dalle.v1({prompt: data.slice(1).join(' ')}, (err, data) => {
       for (const image of data.images) this.send({event: 'link', link: image});
     });
