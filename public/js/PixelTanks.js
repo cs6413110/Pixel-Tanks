@@ -554,7 +554,7 @@ class PixelTanks {
           if (PixelTanks.userData.cosmetic && PixelTanks.userData.cosmetic !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 448, 460, 88, 88, 1);
           if (PixelTanks.userData.cosmetic_body && PixelTanks.userData.cosmetic_body !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 448, 560, 88, 88, 1);
           const deathEffectData = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect+'_'];
-          if (PixelTanks.userData.deathEffect) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 448, 220, 88, 88, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
+          if (PixelTanks.userData.deathEffect && deathEffectData) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 448, 220, 88, 88, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
           Menus.menus.inventory.buttonEffect = true;
           if (this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.deathEffectsTab) {
             Menus.menus.inventory.buttonEffect = false;
@@ -591,7 +591,7 @@ class PixelTanks {
             GUI.drawImage(PixelTanks.images.menus.deathEffectsTab, 518+(a ? 62 : 0), 280, 564-(a ? 62 : 0)-(b ? 62 : 0), 440, 1, 0, 0, 0, 0, undefined, (a ? 31 : 0), 0, 282-(a ? 31 : 0)-(b ? 31 : 0), 220);
             for (let i = this.deathEffectsMenu*16; i < Math.min((this.deathEffectsMenu+1)*16, PixelTanks.userData.deathEffects.length); i++) {
               const d = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[i].split('#')[0]+'_'];
-              GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[i].split('#')[0]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/d.speed)%d.frames)*200, 0, 200, 200);
+              if (d) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffects[i].split('#')[0]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/d.speed)%d.frames)*200, 0, 200, 200);
               GUI.drawText(PixelTanks.userData.deathEffects[i].split('#')[1], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 30, '#FF0000', .5);
               if (PixelTanks.userData.deathEffects[i].split('#')[0] === PixelTanks.userData.deathEffect) {
                 GUI.draw.strokeStyle = 0xffff22;
