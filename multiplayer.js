@@ -851,7 +851,7 @@ wss.on('connection', socket => {
         stream: false,
         markdown: false
       }, (err, data) => {*/
-        if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${data.msg}`, c: '#ffffff'});
+        if (servers[socket.room]) servers[socket.room].logs.push({m: `[${socket.username}] ${data.msg.splice(0, 100)}`, c: '#ffffff'});
       //});
     } else if (data.type === 'logs') {
       if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
