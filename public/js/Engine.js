@@ -154,7 +154,7 @@ class Engine {
     if (fire.length) {
       t.canInvis = t.invis = false;
       setTimeout(() => {t.canInvis = true}, 100);
-      t.pushback = -6;
+      t.pushback = s.type.includes('missle') ? -9 : -6;
       for (const s of fire) A.template('Shot').init(t.x+40, t.y+40, s.r, s.type, Engine.parseTeamExtras(t.team), t.rank, this);
     }
   }
