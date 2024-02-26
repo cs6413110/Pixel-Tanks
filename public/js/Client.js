@@ -449,7 +449,7 @@ class Client {
   }
 
   chat(e) {
-    if (e.key.length === 1) this.msg = (this.msg+e.key).splice(0, 100);
+    if (e.key.length === 1) this.msg = (this.msg+e.key).slice(0, 100);
     if (e.keyCode === 8) this.msg = this.msg.slice(0, -1);
     if (e.keyCode === 13) {
       if (this.msg !== '') {
