@@ -252,8 +252,8 @@ class Client {
 
     if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
     if (t.reflect) GUI.drawImage(PixelTanks.images.tanks.reflect, t.x, t.y, 80, 80, 1, 40, 40, 0, 0, Math.sin((Date.now()-this.animate)/1000*4*Math.PI));
-
-    if (t.dedEffect) {
+    try {
+    if (t.dedEffect && PixelTanks.images.deathEffects[t.dedEffect.id+'_']) {
       const {speed, frames, kill} = PixelTanks.images.deathEffects[t.dedEffect.id+'_'];
       if (t.dedEffect.time/speed <= frames) { 
         if (t.dedEffect.time/speed < kill) {
@@ -266,6 +266,7 @@ class Client {
         GUI.drawImage(PixelTanks.images.deathEffects[t.dedEffect.id], t.dedEffect.x-60, t.dedEffect.y-60, 200, 200, 1, 0, 0, 0, 0, undefined, Math.floor(t.dedEffect.time/speed)*200, 0, 200, 200);
       }
     }
+    } catch(e) {}
 
     if (t.animation) GUI.drawImage(PixelTanks.images.animations[t.animation.id], t.x, t.y, 80, 90, 1, 0, 0, 0, 0, undefined, t.animation.frame*40, 0, 40, 45);
   }
