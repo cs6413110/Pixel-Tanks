@@ -50,6 +50,7 @@ class Client {
           }
           compiledLogs.push({m: line, c: log.c, chunk: false});
         }
+        if (this.hostupdate.logs.length > 100) this.hostupdate.logs.pop();
         this.hostupdate.logs.unshift(...compiledLogs.reverse());
         entities.forEach(p => {
           if (data[p].length) data[p].forEach(e => {
