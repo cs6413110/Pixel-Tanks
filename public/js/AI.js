@@ -371,7 +371,7 @@ class AI {
   }
 
   fireCalc(tx, ty, type) {
-    this.pushback = type.includes('missle') ? -9 : -6;
+    this.pushback = type && type.includes('missle') ? -9 : -6;
     if (type === undefined) type = this.role !== 0 && Math.sqrt((tx - this.x) ** 2 + (ty - this.y) ** 2) < 150 ? 'shotgun' : 'bullet';
     for (let [i, len] = type === 'shotgun' ? [-10, 15] : [0, 1]; i < len; i += 5) {
       A.template('Shot').init(this.x+40, this.y+40, this.r+90+i, type, this.team, this.rank, this.host);
