@@ -211,6 +211,7 @@ const images = {
     helpmode: '/menus/helpmode',
     helpvocab: '/menus/helpvocab',
     helpteam: '/menus/helpteam',
+    broke: '/menus/broke',
   },
   animations: {
     tape: '/animations/tape',
