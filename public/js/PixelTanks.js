@@ -461,7 +461,9 @@ class PixelTanks {
               for (const item in key) {
                 if (Engine.collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
                   if (!PixelTanks.userData.items.includes(item)) {
+                    const lastItem = PixelTanks.userData.items[this.currentItem-1];
                     PixelTanks.userData.items[this.currentItem-1] = item;
+                    if (item === lastItem) PixelTanks.userData.items[this.currentItem-1] = 'undefined';
                   } else alert('You are not allowed to have more than 1 of the same item');
                   return;
                 }
