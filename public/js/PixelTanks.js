@@ -447,9 +447,9 @@ class PixelTanks {
                 for (let ym = 0; ym < 3; ym++) {
                   if (Engine.collision(x, y, 0, 0, [702, 810][xm], [348, 456, 564][ym], 88, 88)) {
                     if (PixelTanks.userData.classes[[[0, 5, 3], [1, 4, 2]][xm][ym]]) {
-                      //const lastClass = PixelTanks.userData.class;
+                      const lastClass = PixelTanks.userData.class;
                       PixelTanks.userData.class = [['tactical', 'fire', 'medic'], ['stealth', 'builder', 'warrior']][xm][ym];
-                      //if (PixelTanks.userData.class === lastClass) PixelTanks.userData.class = 'undefined';
+                      if (PixelTanks.userData.class === lastClass) PixelTanks.userData.class = 'undefined';
                     } else alert('You need to buy this first!');
                     return;
                   }
@@ -461,9 +461,9 @@ class PixelTanks {
               for (const item in key) {
                 if (Engine.collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
                   if (!PixelTanks.userData.items.includes(item)) {
-                    const lastItem = PixelTanks.userData.items[this.currentItem-1];
+                    //const lastItem = PixelTanks.userData.items[this.currentItem-1];
                     PixelTanks.userData.items[this.currentItem-1] = item;
-                    if (item === lastItem) PixelTanks.userData.items[this.currentItem-1] = 'undefined';
+                    //if (item === lastItem) PixelTanks.userData.items[this.currentItem-1] = 'undefined';
                   } else alert('You are not allowed to have more than 1 of the same item');
                   return;
                 }
