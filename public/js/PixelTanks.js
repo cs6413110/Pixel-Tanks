@@ -564,9 +564,11 @@ class PixelTanks {
           }
           if (this.classTab) {
             GUI.drawImage(PixelTanks.images.menus.classTab, 688, 334, 224, 332, 1);
-            GUI.draw.strokeStyle = '#FFFF00';
-            GUI.draw.lineWidth = 10;
-            if (PixelTanks.userData.class === 'tactical') GUI.draw.strokeRect(701, 348, 88, 88); else if (PixelTanks.userData.class === 'fire') GUI.draw.strokeRect(701, 456, 88, 88); else if (PixelTanks.userData.class === 'medic') GUI.draw.strokeRect(701, 565, 88, 88); else if (PixelTanks.userData.class === 'stealth') GUI.draw.strokeRect(814, 348, 88, 88); else if (PixelTanks.userData.class === 'builder') GUI.draw.strokeRect(814, 456, 88, 88); else if (PixelTanks.userData.class === 'warrior') GUI.draw.strokeRect(814, 565, 88, 88); else GUI.drawImage(PixelTanks.images.menus.broke, 814, 565, 88, 88, 1);
+            if (PixelTanks.userData.class !== 'undefined') {
+              GUI.draw.strokeStyle = '#FFFF00';
+              GUI.draw.lineWidth = 10;
+              if (PixelTanks.userData.class === 'tactical') GUI.draw.strokeRect(701, 348, 88, 88); else if (PixelTanks.userData.class === 'fire') GUI.draw.strokeRect(701, 456, 88, 88); else if (PixelTanks.userData.class === 'medic') GUI.draw.strokeRect(701, 565, 88, 88); else if (PixelTanks.userData.class === 'stealth') GUI.draw.strokeRect(814, 348, 88, 88); else if (PixelTanks.userData.class === 'builder') GUI.draw.strokeRect(814, 456, 88, 88); else if (PixelTanks.userData.class === 'warrior') GUI.draw.strokeRect(814, 565, 88, 88);
+            } else GUI.drawImage(PixelTanks.images.menus.broke, 814, 565, 88, 88, 1);
           } else if (this.itemTab) {
             GUI.drawImage(PixelTanks.images.menus.itemTab, 580, 334, 440, 332, 1);
             const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [904, 570]};
