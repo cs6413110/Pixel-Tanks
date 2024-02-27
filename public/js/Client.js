@@ -701,6 +701,7 @@ class Client {
         this.timers.class = {time: Date.now(), cooldown: 15000};
       } else if (c === 'medic') {
         this.fire('healmissle');
+        this.tank.use.push('healmissile');
         this.timers.class = {time: Date.now(), cooldown: 25000};//stop it ur wasting time :/
       } else if (c === 'fire') {
         for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+90+i});
