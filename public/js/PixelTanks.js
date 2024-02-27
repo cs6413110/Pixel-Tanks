@@ -461,9 +461,9 @@ class PixelTanks {
               for (const item in key) {
                 if (Engine.collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
                   if (!PixelTanks.userData.items.includes(item)) {
-                    //const lastItem = PixelTanks.userData.items[this.currentItem-1];
+                    const lastItem = PixelTanks.userData.items[this.currentItem-1];
                     PixelTanks.userData.items[this.currentItem-1] = item;
-                    //if (item === lastItem) PixelTanks.userData.items[this.currentItem-1] = 'undefined';
+                    if (item === lastItem) PixelTanks.userData.items[this.currentItem-1] = 'undefined';
                   } else alert('You are not allowed to have more than 1 of the same item');
                   return;
                 }
@@ -547,6 +547,7 @@ class PixelTanks {
           for (let i = 0; i < 4; i++) {
             if (PixelTanks.userData.items[i] !== 'undefined') GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [404, 492, 580, 668][i], 820, 80, 80, 1);
             if (PixelTanks.userData.items[i] === 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, [404, 492, 580, 668][i], 820, 80, 80, 1);
+          }
           PixelTanks.renderBottom(680, 380, 240, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
           PixelTanks.renderTop(680, 380, 240, PixelTanks.userData.color, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
