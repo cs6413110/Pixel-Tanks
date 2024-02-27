@@ -551,6 +551,7 @@ class PixelTanks {
           if (PixelTanks.userData.cosmetic && PixelTanks.userData.cosmetic !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
           if (PixelTanks.userData.cosmetic_hat && PixelTanks.userData.cosmetic_hat !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
           const key = {tactical: [7, 7], fire: [7, 61], medic: [7, 115], stealth: [61, 7], builder: [61, 61], warrior: [61, 115]};
+          if (PixelTanks.userData.class === 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, 1112, 816, 88, 88, 1)
           if (PixelTanks.userData.class !== 'undefined') GUI.drawImage(PixelTanks.images.menus.classTab, 1112, 816, 88, 88, 1, 0, 0, 0, 0, undefined, key[PixelTanks.userData.class][0], key[PixelTanks.userData.class][1], 44, 44);
           if (PixelTanks.userData.cosmetic_hat && PixelTanks.userData.cosmetic_hat !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 448, 360, 88, 88, 1);
           if (PixelTanks.userData.cosmetic && PixelTanks.userData.cosmetic !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 448, 460, 88, 88, 1);
