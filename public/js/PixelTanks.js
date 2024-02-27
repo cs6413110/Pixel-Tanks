@@ -460,7 +460,7 @@ class PixelTanks {
               const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [924, 570]};
               for (const item in key) {
                 if (Engine.collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
-                  if (!PixelTanks.userData.items.includes(item)) {
+                  if (!PixelTanks.userData.items.includes(item) || PixelTanks.userData.items[this.currentItem-1] === item) {
                     const lastItem = PixelTanks.userData.items[this.currentItem-1];
                     PixelTanks.userData.items[this.currentItem-1] = item;
                     if (item === lastItem) PixelTanks.userData.items[this.currentItem-1] = 'undefined';
