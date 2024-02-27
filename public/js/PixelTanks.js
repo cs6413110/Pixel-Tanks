@@ -447,7 +447,7 @@ class PixelTanks {
                 for (let ym = 0; ym < 3; ym++) {
                   if (Engine.collision(x, y, 0, 0, [702, 810][xm], [348, 456, 564][ym], 88, 88)) {
                     if (PixelTanks.userData.classes[[[0, 5, 3], [1, 4, 2]][xm][ym]]) {
-                      const lastClass = PixelTanks.userData.class
+                      const lastClass = PixelTanks.userData.class;
                       PixelTanks.userData.class = [['tactical', 'fire', 'medic'], ['stealth', 'builder', 'warrior']][xm][ym];
                       if (PixelTanks.userData.class === lastClass) PixelTanks.userData.class = 'undefined';
                     } else alert('You need to buy this first!');
