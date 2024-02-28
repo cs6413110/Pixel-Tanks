@@ -136,7 +136,7 @@ class PixelTanks {
           if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 1200, 600, 160, 180, 1);
           if (PixelTanks.userData.cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 1200, 600, 160, 180, 1);
           GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
-          GUI.drawImage(PixelTanks.images.menus.alert, 962, 830, 20, 20, 1);
+          GUI.drawImage(PixelTanks.images.menus.alert, 530, 830, 20, 20, 1);
         },
       },
       singleplayer: {
