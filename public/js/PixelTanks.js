@@ -546,7 +546,7 @@ class PixelTanks {
           }
           for (let i = 0; i < 4; i++) {
             if (PixelTanks.userData.items[i] !== 'undefined') GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [404, 492, 580, 668][i], 820, 80, 80, 1);
-            if (PixelTanks.userData.items[i] === 'undefined') GUI.drawImage(PixelTanks.images.menus., [404, 492, 580, 668][i], 820, 80, 80, 1);
+            if (PixelTanks.userData.items[i] === 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, [404, 492, 580, 668][i], 820, 80, 80, 1);
           }
           PixelTanks.renderBottom(680, 380, 240, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
