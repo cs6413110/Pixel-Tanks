@@ -631,6 +631,7 @@ class PixelTanks {
         listeners: {},
         cdraw: function() {
           GUI.drawText(PixelTanks.userData.stats[0]+' coinage', 800, 350, 50, 0x000000, 0.5);
+          if (newClass) GUI.drawImage(PixelTanks.images.menus.broke, 448, 220, 88, 88, 1);
         },
       },
       pause: {
@@ -837,6 +838,7 @@ class PixelTanks {
     if (PixelTanks.userData.classes[stat]) return alert('You already bought this.');
     if (PixelTanks.userData.stats[0] < prices[stat]) return alert('Your brok boi.');
     PixelTanks.userData.stats[0] -= prices[stat];
+    const newClass = stat;
     PixelTanks.userData.classes[stat] = true;
   }
 }
