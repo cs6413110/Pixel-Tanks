@@ -546,7 +546,7 @@ class PixelTanks {
           }
           for (let i = 0; i < 4; i++) {
             if (PixelTanks.userData.items[i] !== 'undefined') GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [404, 492, 580, 668][i], 820, 80, 80, 1);
-            if (PixelTanks.userData.items[i] === 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, [404, 492, 580, 668][i], 820, 80, 80, 1);
+            if (PixelTanks.userData.items[i] === 'undefined') GUI.drawImage(PixelTanks.images.menus., [404, 492, 580, 668][i], 820, 80, 80, 1);
           }
           PixelTanks.renderBottom(680, 380, 240, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
@@ -630,6 +630,7 @@ class PixelTanks {
         ],
         listeners: {},
         cdraw: function() {
+          if (newClass) GUI.drawImage(PixelTanks.images.menus.alert, 416, 20, 20, 20, 1);
           GUI.drawText(PixelTanks.userData.stats[0]+' coinage', 800, 350, 50, 0x000000, 0.5);
         },
       },
@@ -777,7 +778,7 @@ class PixelTanks {
 
   static upgrade() {
     const coins = PixelTanks.userData.stats[0], xp = PixelTanks.userData.stats[3], rank = PixelTanks.userData.stats[4];
-    if (coins < (rank+1)*1000 || xp < (rank+1)*100) return alert('Your broke boi!');
+    if (coins < (rank+1)*1000 || xp < (rank+1)*100) return alert('Your  boi!');
     if (rank >= 20) return alert('You are max level!');
     PixelTanks.userData.stats[0] -= (rank+1)*1000;
     PixelTanks.userData.stats[3] -= (rank+1)*100;
@@ -837,6 +838,7 @@ class PixelTanks {
     if (PixelTanks.userData.classes[stat]) return alert('You already bought this.');
     if (PixelTanks.userData.stats[0] < prices[stat]) return alert('Your brok boi.');
     PixelTanks.userData.stats[0] -= prices[stat];
+    const newClass = stat;
     PixelTanks.userData.classes[stat] = true;
   }
 }
