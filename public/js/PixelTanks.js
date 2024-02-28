@@ -57,6 +57,7 @@ class PixelTanks {
     PixelTanks.loadMessages = ['Recharging Instas...', 'Summoning Turrets...', 'Sorting Cosmetics...', 'Spotting Stealths...', 'Putting Out Fires...', 'Generating Levels...', 'Loading Up Crates...', 'Filling Up Stocks...', 'Drawing Menus...', 'Placing Blocks...', 'Launching Missles...', 'Booting Game Engine...'];
     PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
     const config = document.createElement('SCRIPT');
+    const newClass = 'undefined';
     config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
     config.onload = () => {
       PixelTanks.images = images;
