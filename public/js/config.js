@@ -212,6 +212,7 @@ const images = {
     helpvocab: '/menus/helpvocab',
     helpteam: '/menus/helpteam',
     broke: '/menus/broke',
+    alert: '/menus/alert',
   },
   animations: {
     tape: '/animations/tape',
