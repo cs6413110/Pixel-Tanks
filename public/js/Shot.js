@@ -12,8 +12,10 @@ class Shot {
     this.e = Date.now();
     this.id = Math.random();
     this.md = this.damage = Shot.settings[this.type][0]*(rank*10+300)/500;
-    this.x = this.sx = x+(this.xm = Math.cos(Math.PI*r/180)*Shot.settings[this.type][1])*4.5;
-    this.y = this.sy = y+(this.ym = Math.sin(Math.PI*r/180)*Shot.settings[this.type][1])*4.5;
+    this.xm = Math.cos(Math.PI*r/180)*Shot.settings[this.type][1];
+    this.ym = Math.sin(Math.PI*r/180)*Shot.settings[this.type][1];
+    this.x = this.sx = x+70*Math.cos(Math.PI*r/180);
+    this.y = this.sy = y+70*Math.sin(Math.PI*r/180);
     for (let x = Math.max(0, Math.min(29, Math.floor(this.x/100))); x <= Math.max(0, Math.min(29, Math.floor((this.x+10)/100))); x++) {
       for (let y = Math.max(0, Math.min(29, Math.floor(this.y/100))); y <= Math.max(0, Math.min(29, Math.floor((this.y+10)/100))); y++) {
         host.cells[x][y].add(this);
