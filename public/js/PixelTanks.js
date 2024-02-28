@@ -136,6 +136,7 @@ class PixelTanks {
           if (PixelTanks.userData.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 1200, 600, 160, 180, 1);
           if (PixelTanks.userData.cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 1200, 600, 160, 180, 1);
           GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
+          GUI.drawImage(PixelTanks.images.menus.alert, 962, 830, 20, 20, 1);
         },
       },
       singleplayer: {
@@ -564,6 +565,7 @@ class PixelTanks {
           if (!PixelTanks.userData.cosmetic_hat && PixelTanks.userData.cosmetic_hat !== 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, 448, 360, 88, 88, 1);
           if (!PixelTanks.userData.cosmetic && PixelTanks.userData.cosmetic !== 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, 448, 460, 88, 88, 1);
           if (!PixelTanks.userData.cosmetic_body && PixelTanks.userData.cosmetic_body !== 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, 448, 560, 88, 88, 1);
+          GUI.drawImage(PixelTanks.images.menus.alert, 1102, 806, 20, 20, 1);
           const deathEffectData = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect+'_'];
           if (PixelTanks.userData.deathEffect && deathEffectData) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 448, 220, 88, 88, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
           if (!PixelTanks.userData.deathEffect && deathEffectData) GUI.drawImage(PixelTanks.images.menus.broke, 448, 220, 88, 88, 1);
