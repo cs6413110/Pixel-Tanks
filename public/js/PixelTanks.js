@@ -842,7 +842,7 @@ class PixelTanks {
     if (PixelTanks.userData.classes[stat]) return alert('You already bought this.');
     if (PixelTanks.userData.stats[0] < prices[stat]) return alert('Your brok boi.');
     PixelTanks.userData.stats[0] -= prices[stat];
-    newClass = stat;
+    var newClass = stat;
     PixelTanks.userData.classes[stat] = true;
   }
 }
