@@ -631,7 +631,7 @@ class PixelTanks {
         listeners: {},
         cdraw: function() {
           GUI.drawText(PixelTanks.userData.stats[0]+' coinage', 800, 350, 50, 0x000000, 0.5);
-          if (newClass) GUI.drawImage(PixelTanks.images.menus.broke, 448, 220, 88, 88, 1);
+          if (newClass) GUI.drawImage(PixelTanks.images.menus.alert, 416, 20, 20, 20, 1);
         },
       },
       pause: {
