@@ -280,16 +280,18 @@ class Client {
     GUI.clear();
     this._fps++;
     this.render = requestAnimationFrame(this.frame.bind(this));
-    if (this.socket.status === 'connecting') {
-      return this.drawStatus('Connecting...');
-    } else if (this.socket.status === 'disconnected') {
-      return this.drawStatus('Disconnected!');
-    } else if (this.socket.status === 'connected') {
-      if (!this.hostupdate.pt.length) {
-        GUI.draw.fillStyle = '#ffffff';
-        GUI.draw.fillRect(0, 0, 1600, 1600);
-        return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
-      }
+    if (this.socket) {
+      if (this.socket.status === 'connecting') {
+        return this.drawStatus('Connecting...');
+      } else if (this.socket.status === 'disconnected') {
+        return this.drawStatus('Disconnected!');
+      } else if (this.socket.status === 'connected') {
+        if (!this.hostupdate.pt.length) {
+          GUI.draw.fillStyle = '#ffffff';
+          GUI.draw.fillRect(0, 0, 1600, 1600);
+          return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
+        }
+      } else return this.drawStatus('Loading...');
     } else return this.drawStatus('Loading...');
     const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
     if (this.dx) {
