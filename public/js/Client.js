@@ -292,7 +292,7 @@ class Client {
           return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
         }
       } else return this.drawStatus('Loading...');
-    } else return this.drawStatus('Loading...');
+    }
     const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
     if (this.dx) {
       var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : (this.buffed ? 1.5 : 1));
