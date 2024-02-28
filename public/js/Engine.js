@@ -240,4 +240,3 @@ class Engine {
     return x === 0 ? {x, y: y/Math.abs(y)} : {x: x/Math.abs(x), y: y/Math.abs(x)}
   }
 }
-if (module) module.exports = Engine;
