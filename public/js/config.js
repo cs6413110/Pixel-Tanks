@@ -35,6 +35,10 @@ const images = {
     bottom2: '/tanks/bottom2',
   },
   cosmetics: {
+    'angry hoodie': '/cosmetics/angry_hoodie',
+    'googly': '/cosmetics/googly',
+    'eyes': '/cosmetics/eyes',
+    'zombie': '/cosmetics/zombie',
     'watermelon': '/cosmetics/watermelon',
     'bread': '/cosmetics/bread',
     'eye': '/cosmetics/eye',
