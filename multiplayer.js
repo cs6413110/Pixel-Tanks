@@ -98,6 +98,7 @@ class Multiplayer extends Engine {
 
   add(socket, data) {
     data.socket = socket;
+    log(`${socket.username} joined`);
     this.logs.push({m: this.joinMsg(data.username), c: '#66FF00'});
     super.add(data);
   }
@@ -186,6 +187,7 @@ class Multiplayer extends Engine {
       return true;
     });
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === socket.username) this.ai[i].destroy();
+    log(`${socket.username} left`);
     this.logs.push({m: this.rageMsg(socket.username), c: '#E10600'});
     if (this.pt.length === 0) {
       this.i.forEach(i => clearInterval(i));
@@ -194,6 +196,7 @@ class Multiplayer extends Engine {
   }
 
   deathMsg(victim, killer) {
+    log(`${killer} killed ${victim}`); // temp log file death
     return deathMessages[Math.floor(Math.random()*deathMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
   }
 
