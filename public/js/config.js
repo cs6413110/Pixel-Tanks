@@ -202,6 +202,7 @@ const images = {
     cosmeticTab: '/menus/cosmeticTab', // FIX DUPLICATE USELESS(deathEffecs and cosmetic tab referenceing same imagoge);
     deathEffectsTab: '/menus/cosmeticTab',
     shop: '/menus/shop',
+    shop2: '/menus/shop2',
     broke: '/menus/broke',
     htp1: '/menus/htp1',
     htp2: '/menus/htp2',
