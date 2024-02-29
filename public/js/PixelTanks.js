@@ -577,14 +577,14 @@ class PixelTanks {
           }
           if (this.classTab) {
             GUI.drawImage(PixelTanks.images.menus.classTab, 688, 334, 224, 332, 1);
+            const classX = [701, 810, 810, 701, 810, 701];
+            const classY = [348, 348, 456, 456, 564, 564];
+            for (let i = 0; i < 6; i++) {
+              /*if (!PixelTanks.userData.classes[i]) */GUI.drawImage(PixelTanks.images.menus.locked, classX[i], classY[i], 88, 88, 1);
+            }
             if (PixelTanks.userData.class !== 'undefined') {
               GUI.draw.strokeStyle = '#FFFF00';
               GUI.draw.lineWidth = 10;
-              const classX = [701, 810, 810, 701, 810, 701];
-              const classY = [348, 348, 456, 456, 564, 564];
-              for (let i = 0; i < 6; i++) {
-                /*if (!PixelTanks.userData.classes[i]) */GUI.drawImage(PixelTanks.images.menus.locked, classX[i], classY[i], 88, 88, 1);
-              }
               if (PixelTanks.userData.class === 'tactical') GUI.draw.strokeRect(701, 348, 88, 88); else if (PixelTanks.userData.class === 'fire') GUI.draw.strokeRect(701, 456, 88, 88); else if (PixelTanks.userData.class === 'medic') GUI.draw.strokeRect(701, 565, 88, 88); else if (PixelTanks.userData.class === 'stealth') GUI.draw.strokeRect(814, 348, 88, 88); else if (PixelTanks.userData.class === 'builder') GUI.draw.strokeRect(814, 456, 88, 88); else if (PixelTanks.userData.class === 'warrior') GUI.draw.strokeRect(814, 565, 88, 88);
             }
           } else if (this.itemTab) {
