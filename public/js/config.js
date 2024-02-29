@@ -36,6 +36,7 @@ const images = {
   },
   cosmetics: {
     'angry hoodie': '/cosmetics/angry_hoodie',
+    'PortalCube': '/cosmetics/PortalCube',
     'CompanionCube': '/cosmetics/CompanionCube',
     'googly': '/cosmetics/googly',
     'eyes': '/cosmetics/eyes',
