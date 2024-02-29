@@ -579,9 +579,9 @@ class PixelTanks {
             GUI.drawImage(PixelTanks.images.menus.classTab, 688, 334, 224, 332, 1);
             const classX = [701, 810, 810, 701, 810, 701];
             const classY = [348, 348, 456, 456, 564, 564];
-            GUI.drawImage(PixelTanks.images.menus.locked, 701, 348, 88, 88, 1);
+            GUI.drawImage(PixelTanks.images.menus.broke, 701, 348, 88, 88, 1);
             for (let i = 0; i < 6; i++) {
-              GUI.drawImage(PixelTanks.images.menus.locked, classX[i], classY[i], 88, 88, 1);
+              GUI.drawImage(PixelTanks.images.menus.broke, classX[i], classY[i], 88, 88, 1);
             }
             if (PixelTanks.userData.class !== 'undefined') {
               GUI.draw.strokeStyle = '#FFFF00';
