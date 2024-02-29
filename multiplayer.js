@@ -40,7 +40,7 @@ let sockets = new Set(), servers = {}, ffaLevels = [
 
 
 const logger = fs.createWriteStream('log.txt', {flags: 'a'});
-const log = l => logger.write(`\n${l}`);
+const log = l => logger.write(`${l}\n`);
 const hasAccess = (username, clearanceLevel) => {
   // 1 => full auth only, 2 => admins and above, 3 => vips and above, 4 => any
   const isAdmin = settings.admins.includes(username), isVIP = settings.vips.includes(username);
@@ -856,7 +856,7 @@ wss.on('connection', socket => {
       if (!(servers[socket.room] instanceof f[0])) return socket.send({status: 'error', message: 'This command is not available in this server type.'});
       if (data.data.length !== f[2] && f[2] !== -1) return socket.send({status: 'error', message: 'Wrong number of arguments.'});
       if (!hasAccess(socket.username, f[1])) return socket.send({status: 'error', message: `You don't have access to this.`});
-      log(`${socket.username} ran command: ${data.join(' ')}`);
+      log(`${socket.username} ran command: ${data.data.join(' ')}`);
       f[3].bind(socket)(data.data);
     } else if (data.type === 'stats') {
       let gamemodes = {FFA: [], DUELS: [], TDM: [], Defense: [], tickspeed, event: 'stats'};
