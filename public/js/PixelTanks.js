@@ -578,7 +578,7 @@ class PixelTanks {
           if (this.classTab) {
             GUI.drawImage(PixelTanks.images.menus.classTab, 688, 334, 224, 332, 1);
             const classX = [701, 810, 810, 701, 810, 701];
-            const classY = [348, 348, 456, 456, 564, 564];
+            const classY = [348, 348, 564, 564, 456, 456];
             for (let i = 0; i < 6; i++) {
               if (!PixelTanks.userData.classes[i]) GUI.drawImage(PixelTanks.images.menus.locked, classX[i], classY[i], 88, 88, 1);
             }
