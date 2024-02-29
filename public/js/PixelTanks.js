@@ -622,8 +622,7 @@ class PixelTanks {
       shop: {
         buttons: [
           [416, 20, 108, 108, 'main', true],
-          [232, 208, 488, 96, 'shop2', true],
-          [880, 208, 488, 96, /*maintab*/, true],
+          [880, 208, 488, 96, 'shop2, true],
           [496, 404, 176, 176, function() {PixelTanks.purchase(0)}, true],
           [712, 404, 176, 176, function() {PixelTanks.purchase(1)}, true],
           [928, 404, 176, 176, function() {PixelTanks.purchase(4)}, true],
@@ -641,8 +640,7 @@ class PixelTanks {
       shop2: {
         buttons: [
           [416, 20, 108, 108, 'main', true],
-          [232, 208, 488, 96, /*classtab*/, true],
-          [880, 208, 488, 96, 'shop', true],
+          [232, 208, 488, 96, 'shop', true],
           [496, 404, 176, 176, function() {PixelTanks.purchase(0)}, true],
           [712, 404, 176, 176, function() {PixelTanks.purchase(1)}, true],
           [928, 404, 176, 176, function() {PixelTanks.purchase(4)}, true],
