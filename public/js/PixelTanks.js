@@ -111,7 +111,7 @@ class PixelTanks {
           GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
           PixelTanks.renderTop(1200, 600, 160, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.top, 1200, 600, 160, 180, 1);
-          if (!PixelTanks.userData.cosmetics[0].includes('#')) {
+          /*if (!PixelTanks.userData.cosmetics[0].includes('#')) {
             let cosmetics = {};
             for (const cosmetic of PixelTanks.userData.cosmetics) {
               if (cosmetics[cosmetic] === undefined) {
@@ -133,7 +133,7 @@ class PixelTanks {
             for (const deathEffect of Object.keys(deathEffects)) deathEffectData.push(deathEffect+'#'+deathEffects[deathEffect]);
             PixelTanks.userData.deathEffects = deathEffectData;
           }
-          /*PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
+          PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
           PixelTanks.renderTop(1200, 600, 160, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.top, 1200, 600, 160, 180, 1);*/
