@@ -58,7 +58,7 @@ class PixelTanks {
     PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
     const config = document.createElement('SCRIPT');
     const newClass = 'undefined';
-    if (!PixelTanks.userData.class) PixelTanks.userData.class === 'undefined';
+    if (!PixelTanks.userData.class) PixelTanks.userData.class = 'undefined';
     config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
     config.onload = () => {
       PixelTanks.images = images;
