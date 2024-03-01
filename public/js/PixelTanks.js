@@ -107,6 +107,10 @@ class PixelTanks {
         ],
         listeners: {},
         cdraw: function() {
+          PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
+          GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
+          PixelTanks.renderTop(1200, 600, 160, PixelTanks.userData.color);
+          GUI.drawImage(PixelTanks.images.tanks.top, 1200, 600, 160, 180, 1);
           if (!PixelTanks.userData.cosmetics[0].includes('#')) {
             let cosmetics = {};
             for (const cosmetic of PixelTanks.userData.cosmetics) {
@@ -129,10 +133,10 @@ class PixelTanks {
             for (const deathEffect of Object.keys(deathEffects)) deathEffectData.push(deathEffect+'#'+deathEffects[deathEffect]);
             PixelTanks.userData.deathEffects = deathEffectData;
           }
-          PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
+          /*PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
           PixelTanks.renderTop(1200, 600, 160, PixelTanks.userData.color);
-          GUI.drawImage(PixelTanks.images.tanks.top, 1200, 600, 160, 180, 1);
+          GUI.drawImage(PixelTanks.images.tanks.top, 1200, 600, 160, 180, 1);*/
           if (PixelTanks.userData.cosmetic_body !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 1200, 600, 160, 180, 1);
           if (PixelTanks.userData.cosmetic !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 1200, 600, 160, 180, 1);
           if (PixelTanks.userData.cosmetic_hat !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 1200, 600, 160, 180, 1);
