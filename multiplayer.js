@@ -7,7 +7,7 @@ const settings = {
   vips: ['tony34', 'DarkMemeGod'],
   mutes: ['3foe'],
   players_per_room: 400,
-  ups: 10,
+  ups: 30,
 }
 
 const fs = require('fs');
