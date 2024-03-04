@@ -56,8 +56,8 @@ class Client {
         try {
         for (let i = 0; i < this.hostupdate.logs.length; i++) {
           let username = this.hostupdate.logs[i].m.split(']')[0];
-          if (username.includes('->')) username = username.split('->')[1];
-          username = username.replace('[', '');
+          if (username.includes('->')) username = username.split('->')[0];
+          username = username.split('[')[1];
           if (this.blocked.has(username)) this.hostupdate.logs[i].m = '<blocked message from '+username+'>';
         }
         } catch(e) {alert(e)}
