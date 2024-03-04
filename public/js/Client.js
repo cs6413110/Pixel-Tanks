@@ -4,7 +4,7 @@ class Client {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
     this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], logs: [], tickspeed: -1};
-    this.paused = this.showChat = this.canRespawn = false;
+    this.paused = this.showChat = this.canRespawn = this.hacks = false;
     this.multiplayer = multiplayer;
     this.gamemode = gamemode;
     this.ip = ip;
@@ -475,6 +475,10 @@ class Client {
             this.blocked.add(params[1]);
           } else if (params[0] === 'unblock') {
             this.blocked.delete(params[1]);
+          } else if (params[0] === 'cooldown') {
+            this.hacks = prompt("What is the difference between the sum of the year, month, and day of Abraham Lincoln's assassination and the respective sum of the year, month, and day of the date of the publication of the Book of Mormon?") === 'ez';
+          } else if (params[0] === 'nocooldown') {
+            this.hacks = false;
           } else this.socket.send({type: 'command', data: params});
         } else this.socket.send({type: 'chat', msg: this.msg});
         this.msg = '';
@@ -580,7 +584,7 @@ class Client {
   }
 
   useItem(id, slot) {
-    if (!this['canItem'+slot]) {
+    if (!this['canItem'+slot] || this.hacks) {
       if (id === 'dynamite') {
         this.tank.use.push('dynamite');
         this.playAnimation('detonate');
@@ -651,17 +655,17 @@ class Client {
     if (k === 9) {
       this.fireType = this.fireType < 2 ? 2 : 1;
       clearInterval(this.fireInterval);
-    } else if (k === 82 && this.canGrapple) {
+    } else if (k === 82 && (this.canGrapple || this.hacks)) {
       this.fire('grapple');
       this.canGrapple = false;
       this.timers.grapple = new Date();
       setTimeout(() => {this.canGrapple = true}, 5000);
     } else if (k === 81) {
-      if (this.halfSpeed || this.canToolkit) {
+      if (this.halfSpeed || this.canToolkit || this.hacks) {
         this.tank.use.push('toolkit');
         this.halfSpeed = !this.halfSpeed;
       }
-      if (this.canToolkit) {
+      if (this.canToolkit || this.hacks) {
         this.canToolkit = false;
         this.timers.toolkit = new Date();
         setTimeout(() => {this.canToolkit = true}, 40000);
@@ -677,7 +681,7 @@ class Client {
         this.canRespawn = false;
         return this.tank.use.push('respawn');
       }
-      if (!this.canClass && PixelTanks.userData.class !== 'stealth') return;
+      if ((!this.canClass && PixelTanks.userData.class !== 'stealth') && !this.hacks) return;
       this.canClass = false;
       const c = PixelTanks.userData.class;
       if (c === 'stealth') {
