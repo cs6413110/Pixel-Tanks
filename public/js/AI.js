@@ -21,7 +21,12 @@ class AI {
     this.hp = rank * 10 + 300;
     this.maxHp = this.hp;
     this.seeUser = this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
-    this.canFire = this.canPowermissle = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canClass = this.canBoost = this.canBashed = true;
+    this.canFire = this.canPowermissle = this.canBoost = this.canBashed = true;
+    if (Math.random() < (rank/20)) this.canItem0 = true;
+    if (Math.random() < (rank/20)) this.canItem1 = true;
+    if (Math.random() < (rank/20)) this.canItem2 = true;
+    if (Math.random() < (rank/20)) this.canItem3 = true;
+    if (Math.random() < (rank/20)) this.canClass = true;
     this.items = [];
     if (this.role !== 0) this.giveAbilities();
     this.invis = this.class === 'stealth';
