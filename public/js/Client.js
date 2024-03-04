@@ -541,7 +541,7 @@ class Client {
 
   fire(type) {
     if (type === 2) {
-      if (!this.canPowermissle) return;
+      if (!this.canPowermissle && !this.hacks) return;
       this.canPowermissle = false;
       this.timers.powermissle = Date.now();
       setTimeout(() => {this.canPowermissle = true;}, 10000);
@@ -584,7 +584,7 @@ class Client {
   }
 
   useItem(id, slot) {
-    if (!this['canItem'+slot] || this.hacks) {
+    if (!this['canItem'+slot] && !this.hacks) {
       if (id === 'dynamite') {
         this.tank.use.push('dynamite');
         this.playAnimation('detonate');
