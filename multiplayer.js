@@ -542,8 +542,8 @@ const Commands = {
     t.socket.send({status: 'error', message: s});
   }],
   msg: [Object, 4, -1, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === this.username);
-    const m = servers[this.room].pt.find(t => t.username === data[1]);
+    if (settings.mutes.includes(this.username)) return this.send({status: 'error', message: 'You are muted!'});
+    const t = servers[this.room].pt.find(t => t.username === this.username), m = servers[this.room].pt.find(t => t.username === data[1]);
     const message = {m: `[${this.username}->${data[1]}] ${data.slice(2).join(' ')}`, c: '#FFFFFF'};
     if (t) t.privateLogs.push(message);
     if (m) m.privateLogs.push(message);
