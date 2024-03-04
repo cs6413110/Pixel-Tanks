@@ -13,6 +13,7 @@ class Client {
     this.speed = 4;
     this.fireType = 1;
     this.msg = '';
+    this.blocked = new Set();
     this.key = [];
     this.ops = [];
     this.ups = [];
@@ -52,6 +53,10 @@ class Client {
         }
         if (this.hostupdate.logs.length > 100) this.hostupdate.logs.pop();
         this.hostupdate.logs.unshift(...compiledLogs.reverse());
+        for (let i = 0; i < this.hostupdate.logs.length; i++) {
+          let username = this.hostupdate.logs[i].m.split(']')[0].split('->')[1].replace('[', '');
+          if (this.blocked.has(username)) this.hostupdate.logs[i].m = '<blocked message from '+username+'>';
+        }
         entities.forEach(p => {
           if (data[p].length) data[p].forEach(e => {
             const index = this.hostupdate[p].findIndex(obj => obj.id === e.id);
@@ -453,15 +458,21 @@ class Client {
     if (e.keyCode === 8) this.msg = this.msg.slice(0, -1);
     if (e.keyCode === 13) {
       if (this.msg !== '') {
-        if (this.msg.startsWith('/ytdl ')) {
-          const id = this.msg.includes('=') ? this.msg.replace('/ytdl ', '').split('=')[1] : this.msg.replace('/ytdl ', '');
-          this.hostupdate.logs.unshift({m: 'Downloading '+id, c: '#00FF00'});
-          fetch('http://141.148.128.231/download'+id).then(res => {
-            if (res.status !== 200) throw new Error('Invalid Video ID');
-            res.body.pipeTo(window.streamSaver.createWriteStream(`${id}.mp4`)).then(() => this.hostupdate.logs.unshift({m: `Finished Downloading ${id}!`, c: '#00FF00'}));
-          }).catch(e => this.hostupdate.logs.unshift({m: 'Error Downloading. Try using Chrome. Error Info: '+e, c: '#FF0000'}));
-        }
-        this.socket.send(this.msg.charAt(0) === '/' ? {type: 'command', data: this.msg.replace('/', '').split(' ')} : {type: 'chat', msg: this.msg});
+        if (this.msg.charAt(0) === '/') {
+          const params = this.msg.replace('/', '').split(' ');
+          if (params[0] === 'ytdl') {
+            const id = this.msg.includes('=') ? this.msg.replace('/ytdl ', '').split('=')[1] : this.msg.replace('/ytdl ', '');
+            this.hostupdate.logs.unshift({m: 'Downloading '+id, c: '#00FF00'});
+            fetch('http://141.148.128.231/download'+id).then(res => {
+              if (res.status !== 200) throw new Error('Invalid Video ID');
+              res.body.pipeTo(window.streamSaver.createWriteStream(`${id}.mp4`)).then(() => this.hostupdate.logs.unshift({m: `Finished Downloading ${id}!`, c: '#00FF00'}));
+            }).catch(e => this.hostupdate.logs.unshift({m: 'Error Downloading. Try using Chrome. Error Info: '+e, c: '#FF0000'}));
+          } else if (params[0] === 'block') {
+            this.blocked.add(params[1]);
+          } else if (params[0] === 'unblock') {
+            this.blocked.delete(params[1]);
+          } else this.socket.send({type: 'command', data: params});
+        } else this.socket.send({type: 'chat', msg: this.msg});
         this.msg = '';
       }
       this.showChat = false;
