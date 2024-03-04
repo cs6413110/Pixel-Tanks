@@ -53,10 +53,10 @@ class Client {
         }
         if (this.hostupdate.logs.length > 100) this.hostupdate.logs.pop();
         this.hostupdate.logs.unshift(...compiledLogs.reverse());
-        for (let i = 0; i < this.hostupdate.logs.length; i++) {
+        /*for (let i = 0; i < this.hostupdate.logs.length; i++) {
           let username = this.hostupdate.logs[i].m.split(']')[0].split('->')[1].replace('[', '');
           if (this.blocked.has(username)) this.hostupdate.logs[i].m = '<blocked message from '+username+'>';
-        }
+        }*/
         entities.forEach(p => {
           if (data[p].length) data[p].forEach(e => {
             const index = this.hostupdate[p].findIndex(obj => obj.id === e.id);
