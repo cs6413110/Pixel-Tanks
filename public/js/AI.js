@@ -29,7 +29,7 @@ class AI {
     if (Math.random() < (rank/20)) this.canClass = true;
     this.items = [];
     if (this.role !== 0) this.giveAbilities();
-    if (canClass) this.invis = this.class === 'stealth';
+    if (this.canClass) this.invis = this.class === 'stealth';
     const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
     if (summoner) {
       this.cosmetic_hat = summoner.cosmetic_hat;
