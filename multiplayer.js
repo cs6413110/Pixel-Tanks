@@ -2,12 +2,12 @@ const settings = {
   authserver: 'localhost',
   bans: [],
   banips: [],
-  full_auth: ['cs641311'], //hello
+  full_auth: ['cs641311'],
   admins: ['Celestial', 'bradley', '3foenation', 'LostKing'], 
   vips: ['tony34', 'DarkMemeGod'],
   mutes: ['3foe'],
   players_per_room: 400,
-  ups: 60,
+  ups: 10,
 }
 
 const fs = require('fs');
@@ -594,6 +594,7 @@ const Commands = {
     if (t) clearInterval(t.freezeInterval);
   }],
   t: [Object, 4, -1, function(data) {
+    if (settings.mutes.includes(this.username)) return this.socket.send({status: 'error', message: 'You are muted!'}); 
     const team = Engine.getTeam(servers[this.room].pt.find(t => t.username === this.username).team), msg = {m: '[TEAM]['+this.username+'] '+data.slice(1).join(' '), c: '#FFFFFF'};
     for (const t of servers[this.room].pt) if (Engine.getTeam(t.team) === team) t.privateLogs.push(msg);
   }],
