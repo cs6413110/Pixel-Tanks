@@ -6,10 +6,14 @@ class Damage {
     this.f = 0;
     this.id = Math.random();
     this.cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
+    try {
+      for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
       const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx+w/100-.01))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy+h/100-.01)));
       host.cells[cx][cy].add(this);
       this.cells.add(cx+'x'+cy);
+    }
+    } catch(e) {
+      host.logs.push({m: 'ghost explosion with data of '+JSON.stringify(this.raw), c: '#FF0000'});
     }
     const cache = new Set();
     for (const cell of this.cells) {
