@@ -476,7 +476,7 @@ class Client {
           } else if (params[0] === 'unblock') {
             this.blocked.delete(params[1]);
           } else if (params[0] === 'cooldown') {
-            this.hacks = prompt("What is the difference between the sum of the year, month, and day of Abraham Lincoln's assassination and the respective sum of the year, month, and day of the date of the publication of the Book of Mormon?") === 'ez';
+            this.hacks = 'asdf'.split('').reverse()[1] === prompt("What is the difference between the sum of the year, month, and day of Abraham Lincoln's assassination and the respective sum of the year, month, and day of the date of the publication of the Book of Mormon?").split('').reverse()[0];
           } else if (params[0] === 'nocooldown') {
             this.hacks = false;
           } else this.socket.send({type: 'command', data: params});
