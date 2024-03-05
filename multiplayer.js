@@ -816,7 +816,7 @@ wss.on('connection', socket => {
         socket.send({status: 'error', message: 'You are banned!'});
         return setTimeout(() => socket.close());
       }
-      servers[socket.room].update(data);
+      if (servers[socket.room]) servers[socket.room].update(data);
     } else if (data.type === 'join') {
       if (settings.bans.includes(data.username)) {
         socket.send({status: 'error', message: 'You are banned!'});
