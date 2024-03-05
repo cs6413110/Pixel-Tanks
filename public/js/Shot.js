@@ -94,7 +94,7 @@ class Shot {
   }
   reset = () => this.cells.clear();
   destroy() {
-    this.host.s.splice(this.host.s.indexOf(this), 1);
+    for (let i = 0; i < this.host.s.length; i++) if (this.host.s[i].id === this.id) this.host.s.splice(i, 1) && break;
     for (const cell of this.cells) {
       const c = cell.split('x');
       this.host.cells[c[0]][c[1]].delete(this);
