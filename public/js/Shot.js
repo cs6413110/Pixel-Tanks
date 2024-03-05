@@ -94,10 +94,14 @@ class Shot {
   }
   reset = () => this.cells.clear();
   destroy() {
+    if (this.type === 'dynamite') this.host.logs.push({m: 'dyna destroyed at x: '+this.x+' y: '+this.y, c: '#FF0000'});
     for (const cell of this.cells) {
       const c = cell.split('x');
+      if (this.type === 'dynamite') this.host.logs.push({m: 'dyna removed from cell '+c[0]+', '+c[1], c: '#FF0000'});
       this.host.cells[c[0]][c[1]].delete(this);
     }
-    for (let i = 0; i < this.host.s.length; i++) if (this.host.s[i].id === this.id) return this.host.s.splice(i, 1);
+    this.host.logs.push({m: 's len before delete '+this.host.s.length, c: '#FF0000'});
+    for (let i = 0; i < this.host.s.length; i++) if (this.host.s[i].id === this.id) this.host.s.splice(i, 1); // add return here
+    this.host.logs.push({m: 's len after delete '+this.host.s.length, c: '#FF0000'});
   }
 }
