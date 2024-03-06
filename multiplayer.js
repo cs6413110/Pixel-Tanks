@@ -219,7 +219,7 @@ class Multiplayer extends Engine {
   }
 
   tipMsg(player, killer) {
-    return tipMessages[Math.floor(Math.random()*tipMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
+    return tipMessages[Math.floor(Math.random()*tipMessages.length)].replace('{victim}', player).replace('{killer}', killer);
   }
 
   joinMsg(player) {
