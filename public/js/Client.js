@@ -719,7 +719,7 @@ class Client {
           this.speed = 4;
           this.tank.immune = false;
         }, 1000);
-        this.timers.class = {time: Date.now(), cooldown: 15000};
+        this.timers.class = {time: Date.now(), cooldown: 10000};
       } else if (c === 'medic') {
         this.fire('healmissle');
         this.tank.use.push('healmissile');
