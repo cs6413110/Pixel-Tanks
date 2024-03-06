@@ -238,7 +238,11 @@ class FFA extends Multiplayer {
 
   ondeath(t, m={}) {
     this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
-    t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
+    try {
+      t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
+    } catch(e) {
+      const uslessCode = 'undefined';
+    }
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     if (t.socket) t.ded = true;
     if (m.socket) m.socket.send({event: 'kill'});
@@ -289,6 +293,11 @@ class DUELS extends Multiplayer {
   ondeath(t, m) {
     t.ded = true;
     if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
+    try {
+      t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
+    } catch(e) {
+      const uslessCode = 'undefined';
+    }
     if (m.socket) m.socket.send({event: 'kill'});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     this.wins[m.username] = this.wins[m.username] === undefined ? 1 : this.wins[m.username]+1;
@@ -408,6 +417,11 @@ class TDM extends Multiplayer {
       time: 0,
     }
     if (m.username) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
+    try {
+      t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
+    } catch(e) {
+      const uslessCode = 'undefined';
+    }
     if (m.socket) m.socket.send({event: 'kill'});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     let allies = 0;
@@ -536,7 +550,11 @@ class Defense extends Multiplayer {
   
   ondeath(t, m={}) {
     if (t instanceof Tank) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
-    t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
+    try {
+      t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
+    } catch(e) {
+      const uslessCode = 'undefined';
+    }
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     this.updateStatus();
     if (t.socket) {
