@@ -80,6 +80,10 @@ const deathMessages = [
   `{idot} left the game`,
   `{idot} quit`,
   `{idot} disconnected`,
+], tipMessages = [
+  `Try dodging the bullets next time`,
+  `You know how to shoot, right?`,
+  `Heres a tip: git good`,
 ];
 
 let tickspeed = 'N/A';
@@ -198,6 +202,10 @@ class Multiplayer extends Engine {
   deathMsg(victim, killer) {
     log(`${killer} killed ${victim}`); // temp log file death
     return deathMessages[Math.floor(Math.random()*deathMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
+  }
+
+  tipMsg() {
+    return tipMessages[Math.floor(Math.random()*joinMessages.length)];
   }
 
   joinMsg(player) {
@@ -514,6 +522,7 @@ class Defense extends Multiplayer {
   
   ondeath(t, m={}) {
     if (t instanceof Tank) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
+    t.privateLogs.push({m: this.tipMsg(), c: '#80FFF9'});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     this.updateStatus();
     if (t.socket) {
