@@ -289,7 +289,6 @@ class DUELS extends Multiplayer {
   ondeath(t, m) {
     t.ded = true;
     if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
-    if (m.username) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
     if (m.socket) m.socket.send({event: 'kill'});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     this.wins[m.username] = this.wins[m.username] === undefined ? 1 : this.wins[m.username]+1;
