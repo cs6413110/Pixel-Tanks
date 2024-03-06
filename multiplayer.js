@@ -81,9 +81,23 @@ const deathMessages = [
   `{idot} quit`,
   `{idot} disconnected`,
 ], tipMessages = [
-  `Try dodging the bullets next time`,
+  `TIP: Try dodging the bullets next time!`,
   `You know how to shoot, right?`,
-  `Heres a tip: git good`,
+  `TIP: git good.`,
+  `TIP: dont suck.`,
+  `TIP: Avoid {killer}, he's simply better than you.`,
+  `TIP: Fight {victim} for free healing items!`,
+  `TIP: Dont die. It's THAT simple.`,
+  `TIP: Forgive {killer} for brutally slaughtering you and ask him to team with you!`,
+  `TIP: If you are in a block, press ESC and then press the LEAVE button. Works every time!`,
+  `TIP: Press the reload button for a secret 0 cooldown hack!`,
+  `TIP: Do not chase {killer}, they WILL flat you.`,
+  `TIP: Spin on {killer}. They deserve it.`,
+  `Bad internet? Hit the router with a wrench. Trust me :)`,
+  `Must've been your keyboard`,
+  `SKILL ISSUE EZ L + BOZO + U FELL OFF`,
+  `Get a new mouse`,
+  `How embarrassing...`,
 ];
 
 let tickspeed = 'N/A';
@@ -204,8 +218,8 @@ class Multiplayer extends Engine {
     return deathMessages[Math.floor(Math.random()*deathMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
   }
 
-  tipMsg(player) {
-    return tipMessages[Math.floor(Math.random()*tipMessages.length)].replace('{idot}', player);;
+  tipMsg(player, killer) {
+    return tipMessages[Math.floor(Math.random()*tipMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
   }
 
   joinMsg(player) {
@@ -224,7 +238,7 @@ class FFA extends Multiplayer {
 
   ondeath(t, m={}) {
     this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
-    t.privateLogs.push({m: this.tipMsg(t.username), c: '#80FFF9'});
+    t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     if (t.socket) t.ded = true;
     if (m.socket) m.socket.send({event: 'kill'});
@@ -523,7 +537,7 @@ class Defense extends Multiplayer {
   
   ondeath(t, m={}) {
     if (t instanceof Tank) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
-    t.privateLogs.push({m: this.tipMsg(t.username), c: '#80FFF9'});
+    t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     this.updateStatus();
     if (t.socket) {
