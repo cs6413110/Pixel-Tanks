@@ -204,8 +204,8 @@ class Multiplayer extends Engine {
     return deathMessages[Math.floor(Math.random()*deathMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
   }
 
-  tipMsg() {
-    return tipMessages[Math.floor(Math.random()*joinMessages.length)];
+  tipMsg(player) {
+    return tipMessages[Math.floor(Math.random()*tipMessages.length)].replace('{idot}', player);;
   }
 
   joinMsg(player) {
@@ -224,6 +224,7 @@ class FFA extends Multiplayer {
 
   ondeath(t, m={}) {
     this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
+    t.privateLogs.push({m: this.tipMsg(t.username), c: '#80FFF9'});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     if (t.socket) t.ded = true;
     if (m.socket) m.socket.send({event: 'kill'});
@@ -522,7 +523,7 @@ class Defense extends Multiplayer {
   
   ondeath(t, m={}) {
     if (t instanceof Tank) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
-    t.privateLogs.push({m: this.tipMsg(), c: '#80FFF9'});
+    t.privateLogs.push({m: this.tipMsg(t.username), c: '#80FFF9'});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     this.updateStatus();
     if (t.socket) {
