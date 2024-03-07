@@ -5,7 +5,7 @@ const settings = {
   full_auth: ['cs641311'],
   admins: ['Celestial', 'bradley', '3foenation', 'LostKing'], 
   vips: ['tony34', 'DarkMemeGod'],
-  mutes: ['3foe'],
+  mutes: [],
   players_per_room: 400,
   ups: 50,
 }
@@ -688,7 +688,6 @@ const Commands = {
     servers[this.room].logs.push({m: data[1]+' was muted by '+this.username, c: '#FFFF22'});
   }],
   unmute: [Object, 3, 2, function(data) {
-    if (data[1] === '3foe') return this.send({status: 'error', message: '3foe is permamuted!'});
     settings.mutes.splice(settings.mutes.indexOf(data[1]), 1);
     servers[this.room].logs.push({m: data[1]+' was unmuted by '+this.username, c: '#0000FF'});
   }],
