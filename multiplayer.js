@@ -9,7 +9,7 @@ const settings = {
   players_per_room: 400,
   ups: 50,
 }
-
+// x = 72
 const fs = require('fs');
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
