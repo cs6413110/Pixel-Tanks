@@ -860,6 +860,9 @@ wss.on('connection', socket => {
       if (settings.bans.includes(data.username)) {
         socket.send({status: 'error', message: 'You are banned!'});
         return setTimeout(() => socket.close());
+      } else if (!auth(socket.username, data.token)) {
+        socket.send({status: 'error', message: 'Token is invalid. Login with the correct authserver.'});
+        return setTimeout(() => socket.close());
       }
       let server;
       for (const id in servers) {
