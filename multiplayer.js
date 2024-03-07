@@ -9,7 +9,7 @@ const settings = {
   players_per_room: 400,
   ups: 50,
 }
-// x = 72
+
 const fs = require('fs');
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
@@ -730,7 +730,7 @@ const Commands = {
   announce: [Object, 3, -1, function(data) {
     for (const server of Object.values(servers)) server.logs.push({m: '[Announcement]['+this.username+'] '+data.slice(1).join(' '), c: '#FFF87D'});
   }],
-  global: [Object, 4, -1, function(data) {
+  global: [Object, 2, -1, function(data) {
     for (const socket of sockets) socket.send({status: 'error', message: '[Global]['+this.username+'] '+data.slice(1).join(' ')});
   }],
   sread: [Object, 1, 2, function(data) {
