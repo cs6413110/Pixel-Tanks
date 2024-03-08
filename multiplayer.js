@@ -746,10 +746,10 @@ const Commands = {
     process.exit(1);
   }],
   flushlogs: [Object, 2, -1, function() {
-    fs.writeFileSync('logs.txt', '');
+    fs.writeFileSync('log.txt', '');
   }],
   getlogs: [Object, 2, 2, function() {
-    const logs = fs.readFileSync('logs.txt'), t = servers[this.room].pt.find(t => t.username === this.username);
+    const logs = fs.readFileSync('log.txt'), t = servers[this.room].pt.find(t => t.username === this.username);
     for (let i = 0, data = logs.split('\n').reverse(); i < data.length; i++) t.privateLogs.push({m: data[i], c: '#A9A9A9'});
   }],
   announce: [Object, 3, -1, function(data) {
