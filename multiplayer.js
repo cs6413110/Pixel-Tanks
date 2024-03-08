@@ -17,9 +17,12 @@ fs.writeFileSync('engine.js', [`const PF = require('pathfinding');`, fs.readFile
 console.log('Compiled Engine');
 const {Engine, Tank, Block, Shot, AI, Damage, A} = require('./engine.js');
 console.log('Loading Server Properties');
-const Storage = {key: ['./owners.json', 'admins', 'vips', 'mutes', 'bans']};
-for (const p of Storage.key) Storage[p] = fs.existsSync('./'+p+'.json') ? JSON.parse(fs.readFileSync('./'+p+'.json')) : [];
+const Storage = {key: ['owners', 'admins', 'vips', 'mutes', 'bans']};
+for (const p of Storage.key) Storage[p] = fs.existsSync(p+'.json') ? JSON.parse(fs.readFileSync(p+'.json')) : [];
 console.log('Loaded Server Properties');
+process.stdin.resume();
+const save = () => (for (const p of Storage.key) fs.writeFileSync(p+'.json', JSON.stringify(Storage[p])));
+for (const p of ['exit', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException']) process.on(p, save);
 
 const logger = fs.createWriteStream('log.txt', {flags: 'a'}), log = l => logger.write(`${l}\n`);
 const hasAccess = (username, clearanceLevel) => { // 1 => full auth only, 2 => admins and above, 3 => vips and above, 4 => any
@@ -86,7 +89,7 @@ class Multiplayer extends Engine {
     super(levels);
     this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
-    if (!settings.fps_boost) this.i.push(setInterval(() => this.cellSend(), 1000/settings.ups));
+    this.i.push(setInterval(() => this.cellSend(), 1000/settings.ups));
   }
 
   override(t) {
@@ -562,7 +565,7 @@ const Commands = {
     t.socket.send({status: 'error', message: s});
   }],
   msg: [Object, 4, -1, function(data) {
-    if (settings.mutes.includes(this.username)) return this.send({status: 'error', message: 'You are muted!'});
+    if (mutes.includes(this.username)) return this.send({status: 'error', message: 'You are muted!'});
     const t = servers[this.room].pt.find(t => t.username === this.username), m = servers[this.room].pt.find(t => t.username === data[1]);
     const message = {m: `[${this.username}->${data[1]}] ${data.slice(2).join(' ')}`, c: '#FFFFFF'};
     if (t) t.privateLogs.push(message);
@@ -614,7 +617,7 @@ const Commands = {
     if (t) clearInterval(t.freezeInterval);
   }],
   t: [Object, 4, -1, function(data) {
-    if (settings.mutes.includes(this.username)) return this.socket.send({status: 'error', message: 'You are muted!'}); 
+    if (mutes.includes(this.username)) return this.socket.send({status: 'error', message: 'You are muted!'}); 
     const team = Engine.getTeam(servers[this.room].pt.find(t => t.username === this.username).team), msg = {m: '[TEAM]['+this.username+'] '+data.slice(1).join(' '), c: '#FFFFFF'};
     for (const t of servers[this.room].pt) if (Engine.getTeam(t.team) === team) t.privateLogs.push(msg);
   }],
@@ -646,8 +649,8 @@ const Commands = {
     });
   }],
   ban: [Object, 2, 2, function(data) {
-    if (settings.admins.includes(data[1]) || settings.full_auth.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
-    settings.bans.push(data[1]);
+    if (admins.includes(data[1]) || owners.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
+    bans.push(data[1]);
     servers[this.room].logs.push({m: data[1]+' was banned by '+this.username, c: '#FF0000'});
     servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You are banned!'});
     for (const socket of sockets) if (socket.username === data[1]) setTimeout(() => socket.close());
@@ -655,19 +658,19 @@ const Commands = {
   banlist: [Object, 2, -1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     t.privateLogs.push({m: '-----Ban List-----', c: '#00FF00'});
-    for (const ban of settings.bans) t.privateLogs.push({m: ban, c: '#00FF00'});
+    for (const ban of bans) t.privateLogs.push({m: ban, c: '#00FF00'});
   }],
   pardon: [Object, 2, 2, function(data) {
-    settings.bans.splice(settings.bans.indexOf(data[1]), 1);
+    bans.splice(bans.indexOf(data[1]), 1);
     servers[this.room].logs.push({m: data[1]+' was pardoned by '+this.username, c: '#0000FF'});
   }],
   mute: [Object, 3, 2, function(data) {
-    if (settings.mutes.includes(data[1])) return this.send({status: 'error', message: 'They are already muted!'});
-    settings.mutes.push(data[1]);
+    if (mutes.includes(data[1])) return this.send({status: 'error', message: 'They are already muted!'});
+    mutes.push(data[1]);
     servers[this.room].logs.push({m: data[1]+' was muted by '+this.username, c: '#FFFF22'});
   }],
   unmute: [Object, 3, 2, function(data) {
-    settings.mutes.splice(settings.mutes.indexOf(data[1]), 1);
+    mutes.splice(mutes.indexOf(data[1]), 1);
     servers[this.room].logs.push({m: data[1]+' was unmuted by '+this.username, c: '#0000FF'});
   }],
   kick: [Object, 3, 2, function(data) {
@@ -831,13 +834,13 @@ wss.on('connection', socket => {
     }
     if (!socket.username) socket.username = data.username;
     if (data.type === 'update') {
-      if (settings.bans.includes(data.username)) {
+      if (bans.includes(data.username)) {
         socket.send({status: 'error', message: 'You are banned!'});
         return setTimeout(() => socket.close());
       }
       if (servers[socket.room]) servers[socket.room].update(data);
     } else if (data.type === 'join') {
-      if (settings.bans.includes(data.username)) {
+      if (bans.includes(data.username)) {
         socket.send({status: 'error', message: 'You are banned!'});
         return setTimeout(() => socket.close());
       } else if (!auth(socket.username, data.token)) {
@@ -868,7 +871,7 @@ wss.on('connection', socket => {
     } else if (data.type === 'ping') {
       socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
-      if (settings.mutes.includes(socket.username)) {
+      if (mutes.includes(socket.username)) {
         log(`${socket.username} tried to say "${data.msg.slice(0, 100)}"`);
         return socket.send({status: 'error', message: 'You are muted!'});
       }
