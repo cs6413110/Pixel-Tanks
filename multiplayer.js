@@ -3,6 +3,8 @@ const settings = {
   players_per_room: 10,
   ups: 50,
   port: 8080,
+  chat: true,
+  joining: true,
 }
 
 const fs = require('fs'), fetch = require('node-fetch');
@@ -746,9 +748,11 @@ const Commands = {
   global: [Object, 2, -1, function(data) {
     for (const socket of sockets) socket.send({status: 'error', message: '[Global]['+this.username+'] '+data.slice(1).join(' ')});
   }],
-  sread: [Object, 1, 2, function(data) {
-    const value = servers[this.room][data[1]];
-    if (value !== undefined) servers[this.room].logs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
+  lockchat: [Object, 2, 2, function(data) {
+    settings.chat = !settings.chat;
+  }],
+  lockdown: [Object, 2, 2, function(data) {
+    settings.joining = !settings.joining;
   }],
   swrite: [Object, 1, 3, function(data) {
     eval(`try {
@@ -756,13 +760,6 @@ const Commands = {
     } catch(e) {
       servers['${this.room}'].pt.find(t => t.username === '${this.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
     }`);
-  }],
-  tread: [Object, 1, 3, function(data) {
-    for (const t of servers[this.room].pt) if (t.username === data[1]) {
-      const value = t[data[2]];
-      if (value !== undefined) servers[this.room].pt.find(tank => tank.username === this.username).privateLogs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
-      return;
-    }
   }],
   admin: [Object, 1, 2, function(data) {
     if (!Storage.admins.includes(data[1])) Storage.admins.push(data[1]);
@@ -882,7 +879,10 @@ wss.on('connection', socket => {
       }
       if (servers[socket.room]) servers[socket.room].update(data);
     } else if (data.type === 'join') {
-      if (clean(data.username) !== data.username) {
+      if (!hasAccess(data.username, 3) && !settings.joining) {
+        socket.send({status: 'error', message: `Joining is disabled.`});
+        return setTimeout(() => socket.close());
+      } else if (clean(data.username) !== data.username) {
         socket.send({status: 'error', message: `Your username didn't pass the profanity check.`});
         return setTimeout(() => socket.close());
       } else if (Storage.bans.includes(data.username)) {
@@ -916,11 +916,11 @@ wss.on('connection', socket => {
     } else if (data.type === 'ping') {
       socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
+      if (!servers[socket.room] || (!hasAccess(data.username, 3) && !settings.chat)) return;
       if (Storage.mutes.includes(socket.username)) {
         log(`${socket.username} tried to say "${data.msg.slice(0, 100)}"`);
         return socket.send({status: 'error', message: 'You are muted!'});
       }
-      if (!servers[socket.room]) return;
       servers[socket.room].logs.push({m: `[${socket.username}] ${clean(data.msg.slice(0, 100))}`, c: '#ffffff'});
       log(`[${socket.username}] ${clean(data.msg.slice(0, 100))}`);
     } else if (data.type === 'logs') {
