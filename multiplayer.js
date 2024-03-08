@@ -6,11 +6,12 @@ const settings = {
   admins: ['Celestial', 'bradley', '3foenation', 'LostKing'], 
   vips: ['tony34'],
   mutes: ['tony34'],
-  players_per_room: 0,
+  players_per_room: 10,
   ups: 50,
 }
 
 const fs = require('fs');
+const {fetch} = require('node-fetch');
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
