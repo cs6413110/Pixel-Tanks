@@ -653,7 +653,7 @@ class Client {
       this.b = {o: this.tank.baseFrame, t: Date.now()};
     }
     for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds.items[i]) this.useItem(PixelTanks.userData.items[i], i);
-    if (k === 13) this.showChat = true;
+    if (k === 13 && this.socket) this.showChat = true;
     if (k === 9) {
       this.fireType = this.fireType < 2 ? 2 : 1;
       clearInterval(this.fireInterval);
