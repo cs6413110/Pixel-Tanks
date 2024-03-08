@@ -11,7 +11,7 @@ const settings = {
 }
 
 const fs = require('fs');
-import {fetch} from 'node-fetch';
+const {fetch} = require('node-fetch');
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
