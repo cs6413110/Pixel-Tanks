@@ -46,8 +46,8 @@ let sockets = new Set(), servers = {}, ffaLevels = [
 
 const logger = fs.createWriteStream('log.txt', {flags: 'a'}), log = l => logger.write(`${l}\n`);
 const hasAccess = (username, clearanceLevel) => { // 1 => full auth only, 2 => admins and above, 3 => vips and above, 4 => any
-  const isAdmin = admins.includes(username), isVIP = vips.includes(username);
-  if (clearanceLevel === 4 || owners.includes(username)) return true;
+  const isAdmin = Storage.admins.includes(username), isVIP = Storage.vips.includes(username);
+  if (clearanceLevel === 4 || Storage.owners.includes(username)) return true;
   if (clearanceLevel === 3 && (isVIP || isAdmin)) return true;
   if (clearanceLevel === 2 && isAdmin) return true;
   return false;
@@ -585,7 +585,7 @@ const Commands = {
     t.socket.send({status: 'error', message: s});
   }],
   msg: [Object, 4, -1, function(data) {
-    if (mutes.includes(this.username)) return this.send({status: 'error', message: 'You are muted!'});
+    if (Storage.mutes.includes(this.username)) return this.send({status: 'error', message: 'You are muted!'});
     const t = servers[this.room].pt.find(t => t.username === this.username), m = servers[this.room].pt.find(t => t.username === data[1]);
     const message = {m: `[${this.username}->${data[1]}] ${data.slice(2).join(' ')}`, c: '#FFFFFF'};
     if (t) t.privateLogs.push(message);
@@ -637,7 +637,7 @@ const Commands = {
     if (t) clearInterval(t.freezeInterval);
   }],
   t: [Object, 4, -1, function(data) {
-    if (mutes.includes(this.username)) return this.socket.send({status: 'error', message: 'You are muted!'}); 
+    if (Storage.mutes.includes(this.username)) return this.socket.send({status: 'error', message: 'You are muted!'}); 
     const team = Engine.getTeam(servers[this.room].pt.find(t => t.username === this.username).team), msg = {m: '[TEAM]['+this.username+'] '+data.slice(1).join(' '), c: '#FFFFFF'};
     for (const t of servers[this.room].pt) if (Engine.getTeam(t.team) === team) t.privateLogs.push(msg);
   }],
@@ -669,8 +669,8 @@ const Commands = {
     });
   }],
   ban: [Object, 2, 2, function(data) {
-    if (admins.includes(data[1]) || owners.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
-    bans.push(data[1]);
+    if (Storage.admins.includes(data[1]) || Storage.owners.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
+    Storage.bans.push(data[1]);
     servers[this.room].logs.push({m: data[1]+' was banned by '+this.username, c: '#FF0000'});
     servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You are banned!'});
     for (const socket of sockets) if (socket.username === data[1]) setTimeout(() => socket.close());
@@ -678,19 +678,19 @@ const Commands = {
   banlist: [Object, 2, -1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     t.privateLogs.push({m: '-----Ban List-----', c: '#00FF00'});
-    for (const ban of bans) t.privateLogs.push({m: ban, c: '#00FF00'});
+    for (const ban of Storage.bans) t.privateLogs.push({m: ban, c: '#00FF00'});
   }],
   pardon: [Object, 2, 2, function(data) {
-    bans.splice(bans.indexOf(data[1]), 1);
+    Storage.bans.splice(Storage.bans.indexOf(data[1]), 1);
     servers[this.room].logs.push({m: data[1]+' was pardoned by '+this.username, c: '#0000FF'});
   }],
   mute: [Object, 3, 2, function(data) {
-    if (mutes.includes(data[1])) return this.send({status: 'error', message: 'They are already muted!'});
-    mutes.push(data[1]);
+    if (Storage.mutes.includes(data[1])) return this.send({status: 'error', message: 'They are already muted!'});
+    Storage.mutes.push(data[1]);
     servers[this.room].logs.push({m: data[1]+' was muted by '+this.username, c: '#FFFF22'});
   }],
   unmute: [Object, 3, 2, function(data) {
-    mutes.splice(mutes.indexOf(data[1]), 1);
+    Storage.mutes.splice(Storage.mutes.indexOf(data[1]), 1);
     servers[this.room].logs.push({m: data[1]+' was unmuted by '+this.username, c: '#0000FF'});
   }],
   kick: [Object, 3, 2, function(data) {
@@ -854,13 +854,13 @@ wss.on('connection', socket => {
     }
     if (!socket.username) socket.username = data.username;
     if (data.type === 'update') {
-      if (bans.includes(data.username)) {
+      if (Storage.bans.includes(data.username)) {
         socket.send({status: 'error', message: 'You are banned!'});
         return setTimeout(() => socket.close());
       }
       if (servers[socket.room]) servers[socket.room].update(data);
     } else if (data.type === 'join') {
-      if (bans.includes(data.username)) {
+      if (Storage.bans.includes(data.username)) {
         socket.send({status: 'error', message: 'You are banned!'});
         return setTimeout(() => socket.close());
       } else if (!auth(socket.username, data.token)) {
@@ -891,7 +891,7 @@ wss.on('connection', socket => {
     } else if (data.type === 'ping') {
       socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
-      if (mutes.includes(socket.username)) {
+      if (Storage.mutes.includes(socket.username)) {
         log(`${socket.username} tried to say "${data.msg.slice(0, 100)}"`);
         return socket.send({status: 'error', message: 'You are muted!'});
       }
