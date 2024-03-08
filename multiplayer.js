@@ -748,10 +748,10 @@ const Commands = {
   global: [Object, 2, -1, function(data) {
     for (const socket of sockets) socket.send({status: 'error', message: '[Global]['+this.username+'] '+data.slice(1).join(' ')});
   }],
-  lockchat: [Object, 2, 2, function(data) {
+  lockchat: [Object, 2, -1, function(data) {
     settings.chat = !settings.chat;
   }],
-  lockdown: [Object, 2, 2, function(data) {
+  lockdown: [Object, 2, -1, function(data) {
     settings.joining = !settings.joining;
   }],
   swrite: [Object, 1, 3, function(data) {
@@ -916,7 +916,7 @@ wss.on('connection', socket => {
     } else if (data.type === 'ping') {
       socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
-      if (!servers[socket.room] || (!hasAccess(data.username, 3) && !settings.chat)) return;
+      if (!servers[socket.room] || (!hasAccess(socket.username, 3) && !settings.chat)) return;
       if (Storage.mutes.includes(socket.username)) {
         log(`${socket.username} tried to say "${data.msg.slice(0, 100)}"`);
         return socket.send({status: 'error', message: 'You are muted!'});
