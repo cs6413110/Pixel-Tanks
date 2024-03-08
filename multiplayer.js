@@ -748,10 +748,9 @@ const Commands = {
   flushlogs: [Object, 2, -1, function() {
     fs.writeFileSync('log.txt', '');
   }],
-  getlogs: [Object, 2, 2, function() {
-    const logs = fs.readFileSync('log.txt').toString(), t = servers[this.room].pt.find(t => t.username === this.username);
-    console.log(logs);
-    for (let data = logs.split('\n'), i = data.length-1; i >= Math.max(0, data.length-Number(data[1])); i--) t.privateLogs.push({m: data[i], c: '#A9A9A9'});
+  getlogs: [Object, 2, 2, function(data) {
+    const logs = fs.readFileSync('log.txt').toString().split('\n'), t = servers[this.room].pt.find(t => t.username === this.username);
+    for (let i = logs.length-1; i >= Math.max(0, logs.length-Number(data[1])); i--) t.privateLogs.push({m: logs[i], c: '#A9A9A9'});
   }],
   announce: [Object, 3, -1, function(data) {
     for (const server of Object.values(servers)) server.logs.push({m: '[Announcement]['+this.username+'] '+data.slice(1).join(' '), c: '#FFF87D'});
