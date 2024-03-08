@@ -21,7 +21,9 @@ const Storage = {key: ['owners', 'admins', 'vips', 'mutes', 'bans']};
 for (const p of Storage.key) Storage[p] = fs.existsSync(p+'.json') ? JSON.parse(fs.readFileSync(p+'.json')) : [];
 console.log('Loaded Server Properties');
 process.stdin.resume();
-const save = () => (for (const p of Storage.key) fs.writeFileSync(p+'.json', JSON.stringify(Storage[p])));
+const save = () => {
+  for (const p of Storage.key) fs.writeFileSync(p+'.json', JSON.stringify(Storage[p]));
+}
 for (const p of ['exit', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException']) process.on(p, save);
 
 const logger = fs.createWriteStream('log.txt', {flags: 'a'}), log = l => logger.write(`${l}\n`);
