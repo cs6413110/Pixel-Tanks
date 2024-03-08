@@ -727,7 +727,10 @@ const Commands = {
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = true;
   }],
   live: [Object, 3, 2, function(data) {
-    for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = false;
+    for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) {
+      t.hp = t.maxHp;
+      t.ded = false;
+    }
   }],
   switch: [TDM, 3, 2, function(data) {
     if (servers[this.room].mode === 0) for (const t of servers[this.room].pt) if (t.username === (data.length === 1 ? this.username : data[1])) t.color = t.color === '#FF0000' ? '#0000FF' : '#FF0000';
