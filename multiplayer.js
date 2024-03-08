@@ -20,6 +20,7 @@ console.log('Loading Server Properties');
 const Storage = {key: ['owners', 'admins', 'vips', 'mutes', 'bans']};
 for (const p of Storage.key) Storage[p] = fs.existsSync(p+'.json') ? JSON.parse(fs.readFileSync(p+'.json')) : [];
 console.log('Loaded Server Properties');
+console.log(JSON.stringify(Storage));
 process.stdin.resume();
 const save = () => {
   for (const p of Storage.key) fs.writeFileSync(p+'.json', JSON.stringify(Storage[p]));
