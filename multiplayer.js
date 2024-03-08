@@ -18,7 +18,7 @@ console.log('Compiled Engine');
 const {Engine, Tank, Block, Shot, AI, Damage, A} = require('./engine.js');
 console.log('Loading Server Properties');
 const Storage = {key: ['owners', 'admins', 'vips', 'mutes', 'bans']};
-console.log(fs.readFileSync('owners.json'));
+console.log(fs.existsSync('owners.json'), fs.readFileSync('owners.json'), JSON.parse(fs.readFileSync('owners.json')));
 for (const p of Storage.key) Storage[p] = fs.existsSync(p+'.json') ? JSON.parse(fs.readFileSync(p+'.json')) : [];
 console.log('Loaded Server Properties');
 console.log(JSON.stringify(Storage));
