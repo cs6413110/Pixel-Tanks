@@ -241,21 +241,7 @@ class Multiplayer extends Engine {
 class FFA extends Multiplayer {
   constructor() {
     super(ffaLevels);
-  } 
-
-  ondeath(t, m={}) {
-    this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
-    try {
-      t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
-    } catch(e) {
-      const uslessCode = 'undefined';
-    }
-    for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
-    if (t.socket) t.ded = true;
-    if (m.socket) m.socket.send({event: 'kill'});
-    if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
   }
-
   ontick() {}
 }
 
@@ -297,16 +283,8 @@ class DUELS extends Multiplayer {
     }
   }
 
-  ondeath(t, m) {
-    t.ded = true;
-    if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
-    try {
-      t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
-    } catch(e) {
-      const uslessCode = 'undefined';
-    }
-    if (m.socket) m.socket.send({event: 'kill'});
-    for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
+  ondeath(t, m={}) {
+    super.ondeath(t, m);
     this.wins[m.username] = this.wins[m.username] === undefined ? 1 : this.wins[m.username]+1;
     if (this.wins[m.username] === 3) {
       this.global = m.username+' Wins!';
@@ -413,22 +391,8 @@ class TDM extends Multiplayer {
     }
   }
 
-  ondeath(t, m) {
-    t.ded = true;
-    if (m.deathEffect) t.dedEffect = {
-      x: t.x,
-      y: t.y,
-      r: t.r,
-      id: m.deathEffect,
-      start: Date.now(),
-      time: 0,
-    }
-    if (m.username) this.logs.push({m: this.deathMsg(t.username, m.username), c: m.color});
-    try {
-      t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
-    } catch(e) {}
-    if (m.socket) m.socket.send({event: 'kill'});
-    for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
+  ondeath(t, m={}) {
+    super.ondeath(t, m);
     let allies = 0;
     this.pt.forEach(tank => {
       if (!tank.ded) {
@@ -560,17 +524,9 @@ class Defense extends Multiplayer {
     }, 10000));
   }
   
-  ondeath(t, m={}) {
-    if (t instanceof Tank) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
-    try {
-      t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
-    } catch(e) {
-      const uslessCode = 'undefined';
-    }
-    for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
-    this.updateStatus();
+  ondeath(t, m) {
+    super.ondeath(t, m);
     if (t.socket) {
-      t.ded = true;
       let playerAlive = false;
       for (const t of this.pt) if (!t.ded) playerAlive = true;
       if (!playerAlive) {
@@ -578,8 +534,6 @@ class Defense extends Multiplayer {
         for (const t of this.pt) t.socket.close();
       }
     }
-    if (m.socket) m.socket.send({event: 'ded'}); // reset cooldowns without giving loot
-    if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
   }
 }
 
