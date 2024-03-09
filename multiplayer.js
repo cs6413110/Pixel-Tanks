@@ -423,12 +423,10 @@ class TDM extends Multiplayer {
       start: Date.now(),
       time: 0,
     }
-    if (m.username) this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
+    if (m.username) this.logs.push({m: this.deathMsg(t.username, m.username), c: m.color});
     try {
       t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
-    } catch(e) {
-      const uslessCode = 'undefined';
-    }
+    } catch(e) {}
     if (m.socket) m.socket.send({event: 'kill'});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     let allies = 0;
@@ -471,6 +469,13 @@ class TDM extends Multiplayer {
         }, 5000);
       }   
     }
+  }
+
+  disconnect(socket, code, reason) {
+    const v = this.pt.find(t => t.username === socket.username);
+    const m = this.pt.find(t => Engine.getTeam(t.team) !== Engine.getTeam(v.team));
+    this.ondeath(v, m);
+    super.disconnect(socket, code, reason);
   }
 }
 
