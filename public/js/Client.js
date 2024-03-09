@@ -53,14 +53,12 @@ class Client {
         }
         if (this.hostupdate.logs.length > 100) this.hostupdate.logs.pop();
         this.hostupdate.logs.unshift(...compiledLogs.reverse());
-        try {
         for (let i = 0; i < this.hostupdate.logs.length; i++) {
           let username = this.hostupdate.logs[i].m.split(']')[0];
           if (username.includes('->')) username = username.split('->')[0];
           username = username.split('[')[1];
           if (this.blocked.has(username)) this.hostupdate.logs[i].m = '<blocked message from '+username+'>';
         }
-        } catch(e) {alert(e)}
         entities.forEach(p => {
           if (data[p].length) data[p].forEach(e => {
             const index = this.hostupdate[p].findIndex(obj => obj.id === e.id);
@@ -354,10 +352,6 @@ class Client {
     for (const ex of e) this.drawExplosion(ex);
 
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
-    if (player.flashbanged) {
-      GUI.draw.fillStyle = '#FFFFFF';
-      GUI.draw.fillRect(0, 0, 1600, 1000);
-    }
     
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
     GUI.drawText(this.kills, 1530, 40, 30, '#FFFFFF', 1);
@@ -402,7 +396,7 @@ class Client {
     GUI.draw.fillRect(308, 952+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*48, 48, 48);
     GUI.drawText(this.canRespawn ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
     GUI.drawText('', 0, 0, 30, '#ffffff', 0);
-    for (let i = 0; i < Math.min(this.hostupdate.logs.length, this.showChat ? 1000 : 3); i++) {
+    for (let l = this.hostupdate.logs.length-(i = Math.ceil(this.chatScroll/30)); i < this.showChat ? Math.min(26, l) : Math.min(3, l); i++) {
       const log = this.hostupdate.logs[i];
       GUI.draw.fillStyle = '#000000';
       GUI.draw.globalAlpha = .2;
