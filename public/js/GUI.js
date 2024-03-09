@@ -32,7 +32,5 @@ class GUI {
     GUI.draw.fillText(message, x-GUI.draw.measureText(message).width*anchor, y+size*.8*(1-anchor));
   }
 
-  static clear() {
-    GUI.draw.clearRect(0, 0, 1600, 1000);
-  }
+  static clear = () => GUI.draw.clearRect(0, 0, 1600, 1000);
 }
