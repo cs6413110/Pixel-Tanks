@@ -170,6 +170,15 @@ class Engine {
     for (const t of this.pt) t.update();
   }
 
+  ondeath(t, m={}) {
+    this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
+    if (t.privateLogs) t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
+    for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
+    if (t.socket) t.ded = true;
+    if (m.socket) m.socket.send({event: 'kill'});
+    if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}
+  }
+
   levelReader(level) {
     for (let i = this.b.length-1; i >= 0; i--) this.b[i].destroy();
     const key = {'B7': ['halfbarrier', Infinity], 'B6': ['barrel', 100], 'B5': ['void', Infinity], 'B4': ['barrier', Infinity], 'B3': ['gold', 300], 'B2': ['strong', 200], 'B1': ['weak', 100]};
