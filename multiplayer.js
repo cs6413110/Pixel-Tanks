@@ -402,7 +402,7 @@ class TDM extends Multiplayer {
       }
     });
     if (allies === 0) {
-      const winner = Engine.getTeam(m.team);
+      const winner = Engine.getTeam(t.team) === 'BLUE' ? 'RED' : 'BLUE';
       this.wins[winner]++;
       if (this.wins[winner] === 3) {
         this.global = winner+' Wins!';
