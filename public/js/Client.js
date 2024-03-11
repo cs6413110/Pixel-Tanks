@@ -397,7 +397,7 @@ class Client {
     GUI.drawText(this.canRespawn ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
     GUI.drawText('', 0, 0, 30, '#ffffff', 0);
     try {
-    for (let i = Math.ceil(this.chatScroll/30), l = this.hostupdate.logs.length-i; i < this.showChat ? Math.min(26, l) : Math.min(3, l); i++) {
+    for (let i = Math.ceil(this.chatScroll/30), l = this.hostupdate.logs.length-i; i < (this.showChat ? Math.min(26, l) : Math.min(3, l)); i++) {
       const log = this.hostupdate.logs[i];
       GUI.draw.fillStyle = '#000000';
       GUI.draw.globalAlpha = .2;
@@ -405,7 +405,6 @@ class Client {
       GUI.draw.globalAlpha = 1;
       GUI.drawText(log.m, 0, this.chatScroll+800-i*30, 30, log.c, 0);
     }
-    } catch(e) {alert(e)}
 
     if (this.showChat) {
       GUI.draw.fillStyle = '#000000';
@@ -419,6 +418,7 @@ class Client {
       clearInterval(this.animationInterval);
       clearTimeout(this.animationTimeout);
     }
+    } catch(e) {alert(e)}
     
     if (this.debugMode) {// 0 = disabled, 1 = ping, 2 = fps, 3 = ops, 4 = ups
       const infoset = [null, this.pings, this.fps, this.ops, this.ups][this.debugMode];
