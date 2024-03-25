@@ -200,6 +200,7 @@ const images = {
     defeat: '/menus/defeat',
     crate: '/menus/crate',
     settings1: '/menus/settings1',
+    settings2: '/menus/settings2',
     inventory: '/menus/inventory',
     classTab: '/menus/classTab',
     itemTab: '/menus/itemTab',
