@@ -1,3 +1,4 @@
+let v = 5;
 class Client {
   static listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
   constructor(ip, multiplayer, gamemode) {
