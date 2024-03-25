@@ -332,7 +332,30 @@ class PixelTanks {
       settings1: {
         buttons: [
           [416, 20, 108, 108, 'main', true],
-          /*[232, 208, 488, 96, 'shop', true],*/
+          [232, 208, 488, 96, 'settings2', true],
+          //top 6
+          [165, 404, 176, 176, function() {PixelTanks.purchase(0)}, true],
+          [381, 404, 176, 176, function() {PixelTanks.purchase(1)}, true],
+          [597, 404, 176, 176, function() {PixelTanks.purchase(4)}, true],
+          [165, 620, 176, 176, function() {PixelTanks.purchase(2)}, true],
+          [381, 620, 176, 176, function() {PixelTanks.purchase(5)}, true],
+          [597, 620, 176, 176, function() {PixelTanks.purchase(3)}, true],
+          //bottom 6
+          [827, 404, 176, 176, function() {PixelTanks.purchase(0)}, true],
+          [1043, 404, 176, 176, function() {PixelTanks.purchase(1)}, true],
+          [1259, 404, 176, 176, function() {PixelTanks.purchase(4)}, true],
+          [827, 620, 176, 176, function() {PixelTanks.purchase(2)}, true],
+          [1043, 620, 176, 176, function() {PixelTanks.purchase(5)}, true],
+          [1259, 620, 176, 176, function() {PixelTanks.purchase(3)}, true],
+        ],
+        listeners: {},
+        cdraw: function() {
+        },
+      },
+      settings2: {
+        buttons: [
+          [416, 20, 108, 108, 'main', true],
+          [232, 208, 488, 96, 'settings1', true],
           //top 6
           [165, 404, 176, 176, function() {PixelTanks.purchase(0)}, true],
           [381, 404, 176, 176, function() {PixelTanks.purchase(1)}, true],
