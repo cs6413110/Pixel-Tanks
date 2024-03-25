@@ -708,7 +708,7 @@ const Commands = {
     fs.writeFileSync('log.txt', '');
   }],
   getlogs: [Object, 2, 2, function(data) {
-    const logs = fs.readFileSync('log.txt').toString().split('\n').slice(1), t = servers[this.room].pt.find(t => t.username === this.username);
+    const logs = fs.readFileSync('log.txt').toString().split('\n').slice(1).reverse(), t = servers[this.room].pt.find(t => t.username === this.username);
     for (let i = 0; i < Math.min(logs.length, Number(data[1])); i++) t.privateLogs.push({m: logs[i], c: '#A9A9A9'});
   }],
   announce: [Object, 3, -1, function(data) {
