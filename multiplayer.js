@@ -58,8 +58,10 @@ const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
   return await response.text() === 'true';
 }, clean = msg => {
+  console.log(msg);
   const output = [];
-  for (const word of msg.split(' ')) for (const badword of Storage.filter) output.push(word.toLowerCase().includes(badword) ? '@#*%!' : word)
+  for (const word of msg.split(' ')) for (const badword of Storage.filter) output.push(word.toLowerCase().includes(badword) ? '@#*%!' : word);
+  console.log(output);
   return output.join(' ');
 }
 const deathMessages = [
