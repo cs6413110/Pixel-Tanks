@@ -648,17 +648,19 @@ class Client {
       this.dy = {o: this.tank.y, t: Date.now(), a: k === 87 ? -1 : 1, b: false};
       this.b = {o: this.tank.baseFrame, t: Date.now()};
     }
-    for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds.items[i]) this.useItem(PixelTanks.userData.items[i], i);
-    if (k === 13 && this.socket) this.showChat = true;
+    for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i}`]) this.useItem(PixelTanks.userData.items[i], i);
+    if (k === PixelTanks.userData.keybinds.chat && this.socket) this.showChat = true;
     if (k === 9) {
       this.fireType = this.fireType < 2 ? 2 : 1;
       clearInterval(this.fireInterval);
-    } else if (k === 82 && (this.canGrapple || this.hacks)) {
+    }
+    if (k === PixelTanks.userData.keybinds.grapple && (this.canGrapple || this.hacks)) {
       this.fire('grapple');
       this.canGrapple = false;
       this.timers.grapple = new Date();
       setTimeout(() => {this.canGrapple = true}, 5000);
-    } else if (k === 81) {
+    }
+    if (k === PixelTanks.userData.keybinds.toolkit) {
       if (this.halfSpeed || this.canToolkit || this.hacks) {
         this.tank.use.push('toolkit');
         this.halfSpeed = !this.halfSpeed;
@@ -674,11 +676,14 @@ class Client {
         this.timers.toolkit = new Date('Nov 28 2006').getTime();
         this.canToolkit = true;
       }
-    } else if (k === 70) {
+    }
+    if (k === 70) {
       if (this.canRespawn) {
         this.canRespawn = false;
         return this.tank.use.push('respawn');
       }
+    }
+    if (k === PixelTanks.userData.keybinds.class) {
       if ((!this.canClass && PixelTanks.userData.class !== 'stealth') && !this.hacks) return;
       this.canClass = false;
       const c = PixelTanks.userData.class;
@@ -727,21 +732,23 @@ class Client {
         this.timers.class = {time: Date.now(), cooldown: 10000};
       }
       setTimeout(() => {this.canClass = true}, this.timers.class.cooldown);
-    } else if (k === 27) {
+    }
+    if (k === 27) {
       this.paused = !this.paused;
       if (this.paused) {
         Menus.menus.pause.addListeners();
       } else {
         Menus.removeListeners();
       }
-    } else if (k === 18) {
+    }
+    if (k === 18) {
       this.debugMode++;
       if (this.debugMode >= 5) this.debugMode = 0; 
     }
   }
 
   keyLoop(e) {
-    if (e.keyCode === 16) {
+    if (e.keyCode === PixelTanks.userData.keybinds.boost) {
       if (this.canBoost) {
         this.speed = 16;
         this.canBoost = false;
