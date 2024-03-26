@@ -238,6 +238,8 @@ const images = {
     text_: { frames: 37, speed: 50 },
     detonate: '/animations/detonate',
     detonate_: { frames: 28, speed: 20 },
+    weakbreak: '/animations/weakbreak',
+    weakbreak_: { frames: 37, speed: 10 },
     explosion: '/animations/explosion',
     healexplosion: '/animations/healexplosion',
   },
