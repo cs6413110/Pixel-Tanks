@@ -60,7 +60,7 @@ const auth = async(username, token) => {
 }, clean = msg => {
   console.log(msg);
   const output = [];
-  for (const word of msg.split(' ')) for (const badword of Storage.filter) output.push(word.toLowerCase().includes(badword) ? '@#*%!' : word);
+  for (const word of msg.split(' ')) output.push(Storage.filter.some(badword => word.toLowerCase().includes(badword))) ? '@#*%!' : word); 
   console.log(output);
   return output.join(' ');
 }
