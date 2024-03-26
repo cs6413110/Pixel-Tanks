@@ -333,23 +333,25 @@ class PixelTanks {
         buttons: [
           [416, 20, 108, 108, 'main', true],
           [880, 208, 488, 96, 'settings2', true],
-          //top 6
-          [165, 404, 176, 176, function() {PixelTanks.purchase(0)}, true],
-          [381, 404, 176, 176, function() {PixelTanks.purchase(1)}, true],
-          [597, 404, 176, 176, function() {PixelTanks.purchase(4)}, true],
-          [165, 620, 176, 176, function() {PixelTanks.purchase(2)}, true],
-          [381, 620, 176, 176, function() {PixelTanks.purchase(5)}, true],
-          [597, 620, 176, 176, function() {PixelTanks.purchase(3)}, true],
-          //bottom 6
-          [827, 404, 176, 176, function() {PixelTanks.purchase(0)}, true],
-          [1043, 404, 176, 176, function() {PixelTanks.purchase(1)}, true],
-          [1259, 404, 176, 176, function() {PixelTanks.purchase(4)}, true],
-          [827, 620, 176, 176, function() {PixelTanks.purchase(2)}, true],
-          [1043, 620, 176, 176, function() {PixelTanks.purchase(5)}, true],
-          [1259, 620, 176, 176, function() {PixelTanks.purchase(3)}, true],
         ],
-        listeners: {},
+        listeners: {
+          mousedown: function(e) {
+            const key = {item1: [165, 404], item2: [381, 404], item3: [597, 404], item4: [827, 404], toolkit: [1043, 404], grapple: [1259, 404], boost: [165, 620], class: [381, 620], fire: [597, 620], powermissle: [827, 620], chat: [1043, 620], pause: [1259, 620]};
+            for (const p in key) if (x > key[p][0] && x < key[p][0]+176 && y > key[p][1] && y < key[p][1]+176) return Menus.menus.settings1.selected = p;
+          },
+          keydown: function(e) {
+            PixelTanks.userData.keybinds[Menus.menus.settings1.selected] = e.keyCode;
+          }
+        },
         cdraw: function() {
+          // draw selector
+          const key = {item1: [165, 404], item2: [381, 404], item3: [597, 404], item4: [827, 404], toolkit: [1043, 404], grapple: [1259, 404], boost: [165, 620], class: [381, 620], fire: [597, 620], powermissle: [827, 620], chat: [1043, 620], pause: [1259, 620]};
+          GUI.draw.fillStyle = '#A9A9A9'; // change selection color later?
+          GUI.draw.lineWidth = 30; // border thickness
+          for (const p in key) {
+            if (Menus.menus.settings1.selected === p) GUI.draw.strokeRect(key[p][0], key[p][1], 176, 176);
+            GUI.drawText(PixelTanks.userData.keybinds[p], key[p][0]+88, key[p][1]+88, 50, '#ffffff', .5);
+          }
         },
       },
       settings2: {
