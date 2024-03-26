@@ -511,6 +511,7 @@ class Client {
     this.key[e.keyCode] = false;
     if (e.keyCode == 65 || e.keyCode == 68) this.left = null;
     if (e.keyCode == 87 || e.keyCode == 83) this.up = null;
+    if (e.keyCode === PixelTanks.userData.keybinds.fire) clearInterval(this.fireInterval);
     if (this.dx && (e.keyCode === 65 && this.dx.a < 0 || e.keyCode === 68 && this.dx.a > 0)) this.dx = false;
     if (this.dy && (e.keyCode === 87 && this.dy.a < 0 || e.keyCode === 83 && this.dy.a > 0)) this.dy = false;
     if ([87, 65, 68, 83].includes(e.keyCode)) {
@@ -654,6 +655,15 @@ class Client {
       this.fireType = this.fireType < 2 ? 2 : 1;
       clearInterval(this.fireInterval);
     }
+    if (k === PixelTanks.userData.keybinds.fire) {
+      this.fire(0);
+      clearInterval(this.fireInterval);
+      this.fireInterval = setInterval(() => {
+        this.canFire = true;
+        this.fire(e.button);
+      }, this.buff ? this.fireType === 1 ? 133 : 400 : this.fireType === 1 ? 200 : 600);
+    }
+    if (k === PixelTanks.userData.keybinds.powermissle) this.fire(2);
     if (k === PixelTanks.userData.keybinds.grapple && (this.canGrapple || this.hacks)) {
       this.fire('grapple');
       this.canGrapple = false;
