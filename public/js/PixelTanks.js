@@ -770,6 +770,14 @@ class PixelTanks {
             items: ['duck_tape', 'weak', 'bomb', 'flashbang'],
             keybinds: {
               items: [49, 50, 51, 52],
+              toolkit: 81,
+              grapple: 82,
+              boost: 16,
+              class: 70,
+              fire: 32,
+              powermissle: 86,
+              chat: 13,
+              pause: 27,
             },
           };
         }
