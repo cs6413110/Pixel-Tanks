@@ -337,14 +337,14 @@ class PixelTanks {
         listeners: {
           mousedown: function(e) {
             const key = {item1: [165, 404], item2: [381, 404], item3: [597, 404], item4: [827, 404], toolkit: [1043, 404], grapple: [1259, 404], boost: [165, 620], class: [381, 620], fire: [597, 620], powermissle: [827, 620], chat: [1043, 620], pause: [1259, 620]};
-            for (const p in key) if (x > key[p][0] && x < key[p][0]+176 && y > key[p][1] && y < key[p][1]+176) return Menus.menus.settings1.selected = p;
+            for (const p in key) if (Menus.x > key[p][0] && Menus.x < key[p][0]+176 && Menus.y > key[p][1] && Menus.y < key[p][1]+176) return Menus.menus.settings1.selected = p;
           },
           keydown: function(e) {
             PixelTanks.userData.keybinds[Menus.menus.settings1.selected] = e.keyCode;
+            PixelTanks.save();
           }
         },
         cdraw: function() {
-          // draw selector
           const key = {item1: [165, 404], item2: [381, 404], item3: [597, 404], item4: [827, 404], toolkit: [1043, 404], grapple: [1259, 404], boost: [165, 620], class: [381, 620], fire: [597, 620], powermissle: [827, 620], chat: [1043, 620], pause: [1259, 620]};
           GUI.draw.fillStyle = '#A9A9A9'; // change selection color later?
           GUI.draw.lineWidth = 30; // border thickness
