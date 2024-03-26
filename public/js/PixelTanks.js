@@ -332,7 +332,7 @@ class PixelTanks {
       settings1: {
         buttons: [
           [416, 20, 108, 108, 'main', true],
-          [232, 208, 488, 96, 'settings2', true],
+          [880, 208, 488, 96, 'settings2', true],
           //top 6
           [165, 404, 176, 176, function() {PixelTanks.purchase(0)}, true],
           [381, 404, 176, 176, function() {PixelTanks.purchase(1)}, true],
