@@ -131,7 +131,7 @@ class Multiplayer extends Engine {
     for (const t of this.pt) {
       const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
       const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;      
-      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs.slice(t?.render.logs || 0).concat(t.privateLogs), global: this.global, tickspeed, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
+      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs.slice(t?.render.logs || 0).concat(t.privateLogs), global: this.global, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
       t.privateLogs = [];
       let send = message.logs.length > 0;
       for (const p of ['b', 'pt', 'ai', 's', 'd']) {
@@ -163,7 +163,6 @@ class Multiplayer extends Engine {
       render.logs = this.logs.length;
       message.logs = this.logs.slice(t.render?.logs || 0).concat(t.privateLogs);
       message.global = this.global;
-      message.tickspeed = tickspeed;
       t.privateLogs.length = 0;
       let send = message.logs.length > 0;
       for (let cy = sy; cy < ey; cy++) {
@@ -904,7 +903,7 @@ wss.on('connection', socket => {
       log(`${socket.username} ran command: ${data.data.join(' ')}`);
       f[3].bind(socket)(data.data);
     } else if (data.type === 'stats') {
-      let gamemodes = {FFA: [], DUELS: [], TDM: [], Defense: [], tickspeed, event: 'stats'};
+      let gamemodes = {FFA: [], DUELS: [], TDM: [], Defense: [], event: 'stats'};
       for (const id in servers) {
         gamemodes[servers[id].constructor.name][id] = [];
         for (const pt of servers[id].pt) {
