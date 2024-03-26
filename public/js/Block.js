@@ -37,7 +37,6 @@ class Block {
     this.t.length = 0;
   }
   destroy() {
-    this.playAnimation('weakbreak');
     for (const t of this.t) clearTimeout(t);
     clearTimeout(this.sd);
     this.host.b.splice(this.host.b.indexOf(this), 1);
