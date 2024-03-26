@@ -58,8 +58,9 @@ const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
   return await response.text() === 'true';
 }, clean = msg => {
-  for (const word of Storage.filter) msg = msg.replaceAll(word, '@#*%!');
-  return msg;
+  const output = [];
+  for (const word of msg.split(' ')) for (const badword of Storage.filter) output.push(word.toLowerCase().includes(badword) ? '@#*%!' : word)
+  return output.join(' ');
 }
 const deathMessages = [
   `{victim} was killed by {killer}`,
@@ -602,10 +603,10 @@ const Commands = {
     if (t) clearInterval(t.freezeInterval);
   }],
   filter: [Object, 3, 2, function(data) {
-    if (!Storage.filter.includes(data[1])) Storage.filter.push(data[1]);
+    if (!Storage.filter.includes(data[1].toLowerCase())) Storage.filter.push(data[1].toLowerCase());
   }],
   allow: [Object, 2, 2, function(data) {
-    if (Storage.filter.includes(data[1])) Storage.filter.splice(Storage.filter.indexOf(data[1]), 1);
+    if (Storage.filter.includes(data[1].toLowerCase())) Storage.filter.splice(Storage.filter.indexOf(data[1].toLowerCase()), 1);
   }],
   t: [Object, 4, -1, function(data) {
     if (Storage.mutes.includes(this.username)) return this.socket.send({status: 'error', message: 'You are muted!'}); 
