@@ -660,7 +660,7 @@ class Client {
       clearInterval(this.fireInterval);
       this.fireInterval = setInterval(() => {
         this.canFire = true;
-        this.fire(e.button);
+        this.fire(0);
       }, this.buff ? this.fireType === 1 ? 133 : 400 : this.fireType === 1 ? 200 : 600);
     }
     if (k === PixelTanks.userData.keybinds.powermissle) this.fire(2);
