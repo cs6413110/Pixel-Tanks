@@ -648,7 +648,7 @@ class Client {
       this.dy = {o: this.tank.y, t: Date.now(), a: k === 87 ? -1 : 1, b: false};
       this.b = {o: this.tank.baseFrame, t: Date.now()};
     }
-    for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i}`]) this.useItem(PixelTanks.userData.items[i], i);
+    for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i+1}`]) this.useItem(PixelTanks.userData.items[i], i);
     if (k === PixelTanks.userData.keybinds.chat && this.socket) this.showChat = true;
     if (k === 9) {
       this.fireType = this.fireType < 2 ? 2 : 1;
