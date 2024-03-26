@@ -104,8 +104,6 @@ const deathMessages = [
   `How embarrassing...`,
 ];
 
-let tickspeed = 'N/A';
-
 class Multiplayer extends Engine {
   constructor(levels) {
     super(levels);
@@ -194,6 +192,19 @@ class Multiplayer extends Engine {
       if (send) t.socket.send(message);
       message.release();
     }
+  }
+
+  eventSend() {
+    for (const update of this.updates) {
+      if (Engine.collision()) {
+      }
+    }
+    this.updates.release();
+  }
+
+  updateEntity(id, x, y, w, h, property, value) {
+    for (const update of this.updates) if (update.id === id) return update[property] = value;
+    this.updates.push(Object.defineProperty({id, x, y, w, h}, property, {value}));
   }
 
   disconnect(socket, code, reason) {
