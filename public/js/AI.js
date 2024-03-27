@@ -29,7 +29,6 @@ class AI {
     if (Math.random() < (rank/20)) this.canClass = true;
     this.items = [];
     if (this.role !== 0) this.giveAbilities();
-    if (this.canClass) this.invis = this.class === 'stealth';
     const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
     if (summoner) {
       this.cosmetic_hat = summoner.cosmetic_hat;
@@ -71,6 +70,9 @@ class AI {
       if (this.class === 'tactical') {
         this.fireCalc(this.target.x, this.target.y, 'megamissle');
         cooldown = 25000;
+      } else if (this.class === 'stealth') {
+        this.host.useAbility(this, 'invis');
+        cooldown = 40000;
       } else if (this.class === 'builder') {
         this.host.useAbility(this, 'turret');
         cooldown = 20000;
