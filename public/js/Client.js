@@ -641,12 +641,6 @@ class Client {
 
   keyStart(e) {
     if (this.paused && e.keyCode !== 27) return;
-    if (k === 70) {
-      if (this.canRespawn) {
-        this.canRespawn = false;
-        return this.tank.use.push('respawn');
-      }
-    }
     const k = e.keyCode;
     if ([65, 68].includes(k)) {
       this.dx = {o: this.tank.x, t: Date.now(), a: k === 65 ? -1 : 1, b: false};
@@ -691,6 +685,12 @@ class Client {
       if (!this.halfSpeed && Date.now()-this.timers.toolkit < 7500) {
         this.timers.toolkit = new Date('Nov 28 2006').getTime();
         this.canToolkit = true;
+      }
+    }
+    if (k === 70) {
+      if (this.canRespawn) {
+        this.canRespawn = false;
+        return this.tank.use.push('respawn');
       }
     }
     if (k === PixelTanks.userData.keybinds.class) {
