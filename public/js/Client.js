@@ -720,7 +720,7 @@ class Client {
         }
       } else if (c === 'tactical') {
         for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'megamissle', r: this.tank.r+90+i});//april fools
-        this.timers.class = {time: Date.now(), cooldown: 25000};
+        this.timers.class = {time: Date.now(), cooldown: 15000};//april fools
       } else if (c === 'builder') {
         this.tank.use.push('turret');
         this.timers.class = {time: Date.now(), cooldown: 0}//april fools
