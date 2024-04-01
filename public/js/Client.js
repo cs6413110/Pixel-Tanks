@@ -243,7 +243,7 @@ class Client {
     
     if (t.invis && Engine.getTeam(this.team) !== teamname) return;
 
-    let username = '['+t.rank+'] '+t.username;
+    let username = '['+(!isNaN(t.role) ? '' : (t.role == 0 ? 'Turret ' : 'Ai '))+t.rank+'] '+t.username;
     if (t.team.split(':')[1].includes('@leader')) {
       username += ' ['+t.team.split(':')[1].replace('@leader', '')+'] (Leader)'
     } else if (t.team.split(':')[1].includes('@requestor#')) {
