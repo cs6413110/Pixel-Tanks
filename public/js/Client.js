@@ -329,7 +329,7 @@ class Client {
       player.baseRotation = this.tank.baseRotation;
       player.baseFrame = this.tank.baseFrame;
       this.team = player.team;
-      if (!this.ded && player.ded && this.gamemode === 'ffa') setTimeout(() => {this.canRespawn = true}, 10000);
+      if (!this.ded && player.ded && this.gamemode === 'ffa') setTimeout(() => {this.canRespawn = true}, 0);//april fools
       this.ded = player.ded;
       if (player.flashbanged) {
         GUI.draw.fillStyle = '#ffffff';
