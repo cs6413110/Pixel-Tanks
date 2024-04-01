@@ -1,15 +1,17 @@
 class AI {
   constructor(x, y, role, rank, team, host) {
     this.raw = {};
-    ['role', 'rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
+    ['role', 'rank', 'username', 'displayName', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
       Object.defineProperty(this, p, {
         get: () => this.raw[p],
         set: v => this.setValue(p, v),
         configurable: true,
       });
     });
+    const displayNames = ['Bob', 'Jill', 'Bread', 'Billy', 'John']
     this.id = Math.random();
     this.username = 'Bot'+this.id;
+    this.displayName = displayNames[Math.floor(Math.random()*displayNames.length)]
     this.role = role;
     this.x = x;
     this.y = y;
