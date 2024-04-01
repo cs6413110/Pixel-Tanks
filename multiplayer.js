@@ -56,7 +56,7 @@ const hasAccess = (username, clearanceLevel) => { // 1 => full auth only, 2 => a
 }
 const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
-  return await response.text() === 'true';
+  return (await response.text()) === 'true';
 }, clean = msg => msg.split(' ').reduce((a, word) => a.concat([Storage.filter.some(badword => word.toLowerCase().includes(badword)) ? '@#*%!' : word]), []).join(' ');
 const deathMessages = [
   `{victim} was killed by {killer}`,
