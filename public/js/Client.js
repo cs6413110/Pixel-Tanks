@@ -719,7 +719,7 @@ class Client {
           this.timers.class = {time: Date.now(), cooldown: .5*(Date.now()-this.timers.class.time)};
         }
       } else if (c === 'tactical') {
-        for (let i = -30; i < 30; i += 5) this.fire({type: 'megamissile', r: this.tank.r+90+i});//april fools
+        for (let i = -30; i < 30; i += 5) this.fire('megamissile');//april fools
         this.timers.class = {time: Date.now(), cooldown: 25000};
       } else if (c === 'builder') {
         this.tank.use.push('turret');
@@ -736,7 +736,7 @@ class Client {
         this.timers.class = {time: Date.now(), cooldown: 12000};
       } else if (c === 'medic') {
         for (let i = -30; i < 30; i += 5) {
-          this.fire({type: 'healmissile', r: this.tank.r+90+i});
+          this.fire('healmissile');
           this.tank.use.push('healmissile');
         }//april fools
         this.timers.class = {time: Date.now(), cooldown: 5000};//april fools
