@@ -723,7 +723,7 @@ class Client {
         this.timers.class = {time: Date.now(), cooldown: 15000};//april fools
       } else if (c === 'builder') {
         this.tank.use.push('turret');
-        this.timers.class = {time: Date.now(), cooldown: 0}//april fools
+        this.timers.class = {time: Date.now(), cooldown: 1000}//april fools
       } else if (c === 'warrior') {
         this.tank.use.push('bash');
         clearTimeout(this.booster);
