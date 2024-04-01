@@ -204,7 +204,7 @@ class Client {
     if (t.cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic_body], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
     if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
     if (t.cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic_hat], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
-    if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || (this.ded && !p && !t.ded) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
+    if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || (this.ded && !p && !t.ded) || (PixelTanks.userData.class === '' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
       GUI.draw.fillStyle = '#FF0000';
@@ -719,7 +719,7 @@ class Client {
           this.timers.class = {time: Date.now(), cooldown: .5*(Date.now()-this.timers.class.time)};
         }
       } else if (c === 'tactical') {
-        this.fire('megamissile');//april fools
+        for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'megamissle', r: this.tank.r+90+i});//april fools
         this.timers.class = {time: Date.now(), cooldown: 25000};
       } else if (c === 'builder') {
         this.tank.use.push('turret');
@@ -736,7 +736,7 @@ class Client {
         this.timers.class = {time: Date.now(), cooldown: 12000};
       } else if (c === 'medic') {
         for (let i = -30; i < 30; i += 5) {
-          this.fire('healmissile');
+          this.tank.fire.push({type: 'healmissle', r: this.tank.r+90+i});
           this.tank.use.push('healmissile');
         }//april fools
         this.timers.class = {time: Date.now(), cooldown: 5000};//april fools
