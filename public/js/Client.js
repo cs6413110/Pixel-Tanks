@@ -204,7 +204,7 @@ class Client {
     if (t.cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic_body], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
     if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
     if (t.cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic_hat], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
-    if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || (this.ded && !p && !t.ded) || (PixelTanks.userData.class === '' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
+    if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || (this.ded && !p && !t.ded) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
       GUI.draw.fillStyle = '#FF0000';
@@ -329,7 +329,7 @@ class Client {
       player.baseRotation = this.tank.baseRotation;
       player.baseFrame = this.tank.baseFrame;
       this.team = player.team;
-      if (!this.ded && player.ded && this.gamemode === 'ffa') setTimeout(() => {this.canRespawn = true}, 0);//april fools
+      if (!this.ded && player.ded && this.gamemode === 'ffa') setTimeout(() => {this.canRespawn = true}, 10000);
       this.ded = player.ded;
       if (player.flashbanged) {
         GUI.draw.fillStyle = '#ffffff';
@@ -710,7 +710,6 @@ class Client {
             }, 15000);
           }, 30000);
         } else if (this.tank.invis) {
-          this.fire('megamissle');//april fools
           this.tank.invis = false;
           clearTimeout(this.invis);
           setTimeout(() => {
@@ -719,11 +718,11 @@ class Client {
           this.timers.class = {time: Date.now(), cooldown: .5*(Date.now()-this.timers.class.time)};
         }
       } else if (c === 'tactical') {
-        for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'megamissle', r: this.tank.r+90+i});//april fools
-        this.timers.class = {time: Date.now(), cooldown: 15000};//april fools
+        this.fire('megamissle');
+        this.timers.class = {time: Date.now(), cooldown: 25000};
       } else if (c === 'builder') {
         this.tank.use.push('turret');
-        this.timers.class = {time: Date.now(), cooldown: 1000}//april fools
+        this.timers.class = {time: Date.now(), cooldown: 20000}
       } else if (c === 'warrior') {
         this.tank.use.push('bash');
         clearTimeout(this.booster);
@@ -732,17 +731,15 @@ class Client {
         this.booster = setTimeout(() => {
           this.speed = 4;
           this.tank.immune = false;
-        }, 5000);//april fools
+        }, 1000);
         this.timers.class = {time: Date.now(), cooldown: 12000};
       } else if (c === 'medic') {
-        for (let i = -30; i < 30; i += 5) {
-          this.tank.fire.push({type: 'healmissle', r: this.tank.r+90+i});
-          this.tank.use.push('healmissile');
-        }//april fools
-        this.timers.class = {time: Date.now(), cooldown: 5000};//april fools
+        this.fire('healmissle');
+        this.tank.use.push('healmissile');
+        this.timers.class = {time: Date.now(), cooldown: 25000};//stop it ur wasting time :/
       } else if (c === 'fire') {
         for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+90+i});
-        this.timers.class = {time: Date.now(), cooldown: 0};//april fools
+        this.timers.class = {time: Date.now(), cooldown: 10000};
       }
       setTimeout(() => {this.canClass = true}, this.timers.class.cooldown);
     }
