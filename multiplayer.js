@@ -56,7 +56,7 @@ const hasAccess = (username, clearanceLevel) => { // 1 => full auth only, 2 => a
 }
 const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
-  const text === await response.text();
+  const text = await response.text();
   console.log(text);
   return text === 'true';
 }, clean = msg => msg.split(' ').reduce((a, word) => a.concat([Storage.filter.some(badword => word.toLowerCase().includes(badword)) ? '@#*%!' : word]), []).join(' ');
