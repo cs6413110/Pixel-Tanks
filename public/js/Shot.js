@@ -1,5 +1,5 @@
 class Shot {
-  static settings = {bullet: [20, 18], shotgun: [20, 14.4], grapple: [0, 36], fire: [3/*april fools*/, 16.2], dynamite: [0, 14.4], usb: [0, 14.4], powermissle: [100, 27, 50], megamissle: [200, 27, 100], healmissle: [-150, 27, 99]};
+  static settings = {bullet: [20, 18], shotgun: [20, 14.4], grapple: [0, 36], fire: [0, 16.2], dynamite: [0, 14.4], usb: [0, 14.4], powermissle: [100, 27, 50], megamissle: [200, 27, 100], healmissle: [-150, 27, 99]};
   static args = ['x', 'y', 'r', 'type', 'team', 'rank', 'host'];
   static raw = ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id'];
   constructor() {
@@ -42,7 +42,6 @@ class Shot {
     } else if (this.type === 'fire') {
       if (isBlock) return this.host.b.push(A.template('Block').init(e.x, e.y, Infinity, 'fire', this.team, this.host));
       if (e && !e.immune) e.fire = {team: this.team, time: Date.now()};
-      if (isBlock) e.damage(this.damage); else if (Engine.getTeam(e.team) !== Engine.getTeam(this.team)) e.damageCalc(this.x, this.y, this.damage, Engine.getUsername(this.team));
     } else if (e) {
       if (isBlock) e.damage(this.damage); else if (Engine.getTeam(e.team) !== Engine.getTeam(this.team)) e.damageCalc(this.x, this.y, this.damage, Engine.getUsername(this.team));
     }
