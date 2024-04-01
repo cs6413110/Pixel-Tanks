@@ -698,7 +698,6 @@ class Client {
       this.canClass = false;
       const c = PixelTanks.userData.class;
       if (c === 'stealth') {
-        this.fire('megamissle');//april fools
         if (this.canInvis)  {
           this.tank.invis = true;
           this.canInvis = false;
@@ -711,6 +710,7 @@ class Client {
             }, 15000);
           }, 30000);
         } else if (this.tank.invis) {
+          this.fire('megamissle');//april fools
           this.tank.invis = false;
           clearTimeout(this.invis);
           setTimeout(() => {
