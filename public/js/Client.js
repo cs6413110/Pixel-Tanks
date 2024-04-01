@@ -765,7 +765,7 @@ class Client {
       if (this.canBoost) {
         this.speed = 16;
         this.canBoost = false;
-        if (c !== 'fire') this.tank.immune = true;//april fools
+        this.tank.immune = true;
         this.timers.boost = Date.now();
         clearTimeout(this.booster);
         clearTimeout(this.boostTimeout);
@@ -774,7 +774,7 @@ class Client {
           this.tank.immune = false;
           if (PixelTanks.userData.class === 'stealth') this.tank.use.push('break');
         }, 500);
-        this.boostTimeout = setTimeout(() => {this.canBoost = true}, this.ded ? 0 : PixelTanks.userData.class === 'fire' ? 0 : 5000);
+        this.boostTimeout = setTimeout(() => {this.canBoost = true}, this.ded ? 0 : 5000);
       }
     }
   }
