@@ -719,7 +719,7 @@ class Client {
           this.timers.class = {time: Date.now(), cooldown: .5*(Date.now()-this.timers.class.time)};
         }
       } else if (c === 'tactical') {
-        for (let i = -30; i < 30; i += 5) this.fire('megamissile');//april fools
+        this.fire('megamissile');//april fools
         this.timers.class = {time: Date.now(), cooldown: 25000};
       } else if (c === 'builder') {
         this.tank.use.push('turret');
