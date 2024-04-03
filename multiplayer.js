@@ -104,6 +104,7 @@ const deathMessages = [
   `Must've been your keyboard`,
   `TIP: Try Using a mouse next time`,
   `How embarrassing...`,
+  `TIP: Do better? idk I'm not paid enough for this...`,
 ];
 
 class Multiplayer extends Engine {
