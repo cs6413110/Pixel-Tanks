@@ -1,12 +1,12 @@
 class Shot {
   static settings = {bullet: [20, 18], shotgun: [20, 14.4], grapple: [0, 36], fire: [0, 16.2], dynamite: [0, 14.4], usb: [0, 14.4], powermissle: [100, 27, 50], megamissle: [200, 27, 100], healmissle: [-150, 27, 99]};
-  static args = ['x', 'y', 'r', 'type', 'team', 'rank', 'host'];
+  static args = ['x', 'y', 'd', 'r', 'type', 'team', 'rank', 'host'];
   static raw = ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id'];
   constructor() {
     this.cells = new Set();
     for (const p of Shot.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
-  init(x, y, r, type, team, rank, host) {
+  init(x, y, d, r, type, team, rank, host) {
     this.raw = {};
     for (const i in Shot.args) this[Shot.args[i]] = arguments[i];
     this.e = Date.now();
@@ -14,8 +14,8 @@ class Shot {
     this.md = this.damage = Shot.settings[this.type][0]*(rank*10+300)/500;
     this.xm = Math.cos(Math.PI*r/180)*Shot.settings[this.type][1];
     this.ym = Math.sin(Math.PI*r/180)*Shot.settings[this.type][1];
-    this.x = this.sx = x+70*Math.cos(Math.PI*r/180);
-    this.y = this.sy = y+70*Math.sin(Math.PI*r/180);
+    this.x = this.sx = x+d*Math.cos(Math.PI*r/180);
+    this.y = this.sy = y+d*Math.sin(Math.PI*r/180);
     for (let x = Math.max(0, Math.min(29, Math.floor(this.x/100))); x <= Math.max(0, Math.min(29, Math.floor((this.x+10)/100))); x++) {
       for (let y = Math.max(0, Math.min(29, Math.floor(this.y/100))); y <= Math.max(0, Math.min(29, Math.floor((this.y+10)/100))); y++) {
         host.cells[x][y].add(this);
