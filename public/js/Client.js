@@ -531,7 +531,7 @@ class Client {
     this.fireInterval = setInterval(() => {
       this.canFire = true;
       this.fire(e.button);
-    }, this.buff ? this.fireType === 1 ? 133 : 400 : this.fireType === 1 ? 200 : 600);
+    }, this.fireType === 1 ? 200 : 600);
   }
 
   mouseup() {
