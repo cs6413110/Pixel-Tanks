@@ -329,7 +329,7 @@ class Client {
       player.baseRotation = this.tank.baseRotation;
       player.baseFrame = this.tank.baseFrame;
       this.team = player.team;
-      if (!this.ded && player.ded && this.gamemode === 'ffa') setTimeout(() => {this.canRespawn = true}, 10000);
+      if (!this.ded && player.ded && this.gamemode === 'ffa') this.dedTime = Date.now();
       this.ded = player.ded;
       if (player.flashbanged) {
         GUI.draw.fillStyle = '#ffffff';
@@ -394,7 +394,7 @@ class Client {
     }
     GUI.draw.globalAlpha = 1;
     GUI.draw.fillRect(308, 952+Math.min((Date.now()-this.timers.class.time)/this.timers.class.cooldown, 1)*48, 48, 48);
-    GUI.drawText(this.canRespawn ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
+    GUI.drawText(this.dedTime < Date.now()-10000 ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
     GUI.drawText('', 0, 0, 30, '#ffffff', 0);
     try {
     for (let i = Math.ceil(this.chatScroll/30), l = this.hostupdate.logs.length-i, v = i; i < (this.showChat ? v+Math.min(26, l) : Math.min(3, l)); i++) {
@@ -688,8 +688,8 @@ class Client {
       }
     }
     if (k === 70) {
-      if (this.canRespawn) {
-        this.canRespawn = false;
+      if (this.dedTime < Date.now()-10000) {
+        this.dedTime = undefined;
         return this.tank.use.push('respawn');
       }
     }
