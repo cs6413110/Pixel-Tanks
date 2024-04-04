@@ -759,7 +759,7 @@ class PixelTanks {
               0, // crates
               1, // level
               0, // xp
-              50, // rank
+              20, // rank
             ],
             classes: [
               false, // tactical
