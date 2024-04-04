@@ -757,7 +757,7 @@ class PixelTanks {
             stats: [
               1000000, // coins
               0, // crates
-              1, // level
+              50, // level
               0, // xp
               20, // rank
             ],
