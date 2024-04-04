@@ -71,18 +71,17 @@ class Singleplayer extends Engine {
       // .5 => center text(0 = start left, 1 = start right)
       // delete all my comments when u add ur cringe
     }
-    if (this.ai.length === 0) {
-      setTimeout(() => {
-        PixelTanks.user.player.implode();
-        Menus.menus.victory.stats = {kills: 'n/a', coins: 'n/a'};
-        Menus.trigger('victory');
-      }, 3000);
-      this.ontick = () => {}
-    }
   }
 
   ondeath(t, m) {
-    if (t.username !== PixelTanks.userData.username) return PixelTanks.user.player.killRewards();
+    if (t.username !== PixelTanks.userData.username) {
+      if (!this.ai.some(a => Engine.getTeam(a.team) !== Engine.getTeam(t.team))) setTimeout(() => {
+        PixelTanks.user.player.implode();
+        Menus.menus.victory.stats = {kills: 'n/a', coins: 'n/a'};
+        Menus.trigger('victory');
+      }, 3000)
+      return PixelTanks.user.player.killRewards();
+    }
     t.ded = true;
     setTimeout(() => {
       PixelTanks.user.player.implode();
