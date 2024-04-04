@@ -119,6 +119,9 @@ class Multiplayer extends Engine {
     t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
   }
 
+  chunkload(t, x, y) {
+  }
+
   add(socket, data) {
     data.socket = socket;
     log(`${socket.username} joined`);
