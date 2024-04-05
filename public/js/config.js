@@ -36,7 +36,6 @@ const images = {
   },
   cosmetics: {
     'lava': '/cosmetics/lava',
-    'shock': '/cosmetics/shock',
     'Antlers': '/cosmetics/Antlers',
     'static': '/cosmetics/static',
     'disguise': '/cosmetics/disguise',
@@ -65,7 +64,6 @@ const images = {
     'totem': '/cosmetics/totem',
     'venomeme': '/cosmetics/venomeme',
     'carnage': '/cosmetics/carnage',
-    'Venominator': '/cosmetics/Venominator',
     'brain': '/cosmetics/brain',
     'Hands': '/cosmetics/Hands',
     'silver': '/cosmetics/silver',
