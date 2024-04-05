@@ -621,7 +621,7 @@ const Commands = {
     if (Storage.filter.includes(data[1].toLowerCase())) Storage.filter.splice(Storage.filter.indexOf(data[1].toLowerCase()), 1);
   }],
   t: [Object, 4, -1, function(data) {
-    if (Storage.mutes.includes(this.username)) return this.socket.send({status: 'error', message: 'You are muted!'}); 
+    if (Storage.mutes.includes(this.username)) return this.send({status: 'error', message: 'You are muted!'}); 
     const team = Engine.getTeam(servers[this.room].pt.find(t => t.username === this.username).team), msg = {m: '[TEAM]['+this.username+'] '+clean(data.slice(1).join(' ')), c: '#FFFFFF'};
     for (const t of servers[this.room].pt) if (Engine.getTeam(t.team) === team) t.privateLogs.push(msg);
   }],
