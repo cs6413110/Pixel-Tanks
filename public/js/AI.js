@@ -45,7 +45,7 @@ class AI {
       host.cells[cx][cy].add(this);
       this.cells.add(cx+'x'+cy);
     }
-    this.lookInterval = setInterval(() => this.identify(), 500);
+    this.lookInterval = setInterval(() => this.identify(), 0);
   }
 
   giveAbilities() {
