@@ -36,6 +36,8 @@ const images = {
   },
   cosmetics: {
     'lava': '/cosmetics/lava',
+    'Stealthy': '/cosmetics/Stealthy',
+    'GalacticKnight': '/cosmetics/GalacticKnight',
     'Antlers': '/cosmetics/Antlers',
     'static': '/cosmetics/static',
     'disguise': '/cosmetics/disguise',
