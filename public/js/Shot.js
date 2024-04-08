@@ -92,7 +92,7 @@ class Shot {
   setValue(p, v) {
     this.updatedLast = Date.now(); // REMOVE THIS SOON
     this.raw[p] = v; // SOON UNNECCESSARY
-    this.host.updateEntity(this.id, this.x, this.y, 10, 10, p, v); // new method of update logging :)
+    //this.host.updateEntity(this.id, this.x, this.y, 10, 10, p, v); // new method of update logging :)
   }
   reset = () => this.cells.clear();
   destroy() {
