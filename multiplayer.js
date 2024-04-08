@@ -123,19 +123,17 @@ class Multiplayer extends Engine {
     const ocx = Math.floor(t.x/100)+.5, ocy = Math.floor(t.y/100)+.5, ncx = Math.floor(x/100)+.5, ncy = Math.floor(y/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
     const a = A.template('arr');
-    a.push([], [], [], [], [], []); // b, s, ai, pt, d, old
+    a.push([], []); // new, old
     for (let l = false, nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = Math.max(0, Math.min(29, nys)); y != Math.max(0, Math.min(29, nys+h*yda)); y += yda) {
       if (y === nys+yl) l = true;
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = Math.max(0, Math.min(29, nxs)); x != Math.max(0, Math.min(29, nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x += xda) {
-        for (const e of this.cells[x][y]) {
-          a[this.sendkeyValues.indexOf(this.sendkey[e.constructor.name])].push(e.raw);
-        }
+        for (const e of this.cells[x][y]) a[0].push(e.raw);
       }
     }
     for (let l = false, oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = Math.max(0, Math.min(29, oys)); y != Math.max(0, Math.min(29, oys-h*yda)); y -= yda) {
       if (y === oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = Math.max(0, Math.min(29, oxs)); x != Math.max(0, Math.min(29, oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x -= xda) {
-        for (const e of this.cells[x][y]) a[5].push(e.id);
+        for (const e of this.cells[x][y]) a[1].push(e.id);
       }
     }
     return a;
@@ -214,12 +212,15 @@ class Multiplayer extends Engine {
     }
   }
 
-  eventSend(t, add, del) { // optional add + del params for chunkloading per entity
+  eventSend(t, m) { // optional t, m params for chunkloading per player
+    // viewport = 21x15 -> 2100x1500
     for (const t of this.pt) {
       const message = A.template('message');
-      
-      for (const update of this.updates) {
-        if (Engine.collision()) {
+      // new message template
+      //{e: [], d: [id, id, id, id]};
+      for (const u of this.updates) {
+        if (Engine.collision(u[0], u[1], u[3], u[4], t.x+1010, t.y-710, 2100, 1500)) {
+          // type seperate here?
         }
       }
     }
@@ -228,7 +229,7 @@ class Multiplayer extends Engine {
 
   updateEntity(id, x, y, w, h, property, value) {
     for (const update of this.updates) if (update[0] === id) return update.push(property, value);
-    return this.updates.push(A.template('arr').push(id, x, y, w, h, property, value));
+    return this.updates.push(A.template('arr').push(x, y, w, h, id, property, value));
   }
 
   disconnect(socket, code, reason) {
