@@ -124,11 +124,12 @@ class Multiplayer extends Engine {
     const ocx = Math.floor(t.x/100)+.5, ocy = Math.floor(t.y/100)+.5, ncx = Math.floor(x/100)+.5, ncy = Math.floor(y/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
     const n = A.template('arr'), o = A.template('arr');
+    n.push([], [], [], [], []); // may be better data type for n
     for (let l = false, nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = nys; y != nys+h*yda; y += yda) {
       if (y === nys+yl) l = true;
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = nxs; x != nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda; x += xda) {
         for (const e of this.cells[x][y]) {
-          // load entity
+          n[this.sendkeyValues.indexOf(this.sendkey[entity.constructor.name])].push(entity.raw);
         }
       }
     }
@@ -140,26 +141,12 @@ class Multiplayer extends Engine {
     }
   }
 
-  loadCell(t, c) {
-    for (const e of c) {
-      
-    }
-  }
-
-  unloadCell(t, c) {
-    
-  }
-
   add(socket, data) {
     data.socket = socket;
     log(`${socket.username} joined`);
     this.logs.push({m: this.joinMsg(data.username), c: '#66FF00'});
     super.add(data);
   }
-
-  /*update(data) {
-    super.update(data);
-  }*/
 
   send() {
     for (const t of this.pt) {
