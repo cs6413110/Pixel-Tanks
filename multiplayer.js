@@ -226,17 +226,21 @@ class Multiplayer extends Engine {
     }
   }
 
-  eventSend() {
-    for (const update of this.updates) {
-      if (Engine.collision()) {
+  eventSend(t, add, del) { // optional add + del params for chunkloading per entity
+    for (const t of this.pt) {
+      const message = A.template('message');
+      
+      for (const update of this.updates) {
+        if (Engine.collision()) {
+        }
       }
     }
     this.updates.release();
   }
 
   updateEntity(id, x, y, w, h, property, value) {
-    for (const update of this.updates) if (update.id === id) return update[property] = value;
-    this.updates.push(Object.defineProperty({id, x, y, w, h}, property, {value}));
+    for (const update of this.updates) if (update[0] === id) return update.push(property, value);
+    return this.updates.push(A.template('arr').push(id, x, y, w, h, property, value));
   }
 
   disconnect(socket, code, reason) {
