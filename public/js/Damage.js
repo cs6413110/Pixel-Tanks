@@ -37,7 +37,7 @@ class Damage {
   setValue(p, v) {
     this.updatedLast = Date.now(); // replace
     this.raw[p] = v; // replace soon
-    this.host.updateEntity(this.id, this.x, this.y, this.w, this.h, p, v); // new bindings
+    //this.host.updateEntity(this.id, this.x, this.y, this.w, this.h, p, v); // new bindings
   }
   reset() {
     // loop through unnecessary and set to undefined? Or maybe it doesn't matter since it will be auto reset on recycle?
