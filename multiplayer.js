@@ -128,7 +128,7 @@ class Multiplayer extends Engine {
       if (y === nys+yl) l = true;
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = Math.max(0, Math.min(30, nxs)); x != Math.max(0, Math.min(30, nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x += xda) {
         for (const e of this.cells[x][y]) {
-          n[this.sendkeyValues.indexOf(this.sendkey[entity.constructor.name])].push(entity.raw);
+          a[this.sendkeyValues.indexOf(this.sendkey[entity.constructor.name])].push(entity.raw);
         }
       }
     }
