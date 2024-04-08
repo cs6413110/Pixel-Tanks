@@ -119,26 +119,26 @@ class Multiplayer extends Engine {
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
 
   chunkload(t, x, y) {
-    return;
     const w = 21, h = 15;
     const ocx = Math.floor(t.x/100)+.5, ocy = Math.floor(t.y/100)+.5, ncx = Math.floor(x/100)+.5, ncy = Math.floor(y/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
-    const n = A.template('arr'), o = A.template('arr');
-    n.push([], [], [], [], []); // may be better data type for n
-    for (let l = false, nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = nys; y != nys+h*yda; y += yda) {
+    const a = A.template('arr');
+    a.push([], [], [], [], [], []); // b, s, ai, pt, d, old
+    for (let l = false, nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = Math.max(0, Math.min(30, nys)); y != Math.max(0, Math.min(30, nys+h*yda)); y += yda) {
       if (y === nys+yl) l = true;
-      for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = nxs; x != nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda; x += xda) {
+      for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = Math.max(0, Math.min(30, nxs)); x != Math.max(0, Math.min(30, nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x += xda) {
         for (const e of this.cells[x][y]) {
           n[this.sendkeyValues.indexOf(this.sendkey[entity.constructor.name])].push(entity.raw);
         }
       }
     }
-    for (let l = false, oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = oys; y != oys-h*yda; y -= yda) {
+    for (let l = false, oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = Math.max(0, Math.min(30, oys)); y != Math.max(0, Math.min(30, oys-h*yda)); y -= yda) {
       if (y === oys-yl) l = true;
-      for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = oxs; x != oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda; x -= xda) {
-        for (const e of this.cells[x][y]) o.push(e.id);
+      for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = Math.max(0, Math.min(30, oxs)); x != Math.max(0, Math.min(30, oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x -= xda) {
+        for (const e of this.cells[x][y]) a[5].push(e.id);
       }
     }
+    return a;
   }
 
   add(socket, data) {
