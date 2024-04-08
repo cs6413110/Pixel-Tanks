@@ -1,6 +1,6 @@
 class Block {
   static args = ['x', 'y', 'hp', 'type', 'team', 'host'];
-  static raw = ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team'];
+  static raw = ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team', 'id'];
   constructor() {
     this.cells = new Set();
     this.t = []; // can be removed maybe?
