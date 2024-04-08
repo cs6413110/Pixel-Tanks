@@ -157,9 +157,9 @@ class Multiplayer extends Engine {
     super.add(data);
   }
 
-  update(data) {
+  /*update(data) {
     super.update(data);
-  }
+  }*/
 
   send() {
     for (const t of this.pt) {
