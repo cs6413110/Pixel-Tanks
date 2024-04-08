@@ -3,7 +3,7 @@ class Block {
   static raw = ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team', 'id'];
   constructor() {
     this.cells = new Set();
-    this.t = [];
+    this.t = []; // can be removed maybe?
     for (const p of Block.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
   init(x, y, hp, type, team, host) {
