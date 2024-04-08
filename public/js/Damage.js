@@ -1,6 +1,6 @@
 class Damage {
   static args = ['x', 'y', 'w', 'h', 'a', 'team', 'host'];
-  static raw = ['x', 'y', 'w', 'h', 'f']; // x,y,w,h don't change so maybe doesn't matter if raw(for new system only).
+  static raw = ['x', 'y', 'w', 'h', 'f', 'id'];
   constructor() {
     this.cells = new Set();
     for (const p of Damage.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
