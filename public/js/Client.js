@@ -495,20 +495,18 @@ class Client {
   }
 
   keydown(e) {
-    try {
+    if (e.preventDefault) e.preventDefault();
     if (e.ctrlKey || e.metaKey) return;
-    e.preventDefault();
     if (!this.key[e.keyCode]) {
       if (this.showChat) return this.chat(e);
       this.keyStart(e);
       this.keyLoop(e);
       this.key[e.keyCode] = setInterval(this.keyLoop.bind(this), 15, e);
     }
-    } catch(e) {alert(e)}
   }
 
   keyup(e) {
-    e.preventDefault();
+    if (e.preventDefault) e.preventDefault();
     clearInterval(this.key[e.keyCode]);
     this.key[e.keyCode] = false;
     if (e.keyCode == 65 || e.keyCode == 68) this.left = null;
