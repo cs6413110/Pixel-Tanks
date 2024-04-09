@@ -48,9 +48,9 @@ class Shot {
     return true;
   }
   score(e) {
-    if (e instanceof AI) return Engine.getTeam(e.team) === Engine.getTeam(this.team) || this.type === 'grapple' ? 4 : 2;
-    if (e instanceof Tank) return (this.type === 'grapple' ? 0 : 1)+(Engine.getTeam(e.team) === Engine.getTeam(this.team) ? 3 : 1);
-    if (e instanceof Block) return e.maxHp === Infinity ? 5 : 4+(e.hp/e.maxHp);
+    if (e instanceof Block) return e.maxHp === Infinity ? 1 : e.hp/e.maxHp;
+    if (e instanceof AI) return Engine.getTeam(e.team) === Engine.getTeam(this.team) || this.type === 'grapple' ? 5 : 2;
+    if (e instanceof Tank) return (this.type === 'grapple' ? 0 : 1)+(Engine.getTeam(e.team) === Engine.getTeam(this.team) ? 4 : 3);
   }
   collision() {
     for (const cell of this.cells) {
