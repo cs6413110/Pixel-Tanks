@@ -526,7 +526,7 @@ class Client {
   }
 
   mousedown(e) {
-    this.keydown(-(1+e.button));
+    this.keydown({keyCode: -(1+e.button)});
     this.fire(e.button);
     clearInterval(this.fireInterval);
     this.fireInterval = setInterval(() => {
@@ -536,7 +536,7 @@ class Client {
   }
 
   mouseup() {
-    this.keyup(-(1+e.button));
+    this.keyup({keyCode: -(1+e.button)});
     clearInterval(this.fireInterval);
   }
 
