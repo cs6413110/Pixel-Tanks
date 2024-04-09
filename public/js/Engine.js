@@ -100,6 +100,9 @@ class Engine {
     } else if (a === 'bash') {
       t.buff = true; // name fix
       setTimeout(() => { t.buff = false }, 1000);
+    } else if (a === 'invis') {
+      t.invis = true;
+      setTimeout(() => { t.invis = false }, 20000);
     } else if (a === 'shield') {
       t.shields = 100;
     } else if (a === 'reflector') {
