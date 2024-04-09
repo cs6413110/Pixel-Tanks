@@ -21,7 +21,8 @@ class AI {
     this.host = host;
     this.hp = rank * 10 + 300;
     this.maxHp = this.hp;
-    this.seeUser = this.target = this.fire = this.obstruction = this.bond = this.path = this.damage = false;
+    this.seeUser = this.target = this.obstruction = this.bond = this.path = this.damage = false;
+    this.fire = {time: 0, team: this.team};
     this.canFire = this.canPowermissle = this.canBoost = this.canBashed = true;
     if (Math.random() < (rank/20)) this.canItem0 = true;
     if (Math.random() < (rank/20)) this.canItem1 = true;
@@ -178,7 +179,7 @@ class AI {
       this.setValue('dedEffect', this.dedEffect); // REMOVE THIS TEMPORARY
     } No death effects for AI yet...*/
     if (this.pushback !== 0) this.pushback += 0.5;
-    if (this.fire && Engine.getTeam(this.fire.team) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire.team));
+    if (Date.now()-this.fire.time < 4000 && Engine.getTeam(this.fire.team) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire.team));
     if (this.damage) this.damage.y--;
     // if (this.grapple) this.grappleCalc(); No grapple for AI yet...
     if (this.reflect) {
