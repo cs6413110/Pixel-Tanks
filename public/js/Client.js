@@ -495,6 +495,7 @@ class Client {
   }
 
   keydown(e) {
+    try {
     if (e.ctrlKey || e.metaKey) return;
     e.preventDefault();
     if (!this.key[e.keyCode]) {
@@ -503,6 +504,7 @@ class Client {
       this.keyLoop(e);
       this.key[e.keyCode] = setInterval(this.keyLoop.bind(this), 15, e);
     }
+    } catch(e) {alert(e)}
   }
 
   keyup(e) {
