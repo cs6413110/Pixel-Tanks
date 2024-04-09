@@ -535,7 +535,7 @@ class Client {
     }, this.fireType === 1 ? 200 : 600);
   }
 
-  mouseup() {
+  mouseup(e) {
     clearInterval(this.fireInterval);
     this.keyup({keyCode: 1000+e.button});
   }
