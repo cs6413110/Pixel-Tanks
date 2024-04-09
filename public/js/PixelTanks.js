@@ -339,7 +339,7 @@ class PixelTanks {
             const key = {item1: [165, 404], item2: [381, 404], item3: [597, 404], item4: [827, 404], toolkit: [1043, 404], grapple: [1259, 404], boost: [165, 620], class: [381, 620], fire: [597, 620], powermissle: [827, 620], chat: [1043, 620], pause: [1259, 620]};
             for (const p in key) if (Menus.x > key[p][0] && Menus.x < key[p][0]+176 && Menus.y > key[p][1] && Menus.y < key[p][1]+176) {
               if (Menus.menus.settings1.selected === p) {
-                PixelTanks.userData.keybinds[PixelTanks.menus.settings1.selected] = -(1+e.button); // mouse handler
+                PixelTanks.userData.keybinds[Menus.menus.settings1.selected] = -(1+e.button); // mouse handler
                 return PixelTanks.save();
               } else return Menus.menus.settings1.selected = p;
             }
