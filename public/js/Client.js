@@ -151,7 +151,9 @@ class Client {
   }
 
   drawBlock(b) {
-    const size = b.type === 'airstrike' ? 200 : (b.type === 'smoke' ? 400 : 100), type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
+    GUI.draw.fillStyle = '#ffffff';
+    if (b.type === 'smoke') return GUI.draw.fillRect(b.x, b.y, 400, 400);
+    const size = b.type === 'airstrike' ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
     GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1);
   }
 
