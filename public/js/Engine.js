@@ -66,7 +66,7 @@ class Engine {
       }
     } else if (a === 'flashbang') {
       const h = a.replace('smoke', '').split('x');
-      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'smoke', Engine.parseTeamExtras(t.team), this));
+      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'smoke', t.team, this));
       }
     } else if (a === 'break') {
       for (const cell of t.cells) {
