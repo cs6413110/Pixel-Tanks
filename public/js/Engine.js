@@ -65,9 +65,8 @@ class Engine {
         }
       }
     } else if (a === 'flashbang') {
-      for (const t of this.pt) {
-        t.flashbanged = true;
-        t.flashbangTimeout = setTimeout(() => {t.flashbanged = false}, 10);
+      const h = a.replace('smoke', '').split('x');
+      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'smoke', Engine.parseTeamExtras(t.team), this));
       }
     } else if (a === 'break') {
       for (const cell of t.cells) {
