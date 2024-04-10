@@ -620,7 +620,7 @@ class Client {
       this.fire('usb');
       cooldown = 25000;
     } else if (id === 'flashbang') {
-      this.tank.use.push('flashbang');
+      this.tank.use.push(`flashbang${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
       cooldown = 10000;
     } else if (id === 'bomb') {
       this.tank.use.push('bomb');
