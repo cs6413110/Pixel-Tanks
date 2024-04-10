@@ -65,7 +65,7 @@ class Engine {
         }
       }
     } else if (a === 'flashbang') {
-      const h = a.replace('smoke', '').split('x');
+      const h = a.replace('airstrike', '').split('x');
       this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'smoke', t.team, this));
       }
     } else if (a === 'break') {
