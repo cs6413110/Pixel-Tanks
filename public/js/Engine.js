@@ -65,9 +65,8 @@ class Engine {
         }
       }
     } else if (a === 'flashbang') {
-      const h = a.replace('airstrike', '').split('x');
+      const h = a.replace('smoke', '').split('x');
       this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'smoke', t.team, this));
-      }
     } else if (a === 'break') {
       for (const cell of t.cells) {
         const c = cell.split('x'), cx = c[0], cy = c[1], breakable = ['gold', 'weak', 'strong', 'spike', 'barrier', 'void', 'barrel', 'halfbarrier'];
