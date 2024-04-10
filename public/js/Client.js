@@ -151,7 +151,7 @@ class Client {
   }
 
   drawBlock(b) {
-    const size = b.type === 'airstrike' ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
+    const size = b.type === 'airstrike' ? 200 : (b.type === 'smoke' ? 400 : 100), type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
     GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1);
   }
 
