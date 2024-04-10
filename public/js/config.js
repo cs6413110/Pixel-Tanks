@@ -35,6 +35,7 @@ const images = {
     bottom2: '/tanks/bottom2',
   },
   cosmetics: {
+    'void knight': '/cosmetics/voidknight',
     'lava': '/cosmetics/lava',
     'Antlers': '/cosmetics/Antlers',
     'static': '/cosmetics/static',
