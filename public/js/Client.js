@@ -32,7 +32,10 @@ class Client {
     const entities = ['pt', 'b', 's', 'ai', 'd'];
     this.socket = new MegaSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://')+this.ip, {keepAlive: false, reconnect: false, autoconnect: true});
     this.socket.on('message', data => {
-      if (data.event === 'hostupdate') {
+      if (Array.isArray(data)) {
+        // new version of hostupdate :D
+        
+      } if (data.event === 'hostupdate') {
         this._ups++;
         this.hostupdate.tickspeed = data.tickspeed;
         this.hostupdate.global = data.global;
