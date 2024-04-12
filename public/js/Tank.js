@@ -2,6 +2,7 @@ class Tank {
   constructor(data, host) {
     this.id = Math.random();
     this.raw = {id: this.id};
+    this.host = host;
     this.render = {release: () => {}, b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
     ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
       Object.defineProperty(this, p, {get: () => this.raw[p], set: (v) => this.setValue(p, v), configurable: true});
@@ -23,7 +24,6 @@ class Tank {
     this.x = host.spawn.x;
     this.y = host.spawn.y;
     this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = this.lastUpdate = 0;
-    this.host = host;
     this.privateLogs = [];
     this.cells = new Set();
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
