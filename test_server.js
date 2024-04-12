@@ -115,12 +115,13 @@ class Multiplayer extends Engine {
     this.updates = [];
     this.deletions = [];
     this.i.push(setInterval(() => this.getBetaStats(), 1000));
-    this.i.push(setInterval(() => this.cellSend(), 1000/settings.ups));
+    this.i.push(setInterval(() => this.cellSend(), 5000/settings.ups));
   }
 
   getBetaStats() {
     this.logs.push({m: JSON.stringify(this.updates), c: '#ff0f0f'});
-    this.updates.length = 0;
+    this.logs.push({m: JSON.stringify(this.deletions), c: '#ffA9A9'});
+    this.updates.length = this.deletions.length = 0;
   }
 
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
