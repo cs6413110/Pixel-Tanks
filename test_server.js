@@ -114,7 +114,12 @@ class Multiplayer extends Engine {
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
     this.updates = [];
     this.deletions = [];
+    this.i.push(setInterval(() => this.getBetaStats(), 1000));
     this.i.push(setInterval(() => this.cellSend(), 1000/settings.ups));
+  }
+
+  getBetaStats() {
+    this.logs.push({m: JSON.stringify(this.updates), c: '#ff0f0f'});
   }
 
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
@@ -249,20 +254,9 @@ class Multiplayer extends Engine {
     this.updates.length = this.deletions.length = 0;
   }
 
-  /*updateEntity(id, x, y, w, h, property, value) {
+  updateEntity(id, x, y, w, h, property, value) {
     for (const update of this.updates) if (update[0] === id) return update.push(property, value);
     return this.updates.push(A.template('arr').concat(x, y, w, h, id, property, value));
-  }*/ // opt
-
-  updateEntity(id, x, y, w, h, property, value) {
-    for (const update of this.updates) if (update[0] === id) {
-      update.push(property, value);
-      console.log(this.updates.length);
-      return;
-    }
-    this.updates.push(A.template('arr').concat(x, y, w, h, id, property, value));
-    console.log(this.updates.length);
-    return;
   }
 
   destroyEntity(id, x, y, w, h) {
