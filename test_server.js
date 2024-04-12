@@ -137,7 +137,7 @@ class Multiplayer extends Engine {
         for (const e of this.cells[x][y]) o.del.push(e.id);
       }
     }
-    this.hostupdate.logs.push({m: JSON.stringify(o), c: '#00ff00'});
+    this.logs.push({m: JSON.stringify(o), c: '#00ff00'});
     return o;
   }
 
