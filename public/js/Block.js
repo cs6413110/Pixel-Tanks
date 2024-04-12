@@ -1,15 +1,15 @@
 class Block {
   static args = ['x', 'y', 'hp', 'type', 'team', 'host'];
-  static raw = ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team', 'id'];
+  static raw = ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team',];
   constructor() {
     this.cells = new Set();
     this.t = []; // can be removed maybe?
     for (const p of Block.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
   init(x, y, hp, type, team, host) {
-    this.raw = {};
-    for (let i = Block.args.length-1; i >= 0; i--) this[Block.args[i]] = arguments[i];
     this.id = Math.random();
+    this.raw = {id: this.id};
+    for (let i = Block.args.length-1; i >= 0; i--) this[Block.args[i]] = arguments[i];
     this.maxHp = hp;
     if (!(this.c = type !== 'fire' && type !== 'airstrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : (type === 'smoke' ? 11000 : 6000));
     if (type === 'halfbarrier' || type === 'spike') this.c = false;
