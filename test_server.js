@@ -122,12 +122,16 @@ class Multiplayer extends Engine {
     const w = 21, h = 15;
     const ocx = Math.floor(t.x/100)+.5, ocy = Math.floor(t.y/100)+.5, ncx = Math.floor(x/100)+.5, ncy = Math.floor(y/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
-    const o = {b: [], ai: [], pt: [], d: [], s: [], del: []};
+    const o = {pt: [], d: [], b: [], ai: [], s: [], del: []};
     for (let l = false, nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = Math.max(0, Math.min(29, nys)); y != Math.max(0, Math.min(29, nys+h*yda)); y += yda) {
       if (y === nys+yl) l = true;
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = Math.max(0, Math.min(29, nxs)); x != Math.max(0, Math.min(29, nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x += xda) {
         for (const e of this.cells[x][y]) {
+          try {
           o[this.sendkey[e.constructor.name]].push(e.constructor.raw.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
+          } catch(e) {
+            this.logs.push({m: 'Error loading entity: ('+e.constructor+', '+e.constructor?.name+', '+e.constructor?.raw+')', c: '#ff0000'});
+          }
         }
       }
     }
