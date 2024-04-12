@@ -715,6 +715,9 @@ const Commands = {
   ai: [Object, 2, 7, function(data) {
     for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), data[6], servers[this.room]));
   }],
+  squad: [Object, 2, 1, function(data) {
+    for (let i = 0; i < 10; i++) servers[this.room].ai.push(new AI(Math.floor(this.x) / 100) * 100 + 10, Math.floor(this.y) / 100) * 100 + 10, 3, this.rank, Engine.getTeam(this.team), servers[this.room]));
+  }],
   spectate: [Object, 3, 2, function(data) {
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = true;
   }],
