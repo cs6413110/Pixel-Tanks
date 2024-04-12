@@ -129,7 +129,7 @@ class Multiplayer extends Engine {
         for (const e of this.cells[x][y]) {
           try {
           o[this.sendkey[e.constructor.name]].push(e.constructor.raw.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
-          } catch(e) {
+          } catch(k) {
             this.logs.push({m: 'Error loading entity: ('+e.constructor+', '+e.constructor?.name+', '+e.constructor?.raw+')', c: '#ff0000'});
           }
         }
