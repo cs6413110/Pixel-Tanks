@@ -33,7 +33,7 @@ class Block {
     if ((this.hp = Math.min(this.maxHp, this.hp-d)) <= 0) this.destroy();
   }
   reset() {
-    for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'host', 'team', 's' ,'c', 'updatedLast']) this[property] = undefined;
+    for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'team', 's' ,'c', 'updatedLast', 'host']) this[property] = undefined;
     this.cells.clear();
     this.t.length = 0;
   }
