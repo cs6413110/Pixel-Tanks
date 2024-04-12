@@ -25,11 +25,7 @@ class Block {
   setValue(p, v) {
     this.updatedLast = Date.now();
     this.raw[p] = v; // replace soon
-    try { 
-      this.host.updateEntity(this.id, this.x, this.y, 100, 100, p, v); // new bindings
-    } catch(e) {
-      //console.log(e, this);
-    }
+    this.host.updateEntity(this.id, this.x, this.y, 100, 100, p, v); // new bindings
   }
   damage(d, type) {
     if (this.hp === Infinity) return;
