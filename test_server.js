@@ -120,6 +120,7 @@ class Multiplayer extends Engine {
 
   getBetaStats() {
     this.logs.push({m: JSON.stringify(this.updates), c: '#ff0f0f'});
+    this.updates.length = 0;
   }
 
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
