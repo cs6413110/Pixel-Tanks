@@ -255,6 +255,7 @@ class Multiplayer extends Engine {
   }*/ // opt
 
   updateEntity(id, x, y, w, h, property, value) {
+    return;
     for (const update of this.updates) if (update[0] === id) {
       update.push(property, value);
       this.logs.push({m: JSON.stringify(this.updates), c: '#ff0000'});
