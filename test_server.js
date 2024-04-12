@@ -113,6 +113,7 @@ class Multiplayer extends Engine {
     this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
     this.updates = [];
+    this.deletions = [];
     this.i.push(setInterval(() => this.cellSend(), 1000/settings.ups));
   }
 
@@ -219,40 +220,54 @@ class Multiplayer extends Engine {
   }
 
   eventSend(u, m) { // optional u, m params for chunkloading per player
-    // viewport = 21x15 -> 2100x1500
     for (const t of this.pt) {
-      const message = A.template('message');
+      const message = t.username === u ? m : A.template('message');
+      message.global = this.global;
+      //message.logs = // attach variable to player to track how many logs have been sent to them
       /*
       const message = {
         event: 'update',
         logs: [{m: 'asdf', c: '#ffffff'}],
-        global: '',
-        b: [[id, prop, val],
-        pt: [],
-        ai: [],
-        s: [],
-        d: [],
-        del: [id, id, id...],
-      }
-      */
-      // new message template
-      //{e: [], d: [id, id, id, id]};
-      if (t.username === u) {
-        
-      }
-      let send = message.logs.length || this.updates.length || message.del.length;
+        global: '', // not delta updated so can't track if updated for send bool
+        u: [[id, prop, val]],
+        d: [id, id, id...],
+      }*/
       for (const u of this.updates) {
-        if (Engine.collision(u[0], u[1], u[3], u[4], t.x+1010, t.y-710, 2100, 1500)) {
-          
+        if (Engine.collision(u[0], u[1], u[2], u[3], t.x+1010, t.y-710, 2100, 1500)) {
+          let i = message.u.indexOf(e => e[0] === u[4]);
+          if (i) message.u[i].push(...u.slice(5)); else message.u.push(...u.slice(4));
         }
       }
+      for (const d of this.deletions) {
+        if (Engine.collision(d[1], d[2], d[3], d[4], t.x+1010, t.y-710, 2100, 1500)) {
+          if (!message.d.includes(d[0])) message.d.push(d[0]);
+        }
+      }
+      if ((message.logs.length || message.u.length || message.d.length) && true/* rate limiter here */) t.socket.send(message); 
+      message.release();
     }
-    this.updates.length = 0;
+    this.updates.length = this.deletions.length = 0;
   }
 
-  updateEntity(id, x, y, w, h, property, value) {
+  /*updateEntity(id, x, y, w, h, property, value) {
     for (const update of this.updates) if (update[0] === id) return update.push(property, value);
     return this.updates.push(A.template('arr').push(x, y, w, h, id, property, value));
+  }*/ // opt
+
+  updateEntity(id, x, y, w, h, property, value) {
+    for (const update of this.updates) if (update[0] === id) {
+      update.push(property, value);
+      this.logs.push({m: JSON.stringify(this.updates), c: '#ff0000'});
+      return;
+    }
+    this.updates.push(A.template('arr').push(x, y, w, h, id, property, value));
+    this.logs.push({m: JSON.stringify(this.updates), c: '#ff0000'});
+    return;
+  }
+
+  destroyEntity(id, x, y, w, h) {
+    this.deletions.push(A.template('arr').push(id, x, y, w, h));
+    this.logs.push({m: JSON.stringify(this.deletions), c: '#ff0000'});
   }
 
   disconnect(socket, code, reason) {
