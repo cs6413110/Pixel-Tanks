@@ -114,7 +114,7 @@ class Multiplayer extends Engine {
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
     this.updates = [];
     this.deletions = [];
-    this.i.push(setInterval(() => this.getBetaStats(), 1000));
+    this.i.push(setInterval(() => this.getBetaStats(), 10000));
     this.i.push(setInterval(() => this.cellSend(), 5000/settings.ups));
   }
 
