@@ -3,7 +3,6 @@ class Block {
   static raw = ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team', 'id'];
   constructor() {
     this.cells = new Set();
-    this.setValue = this.setValue.bind(this);
     this.t = []; // can be removed maybe?
     for (const p of Block.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
@@ -29,7 +28,7 @@ class Block {
     try { 
       this.host.updateEntity(this.id, this.x, this.y, 100, 100, p, v); // new bindings
     } catch(e) {
-      console.log(e, this);
+      //console.log(e, this);
     }
   }
   damage(d, type) {
