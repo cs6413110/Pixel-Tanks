@@ -1,11 +1,11 @@
 class Tank {
   constructor(data, host) {
-    this.raw = {};
+    this.id = Math.random();
+    this.raw = {id: this.id};
     this.render = {release: () => {}, b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
-    ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
+    ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
       Object.defineProperty(this, p, {get: () => this.raw[p], set: (v) => this.setValue(p, v), configurable: true});
     });
-    this.id = Math.random();
     if (data.socket) this.socket = data.socket;
     this.username = data.username;
     this.rank = data.rank;
