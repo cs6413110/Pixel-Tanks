@@ -1,13 +1,13 @@
 class Damage {
   static args = ['x', 'y', 'w', 'h', 'a', 'team', 'host'];
-  static raw = ['x', 'y', 'w', 'h', 'f', 'id'];
+  static raw = ['x', 'y', 'w', 'h', 'f'];
   constructor() {
     this.cells = new Set();
     for (const p of Damage.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
   init(x, y, w, h, a, team, host) {
-    this.raw = {};
     this.id = Math.random();
+    this.raw = {id: this.id};
     for (const i in arguments) this[Damage.args[i]] = arguments[i];
     this.f = 0;
     for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) { // upgrade this soon for more dynamic rect
@@ -37,13 +37,14 @@ class Damage {
   setValue(p, v) {
     this.updatedLast = Date.now(); // replace
     this.raw[p] = v; // replace soon
-    //this.host.updateEntity(this.id, this.x, this.y, this.w, this.h, p, v); // new bindings
+    this.host.updateEntity(this.id, this.x, this.y, this.w, this.h, p, v);
   }
   reset() {
     // loop through unnecessary and set to undefined? Or maybe it doesn't matter since it will be auto reset on recycle?
     this.cells.clear();
   }
   destroy() {
+    this.host.destroyEntity(this.id, this.x, this.y, this.w, this.h);
     clearInterval(this.i);
     this.host.d.splice(this.host.d.indexOf(this), 1);
     for (const cell of this.cells) {
