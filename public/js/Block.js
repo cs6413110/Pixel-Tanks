@@ -8,7 +8,7 @@ class Block {
   }
   init(x, y, hp, type, team, host) {
     this.raw = {};
-    for (const i in Block.args) this[Block.args[i]] = arguments[i];
+    for (let i = Block.args.length-1; i >= 0; i--) this[Block.args[i]] = arguments[i];
     this.id = Math.random();
     this.maxHp = hp;
     if (!(this.c = type !== 'fire' && type !== 'airstrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : (type === 'smoke' ? 11000 : 6000));
