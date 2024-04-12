@@ -23,7 +23,7 @@ class Engine {
   }
 
   add(data) {
-    this.pt.push(new Tank(data, this));
+    setTimeout(this.pt.push(new Tank(data, this))); // change this later??? temp fix for joining delay
   }
 
   useAbility(t, a) {
