@@ -38,6 +38,7 @@ class Block {
     this.t.length = 0;
   }
   destroy() {
+    this.host.destroyEntity(this.id, this.x, this.y, 100, 100);
     for (const t of this.t) clearTimeout(t);
     clearTimeout(this.sd);
     this.host.b.splice(this.host.b.indexOf(this), 1);
