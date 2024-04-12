@@ -251,7 +251,7 @@ class Multiplayer extends Engine {
 
   /*updateEntity(id, x, y, w, h, property, value) {
     for (const update of this.updates) if (update[0] === id) return update.push(property, value);
-    return this.updates.push(A.template('arr').push(x, y, w, h, id, property, value));
+    return this.updates.push(A.template('arr').concat(x, y, w, h, id, property, value));
   }*/ // opt
 
   updateEntity(id, x, y, w, h, property, value) {
@@ -260,7 +260,7 @@ class Multiplayer extends Engine {
       this.logs.push({m: JSON.stringify(this.updates), c: '#ff0000'});
       return;
     }
-    this.updates.push(A.template('arr').push(x, y, w, h, id, property, value));
+    this.updates.push(A.template('arr').concat(x, y, w, h, id, property, value));
     this.logs.push({m: JSON.stringify(this.updates), c: '#ff0000'});
     return;
   }
