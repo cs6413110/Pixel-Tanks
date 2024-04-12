@@ -257,11 +257,11 @@ class Multiplayer extends Engine {
   updateEntity(id, x, y, w, h, property, value) {
     for (const update of this.updates) if (update[0] === id) {
       update.push(property, value);
-      this.logs.push({m: this.updates.length, c: '#ff0000'});
+      console.log(this.updates.length);
       return;
     }
     this.updates.push(A.template('arr').concat(x, y, w, h, id, property, value));
-    this.logs.push({m: this.updates.length, c: '#ff0000'});
+    console.log(this.updates.length);
     return;
   }
 
