@@ -37,6 +37,7 @@ class Tank {
   setValue(p, v) {
     this.updatedLast = Date.now();
     this.raw[p] = v;
+    this.host.updateEntity(this.id, this.x, this.y, 80, 80, p, v);
   }
 
   updateCell() {
