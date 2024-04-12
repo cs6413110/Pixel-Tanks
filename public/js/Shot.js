@@ -1,16 +1,16 @@
 class Shot {
   static settings = {bullet: [20, 18], shotgun: [20, 14.4], grapple: [0, 36], fire: [0, 16.2], dynamite: [0, 14.4], usb: [0, 14.4], powermissle: [100, 27, 50], megamissle: [200, 27, 100], healmissle: [-500, 27, 30]};
   static args = ['x', 'y', 'd', 'r', 'type', 'team', 'rank', 'host'];
-  static raw = ['team', 'r', 'type', 'x', 'y', 'sx', 'sy', 'id'];
+  static raw = ['team', 'r', 'type', 'x', 'y', 'sx', 'sy'];
   constructor() {
     this.cells = new Set();
     for (const p of Shot.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
   init(x, y, d, r, type, team, rank, host) {
-    this.raw = {};
+    this.id = Math.random();
+    this.raw = {id: this.id};
     for (const i in Shot.args) this[Shot.args[i]] = arguments[i];
     this.e = Date.now();
-    this.id = Math.random();
     this.md = this.damage = Shot.settings[this.type][0]*(rank*10+300)/500;
     this.xm = Math.cos(Math.PI*r/180)*Shot.settings[this.type][1];
     this.ym = Math.sin(Math.PI*r/180)*Shot.settings[this.type][1];
@@ -92,10 +92,11 @@ class Shot {
   setValue(p, v) {
     this.updatedLast = Date.now(); // REMOVE THIS SOON
     this.raw[p] = v; // SOON UNNECCESSARY
-    //this.host.updateEntity(this.id, this.x, this.y, 10, 10, p, v); // new method of update logging :)
+    this.host.updateEntity(this.id, this.x, this.y, 10, 10, p, v);
   }
   reset = () => this.cells.clear();
   destroy() {
+    this.host.destroyEntity(this.id, this.x, this.y, 10, 10);
     for (const cell of this.cells) {
       const c = cell.split('x');
       this.host.cells[c[0]][c[1]].delete(this);
