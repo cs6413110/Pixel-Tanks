@@ -233,6 +233,10 @@ class Multiplayer extends Engine {
     return this.updates.push(A.template('arr').push(x, y, w, h, id, property, value));
   }
 
+  destroyEntity() {
+    return;
+  }
+
   disconnect(socket, code, reason) {
     this.pt = this.pt.filter(t => {
       if (t.username === socket.username) {
