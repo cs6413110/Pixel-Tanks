@@ -122,21 +122,23 @@ class Multiplayer extends Engine {
     const w = 21, h = 15;
     const ocx = Math.floor(t.x/100)+.5, ocy = Math.floor(t.y/100)+.5, ncx = Math.floor(x/100)+.5, ncy = Math.floor(y/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
-    const a = A.template('arr');
-    a.push([], []); // new, old
+    const o = {b: [], ai: [], pt: [], d: [], s: [], del: []};
     for (let l = false, nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = Math.max(0, Math.min(29, nys)); y != Math.max(0, Math.min(29, nys+h*yda)); y += yda) {
       if (y === nys+yl) l = true;
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = Math.max(0, Math.min(29, nxs)); x != Math.max(0, Math.min(29, nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x += xda) {
-        for (const e of this.cells[x][y]) a[0].push(e.raw);
+        for (const e of this.cells[x][y]) {
+          o[this.sendkey[e.constructor.name]].push(e.constructor.raw.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
+        }
       }
     }
     for (let l = false, oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = Math.max(0, Math.min(29, oys)); y != Math.max(0, Math.min(29, oys-h*yda)); y -= yda) {
       if (y === oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = Math.max(0, Math.min(29, oxs)); x != Math.max(0, Math.min(29, oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x -= xda) {
-        for (const e of this.cells[x][y]) a[1].push(e.id);
+        for (const e of this.cells[x][y]) o.del.push(e.id);
       }
     }
-    return a;
+    this.hostupdate.logs.push({m: JSON.stringify(o), c: '#00ff00'});
+    return o;
   }
 
   add(socket, data) {
@@ -212,15 +214,32 @@ class Multiplayer extends Engine {
     }
   }
 
-  eventSend(t, m) { // optional t, m params for chunkloading per player
+  eventSend(u, m) { // optional u, m params for chunkloading per player
     // viewport = 21x15 -> 2100x1500
     for (const t of this.pt) {
       const message = A.template('message');
+      /*
+      const message = {
+        event: 'update',
+        logs: [{m: 'asdf', c: '#ffffff'}],
+        global: '',
+        b: [[id, prop, val],
+        pt: [],
+        ai: [],
+        s: [],
+        d: [],
+        del: [id, id, id...],
+      }
+      */
       // new message template
       //{e: [], d: [id, id, id, id]};
+      if (t.username === u) {
+        
+      }
+      let send = message.logs.length || this.updates.length || message.del.length;
       for (const u of this.updates) {
         if (Engine.collision(u[0], u[1], u[3], u[4], t.x+1010, t.y-710, 2100, 1500)) {
-          // type seperate here?
+          
         }
       }
     }
