@@ -29,7 +29,7 @@ class Block {
     try { 
       this.host.updateEntity(this.id, this.x, this.y, 100, 100, p, v); // new bindings
     } catch(e) {
-      this.host.logs.push({m: 'err', c: '#ff0000'});
+      console.log(e, this);
     }
   }
   damage(d, type) {
