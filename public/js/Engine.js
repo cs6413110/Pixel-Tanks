@@ -187,8 +187,9 @@ class Engine {
     for (let l = 0; l < level.length; l++) {
       for (let q = 0; q < level[l].length; q++) {
         const e = level[l][q];
+        this.spawn = []
         if (e === 'S') {
-          this.spawn = { x: q * 100, y: l * 100 };
+          this.spawn.push({ x: q * 100, y: l * 100 });
         } else if (e === 'A') {
           this.spawns[0] = {x: q*100, y: l*100};
         } else if (e === 'B') {
