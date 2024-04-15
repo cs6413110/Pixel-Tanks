@@ -447,7 +447,6 @@ class TDM extends Multiplayer {
       this.wins[winner]++;
       if (this.wins[winner] === 3) {
         this.global = winner+' Wins!';
-        for (const server of Object.values(servers)) for (const t of servers[this.room].pt) if (Engine.getTeam(t.team) === winner && !t.ded) for (let i = 0; i < 10; i++) servers[this.room].ai.push(new AI(Math.floor((t.x) / 100) * 100 + 10, Math.floor((t.y) / 100) * 100 + 10, 3, t.rank, t.team, servers[this.room]));
         setTimeout(() => {
           this.pt.forEach(t => {
             t.socket.send({event: 'gameover', type: winner === Engine.getTeam(t.team) ? 'victory' : 'defeat'});
