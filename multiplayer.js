@@ -380,6 +380,7 @@ class TDM extends Multiplayer {
 
   add(socket, data) {
     super.add(socket, data);
+    setTimeout(() => {
     const t = this.pt[this.pt.length-1];
     let red = 0, blue = 0;
     this.pt.forEach(tank => {
@@ -397,6 +398,7 @@ class TDM extends Multiplayer {
       this.readytime = Date.now();
       this.time = 60; // 1 minute starting time
     }
+    });
   }
 
   ontick() {
