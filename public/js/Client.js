@@ -395,8 +395,8 @@ class Client {
         GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952, 48, 48);
       } else {
         GUI.draw.fillStyle = '#ffffff';
-        GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers[['class', 'powermissle', 'toolkit', 'boost', 'grapple'][i]].time+[this.timers.class.cooldown, 10000, 40000, 5000, 5000][i]))%4000)/1000)-3)));
-        GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952+Math.min((Date.now()-this.timers[['class', 'powermissle', 'toolkit', 'boost', 'grapple'][i]].time)/[this.timers.class.cooldown, 10000, 40000, 5000, 5000][i], 1)*48, 48, 48);
+        GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-((i === 0 ? this.timers.class.time : this.timers[['class', 'powermissle', 'toolkit', 'boost', 'grapple'][i]])+[this.timers.class.cooldown, 10000, 40000, 5000, 5000][i]))%4000)/1000)-3)));
+        GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952, 48, 48);
       }
       GUI.draw.fillStyle = PixelTanks.userData.color;
       GUI.draw.globalAlpha = 1;
