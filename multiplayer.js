@@ -2,7 +2,7 @@ const settings = {
   authserver: 'localhost',
   players_per_room: 10,
   ups: 50,
-  port: 8080,
+  port: 443,
   chat: true,
   joining: true,
 }
@@ -113,7 +113,15 @@ class Multiplayer extends Engine {
     this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
     this.updates = [];
-    this.i.push(setInterval(() => this.cellSend(), 1000/settings.ups));
+    this.deletions = [];
+    this.i.push(setInterval(() => this.getBetaStats(), 10000));
+    this.i.push(setInterval(() => this.cellSend(), 5000/settings.ups));
+  }
+
+  getBetaStats() {
+    this.logs.push({m: JSON.stringify(this.updates), c: '#ff0f0f'});
+    this.logs.push({m: JSON.stringify(this.deletions), c: '#ffA9A9'});
+    this.updates.length = this.deletions.length = 0;
   }
 
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
@@ -122,21 +130,27 @@ class Multiplayer extends Engine {
     const w = 21, h = 15;
     const ocx = Math.floor(t.x/100)+.5, ocy = Math.floor(t.y/100)+.5, ncx = Math.floor(x/100)+.5, ncy = Math.floor(y/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
-    const a = A.template('arr');
-    a.push([], []); // new, old
+    const o = {pt: [], d: [], b: [], ai: [], s: [], del: []};
     for (let l = false, nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = Math.max(0, Math.min(29, nys)); y != Math.max(0, Math.min(29, nys+h*yda)); y += yda) {
       if (y === nys+yl) l = true;
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = Math.max(0, Math.min(29, nxs)); x != Math.max(0, Math.min(29, nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x += xda) {
-        for (const e of this.cells[x][y]) a[0].push(e.raw);
+        for (const e of this.cells[x][y]) {
+          try {
+          o[this.sendkey[e.constructor.name]].push(e.constructor.raw.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
+          } catch(k) {
+            this.logs.push({m: 'Error loading entity: ('+e.constructor+', '+e.constructor?.name+', '+e.constructor?.raw+')', c: '#ff0000'});
+          }
+        }
       }
     }
     for (let l = false, oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = Math.max(0, Math.min(29, oys)); y != Math.max(0, Math.min(29, oys-h*yda)); y -= yda) {
       if (y === oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = Math.max(0, Math.min(29, oxs)); x != Math.max(0, Math.min(29, oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x -= xda) {
-        for (const e of this.cells[x][y]) a[1].push(e.id);
+        for (const e of this.cells[x][y]) o.del.push(e.id);
       }
     }
-    return a;
+    this.logs.push({m: JSON.stringify(o), c: '#00ff00'});
+    return o;
   }
 
   add(socket, data) {
@@ -212,29 +226,44 @@ class Multiplayer extends Engine {
     }
   }
 
-  eventSend(t, m) { // optional t, m params for chunkloading per player
-    // viewport = 21x15 -> 2100x1500
+  eventSend(u, m) { // optional u, m params for chunkloading per player
     for (const t of this.pt) {
-      const message = A.template('message');
-      // new message template
-      //{e: [], d: [id, id, id, id]};
+      const message = t.username === u ? m : A.template('message');
+      message.global = this.global;
+      //message.logs = // attach variable to player to track how many logs have been sent to them
+      /*
+      const message = {
+        event: 'update',
+        logs: [{m: 'asdf', c: '#ffffff'}],
+        global: '', // not delta updated so can't track if updated for send bool
+        u: [[id, prop, val]],
+        d: [id, id, id...],
+      }*/
       for (const u of this.updates) {
-        if (Engine.collision(u[0], u[1], u[3], u[4], t.x+1010, t.y-710, 2100, 1500)) {
-          // type seperate here?
+        if (Engine.collision(u[0], u[1], u[2], u[3], t.x+1010, t.y-710, 2100, 1500)) {
+          let i = message.u.indexOf(e => e[0] === u[4]);
+          if (i) message.u[i].push(...u.slice(5)); else message.u.push(...u.slice(4));
         }
       }
+      for (const d of this.deletions) {
+        if (Engine.collision(d[1], d[2], d[3], d[4], t.x+1010, t.y-710, 2100, 1500)) {
+          if (!message.d.includes(d[0])) message.d.push(d[0]);
+        }
+      }
+      if ((message.logs.length || message.u.length || message.d.length) && true/* rate limiter here */) t.socket.send(message); 
+      message.release();
     }
-    this.updates.length = 0;
+    this.updates.length = this.deletions.length = 0;
   }
 
   updateEntity(id, x, y, w, h, property, value) {
-    return;
-    for (const update of this.updates) if (update[0] === id) return update.push(property, value);
-    return this.updates.push(A.template('arr').push(x, y, w, h, id, property, value));
+    for (const update of this.updates) if (update[4] === id) return update.push(property, value);
+    return this.updates.push(A.template('arr').concat(x, y, w, h, id, property, value));
   }
 
-  destroyEntity() {
-    return;
+  destroyEntity(id, x, y, w, h) {
+    this.deletions.push(A.template('arr').push(id, x, y, w, h));
+    this.logs.push({m: JSON.stringify(this.deletions), c: '#ff0000'});
   }
 
   disconnect(socket, code, reason) {
@@ -247,6 +276,7 @@ class Multiplayer extends Engine {
         if (t.grapple) t.grapple.bullet.destroy();
         return false;
       }
+      this.destroyEntity(t.id, t.x, t.y, 80, 80);
       return true;
     });
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === socket.username) this.ai[i].destroy();
@@ -444,13 +474,12 @@ class TDM extends Multiplayer {
       this.wins[winner]++;
       if (this.wins[winner] === 3) {
         this.global = winner+' Wins!';
-        for (const server of Object.values(servers)) for (const t of servers[this.room].pt) if (Engine.getTeam(t.team) === winner && !t.ded) for (let i = 0; i < 10; i++) servers[this.room].ai.push(new AI(Math.floor((t.x) / 100) * 100 + 10, Math.floor((t.y) / 100) * 100 + 10, 3, t.rank, t.team, servers[this.room]));
         setTimeout(() => {
           this.pt.forEach(t => {
             t.socket.send({event: 'gameover', type: winner === Engine.getTeam(t.team) ? 'victory' : 'defeat'});
             t.socket.close();
           });
-        }, 10000);
+        }, 5000);
       } else {
         this.global = winner+' Wins Round '+this.round;
         setTimeout(() => {
@@ -720,9 +749,6 @@ const Commands = {
   }],
   ai: [Object, 2, 7, function(data) {
     for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), data[6], servers[this.room]));
-  }],
-  squad: [Object, 2, 2, function(data) {
-    for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) for (let i = 0; i < 10; i++) servers[this.room].ai.push(new AI(Math.floor((t.x) / 100) * 100 + 10, Math.floor((t.y) / 100) * 100 + 10, 3, t.rank, t.team, servers[this.room]));
   }],
   spectate: [Object, 3, 2, function(data) {
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = true;
