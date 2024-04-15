@@ -32,8 +32,11 @@ class Client {
     const entities = ['pt', 'b', 's', 'ai', 'd'];
     this.socket = new MegaSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://')+this.ip, {keepAlive: false, reconnect: false, autoconnect: true});
     this.socket.on('message', data => {
-      if (Array.isArray(data)) {
-        // new version of hostupdate :D
+      if (data.event === 'update') {
+        this._ups++;
+        this.hostupdate.global = data.global;
+        let compiledLogs = [];
+        GUI.draw.font = '30px Font';
         
       } if (data.event === 'hostupdate') {
         this._ups++;
