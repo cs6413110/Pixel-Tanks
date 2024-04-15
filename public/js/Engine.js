@@ -172,6 +172,8 @@ class Engine {
     for (const t of this.pt) t.update();
   }
 
+  updateEntity() {}
+
   ondeath(t, m={}) {
     this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
     if (t.privateLogs) t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
