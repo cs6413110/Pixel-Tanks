@@ -37,7 +37,7 @@ class Shot {
         if (e instanceof AI) return true;
         if (g.grapple) g.grapple.bullet.destroy();
         g.grapple = {target: pullGrapple ? {x: e ? e.x : this.x, y: e ? e.y : this.y} : this.host.pt.find(t => t.username === Engine.getUsername(this.team)), bullet: this};
-      } else if (this.type === 'usb') setTimeout(() => this.destroy(), 20000);
+      } else if (this.type === 'usb' && Engine.getTeam(e?.team) !== Engine.getTeam(g.team)) setTimeout(() => this.destroy(), 20000);
       return false;
     } else if (this.type === 'fire') {
       if (isBlock) return this.host.b.push(A.template('Block').init(e.x, e.y, Infinity, 'fire', this.team, this.host));
