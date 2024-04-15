@@ -9,7 +9,7 @@ class Shot {
   init(x, y, d, r, type, team, rank, host) {
     this.id = Math.random();
     this.raw = {id: this.id};
-    for (const i in Shot.args) this[Shot.args[i]] = arguments[i];
+    for (let i = Shot.args.length-1; i >= 0; i--) this[Shot.args[i]] = arguments[i];
     this.e = Date.now();
     this.md = this.damage = Shot.settings[this.type][0]*(rank*10+300)/500;
     this.xm = Math.cos(Math.PI*r/180)*Shot.settings[this.type][1];
