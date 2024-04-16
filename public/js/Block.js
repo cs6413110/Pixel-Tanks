@@ -33,7 +33,7 @@ class Block {
     this.raw.hp = this.hp; // temp
   }
   reset() {
-    for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'team', 's' ,'c', 'updatedLast', 'host']) this[property] = undefined;
+    //for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'team', 's' ,'c', 'updatedLast', 'host']) this[property] = undefined;
     this.cells.clear();
     this.t.length = 0;
   }
