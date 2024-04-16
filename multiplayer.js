@@ -264,7 +264,19 @@ class Multiplayer extends Engine {
   }
 
   pushUpdate(id, x, y, w, h, ...p) {
-    for (const u of this.updates) if (u[4] === id) return u.push(...p);
+    for (const u of this.updates) if (u[4] === id) {
+      for (let i = 0; i < p.length; i += 2) {
+        let done = false;
+        for (let l = 5; l < u.length && !done; l += 2) {
+          if (p[l] == u[l]) {
+            u[l+1] = p[l+1];
+            done = true;
+          }
+        }
+        if (!done) u.push(p[i], p[i+1]);
+      }
+      return;
+    }
     return this.updates.push(A.template('arr').concat(x, y, w, h, id, ...p));
   }
 
