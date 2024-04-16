@@ -268,8 +268,8 @@ class Multiplayer extends Engine {
       for (let i = 0; i < p.length; i += 2) {
         let done = false;
         for (let l = 5; l < u.length && !done; l += 2) {
-          if (p[l] == u[l]) {
-            u[l+1] = p[l+1];
+          if (p[i] == u[l]) {
+            u[l+1] = p[i+1];
             done = true;
           }
         }
