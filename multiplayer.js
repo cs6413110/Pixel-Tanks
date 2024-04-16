@@ -269,8 +269,7 @@ class Multiplayer extends Engine {
   }
 
   destroyEntity(id, x, y, w, h) {
-    this.deletions.push(A.template('arr').push(id, x, y, w, h));
-    this.logs.push({m: JSON.stringify(this.deletions), c: '#ff0000'});
+    this.deletions.push(A.template('arr').concat(id, x, y, w, h));
   }
 
   disconnect(socket, code, reason) {
