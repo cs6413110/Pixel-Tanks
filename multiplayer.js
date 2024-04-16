@@ -265,7 +265,7 @@ class Multiplayer extends Engine {
 
   pushUpdate(id, x, y, w, h, ...p) {
     for (const u of this.updates) if (u[4] === id) return u.push(...p);
-    return this.updates.push(A.template('arr').concat(x, y, w, h, id, ...p)));
+    return this.updates.push(A.template('arr').concat(x, y, w, h, id, ...p));
   }
 
   destroyEntity(id, x, y, w, h) {
