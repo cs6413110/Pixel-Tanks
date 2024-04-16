@@ -256,8 +256,15 @@ class Multiplayer extends Engine {
     this.updates.length = this.deletions.length = 0;
   }
 
-  updateEntity(id, x, y, w, h, ...p) {
-    for (const update of this.updates) if (update[4] === id) return update.push(...p);
+  updateEntity(e, x, y, w, h, c) {
+    const a = A.template('arr');
+    for (const p of c) a.push(p, e[p]);
+    this.pushUpdate(e.id, x, y, w, h, ...a);
+    a.release();
+  }
+
+  pushUpdate(id, x, y, w, h, ...p) {
+    for (const u of this.updates) if (u[4] === id) return u.push(...p);
     return this.updates.push(A.template('arr').concat(x, y, w, h, id, ...p)));
   }
 
