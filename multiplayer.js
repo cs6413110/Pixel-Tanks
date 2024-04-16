@@ -231,8 +231,7 @@ class Multiplayer extends Engine {
       const message = t.username === u ? m : A.template('message');
       message.global = this.global;
       //message.logs = // attach variable to player to track how many logs have been sent to them
-      /*
-      const message = {
+    /*const message = {
         event: 'update',
         logs: [{m: 'asdf', c: '#ffffff'}],
         global: '', // not delta updated so can't track if updated for send bool
@@ -242,7 +241,7 @@ class Multiplayer extends Engine {
       for (const u of this.updates) {
         if (Engine.collision(u[0], u[1], u[2], u[3], t.x+1010, t.y-710, 2100, 1500)) {
           let i = message.u.indexOf(e => e[0] === u[4]);
-          if (i) message.u[i].push(...u.slice(5)); else message.u.push(...u.slice(4));
+          if (i) message.u[i].push(...u.slice(5)); else message.u.push(u.slice(4));
         }
       }
       for (const d of this.deletions) {
@@ -250,7 +249,9 @@ class Multiplayer extends Engine {
           if (!message.d.includes(d[0])) message.d.push(d[0]);
         }
       }
-      if ((message.logs.length || message.u.length || message.d.length) && true/* rate limiter here */) t.socket.send(message); 
+      if ((message.logs.length || message.u.length || message.d.length) && true/* rate limiter here */) {
+        t.socket.send(message);
+      }
       message.release();
     }
     this.updates.length = this.deletions.length = 0;
@@ -281,7 +282,7 @@ class Multiplayer extends Engine {
   }
 
   destroyEntity(id, x, y, w, h) {
-    this.deletions.push(A.template('arr').concat(id, x, y, w, h));
+    this.deletions.push(A.template('arr').concat(x, y, w, h, id));
   }
 
   disconnect(socket, code, reason) {
