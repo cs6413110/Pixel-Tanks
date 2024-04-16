@@ -138,7 +138,7 @@ class Multiplayer extends Engine {
           try {
           o[this.sendkey[e.constructor.name]].push(e.constructor.raw.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
           } catch(k) {
-            this.logs.push({m: 'Error loading entity: ('+e.constructor?.name+', '+e.constructor?.raw+', '+x+', '+y+')', c: '#ff0000'});
+            this.logs.push({m: 'Error loading entity: ('+e.constructor?.name+', '+e.constructor?.raw+', '+Math.max(0, Math.min(29, nxs))+'->'+x+'->'+Math.max(0, Math.min(29, nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda))+', '+Math.max(0, Math.min(29, nys))+'->'+y+'->'+y != Math.max(0, Math.min(29, nys+h*yda))+')', c: '#ff0000'});
           }
         }
       }
