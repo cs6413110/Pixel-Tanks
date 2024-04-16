@@ -210,6 +210,8 @@ class Engine {
     return color;
   }
 
+  static genId = type => .2*(type+Math.random());
+
   static finder = new PF.AStarFinder({allowDiagonal: true, dontCrossCorners: true});
 
   static pathfind(sx, sy, tx, ty, map) {
