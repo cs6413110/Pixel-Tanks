@@ -1,6 +1,6 @@
 class Tank {
   constructor(data, host) {
-    this.id = Math.random();
+    this.id = Engine.getId(0);
     this.raw = {id: this.id};
     this.host = host;
     this.render = {release: () => {}, b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
