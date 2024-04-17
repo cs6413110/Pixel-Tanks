@@ -136,13 +136,15 @@ class Multiplayer extends Engine {
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = Math.max(0, Math.min(29, nxs)); x != Math.max(0, Math.min(29, nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x += xda) {
         for (const e of this.cells[x][y]) {
           try {
-          o[this.sendkey[e.constructor.name]].push(e.constructor.raw.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
-          } catch(k) {
-            this.logs.push({m: 'Error loading entity: ('+e.constructor?.name+', '+e.constructor?.raw+', ('+nxs+')'+Math.max(0, Math.min(29, nxs))+'->'+x+'->('+(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)+')'+Math.max(0, Math.min(29, nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda))+', ('+nys+')'+Math.max(0, Math.min(29, nys))+'->'+y+'->('+(nys+h*yda)+')'+Math.max(0, Math.min(29, nys+h*yda))+')', c: '#ff0000'});
-          }
+            o[this.sendkey[e.constructor.name]].push(e.constructor.raw.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
+          } catch(k) {this.logs.push({m: 'Error Loading Entity', c: '#ff0000'})}
         }
       }
     }
+    const j = a => Math.max(0, Math.min(29, a));
+    this.logs.push({m: 'Chunkload Stats for O('+t.x+', '+t.y+'), N('+x+', '+y+')', c: '#ffffff'});
+    this.logs.push({m: 'Y loops from '+j(nys)+' to '+j(nys+h*yda), c: '#ffffff');
+    this.logs.push({m: 'X loops form '+j(nxs)+' to '+j(w)+' until y='+(nys+yl)+' in which it will loop til '+j(Math.min(w, Math.abs(xd)))});
     for (let l = false, oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = Math.max(0, Math.min(29, oys)); y != Math.max(0, Math.min(29, oys-h*yda)); y -= yda) {
       if (y === oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = Math.max(0, Math.min(29, oxs)); x != Math.max(0, Math.min(29, oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x -= xda) {
