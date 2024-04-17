@@ -96,7 +96,7 @@ class Shot {
   }
   reset = () => this.cells.clear();
   destroy() {
-    this.host.destroyEntity(this.id, this.x, this.y, 10, 10);
+    //this.host.destroyEntity(this.id, this.x, this.y, 10, 10);
     for (const cell of this.cells) {
       const c = cell.split('x');
       this.host.cells[c[0]][c[1]].delete(this);
