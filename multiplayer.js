@@ -143,7 +143,7 @@ class Multiplayer extends Engine {
     }
     const j = a => Math.max(0, Math.min(29, a));
     this.logs.push({m: 'Chunkload Stats for O('+t.x+', '+t.y+'), N('+x+', '+y+')', c: '#ffffff'});
-    this.logs.push({m: 'Y loops from '+j(nys)+' to '+j(nys+h*yda), c: '#ffffff');
+    this.logs.push({m: 'Y loops from '+j(nys)+' to '+j(nys+h*yda), c: '#ffffff'});
     this.logs.push({m: 'X loops form '+j(nxs)+' to '+j(w)+' until y='+(nys+yl)+' in which it will loop til '+j(Math.min(w, Math.abs(xd)))});
     for (let l = false, oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = Math.max(0, Math.min(29, oys)); y != Math.max(0, Math.min(29, oys-h*yda)); y -= yda) {
       if (y === oys-yl) l = true;
