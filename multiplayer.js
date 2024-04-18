@@ -293,6 +293,7 @@ class DUELS extends Multiplayer {
   }
 
   add(socket, data) {
+    setTimeout(() => {
     super.add(socket, data);
     if (this.pt.length === 1) {
       this.global = 'Waiting For Player...';
@@ -300,6 +301,7 @@ class DUELS extends Multiplayer {
       this.readytime = Date.now();
       this.mode++;
     }
+    });
   }
 
   ontick() {
@@ -379,8 +381,8 @@ class TDM extends Multiplayer {
   }
 
   add(socket, data) {
-    super.add(socket, data);
     setTimeout(() => {
+    super.add(socket, data);
     const t = this.pt[this.pt.length-1];
     let red = 0, blue = 0;
     this.pt.forEach(tank => {
