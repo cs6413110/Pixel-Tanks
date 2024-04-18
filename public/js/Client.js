@@ -28,16 +28,26 @@ class Client {
     this.animate = Date.now();
   }
 
+  interpret(data) {
+    this._ups++;
+    //this.hostupdate.global = data.global;
+    // log splitting here
+    //this.hostupdate.logs.unshift(...data.logs.reverse());
+    // msg blocking here
+    for (const u of data.u) {
+      //for (let i = 
+    }
+    for (const d of data.d) {
+    }
+    this.hostupdate.logs.unshift({m: JSON.stringify(data), c: '#00ff00'});
+  }
+
   connect() {
     const entities = ['pt', 'b', 's', 'ai', 'd'];
     this.socket = new MegaSocket((window.location.protocol === 'https:' ? 'wss://' : 'ws://')+this.ip, {keepAlive: false, reconnect: false, autoconnect: true});
     this.socket.on('message', data => {
       if (data.event === 'update') {
-        this._ups++;
-        this.hostupdate.global = data.global;
-        let compiledLogs = [];
-        GUI.draw.font = '30px Font';
-        
+        this.interpret(data);
       } if (data.event === 'hostupdate') {
         this._ups++;
         this.hostupdate.tickspeed = data.tickspeed;
