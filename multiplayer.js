@@ -126,29 +126,24 @@ class Multiplayer extends Engine {
 
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
 
+
   chunkload(t, x, y) {
     this.logs.push({m: 'Chunkload Stats for O('+t.x+', '+t.y+'), N('+x+', '+y+')', c: '#ffffff'});
-    const w = 21, h = 15;
+    const w = 21, h = 15, m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o));
     const ocx = Math.floor(t.x/100)+.5, ocy = Math.floor(t.y/100)+.5, ncx = Math.floor(x/100)+.5, ncy = Math.floor(y/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
-    const o = {pt: [], d: [], b: [], ai: [], s: [], del: []};
-    let nys, l, nxs;
-    for (l = false, nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = Math.max(0, Math.min(29, nys)); y != Math.max(0, Math.min(29, nys+h*yda)); y += yda) {
-      if (y === nys+yl) l = true;
-      for (nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = Math.max(0, Math.min(29, nxs)); x != Math.max(0, Math.min(29, nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x += xda) {
+    const o = {u: [], del: []}; // message template?
+    for (let nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = m(nys), l = false; (yda > 0 ? (y < m2(nys+h*yda)) : (y > m2(nys+h*yda))); y += yda) {
+      if (yda < 0 ? y <= nys+yl : y >= nys+yl) l = true;
+      for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = m(nxs); (xda > 0 ? (x < m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x += xda) {
         for (const e of this.cells[x][y]) {
-          try {
-            o[this.sendkey[e.constructor.name]].push(e.constructor.raw.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
-          } catch(k) {this.logs.push({m: 'Error Loading Entity', c: '#ff0000'})}
+          o.u.push(e.constructor.raw.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
         }
       }
     }
-    const j = a => Math.max(0, Math.min(29, a));
-    this.logs.push({m: 'Y loops from '+j(nys)+' to '+j(nys+h*yda), c: '#ffffff'});
-    this.logs.push({m: 'X loops form '+j(nxs)+' to '+j(w)+' until y='+(nys+yl)+' in which it will loop til '+j(Math.min(w, Math.abs(xd)))});
-    for (let l = false, oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = Math.max(0, Math.min(29, oys)); y != Math.max(0, Math.min(29, oys-h*yda)); y -= yda) {
-      if (y === oys-yl) l = true;
-      for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = Math.max(0, Math.min(29, oxs)); x != Math.max(0, Math.min(29, oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x -= xda) {
+    for (let oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = m(oys), l = false; (yda < 0 ? (y < m2(oys-h*yda)) : (y > m2(oys-h*yda))); y -= yda) {
+      if (yda > 0 ? y <= oys-yl : y >= oys-yl) l = true;
+      for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
         for (const e of this.cells[x][y]) o.del.push(e.id);
       }
     }
