@@ -1,7 +1,7 @@
 class Block {
   static args = ['x', 'y', 'hp', 'type', 'team', 'host'];
   static raw = ['x', 'y', 'maxHp', 'hp', 'type', 's', 'team'];
-  static perUpdate = ['s', 'hp'];
+  static update = ['s', 'hp'];
   constructor() {
     this.cells = new Set();
     this.t = []; // can be removed maybe?
@@ -28,7 +28,7 @@ class Block {
     if (this.hp === Infinity) return;
     this.s = Date.now();
     if ((this.hp = Math.min(this.maxHp, this.hp-d)) <= 0) return this.destroy();
-    this.host.updateEntity(this, this.x, this.y, 100, 100, Block.perUpdate);
+    this.host.updateEntity(this, this.x, this.y, 100, 100, Block.update);
     this.raw.s = this.s;
     this.raw.hp = this.hp; // temp
   }
