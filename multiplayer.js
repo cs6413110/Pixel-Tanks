@@ -232,8 +232,7 @@ class Multiplayer extends Engine {
       for (const u of this.updates) {
         if (Engine.collision(u[0], u[1], u[2], u[3], t.x+1010, t.y-710, 2100, 1500)) {
           let i = message.u.indexOf(e => e[0] === u[4]);
-          console.log(i);
-          if (i) message.u[i].push(...u.slice(5)); else message.u.push(u.slice(4));
+          if (i >= 0) message.u[i].push(...u.slice(5)); else message.u.push(u.slice(4));
         }
       }
       for (const d of this.deletions) {
