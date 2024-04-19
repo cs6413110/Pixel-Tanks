@@ -253,7 +253,6 @@ class Multiplayer extends Engine {
   updateEntity(e, x, y, w, h, c) {
     const a = A.template('arr');
     for (const p of c) a.push(p, e[p]);
-    console.log(e.id, x, y, w, h, a);
     this.pushUpdate(e.id, x, y, w, h, ...a);
     a.release();
   } // optimize by combining with the below function
