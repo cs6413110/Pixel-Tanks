@@ -839,7 +839,7 @@ const helpList = Commands;
 A.createTemplate('render', class {b = new Set(); pt = new Set(); ai = new Set(); s = new Set(); d = new Set()}, r => {
   for (const property of ['b', 'pt', 'ai', 's', 'd']) r[property].clear();
 });
-A.createTemplate('message', class {b = []; pt = []; ai = []; s = []; d = []; event = 'hostupdate'; delete = {b: [], pt: [], ai: [], s: [], d: []}}, m => {
+A.createTemplate('message', class {u = []; b = []; pt = []; ai = []; s = []; d = []; event = 'hostupdate'; delete = {b: [], pt: [], ai: [], s: [], d: []}}, m => {
   for (const property of ['b', 'pt', 'ai', 's', 'd']) {
     m[property].length = 0;
     m.delete[property].length = 0;
