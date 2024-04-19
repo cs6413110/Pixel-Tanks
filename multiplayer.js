@@ -911,6 +911,7 @@ wss.on('connection', socket => {
           break;
         }
       }
+      data.gamemode = 'ffa';
       if (!server) {
         server = Math.random();
         servers[server] = new joinKey[data.gamemode]();
