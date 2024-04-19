@@ -26,7 +26,10 @@ class Tank {
     host.loadCells(this, this.x, this.y, 80, 80);
     host.override(this);
     host.pt.push(this);
-    for (const p of Tank.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
+    for (const p of Tank.raw) {
+      this.raw[p] = this[p];
+      Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
+    }
   }
   setValue(p, v) {
     if (this.raw[p] === v) return; else this.raw[p] = v;
