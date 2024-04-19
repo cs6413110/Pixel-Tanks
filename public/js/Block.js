@@ -14,8 +14,8 @@ class Block {
     if (!(this.c = type !== 'fire' && type !== 'airstrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
     if (type === 'spike') this.c = false;
     if (type === 'airstrike') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(A.template('Damage').init(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
-    host.loadCells(this, this.x, this.y, 100, 100);
     if (this.c && this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && this.y <= 2900) host.map.setWalkableAt(Engine.r(Math.floor(this.x/100)), Engine.r(Math.floor(this.y/100)), false);
+    host.loadCells(this, this.x, this.y, 100, 100);
     host.updateEntity(this, this.x, this.y, 100, 100, Block.raw);
     for (const p of Block.raw) this.raw[p] = this[p]; // temp
     return this;
