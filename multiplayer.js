@@ -242,7 +242,8 @@ class Multiplayer extends Engine {
         }
       }
       if ((message.logs.length || message.u.length || message.d.length) && true/* rate limiter here */) {
-        t.socket.send(message);
+       // t.socket.send(message);
+        console.log(JSON.stringify(message));
       }
       message.release();
     }
@@ -254,7 +255,7 @@ class Multiplayer extends Engine {
     for (const p of c) a.push(p, e[p]);
     this.pushUpdate(e.id, x, y, w, h, ...a);
     a.release();
-  }
+  } // optimize by combining with the below function
 
   pushUpdate(id, x, y, w, h, ...p) {
     for (const u of this.updates) if (u[4] === id) {
