@@ -174,19 +174,19 @@ class Engine {
 
   static r = o => Math.max(0, Math.min(29, o));
 
-  loadCells(e, x, y, w, h) {
+  loadCells(e, ex, ey, w, h) {
     del: for (const cell of e.cells) {
       let c = cell.split('x'), xv = c[0], yv = c[1];
-      for (let x = Engine.r(Math.floor(x/100)); x <= Engine.r(Math.floor((x+w-1)/100)); x++) {
-        for (let y = Engine.r(Math.floor(y/100)); y <= Engine.r(Math.floor((x+h-1)/100)); y++) {
+      for (let x = Engine.r(Math.floor(ex/100)); x <= Engine.r(Math.floor((ex+w-1)/100)); x++) {
+        for (let y = Engine.r(Math.floor(ey/100)); y <= Engine.r(Math.floor((ey+h-1)/100)); y++) {
           if (x === xv && y === yv) continue del;
         }
       }
       this.cells[xv][yv].delete(e);
-      e.cells.delete(`${xv}x${yv}`);
+      e.cells.delete(cell);
     }
-    for (let x = Engine.r(Math.floor(x/100)); x <= Engine.r(Math.floor((x+w-1)/100)); x++) {
-      for (let y = Engine.r(Math.floor(y/100)); y <= Engine.r(Math.floor((x+h-1)/100)); y++) {
+    for (let x = Engine.r(Math.floor(ex/100)); x <= Engine.r(Math.floor((ex+w-1)/100)); x++) {
+      for (let y = Engine.r(Math.floor(ey/100)); y <= Engine.r(Math.floor((ey+h-1)/100)); y++) {
         if (e.cells.has(`${x}x${y}`)) continue;
         this.cells[x][y].add(e);
         e.cells.add(`${x}x${y}`); 
