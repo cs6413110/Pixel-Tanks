@@ -1,13 +1,13 @@
 class Engine {
   constructor(levels) {
     if (!A.templates.Block) {
+      A.createTemplate('Tank', Tank);
       A.createTemplate('Block', Block);
       A.createTemplate('Shot', Shot);
       A.createTemplate('Damage', Damage);
       A.createTemplate('AI', AI);
       A.createTemplate('arr', Array, a => (a.length = 0)); // batch size of 100, will inc upon higher demand. Startup value may vary depending on use case.
       A.createTemplate('set', Set, s => s.clear());
-      //A.createTemplate('Tank', Tank); ...players aren't created or destroyed often enough for this to really matter
     }
     this.spawn = {x: 0, y: 0};
     this.spawns = [{x: 0, y: 0}, {x: 0, y: 0}];
@@ -23,7 +23,7 @@ class Engine {
   }
 
   add(data) {
-    setTimeout(() => this.pt.push(new Tank(data, this))); // change this later??? temp fix for joining delay
+    setTimeout(() => A.template('Tank').init(data, this)); // change this later??? temp fix for joining delay
   }
 
   useAbility(t, a) {
