@@ -14,12 +14,8 @@ class Block {
     if (!(this.c = type !== 'fire' && type !== 'airstrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : 6000);
     if (type === 'spike') this.c = false;
     if (type === 'airstrike') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(A.template('Damage').init(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
-    let dxmin = Math.max(0, Math.min(29, Math.floor(this.x/100))), dymin = Math.max(0, Math.min(29, Math.floor(this.y/100))), dxmax = Math.max(0, Math.min(29, Math.floor((this.x+99)/100))), dymax = Math.max(0, Math.min(29, Math.floor((this.y+99)/100)));
-    for (let x = dxmin; x <= dxmax; x++) for (let y = dymin; y <= dymax; y++) {
-      host.cells[x][y].add(this);
-      this.cells.add(x+'x'+y);
-    }
-    if (this.c && this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && this.y <= 2900) host.map.setWalkableAt(dxmin, dymin, false);
+    host.loadCells(this, this.x, this.y, 100, 100);
+    if (this.c && this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && this.y <= 2900) host.map.setWalkableAt(Engine.r(Math.floor(this.x/100)), Engine.r(Math.floor(this.y/100)), false);
     host.updateEntity(this, this.x, this.y, 100, 100, Block.raw);
     for (const p of Block.raw) this.raw[p] = this[p]; // temp
     return this;
