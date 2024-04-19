@@ -1,7 +1,7 @@
 class Block {
   static args = ['x', 'y', 'hp', 'type', 'team', 'host'];
-  static raw = ['x', 'y', 'type', 's', 'team', 'maxHp', 'hp'];
-  static raw2 = ['x', 'y', 'type', 's', 'team'];
+  static raw = ['x', 'y', 'type', 'team', 'maxHp', 'hp'];
+  static raw2 = ['x', 'y', 'type', 'team'];
   static update = ['s', 'hp'];
   constructor() {
     this.cells = new Set();
