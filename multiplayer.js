@@ -242,8 +242,8 @@ class Multiplayer extends Engine {
         }
       }
       if ((message.logs.length || message.u.length || message.d.length) && true/* rate limiter here */) {
-        //t.socket.send(message);
-        console.log(JSON.stringify(message));
+        t.socket.send(message);
+        //console.log(JSON.stringify(message));
       }
       //message.release();
     }
