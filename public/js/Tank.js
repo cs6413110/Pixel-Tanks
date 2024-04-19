@@ -6,7 +6,6 @@ class Tank {
     this.cells = new Set();
   }
   init(data, host) {
-    console.log(data, host);
     this.id = Engine.genId(0);
     this.raw = {id: this.id};
     for (const p of Tank.args) this[p] = data[p];
