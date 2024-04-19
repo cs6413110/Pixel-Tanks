@@ -219,9 +219,9 @@ class Multiplayer extends Engine {
 
   eventSend(u, m) { // optional u, m params for chunkloading per player
     for (const t of this.pt) {
-      const message = t.username === u ? m : A.template('message');
+      //const message = t.username === u ? m : A.template('message');
+      let message = {u: [], d: [], event: 'update'};
       message.global = this.global;
-      message.event = 'update';
       //message.logs = // attach variable to player to track how many logs have been sent to them
     /*const message = {
         event: 'update',
@@ -242,10 +242,10 @@ class Multiplayer extends Engine {
         }
       }
       if ((message.logs.length || message.u.length || message.d.length) && true/* rate limiter here */) {
-       // t.socket.send(message);
+        //t.socket.send(message);
         console.log(JSON.stringify(message));
       }
-      message.release();
+      //message.release();
     }
     this.updates.length = this.deletions.length = 0;
   }
