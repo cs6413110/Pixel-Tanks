@@ -33,7 +33,7 @@ class Tank {
   setValue(p, v) {
     if (this.raw[p] === v) return; else this.raw[p] = v;
     this.updatedLast = Date.now();
-    this.host.updateEntity(this.id, this.x, this.y, 80, 80, p, v);
+    this.host.updateEntity(this.id, this.x, this.y, 80, 80, [p, v]);
   }
   update() {
     const team = Engine.getTeam(this.team);
