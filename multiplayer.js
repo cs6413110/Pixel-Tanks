@@ -114,18 +114,11 @@ class Multiplayer extends Engine {
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
     this.updates = [];
     this.deletions = [];
-    this.i.push(setInterval(() => this.getBetaStats(), 10000));
+    this.i.push(setInterval(() => this.eventSend(), 1000));
     this.i.push(setInterval(() => this.cellSend(), 1000/settings.ups));
   }
 
-  getBetaStats() {
-    //this.logs.push({m: JSON.stringify(this.updates), c: '#ff0f0f'});
-    //this.logs.push({m: JSON.stringify(this.deletions), c: '#ffA9A9'});
-    this.updates.length = this.deletions.length = 0;
-  }
-
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
-
 
   chunkload(t, x, y) {
     //this.logs.push({m: 'Chunkload Stats for O('+t.x+', '+t.y+'), N('+x+', '+y+')', c: '#ffffff'});
