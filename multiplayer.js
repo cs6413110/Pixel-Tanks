@@ -119,8 +119,8 @@ class Multiplayer extends Engine {
   }
 
   getBetaStats() {
-    this.logs.push({m: JSON.stringify(this.updates), c: '#ff0f0f'});
-    this.logs.push({m: JSON.stringify(this.deletions), c: '#ffA9A9'});
+    //this.logs.push({m: JSON.stringify(this.updates), c: '#ff0f0f'});
+    //this.logs.push({m: JSON.stringify(this.deletions), c: '#ffA9A9'});
     this.updates.length = this.deletions.length = 0;
   }
 
@@ -128,7 +128,7 @@ class Multiplayer extends Engine {
 
 
   chunkload(t, x, y) {
-    this.logs.push({m: 'Chunkload Stats for O('+t.x+', '+t.y+'), N('+x+', '+y+')', c: '#ffffff'});
+    //this.logs.push({m: 'Chunkload Stats for O('+t.x+', '+t.y+'), N('+x+', '+y+')', c: '#ffffff'});
     const w = 21, h = 15, m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o));
     const ocx = Math.floor(t.x/100)+.5, ocy = Math.floor(t.y/100)+.5, ncx = Math.floor(x/100)+.5, ncy = Math.floor(y/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
@@ -147,7 +147,7 @@ class Multiplayer extends Engine {
         for (const e of this.cells[x][y]) o.del.push(e.id);
       }
     }
-    this.logs.push({m: JSON.stringify(o), c: '#00ff00'});
+    //this.logs.push({m: JSON.stringify(o), c: '#00ff00'});
     return o;
   }
 
