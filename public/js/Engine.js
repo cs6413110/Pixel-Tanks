@@ -134,7 +134,7 @@ class Engine {
       if (t.socket && (Math.floor(t.x/100) !== Math.floor(x/100) || Math.floor(t.y/100) !== Math.floor(y/100))) this.chunkload(t, x, y);
       t.x = x;
       t.y = y;
-      t.updateCell();
+      this.loadCells(t, t.x, t.y, 80, 80);
     }
     t.r = r;
     if (use.includes('respawn')) {
