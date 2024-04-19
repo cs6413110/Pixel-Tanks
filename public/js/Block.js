@@ -29,6 +29,7 @@ class Block {
     this.s = Date.now();
     if ((this.hp = Math.min(this.maxHp, this.hp-d)) <= 0) return this.destroy();
     this.host.updateEntity(this, this.x, this.y, 100, 100, Block.update);
+    this.updatedLast = Date.now();
     this.raw.s = this.s;
     this.raw.hp = this.hp; // temp
   }
