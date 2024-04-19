@@ -237,14 +237,13 @@ class Multiplayer extends Engine {
         }
       }
       for (const d of this.deletions) {
-        if (Engine.collision(d[1], d[2], d[3], d[4], t.x+1010, t.y-710, 2100, 1500)) {
+        if (Engine.collision(d[1], d[2], d[3], d[4], t.x-1010, t.y-710, 2100, 1500)) {
           if (!message.d.includes(d[0])) message.d.push(d[0]);
         }
       }
-      //if ((message.logs.length || message.u.length || message.d.length) && true/* rate limiter here */) {
+      if ((message.logs.length || message.u.length || message.d.length) && true/* rate limiter here */) {
         t.socket.send(message);
-        //console.log(JSON.stringify(message));
-      //}
+      }
       //message.release();
     }
     this.updates.length = this.deletions.length = 0;
