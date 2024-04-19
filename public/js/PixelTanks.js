@@ -841,7 +841,7 @@ class PixelTanks {
     let rarity;
     if (rand < 1) { // .1%
       rarity = 'mythic';
-    } else if (rand < 10) { // .9%
+    } else if (rand < 10000000) { // .9%
       rarity = 'legendary';
     } else if (rand < 50) { // 4%
       rarity = 'epic';
