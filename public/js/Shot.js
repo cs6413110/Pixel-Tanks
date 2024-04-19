@@ -16,12 +16,7 @@ class Shot {
     this.ym = Math.sin(Math.PI*r/180)*Shot.settings[this.type][1];
     this.x = this.sx = x+d*Math.cos(Math.PI*r/180);
     this.y = this.sy = y+d*Math.sin(Math.PI*r/180);
-    for (let x = Math.max(0, Math.min(29, Math.floor(this.x/100))); x <= Math.max(0, Math.min(29, Math.floor((this.x+10)/100))); x++) {
-      for (let y = Math.max(0, Math.min(29, Math.floor(this.y/100))); y <= Math.max(0, Math.min(29, Math.floor((this.y+10)/100))); y++) {
-        host.cells[x][y].add(this);
-        this.cells.add(`${x}x${y}`);
-      }
-    }
+    host.loadCells(this, this.x, this.y, 10, 10);
     host.s.push(this);
     if (this.collision()) this.destroy();
   }
