@@ -237,8 +237,8 @@ class Multiplayer extends Engine {
         }
       }
       for (const d of this.deletions) {
-        if (Engine.collision(d[1], d[2], d[3], d[4], t.x-1010, t.y-710, 2100, 1500)) {
-          if (!message.d.includes(d[0])) message.d.push(d[0]);
+        if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
+          if (!message.d.includes(d[4])) message.d.push(d[4]);
         }
       }
       if ((message.logs.length || message.u.length || message.d.length) && true/* rate limiter here */) {
