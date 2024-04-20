@@ -230,15 +230,15 @@ class Multiplayer extends Engine {
         u: [[id, prop, val]],
         d: [id, id, id...],
       }*/
-      for (const u of this.updates) {
-        if (Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500)) {
-          let i = message.u.indexOf(e => e[0] === u[4]);
-          if (i >= 0) message.u[i].push(...u.slice(5)); else message.u.push(u.slice(4));
-        }
-      }
       for (const d of this.deletions) {
         if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
           if (!message.d.includes(d[4])) message.d.push(d[4]);
+        }
+      }
+      for (const u of this.updates) {
+        if (!message.d.includes(u[4]) && Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500)) {
+          let i = message.u.indexOf(e => e[0] === u[4]);
+          if (i >= 0) message.u[i].push(...u.slice(5)); else message.u.push(u.slice(4));
         }
       }
       if ((message.logs.length || message.u.length || message.d.length) && true/* rate limiter here */) {
