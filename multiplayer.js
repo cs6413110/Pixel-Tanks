@@ -251,7 +251,7 @@ class Multiplayer extends Engine {
 
   updateEntity(e, x, y, w, h, c) {
     const a = A.template('arr');
-    for (const p of c) a.push(p, e[p]);
+    for (const p of c) a.push(p, isNaN(e[p]) ? e[p] : Math.round(e[p]*10)/10);
     this.pushUpdate(e.id, x, y, w, h, ...a);
     a.release();
   } // optimize by combining with the below function
