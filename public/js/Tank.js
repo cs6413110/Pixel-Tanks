@@ -15,7 +15,7 @@ class Tank {
     this.fire = {time: 0, team: this.team};
     this.hp = this.maxHp = this.rank*10+300;
     this.canBashed = this.canInvis = !(this.damage = false);
-    this.team = data.username+':'+Math.random();
+    this.team = data.username+':'+this.id;
     this.x = host.spawn.x;
     this.y = host.spawn.y;
     this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = this.lastUpdate = 0;
