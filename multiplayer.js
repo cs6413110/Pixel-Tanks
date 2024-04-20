@@ -221,7 +221,7 @@ class Multiplayer extends Engine {
     for (const t of this.pt) {
       //const message = t.username === u ? m : A.template('message');
       let message = {u: [], d: [], event: 'update'};
-      message.global = JSON.stringify(this.updates);
+      //message.global = '';
       message.logs = [];// attach variable to player to track how many logs have been sent to them
     /*const message = {
         event: 'update',
