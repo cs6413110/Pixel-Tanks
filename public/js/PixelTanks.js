@@ -934,7 +934,7 @@ class PixelTanks {
   static purchase(stat) {
     // since u can like only buy classes the number relates to the index of the true/false value in the PixelTanks.userData.classes to determine whether you have it or not
     const prices = [
-      7000000, // tactical
+      70000, // tactical
       30000, // stealth
       80000, // warrior
       40000, // medic
