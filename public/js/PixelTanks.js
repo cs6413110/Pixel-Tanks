@@ -287,12 +287,12 @@ class PixelTanks {
         listeners: {},
         cdraw: function() {
           GUI.drawText('Crates: ' + PixelTanks.userData.stats[1], 800, 260, 30, '#ffffff', 0.5);
-          if (cosmetAmount = 1) GUI.draw.strokeRect(300, 816, 104, 52);
-          if (cosmetAmount = 10) GUI.draw.strokeRect(424, 816, 104, 52);
-          if (cosmetAmount = 100) GUI.draw.strokeRect(548, 816, 104, 52);
-          if (deathAmount = 1) GUI.draw.strokeRect(948, 816, 104, 52);
-          if (deathAmount = 10) GUI.draw.strokeRect(1072, 816, 104, 52);
-          if (deathAmount = 100) GUI.draw.strokeRect(1196, 816, 104, 52);
+          if (cosmetAmount === 1) GUI.draw.strokeRect(300, 816, 104, 52);
+          if (cosmetAmount === 10) GUI.draw.strokeRect(424, 816, 104, 52);
+          if (cosmetAmount === 100) GUI.draw.strokeRect(548, 816, 104, 52);
+          if (deathAmount === 1) GUI.draw.strokeRect(948, 816, 104, 52);
+          if (deathAmount === 10) GUI.draw.strokeRect(1072, 816, 104, 52);
+          if (deathAmount === 100) GUI.draw.strokeRect(1196, 816, 104, 52);
         }
       },
       settings: {
