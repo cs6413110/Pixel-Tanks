@@ -276,7 +276,7 @@ class PixelTanks {
         buttons: [
           [416, 20, 81, 81, 'main', true],
           [232, 308, 488, 488, function() {for (let i = 0; i < cosmetAmount; i++) {PixelTanks.openCrate(0)}}, false],
-          [880, 308, 488, 488, function() {for (let i = 0; i < deathAmount; i++) {PixelTanks.openCrate(1)}, false],
+          [880, 308, 488, 488, function() {for (let i = 0; i < deathAmount; i++) {PixelTanks.openCrate(1)}}, false],
           [300, 816, 104, 52, function() {cosmetAmount = 1}, false],
           [424, 816, 104, 52, function() {cosmetAmount = 10}, false],
           [548, 816, 104, 52, function() {cosmetAmount = 100}, false],
