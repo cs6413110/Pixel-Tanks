@@ -1,13 +1,14 @@
 class Shot {
   static settings = {bullet: [20, 18], shotgun: [20, 14.4], grapple: [0, 36], fire: [0, 16.2], dynamite: [0, 14.4], usb: [0, 14.4], powermissle: [100, 27, 50], megamissle: [200, 27, 100], healmissle: [-500, 27, 30]};
   static args = ['x', 'y', 'd', 'r', 'type', 'team', 'rank', 'host'];
-  static raw = ['team', 'r', 'type', 'x', 'y', 'sx', 'sy'];
+  static raw = ['team', 'r', 'type', 'x', 'y', 'sx', 'sy']; // make reflector update shot team?
+  static u = ['x', 'y'];
+  static u2 = ['r'];
   constructor() {
     this.cells = new Set();
-    for (const p of Shot.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
   init(x, y, d, r, type, team, rank, host) {
-    this.id = Math.random();
+    this.id = Engine.genId(2);
     this.raw = {id: this.id};
     for (let i = Shot.args.length-1; i >= 0; i--) this[Shot.args[i]] = arguments[i];
     this.e = Date.now();
@@ -18,7 +19,8 @@ class Shot {
     this.y = this.sy = y+d*Math.sin(Math.PI*r/180);
     host.loadCells(this, this.x, this.y, 10, 10);
     host.s.push(this);
-    if (this.collision()) this.destroy();
+    if (this.collision()) return this.destroy(); // for quick destroy, no need to even register this bullet's existance on the update stream.
+    host.updateEntity(this, this.x, this.y, 10, 10, Shot.raw);
   }
   collide(e) {
     let size = Shot.settings[this.type][2], o = size/2+10, isBlock = e instanceof Block, pullGrapple = (isBlock || !e) && this.type === 'grapple';
@@ -62,24 +64,25 @@ class Shot {
     if (((x < 0 || y < 0 || x+10 >= 3000 || y+10 >= 3000) && !this.target && this.collide()) || (this.target && (!this.target.x || !this.target.y))) return this.destroy();
     if (this.target) if (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded) return this.destroy();
     if (Math.floor(this.x/100) !== x1 || Math.floor(this.y/100) !== y2 || Math.floor((this.x+10)/100) !== x2 || Math.floor((this.y+10)/100) !== y2) this.host.loadCells(this, x, y, 10, 10);
-    this.x = x;
-    this.y = y;
+    this.host.updateEntity(this, this.x = x, this.y = y, 10, 10, Shot.u);
+    /* temp */
+    this.raw.x = x;
+    this.raw.y = y;
     if (this.target) return;
     if (this.collision()) return this.destroy();
     if (this.type === 'shotgun') {
       this.d = Math.sqrt((this.x-this.sx)**2+(this.y-this.sy)**2);
       if (this.d >= 300) return this.destroy();
-      this.damage = (1-this.d/300)*this.md;  
-    } else if (this.type === 'dynamite') this.r += 5;
-  }
-  setValue(p, v) {
-    this.updatedLast = Date.now(); // REMOVE THIS SOON
-    this.raw[p] = v; // SOON UNNECCESSARY
-    //this.host.updateEntity(this.id, this.x, this.y, 10, 10, p, v);
+      this.damage = (1-this.d/300)*this.md;
+    } else if (this.type === 'dynamite') {
+      this.r += 5;
+      this.host.updateEntity(this, this.x, this.y, 10, 10, Shot.u2);
+      this.raw.r = this.r; // temp
+    }
   }
   reset = () => this.cells.clear();
   destroy() {
-    //this.host.destroyEntity(this.id, this.x, this.y, 10, 10);
+    this.host.destroyEntity(this.id, this.x, this.y, 10, 10);
     for (const cell of this.cells) {
       const c = cell.split('x');
       this.host.cells[c[0]][c[1]].delete(this);
