@@ -21,6 +21,7 @@ class Shot {
     if (this.collision()) return this.destroy(); // for quick destroy, no need to even register this bullet's existance on the update stream.
     host.updateEntity(this, this.x, this.y, 10, 10, Shot.raw);
     this.raw = {id: this.id, type: type, team: team, x: this.x, y: this.y, sx: this.sx, sy: this.sy, r: this.r}; // temp
+    this.updatedLast = Date.now();
   }
   collide(e) {
     let size = Shot.settings[this.type][2], o = size/2+10, isBlock = e instanceof Block, pullGrapple = (isBlock || !e) && this.type === 'grapple';
@@ -66,6 +67,7 @@ class Shot {
     if (Math.floor(this.x/100) !== x1 || Math.floor(this.y/100) !== y2 || Math.floor((this.x+10)/100) !== x2 || Math.floor((this.y+10)/100) !== y2) this.host.loadCells(this, x, y, 10, 10);
     this.host.updateEntity(this, this.x = x, this.y = y, 10, 10, Shot.u);
     /* temp */
+    this.updatedLast = Date.now();
     this.raw.x = x;
     this.raw.y = y;
     if (this.target) return;
@@ -77,6 +79,7 @@ class Shot {
     } else if (this.type === 'dynamite') {
       this.r += 5;
       this.host.updateEntity(this, this.x, this.y, 10, 10, Shot.u2);
+      this.updatedLast = Date.now();
       this.raw.r = this.r; // temp
     }
   }
