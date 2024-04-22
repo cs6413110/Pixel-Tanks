@@ -58,6 +58,8 @@ class PixelTanks {
     PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
     const config = document.createElement('SCRIPT');
     const newClass = 'undefined';
+    const cosmetAmount = 1;
+    const deathAmount = 1;
     config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
     config.onload = () => {
       PixelTanks.images = images;
@@ -273,12 +275,20 @@ class PixelTanks {
       crate: {
         buttons: [
           [416, 20, 81, 81, 'main', true],
-          [232, 308, 488, 488, function() {PixelTanks.openCrate(0)}, false],
-          [880, 308, 488, 488, function() {PixelTanks.openCrate(1)}, false],
+          [232, 308, 488, 488, function() {for (let i = 0; i < cosmetAmount; i++) {PixelTanks.openCrate(0)}}, false],
+          [880, 308, 488, 488, function() {for (let i = 0; i < deathAmount; i++) {PixelTanks.openCrate(1)}, false],
+          [300, 816, 104, 52, function() {cosmetAmount = 1}, false],
+          [424, 816, 104, 52, function() {cosmetAmount = 10}, false],
+          [548, 816, 104, 52, function() {cosmetAmount = 100}, false],
+          [948, 816, 104, 52, function() {deathAmount = 1}, false],
+          [1072, 816, 104, 52, function() {deathAmount = 10}, false],
+          [1196, 816, 104, 52, function() {deathAmount = 100}, false],
         ],
         listeners: {},
         cdraw: function() {
           GUI.drawText('Crates: ' + PixelTanks.userData.stats[1], 800, 260, 30, '#ffffff', 0.5);
+          if (cosmetAmount = 1) GUI.draw.strokeRect(300, 816, 104, 52); else if (cosmetAmount = 10) GUI.draw.strokeRect(424, 816, 104, 52); else if (cosmetAmount = 100) GUI.draw.strokeRect(548, 816, 104, 52);
+          if (deathAmount = 1) GUI.draw.strokeRect(948, 816, 104, 52); else if (deathAmount = 10) GUI.draw.strokeRect(1072, 816, 104, 52); else if (deathAmount = 100) GUI.draw.strokeRect(1196, 816, 104, 52);
         }
       },
       settings: {
@@ -878,7 +888,7 @@ class PixelTanks {
     setTimeout(() => {
       clearInterval(render);
       Menus.trigger('crate');
-    }, done ? 250 : 5000);
+    }, done ? 50 : 3000);
     PixelTanks.save();
   }
 
