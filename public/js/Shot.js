@@ -9,7 +9,6 @@ class Shot {
   }
   init(x, y, d, r, type, team, rank, host) {
     this.id = Engine.genId(2);
-    this.raw = {id: this.id};
     for (let i = Shot.args.length-1; i >= 0; i--) this[Shot.args[i]] = arguments[i];
     this.e = Date.now();
     this.md = this.damage = Shot.settings[this.type][0]*(rank*10+300)/500;
@@ -21,6 +20,7 @@ class Shot {
     host.s.push(this);
     if (this.collision()) return this.destroy(); // for quick destroy, no need to even register this bullet's existance on the update stream.
     host.updateEntity(this, this.x, this.y, 10, 10, Shot.raw);
+    this.raw = {id: this.id, type: type, team: team, x: this.x, y: this.y, sx: this.sx, sy: this.sy, r: this.r}; // temp
   }
   collide(e) {
     let size = Shot.settings[this.type][2], o = size/2+10, isBlock = e instanceof Block, pullGrapple = (isBlock || !e) && this.type === 'grapple';
