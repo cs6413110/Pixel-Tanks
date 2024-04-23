@@ -53,7 +53,7 @@ class Client {
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
       if (i) this.hostupdate[this.getIdType(d)].splice(i, 1);
     }
-    alert(JSON.stringify(this.hostupdate));
+    if (this.hacks) document.write(JSON.stringify(this.hostupdate));
     //this.hostupdate.logs.unshift({m: JSON.stringify(data), c: '#00ff00'});
   }
 
