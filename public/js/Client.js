@@ -3,7 +3,7 @@ class Client {
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
-    this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], logs: [], tickspeed: -1};
+    this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], logs: [], entities: [], tickspeed: -1};
     this.paused = this.showChat = this.canRespawn = this.hacks = false;
     this.multiplayer = multiplayer;
     this.gamemode = gamemode;
@@ -28,6 +28,10 @@ class Client {
     this.animate = Date.now();
   }
 
+  getIdType(id) {
+    return ['pt', 'b', 's', 'ai', 'd'][Math.floor(id)];
+  }
+
   interpret(data) {
     this._ups++;
     //this.hostupdate.global = data.global;
@@ -35,11 +39,21 @@ class Client {
     //this.hostupdate.logs.unshift(...data.logs.reverse());
     // msg blocking here
     for (const u of data.u) {
-      //for (let i = 
+      let e = this.hostupdate.entities.find(e => e.id === u[0]);
+      if (!e) {
+        e = {id: u[0]};
+        this.hostupdate.entities.push(e);
+        this.hostupdate[this.getIdType(e.id)].push(e);
+      }
+      for (let i = 1; i < u.length; i += 2) e[u[i]] = u[i+1];
     }
     for (const d of data.d) {
+      let i = this.hostupdate.entities.indexOf(e => e.id === d);
+      if (i) this.hostupdate.entities.splice(i, 1);
+      i = this.hostupdate[this.getIdType(d)].indexOf(e => e.id === d);
+      if (i) this.hostupdate[this.getIdType(d)].splice(i, 1);
     }
-    this.hostupdate.logs.unshift({m: JSON.stringify(data), c: '#00ff00'});
+    //this.hostupdate.logs.unshift({m: JSON.stringify(data), c: '#00ff00'});
   }
 
   connect() {
