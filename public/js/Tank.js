@@ -21,7 +21,8 @@ class Tank {
     this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = this.lastUpdate = 0;
     this.privateLogs = A.template('arr');
     // chunkload here?
-    //host.updateEntity(this, this.x, this.y, 80, 80, Tank.raw);
+    // ye :)
+    host.updateEntity(this, this.x, this.y, 80, 80, Tank.raw);
     host.loadCells(this, this.x, this.y, 80, 80);
     host.override(this);
     host.pt.push(this);
@@ -33,7 +34,7 @@ class Tank {
   setValue(p, v) {
     if (this.raw[p] === v) return; else this.raw[p] = v;
     this.updatedLast = Date.now();
-    //this.host.updateEntity(this, this.x, this.y, 80, 80, [p]);
+    this.host.updateEntity(this, this.x, this.y, 80, 80, [p]);
   }
   update() {
     const team = Engine.getTeam(this.team);
