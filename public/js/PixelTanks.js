@@ -895,10 +895,10 @@ class PixelTanks {
       if (!done) PixelTanks.userData[name].unshift(crate[type][rarity][number]+'#1');
       setTimeout(() => {}, done ? 2500/stuffAmount : 2500);
     }
+    clearInterval(render);
+    Menus.trigger('crate');
+    PixelTanks.save();
   }
-  //clearInterval(render);
-  //Menus.trigger('crate');
-  //PixelTanks.save();
 
   static upgrade() {
     const coins = PixelTanks.userData.stats[0], xp = PixelTanks.userData.stats[3], rank = PixelTanks.userData.stats[4];
