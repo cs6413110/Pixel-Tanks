@@ -869,7 +869,7 @@ class PixelTanks {
     } else { // 70%
       rarity = 'common'; 
     }
-    if (PixelTanks.userData.stats[1] < price) return alert('Your broke boi!');
+    if (PixelTanks.userData.stats[1] < price*stuffAmount) return alert('Your broke boi!');
     PixelTanks.userData.stats[1] -= price; 
     let number = Math.floor(Math.random()*(crate[type][rarity].length)), item;
     for (const e in this.images[name]) if (e === crate[type][rarity][number]) item = this.images[name][e];
@@ -895,7 +895,7 @@ class PixelTanks {
     setTimeout(() => {
       clearInterval(render);
       Menus.trigger('crate');
-    }, done ? 2500 : 2500);
+    }, done ? 2500/stuffAmount : 2500);
     PixelTanks.save();
   }
 
