@@ -121,7 +121,6 @@ class Multiplayer extends Engine {
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
 
   chunkload(t, x, y) {
-    //this.logs.push({m: 'Chunkload Stats for O('+t.x+', '+t.y+'), N('+x+', '+y+')', c: '#ffffff'});
     const w = 21, h = 15, m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o));
     const ocx = Math.floor(t.x/100)+.5, ocy = Math.floor(t.y/100)+.5, ncx = Math.floor(x/100)+.5, ncy = Math.floor(y/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
@@ -140,7 +139,6 @@ class Multiplayer extends Engine {
         for (const e of this.cells[x][y]) o.del.push(e.id);
       }
     }
-    //this.logs.push({m: JSON.stringify(o), c: '#00ff00'});
     return o;
   }
 
@@ -217,34 +215,26 @@ class Multiplayer extends Engine {
     }
   }
 
-  eventSend(u, m) { // optional u, m params for chunkloading per player
+  eventSend() {
     for (const t of this.pt) {
-      //const message = t.username === u ? m : A.template('message');
-      let message = {u: [], d: [], event: 'update'};
-      //message.global = '';
-      message.logs = [];// attach variable to player to track how many logs have been sent to them
-    /*const message = {
-        event: 'update',
-        logs: [{m: 'asdf', c: '#ffffff'}],
-        global: '', // not delta updated so can't track if updated for send bool
-        u: [[id, prop, val]],
-        d: [id, id, id...],
-      }*/
+      const msg = t.chunk || A.template('msg');
+      // handle message global and logs
       for (const d of this.deletions) {
         if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
-          if (!message.d.includes(d[4])) message.d.push(d[4]);
+          if (!msg.d.includes(d[4])) msg.d.push(d[4]);
         }
       }
       for (const u of this.updates) {
-        if (!message.d.includes(u[4]) && Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500)) {
-          let i = message.u.indexOf(e => e[0] === u[4]);
-          if (i >= 0) message.u[i].push(...u.slice(5)); else message.u.push(u.slice(4));
+        if (!msg.d.includes(u[4]) && Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500)) {
+          let i = msg.u.indexOf(e => e[0] === u[4]);
+          if (i >= 0) msg.u[i].push(...u.slice(5)); else msg.u.push(u.slice(4));
         }
       }
-      if ((message.logs.length || message.u.length || message.d.length) && true/* rate limiter here */) {
-        t.socket.send(message);
+      if ((msg.logs.length || msg.u.length || msg.d.length) && true/* rate limiter here */) {
+        t.socket.send(ms);
       }
-      //message.release();
+      msg.release();
+      if (t.chunk) t.chunk = undefined;
     }
     this.updates.length = this.deletions.length = 0;
   }
@@ -846,6 +836,10 @@ A.createTemplate('message', class {u = []; b = []; pt = []; ai = []; s = []; d =
     m[property].length = 0;
     m.delete[property].length = 0;
   }
+});
+A.createTemplate('msg', class {u = []; d = []; global = ''; logs = []; event = 'update'}, m => {
+  m.u.length = m.d.length = m.logs.length = 0;
+  m.global = '';
 });
 A.createTemplate('arr', Array, a => (a.length = 0));
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM, 'defense': Defense};
