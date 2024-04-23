@@ -275,8 +275,8 @@ class PixelTanks {
       crate: {
         buttons: [
           [416, 20, 81, 81, 'main', true],
-          [232, 308, 488, 488, function() {for (let i = 0; i < cosmetAmount; i++) {PixelTanks.openCrate(0)}}, false],
-          [880, 308, 488, 488, function() {for (let i = 0; i < deathAmount; i++) {PixelTanks.openCrate(1)}}, false],
+          [232, 308, 488, 488, function() {for (let i = 0; i < cosmetAmount; i++) {PixelTanks.openCrate(0, cosmetAmount)}}, false],
+          [880, 308, 488, 488, function() {for (let i = 0; i < deathAmount; i++) {PixelTanks.openCrate(1, deathAmount)}}, false],
           [300, 816, 104, 52, function() {cosmetAmount = 1}, false],
           [424, 816, 104, 52, function() {cosmetAmount = 10}, false],
           [548, 816, 104, 52, function() {cosmetAmount = 100}, false],
@@ -839,7 +839,7 @@ class PixelTanks {
     Menus.redraw();
   } // OPTIMIZE
   
-  static openCrate(type) {
+  static openCrate(type, amount) {
     const price = type ? 5 : 1, name = type ? 'deathEffects' : 'cosmetics', rand = Math.floor(Math.random()*1001), crate = [{
       common: ['white horns', 'white wings', 'blue horns', 'gold horns', 'blue wings', 'gold wings', 'watermelon', 'Spooked', 'Cute Eyes', 'Army', 'Top Hat', 'X', 'Red Hoodie', 'Devil Wings', 'Devil Horns', 'Exclaimation Point', 'Orange Hoodie', 'GoldShield', 'Yellow Hoodie', 'Green Hoodie', 'Blue Hoodie', 'Purple Hoodie', 'Cancelled', 'Spirals', 'Speaker', 'Spikes', 'Candy Cane', 'Pumpkin Face', 'Mask', 'Purple-Pink Hoodie', 'Bunny Ears'],
       uncommon: ['glitch', 'CompanionCube', 'PortalCube', 'half glitch', 'eye', 'Anime Eyes', 'Angry Eyes', 'Hard Hat', 'Present', 'Dead', 'Peace', 'Question Mark', 'Small Scratch', 'Kill = Ban', 'Reindeer Hat', 'Pumpkin Hat', 'Cat Ears', 'Cake', 'Cat Hat', 'bread', 'First Aid', 'silver', 'Fisher Hat', 'chip', 'eyes', 'zombie', 'googly', 'static', 'lava', 'void knight'],
@@ -892,12 +892,10 @@ class PixelTanks {
       }
     }
     if (!done) PixelTanks.userData[name].unshift(crate[type][rarity][number]+'#1');
-    const cosAmount = cosmetAmount;
-    const dedAmount = deathAmount;
     setTimeout(() => {
       clearInterval(render);
       Menus.trigger('crate');
-    }, done ? (name === 'cosmetics' ? 2500/cosAmount : 2500/dedAmount) : 2500);
+    }, done ? 2500/amount) : 2500);
     PixelTanks.save();
   }
 
