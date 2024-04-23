@@ -895,7 +895,7 @@ class PixelTanks {
     setTimeout(() => {
       clearInterval(render);
       Menus.trigger('crate');
-      const kind = type === 'cosmetics' ? cosmetAmount : deathAmount;
+      const kind = name === 'cosmetics' ? cosmetAmount : deathAmount;
     }, done ? (2500/kind) : 2500);
     PixelTanks.save();
   }
