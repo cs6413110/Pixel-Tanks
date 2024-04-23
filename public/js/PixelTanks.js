@@ -895,7 +895,7 @@ class PixelTanks {
     setTimeout(() => {
       clearInterval(render);
       Menus.trigger('crate');
-    }, done ? 2500/stuffAmount : 2500);
+    }, done ? 2500 : 2500);
     PixelTanks.save();
   }
 
