@@ -48,11 +48,12 @@ class Client {
       for (let i = 1; i < u.length; i += 2) e[u[i]] = u[i+1];
     }
     for (const d of data.d) {
-      let i = this.hostupdate.entities.indexOf(e => e.id === d);
+      let i = this.hostupdate.entities.findIndex(e => e.id === d);
       if (i) this.hostupdate.entities.splice(i, 1);
-      i = this.hostupdate[this.getIdType(d)].indexOf(e => e.id === d);
+      i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
       if (i) this.hostupdate[this.getIdType(d)].splice(i, 1);
     }
+    alert(JSON.stringify(this.hostupdate));
     //this.hostupdate.logs.unshift({m: JSON.stringify(data), c: '#00ff00'});
   }
 
