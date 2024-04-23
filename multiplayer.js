@@ -285,9 +285,10 @@ class Multiplayer extends Engine {
           this.cells[x][y].delete(t);
         }
         if (t.grapple) t.grapple.bullet.destroy();
+        this.destroyEntity(t.id, t.x, t.y, 80, 80);
+        t.release();  
         return false;
       }
-      this.destroyEntity(t.id, t.x, t.y, 80, 80);
       return true;
     });
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === socket.username) this.ai[i].destroy();
