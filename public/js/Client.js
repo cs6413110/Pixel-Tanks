@@ -49,9 +49,9 @@ class Client {
     }
     for (const d of data.d) {
       let i = this.hostupdate.entities.findIndex(e => e.id === d);
-      if (i) this.hostupdate.entities.splice(i, 1);
+      if (i !== -1) this.hostupdate.entities.splice(i, 1);
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
-      if (i) this.hostupdate[this.getIdType(d)].splice(i, 1);
+      if (i !== -1) this.hostupdate[this.getIdType(d)].splice(i, 1);
     }
     if (this.hacks) document.write(JSON.stringify(this.hostupdate));
     //this.hostupdate.logs.unshift({m: JSON.stringify(data), c: '#00ff00'});
