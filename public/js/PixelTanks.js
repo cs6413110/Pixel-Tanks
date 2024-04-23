@@ -896,7 +896,7 @@ class PixelTanks {
       clearInterval(render);
       Menus.trigger('crate');
       const kind = type === 'cosmetics' ? cosmetAmount : deathAmount;
-    }, done ? 5/kind : 2500);
+    }, done ? (2500/kind) : 2500);
     PixelTanks.save();
   }
 
