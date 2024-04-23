@@ -277,18 +277,19 @@ class PixelTanks {
           [416, 20, 81, 81, 'main', true],
           [232, 308, 488, 488, function() {for (let i = 0; i < cosmetAmount; i++) {PixelTanks.openCrate(0)}}, false],
           [880, 308, 488, 488, function() {for (let i = 0; i < deathAmount; i++) {PixelTanks.openCrate(1)}}, false],
-          [300, 816, 104, 52, function() {let cosmetAmount = 1}, false],
-          [424, 816, 104, 52, function() {let cosmetAmount = 10}, false],
-          [548, 816, 104, 52, function() {let cosmetAmount = 100}, false],
-          [948, 816, 104, 52, function() {let deathAmount = 1}, false],
-          [1072, 816, 104, 52, function() {let deathAmount = 10}, false],
-          [1196, 816, 104, 52, function() {let deathAmount = 100}, false],
+          [300, 816, 104, 52, function() {cosmetAmount = '1'}, false],
+          [424, 816, 104, 52, function() {cosmetAmount = '10'}, false],
+          [548, 816, 104, 52, function() {cosmetAmount = '100'}, false],
+          [948, 816, 104, 52, function() {deathAmount = '1'}, false],
+          [1072, 816, 104, 52, function() {deathAmount = '10'}, false],
+          [1196, 816, 104, 52, function() {deathAmount = '100'}, false],
         ],
         listeners: {},
         cdraw: function() {
           GUI.drawText('Crates: ' + PixelTanks.userData.stats[1], 800, 260, 30, '#ffffff', 0.5);
+          GUI.draw.globalAlpha = 1;
           GUI.draw.strokeStyle = '#FFFF00';
-          GUI.draw.lineWidth = 10;
+          GUI.draw.lineWidth = 30;
           if (cosmetAmount === 1) GUI.draw.strokeRect(300, 816, 104, 52);
           if (cosmetAmount === 10) GUI.draw.strokeRect(424, 816, 104, 52);
           if (cosmetAmount === 100) GUI.draw.strokeRect(548, 816, 104, 52);
