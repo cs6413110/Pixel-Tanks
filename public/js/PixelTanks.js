@@ -277,16 +277,18 @@ class PixelTanks {
           [416, 20, 81, 81, 'main', true],
           [232, 308, 488, 488, function() {for (let i = 0; i < cosmetAmount; i++) {PixelTanks.openCrate(0)}}, false],
           [880, 308, 488, 488, function() {for (let i = 0; i < deathAmount; i++) {PixelTanks.openCrate(1)}}, false],
-          [300, 816, 104, 52, function() {cosmetAmount = 1}, false],
-          [424, 816, 104, 52, function() {cosmetAmount = 10}, false],
-          [548, 816, 104, 52, function() {cosmetAmount = 100}, false],
-          [948, 816, 104, 52, function() {deathAmount = 1}, false],
-          [1072, 816, 104, 52, function() {deathAmount = 10}, false],
-          [1196, 816, 104, 52, function() {deathAmount = 100}, false],
+          [300, 816, 104, 52, function() {let cosmetAmount = 1}, false],
+          [424, 816, 104, 52, function() {let cosmetAmount = 10}, false],
+          [548, 816, 104, 52, function() {let cosmetAmount = 100}, false],
+          [948, 816, 104, 52, function() {let deathAmount = 1}, false],
+          [1072, 816, 104, 52, function() {let deathAmount = 10}, false],
+          [1196, 816, 104, 52, function() {let deathAmount = 100}, false],
         ],
         listeners: {},
         cdraw: function() {
           GUI.drawText('Crates: ' + PixelTanks.userData.stats[1], 800, 260, 30, '#ffffff', 0.5);
+          GUI.draw.strokeStyle = '#FFFF00';
+          GUI.draw.lineWidth = 10;
           if (cosmetAmount === 1) GUI.draw.strokeRect(300, 816, 104, 52);
           if (cosmetAmount === 10) GUI.draw.strokeRect(424, 816, 104, 52);
           if (cosmetAmount === 100) GUI.draw.strokeRect(548, 816, 104, 52);
@@ -366,7 +368,7 @@ class PixelTanks {
         },
         cdraw: function() {
           const key = {item1: [165, 404], item2: [381, 404], item3: [597, 404], item4: [827, 404], toolkit: [1043, 404], grapple: [1259, 404], boost: [165, 620], class: [381, 620], fire: [597, 620], powermissle: [827, 620], chat: [1043, 620], pause: [1259, 620]};
-          GUI.draw.fillStyle = '#A9A9A9'; // change selection color later?
+          GUI.draw.fillStyle = '#A9A9A9'; // change selection  later?
           GUI.draw.lineWidth = 30; // border thickness
           for (const p in key) {
             if (Menus.menus.settings1.selected === p) GUI.draw.strokeRect(key[p][0], key[p][1], 176, 176);
