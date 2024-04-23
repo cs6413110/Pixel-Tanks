@@ -893,11 +893,12 @@ class PixelTanks {
         }
       }
       if (!done) PixelTanks.userData[name].unshift(crate[type][rarity][number]+'#1');
-      setTimeout(() => {}, done ? 2500/stuffAmount : 2500);
+      setTimeout(() => {
+        clearInterval(render);
+        Menus.trigger('crate');
+        PixelTanks.save();
+      }, done ? 2500/stuffAmount : 2500);
     }
-    clearInterval(render);
-    Menus.trigger('crate');
-    PixelTanks.save();
   }
 
   static upgrade() {
