@@ -892,10 +892,12 @@ class PixelTanks {
       }
     }
     if (!done) PixelTanks.userData[name].unshift(crate[type][rarity][number]+'#1');
+    const cosAmount = cosmetAmount;
+    const dedAmount = deathAmount;
     setTimeout(() => {
       clearInterval(render);
       Menus.trigger('crate');
-    }, done ? (name === 'cosmetics' ? 2500/cosmetAmount : 2500/deathAmount) : 2500);
+    }, done ? (name === 'cosmetics' ? 2500/cosAmount : 2500/dedAmount) : 2500);
     PixelTanks.save();
   }
 
