@@ -844,6 +844,9 @@ class PixelTanks {
     for (let i = 0; i < stuffAmount; i++) {
       namber += 2500/stuffAmount;
       setTimeout(() => {
+        clearInterval(render);
+        Menus.trigger('crate');
+        PixelTanks.save();
         const price = type ? 5 : 1, name = type ? 'deathEffects' : 'cosmetics', rand = Math.floor(Math.random()*1001), crate = [{
           common: ['white horns', 'white wings', 'blue horns', 'gold horns', 'blue wings', 'gold wings', 'watermelon', 'Spooked', 'Cute Eyes', 'Army', 'Top Hat', 'X', 'Red Hoodie', 'Devil Wings', 'Devil Horns', 'Exclaimation Point', 'Orange Hoodie', 'GoldShield', 'Yellow Hoodie', 'Green Hoodie', 'Blue Hoodie', 'Purple Hoodie', 'Cancelled', 'Spirals', 'Speaker', 'Spikes', 'Candy Cane', 'Pumpkin Face', 'Mask', 'Purple-Pink Hoodie', 'Bunny Ears'],
           uncommon: ['glitch', 'CompanionCube', 'PortalCube', 'half glitch', 'eye', 'Anime Eyes', 'Angry Eyes', 'Hard Hat', 'Present', 'Dead', 'Peace', 'Question Mark', 'Small Scratch', 'Kill = Ban', 'Reindeer Hat', 'Pumpkin Hat', 'Cat Ears', 'Cake', 'Cat Hat', 'bread', 'First Aid', 'silver', 'Fisher Hat', 'chip', 'eyes', 'zombie', 'googly', 'static', 'lava', 'void knight'],
@@ -896,11 +899,11 @@ class PixelTanks {
           }
         }
         if (!done) PixelTanks.userData[name].unshift(crate[type][rarity][number]+'#1');
-        setTimeout(() => {
+        /*setTimeout(() => {
           clearInterval(render);
           Menus.trigger('crate');
           PixelTanks.save();
-        }, 2500/stuffAmount);
+        }, 2500/stuffAmount);*/
       }, namber);
     }
     clearInterval(render);
