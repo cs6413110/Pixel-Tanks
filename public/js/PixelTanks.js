@@ -914,9 +914,11 @@ class PixelTanks {
         }, (nimber)-5);
       }, namber);
     }
-    clearInterval(render);
-    Menus.trigger('crate');
-    PixelTanks.save();
+    setTimeout(() => {
+      clearInterval(render);
+      Menus.trigger('crate');
+      PixelTanks.save();
+    }, (nimber)+5);
   }
 
   static upgrade() {
