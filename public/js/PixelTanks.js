@@ -900,7 +900,7 @@ class PixelTanks {
           clearInterval(render);
           Menus.trigger('crate');
           PixelTanks.save();
-        }, namber);
+        }, (2500/stuffAmount)-100);
       }, namber);
     }
     clearInterval(render);
