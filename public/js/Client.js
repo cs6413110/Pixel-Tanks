@@ -36,6 +36,7 @@ class Client {
     this._ups++;
     //this.hostupdate.global = data.global;
     // log splitting here
+    this.hostupdate.logs = data.logs.reverse();
     //this.hostupdate.logs.unshift(...data.logs.reverse());
     // msg blocking here
     for (const u of data.u) {
