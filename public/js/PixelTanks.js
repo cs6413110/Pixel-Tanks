@@ -840,9 +840,10 @@ class PixelTanks {
   } // OPTIMIZE
   
   static openCrate(type, stuffAmount) {
-    let namber = -250;
+    if (stuffAmount === 1) let interval = 1000; else if (stuffAmount === 10) let interval = 500; else if (stuffAmount === 100) let interval = 100;
+    let namber = -(interval);
     for (let i = 0; i < stuffAmount; i++) {
-      namber += 250;
+      namber += interval;
       setTimeout(() => {
         const price = type ? 5 : 1, name = type ? 'deathEffects' : 'cosmetics', rand = Math.floor(Math.random()*1001), crate = [{
           common: ['white horns', 'white wings', 'blue horns', 'gold horns', 'blue wings', 'gold wings', 'watermelon', 'Spooked', 'Cute Eyes', 'Army', 'Top Hat', 'X', 'Red Hoodie', 'Devil Wings', 'Devil Horns', 'Exclaimation Point', 'Orange Hoodie', 'GoldShield', 'Yellow Hoodie', 'Green Hoodie', 'Blue Hoodie', 'Purple Hoodie', 'Cancelled', 'Spirals', 'Speaker', 'Spikes', 'Candy Cane', 'Pumpkin Face', 'Mask', 'Purple-Pink Hoodie', 'Bunny Ears'],
@@ -900,7 +901,7 @@ class PixelTanks {
           clearInterval(render);
           Menus.trigger('crate');
           PixelTanks.save();
-        }, 240);
+        }, interval-5);
       }, namber);
     }
     clearInterval(render);
