@@ -227,6 +227,7 @@ const images = {
     broke: '/menus/broke',
     locked: '/menus/locked',
     alert: '/menus/alert',
+    void: '/blocks/void', //used in crate opening dont delete
   },
   animations: {
     tape: '/animations/tape',
