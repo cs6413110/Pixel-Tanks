@@ -45,7 +45,10 @@ class Client {
         e = {id: u[0]};
         this.hostupdate.entities.push(e);
         this.hostupdate[this.getIdType(e.id)].push(e);
-        if (this.getIdType(e.id) === 'pt') alert(JSON.stringify(u));
+        if (this.getIdType(e.id) === 'pt') {
+          alert(JSON.stringify(u));
+          if (confirm('Dump update?')) alert(JSON.stringify(data));
+        }
       }
       for (let i = 1; i < u.length; i += 2) e[u[i]] = u[i+1];
     }
