@@ -21,7 +21,7 @@ class Tank {
     this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = this.lastUpdate = 0;
     this.privateLogs = A.template('arr');
     // chunkload here?
-    // ye :)
+    this.chunk = host.chunkload({x: -10000, y: -10000}, this.x, this.y);
     host.updateEntity(this, this.x, this.y, 80, 80, Tank.raw);
     host.loadCells(this, this.x, this.y, 80, 80);
     host.override(this);
