@@ -22,6 +22,7 @@ class Tank {
     this.privateLogs = A.template('arr');
     // chunkload here?
     this.chunk = host.chunkload({x: -10000, y: -10000}, this.x, this.y);
+    this.socket.send({status: 'error', message: JSON.stringify(this.chunk)})
     host.updateEntity(this, this.x, this.y, 80, 80, Tank.raw);
     host.loadCells(this, this.x, this.y, 80, 80);
     host.override(this);
