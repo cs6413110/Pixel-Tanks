@@ -219,6 +219,7 @@ class Multiplayer extends Engine {
     for (const t of this.pt) {
       const msg = t.chunk || A.template('msg');
       // handle message global and logs
+      msg.logs = this.logs;
       for (const d of this.deletions) {
         if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
           if (!msg.d.includes(d[4])) msg.d.push(d[4]);
