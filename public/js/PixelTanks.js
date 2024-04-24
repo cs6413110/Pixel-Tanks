@@ -896,15 +896,12 @@ class PixelTanks {
           }
         }
         if (!done) PixelTanks.userData[name].unshift(crate[type][rarity][number]+'#1');
-        /*setTimeout(() => {
+        setTimeout(() => {
           clearInterval(render);
           Menus.trigger('crate');
           PixelTanks.save();
-        }, 2500/stuffAmount);*/
+        }, 2500/stuffAmount);
       }, namber);
-      clearInterval(render);
-      Menus.trigger('crate');
-      PixelTanks.save();
     }
     clearInterval(render);
     Menus.trigger('crate');
