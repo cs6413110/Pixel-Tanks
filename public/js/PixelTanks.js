@@ -897,7 +897,7 @@ class PixelTanks {
         clearInterval(render);
         Menus.trigger('crate');
         PixelTanks.save();
-      }, done ? 2500*stuffAmount : 2500);
+      }, done ? 2500/stuffAmount : 2500);
     }
   }
 
