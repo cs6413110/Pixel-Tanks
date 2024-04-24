@@ -20,11 +20,9 @@ class Tank {
     this.y = host.spawn.y;
     this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = this.lastUpdate = 0;
     this.privateLogs = A.template('arr');
-    // chunkload here?
-    this.chunk = host.chunkload({x: -10000, y: -10000}, this.x, this.y);
-    this.socket.send({status: 'error', message: JSON.stringify(this.chunk)})
     host.updateEntity(this, this.x, this.y, 80, 80, Tank.raw);
     host.loadCells(this, this.x, this.y, 80, 80);
+    this.chunk = host.chunkload({x: -10000, y: -10000}, this.x, this.y);
     host.override(this);
     host.pt.push(this);
     for (const p of Tank.raw) {
