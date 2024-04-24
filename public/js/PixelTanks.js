@@ -840,9 +840,10 @@ class PixelTanks {
   } // OPTIMIZE
   
   static openCrate(type, stuffAmount) {
-    if (stuffAmount === 1) let nimber = 1000;
-    if (stuffAmount === 10) let nimber = 500;
-    if (stuffAmount === 100) let nimber = 100;
+    let nimber = 100
+    if (stuffAmount === 1) nimber = 1000;
+    if (stuffAmount === 10) nimber = 500;
+    if (stuffAmount === 100) nimber = 100;
     let namber = -(nimber);
     for (let i = 0; i < stuffAmount; i++) {
       namber += nimber;
