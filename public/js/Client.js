@@ -39,16 +39,16 @@ class Client {
     this.hostupdate.logs = data.logs.reverse();
     //this.hostupdate.logs.unshift(...data.logs.reverse());
     // msg blocking here
+    if (confirm(JSON.stringify(this.hostupdate).length)) {
+      let w = window.open('about:blank');
+      w.document.write(JSON.stringify(this.hostupdate));
+    }
     for (const u of data.u) {
       let e = this.hostupdate.entities.find(e => e.id === u[0]);
       if (!e) {
         e = {id: u[0]};
         this.hostupdate.entities.push(e);
         this.hostupdate[this.getIdType(e.id)].push(e);
-        if (this.getIdType(e.id) === 'pt') {
-          alert(JSON.stringify(u));
-          if (confirm('Dump update?')) alert(JSON.stringify(data));
-        }
       }
       for (let i = 1; i < u.length; i += 2) e[u[i]] = u[i+1];
     }
