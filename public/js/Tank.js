@@ -21,10 +21,11 @@ class Tank {
     this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = this.lastUpdate = 0;
     this.privateLogs = A.template('arr');
     host.updateEntity(this, this.x, this.y, 80, 80, Tank.raw);
-    host.loadCells(this, this.x, this.y, 80, 80);
-    this.chunk = host.chunkload({x: -10000, y: -10000}, this.x, this.y);
     host.override(this);
     host.pt.push(this);
+    host.loadCells(this, this.x, this.y, 80, 80);
+    this.chunk = host.chunkload({x: -10000, y: -10000}, this.x, this.y);
+    this.socket.send({status: 'error', message: this.x+' x '+this.y+' -> '+JSON.stringify(this.chunk)})
     for (const p of Tank.raw) {
       this.raw[p] = this[p];
       Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
