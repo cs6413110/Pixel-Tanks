@@ -41,7 +41,7 @@ class Client {
     // msg blocking here
     if (confirm(JSON.stringify(this.hostupdate).length)) {
       let w = window.open('about:blank');
-      w.document.write(JSON.stringify(this.hostupdate));
+      w.document.write(JSON.stringify(data));
     }
     for (const u of data.u) {
       let e = this.hostupdate.entities.find(e => e.id === u[0]);
