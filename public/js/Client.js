@@ -39,7 +39,7 @@ class Client {
     this.hostupdate.logs = data.logs.reverse();
     //this.hostupdate.logs.unshift(...data.logs.reverse());
     // msg blocking here
-    if (confirm(JSON.stringify(this.hostupdate).length)) {
+    if (confirm(JSON.stringify(data).length)) {
       let w = window.open('about:blank');
       w.document.write(JSON.stringify(data));
     }
