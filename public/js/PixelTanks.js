@@ -346,6 +346,13 @@ class PixelTanks {
         listeners: {},
         cdraw: function() {},
       },
+      void: {
+        buttons: [
+          [12, 12, 120, 120, 'main', true],
+        ],
+        listeners: {},
+        cdraw: function() {},
+      },
       settings1: {
         buttons: [
           [416, 20, 108, 108, 'main', true],
