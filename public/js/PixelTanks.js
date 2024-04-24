@@ -1,4 +1,4 @@
-class PixelTanks {
+iclass PixelTanks {
   static start() {
     PixelTanks.setup();
     PixelTanks.boot();
@@ -735,11 +735,14 @@ class PixelTanks {
           [564, 740, 136, 136, function() {PixelTanks.purchase(0)}, true],
           //relfect boost
           [732, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
+          [732, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
           //double boost
           [900, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
+          [900, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
           //gripple
           [1068, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
           [1068, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
+          [1068, 740, 136, 136, function() {PixelTanks.purchase(0)}, true],
           //ai
           [1236, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
           [1236, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
