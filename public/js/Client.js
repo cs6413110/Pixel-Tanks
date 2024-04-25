@@ -710,7 +710,7 @@ class Client {
     if (k === PixelTanks.userData.keybinds.grapple && (this.canGrapple || this.hacks)) {
       this.fire('grapple');
       this.canGrapple = false;
-      this.timers.grapple = new Date();
+      this.timers.grapple = Date.now();
       setTimeout(() => {this.canGrapple = true}, 5000);
     }
     if (k === PixelTanks.userData.keybinds.toolkit) {
@@ -720,7 +720,7 @@ class Client {
       }
       if (this.canToolkit || this.hacks) {
         this.canToolkit = false;
-        this.timers.toolkit = new Date();
+        this.timers.toolkit = Date.now();
         setTimeout(() => {this.canToolkit = true}, 40000);
         setTimeout(() => {this.halfSpeed = false}, 7500);
         this.playAnimation('toolkit');
