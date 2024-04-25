@@ -918,6 +918,7 @@ class PixelTanks {
       }, namber);
     }
     setTimeout(() => {
+      alert('done???');
       clearInterval(render);
       Menus.trigger('crate');
       PixelTanks.save();
