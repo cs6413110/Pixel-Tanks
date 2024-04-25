@@ -1,4 +1,4 @@
-iclass PixelTanks {
+class PixelTanks {
   static start() {
     PixelTanks.setup();
     PixelTanks.boot();
