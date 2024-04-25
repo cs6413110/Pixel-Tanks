@@ -912,16 +912,11 @@ class PixelTanks {
         if (!done) PixelTanks.userData[name].unshift(crate[type][rarity][number]+'#1');
         setTimeout(() => {
           clearInterval(render);
+          if (i < stuffAmount) Menus.trigger('void'); else Menus.trigger('crate');
           PixelTanks.save();
         }, (nimber)-20);
       }, namber);
     }
-    setTimeout(() => {
-      alert('done???');
-      clearInterval(render);
-      Menus.trigger('crate');
-      PixelTanks.save();
-    }, namber+nimber+20);
   }
 
   static upgrade() {
