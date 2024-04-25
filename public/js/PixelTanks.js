@@ -850,7 +850,7 @@ class PixelTanks {
   } // OPTIMIZE
   
   static openCrate(type, stuffAmount) {
-    let nimber = 100
+    let nimber = 100;
     if (stuffAmount === 1) nimber = 1000;
     if (stuffAmount === 10) nimber = 500;
     if (stuffAmount === 100) nimber = 100;
@@ -921,7 +921,7 @@ class PixelTanks {
       clearInterval(render);
       Menus.trigger('crate');
       PixelTanks.save();
-    }, (nimber)+5);
+    }, nimber);
   }
 
   static upgrade() {
