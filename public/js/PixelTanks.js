@@ -856,7 +856,6 @@ class PixelTanks {
     if (stuffAmount === 10) nimber = 500;
     if (stuffAmount === 100) nimber = 100;
     let namber = -(nimber);
-    if (PixelTanks.userData.stats[1] < price*stuffAmount) return alert('Your broke boi!');
     for (let i = 0; i < stuffAmount; i++) {
       namber += nimber;
       setTimeout(() => {
