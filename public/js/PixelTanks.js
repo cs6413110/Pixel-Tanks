@@ -922,7 +922,7 @@ class PixelTanks {
       clearInterval(render);
       Menus.trigger('crate');
       PixelTanks.save();
-    }, namber+nimber);
+    }, namber+nimber+20);
   }
 
   static upgrade() {
