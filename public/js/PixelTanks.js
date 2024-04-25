@@ -912,7 +912,6 @@ class PixelTanks {
         if (!done) PixelTanks.userData[name].unshift(crate[type][rarity][number]+'#1');
         setTimeout(() => {
           clearInterval(render);
-          Menus.trigger('void');
           PixelTanks.save();
         }, (nimber)-20);
       }, namber);
