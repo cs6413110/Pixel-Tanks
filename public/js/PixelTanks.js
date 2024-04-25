@@ -851,6 +851,8 @@ class PixelTanks {
   } // OPTIMIZE
   
   static openCrate(type, stuffAmount) {
+    if (PixelTanks.userData.stats[1] < (type ? 5 : 1)*stuffAmount) return alert('Not Enough Crates... You Know What That Means Right??? BACK TO THE CRATE MINES YOU MINOR (miner*)');
+    PixelTanks.userData.stats[1] -= (type ? 5 : 1)*stuffAmount; 
     let nimber = 100;
     if (stuffAmount === 1) nimber = 1000;
     if (stuffAmount === 10) nimber = 500;
@@ -888,8 +890,6 @@ class PixelTanks {
         } else { // 70%
           rarity = 'common'; 
         }
-        if (PixelTanks.userData.stats[1] < price*stuffAmount) return alert('Your broke boi!');
-        PixelTanks.userData.stats[1] -= price; 
         let number = Math.floor(Math.random()*(crate[type][rarity].length)), item;
         for (const e in this.images[name]) if (e === crate[type][rarity][number]) item = this.images[name][e];
         if (item === undefined) return alert('Error while trying to give you cosmetic id "'+crate[type][rarity][number]+'"');
