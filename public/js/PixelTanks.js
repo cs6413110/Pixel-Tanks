@@ -78,6 +78,7 @@ class PixelTanks {
             if (e.key.length === 1) this[this.type] += e.key;
             if (e.keyCode === 8) this[this.type] = this[this.type].slice(0, -1);
             if (e.keyCode === 13) PixelTanks.auth(this.username, this.password, 'login');
+            if (e.keyCode === 9) this.type = this.type === 'username' ? 'password' : 'username';
           }
         },
         cdraw: function() {
