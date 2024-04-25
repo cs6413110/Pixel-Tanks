@@ -914,14 +914,14 @@ class PixelTanks {
           clearInterval(render);
           Menus.trigger('void');
           PixelTanks.save();
-        }, (nimber)-5);
+        }, (nimber)-10);
       }, namber);
     }
     setTimeout(() => {
       clearInterval(render);
       Menus.trigger('crate');
       PixelTanks.save();
-    }, nimber);
+    }, (nimber*stuffAmount)+10);
   }
 
   static upgrade() {
