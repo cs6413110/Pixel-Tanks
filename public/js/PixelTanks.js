@@ -851,12 +851,12 @@ class PixelTanks {
   } // OPTIMIZE
   
   static openCrate(type, stuffAmount) {
-    if (PixelTanks.userData.stats[1] < price*stuffAmount) return alert('Hmmm.... Someone who dosent have enough crates??? I see... I have the perfect thing for you! BACK TO THE CRATE MINES SLAVE >:)');
     let nimber = 100;
     if (stuffAmount === 1) nimber = 1000;
     if (stuffAmount === 10) nimber = 500;
     if (stuffAmount === 100) nimber = 100;
     let namber = -(nimber);
+    if (PixelTanks.userData.stats[1] < price*stuffAmount) return alert('Your broke boi!');
     for (let i = 0; i < stuffAmount; i++) {
       namber += nimber;
       setTimeout(() => {
