@@ -230,23 +230,22 @@ class Client {
   drawTank(t) {
     const firstColor = t.color
     if (firstColor === "rainbow") {
-      if (t.color === "rainbow") t.color = "#9400D3";
       const rainbow = ["#9400D3", "#4B0082", "#0000FF", "#00FF00", "#FFFF00", "#FF7F00", "#FF0000"];
-      t.color = rainbow[colorCycle];
       colorCycle = colorCycle+1;
       if (colorCycle === 7) colorCycle = 0;
     }
+    let finalColor = (firstColor === "rainbow" ? rainbow[colorCycle] : t.color);
     const p = t.username === PixelTanks.user.username;
     let a = 1;
     if (this.ded && t.invis && !p) return;
     if ((t.invis && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || t.ded) a = .5;
     if (t.invis && Engine.getTeam(this.team) !== Engine.getTeam(t.team)) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
     GUI.draw.globalAlpha = a;
-    if (t.role !== 0) PixelTanks.renderBottom(t.x, t.y, 80, t.color, t.baseRotation);
+    if (t.role !== 0) PixelTanks.renderBottom(t.x, t.y, 80, finalColor, t.baseRotation);
     GUI.drawImage(PixelTanks.images.tanks[t.role === 0 ? 'base' : 'bottom'+(t.baseFrame ? '' : '2')], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
     if (t.fire && false) GUI.drawImage(PixelTanks.images.animations.fire, t.x, t.y, 80, 80, 1, 0, 0, 0, 0, undefined, 0*Math.random(), 0, 29, 29);
     GUI.draw.globalAlpha = a;
-    PixelTanks.renderTop(t.x, t.y, 80, t.color, t.r, t.pushback);
+    PixelTanks.renderTop(t.x, t.y, 80, finalColor, t.r, t.pushback);
     GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
     if (t.cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic_body], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
     if (t.cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
