@@ -233,7 +233,7 @@ class Client {
       if (t.color === "rainbow") t.color = "#9400D3";
       currentColor = t.color;
       const rainbow = ["#9400D3", "#4B0082", "#0000FF", "#00FF00", "#FFFF00", "#FF7F00", "#FF0000"];
-      for (let i = 0; i < rainbow.length; i++) if (currentColor === rainbow[i]) t.color = (i === 6 ? rainbow[0] : rainbow[i+1]);
+      for (let i = 0; i < rainbow.length; i++) if (currentColor === rainbow[i]) t.color = /*(i === rainbow.length ? rainbow[0] : rainbow[i+1])*/"#4B0082";
     }
     const p = t.username === PixelTanks.user.username;
     let a = 1;
