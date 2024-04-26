@@ -19,7 +19,9 @@ class Client {
     this.ups = [];
     this.fps = [];
     this.pings = [];
-    this.joinData = {username: PixelTanks.user.username, token: PixelTanks.user.token, type: 'join', gamemode: this.gamemode, tank: {rank: PixelTanks.userData.stats[4], username: PixelTanks.user.username, class: PixelTanks.userData.class, cosmetic_hat: PixelTanks.userData.cosmetic_hat, cosmetic: PixelTanks.userData.cosmetic, cosmetic_body: PixelTanks.userData.cosmetic_body, deathEffect: PixelTanks.userData.deathEffect, color: PixelTanks.userData.color === "random" ? Engine.getRandomColor() : PixelTanks.userData.color}};
+    this.joinData = {username: PixelTanks.user.username, token: PixelTanks.user.token, type: 'join', gamemode: this.gamemode, tank: {rank: PixelTanks.userData.stats[4], username: PixelTanks.user.username, class: PixelTanks.userData.class, cosmetic_hat: PixelTanks.userData.cosmetic_hat, cosmetic: PixelTanks.userData.cosmetic, cosmetic_body: PixelTanks.userData.cosmetic_body, deathEffect: PixelTanks.userData.deathEffect, color: PixelTanks.userData.color}};
+    const firstColor === this.color;
+    if (this.color === "random") this.color = Engine.getRandomColor();
     this.reset();
     if (this.multiplayer) this.connect();
     if (!this.multiplayer) this.generateWorld();
@@ -227,6 +229,12 @@ class Client {
   }
 
   drawTank(t) {
+    let currentColor = t.color
+    if (firstColor === "rainbow") {
+      if (t.color === "rainbow") t.color = "#FF0000";
+      const rainbow = ["#9400D3", "#4B0082", "#0000FF", "#00FF00", "#FFFF00", "#FF7F00", "#FF0000"];
+      for (let i = 0; i < rainbow.length; i++) if (currentColor === rainbow[i]) t.color = i === rainbow.length ? rainbow[0] : rainbow[i+1];
+    }
     const p = t.username === PixelTanks.user.username;
     let a = 1;
     if (this.ded && t.invis && !p) return;
