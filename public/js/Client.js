@@ -233,6 +233,7 @@ class Client {
       for (let i = 0; i < 10000; i++) {
         t.color = rainbow[i];
         if (i === 7) i = 0;
+      }
     }
     const p = t.username === PixelTanks.user.username;
     let a = 1;
