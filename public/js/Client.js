@@ -230,7 +230,7 @@ class Client {
     const firstColor = t.color;
     let currentColor = t.color;
     if (firstColor === "rainbow") {
-      if (t.color === "rainbow") t.color = "#FF7F00";
+      if (t.color === "rainbow") t.color = "#9400D3";
       currentColor = t.color;
       const rainbow = ["#9400D3", "#4B0082", "#0000FF", "#00FF00", "#FFFF00", "#FF7F00", "#FF0000"];
       for (let i = 0; i < rainbow.length; i++) if (currentColor === rainbow[i]) t.color = (i === 6 ? rainbow[0] : rainbow[i+1]);
