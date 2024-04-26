@@ -227,13 +227,12 @@ class Client {
   }
 
   drawTank(t) {
-    const firstColor = t.color;
-    let currentColor = t.color;
-    if (firstColor === "rainbow") {
+    if (t.color === "rainbow") {
       if (t.color === "rainbow") t.color = "#9400D3";
-      currentColor = t.color;
       const rainbow = ["#9400D3", "#4B0082", "#0000FF", "#00FF00", "#FFFF00", "#FF7F00", "#FF0000"];
-      for (let i = 0; i < rainbow.length; i++) if (currentColor === rainbow[i]) t.color = /*(i === rainbow.length ? rainbow[0] : rainbow[i+1])*/"#4B0082";
+      for (let i = 0; i < 10000; i++) {
+        t.color = rainbow[i];
+        if (i === 7) i = 0;
     }
     const p = t.username === PixelTanks.user.username;
     let a = 1;
