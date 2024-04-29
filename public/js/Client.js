@@ -39,6 +39,7 @@ class Client {
     this.hostupdate.logs = data.logs.reverse();
     //this.hostupdate.logs.unshift(...data.logs.reverse());
     // msg blocking here
+    if (data.temp) this.temp = data.temp;
     for (const u of data.u) {
       let e = this.hostupdate.entities.find(e => e.id === u[0]);
       if (!e) {
@@ -385,6 +386,21 @@ class Client {
     for (const ex of e) this.drawExplosion(ex);
 
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
+    // beta chunkload debug
+    if (this.temp)  {
+      GUI.draw.fillRect(100, 100, 300, 300);
+      GUI.draw.fillStyle = '#00ff00';
+      let data = this.temp;
+      GUI.draw.fillRect(100+data.nx*10, 100+data.ny*10, 10, 10);
+      for (const n of data.n) {
+        draw.fillRect(100+n.x*10, 100+n.y*10, 10, 10);
+      }
+      draw.fillStyle = '#ff0000';
+      draw.fillRect(100+data.ox*10, 100+data.ox*10, 10, 10);
+      for (const o of data.o) {
+        draw.fillRect(100+o.x*10, 100+o.y*10, 10, 10);
+      }
+    }
     
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
     GUI.drawText(this.kills, 1530, 40, 30, '#FFFFFF', 1);
