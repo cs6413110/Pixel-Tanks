@@ -109,13 +109,10 @@ const deathMessages = [
 
 class Multiplayer extends Engine {
   constructor(levels) {
+    super(levels);
     this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
-    this.updates = [];
-    this.deletions = [];
     this.i.push(setInterval(() => this.eventSend(), 1000/settings.ups));
-    super(levels);
-   // this.i.push(setInterval(() => this.cellSend(), 1000/settings.ups));
   }
 
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
