@@ -22,7 +22,7 @@ class Engine {
   }
 
   add(data) {
-    setTimeout(() => A.template('Tank').init(data, this)); // change this later??? temp fix for joining delay
+    A.template('Tank').init(data, this);
   }
 
   useAbility(t, a) {
