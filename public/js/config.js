@@ -282,6 +282,8 @@ const images = {
     gameover_: { frames: 40, speed: 75, kill: 1, type: 2 },
     skull: '/animations/skull',
     skull_: { frames: 11, speed: 50, kill: 1, type: 1 },
+    darksouls: '/animations/darksouls',
+    darksouls_: { frames: 56, speed: 50, kill: 33, type: 2 }
   },
   items: {
     airstrike: '/items/airstrike',
