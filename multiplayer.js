@@ -217,6 +217,10 @@ class Multiplayer extends Engine {
   }
 
   eventSend() {
+    if (this.pt.length === 0) {
+      console.log('no pt');
+      console.log(JSON.stringify(this.updates));
+    }
     for (const t of this.pt) {
       const msg = A.template('msg'); //t.chunk | A.template('msg');
       // handle message global and logs
