@@ -139,7 +139,7 @@ class Multiplayer extends Engine {
         //for (const e of this.cells[x][y]) o.d.push(e.id);
       }
     }
-    console.log(JSON.stringify(data));
+    o.temp = data;
     return o;
   }
 
