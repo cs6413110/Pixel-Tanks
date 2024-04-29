@@ -226,12 +226,12 @@ class Multiplayer extends Engine {
       // handle message global and logs
       msg.logs = [];
       for (const d of this.deletions) {
-        if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
+        if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500) || 1) {
           if (!msg.d.includes(d[4])) msg.d.push(d[4]);
         }
       }
       for (const u of this.updates) {
-        if (!msg.d.includes(u[4]) && Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500)) {
+        if (!msg.d.includes(u[4]) && (Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500) || 1)) {
           let i = msg.u.indexOf(e => e[0] === u[4]);
           if (i >= 0) msg.u[i].push(...u.slice(5)); else msg.u.push(u.slice(4));
         }
