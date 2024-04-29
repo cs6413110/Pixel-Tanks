@@ -18,7 +18,7 @@ class Engine {
       for (let x = 0; x < 30; x++) this.cells[y][x] = new Set();
     }
     this.map = new PF.Grid(30, 30);
-    setTimeout(() => this.levelReader(levels[Math.floor(Math.random()*levels.length)]));
+    this.levelReader(levels[Math.floor(Math.random()*levels.length)]);
     this.i.push(setInterval(() => this.tick(), 1000/60));
   }
 
