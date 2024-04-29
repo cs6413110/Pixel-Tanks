@@ -390,6 +390,7 @@ class Client {
     if (this.temp)  {
       GUI.draw.fillRect(100, 100, 300, 300);
       GUI.draw.fillStyle = '#00ff00';
+      GUI.drawText(JSON.stringify(this.temp), 600, 100, 30, '#ffffff', .5);
       let data = this.temp;
       GUI.draw.fillRect(100+data.nx*10, 100+data.ny*10, 10, 10);
       for (const n of data.n) {
