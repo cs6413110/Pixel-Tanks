@@ -24,7 +24,7 @@ class Tank {
     host.override(this);
     host.pt.push(this);
     host.loadCells(this, this.x, this.y, 80, 80);
-    this.chunk = host.chunkload({x: -10000, y: -10000}, this.x, this.y);
+    //this.chunk = host.chunkload({x: -10000, y: -10000}, this.x, this.y);
     this.socket.send({status: 'error', message: this.x+' x '+this.y+' -> '+JSON.stringify(this.chunk)})
     for (const p of Tank.raw) {
       this.raw[p] = this[p];
