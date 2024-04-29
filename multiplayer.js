@@ -122,9 +122,11 @@ class Multiplayer extends Engine {
     const ocx = Math.floor((t.x+40)/100)+.5, ocy = Math.floor((t.y+40)/100)+.5, ncx = Math.floor((x+40)/100)+.5, ncy = Math.floor((y+40)/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
     const o = A.template('msg');
+    let data = {n: [], o: [], ox: t.x, oy: t.y, nx: x, ny: y};
     for (let nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = m(nys), l = false; (yda > 0 ? (y < m2(nys+h*yda)) : (y > m2(nys+h*yda))); y += yda) {
       if (yda < 0 ? y <= nys+yl : y >= nys+yl) l = true;
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = m(nxs); (xda > 0 ? (x < m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x += xda) {
+        data.n.push({x, y});
         for (const e of this.cells[x][y]) {
           o.u.push(e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
         }
@@ -133,9 +135,11 @@ class Multiplayer extends Engine {
     for (let oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = m(oys), l = false; (yda < 0 ? (y < m2(oys-h*yda)) : (y > m2(oys-h*yda))); y -= yda) {
       if (yda > 0 ? y <= oys-yl : y >= oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
+        data.o.push({x, y});
         //for (const e of this.cells[x][y]) o.d.push(e.id);
       }
     }
+    console.log(JSON.stringify(data));
     return o;
   }
 
@@ -229,7 +233,6 @@ class Multiplayer extends Engine {
         }
       }
       if ((msg.logs.length || msg.u.length || msg.d.length) && true/* rate limiter here */) {
-        console.log(JSON.stringify(msg));
         t.socket.send(msg);
       }
       msg.release();
