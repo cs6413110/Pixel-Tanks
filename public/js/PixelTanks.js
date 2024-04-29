@@ -870,8 +870,8 @@ class PixelTanks {
           mythic: ['Terminator', 'MLG Glasses', 'Power Armor'],
         }, {
           common: ['explode', 'nuke', 'insta', 'evan'], //bruh why am i common :(
-          uncommon: ['anvil', 'gameover'],
-          rare: ['minecraft', 'magic', 'Cactus'],
+          uncommon: ['anvil', 'gameover', 'minecraft'],
+          rare: ['darksouls', 'magic', 'Cactus'],
           epic: ['battery', 'skull', 'banhammer'],
           legendary: ['error', 'pokeball'],
           mythic: ['clicked', 'cat'],
