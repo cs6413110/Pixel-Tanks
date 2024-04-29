@@ -39,10 +39,6 @@ class Client {
     this.hostupdate.logs = data.logs.reverse();
     //this.hostupdate.logs.unshift(...data.logs.reverse());
     // msg blocking here
-    if (confirm(JSON.stringify(data).length)) {
-      let w = window.open('about:blank');
-      w.document.write(JSON.stringify(data));
-    }
     for (const u of data.u) {
       let e = this.hostupdate.entities.find(e => e.id === u[0]);
       if (!e) {
@@ -58,7 +54,6 @@ class Client {
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate[this.getIdType(d)].splice(i, 1);
     }
-    if (this.hacks) document.write(JSON.stringify(this.hostupdate));
     //this.hostupdate.logs.unshift({m: JSON.stringify(data), c: '#00ff00'});
   }
 
