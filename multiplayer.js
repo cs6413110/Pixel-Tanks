@@ -233,7 +233,7 @@ class Multiplayer extends Engine {
         }
       }
       if ((msg.logs.length || msg.u.length || msg.d.length) && true/* rate limiter here */) {
-        if (JSON.stringify(msg).includes('0.')) console.log(JSON.stringfy(msg));
+        if (JSON.stringify(msg).includes('0.')) console.log(JSON.stringify(msg));
         t.socket.send(msg);
       }
       msg.release();
