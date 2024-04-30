@@ -222,7 +222,7 @@ class Multiplayer extends Engine {
       console.log(JSON.stringify(this.updates));
     }
     for (const t of this.pt) {
-      const msg = A.template('msg'); //t.chunk | A.template('msg');
+      const msg = t.chunk | A.template('msg');
       // handle message global and logs
       msg.logs = [];
       for (const d of this.deletions) {
