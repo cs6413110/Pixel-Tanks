@@ -190,6 +190,9 @@ class Client {
   }
 
   drawShot(s) {
+    GUI.draw.strokeStyle = '#ff0000';
+    GUI.draw.lineWidth = 1;
+    GUI.draw.strokeRect(s.x, s.y, 10, 10);
     if (s.type == 'bullet') {
       GUI.drawImage(PixelTanks.images.blocks.void, s.x, s.y, 10, 10, .7, 5, 5, 0, 0, s.r+90);
     } else if (s.type === 'powermissle') {
