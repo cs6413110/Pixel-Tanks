@@ -231,7 +231,7 @@ class Engine {
     return color;
   }
 
-  static genId = type => Math.floor((type+Math.random())*100000)/100000;
+  static genId = type => Math.floor((type+Math.random())*10000000)/10000000;
 
   static finder = new PF.AStarFinder({allowDiagonal: true, dontCrossCorners: true});
 
