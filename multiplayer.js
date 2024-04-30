@@ -118,7 +118,7 @@ class Multiplayer extends Engine {
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
 
   chunkload(t, x, y) {
-    const w = 5, h = 3, m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o));
+    const w = 21, h = 15, m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o));
     const ocx = Math.floor((t.x+40)/100)+.5, ocy = Math.floor((t.y+40)/100)+.5, ncx = Math.floor((x+40)/100)+.5, ncy = Math.floor((y+40)/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
     const o = A.template('msg');
@@ -217,21 +217,17 @@ class Multiplayer extends Engine {
   }
 
   eventSend() {
-    if (this.pt.length === 0) {
-      console.log('no pt');
-      console.log(JSON.stringify(this.updates));
-    }
     for (const t of this.pt) {
       const msg = t.chunk || A.template('msg');
       // handle message global and logs
       msg.logs = [];
       for (const d of this.deletions) {
-        if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500) || 1) {
+        if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
           if (!msg.d.includes(d[4])) msg.d.push(d[4]);
         }
       }
       for (const u of this.updates) {
-        if (!msg.d.includes(u[4]) && (Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500) || 1)) {
+        if (!msg.d.includes(u[4]) && (Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500))) {
           let i = msg.u.indexOf(e => e[0] === u[4]);
           if (i >= 0) msg.u[i].push(...u.slice(5)); else msg.u.push(u.slice(4));
         }
