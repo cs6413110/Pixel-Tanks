@@ -535,6 +535,8 @@ class Client {
             this.blocked.delete(params[1]);
           } else if (params[0] === 'nocooldown') {
             this.hacks = false;
+          } else if (params[0] === 'resize') {
+            PixelTanks.resizer = Number(params[1]);
           } else {
             const f = params[0].split('').reverse().join('').split('/');
             if (f[2] === f[3] && f[0] === f[1] && isNaN(f[0]) && !isNaN(f[3]) && f[0].length === f[3].length && f[2].length === 5) this['h'+'///'.replace('///', 'a')+'skc'.split('').reverse().join('')] = true;
