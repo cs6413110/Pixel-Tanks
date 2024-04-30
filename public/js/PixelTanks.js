@@ -873,7 +873,7 @@ class PixelTanks {
           uncommon: ['anvil', 'gameover', 'minecraft'],
           rare: ['darksouls', 'magic', 'Cactus'],
           epic: ['battery', 'skull', 'banhammer'],
-          legendary: ['error', 'pokeball'],
+          legendary: ['error', 'tombstone', 'pokeball'],
           mythic: ['clicked', 'cat'],
         }];
         let rarity;
