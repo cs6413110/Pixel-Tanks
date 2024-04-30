@@ -321,19 +321,6 @@ class Client {
 
   frame() {
     GUI.clear();
-    // beta chunkload debug
-    if (this.temp)  {
-      GUI.draw.fillStyle = '#ffffff';
-      GUI.draw.fillRect(100, 100, 300, 300);
-      GUI.drawText(JSON.stringify(this.temp), 600, 100, 10, '#ffffff', .5);
-      let data = this.temp;
-      GUI.draw.fillStyle = '#00ff00';
-      GUI.draw.fillRect(100+data.nx*10, 100+data.ny*10, 10, 10);
-      for (const n of data.n) GUI.draw.fillRect(100+n.x*10, 100+n.y*10, 10, 10);
-      GUI.draw.fillStyle = '#ff0000';
-      GUI.draw.fillRect(100+data.ox*10, 100+data.ox*10, 10, 10);
-      for (const o of data.o) GUI.draw.fillRect(100+o.x*10, 100+o.y*10, 10, 10);
-    }
     this._fps++;
     this.render = requestAnimationFrame(() => this.frame());
     if (this.socket) {
@@ -345,7 +332,21 @@ class Client {
         if (!this.hostupdate.pt.length) {
           GUI.draw.fillStyle = '#ffffff';
           GUI.draw.fillRect(0, 0, 1600, 1600);
-          return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
+          GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
+          // beta chunkload debug
+          if (this.temp)  {
+            GUI.draw.fillStyle = '#ffffff';
+            GUI.draw.fillRect(100, 100, 300, 300);
+            GUI.drawText(JSON.stringify(this.temp), 600, 100, 10, '#ffffff', .5);
+            let data = this.temp;
+            GUI.draw.fillStyle = '#00ff00';
+            GUI.draw.fillRect(100+data.nx*10, 100+data.ny*10, 10, 10);
+            for (const n of data.n) GUI.draw.fillRect(100+n.x*10, 100+n.y*10, 10, 10);
+            GUI.draw.fillStyle = '#ff0000';
+            GUI.draw.fillRect(100+data.ox*10, 100+data.ox*10, 10, 10);
+            for (const o of data.o) GUI.draw.fillRect(100+o.x*10, 100+o.y*10, 10, 10);
+          }
+          return;
         }
       } else return this.drawStatus('Loading...');
     }
