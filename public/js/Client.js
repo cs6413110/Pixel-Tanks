@@ -390,19 +390,16 @@ class Client {
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
     // beta chunkload debug
     if (this.temp)  {
+      GUI.draw.fillStyle = '#ffffff';
       GUI.draw.fillRect(100, 100, 300, 300);
-      GUI.draw.fillStyle = '#00ff00';
       GUI.drawText(JSON.stringify(this.temp), 600, 100, 30, '#ffffff', .5);
       let data = this.temp;
+      GUI.draw.fillStyle = '#00ff00';
       GUI.draw.fillRect(100+data.nx*10, 100+data.ny*10, 10, 10);
-      for (const n of data.n) {
-        draw.fillRect(100+n.x*10, 100+n.y*10, 10, 10);
-      }
-      draw.fillStyle = '#ff0000';
-      draw.fillRect(100+data.ox*10, 100+data.ox*10, 10, 10);
-      for (const o of data.o) {
-        draw.fillRect(100+o.x*10, 100+o.y*10, 10, 10);
-      }
+      for (const n of data.n) GUI.draw.fillRect(100+n.x*10, 100+n.y*10, 10, 10);
+      GUI.draw.fillStyle = '#ff0000';
+      GUI.draw.fillRect(100+data.ox*10, 100+data.ox*10, 10, 10);
+      for (const o of data.o) GUI.draw.fillRect(100+o.x*10, 100+o.y*10, 10, 10);
     }
     
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
