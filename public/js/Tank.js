@@ -126,7 +126,7 @@ class Tank {
       this.y = Math.floor(this.y/4)*4;
     }
     this.host.loadCells(this, this.x, this.y, 80, 80);
-    if (this.socket && (Math.floor((ox+40)/100) !== Math.floor((this.x+40)/100) || Math.floor((oy+40)/100) !== Math.floor((this.y+40)/100))) this.host.chunkload(this, this.x, this.y);
+    if (this.socket && (Math.floor((ox+40)/100) !== Math.floor((this.x+40)/100) || Math.floor((oy+40)/100) !== Math.floor((this.y+40)/100))) this.chunk = this.host.chunkload(this, this.x, this.y);
   }
   reset() {
     for (const p of Tank.raw) Object.defineProperty(this, p, {value: undefined});
