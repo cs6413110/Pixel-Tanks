@@ -283,7 +283,9 @@ const images = {
     skull: '/animations/skull',
     skull_: { frames: 11, speed: 50, kill: 1, type: 1 },
     darksouls: '/animations/darksouls',
-    darksouls_: { frames: 56, speed: 50, kill: 33, type: 2 }
+    darksouls_: { frames: 56, speed: 50, kill: 33, type: 2 },
+    tombstone: '/animations/tombstone',
+    tombstone_: { frames: 36, speed: 50, kill: 8, type: 1 }
   },
   items: {
     airstrike: '/items/airstrike',
