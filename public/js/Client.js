@@ -617,7 +617,7 @@ class Client {
       if ((x > blocks[l].x || x + 80 > blocks[l].x) && (x < blocks[l].x + 100 || x + 80 < blocks[l].x + 100) && (y > blocks[l].y || y + 80 > blocks[l].y) && (y < blocks[l].y + 100 || y + 80 < blocks[l].y + 100)) {
         if (this.tank.invis && this.tank.immune) {
           if (block[l].type === 'void') return false;
-        } else if (['barrier', 'weak', 'strong', 'gold'].includes(blocks[l].type)) return false;
+        } else if (['void', 'barrier', 'weak', 'strong', 'gold'].includes(blocks[l].type)) return false;
       }
       l++;
     }
