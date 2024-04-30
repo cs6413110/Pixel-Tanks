@@ -140,6 +140,10 @@ class Multiplayer extends Engine {
       }
     }
     o.temp = data;
+    if (t.firstTime === undefined) {
+      t.firstTime = 3;
+      t.socket.send({status: 'error', message: JSON.stringify(o)});
+    }
     return o;
   }
 
