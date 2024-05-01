@@ -184,9 +184,8 @@ class Client {
 
   drawBlock(b) {
     GUI.draw.fillStyle = '#ffffff';
-    if (b.type === 'smoke') return GUI.draw.fillRect(b.x, b.y, 400, 400);
     const size = b.type === 'airstrike' ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
-    GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1);
+    GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type === fire ? Math.floor((this.animate%2000)/500)*50 : 0, 0, 50, 50);
   }
 
   drawShot(s) {
