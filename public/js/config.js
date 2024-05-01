@@ -36,6 +36,7 @@ const images = {
     bottom2: '/tanks/bottom2',
   },
   cosmetics: {
+    'toxic': '/cosmetics/toxic',
     'spoider': '/cosmetics/spoider',
     'Power Armor': '/cosmetics/power_armor',
     'void knight': '/cosmetics/voidknight',
