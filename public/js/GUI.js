@@ -15,7 +15,7 @@ class GUI {
     }
     GUI.draw.globalAlpha = t;
     if (cx || cy || cy || ch) {
-      GUI.draw.drawImage(image, cx, cy, cw, ch, x, y, w, h);
+      GUI.draw.drawImage(image, cx, cy, cw, ch, a !== undefined ? -px+bx : x, a !== undefined ? -py+by : y, w, h);
     } else {
       GUI.draw.drawImage(image, a !== undefined ? -px+bx : x, a !== undefined ? -py+by : y, w, h);
     }
