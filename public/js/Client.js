@@ -226,7 +226,7 @@ class Client {
   renderCosmetic(t, i, a) {
     if (!i) return;
     let size = i.height, frames = i.width/size, speed = 300, frame = Math.floor(((Date.now()-this.animate)%(frames*speed))/speed); 
-    GUI.drawImage(i, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r, frame*size, size, size, size);
+    GUI.drawImage(i, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r, frame*size, 0, size, size);
   }
 
   drawTank(t) {
