@@ -223,7 +223,7 @@ class Client {
   }
 
 
-  renderCosmetic(t, i) {
+  renderCosmetic(t, i, a) {
     if (!i) return;
     let size = i.height, frames = i.width/size, speed = 300, frame = Math.floor(((Date.now()-this.animate)%(frames*speed))/speed); 
     GUI.drawImage(i, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r, frame*size, size, size, size);
@@ -242,9 +242,9 @@ class Client {
     GUI.draw.globalAlpha = a;
     PixelTanks.renderTop(t.x, t.y, 80, t.color, t.r, t.pushback);
     GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
-    if (t.cosmetic_body) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_body]);
-    if (t.cosmetic) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic]);
-    if (t.cosmetic_hat) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_hat]);
+    if (t.cosmetic_body) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_body], a);
+    if (t.cosmetic) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic], a);
+    if (t.cosmetic_hat) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_hat], a);
     if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || (this.ded && !p && !t.ded) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
