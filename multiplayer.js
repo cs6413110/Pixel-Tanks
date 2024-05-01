@@ -2,7 +2,7 @@ const settings = {
   authserver: 'localhost',
   players_per_room: 10,
   ups: 50,
-  port: 443,
+  port: 8080,
   chat: true,
   joining: true,
 }
@@ -219,8 +219,10 @@ class Multiplayer extends Engine {
   eventSend() {
     for (const t of this.pt) {
       const msg = t.chunk || A.template('msg');
-      // handle message global and logs
-      msg.logs = [];
+      msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
+      t.logs = this.logs.length;
+      t.privateLogs.length = 0;
+      if (t.global !== this.global) t.global = message.global = this.global;
       for (const d of this.deletions) {
         if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
           if (!msg.d.includes(d[4])) msg.d.push(d[4]);
