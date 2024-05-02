@@ -132,11 +132,9 @@ class Engine {
     if (t.canInvis) t.invis = data.invis;
     t.baseFrame = data.baseFrame;
     if (!t.grapple) {
-      let chunkload = t.socket && (Math.floor(t.x/100) !== Math.floor(x/100) || Math.floor(t.y/100) !== Math.floor(y/100)), ox = x, oy = y;
       t.x = x;
       t.y = y;
       t.updateCell();
-      if (chunkload) t.chunk = this.chunkload(t, ox, oy);
     }
     t.r = r;
     if (use.includes('respawn')) {
