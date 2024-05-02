@@ -842,10 +842,7 @@ A.createTemplate('message', class {u = []; b = []; pt = []; ai = []; s = []; d =
     m.delete[property].length = 0;
   }
 });
-A.createTemplate('msg', class {u = []; d = []; global = ''; logs = []; event = 'update'}, m => {
-  m.u.length = m.d.length = m.logs.length = 0;
-  m.global = '';
-});
+A.createTemplate('msg', class {u = []; d = []; logs = []; event = 'update'}, m => (m.u.length = m.d.length = m.logs.length = 0));
 A.createTemplate('arr', Array, a => (a.length = 0));
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM, 'defense': Defense};
 const Profile = (arr, update) => {
