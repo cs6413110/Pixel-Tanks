@@ -61,7 +61,7 @@ class Client {
       }
     }
     if (data.temp) this.temp = data.temp;
-    for (const u of data.u) {
+    if (data.u) for (const u of data.u) {
       let e = this.hostupdate.entities.find(e => e.id === u[0]);
       if (!e) {
         e = {id: u[0]};
@@ -70,13 +70,12 @@ class Client {
       }
       for (let i = 1; i < u.length; i += 2) e[u[i]] = u[i+1];
     }
-    for (const d of data.d) {
+    if (data.d) for (const d of data.d) {
       let i = this.hostupdate.entities.findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate.entities.splice(i, 1);
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate[this.getIdType(d)].splice(i, 1);
     }
-    //this.hostupdate.logs.unshift({m: JSON.stringify(data), c: '#00ff00'});
   }
 
   connect() {
