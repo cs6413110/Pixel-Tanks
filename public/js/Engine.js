@@ -173,6 +173,7 @@ class Engine {
   }
 
   updateEntity() {}
+  destroyEntity() {}
 
   ondeath(t, m={}) {
     this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
