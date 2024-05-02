@@ -220,6 +220,7 @@ class Multiplayer extends Engine {
   eventSend() {
     for (const t of this.pt) {
       const msg = t.chunk || A.template('msg');
+      if (t.chunk) console.log(JSON.stringify(t.chunk));
       msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
       t.logs = this.logs.length;
       t.privateLogs.length = 0;
