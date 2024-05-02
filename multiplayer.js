@@ -230,7 +230,7 @@ class Multiplayer extends Engine {
           if (i >= 0) msg.u[i].push(...u.slice(5)); else msg.u.push(u.slice(4));
         }
       }
-      if ((msg.logs.length || msg.u.length || msg.d.length) && true/* rate limiter here */) {
+      if ((msg.logs.length || msg.u.length || msg.d.length || msg.global) && true/* rate limiter here */) {
         t.socket.send(msg);
       }
       msg.release();
