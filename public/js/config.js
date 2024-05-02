@@ -187,6 +187,7 @@ const images = {
     'Elf': '/cosmetics/elf',
     'Spooked': '/cosmetics/spooked',
     'Locked': '/cosmetics/locked',
+    'scapegoat': '/cosmetics/scapegoat',
     'Angry Eyes': '/cosmetics/angryeyes',
     'Cute Eyes': '/cosmetics/cuteeyes',
     'Stripes': '/cosmetics/stripe',
