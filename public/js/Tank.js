@@ -7,10 +7,8 @@ class Tank {
   }
   init(data, host) {
     this.id = Engine.genId(0);
-    this.raw = {id: this.id};
     for (const p of Tank.args) this[p] = data[p];
     this.host = host;
-    this.render = {release: () => {}, b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
     if (data.socket) this.socket = data.socket;
     this.fire = {time: 0, team: this.team};
     this.hp = this.maxHp = this.rank*10+300;
@@ -18,7 +16,7 @@ class Tank {
     this.team = data.username+':'+this.id;
     this.x = host.spawn.x;
     this.y = host.spawn.y;
-    this.logs = this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = this.lastUpdate = 0;
+    this.logs = this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = 0;
     this.privateLogs = A.template('arr');
     host.updateEntity(this, this.x, this.y, 80, 80, Tank.raw);
     host.override(this);
