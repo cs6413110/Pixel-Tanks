@@ -128,7 +128,7 @@ class Tank {
     if (!this.chunk && this.socket && (Math.floor((ox+40)/100) !== Math.floor((this.x+40)/100) || Math.floor((oy+40)/100) !== Math.floor((this.y+40)/100))) this.chunk = this.host.chunkload({x: ox, y: oy}, this.x, this.y);
   }
   reset() {
-    for (const p of Tank.raw) Object.defineProperty(this, p, {value: undefined, writeable: true});
+    for (const p of Tank.raw) Object.defineProperty(this, p, {value: undefined, writable: true});
     this.cells.clear();
   }
   collision(x, y) {
