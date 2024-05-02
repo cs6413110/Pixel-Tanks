@@ -130,10 +130,11 @@ class Engine {
     if (t.canInvis) t.invis = data.invis;
     t.baseFrame = data.baseFrame;
     if (!t.grapple) {
-      if (t.socket && (Math.floor((t.x+40)/100) !== Math.floor((x+40)/100) || Math.floor((t.y+40)/100) !== Math.floor((y+40)/100))) t.chunk = this.chunkload(t, x, y);
+      let chunkload = t.socket && (Math.floor(t.x/100) !== Math.floor(x/100) || Math.floor(t.y/100) !== Math.floor(y/100)), ox = x, oy = y;
       t.x = x;
       t.y = y;
       this.loadCells(t, t.x, t.y, 80, 80);
+      if (chunkload) t.chunk = this.chunkload({x: ox, y: oy}, t.x, t.y); // optimize to not take an obj param
     }
     t.r = r;
     if (use.includes('respawn')) {
