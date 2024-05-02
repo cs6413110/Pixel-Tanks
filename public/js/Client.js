@@ -35,28 +35,30 @@ class Client {
   interpret(data) {
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
-    let compiledLogs = [];
-    GUI.draw.font = '30px Font';
-    for (const log of data.logs) {
-      let words = log.m.split(' '), len = 0, line = '';
-      for (const word of words) {
-        len += GUI.draw.measureText(word).width;
-        if (len > 800) {
-          compiledLogs.push({m: line, c: log.c, chunk: true});
-          len = 0;
-          line = '';
+    if (data.logs) {
+      let compiledLogs = [];
+      GUI.draw.font = '30px Font';
+      for (const log of data.logs) {
+        let words = log.m.split(' '), len = 0, line = '';
+        for (const word of words) {
+          len += GUI.draw.measureText(word).width;
+          if (len > 800) {
+            compiledLogs.push({m: line, c: log.c, chunk: true});
+            len = 0;
+            line = '';
+          }
+          line += word+' ';
         }
-        line += word+' ';
+        compiledLogs.push({m: line, c: log.c, chunk: false});
       }
-      compiledLogs.push({m: line, c: log.c, chunk: false});
-    }
-    if (this.hostupdate.logs.length > 100) this.hostupdate.logs.pop();
-    this.hostupdate.logs.unshift(...compiledLogs.reverse());
-    for (let i = 0; i < this.hostupdate.logs.length; i++) {
-      let username = this.hostupdate.logs[i].m.split(']')[0];
-      if (username.includes('->')) username = username.split('->')[0];
-      username = username.split('[')[1];
-      if (this.blocked.has(username)) this.hostupdate.logs[i].m = '<blocked message from '+username+'>';
+      if (this.hostupdate.logs.length > 100) this.hostupdate.logs.pop();
+      this.hostupdate.logs.unshift(...compiledLogs.reverse());
+      for (let i = 0; i < this.hostupdate.logs.length; i++) {
+        let username = this.hostupdate.logs[i].m.split(']')[0];
+        if (username.includes('->')) username = username.split('->')[0];
+        username = username.split('[')[1];
+        if (this.blocked.has(username)) this.hostupdate.logs[i].m = '<blocked message from '+username+'>';
+      }
     }
     if (data.temp) this.temp = data.temp;
     for (const u of data.u) {
