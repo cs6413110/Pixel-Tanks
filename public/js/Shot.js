@@ -14,8 +14,8 @@ class Shot {
     this.md = this.damage = Shot.settings[this.type][0]*(rank*10+300)/500;
     this.xm = Math.cos(Math.PI*r/180)*Shot.settings[this.type][1];
     this.ym = Math.sin(Math.PI*r/180)*Shot.settings[this.type][1];
-    this.x = this.sx = x+d*Math.cos(Math.PI*r/180);
-    this.y = this.sy = y+d*Math.sin(Math.PI*r/180);
+    this.x = this.sx = x+d*Math.cos(Math.PI*r/180)-5;
+    this.y = this.sy = y+d*Math.sin(Math.PI*r/180)-5;
     host.loadCells(this, this.x, this.y, 10, 10);
     host.s.push(this);
     if (this.collision()) return this.destroy(); // for quick destroy, no need to even register this bullet's existance on the update stream.
