@@ -321,7 +321,7 @@ class Client {
 
     if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
     if (t.reflect) GUI.drawImage(PixelTanks.images.tanks.reflect, t.x, t.y, 80, 80, 1, 40, 40, 0, 0, 360*Math.sin((Date.now()-this.animate)/1000*4*Math.PI));
-    if (t.dedEffect && PixelTanks.images.deathEffects[t.dedEffect.id+'_'] && !['bradley', 'LostKing', 'DarkMemeGod'].includes(PixelTanks.user.username)) {
+    if (t.dedEffect && PixelTanks.images.deathEffects[t.dedEffect.id+'_'] {
       const {speed, frames, kill} = PixelTanks.images.deathEffects[t.dedEffect.id+'_'];
       if (t.dedEffect.time/speed <= frames) { 
         if (t.dedEffect.time/speed < kill) {
