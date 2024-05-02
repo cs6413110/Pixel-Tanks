@@ -345,6 +345,7 @@ class Client {
   }
 
   frame() {
+    try {
     GUI.clear();
     this._fps++;
     this.render = requestAnimationFrame(() => this.frame());
@@ -357,21 +358,7 @@ class Client {
         if (!this.hostupdate.pt.length) {
           GUI.draw.fillStyle = '#ffffff';
           GUI.draw.fillRect(0, 0, 1600, 1600);
-          GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
-          // beta chunkload debug
-          if (this.temp)  {
-            GUI.draw.fillStyle = '#ffffff';
-            GUI.draw.fillRect(100, 100, 300, 300);
-            GUI.drawText(JSON.stringify(this.temp), 600, 100, 10, '#ffffff', .5);
-            let data = this.temp;
-            GUI.draw.fillStyle = '#00ff00';
-            GUI.draw.fillRect(100+data.nx*10, 100+data.ny*10, 10, 10);
-            for (const n of data.n) GUI.draw.fillRect(100+n.x*10, 100+n.y*10, 10, 10);
-            GUI.draw.fillStyle = '#ff0000';
-            GUI.draw.fillRect(100+data.ox*10, 100+data.ox*10, 10, 10);
-            for (const o of data.o) GUI.draw.fillRect(100+o.x*10, 100+o.y*10, 10, 10);
-          }
-          return;
+          return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);r
         }
       } else return this.drawStatus('Loading...');
     }
@@ -483,7 +470,6 @@ class Client {
     }
     GUI.drawText(this.dedTime < Date.now()-10000 ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
     GUI.drawText('', 0, 0, 30, '#ffffff', 0); // set font size :) can probably be changed
-    try {
     for (let i = Math.ceil(this.chatScroll/30), l = this.hostupdate.logs.length-i, v = i; i < (this.showChat ? v+Math.min(26, l) : Math.min(3, l)); i++) {
       const log = this.hostupdate.logs[i];
       GUI.draw.fillStyle = '#000000';
@@ -505,7 +491,6 @@ class Client {
       clearInterval(this.animationInterval);
       clearTimeout(this.animationTimeout);
     }
-    } catch(e) {alert(e)}
     
     if (this.debugMode) {// 0 = disabled, 1 = ping, 2 = fps, 3 = ops, 4 = ups
       const infoset = [null, this.pings, this.fps, this.ops, this.ups][this.debugMode];
@@ -538,6 +523,7 @@ class Client {
       }
       Menus.menus.pause.draw([1200, 0, 400, 1000]);
     }
+    } catch(e) {alert(e)}
   }
 
   chat(e) {
