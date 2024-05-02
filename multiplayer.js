@@ -224,7 +224,7 @@ class Multiplayer extends Engine {
       msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
       t.logs = this.logs.length;
       t.privateLogs.length = 0;
-      if (t.global !== this.global) t.global = message.global = this.global;
+      if (t.global !== this.global) t.global = msg.global = this.global;
       for (const d of this.deletions) {
         if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
           if (!msg.d.includes(d[4])) msg.d.push(d[4]);
