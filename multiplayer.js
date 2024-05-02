@@ -127,7 +127,7 @@ class Multiplayer extends Engine {
       if (yda < 0 ? y <= nys+yl : y >= nys+yl) l = true;
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = m(nxs); (xda > 0 ? (x < m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x += xda) {
         for (const e of this.cells[x][y]) {
-          if (e.id < 1) console.log('Loaded Tank!');
+          if (e.id < 1) console.log('Loaded Tank: '+JSON.stringify(e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id))));
           o.u.push(e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
         }
       }
