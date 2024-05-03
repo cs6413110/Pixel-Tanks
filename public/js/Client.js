@@ -203,7 +203,7 @@ class Client {
   }
 
   drawBlock(b) {
-    const size = b.type === 'airstrike' ? 200 : 100, type = ['airstrike', 'fi*re'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
+    const size = b.type === 'airstrike' || 'smoke' ? 200 : 100, type = ['airstrike', 'fi*re'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
     GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type === 'fire' ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type === 'fire' ? 50 : PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
   }
 
