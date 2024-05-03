@@ -239,7 +239,7 @@ class Client {
   }
 
   drawExplosion(e) {
-    GUI.drawImage(PixelTanks.images.animations[(e.w === 49 ? 'heal' : '') + 'explosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, e.f*50, 0, 50, 50);
+    GUI.drawImage(PixelTanks.images.animations[(e.w === 200 ? 'smoke' : (e.w === 49 ? 'heal' : '')+ 'explosion')], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, e.f*50, 0, 50, 50);
   }
 
 
