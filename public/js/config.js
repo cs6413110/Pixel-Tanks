@@ -248,6 +248,7 @@ const images = {
     weakbreak_: { frames: 37, speed: 10 },
     explosion: '/animations/explosion',
     healexplosion: '/animations/healexplosion',
+    smoke: '/animations/smoke',
   },
   deathEffects: {
     banhammer:'/animations/banhammer',
