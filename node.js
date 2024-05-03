@@ -10,7 +10,7 @@ const client = new MongoClient('mongodb+srv://cs641311:355608-G38@cluster0.z6wsn
 const tokens = new Set(), sockets = new Set();
 const valid = (token, username) => tokens.has(`${token}:${username}`);
 const auth = async({username, type, password}, socket) => {
-  if (username === undefined || username === '') return socket.send({status: 'error', message: 'Blank account.'});
+  if (type === 'signup' && (username === undefined || username === '')) return socket.send({status: 'error', message: 'Blank account.'});
   if (password === undefined || password === '') return socket.send({status: 'error', message: 'Invalid password.'});
   if (username.split('').some(a => [' ', '@', '[', ']', '#'].includes(a)) || username.length > 15) return socket.send({status: 'error', message: 'Invalid username.'});
   const item = await db.findOne({username}), token = Math.random();
