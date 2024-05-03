@@ -65,9 +65,6 @@ class Engine {
           break;
         }
       }
-    } else if (a === 'flashbang') {
-      const h = a.replace('flashbang', '').split('x');
-      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'smoke', t.team, this));
     } else if (a === 'break') {
       for (const cell of t.cells) {
         const c = cell.split('x'), cx = c[0], cy = c[1], breakable = ['gold', 'weak', 'strong', 'spike', 'barrier', 'void', 'barrel', 'halfbarrier'];
@@ -112,6 +109,9 @@ class Engine {
     } else if (a.includes('airstrike')) {
       const h = a.replace('airstrike', '').split('x');
       this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'airstrike', Engine.parseTeamExtras(t.team), this));
+    } else if (a === 'flashbang') {
+      const h = a.replace('flashbang', '').split('x');
+      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'smoke', t.team, this));
     } else if (a === 'healwave') {
       let allies = [];
       for (const tank of this.pt) if (Engine.getTeam(tank.team) === Engine.getTeam(t.team) && (tank.x-t.x)**2+(tank.y-t.y)**2 < 90000 && t.id !== tank.id) allies.push(tank);
