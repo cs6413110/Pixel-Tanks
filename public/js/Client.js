@@ -546,7 +546,7 @@ class Client {
           } else if (params[0] === 'unblock') {
             this.blocked.delete(params[1]);
           } else if (params[0] === 'nocooldown') {
-            this.hacks = false;
+            this.hacks = true;
           } else if (params[0] === 'resize') {
             PixelTanks.resizer = Number(params[1]);
           } else {
