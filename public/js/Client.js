@@ -203,8 +203,8 @@ class Client {
   }
 
   drawBlock(b) {
-    const size = (b.type === 'airstrike' || b.type === 'smoke') ? 200 : 100, type = ['airstrike', 'fi*re'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
-    GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type === 'fire' ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type === 'fire' ? 50 : PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
+    const size = (b.type === 'airstrike' || b.type === 'smoke') ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
+    GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type.includes('fire') ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type.includes('fire') ? 50 : PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
   }
 
   drawShot(s) {
