@@ -809,7 +809,7 @@ class PixelTanks {
               0, // crates
               1, // level
               0, // xp
-              20, // rank
+              1, // rank
             ],
             classes: [
               false, // tactical
