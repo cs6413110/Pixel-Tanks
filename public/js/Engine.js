@@ -134,7 +134,7 @@ class Engine {
       t.x = x;
       t.y = y;
       this.loadCells(t, t.x, t.y, 80, 80);
-      if (chunkload) t.update = this.chunkload({x: ox, y: oy}, t.x, t.y); // optimize to not take an obj param
+      if (chunkload) t.update = this.chunkload(t, ox, oy, t.x, t.y);
     }
     t.r = r;
     if (use.includes('respawn')) {
