@@ -218,30 +218,26 @@ class Multiplayer extends Engine {
 
   eventSend() {
     for (const t of this.pt) {
-      const msg = t.chunk || A.template('msg');
-      msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
+      t.update.logs = this.logs.slice(t.logs).concat(t.privateLogs);
       t.logs = this.logs.length;
       t.privateLogs.length = 0;
-      if (t.global !== this.global) t.global = msg.global = this.global;
+      if (t.global !== this.global) t.global = t.update.global = this.global;
       for (const d of this.deletions) {
         if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
-          if (!msg.d.includes(d[4])) msg.d.push(d[4]);
+          if (!t.update.d.includes(d[4])) t.update.d.push(d[4]);
         }
       }
       for (const u of this.updates) {
         if (!msg.d.includes(u[4]) && (Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500))) {
-          let i = msg.u.indexOf(e => e[0] === u[4]);
-          if (i >= 0) msg.u[i].push(...u.slice(5)); else msg.u.push(u.slice(4));
+          let i = t.update.u.indexOf(e => e[0] === u[4]);
+          if (i >= 0) t.update.u[i].push(...u.slice(5)); else t.update.u.push(u.slice(4));
         }
       }
-      /*if (msg.u.length === 0) msg.u = undefined;
-      if (msg.d.length === 0) msg.d = undefined;
-      if (msg.logs.length === 0) msg.logs = undefined;*/
-      if ((msg.logs.length || msg.u.length || msg.d.length || msg.global) && true/* rate limiter here */) {
+      if ((t.update.logs.length || t.update.u.length || t.update.d.length || t.update.global) && true/* rate limiter here */) {
         t.socket.send(msg);
       }
-      msg.release();
-      if (t.chunk) t.chunk = undefined;
+      t.update.u.length = t.update.d.length = 0;
+      t.update.global = t.update.logs = undefined;
     }
     this.updates.length = this.deletions.length = 0;
   }
