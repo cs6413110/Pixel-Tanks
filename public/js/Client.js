@@ -406,7 +406,7 @@ class Client {
     for (const shot of s) this.drawShot(shot);
     for (const ai of a) this.drawTank(ai);
     for (const tank of t) this.drawTank(tank);
-    for (const block of b) if (block.s) {
+    for (const block of b) if (block.s && block.hp !== block.maxHp) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(block.x-2, block.y+108, 104, 11);
       GUI.draw.fillStyle = '#0000FF';
