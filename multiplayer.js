@@ -141,6 +141,7 @@ class Multiplayer extends Engine {
         }
       }
     }
+    console.log(JSON.stringify(t.msg));
   }
 
   add(socket, data) {
