@@ -133,6 +133,7 @@ class Engine {
       let chunkload = t.socket && (Math.floor((t.x+40)/100) !== Math.floor((x+40)/100) || Math.floor((t.y+40)/100) !== Math.floor((y+40)/100)), ox = t.x, oy = t.y;
       t.x = x;
       t.y = y;
+      this.updateEntity(this, this.x, this.y, 80, 80, ox, oy, Tank.u);
       this.loadCells(t, t.x, t.y, 80, 80);
       if (chunkload) t.update = this.chunkload(t, ox, oy, t.x, t.y);
     }
