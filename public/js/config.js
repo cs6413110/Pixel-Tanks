@@ -13,7 +13,7 @@ const images = {
     friendlyairstrike: '/blocks/friendlyairstrike',
     barrel: '/blocks/barrel',
     halfbarrier: '/blocks/halfbarrier',
-    smoke: '/blocks/airstrike',//no img yet so just void EZ
+    smoke: '/blocks/nothing',//invis
   },
   bullets: {
     //normal: '/bullets/normal', no image yet :(
