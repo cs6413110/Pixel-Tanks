@@ -1,6 +1,7 @@
 class Tank {
   static args = ['username', 'rank', 'class', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'deathEffect', 'color'];
-  static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static s = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
   static u = ['x', 'y'];
   constructor() {
     this.cells = new Set();
@@ -25,7 +26,7 @@ class Tank {
     host.pt.push(this);
     host.loadCells(this, this.x, this.y, 80, 80);
     host.chunkload(this, -100000, -100000, this.x, this.y);
-    for (const p of Tank.raw) {
+    for (const p of Tank.s) {
       this.raw[p] = this[p];
       Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
     }
@@ -130,7 +131,7 @@ class Tank {
     if (this.socket && (Math.floor((ox+40)/100) !== Math.floor((this.x+40)/100) || Math.floor((oy+40)/100) !== Math.floor((this.y+40)/100))) this.host.chunkload(this, ox, oy, this.x, this.y);
   }
   reset() {
-    for (const p of Tank.raw) Object.defineProperty(this, p, {value: undefined, writable: true});
+    for (const p of Tank.s) Object.defineProperty(this, p, {value: undefined, writable: true});
     this.cells.clear();
   }
   collision(x, y) {
