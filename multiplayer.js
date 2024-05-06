@@ -131,8 +131,6 @@ class Multiplayer extends Engine {
         }
       }
     }
-    console.log('Chunkloading for x= '+x+' y='+y);
-    console.log('Tank loaded = '+(-1 !== t.msg.u.findIndex(u => u[0] < 1)));
     for (let oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = m(oys), l = false; (yda < 0 ? (y < m2(oys-h*yda)) : (y > m2(oys-h*yda))); y -= yda) {
       if (yda > 0 ? y <= oys-yl : y >= oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
@@ -143,7 +141,6 @@ class Multiplayer extends Engine {
         }
       }
     }
-    console.log('Tank unloaded = '+(-1 !== t.msg.d.findIndex(u => u < 1)));
   }
 
   add(socket, data) {
@@ -226,6 +223,8 @@ class Multiplayer extends Engine {
       t.privateLogs.length = 0;
       if (t.global !== this.global) t.global = t.msg.global = this.global;
       for (const d of this.deletions) {
+        let i = t.msg.u.indexWhere(u => u[0] === d[4]);
+        if (i !== -1) t.msg.u.splice(i, 1);
         if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
           if (!t.msg.d.includes(d[4])) t.msg.d.push(d[4]);
         }
