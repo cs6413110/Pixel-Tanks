@@ -1,7 +1,7 @@
 class Tank {
   static args = ['username', 'rank', 'class', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'deathEffect', 'color'];
-  static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
-  // update support stats (probably just going to use getters/setters)
+  static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static u = ['x', 'y'];
   constructor() {
     this.cells = new Set();
   }
@@ -20,7 +20,7 @@ class Tank {
     this.logs = this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = 0;
     this.update = A.template('msg');
     this.privateLogs = A.template('arr');
-    host.updateEntity(this, this.x, this.y, 80, 80, Tank.raw);
+    host.updateEntity(this, this.x, this.y, 80, 80, this.x, this.y, Tank.raw);
     host.override(this);
     host.pt.push(this);
     host.loadCells(this, this.x, this.y, 80, 80);
@@ -33,7 +33,7 @@ class Tank {
   setValue(p, v) {
     if (this.raw[p] === v) return; else this.raw[p] = v;
     this.updatedLast = Date.now();
-    this.host.updateEntity(this, this.x, this.y, 80, 80, [p]);
+    this.host.updateEntity(this, this.x, this.y, 80, 80, this.x, this.y, [p]);
   }
   update() {
     const team = Engine.getTeam(this.team);
@@ -125,6 +125,7 @@ class Tank {
       this.x = Math.floor(this.x/4)*4;
       this.y = Math.floor(this.y/4)*4;
     }
+    this.host.updateEntity(this, this.x, this.y, 80, 80, ox, oy, Tank.u);
     this.host.loadCells(this, this.x, this.y, 80, 80);
     if (this.socket && (Math.floor((ox+40)/100) !== Math.floor((this.x+40)/100) || Math.floor((oy+40)/100) !== Math.floor((this.y+40)/100))) this.update = this.host.chunkload(this, ox, oy, this.x, this.y);
   }
