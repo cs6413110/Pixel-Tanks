@@ -1,3 +1,9 @@
+class PixelTanks {
+  static start() {
+    PixelTanks.setup();
+    PixelTanks.boot();
+  }
+
 class AI {
   constructor(x, y, role, rank, team, host) {
     this.raw = {};
@@ -431,3 +437,4 @@ class AI {
     }
   }
 }
+
