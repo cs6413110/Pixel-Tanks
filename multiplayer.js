@@ -125,9 +125,9 @@ class Multiplayer extends Engine {
       if (yda < 0 ? y <= nys+yl : y >= nys+yl) l = true;
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = m(nxs); (xda > 0 ? (x < m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x += xda) {
         for (const e of this.cells[x][y]) {
-          let i = t.update.d.indexOf(e.id);
-          if (i !== -1) t.update.d.splice(i, 1);
-          t.update.u.push(this.loadEntity(e));
+          let i = t.msg.d.indexOf(e.id);
+          if (i !== -1) t.msg.d.splice(i, 1);
+          t.msg.u.push(this.loadEntity(e));
         }
       }
     }
@@ -135,9 +135,9 @@ class Multiplayer extends Engine {
       if (yda > 0 ? y <= oys-yl : y >= oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
         for (const e of this.cells[x][y]) {
-          let i = t.update.u.findIndex(u => u[0] === e.id);
-          if (i !== -1) t.update.u.splice(i, 1);
-          t.update.d.push(e.id);
+          let i = t.msg.u.findIndex(u => u[0] === e.id);
+          if (i !== -1) t.msg.u.splice(i, 1);
+          t.msg.d.push(e.id);
         }
       }
     }
@@ -218,26 +218,26 @@ class Multiplayer extends Engine {
 
   eventSend() {
     for (const t of this.pt) {
-      t.update.logs = this.logs.slice(t.logs).concat(t.privateLogs);
+      t.msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
       t.logs = this.logs.length;
       t.privateLogs.length = 0;
-      if (t.global !== this.global) t.global = t.update.global = this.global;
+      if (t.global !== this.global) t.global = t.msg.global = this.global;
       for (const d of this.deletions) {
         if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
-          if (!t.update.d.includes(d[4])) t.update.d.push(d[4]);
+          if (!t.msg.d.includes(d[4])) t.msg.d.push(d[4]);
         }
       }
       for (const u of this.updates) {
         if (!msg.d.includes(u[4]) && (Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500))) {
-          let i = t.update.u.indexOf(e => e[0] === u[4]);
-          if (i >= 0) t.update.u[i].push(...u.slice(5)); else t.update.u.push(u.slice(4));
+          let i = t.msg.u.indexOf(e => e[0] === u[4]);
+          if (i >= 0) t.msg.u[i].push(...u.slice(5)); else t.msg.u.push(u.slice(4));
         }
       }
-      if ((t.update.logs.length || t.update.u.length || t.update.d.length || t.update.global) && true/* rate limiter here */) {
+      if ((t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global) && true/* rate limiter here */) {
         t.socket.send(msg);
       }
-      t.update.u.length = t.update.d.length = 0;
-      t.update.global = t.update.logs = undefined;
+      t.msg.u.length = t.msg.d.length = 0;
+      t.msg.global = t.msg.logs = undefined;
     }
     this.updates.length = this.deletions.length = 0;
   }
@@ -255,13 +255,13 @@ class Multiplayer extends Engine {
     for (const t of this.pt) {
       let tx = t.x-1010, ty = t.y-710, o = Engine.collision(ox, oy, w, h, tx, ty, 2100, 1500), n = Engine.collision(x, y, w, h, tx, ty, 2100, 1500);
       if (!o && n) {
-        let i = t.update.d.indexOf(e.id);
-        if (i !== -1) t.update.d.splice(i, 1);
-        t.update.push(this.loadEntity(e));
+        let i = t.msg.d.indexOf(e.id);
+        if (i !== -1) t.msg.d.splice(i, 1);
+        t.msg.push(this.loadEntity(e));
       } else if (o && !n) {
-        let i = t.update.u.findIndex(u => u[0] === e.id);
-        if (i !== -1) t.update.u.splice(i, 1);
-        t.update.d.push(e.id);
+        let i = t.msg.u.findIndex(u => u[0] === e.id);
+        if (i !== -1) t.msg.u.splice(i, 1);
+        t.msg.d.push(e.id);
       }
     }
   }
