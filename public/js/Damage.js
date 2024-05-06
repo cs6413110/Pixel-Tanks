@@ -32,9 +32,9 @@ class Damage {
     }
     this.i = setInterval(() => {
       this.f++;
-      this.host.updateEntity(this, this.x, this.y, this.w, this.h, ['f']);
+      this.host.updateEntity(this, this.x, this.y, this.w, this.h, this.x, this.y, ['f']);
     }, 18); // remove pls me this is pain // ye its pain but can't remove yet :(
-    this.host.updateEntity(this, this.x, this.y, this.w, this.h, Damage.raw);
+    this.host.updateEntity(this, this.x, this.y, this.w, this.h, this.x, this.y, Damage.raw);
     setTimeout(() => this.destroy(), 200);
   }
   reset() {
