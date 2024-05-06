@@ -33,7 +33,6 @@ class Client {
   }
 
   interpret(data) {
-    alert(data);
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
