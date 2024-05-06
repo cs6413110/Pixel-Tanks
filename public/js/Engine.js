@@ -135,7 +135,7 @@ class Engine {
       t.y = y;
       this.updateEntity(this, this.x, this.y, 80, 80, ox, oy, Tank.u);
       this.loadCells(t, t.x, t.y, 80, 80);
-      if (chunkload) t.update = this.chunkload(t, ox, oy, t.x, t.y);
+      if (chunkload) this.chunkload(t, ox, oy, t.x, t.y);
     }
     t.r = r;
     if (use.includes('respawn')) {
