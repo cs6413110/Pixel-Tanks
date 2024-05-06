@@ -135,7 +135,7 @@ class Multiplayer extends Engine {
       if (yda > 0 ? y <= oys-yl : y >= oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
         for (const e of this.cells[x][y]) {
-          let i = t.update.u.indexAt(u => u[0] === e.id);
+          let i = t.update.u.findIndex(u => u[0] === e.id);
           if (i !== -1) t.update.u.splice(i, 1);
           t.update.d.push(e.id);
         }
@@ -259,7 +259,7 @@ class Multiplayer extends Engine {
         if (i !== -1) t.update.d.splice(i, 1);
         t.update.push(this.loadEntity(e));
       } else if (o && !n) {
-        let i = t.update.u.indexAt(u => u[0] === e.id);
+        let i = t.update.u.findIndex(u => u[0] === e.id);
         if (i !== -1) t.update.u.splice(i, 1);
         t.update.d.push(e.id);
       }
