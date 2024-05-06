@@ -118,7 +118,7 @@ class AI {
             cooldown = 30000;
           }
         } else if (item === 'flashbang') {
-          this.host.useAbility(this, 'flashbang');
+          this.host.useAbility(this, 'flashbang'+this.target.x+'x'+this.target.y);
           cooldown = 20000;
         } else if (item === 'bomb') {
           if (this.obstruction) {
