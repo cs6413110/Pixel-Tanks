@@ -23,7 +23,7 @@ class Tank {
     host.override(this);
     host.pt.push(this);
     host.loadCells(this, this.x, this.y, 80, 80);
-    this.update = host.chunkload({x: -10000, y: -10000}, this.x, this.y);
+    this.update = host.chunkload(this, -100000, -100000, this.x, this.y);
     for (const p of Tank.raw) {
       this.raw[p] = this[p];
       Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
@@ -125,7 +125,7 @@ class Tank {
       this.y = Math.floor(this.y/4)*4;
     }
     this.host.loadCells(this, this.x, this.y, 80, 80);
-    if (this.socket && (Math.floor((ox+40)/100) !== Math.floor((this.x+40)/100) || Math.floor((oy+40)/100) !== Math.floor((this.y+40)/100))) this.update = this.host.chunkload({x: ox, y: oy}, this.x, this.y);
+    if (this.socket && (Math.floor((ox+40)/100) !== Math.floor((this.x+40)/100) || Math.floor((oy+40)/100) !== Math.floor((this.y+40)/100))) this.update = this.host.chunkload(this, ox, oy, this.x, this.y);
   }
   reset() {
     for (const p of Tank.raw) Object.defineProperty(this, p, {value: undefined, writable: true});
