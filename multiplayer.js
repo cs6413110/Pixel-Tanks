@@ -257,7 +257,7 @@ class Multiplayer extends Engine {
       if (!o && n) {
         let i = t.msg.d.indexOf(e.id);
         if (i !== -1) t.msg.d.splice(i, 1);
-        t.msg.push(this.loadEntity(e));
+        t.msg.u.push(this.loadEntity(e));
       } else if (o && !n) {
         let i = t.msg.u.findIndex(u => u[0] === e.id);
         if (i !== -1) t.msg.u.splice(i, 1);
