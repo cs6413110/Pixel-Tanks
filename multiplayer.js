@@ -242,31 +242,35 @@ class Multiplayer extends Engine {
     this.updates.length = this.deletions.length = 0;
   }
 
-  updateEntity(e, x, y, w, h, c) {
-    const a = A.template('arr');
-    for (const p of c) a.push(p, isNaN(e[p]) ? e[p] : Math.round(e[p]*10)/10);
-    this.pushUpdate(e.id, x, y, w, h, ...a);
-    a.release();
-  } // optimize by combining with the below function
-
-  pushUpdate(id, x, y, w, h, ...p) {
-    for (const u of this.updates) if (u[4] === id) {
-      for (let i = 0; i < p.length; i += 2) {
-        let done = false;
-        for (let l = 5; l < u.length && !done; l += 2) {
-          if (p[i] == u[l]) {
-            u[l+1] = p[i+1];
-            done = true;
-          }
-        }
-        if (!done) u.push(p[i], p[i+1]);
-      }
-      return;
+  updateEntity(e, x, y, w, h, ox, oy, c) {
+    let update = this.updates.find(u => u[4] === e.id);
+    if (!update) {
+      update = A.template('arr').concat(x, y, w, h, e.id);
+      this.updates.push(update);
     }
-    return this.updates.push(A.template('arr').concat(x, y, w, h, id, ...p));
+    for (const p of c) {
+      const i = update.indexOf(p), value = isNaN(e[p]) ? e[p] : Math.round(e[p]*10)/10;
+      if (i >= 5) update[i+1] = value; else update.push(p, value);
+    }
+    for (const t of this.pt) {
+      let tx = t.x-1010, ty = t.y-710, o = Engine.collision(ox, oy, w, h, tx, ty, 2100, 1500), n = Engine.collision(x, y, w, h, tx, ty, 2100, 1500);
+      if (!o && n) {
+        t.update.push(this.loadEntity(e)); // no need for update sub (happens upon eventSend)
+        let i = t.update.d.indexOf(e.id);
+        if (i !== -1) t.update.d.splice(i, 1);
+      } else if (o && !n) { // should not be possible for deletion duplicates
+        
+        t.update.d.push(e.id);
+      }
+    }
+  }
+
+  loadEntity(e) {
+    return e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id));
   }
 
   destroyEntity(id, x, y, w, h) {
+    // maybe delete update here and remove from eventSend?
     this.deletions.push(A.template('arr').concat(x, y, w, h, id));
   }
 
