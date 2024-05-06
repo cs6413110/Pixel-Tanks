@@ -19,7 +19,7 @@ class Shot {
     host.loadCells(this, this.x, this.y, 10, 10);
     host.s.push(this);
     if (this.collision()) return this.destroy(); // for quick destroy, no need to even register this bullet's existance on the update stream.
-    host.updateEntity(this, this.x, this.y, 10, 10, Shot.raw);
+    host.updateEntity(this, this.x, this.y, 10, 10, this.x, this.y, Shot.raw);
     this.raw = {id: this.id, type: type, team: team, x: this.x, y: this.y, sx: this.sx, sy: this.sy, r: this.r}; // temp
     this.updatedLast = Date.now();
   }
@@ -65,7 +65,8 @@ class Shot {
     if (((x < 0 || y < 0 || x+10 >= 3000 || y+10 >= 3000) && !this.target && this.collide()) || (this.target && (!this.target.x || !this.target.y))) return this.destroy();
     if (this.target) if (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded) return this.destroy();
     if (Math.floor(this.x/100) !== x1 || Math.floor(this.y/100) !== y2 || Math.floor((this.x+10)/100) !== x2 || Math.floor((this.y+10)/100) !== y2) this.host.loadCells(this, x, y, 10, 10);
-    this.host.updateEntity(this, this.x = x, this.y = y, 10, 10, Shot.u);
+    let ox = this.x, oy = this.y;
+    this.host.updateEntity(this, this.x = x, this.y = y, 10, 10, ox, oy, Shot.u);
     /* temp */
     this.updatedLast = Date.now();
     this.raw.x = x;
@@ -78,7 +79,7 @@ class Shot {
       this.damage = (1-this.d/300)*this.md;
     } else if (this.type === 'dynamite') {
       this.r += 5;
-      this.host.updateEntity(this, this.x, this.y, 10, 10, Shot.u2);
+      this.host.updateEntity(this, this.x, this.y, 10, 10, this.x, this.y, Shot.u2);
       this.updatedLast = Date.now();
       this.raw.r = this.r; // temp
     }
