@@ -29,6 +29,9 @@ class AI {
     if (Math.random() < (rank/20)) this.canItem2 = true;
     if (Math.random() < (rank/20)) this.canItem3 = true;
     if (Math.random() < (rank/20)) this.canClass = true;
+    if (Math.random() < (rank/20)) this.cosmetic_hat = PixelTanks.images.cosmetics[Math.floor(Math.random()*160)];
+    if (Math.random() < (rank/20)) this.cosmetic = PixelTanks.images.cosmetics[Math.floor(Math.random()*160)];
+    if (Math.random() < (rank/20)) this.cosmetic_body = PixelTanks.images.cosmetics[Math.floor(Math.random()*160)];
     this.items = [];
     if (this.role !== 0) this.giveAbilities();
     const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
