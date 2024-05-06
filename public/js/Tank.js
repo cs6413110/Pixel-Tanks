@@ -18,7 +18,7 @@ class Tank {
     this.x = host.spawn.x;
     this.y = host.spawn.y;
     this.logs = this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = 0;
-    this.update = A.template('msg');
+    this.update = {u: [], d: []};
     this.privateLogs = A.template('arr');
     host.updateEntity(this, this.x, this.y, 80, 80, this.x, this.y, Tank.raw);
     host.override(this);
