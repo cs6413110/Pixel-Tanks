@@ -29,9 +29,10 @@ class AI {
     if (Math.random() < (rank/20)) this.canItem2 = true;
     if (Math.random() < (rank/20)) this.canItem3 = true;
     if (Math.random() < (rank/20)) this.canClass = true;
-    if (Math.random() < (rank/20)) this.cosmetic_hat = PixelTanks.images.cosmetics[Math.floor(Math.random()*160)];
-    if (Math.random() < (rank/20)) this.cosmetic = PixelTanks.images.cosmetics[Math.floor(Math.random()*160)];
-    if (Math.random() < (rank/20)) this.cosmetic_body = PixelTanks.images.cosmetics[Math.floor(Math.random()*160)];
+    const cosmetics = ['white horns', 'white wings', 'blue horns', 'gold horns', 'blue wings', 'gold wings', 'watermelon', 'Spooked', 'Cute Eyes', 'Army', 'Top Hat', 'X', 'Red Hoodie', 'Devil Wings', 'Devil Horns', 'Exclaimation Point', 'Orange Hoodie', 'GoldShield', 'Yellow Hoodie', 'Green Hoodie', 'Blue Hoodie', 'Purple Hoodie', 'Cancelled', 'Spirals', 'Speaker', 'Spikes', 'Candy Cane', 'Pumpkin Face', 'Mask', 'Purple-Pink Hoodie', 'Bunny Ears', 'glitch', 'spoider', 'CompanionCube', 'PortalCube', 'half glitch', 'eye', 'Anime Eyes', 'Angry Eyes', 'Hard Hat', 'Present', 'Dead', 'Peace', 'Question Mark', 'Small Scratch', 'Kill = Ban', 'Reindeer Hat', 'Pumpkin Hat', 'Cat Ears', 'Cake', 'Cat Hat', 'bread', 'First Aid', 'silver', 'Fisher Hat', 'chip', 'eyes', 'zombie', 'googly', 'static', 'lava', 'void knight', 'gold helment', 'toxic', 'Antlers', 'White helment', 'Blue Helment', 'Aqua Helment', 'Purple helment', 'Stripes', 'scoped', 'brain', 'Hands', 'Straw Hat', 'Hax', 'Tools', 'Money Eyes', 'Dizzy', 'Checkmark', 'Sweat', 'Scared', 'Blue Tint', 'Purple Top Hat', 'Purple Grad Hat', 'Eyebrows', 'Helment', 'Rudolph', 'Candy Corn', 'Flag', 'Katana',  'Swords', 'angry hoodie', 'Aaron', 'hacker_hoodie', 'Hazard', 'Locked', 'Elf', 'Triple Gun', 'Evil Eyes', 'Gold', 'Rage', 'Onfire', 'Halo', 'Police', 'Deep Scratch', 'bluekatana', 'Assassin', 'Astronaut', 'Christmas Lights', 'No Mercy', 'Error', 'disguise', 'Lego', 'Paleontologist', 'Sun Roof', 'Blind', 'Redsus', 'Uno Reverse', 'Christmas Hat', 'Mini Tank', 'Terminator', 'MLG Glasses', 'Power Armor', 'venom'];
+    if (Math.random() < (rank/20)) this.cosmetic_hat = cosmetics[Math.floor(Math.random()*cosmetics.length)];
+    if (Math.random() < (rank/20)) this.cosmetic = cosmetics[Math.floor(Math.random()*cosmetics.length)];
+    if (Math.random() < (rank/20)) this.cosmetic_body = cosmetics[Math.floor(Math.random()*cosmetics.length)];
     this.items = [];
     if (this.role !== 0) this.giveAbilities();
     const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
