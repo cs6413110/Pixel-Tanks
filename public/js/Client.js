@@ -33,6 +33,7 @@ class Client {
   }
 
   interpret(data) {
+    alert(data);
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
@@ -60,7 +61,6 @@ class Client {
         if (this.blocked.has(username)) this.hostupdate.logs[i].m = '<blocked message from '+username+'>';
       }
     }
-    if (data.temp) this.temp = data.temp;
     if (data.u) for (const u of data.u) {
       let e = this.hostupdate.entities.find(e => e.id === u[0]);
       if (!e) {
