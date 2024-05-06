@@ -228,7 +228,7 @@ class Multiplayer extends Engine {
         }
       }
       for (const u of this.updates) {
-        if (!msg.d.includes(u[4]) && (Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500))) {
+        if (!t.msg.d.includes(u[4]) && (Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500))) {
           let i = t.msg.u.indexOf(e => e[0] === u[4]);
           if (i >= 0) t.msg.u[i].push(...u.slice(5)); else t.msg.u.push(u.slice(4));
         }
