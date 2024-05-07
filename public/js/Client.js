@@ -523,7 +523,9 @@ class Client {
       }
       Menus.menus.pause.draw([1200, 0, 400, 1000]);
     }
-    } catch(e) {alert(e)}
+    } catch(e) {
+      
+    }
   }
 
   chat(e) {
