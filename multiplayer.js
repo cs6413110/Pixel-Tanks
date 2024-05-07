@@ -234,8 +234,9 @@ class Multiplayer extends Engine {
         }
       }
       if ((t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global)) {
-        if (/*(!t.lastSend || (Date.now()-t.lastSend >= 1000/settings.ups)) && */true) {
-          t.socket.send(t.msg);
+        if (/*(!t.lastSend || (Date.now()-t.lastSend >= 1000/settings.ups)) && */!t.busy) {
+          t.busy = true;
+          t.socket.send(t.msg, {}, () => (t.busy = false));
           t.lastSend = Date.now();
           t.msg.u.length = t.msg.d.length = 0;
           t.msg.global = t.msg.logs = undefined;
