@@ -36,7 +36,7 @@ const images = {
     bottom2: '/tanks/bottom2',
   },
   cosmetics: {
-    'Plasma Ball': '/cosmetics/plasma',
+    'Plasma Ball': '/cosmetics/Plasma',
     'venom': '/cosmetics/venom',
     'toxic': '/cosmetics/toxic',
     'spoider': '/cosmetics/spoider',
