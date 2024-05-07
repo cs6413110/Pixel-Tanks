@@ -381,7 +381,7 @@ class PixelTanks {
           GUI.draw.lineWidth = 30; // border thickness
           for (const p in key) {
             if (Menus.menus.settings1.selected === p) GUI.draw.strokeRect(key[p][0], key[p][1], 176, 176);
-            GUI.drawText(PixelTanks.userData.keybinds[p], key[p][0]+88, key[p][1]+88, 50, '#ffffff', .5);
+            GUI.drawText(String.fromCharCode(PixelTanks.userData.keybinds[p]), key[p][0]+88, key[p][1]+88, 50, '#ffffff', .5);
           }
         },
       },
