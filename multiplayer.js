@@ -262,7 +262,8 @@ class Multiplayer extends Engine {
       } else if (o && !n) {
         let i = t.msg.u.findIndex(u => u[0] === e.id);
         if (i !== -1) t.msg.u.splice(i, 1);
-        //t.msg.d.push(e.id);
+        console.log(e.id, e.constructor.name);
+        t.msg.d.push(e.id);
       }
     }
   }
