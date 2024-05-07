@@ -236,7 +236,7 @@ class Multiplayer extends Engine {
       if ((t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global)) {
         if (/*(!t.lastSend || (Date.now()-t.lastSend >= 1000/settings.ups)) && */!t.busy) {
           t.busy = true;
-          t.socket.send(t.msg, {}, () => (t.busy = false));
+          t.socket._send(pack(t.msg), {}, () => (t.busy = false));
           t.lastSend = Date.now();
           t.msg.u.length = t.msg.d.length = 0;
           t.msg.global = t.msg.logs = undefined;
@@ -907,7 +907,7 @@ process.on('uncaughtException', (err, origin) => {
 const wss = new WebSocketServer({port: settings.port});
 wss.on('connection', socket => {
   socket._send = socket.send;
-  socket.send = data => socket._send(pack(data), ...arguments.slice(1));
+  socket.send = data => socket._send(pack(data));
   sockets.add(socket);
   socket.on('message', data => {
     try {
