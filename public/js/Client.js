@@ -197,7 +197,6 @@ class Client {
   }
 
   drawTank(t) {
-    return;
     const p = t.username === PixelTanks.user.username;
     let a = 1;
     if (this.ded && t.invis && !p) return;
@@ -351,7 +350,7 @@ class Client {
     for (const block of b) this.drawBlock(block);
     for (const shot of s) this.drawShot(shot);
     for (const ai of a) this.drawTank(ai);
-    for (const tank of t) this.drawTank(tank);
+    //for (const tank of t) this.drawTank(tank);
     for (const block of b) if (block.s) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(block.x-2, block.y+108, 104, 11);
