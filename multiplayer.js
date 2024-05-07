@@ -223,19 +223,18 @@ class Multiplayer extends Engine {
       t.privateLogs.length = 0;
       if (t.global !== this.global) t.global = t.msg.global = this.global;
       for (const d of this.deletions) {
-        let i = t.msg.u.findIndex(u => u[0] === d[4]);
-        if (i !== -1) t.msg.u.splice(i, 1);
         if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
           if (!t.msg.d.includes(d[4])) t.msg.d.push(d[4]);
         }
       }
       for (const u of this.updates) {
-        if (!t.msg.d.includes(u[4]) && (Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500))) {
+        if (!t.msg.d.includes(u[4]) && Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500)) {
           let i = t.msg.u.indexOf(e => e[0] === u[4]);
           if (i >= 0) t.msg.u[i].push(...u.slice(5)); else t.msg.u.push(u.slice(4));
         }
       }
       if ((t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global) && true/* rate limiter here */) {
+        console.log(JSON.stringify(t.msg));
         t.socket.send(t.msg);
       }
       t.msg.u.length = t.msg.d.length = 0;
@@ -273,10 +272,6 @@ class Multiplayer extends Engine {
   }
 
   destroyEntity(id, x, y, w, h) {
-    for (const t of this.pt) {
-      let i = t.msg.u.findIndex(u => u[0] === id);
-      if (i !== -1) t.msg.u.splice(i, 1);
-    }
     this.deletions.push(A.template('arr').concat(x, y, w, h, id));
   }
 
