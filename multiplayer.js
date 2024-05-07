@@ -234,7 +234,6 @@ class Multiplayer extends Engine {
         }
       }
       if ((t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global) && true/* rate limiter here */) {
-        console.log(JSON.stringify(t.msg));
         t.socket.send(t.msg);
       }
       t.msg.u.length = t.msg.d.length = 0;
@@ -262,7 +261,6 @@ class Multiplayer extends Engine {
       } else if (o && !n) {
         let i = t.msg.u.findIndex(u => u[0] === e.id);
         if (i !== -1) t.msg.u.splice(i, 1);
-        console.log(e.id, e.constructor.name);
         t.msg.d.push(e.id);
       }
     }
