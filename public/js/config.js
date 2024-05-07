@@ -36,7 +36,6 @@ const images = {
     bottom2: '/tanks/bottom2',
   },
   cosmetics: {
-    'Lost Mask': '/cosmetics/LostMask',
     'Plasma Ball': '/cosmetics/Plasma',
     'venom': '/cosmetics/venom',
     'toxic': '/cosmetics/toxic',
