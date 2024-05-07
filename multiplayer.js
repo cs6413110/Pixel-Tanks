@@ -112,7 +112,7 @@ class Multiplayer extends Engine {
     super(levels);
     this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
-    this.i.push(setInterval(() => this.eventSend(), 1000/settings.ups));
+    this.i.push(setInterval(() => this.eventSend()));
   }
 
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
