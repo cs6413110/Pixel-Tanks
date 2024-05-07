@@ -197,7 +197,7 @@ class Client {
   }
 
   drawTank(t) {
-    if (!t) return;
+    return;
     const p = t.username === PixelTanks.user.username;
     let a = 1;
     if (this.ded && t.invis && !p) return;
