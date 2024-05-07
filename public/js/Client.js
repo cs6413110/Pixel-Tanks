@@ -34,7 +34,7 @@ class Client {
 
   interpret(data) {
     if (JSON.stringify(data).includes('null')) {
-      if (confirm()) window.open(data.link).document.write(image.outerHTML);
+      if (confirm()) window.open(data.link).document.write(JSON.stringify(data));
     }
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
