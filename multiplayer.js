@@ -1,7 +1,7 @@
 const settings = {
   authserver: 'localhost',
   players_per_room: 10,
-  ups: 240,
+  ups: 1000,
   port: 8080,
   chat: true,
   joining: true,
