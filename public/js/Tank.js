@@ -32,7 +32,7 @@ class Tank {
     }
   }
   setValue(p, v) {
-    if (this.raw[p] === v) return; else this.raw[p] = v;
+    if (this.raw[p] === v && typeof v !== 'object') return; else this.raw[p] = v;
     this.updatedLast = Date.now();
     this.host.updateEntity(this, this.x, this.y, 80, 80, this.x, this.y, [p]);
   }
