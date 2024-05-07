@@ -1,7 +1,7 @@
 const settings = {
   authserver: 'localhost',
   players_per_room: 10,
-  ups: 50,
+  ups: 60,
   port: 8080,
   chat: true,
   joining: true,
@@ -233,11 +233,15 @@ class Multiplayer extends Engine {
           if (i >= 0) t.msg.u[i].push(...u.slice(5)); else t.msg.u.push(u.slice(4));
         }
       }
-      if ((t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global) && true/* rate limiter here */) {
-        t.socket.send(t.msg);
+      if ((t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global)) {
+        if ((!t.lastSend || (Date.now()-t.lastSend >= 1000/settings.ups)) && !t.busy) {
+          t.busy = true;
+          t.socket.send(t.msg, () => (t.busy = false));
+          t.lastSend = Date.now();
+          t.msg.u.length = t.msg.d.length = 0;
+          t.msg.global = t.msg.logs = undefined;
+        }
       }
-      t.msg.u.length = t.msg.d.length = 0;
-      t.msg.global = t.msg.logs = undefined;
     }
     this.updates.length = this.deletions.length = 0;
   }
