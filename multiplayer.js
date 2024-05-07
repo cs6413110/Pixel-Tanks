@@ -907,7 +907,7 @@ process.on('uncaughtException', (err, origin) => {
 const wss = new WebSocketServer({port: settings.port});
 wss.on('connection', socket => {
   socket._send = socket.send;
-  socket.send = data => socket._send(pack(data));
+  socket.send = data => socket._send(pack(data), ...arguments.slice(1));
   sockets.add(socket);
   socket.on('message', data => {
     try {
