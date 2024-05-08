@@ -410,7 +410,7 @@ class Client {
     for (const ai of a) this.drawTank(ai);
     for (const tank of t) {
       if (!tank.team) {
-        if (!this.hostupdate.logs[0].m.includes('Skipped errored tank')) this.hostupdate.logs.unshift({m: 'Skipped errored tank: '+tank.username, c: '#ff0000'});
+        if (!this.hostupdate.logs[0].m.includes('Skipped errored tank')) this.hostupdate.logs.unshift({m: 'Skipped errored tank: '+JSON.stringify(tank), c: '#ff0000'});
       } else this.drawTank(tank);
     }
     for (const block of b) if (block.s && block.hp !== block.maxHp) {
