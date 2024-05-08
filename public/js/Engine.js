@@ -11,7 +11,7 @@ class Engine {
     }
     this.spawn = {x: 0, y: 0};
     this.spawns = [{x: 0, y: 0}, {x: 0, y: 0}];
-    for (const property of ['ai', 's', 'pt', 'b', 'd', 'i', 'logs', 'cells', 'updates', 'deletions']) this[property] = [];
+    for (const property of ['ai', 's', 'pt', 'b', 'd', 'i', 'logs', 'cells', 'updates', 'deletions', 'ids']) this[property] = [];
     for (let y = 0; y < 30; y++) {
       this.cells[y] = [];
       for (let x = 0; x < 30; x++) this.cells[y][x] = new Set();
@@ -231,7 +231,13 @@ class Engine {
     return color;
   }
 
-  static genId = type => Math.floor((type+Math.random())*10000000)/10000000;
+  static id = type => Math.floor((type+Math.random())*10000000)/10000000;
+  static genId = type => {
+    let id = Engine.id(type);
+    while (this.ids.includes(id)) id = Engine.id(type);
+    this.ids.push(id);
+    return id;
+  }
 
   static finder = new PF.AStarFinder({allowDiagonal: true, dontCrossCorners: true});
 
