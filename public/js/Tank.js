@@ -103,7 +103,7 @@ class Tank {
     if (this.hp <= 0 && this.host.ondeath) this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
   }
 
-  grappleCalc() {
+  grappleCalc() { // direct setting of pos may cause chunkload issues
     const dx = this.grapple.target.x - this.x, dy = this.grapple.target.y - this.y, ox = this.x, oy = this.y;
     if (dx ** 2 + dy ** 2 > 400) {
       const angle = Math.atan2(dy, dx);
