@@ -409,15 +409,9 @@ class Client {
     for (const shot of s) this.drawShot(shot);
     for (const ai of a) this.drawTank(ai);
     for (const tank of t) {
-      try {
-        this.drawTank(tank);
-      } catch(e) {
-        this.hostupdate.logs.unshift({m: 'Unloaded errored tank: '+tank.username, c: '#ff0000'});
-        let i = this.hostupdate.entities.findIndex(e => e.id === tank.id);
-        if (i !== -1) this.hostupdate.entities.splice(i, 1);
-        i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === tank.id);
-       if (i !== -1) this.hostupdate[this.getIdType(d)].splice(i, 1);
-      }
+      if (!tank.team) {
+        if (!this.hostupdate.logs[0].m.includes('Skipped errored tank')) this.hostupdate.logs.unshift({m: 'Skipped errored tank: '+tank.username, c: '#ff0000'});
+      } else this.drawTank(tank);
     }
     for (const block of b) if (block.s && block.hp !== block.maxHp) {
       GUI.draw.fillStyle = '#000000';
