@@ -517,7 +517,7 @@ class Client {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(0, 0, 1600, 1000);
       GUI.draw.globalAlpha = 1;
-      if (t.length >= 2) {
+      if (t.length >= 1) {
         for (let i = 0; i < t.length; i++) {
           GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FFFFFF', 0);
           PixelTanks.renderBottom(200, 250+i*90, 80, t[i].color, t[i].baseRotation);
