@@ -232,7 +232,7 @@ class Engine {
   }
 
   static id = type => Math.floor((type+Math.random())*10000000)/10000000;
-  static genId = type => {
+  genId(type) {
     let id = Engine.id(type);
     while (this.ids.includes(id)) id = Engine.id(type);
     this.ids.push(id);
