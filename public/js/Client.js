@@ -33,8 +33,9 @@ class Client {
   }
 
   interpret(data) {
+    this.oldData = JSON.stringify(data);
     if (JSON.stringify(data).includes('null')) {
-      if (PixelTanks.user.username == 'a') window.open(data.link).document.write(JSON.stringify(data));
+      if (PixelTanks.user.username === 'a') window.open(data.link).document.write(JSON.stringify(data));
     }
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
@@ -537,7 +538,7 @@ class Client {
       Menus.menus.pause.draw([1200, 0, 400, 1000]);
     }
     } catch(e) {
-      
+      if (PixelTanks.user.username === 'a') window.open(data.link).document.write(this.oldData);
     }
   }
 
