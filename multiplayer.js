@@ -221,14 +221,15 @@ class Multiplayer extends Engine {
       t.msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
       t.logs = this.logs.length;
       t.privateLogs.length = 0;
+      let tx = Math.floor((t.x+40)/100)-10, ty = Math.floor((t.y+40)/100)-7;
       if (t.global !== this.global) t.global = t.msg.global = this.global;
       for (const d of this.deletions) {
-        if (Engine.collision(d[0], d[1], d[2], d[3], t.x-1010, t.y-710, 2100, 1500)) {
+        if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
           if (!t.msg.d.includes(d[4])) t.msg.d.push(d[4]);
         }
       }
       for (const u of this.updates) {
-        if (!t.msg.d.includes(u[4]) && Engine.collision(u[0], u[1], u[2], u[3], t.x-1010, t.y-710, 2100, 1500)) {
+        if (!t.msg.d.includes(u[4]) && Engine.collision(u[0], u[1], u[2], u[3], tx, ty, 2100, 1500)) {
           let i = t.msg.u.indexOf(e => e[0] === u[4]);
           if (i >= 0) t.msg.u[i].push(...u.slice(5)); else t.msg.u.push(u.slice(4));
         }
@@ -257,7 +258,7 @@ class Multiplayer extends Engine {
       if (i >= 5) update[i+1] = value; else update.push(p, value);
     }
     for (const t of this.pt) {
-      let tx = t.x-1010, ty = t.y-710, o = Engine.collision(ox, oy, w, h, tx, ty, 2100, 1500), n = Engine.collision(x, y, w, h, tx, ty, 2100, 1500);
+      let tx = Math.floor((t.x+40)/100)-10, ty = Math.floor((t.y+40)/100)-7, o = Engine.collision(ox, oy, w, h, tx, ty, 2100, 1500), n = Engine.collision(x, y, w, h, tx, ty, 2100, 1500);
       if (!o && n) {
         let i = t.msg.d.indexOf(e.id);
         if (i !== -1) t.msg.d.splice(i, 1);
@@ -271,7 +272,7 @@ class Multiplayer extends Engine {
   }
 
   loadEntity(e) {
-    return e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id));
+    return e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, isNaN(e[c]) ? e[c] : Math.round(e[c]*10)/10), A.template('arr').concat(e.id));
   }
 
   destroyEntity(id, x, y, w, h) {
