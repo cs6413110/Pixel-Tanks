@@ -8,7 +8,7 @@ class Shot {
     this.cells = new Set();
   }
   init(x, y, d, r, type, team, rank, host) {
-    this.id = Engine.genId(2);
+    this.id = host.genId(2);
     for (let i = Shot.args.length-1; i >= 0; i--) this[Shot.args[i]] = arguments[i];
     this.e = Date.now();
     this.md = this.damage = Shot.settings[this.type][0]*(rank*10+300)/500;
