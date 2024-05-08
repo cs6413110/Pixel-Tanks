@@ -221,7 +221,7 @@ class Multiplayer extends Engine {
       t.msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
       t.logs = this.logs.length;
       t.privateLogs.length = 0;
-      let tx = Math.floor((t.x+40)/100)-10, ty = Math.floor((t.y+40)/100)-7;
+      let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100;
       if (t.global !== this.global) t.global = t.msg.global = this.global;
       for (const d of this.deletions) {
         if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
@@ -258,7 +258,7 @@ class Multiplayer extends Engine {
       if (i >= 5) update[i+1] = value; else update.push(p, value);
     }
     for (const t of this.pt) {
-      let tx = Math.floor((t.x+40)/100)-10, ty = Math.floor((t.y+40)/100)-7, o = Engine.collision(ox, oy, w, h, tx, ty, 2100, 1500), n = Engine.collision(x, y, w, h, tx, ty, 2100, 1500);
+      let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100, o = Engine.collision(ox, oy, w, h, tx, ty, 2100, 1500), n = Engine.collision(x, y, w, h, tx, ty, 2100, 1500);
       if (!o && n) {
         let i = t.msg.d.indexOf(e.id);
         if (i !== -1) t.msg.d.splice(i, 1);
