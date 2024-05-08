@@ -8,7 +8,7 @@ class Block {
     this.t = []; // can be removed maybe?
   }
   init(x, y, hp, type, team, host) {
-    this.id = Engine.genId(1);
+    this.id = host.genId(1);
     this.raw = {id: this.id};
     for (const i in Block.args) this[Block.args[i]] = arguments[i];
     this.maxHp = hp;
