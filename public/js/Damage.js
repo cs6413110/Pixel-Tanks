@@ -5,7 +5,7 @@ class Damage {
     this.cells = new Set();
   }
   init(x, y, w, h, a, team, host) {
-    this.id = Engine.genId(4);
+    this.id = host.genId(4);
     this.raw = {id: this.id};
     for (let i = Damage.args.length-1; i >= 0; i--) this[Damage.args[i]] = arguments[i];
     this.f = 0;
