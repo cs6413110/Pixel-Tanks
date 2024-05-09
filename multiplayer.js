@@ -1,7 +1,7 @@
 const settings = {
   authserver: 'localhost',
   players_per_room: 10,
-  ups: 50,
+  ups: 1000,
   port: 8080,
   chat: true,
   joining: true,
@@ -82,7 +82,7 @@ const deathMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
   `{idot} has joined the battle`,
-  `{idot}`, //plz leave
+  `{idot} leave`,
 ], rageMessages = [
   `{idot} left the game`,
   `{idot} quit`,
@@ -112,32 +112,40 @@ class Multiplayer extends Engine {
     super(levels);
     this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
-    this.updates = [];
-    this.i.push(setInterval(() => this.cellSend(), 1000/settings.ups));
+    this.i.push(setInterval(() => this.eventSend()));
   }
 
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
 
-  chunkload(t, x, y) {
-    return;
-    const w = 21, h = 15;
-    const ocx = Math.floor(t.x/100)+.5, ocy = Math.floor(t.y/100)+.5, ncx = Math.floor(x/100)+.5, ncy = Math.floor(y/100)+.5;
+  chunkload(t, ox, oy, x, y) {
+    const w = 21, h = 15, m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o));
+    const ocx = Math.floor((ox+40)/100)+.5, ocy = Math.floor((oy+40)/100)+.5, ncx = Math.floor((x+40)/100)+.5, ncy = Math.floor((y+40)/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
-    const a = A.template('arr');
-    a.push([], []); // new, old
-    for (let l = false, nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = Math.max(0, Math.min(29, nys)); y != Math.max(0, Math.min(29, nys+h*yda)); y += yda) {
-      if (y === nys+yl) l = true;
-      for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = Math.max(0, Math.min(29, nxs)); x != Math.max(0, Math.min(29, nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x += xda) {
-        for (const e of this.cells[x][y]) a[0].push(e.raw);
+    const ymin = ncy-h/2, ymax = ncy+h/2, xmin = ncx-w/2, xmax = ncx+w/2;
+    for (let nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = m(nys), l = false; (yda > 0 ? (y < m2(nys+h*yda)) : (y > m2(nys+h*yda))); y += yda) {
+      if (yda < 0 ? y <= nys+yl : y >= nys+yl) l = true;
+      for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = m(nxs); (xda > 0 ? (x < m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x += xda) {
+        for (const e of this.cells[x][y]) {
+          let i = t.msg.d.indexOf(e.id);
+          if (i !== -1) t.msg.d.splice(i, 1);
+          t.msg.u.push(this.loadEntity(e));
+        }
       }
     }
-    for (let l = false, oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = Math.max(0, Math.min(29, oys)); y != Math.max(0, Math.min(29, oys-h*yda)); y -= yda) {
-      if (y === oys-yl) l = true;
-      for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = Math.max(0, Math.min(29, oxs)); x != Math.max(0, Math.min(29, oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)); x -= xda) {
-        for (const e of this.cells[x][y]) if (e.id > 1) a[1].push(e.id);
+    for (let oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = m(oys), l = false; (yda < 0 ? (y < m2(oys-h*yda)) : (y > m2(oys-h*yda))); y -= yda) {
+      if (yda > 0 ? y <= oys-yl : y >= oys-yl) l = true;
+      for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
+        entity: for (const e of this.cells[x][y]) {
+          for (const cell of e.cells) {
+            const [x, y] = cell.split('x');
+            //if (xmin <= x && x <= xmax && ymin <= y && y <= ymax) continue entity;
+          }
+          let i = t.msg.u.findIndex(u => u[0] === e.id);
+          if (i !== -1) t.msg.u.splice(i, 1);
+          t.msg.d.push(e.id);
+        }
       }
     }
-    return a;
   }
 
   add(socket, data) {
@@ -213,29 +221,67 @@ class Multiplayer extends Engine {
     }
   }
 
-  eventSend(t, m) { // optional t, m params for chunkloading per player
-    // viewport = 21x15 -> 2100x1500
+  eventSend() {
     for (const t of this.pt) {
-      const message = A.template('message');
-      // new message template
-      //{e: [], d: [id, id, id, id]};
+      t.msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
+      t.logs = this.logs.length;
+      t.privateLogs.length = 0;
+      let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100;
+      if (t.global !== this.global) t.global = t.msg.global = this.global;
+      for (const d of this.deletions) {
+        if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
+          if (!t.msg.d.includes(d[4])) t.msg.d.push(d[4]); // maybe redundant bc something will never be deleted twice?
+        }
+      }
       for (const u of this.updates) {
-        if (Engine.collision(u[0], u[1], u[3], u[4], t.x+1010, t.y-710, 2100, 1500)) {
-          // type seperate here?
+        if (!t.msg.d.includes(u[4]) && Engine.collision(u[0], u[1], u[2], u[3], tx, ty, 2100, 1500)) {
+          let i = t.msg.u.indexOf(e => e[0] === u[4]);
+          if (i >= 0) t.msg.u[i].push(...u.slice(5)); else t.msg.u.push(u.slice(4));
+        }
+      }
+      if ((t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global)) {
+        if (/*(!t.lastSend || (Date.now()-t.lastSend >= 1000/settings.ups)) && */!t.busy) {
+          t.busy = true;
+          t.socket._send(pack(t.msg), {}, () => (t.busy = false));
+          t.lastSend = Date.now();
+          t.msg.u.length = t.msg.d.length = 0;
+          t.msg.global = t.msg.logs = undefined;
         }
       }
     }
-    this.updates.length = 0;
+    this.updates.length = this.deletions.length = 0;
   }
 
-  updateEntity(id, x, y, w, h, property, value) {
-    return;
-    for (const update of this.updates) if (update[0] === id) return update.push(property, value);
-    return this.updates.push(A.template('arr').push(x, y, w, h, id, property, value));
+  updateEntity(e, x, y, w, h, ox, oy, c) {
+    let update = this.updates.find(u => u[4] === e.id);
+    if (!update) {
+      update = A.template('arr').concat(x, y, w, h, e.id);
+      this.updates.push(update);
+    }
+    for (const p of c) {
+      const i = update.indexOf(p), value = isNaN(e[p]) ? e[p] : Math.round(e[p]*10)/10;
+      if (i >= 5) update[i+1] = value; else update.push(p, value);
+    }
+    for (const t of this.pt) {
+      let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100, o = Engine.collision(ox, oy, w, h, tx, ty, 2100, 1500), n = Engine.collision(x, y, w, h, tx, ty, 2100, 1500);
+      if (!o && n) {
+        let i = t.msg.d.indexOf(e.id);
+        if (i !== -1) t.msg.d.splice(i, 1);
+        t.msg.u.push(this.loadEntity(e));
+      } else if (o && !n) {
+        let i = t.msg.u.findIndex(u => u[0] === e.id);
+        if (i !== -1) t.msg.u.splice(i, 1);
+        t.msg.d.push(e.id);
+      }
+    }
   }
 
-  destroyEntity() {
-    return;
+  loadEntity(e) {
+    return e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, isNaN(e[c]) ? e[c] : Math.round(e[c]*10)/10), A.template('arr').concat(e.id));
+  }
+
+  destroyEntity(id, x, y, w, h) {
+    this.deletions.push(A.template('arr').concat(x, y, w, h, id));
   }
 
   disconnect(socket, code, reason) {
@@ -246,6 +292,8 @@ class Multiplayer extends Engine {
           this.cells[x][y].delete(t);
         }
         if (t.grapple) t.grapple.bullet.destroy();
+        this.destroyEntity(t.id, t.x, t.y, 80, 80);
+        t.release();
         return false;
       }
       return true;
@@ -293,7 +341,6 @@ class DUELS extends Multiplayer {
   }
 
   add(socket, data) {
-    setTimeout(() => {
     super.add(socket, data);
     if (this.pt.length === 1) {
       this.global = 'Waiting For Player...';
@@ -301,7 +348,6 @@ class DUELS extends Multiplayer {
       this.readytime = Date.now();
       this.mode++;
     }
-    });
   }
 
   ontick() {
@@ -381,7 +427,6 @@ class TDM extends Multiplayer {
   }
 
   add(socket, data) {
-    setTimeout(() => {
     super.add(socket, data);
     const t = this.pt[this.pt.length-1];
     let red = 0, blue = 0;
@@ -400,7 +445,6 @@ class TDM extends Multiplayer {
       this.readytime = Date.now();
       this.time = 60; // 1 minute starting time
     }
-    });
   }
 
   ontick() {
@@ -454,7 +498,7 @@ class TDM extends Multiplayer {
             t.socket.send({event: 'gameover', type: winner === Engine.getTeam(t.team) ? 'victory' : 'defeat'});
             t.socket.close();
           });
-        }, 10000);
+        }, 5000);
       } else {
         this.global = winner+' Wins Round '+this.round;
         setTimeout(() => {
@@ -722,11 +766,8 @@ const Commands = {
   killai: [Object, 2, 1, function(data) {
     for (let i = servers[this.room].ai.length-1; i >= 0; i--) servers[this.room].ai[i].destroy();
   }],
-   ai: [Object, 2, 7, function(data) {
+  ai: [Object, 2, 7, function(data) {
     for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), data[6], servers[this.room]));
-  }],
-  squad: [Object, 2, 2, function(data) {
-    for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) for (let i = 0; i < 10; i++) servers[this.room].ai.push(new AI(Math.floor((t.x) / 100) * 100 + 10, Math.floor((t.y) / 100) * 100 + 10, 3, t.rank, t.team, servers[this.room]));
   }],
   spectate: [Object, 3, 2, function(data) {
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = true;
@@ -807,12 +848,13 @@ const helpList = Commands;
 A.createTemplate('render', class {b = new Set(); pt = new Set(); ai = new Set(); s = new Set(); d = new Set()}, r => {
   for (const property of ['b', 'pt', 'ai', 's', 'd']) r[property].clear();
 });
-A.createTemplate('message', class {b = []; pt = []; ai = []; s = []; d = []; event = 'hostupdate'; delete = {b: [], pt: [], ai: [], s: [], d: []}}, m => {
+A.createTemplate('message', class {u = []; b = []; pt = []; ai = []; s = []; d = []; event = 'hostupdate'; delete = {b: [], pt: [], ai: [], s: [], d: []}}, m => {
   for (const property of ['b', 'pt', 'ai', 's', 'd']) {
     m[property].length = 0;
     m.delete[property].length = 0;
   }
 });
+A.createTemplate('msg', class {u = []; d = []; logs = []; event = 'update'}, m => (m.u.length = m.d.length = m.logs.length = 0));
 A.createTemplate('arr', Array, a => (a.length = 0));
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM, 'defense': Defense};
 const Profile = (arr, update) => {
