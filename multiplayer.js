@@ -121,6 +121,7 @@ class Multiplayer extends Engine {
     const w = 21, h = 15, m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o));
     const ocx = Math.floor((ox+40)/100)+.5, ocy = Math.floor((oy+40)/100)+.5, ncx = Math.floor((x+40)/100)+.5, ncy = Math.floor((y+40)/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
+    const ymin = ncy-h/2, ymax = ncy+h/2, xmin = ncx-w/2, xmax = ncx+w/2;
     for (let nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = m(nys), l = false; (yda > 0 ? (y < m2(nys+h*yda)) : (y > m2(nys+h*yda))); y += yda) {
       if (yda < 0 ? y <= nys+yl : y >= nys+yl) l = true;
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = m(nxs); (xda > 0 ? (x < m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x += xda) {
@@ -135,9 +136,14 @@ class Multiplayer extends Engine {
       if (yda > 0 ? y <= oys-yl : y >= oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
         for (const e of this.cells[x][y]) {
-          let i = t.msg.u.findIndex(u => u[0] === e.id);
-          if (i !== -1) t.msg.u.splice(i, 1);
-          t.msg.d.push(e.id);
+          if (!t.cells.find(c => {
+            const [x, y] = c.split('x');
+            return xmin <= x && x <= xmax && ymin <= y && y <= ymax;
+          })) {
+            let i = t.msg.u.findIndex(u => u[0] === e.id);
+            if (i !== -1) t.msg.u.splice(i, 1);
+            t.msg.d.push(e.id);
+          }
         }
       }
     }
