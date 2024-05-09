@@ -47,7 +47,7 @@ const server = http.createServer((req, res) => {
     res.setHeader('Content-Disposition', 'attachment');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', '*');
-    ytdl(`https://youtube.com/watch?v=${req.url.replace('/download', '')}`, {filter: 'videoandaudio', quality: 'highest'}).pipe(res);
+    ytdl(`https://youtube.com/watch?v=${req.url.replace('/download', '').replace('.mp4', '')}`, {filter: 'videoandaudio', quality: 'highest'}).pipe(res);
   } else res.end(fs.readFileSync('./public/js/pixel-tanks.js'));
 });
 const wss = new WebSocketServer({server});
