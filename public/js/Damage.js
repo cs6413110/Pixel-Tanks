@@ -3,10 +3,9 @@ class Damage {
   static raw = ['x', 'y', 'w', 'h', 'f'];
   constructor() {
     this.cells = new Set();
-    for (const p of Damage.raw) Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
   }
   init(x, y, w, h, a, team, host) {
-    this.id = Math.random();
+    this.id = host.genId(4);
     this.raw = {id: this.id};
     for (let i = Damage.args.length-1; i >= 0; i--) this[Damage.args[i]] = arguments[i];
     this.f = 0;
@@ -31,13 +30,12 @@ class Damage {
         }
       }
     }
-    this.i = setInterval(() => (this.f++), 18); // remove pls me this is pain
+    this.i = setInterval(() => {
+      this.f++;
+      this.host.updateEntity(this, this.x, this.y, this.w, this.h, this.x, this.y, ['f']);
+    }, 18); // remove pls me this is pain // ye its pain but can't remove yet :(
+    this.host.updateEntity(this, this.x, this.y, this.w, this.h, this.x, this.y, Damage.raw);
     setTimeout(() => this.destroy(), 200);
-  }
-  setValue(p, v) {
-    this.updatedLast = Date.now(); // replace
-    this.raw[p] = v; // replace soon
-    this.host.updateEntity(this.id, this.x, this.y, this.w, this.h, p, v);
   }
   reset() {
     // loop through unnecessary and set to undefined? Or maybe it doesn't matter since it will be auto reset on recycle?
