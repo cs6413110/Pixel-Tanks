@@ -1,70 +1,52 @@
 class Tank {
-  constructor(data, host) {
-    this.id = Math.random();
-    this.raw = {id: this.id};
+  static args = ['username', 'rank', 'class', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'deathEffect', 'color'];
+  static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static s = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static u = ['x', 'y'];
+  constructor() {
+    this.cells = new Set();
+  }
+  init(data, host) {
+    this.id = host.genId(0);
+    this.raw = {id: this.id}
+    for (const p of Tank.args) this[p] = data[p];
     this.host = host;
-    this.render = {release: () => {}, b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set()};
-    ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
-      Object.defineProperty(this, p, {get: () => this.raw[p], set: (v) => this.setValue(p, v), configurable: true});
-    });
     if (data.socket) this.socket = data.socket;
-    this.username = data.username;
-    this.rank = data.rank;
-    this.class = data.class;
-    this.cosmetic = data.cosmetic;
-    this.cosmetic_hat = data.cosmetic_hat;
-    this.cosmetic_body = data.cosmetic_body;
-    this.deathEffect = data.deathEffect;
-    this.color = data.color;
     this.fire = {time: 0, team: this.team};
-    this.damage = false;
     this.hp = this.maxHp = this.rank*10+300;
-    this.canBashed = this.canInvis = true;
-    this.team = data.username+':'+Math.random();
+    this.canBashed = this.canInvis = !(this.damage = false);
+    this.team = data.username+':'+this.id;
     this.x = host.spawn.x;
     this.y = host.spawn.y;
-    this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = this.lastUpdate = 0;
-    this.privateLogs = [];
-    this.cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .79))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .79)));
-      host.cells[cx][cy].add(this);
-      this.cells.add(cx+'x'+cy);
-    }
+    this.logs = this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = 0;
+    this.msg = {u: [], d: [], event: 'update'};
+    this.privateLogs = A.template('arr');
+    host.updateEntity(this, this.x, this.y, 80, 80, this.x, this.y, Tank.raw);
     host.override(this);
+    host.pt.push(this);
+    host.loadCells(this, this.x, this.y, 80, 80);
+    host.chunkload(this, -100000, -100000, this.x, this.y);
+    for (const p of Tank.s) {
+      this.raw[p] = this[p];
+      Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
+    }
   }
-
   setValue(p, v) {
+    if (this.raw[p] === v && typeof v !== 'object') return; else this.raw[p] = v;
     this.updatedLast = Date.now();
-    this.raw[p] = v;
-    this.host.updateEntity(this.id, this.x, this.y, 80, 80, p, v);
+    this.host.updateEntity(this, this.x, this.y, 80, 80, this.x, this.y, [p]);
   }
-
-  updateCell() {
-    const cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + .79))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + .79)));
-      this.host.cells[cx][cy].add(this);
-      cells.add(`${cx}x${cy}`);
-    }
-    for (const cell of [...this.cells].filter(c => !cells.has(c))) {
-      const [x, y] = cell.split('x');
-      this.host.cells[x][y].delete(this);
-    }
-    this.cells = cells;
-  }
-
   update() {
     const team = Engine.getTeam(this.team);
     if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
       this.setValue('dedEffect', this.dedEffect); // REMOVE THIS TEMPORARY
     }
-    if (this.pushback !== 0) this.pushback += 0.5;
+    if (this.pushback !== 0) this.pushback += 0.5; // maybe change to (-this.pushback)?
     if (Date.now()-this.fire.time < 4000 && Engine.getTeam(this.fire.team) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire.team));
     if (this.damage) this.damage.y--;
     if (this.grapple) this.grappleCalc();
-    if (this.reflect) {
+    if (this.reflect) { // redo this
       const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
       for (let i = Math.max(0, hx-2); i <= Math.min(29, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(29, hy+2); l++) {
         for (const entity of this.host.cells[i][l]) {
@@ -121,8 +103,8 @@ class Tank {
     if (this.hp <= 0 && this.host.ondeath) this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
   }
 
-  grappleCalc() {
-    const dx = this.grapple.target.x - this.x, dy = this.grapple.target.y - this.y;
+  grappleCalc() { // direct setting of pos may cause chunkload issues
+    const dx = this.grapple.target.x - this.x, dy = this.grapple.target.y - this.y, ox = this.x, oy = this.y;
     if (dx ** 2 + dy ** 2 > 400) {
       const angle = Math.atan2(dy, dx);
       const mx = Math.round(Math.cos(angle) * 5)*4;
@@ -136,17 +118,22 @@ class Tank {
         this.grapple.bullet.destroy();
         this.grapple = false;
         this.x = Math.floor(this.x/4)*4;
-        this.y = Math.floor(this.y/4)*4
+        this.y = Math.floor(this.y/4)*4; // no override so useless??!?!
       }
     } else {
       this.grapple.bullet.destroy();
       this.grapple = false;
       this.x = Math.floor(this.x/4)*4;
-      this.y = Math.floor(this.y/4)*4
+      this.y = Math.floor(this.y/4)*4;
     }
-    this.updateCell();
+    this.host.updateEntity(this, this.x, this.y, 80, 80, ox, oy, Tank.u);
+    this.host.loadCells(this, this.x, this.y, 80, 80);
+    if (this.socket && (Math.floor((ox+40)/100) !== Math.floor((this.x+40)/100) || Math.floor((oy+40)/100) !== Math.floor((this.y+40)/100))) this.host.chunkload(this, ox, oy, this.x, this.y);
   }
-
+  reset() {
+    for (const p of Tank.s) Object.defineProperty(this, p, {value: undefined, writable: true});
+    this.cells.clear();
+  }
   collision(x, y) {
     if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return false;
     for (const b of this.host.b) if (Engine.collision(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) return false;
