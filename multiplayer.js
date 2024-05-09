@@ -82,13 +82,13 @@ const deathMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
   `{idot} has joined the battle`,
-  `{idot} won't run this time... Right?`,
+  `{idot}`,
 ], rageMessages = [
   `{idot} left the game`,
   `{idot} quit`,
   `{idot} disconnected`,
-  `{idot} is lost`,
-  `{idot} went looking for Karl`,
+  `{idot} lost connection`,
+  `{idot} didn't make it out alive`,
 ], tipMessages = [
   `TIP: time the reflector better next time!`,
   `TIP: Try switching class, maybe you're not good at that one!`,
@@ -107,7 +107,6 @@ const deathMessages = [
   `TIP: Try Using a mouse next time`,
   `How embarrassing...`,
   `TIP: Do better? idk I'm not paid enough for this...`,
-  `TIP: ROCK AND STONE`
 ];
 
 class Multiplayer extends Engine {
