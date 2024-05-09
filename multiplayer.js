@@ -138,14 +138,18 @@ class Multiplayer extends Engine {
       if (yda > 0 ? y <= oys-yl : y >= oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
         for (const e of this.cells[x][y]) {
-          let de = true;
+          let de = true, f = e.id < 1;
+          if (f) t.privateLogs.push({m: 'Deletion check for '+e.username+' #'+e.id, c: '#ff0000'});
           for (const cell of e.cells) {
             const [a, b] = cell.split('x');
+            if (f) t.privateLogs.push({m: 'Cell check for x='+a+' y='+b, c: '#ff0000'});
             if (xmin <= a && a <= xmax && ymin <= b && b <= ymax) {
               de = false;
+              if (f) t.privateLogs.push({m: 'Passed, not deleting entity', c: '#ff0000'});
               break;
             }
           }
+          if (f) t.privateLogs.push({m: 'Failed, deleting entity', c: '#ff0000'});
           if (de) {
             let i = t.msg.u.findIndex(u => u[0] === e.id);
             if (i !== -1) t.msg.u.splice(i, 1);
