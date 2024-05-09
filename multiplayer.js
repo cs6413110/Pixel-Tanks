@@ -137,7 +137,7 @@ class Multiplayer extends Engine {
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
         entity: for (const e of this.cells[x][y]) {
           for (const cell of t.cells) {
-            const [x, y] = c.split('x');
+            const [x, y] = cell.split('x');
             if (xmin <= x && x <= xmax && ymin <= y && y <= ymax) continue entity;
           }
           let i = t.msg.u.findIndex(u => u[0] === e.id);
