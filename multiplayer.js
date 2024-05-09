@@ -140,7 +140,7 @@ class Multiplayer extends Engine {
           for (const cell of e.cells) {
             const [x, y] = cell.split('x');
             if (xmin <= x && x <= xmax && ymin <= y && y <= ymax) {
-              de = false;
+              //de = false;
               break;
             }
           }
