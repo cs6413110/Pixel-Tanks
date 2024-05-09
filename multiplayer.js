@@ -1,7 +1,7 @@
 const settings = {
   authserver: 'localhost',
   players_per_room: 10,
-  ups: 1000,
+  ups: 50,
   port: 8080,
   chat: true,
   joining: true,
@@ -112,7 +112,7 @@ class Multiplayer extends Engine {
     super(levels);
     this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
     this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
-    this.i.push(setInterval(() => this.eventSend()));
+    this.i.push(setInterval(() => this.eventSend(), 1000/settings.ups));
   }
 
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
