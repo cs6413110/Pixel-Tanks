@@ -63,7 +63,7 @@ class Client {
     if (data.u) for (const u of data.u) {
       let e = this.hostupdate.entities.find(e => e.id === u[0]);
       if (!e) {
-        if (u[0] < 1) this.hostupdate.logs.push({m: 'Loaded tank('+u[0]+')', c: '#0000ff'});
+        if (u[0] < 1) this.hostupdate.logs.unshift({m: 'Loaded tank('+u[0]+')', c: '#0000ff'});
         e = {id: u[0]};
         this.hostupdate.entities.push(e);
         this.hostupdate[this.getIdType(e.id)].push(e);
@@ -71,7 +71,7 @@ class Client {
       for (let i = 1; i < u.length; i += 2) e[u[i]] = u[i+1];
     }
     if (data.d) for (const d of data.d) {
-      if (d < 1) this.hostupdate.logs.push({m: 'Unloaded tank('+d+')', c: '#0000ff'});
+      if (d < 1) this.hostupdate.logs.unshift({m: 'Unloaded tank('+d+')', c: '#0000ff'});
       let i = this.hostupdate.entities.findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate.entities.splice(i, 1);
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
