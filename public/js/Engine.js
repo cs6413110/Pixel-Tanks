@@ -1,18 +1,17 @@
 class Engine {
   constructor(levels) {
     if (!A.templates.Block) {
+      A.createTemplate('Tank', Tank);
       A.createTemplate('Block', Block);
       A.createTemplate('Shot', Shot);
       A.createTemplate('Damage', Damage);
       A.createTemplate('AI', AI);
       A.createTemplate('arr', Array, a => (a.length = 0)); // batch size of 100, will inc upon higher demand. Startup value may vary depending on use case.
       A.createTemplate('set', Set, s => s.clear());
-      //A.createTemplate('Tank', Tank); ...players aren't created or destroyed often enough for this to really matter
     }
     this.spawn = {x: 0, y: 0};
     this.spawns = [{x: 0, y: 0}, {x: 0, y: 0}];
-    for (const property of ['ai', 's', 'pt', 'b', 'd', 'i', 'logs', 'cells']) this[property] = [];
-    this.cells = [];
+    for (const property of ['ai', 's', 'pt', 'b', 'd', 'i', 'logs', 'cells', 'updates', 'deletions', 'ids']) this[property] = [];
     for (let y = 0; y < 30; y++) {
       this.cells[y] = [];
       for (let x = 0; x < 30; x++) this.cells[y][x] = new Set();
@@ -23,7 +22,7 @@ class Engine {
   }
 
   add(data) {
-    this.pt.push(new Tank(data, this));
+    A.template('Tank').init(data, this);
   }
 
   useAbility(t, a) {
@@ -57,14 +56,16 @@ class Engine {
       t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
     } else if (a.includes('block#')) {
       const coords = [{ r: [337.5, 360], dx: -10, dy: 80 }, { r: [0, 22.5], dx: -10, dy: 80 }, { r: [22.5, 67.5], dx: -100, dy: 80 }, { r: [67.5, 112.5], dx: -100, dy: -10 }, { r: [112.5, 157.5], dx: -100, dy: -100 }, { r: [157.5, 202.5], dx: -10, dy: -100 }, { r: [202.5, 247.5], dx: 80, dy: -100 }, { r: [247.5, 292.5], dx: 80, dy: -10 }, { r: [292.5, 337.5], dx: 80, dy: 80 }];
-      let type = a.replace('block#', '');
-      if (type === 'gold') type = 'strong';
+      const type = a.replace('block#', '');
       for (const coord of coords) {
         if (t.r >= coord.r[0] && t.r < coord.r[1]) {
           this.b.push(A.template('Block').init(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 100, barrel: 100}[type], type, t.team, this));
           break;
         }
       }
+    } else if (a === 'flashbang') {
+      const h = a.replace('flashbang', '').split('x');
+      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'smoke', t.team, this));
     } else if (a === 'break') {
       for (const cell of t.cells) {
         const c = cell.split('x'), cx = c[0], cy = c[1], breakable = ['gold', 'weak', 'strong', 'spike', 'barrier', 'void', 'barrel', 'halfbarrier'];
@@ -109,9 +110,6 @@ class Engine {
     } else if (a.includes('airstrike')) {
       const h = a.replace('airstrike', '').split('x');
       this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'airstrike', Engine.parseTeamExtras(t.team), this));
-    } else if (a.includes('flashbang')) {
-      const h = a.replace('flashbang', '').split('x');
-      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'smoke', Engine.parseTeamExtras(t.team), this));
     } else if (a === 'healwave') {
       let allies = [];
       for (const tank of this.pt) if (Engine.getTeam(tank.team) === Engine.getTeam(t.team) && (tank.x-t.x)**2+(tank.y-t.y)**2 < 90000 && t.id !== tank.id) allies.push(tank);
@@ -132,9 +130,12 @@ class Engine {
     if (t.canInvis) t.invis = data.invis;
     t.baseFrame = data.baseFrame;
     if (!t.grapple) {
+      let chunkload = t.socket && (Math.floor((t.x+40)/100) !== Math.floor((x+40)/100) || Math.floor((t.y+40)/100) !== Math.floor((y+40)/100)), ox = t.x, oy = t.y;
       t.x = x;
       t.y = y;
-      t.updateCell();
+      this.updateEntity(t, t.x, t.y, 80, 80, ox, oy, Tank.u);
+      this.loadCells(t, t.x, t.y, 80, 80);
+      if (chunkload) this.chunkload(t, ox, oy, t.x, t.y);
     }
     t.r = r;
     if (use.includes('respawn')) {
@@ -170,8 +171,29 @@ class Engine {
     for (const t of this.pt) t.update();
   }
 
+  static r = o => Math.max(0, Math.min(29, o));
+
+  loadCells(e, ex, ey, w, h) {
+    del: for (const cell of e.cells) {
+      let c = cell.split('x'), xv = c[0], yv = c[1];
+      for (let x = Engine.r(Math.floor(ex/100)); x <= Engine.r(Math.floor((ex+w-1)/100)); x++) {
+        for (let y = Engine.r(Math.floor(ey/100)); y <= Engine.r(Math.floor((ey+h-1)/100)); y++) {
+          if (x === xv && y === yv) continue del;
+        }
+      }
+      this.cells[xv][yv].delete(e);
+      e.cells.delete(cell);
+    }
+    for (let x = Engine.r(Math.floor(ex/100)); x <= Engine.r(Math.floor((ex+w-1)/100)); x++) {
+      for (let y = Engine.r(Math.floor(ey/100)); y <= Engine.r(Math.floor((ey+h-1)/100)); y++) {
+        if (e.cells.has(`${x}x${y}`)) continue;
+        this.cells[x][y].add(e);
+        e.cells.add(`${x}x${y}`); 
+      }
+    }
+  }
+
   updateEntity() {}
-  destroyEntity() {}
 
   ondeath(t, m={}) {
     this.logs.push({m: this.deathMsg(t.username, m.username), c: '#FF8C00'});
@@ -184,7 +206,7 @@ class Engine {
 
   levelReader(level) {
     for (let i = this.b.length-1; i >= 0; i--) this.b[i].destroy();
-    const key = {'B6': ['barrel', 100], 'B5': ['void', Infinity], 'B4': ['barrier', Infinity], 'B3': ['gold', 300], 'B2': ['strong', 200], 'B1': ['weak', 100]};
+    const key = {'B7': ['halfbarrier', Infinity], 'B6': ['barrel', 100], 'B5': ['void', Infinity], 'B4': ['barrier', Infinity], 'B3': ['gold', 300], 'B2': ['strong', 200], 'B1': ['weak', 100]};
     for (let l = 0; l < level.length; l++) {
       for (let q = 0; q < level[l].length; q++) {
         const e = level[l][q];
@@ -207,6 +229,14 @@ class Engine {
     let letters = '0123456789ABCDEF', color = '#';
     for (var i = 0; i < 6; i++) color += letters[Math.floor(Math.random() * 16)];
     return color;
+  }
+
+  static id = type => Math.floor((type+Math.random())*10000000)/10000000;
+  genId(type) {
+    let id = Engine.id(type);
+    while (this.ids.includes(id)) id = Engine.id(type);
+    this.ids.push(id);
+    return id;
   }
 
   static finder = new PF.AStarFinder({allowDiagonal: true, dontCrossCorners: true});
