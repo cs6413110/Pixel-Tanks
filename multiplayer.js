@@ -149,8 +149,8 @@ class Multiplayer extends Engine {
               break;
             }
           }
-          if (f) t.privateLogs.push({m: 'Failed, deleting entity', c: '#ff0000'});
           if (de) {
+            if (f) t.privateLogs.push({m: 'Failed, deleting entity', c: '#ff0000'});
             let i = t.msg.u.findIndex(u => u[0] === e.id);
             if (i !== -1) t.msg.u.splice(i, 1);
             if (!t.msg.d.includes(e.id)) t.msg.d.push(e.id);
