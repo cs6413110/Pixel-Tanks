@@ -731,9 +731,9 @@ const Commands = {
   smoke: [Object, 2, 1, function(data) {
     for (let x = 2.5; x < 30; x += 4) for (let y = 2.5; y < 30; y += 4) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'smoke', ':', servers[this.room]));
   }],
-  invis: [Object, 2, 2, function(data) {
+  invis: [Object, 2, 3, function(data) {
     const t = servers[this.room].pt.find(t => t.username === data[1]);
-    for (let i = 0; i < 1600; i++) setTimeout(() => servers[this.room].b.push(A.template('Damage').init(t.x+Math.floor(Math.random()*350)-250, t.y+Math.floor(Math.random()*350)-250, 200, 200, 0, t.team, t.host)), Math.random()*10000);
+    for (let i = 0; i < (data[2]*160); i++) setTimeout(() => servers[this.room].b.push(A.template('Damage').init(t.x+Math.floor(Math.random()*350)-250, t.y+Math.floor(Math.random()*350)-250, 200, 200, 0, t.team, t.host)), Math.random()*(data[2]*1000));
   }],
   newmap: [FFA, 3, -1, function(data) {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
