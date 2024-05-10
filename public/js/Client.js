@@ -63,7 +63,6 @@ class Client {
     if (data.u) for (const u of data.u) {
       let e = this.hostupdate.entities.find(e => e.id === u[0]);
       if (!e) {
-        if (u[0] < 1) this.hostupdate.logs.unshift({m: 'Loaded tank('+u[0]+')', c: '#0000ff'});
         e = {id: u[0]};
         this.hostupdate.entities.push(e);
         this.hostupdate[this.getIdType(e.id)].push(e);
@@ -71,7 +70,6 @@ class Client {
       for (let i = 1; i < u.length; i += 2) e[u[i]] = u[i+1];
     }
     if (data.d) for (const d of data.d) {
-      if (d < 1) this.hostupdate.logs.unshift({m: 'Unloaded tank('+d+')', c: '#0000ff'});
       let i = this.hostupdate.entities.findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate.entities.splice(i, 1);
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
@@ -406,11 +404,7 @@ class Client {
     for (const block of b) this.drawBlock(block);
     for (const shot of s) this.drawShot(shot);
     for (const ai of a) this.drawTank(ai);
-    for (const tank of t) {
-      if (!tank.team) {
-        if (!this.hostupdate.logs[0].m.includes('Skipped errored tank')) this.hostupdate.logs.unshift({m: 'Skipped errored tank: '+JSON.stringify(tank), c: '#ff0000'});
-      } else this.drawTank(tank);
-    }
+    for (const tank of t) this.drawTank(tank);
     for (const block of b) if (block.s && block.hp !== block.maxHp) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(block.x-2, block.y+108, 104, 11);
