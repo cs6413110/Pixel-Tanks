@@ -734,7 +734,7 @@ const Commands = {
   }],
   invis: [Object, 2, 3, function(data) {
     const t = servers[this.room].pt.find(t => t.username === data[1]);
-    for (let i = 0; i < (data[2]*160); i++) setTimeout(() => if (t.username === data[1]) servers[this.room].d.push(A.template('Damage').init(Math.round(t.x+Math.floor(Math.random()*350)-250), Math.round(t.y+Math.floor(Math.random()*350)-250), 200, 200, 0, t.team, t.host)), Math.random()*(data[2]*1000));
+    for (let i = 0; i < (data[2]*160); i++) setTimeout(() => servers[this.room].d.push(A.template('Damage').init(Math.round(t.x+Math.floor(Math.random()*350)-250), Math.round(t.y+Math.floor(Math.random()*350)-250), 200, 200, 0, t.team, t.host)), Math.random()*(data[2]*1000));
   }],
   newmap: [FFA, 3, -1, function(data) {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
