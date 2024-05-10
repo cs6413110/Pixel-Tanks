@@ -733,7 +733,7 @@ const Commands = {
   }],
   invis: [Object, 2, 2, function(data) {
     const t = servers[this.room].pt.find(t => t.username === data[1]);
-    for (let i = 0; i < 1600; i++) this.t.push(setTimeout(() => this.host.d.push(A.template('Damage').init(t.x+Math.floor(Math.random()*350)-150, t.y+Math.floor(Math.random()*350)-150, 200, 200, 0, t.team, t.host)), Math.random()*10000));
+    for (let i = 0; i < 1600; i++) this.t.push(setTimeout(() => servers[this.room].b.push(A.template('Damage').init(t.x+Math.floor(Math.random()*350)-150, t.y+Math.floor(Math.random()*350)-150, 200, 200, 0, t.team, t.host)), Math.random()*10000));
   }],
   newmap: [FFA, 3, -1, function(data) {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
