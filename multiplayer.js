@@ -139,7 +139,8 @@ class Multiplayer extends Engine {
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
         for (const e of this.cells[x][y]) {
           let de = true, f = e.id < 1;
-          if (f) t.privateLogs.push({m: 'Deletion check for '+e.username+' #'+e.id, c: '#ff0000'});
+          if (f) t.privateLogs.push({m: 'Del('+x+', '+y+') - '+e.username+' #'+e.id, c: '#ff0000'});
+          if (f) t.privateLogs.push({m: xmin+' to '+xmax+' + '+ymin+' to '+ymax, c: '#ff0000'});
           for (const cell of e.cells) {
             const [a, b] = cell.split('x');
             if (f) t.privateLogs.push({m: 'Cell check for x='+a+' y='+b, c: '#ff0000'});
