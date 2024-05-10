@@ -243,11 +243,11 @@ class Multiplayer extends Engine {
       if (t.global !== this.global) t.global = t.msg.global = this.global;
       for (const d of this.deletions) {
         if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
-          if (!t.msg.d.includes(d[4])) t.msg.d.push(d[4]); // maybe redundant bc something will never be deleted twice?
+          t.msg.d.push(d[4]);
         }
       }
       for (const u of this.updates) {
-        if (!t.msg.d.includes(u[4]) && Engine.collision(u[0], u[1], u[2], u[3], tx, ty, 2100, 1500)) {
+        if (Engine.collision(u[0], u[1], u[2], u[3], tx, ty, 2100, 1500)) {
           let i = t.msg.u.indexOf(e => e[0] === u[4]);
           if (i >= 0) t.msg.u[i].push(...u.slice(5)); else t.msg.u.push(u.slice(4));
         }
