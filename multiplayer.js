@@ -112,15 +112,11 @@ const deathMessages = [
 class Multiplayer extends Engine {
   constructor(levels) {
     super(levels);
-    this.sendkey = {'Block': 'b', 'Shot': 's', 'AI': 'ai', 'Tank': 'pt', 'Damage': 'd'};
-    this.sendkeyValues = ['b', 's', 'ai', 'pt', 'd'];
     this.i.push(setInterval(() => this.eventSend(), 1000/settings.ups));
   }
-
   override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
-
   chunkload(t, ox, oy, x, y) {
-    const w = 21, h = 15, m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o));
+    const w = 21, h = 15, m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o)); // can be moved to static functions
     const ocx = Math.floor((ox+40)/100)+.5, ocy = Math.floor((oy+40)/100)+.5, ncx = Math.floor((x+40)/100)+.5, ncy = Math.floor((y+40)/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
     const ymin = ncy-h/2, ymax = ncy+h/2-1, xmin = ncx-w/2, xmax = ncx+w/2-1;
@@ -130,7 +126,7 @@ class Multiplayer extends Engine {
         for (const e of this.cells[x][y]) {
           let i = t.msg.d.indexOf(e.id);
           if (i !== -1) t.msg.d.splice(i, 1);
-          t.msg.u.push(this.loadEntity(e));
+          t.msg.u.push(this.loadEntity(e)); // this.loadEntity can be changed to a static function
         }
       }
     }
@@ -157,76 +153,10 @@ class Multiplayer extends Engine {
   }
 
   add(socket, data) {
-    data.socket = socket;
-    log(`${socket.username} joined`);
+    data.socket = socket; // this can moved to the join handler?
+    log(`${socket.username} joined`); // this.logs.push and log can be merged?
     this.logs.push({m: this.joinMsg(data.username), c: '#66FF00'});
     super.add(data);
-  }
-
-  send() {
-    for (const t of this.pt) {
-      const render = {b: new Set(), pt: new Set(), ai: new Set(), s: new Set(), d: new Set(), logs: this.logs.length};
-      const vx = t.x-860, vy = t.y-560, vw = 1880, vh = 1280;      
-      const message = {b: [], pt: [], ai: [], s: [], d: [], logs: this.logs.slice(t?.render.logs || 0).concat(t.privateLogs), global: this.global, event: 'hostupdate', delete: {b: [], pt: [], ai: [], s: [], d: []}};
-      t.privateLogs = [];
-      let send = message.logs.length > 0;
-      for (const p of ['b', 'pt', 'ai', 's', 'd']) {
-        const ids = new Set(this[p].map(e => e.id));
-        this[p].filter(e => Engine.collision(vx, vy, vw, vh, e.x, e.y, 100, 100)).forEach(e => {
-          render[p].add(e.id);
-          if (!t.render[p].has(e.id) || e.updatedLast > t.lastUpdate) {
-            message[p].push(e.raw);
-            send = true;
-          }
-        });
-        t.render[p].forEach(id => {
-          if (!render[p].has(id) || !ids.has(id)) {
-            message.delete[p].push(id);
-            send = true;
-          }
-        });
-      }
-      t.render = render;
-      t.lastUpdate = Date.now();
-      if (send) t.socket.send(message);
-    }
-  }
-
-  cellSend() {
-    for (const t of this.pt) {
-      const fx = Math.floor(t.x/100), fy = Math.floor(t.y/100), sy = Math.max(fy-7, 0), ey = Math.min(fy+7, 30), sx = Math.max(fx-10, 0), ex = Math.min(fx+10, 30);
-      const render = A.template('render'), message = A.template('message');
-      render.logs = this.logs.length;
-      message.logs = this.logs.slice(t.render?.logs || 0).concat(t.privateLogs);
-      message.global = this.global;
-      t.privateLogs.length = 0;
-      let send = message.logs.length > 0;
-      for (let cy = sy; cy < ey; cy++) {
-        for (let cx = sx; cx < ex; cx++) {
-          for (const entity of this.cells[cx][cy]) {
-            const type = this.sendkey[entity.constructor.name];
-            render[type].add(entity.id);
-            if (!t.render[type].has(entity.id) || entity.updatedLast > t.lastUpdate) {
-              message[type].push(entity.raw);
-              send = true;
-            }
-          }
-        }
-      }
-      for (const entity of this.sendkeyValues) {
-        for (const id of t.render[entity]) {
-          if (!render[entity].has(id)) {
-            message.delete[entity].push(id);
-            send = true;
-          }
-        }
-      }
-      if (t.render) t.render.release();
-      t.render = render;
-      t.lastUpdate = Date.now();
-      if (send) t.socket.send(message);
-      message.release();
-    }
   }
 
   eventSend() {
@@ -236,11 +166,7 @@ class Multiplayer extends Engine {
       t.privateLogs.length = 0;
       let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100;
       if (t.global !== this.global) t.global = t.msg.global = this.global;
-      for (const d of this.deletions) {
-        if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
-          t.msg.d.push(d[4]);
-        }
-      }
+      for (const d of this.deletions) if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) t.msg.d.push(d[4]);
       for (const u of this.updates) {
         if (Engine.collision(u[0], u[1], u[2], u[3], tx, ty, 2100, 1500)) {
           let i = t.msg.u.indexOf(e => e[0] === u[4]);
@@ -248,7 +174,7 @@ class Multiplayer extends Engine {
         }
       }
       if ((t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global)) {
-        if (/*(!t.lastSend || (Date.now()-t.lastSend >= 1000/settings.ups)) && */!t.busy) {
+        if (!t.busy) {
           t.busy = true;
           t.socket._send(pack(t.msg), {}, () => (t.busy = false));
           t.lastSend = Date.now();
