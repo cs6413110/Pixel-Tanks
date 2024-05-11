@@ -737,11 +737,7 @@ const Commands = {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
     if (isNaN(levelID) || levelID % 1 !== 0 || levelID >= ffaLevels.length) return this.send({status: 'error', message: 'Out of range or invalid input.'});
     servers[this.room].levelReader(ffaLevels[levelID]);
-    servers[this.room].pt.forEach(t => {
-      t.x = servers[this.room].spawn.x;
-      t.y = servers[this.room].spawn.y;
-      t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
-    });
+    servers[this.room].pt.forEach(t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]}));
   }],
   ban: [Object, 2, 2, function(data) {
     if (Storage.admins.includes(data[1]) || Storage.owners.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
