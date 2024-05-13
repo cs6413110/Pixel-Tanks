@@ -113,7 +113,6 @@ class Tank {
       if (this.collision(this.x, this.y+my)) this.y += my;
       this.grapple.bullet.sx = this.x+40;
       this.grapple.bullet.sy = this.y+40;
-      this.host.override(this, [{ key: 'x', value: this.x }, { key: 'y', value: this.y }]);
       if ((!this.collision(this.x+mx, this.y) || Math.abs(mx) < 2) && (!this.collision(this.x, this.y+my) || Math.abs(my) < 2)) {
         this.grapple.bullet.destroy();
         this.grapple = false;
@@ -126,7 +125,7 @@ class Tank {
       this.x = Math.floor(this.x/4)*4;
       this.y = Math.floor(this.y/4)*4;
     }
-    this.override(this, ox, oy);
+    this.host.override(this, ox, oy);
   }
   reset() {
     for (const p of Tank.s) Object.defineProperty(this, p, {value: undefined, writable: true});
