@@ -672,6 +672,12 @@ const Commands = {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
     if (isNaN(levelID) || levelID % 1 !== 0 || levelID >= ffaLevels.length) return this.send({status: 'error', message: 'Out of range or invalid input.'});
     servers[this.room].levelReader(ffaLevels[levelID]);
+    for (const t of servers[this.room].pt) {
+      let ox = t.x, oy = t.y;
+      t.x = this.spawn.x;
+      t.y = this.spawn.y;
+      servers[this.room].override(t, ox, oy);
+    }
   }],
   ban: [Object, 2, 2, function(data) {
     if (Storage.admins.includes(data[1]) || Storage.owners.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
