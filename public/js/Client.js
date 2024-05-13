@@ -573,8 +573,6 @@ class Client {
   keydown(e) {
     if (e.ctrlKey || e.metaKey) return;
     if (e.preventDefault) e.preventDefault();
-    if (!this.key[65] && !this.key[68]) this.left = null;
-    if (!this.key[87] && !this.key[83]) this.up = null;
     if (!this.key[e.keyCode]) {
       if (this.showChat) return this.chat(e);
       this.keyStart(e);
@@ -841,6 +839,10 @@ class Client {
   }
 
   keyLoop(e) {
+    if ([65, 68, 87, 63].includes(e.keyCode)) {
+      if (!this.key[65] && !this.key[68]) this.left = null;
+      if (!this.key[87] && !this.key[83]) this.up = null;
+    }
     if (e.keyCode === PixelTanks.userData.keybinds.boost) {
       if (this.canBoost) {
         this.speed = 16;
