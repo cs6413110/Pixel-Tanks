@@ -211,7 +211,8 @@ const images = {
     inventory: '/menus/inventory',
     classTab: '/menus/classTab',
     itemTab: '/menus/itemTab',
-    cosmeticTab: '/menus/cosmeticTab', // FIX DUPLICATE USELESS(deathEffecs and cosmetic tab referenceing same imagoge);
+    perkTab: '/menus/perkTab',
+    cosmeticTab: '/menus/cosmeticTab', // FIX DUPLICATE USELESS(deathEffecs and cosmetic tab referenceing same imagoge); (NUH UH)
     deathEffectsTab: '/menus/cosmeticTab',
     shop: '/menus/shop',
     shop2: '/menus/shop2',
