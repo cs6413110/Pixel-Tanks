@@ -381,8 +381,8 @@ class Client {
       this.dy.t = Date.now()-(Date.now()-this.dy.t)%15;
       this.dy.o = this.tank.y;
     }
-    if (this.b) this.tank.baseFrame = ((this.b.o ? 0 : 1)+Math.floor((Date.now()-this.b.t)/120))%2;
     this.tank.baseRotation = (this.left === null) ? (this.up ? 180 : 0) : (this.left ? (this.up === null ? 90 : (this.up ? 135 : 45)) : (this.up === null ? 270 : (this.up ? 225: 315)));
+    if (this.b) this.tank.baseFrame = ((this.b.o ? 0 : 1)+Math.floor((Date.now()-this.b.t)/120))%2;
     const player = t.find(tank => tank.username === PixelTanks.user.username);
     if (player) {
       player.x = this.tank.x;
@@ -585,8 +585,6 @@ class Client {
     if (e.preventDefault) e.preventDefault();
     clearInterval(this.key[e.keyCode]);
     this.key[e.keyCode] = false;
-    if (e.keyCode == 65 || e.keyCode == 68) this.left = null;
-    if (e.keyCode == 87 || e.keyCode == 83) this.up = null;
     if (e.keyCode === PixelTanks.userData.keybinds.fire) clearInterval(this.fireInterval);
     if (this.dx && (e.keyCode === 65 && this.dx.a < 0 || e.keyCode === 68 && this.dx.a > 0)) this.dx = false;
     if (this.dy && (e.keyCode === 87 && this.dy.a < 0 || e.keyCode === 83 && this.dy.a > 0)) this.dy = false;
