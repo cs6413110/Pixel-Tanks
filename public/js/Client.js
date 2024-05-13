@@ -573,6 +573,8 @@ class Client {
   keydown(e) {
     if (e.ctrlKey || e.metaKey) return;
     if (e.preventDefault) e.preventDefault();
+    if (!this.key[65] && !this.key[68]) this.left = null;
+    if (!this.key[87] && !this.key[83]) this.up = null;
     if (!this.key[e.keyCode]) {
       if (this.showChat) return this.chat(e);
       this.keyStart(e);
