@@ -571,8 +571,8 @@ class Client {
   }
 
   keydown(e) {
-    if (e.preventDefault) e.preventDefault();
     if (e.ctrlKey || e.metaKey) return;
+    if (e.preventDefault) e.preventDefault();
     if (!this.key[e.keyCode]) {
       if (this.showChat) return this.chat(e);
       this.keyStart(e);
