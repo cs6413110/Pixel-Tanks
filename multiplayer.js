@@ -674,8 +674,8 @@ const Commands = {
     servers[this.room].levelReader(ffaLevels[levelID]);
     for (const t of servers[this.room].pt) {
       let ox = t.x, oy = t.y;
-      t.x = this.spawn.x;
-      t.y = this.spawn.y;
+      t.x = servers[this.room].spawn.x;
+      t.y = servers[this.room].spawn.y;
       servers[this.room].override(t, ox, oy);
     }
   }],
