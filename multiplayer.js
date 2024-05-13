@@ -114,7 +114,12 @@ class Multiplayer extends Engine {
     super(levels);
     this.i.push(setInterval(() => this.eventSend(), 1000/settings.ups));
   }
-  override = t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
+  override(t, ox, oy) {
+    this.updateEntity(t, t.x, t.y, 80, 80, ox, oy, Tank.u);
+    this.loadCells(t, t.x, t.y, 80, 80);
+    if (t.socket && (Math.floor((ox+40)/100) !== Math.floor((t.x+40)/100) || Math.floor((oy+40)/100) !== Math.floor((t.y+40)/100))) this.chunkload(t, ox, oy, t.x, t.y);
+    t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
+  }
   chunkload(t, ox, oy, x, y) {
     const w = 21, h = 15, m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o)); // can be moved to static functions
     const ocx = Math.floor((ox+40)/100)+.5, ocy = Math.floor((oy+40)/100)+.5, ncx = Math.floor((x+40)/100)+.5, ncy = Math.floor((y+40)/100)+.5;
@@ -286,14 +291,16 @@ class DUELS extends Multiplayer {
 
   ontick() {
     if ([0, 1].includes(this.mode)) {
+      let ox = this.pt[0].x, oy = this.pt[0].y;
       this.pt[0].x = this.spawns[0].x;
       this.pt[0].y = this.spawns[0].y;
-      this.override(this.pt[0]);
+      this.override(this.pt[0], ox, oy);
     }
     if (this.mode === 1) {
+      let ox = this.pt[1].x, oy = this.pt[1].y;
       this.pt[1].x = this.spawns[1].x;
       this.pt[1].y = this.spawns[1].y;
-      this.override(this.pt[1]);
+      this.override(this.pt[1], ox, oy);
       this.global = 'Round '+this.round+' in '+(5-Math.floor((Date.now()-this.readytime)/1000));
       if (5-(Date.now()-this.readytime)/1000 <= 0) {
         for (let i = this.s.length-1; i >= 0; i--) if (this.s[i].type !== 'grapple') this.s[i].destroy();
@@ -400,9 +407,10 @@ class TDM extends Multiplayer {
     } else if (this.mode === 1) {
       this.pt.forEach(t => {
         const spawn = Engine.getTeam(t.team) === 'BLUE' ? 0 : 1;
+        let ox = t.x, oy = t.y;
         t.x = this.spawns[spawn].x;
         t.y = this.spawns[spawn].y;
-        this.override(t);
+        this.override(t, ox, oy);
       });
       this.global = 'Round '+this.round+' in '+(this.time-Math.floor((Date.now()-this.readytime)/1000));
       if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
@@ -612,9 +620,10 @@ const Commands = {
     if (t) {
       const x = t.x, y = t.y;
       t.freezeInterval = setInterval(() => {
+        let ox = t.x, oy = t.y;
         t.x = x;
         t.y = y;
-        servers[this.room].override(t);
+        servers[this.room].override(t, ox, oy);
       }, 15);
     }
   }],
@@ -663,7 +672,6 @@ const Commands = {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
     if (isNaN(levelID) || levelID % 1 !== 0 || levelID >= ffaLevels.length) return this.send({status: 'error', message: 'Out of range or invalid input.'});
     servers[this.room].levelReader(ffaLevels[levelID]);
-    servers[this.room].pt.forEach(t => t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]}));
   }],
   ban: [Object, 2, 2, function(data) {
     if (Storage.admins.includes(data[1]) || Storage.owners.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
