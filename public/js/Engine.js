@@ -89,7 +89,6 @@ class Engine {
       }
       this.d.push(A.template('Damage').init(t.x, t.y, 80, 80, 50, t.team, this));
     } else if (a === 'turret') {
-      return t.hp = 0;
       this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
       for (let i = this.ai.length-1, turrets = 0; i >= 0; i--) if (this.ai[i].role === 0 && Engine.getUsername(this.ai[i].team) === t.username && ++turrets > 3) this.ai[i].destroy();
     } else if (a === 'bash') {
