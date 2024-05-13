@@ -126,9 +126,7 @@ class Tank {
       this.x = Math.floor(this.x/4)*4;
       this.y = Math.floor(this.y/4)*4;
     }
-    this.host.updateEntity(this, this.x, this.y, 80, 80, ox, oy, Tank.u);
-    this.host.loadCells(this, this.x, this.y, 80, 80);
-    if (this.socket && (Math.floor((ox+40)/100) !== Math.floor((this.x+40)/100) || Math.floor((oy+40)/100) !== Math.floor((this.y+40)/100))) this.host.chunkload(this, ox, oy, this.x, this.y);
+    this.override(this, ox, oy);
   }
   reset() {
     for (const p of Tank.s) Object.defineProperty(this, p, {value: undefined, writable: true});
