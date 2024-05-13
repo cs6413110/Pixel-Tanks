@@ -141,6 +141,8 @@ class Engine {
     if (use.includes('respawn')) {
       t.socket.send({event: 'ded'});
       let ox = t.x, oy = t.y;
+      t.x = this.spawn.x;
+      t.y = this.spawn.y;
       this.override(t, ox, oy);
       t.ded = false;
       t.hp = t.maxHp;
