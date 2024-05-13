@@ -839,7 +839,7 @@ class Client {
   }
 
   keyLoop(e) {
-    if ([65, 68, 87, 63].includes(e.keyCode)) {
+    if ([65, 68, 87, 83].includes(e.keyCode)) {
       if (!this.key[65] && !this.key[68]) this.left = null;
       if (!this.key[87] && !this.key[83]) this.up = null;
     }
