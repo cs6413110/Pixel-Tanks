@@ -920,12 +920,13 @@ wss.on('connection', socket => {
       socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
       if (!servers[socket.room] || (!hasAccess(socket.username, 3) && !settings.chat)) return;
+      data.msg = data.msg.slice(0, 4000);
       if (Storage.mutes.includes(socket.username)) {
-        log(`${socket.username} tried to say "${data.msg.slice(0, 100)}"`);
+        log(`${socket.username} tried to say "${data.msg}"`);
         return socket.send({status: 'error', message: 'You are muted!'});
       }
-      servers[socket.room].logs.push({m: `[${socket.username}] ${clean(data.msg.slice(0, 100))}`, c: '#ffffff'});
-      log(`[${socket.username}] ${clean(data.msg.slice(0, 100))}`);
+      servers[socket.room].logs.push({m: `[${socket.username}] ${clean(data.msg)}`, c: '#ffffff'});
+      log(`[${socket.username}] ${clean(data.msg)}`);
     } else if (data.type === 'logs') {
       if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
     } else if (data.type === 'command') {
