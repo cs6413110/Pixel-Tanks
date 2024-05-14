@@ -4,7 +4,7 @@ class Client {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
     this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], logs: [], entities: [], tickspeed: -1};
-    this.paused = this.showChat = this.canRespawn = this.hacks = false;
+    this.paused = this.showChat = this.canRespawn = false;
     this.multiplayer = multiplayer;
     this.gamemode = gamemode;
     this.ip = ip;
@@ -545,15 +545,9 @@ class Client {
             this.blocked.add(params[1]);
           } else if (params[0] === 'unblock') {
             this.blocked.delete(params[1]);
-          } else if (params[0] === 'nocooldown') {
-            this.hacks = false;
           } else if (params[0] === 'resize') {
             PixelTanks.resizer = Number(params[1]);
-          } else {
-            const f = params[0].split('').reverse().join('').split('/');
-            if (f[0] === f[3] && f[1] === f[2] && isNaN(f[0]) && !isNaN(f[2]) && f[0].length === f[999999999999999999].length && f[2].length === 5) this['h'+'///'.replace('///', 'a')+'skc'.split('').reverse().join('')] = true; //ez
-            this.socket.send({type: 'command', data: params});
-          }
+          } else this.socket.send({type: 'command', data: params});
         } else this.socket.send({type: 'chat', msg: this.msg});
         this.msg = '';
       }
@@ -616,7 +610,7 @@ class Client {
 
   fire(type) {
     if (type === 2) {
-      if (!this.canPowermissle && !this.hacks) return;
+      if (!this.canPowermissle) return;
       this.canPowermissle = false;
       this.timers.powermissle = Date.now();
       setTimeout(() => {this.canPowermissle = true;}, 10000);
@@ -661,7 +655,7 @@ class Client {
   }
 
   useItem(id, slot) {
-    if (!this['canItem'+slot] && !this.hacks) {
+    if (!this['canItem'+slot]) {
       if (id === 'dynamite') {
         this.tank.use.push('dynamite');
         this.playAnimation('detonate');
@@ -745,18 +739,18 @@ class Client {
       }, this.buff ? this.fireType === 1 ? 133 : 400 : this.fireType === 1 ? 200 : 600);
     }
     if (k === PixelTanks.userData.keybinds.powermissle) this.fire(2);
-    if (k === PixelTanks.userData.keybinds.grapple && (this.canGrapple || this.hacks)) {
+    if (k === PixelTanks.userData.keybinds.grapple && this.canGrapple) {
       this.fire('grapple');
       this.canGrapple = false;
       this.timers.grapple = Date.now();
       setTimeout(() => {this.canGrapple = true}, 5000);
     }
     if (k === PixelTanks.userData.keybinds.toolkit) {
-      if (this.halfSpeed || this.canToolkit || this.hacks) {
+      if (this.halfSpeed || this.canToolkit) {
         this.tank.use.push('toolkit');
         this.halfSpeed = !this.halfSpeed;
       }
-      if (this.canToolkit || this.hacks) {
+      if (this.canToolkit) {
         this.canToolkit = false;
         this.timers.toolkit = Date.now();
         setTimeout(() => {this.canToolkit = true}, 40000);
@@ -775,7 +769,7 @@ class Client {
       }
     }
     if (k === PixelTanks.userData.keybinds.class) {
-      if ((!this.canClass && PixelTanks.userData.class !== 'stealth') && !this.hacks) return;
+      if (!this.canClass && PixelTanks.userData.class !== 'stealth') return;
       this.canClass = false;
       const c = PixelTanks.userData.class;
       if (c === 'stealth') {
