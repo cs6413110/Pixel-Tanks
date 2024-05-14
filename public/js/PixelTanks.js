@@ -546,16 +546,7 @@ class PixelTanks {
               }
             } else if (this.perkTab) {
               if (x < 634 || x > 966 || y < 334 || y > 666) return this.perkTab = false;
-              const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [924, 570]};
-              for (const item in key) {
-                if (Engine.collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
-                  if (!PixelTanks.userData.items.includes(item) || PixelTanks.userData.items[this.currentItem-1] === item) {
-                    const lastItem = PixelTanks.userData.items[this.currentItem-1];
-                    PixelTanks.userData.items[this.currentItem-1] = item;
-                    if (item === lastItem) PixelTanks.userData.items[this.currentItem-1] = 'undefined';
-                  } else alert('You are not allowed to have more than 1 of the same item');
-                  return;
-                }
+              //work in progress
               }
             } else if (this.cosmeticTab) {
               if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.cosmeticTab = false;
@@ -679,10 +670,9 @@ class PixelTanks {
             GUI.drawImage(PixelTanks.images.menus.itemTab, 580, 334, 440, 332, 1);
             const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [904, 570]};
             for (const item in key) GUI.drawImage(PixelTanks.images.items[item], key[item][0], key[item][1], 80, 80, 1);
-          } else if (this.itemTab) {
+          } else if (this.perkTab) {
             GUI.drawImage(PixelTanks.images.menus.perkTab, 634, 334, 332, 332, 1);
-            const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [904, 570]};
-            for (const item in key) GUI.drawImage(PixelTanks.images.items[item], key[item][0], key[item][1], 80, 80, 1);
+            //work in progress
           } else if (this.cosmeticTab) {
             const a = this.cosmeticMenu === 0, b = this.cosmeticMenu === Math.floor(PixelTanks.userData.cosmetics.length/16);
             GUI.drawImage(PixelTanks.images.menus.cosmeticTab, 518+(a ? 62 : 0), 280, 564-(a ? 62 : 0)-(b ? 62 : 0), 440, 1, 0, 0, 0, 0, undefined, (a ? 31 : 0), 0, 282-(a ? 31 : 0)-(b ? 31 : 0), 220);
