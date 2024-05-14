@@ -656,6 +656,12 @@ const Commands = {
   arson: [Object, 3, 1, function(data) {
     for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'fire', ':', servers[this.room]));
   }],
+  acupuncture: [Object, 2, 1, function(data) {
+    for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, 50, 'spike', ':', servers[this.room]));
+  }],
+  smoke: [Object, 2, 1, function(data) {
+    for (let x = 2.5; x < 30; x += 4) for (let y = 2.5; y < 30; y += 4) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'smoke', ':', servers[this.room]));
+  }],
   invis: [Object, 2, 3, function(data) {
     const t = servers[this.room].pt.find(t => t.username === data[1]);
     for (let i = 0; i < (data[2]*160); i++) setTimeout(() => {
@@ -747,6 +753,9 @@ const Commands = {
   }],
   announce: [Object, 3, -1, function(data) {
     for (const server of Object.values(servers)) server.logs.push({m: '[Announcement]['+this.username+'] '+data.slice(1).join(' '), c: '#FFF87D'});
+  }],
+  global: [Object, 2, -1, function(data) {
+    for (const socket of sockets) socket.send({status: 'error', message: '[Global]['+this.username+'] '+data.slice(1).join(' ')});
   }],
   lockchat: [Object, 2, -1, function(data) {
     settings.chat = !settings.chat;
