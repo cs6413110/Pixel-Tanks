@@ -547,7 +547,6 @@ class PixelTanks {
             } else if (this.perkTab) {
               if (x < 634 || x > 966 || y < 334 || y > 666) return this.perkTab = false;
               //work in progress
-              }
             } else if (this.cosmeticTab) {
               if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.cosmeticTab = false;
               for (let i = 0; i < 16; i++) {
