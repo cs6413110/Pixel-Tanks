@@ -180,7 +180,6 @@ const images = {
     'Evil Eyes': '/cosmetics/evileye',
     'Lego': '/cosmetics/lego',
     'Dead': '/cosmetics/dead',
-    "PWR-DMG'S HELM": '/cosmetics/pwr-dmg-helm',
     'Sun Roof': '/cosmetics/sunroof',
     'Army': '/cosmetics/army',
     'Stamp': '/cosmetics/stamp',
