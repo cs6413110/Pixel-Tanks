@@ -511,8 +511,8 @@ class PixelTanks {
           [448, 460, 88, 88, function() {PixelTanks.switchTab('cosmeticTab', 'cosmetic')}, false],
           [448, 560, 88, 88, function() {PixelTanks.switchTab('cosmeticTab', 'cosmetic_body')}, false],
           [448, 220, 88, 88, function() {PixelTanks.switchTab('deathEffectsTab')}, false],
-          [448, 220, 88, 88, function() {PixelTanks.switchTab('perkTab', 1)}, false],
-          [448, 220, 88, 88, function() {PixelTanks.switchTab('perkTab', 2)}, false],
+          [844, 816, 88, 88, function() {PixelTanks.switchTab('perkTab', 1)}, false],
+          [888, 816, 88, 88, function() {PixelTanks.switchTab('perkTab', 2)}, false],
         ],
         listeners: {
           mousedown: function(e) {
@@ -545,7 +545,7 @@ class PixelTanks {
                 }
               }
             } else if (this.perkTab) {
-              if (x < 844 || x > 1020 || y < 334 || y > 666) return this.perkTab = false;
+              if (x < 634 || x > 966 || y < 334 || y > 666) return this.perkTab = false;
               const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [924, 570]};
               for (const item in key) {
                 if (Engine.collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
@@ -680,7 +680,7 @@ class PixelTanks {
             const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [904, 570]};
             for (const item in key) GUI.drawImage(PixelTanks.images.items[item], key[item][0], key[item][1], 80, 80, 1);
           } else if (this.itemTab) {
-            GUI.drawImage(PixelTanks.images.menus.perkTab, 580, 334, 440, 332, 1);
+            GUI.drawImage(PixelTanks.images.menus.perkTab, 634, 334, 332, 332, 1);
             const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [904, 570]};
             for (const item in key) GUI.drawImage(PixelTanks.images.items[item], key[item][0], key[item][1], 80, 80, 1);
           } else if (this.cosmeticTab) {
