@@ -120,8 +120,10 @@ class Multiplayer extends Engine {
     if (t.socket && (Math.floor((ox+40)/100) !== Math.floor((t.x+40)/100) || Math.floor((oy+40)/100) !== Math.floor((t.y+40)/100))) this.chunkload(t, ox, oy, t.x, t.y);
     t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
   }
+  static m = o => Math.max(0, Math.min(29, o))
+  static m2 = o => Math.max(-1, Math.min(30, o));
   chunkload(t, ox, oy, x, y) {
-    const w = 21, h = 15, m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o)); // can be moved to static functions
+    const w = 21, h = 15, m = Multiplayer.m, m2 = Multiplayer.m2;
     const ocx = Math.floor((ox+40)/100)+.5, ocy = Math.floor((oy+40)/100)+.5, ncx = Math.floor((x+40)/100)+.5, ncy = Math.floor((y+40)/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
     const ymin = ncy-h/2, ymax = ncy+h/2-1, xmin = ncx-w/2, xmax = ncx+w/2-1;
@@ -130,7 +132,10 @@ class Multiplayer extends Engine {
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = m(nxs); (xda > 0 ? (x < m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x += xda) {
         for (const e of this.cells[x][y]) {
           let i = t.msg.d.indexOf(e.id);
-          if (i !== -1) t.msg.d.splice(i, 1);
+          if (i !== -1) {
+            t.privateLogs.push({m: 'Re-added updated deleted entity: '+e.id, c: '#ffffff'});
+            t.msg.d.splice(i, 1);
+          }
           t.msg.u.push(this.loadEntity(e)); // this.loadEntity can be changed to a static function
         }
       }
@@ -139,13 +144,13 @@ class Multiplayer extends Engine {
       if (yda > 0 ? y <= oys-yl : y >= oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
         for (const e of this.cells[x][y]) {
-          if (e.cells.find(c => {
+          if (e.cells && e.cells.find(c => {
             const [a, b] = c.split('x');
             return xmin <= a && a <= xmax && ymin <= b && b <= ymax;
           })) continue;
           let i = t.msg.u.findIndex(u => u[0] === e.id);
           if (i !== -1) t.msg.u.splice(i, 1);
-          if (!t.msg.d.includes(e.id)) t.msg.d.push(e.id);
+          t.msg.d.push(e.id);
         }
       }
     }
@@ -199,7 +204,10 @@ class Multiplayer extends Engine {
       let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100, o = Engine.collision(ox, oy, w, h, tx, ty, 2100, 1500), n = Engine.collision(x, y, w, h, tx, ty, 2100, 1500);
       if (!o && n) {
         let i = t.msg.d.indexOf(e.id);
-        if (i !== -1) t.msg.d.splice(i, 1);
+        if (i !== -1) {
+          t.privateLogs.push({m: 'Re-added updated deleted entity(Render: '+e.id, c: '#ffffff'});
+          t.msg.d.splice(i, 1);
+        }
         t.msg.u.push(this.loadEntity(e));
       } else if (o && !n) {
         let i = t.msg.u.findIndex(u => u[0] === e.id);
