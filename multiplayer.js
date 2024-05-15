@@ -139,19 +139,13 @@ class Multiplayer extends Engine {
       if (yda > 0 ? y <= oys-yl : y >= oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
         for (const e of this.cells[x][y]) {
-          let de = true;
-          for (const cell of e.cells) {
-            const [a, b] = cell.split('x');
-            if (xmin <= a && a <= xmax && ymin <= b && b <= ymax) {
-              de = false;
-              break;
-            }
-          }
-          if (de) {
-            let i = t.msg.u.findIndex(u => u[0] === e.id);
-            if (i !== -1) t.msg.u.splice(i, 1);
-            if (!t.msg.d.includes(e.id)) t.msg.d.push(e.id);
-          }
+          if (e.cells.find(c => {
+            const [a, b] = c.split('x');
+            return xmin <= a && a <= xmax && ymin <= b && b <= ymax;
+          })) continue;
+          let i = t.msg.u.findIndex(u => u[0] === e.id);
+          if (i !== -1) t.msg.u.splice(i, 1);
+          if (!t.msg.d.includes(e.id)) t.msg.d.push(e.id);
         }
       }
     }
@@ -645,28 +639,11 @@ const Commands = {
   gpt: [Object, 4, -1, function(data) {
     gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
   }],
-  dalle: [Object, 3, -1, function(data) {
-    dalle.v1({prompt: data.slice(1).join(' ')}, (err, data) => {
-      if (data.images) for (const image of data.images) this.send({event: 'link', link: image});
-    });
-  }], 
   nuke: [Object, 2, 1, function(data) {
     for (let x = 0; x < 30; x += 2) for (let y = 0; y < 30; y += 2) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'airstrike', ':', servers[this.room]));
   }],
   arson: [Object, 3, 1, function(data) {
     for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'fire', ':', servers[this.room]));
-  }],
-  acupuncture: [Object, 2, 1, function(data) {
-    for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, 50, 'spike', ':', servers[this.room]));
-  }],
-  smoke: [Object, 2, 1, function(data) {
-    for (let x = 2.5; x < 30; x += 4) for (let y = 2.5; y < 30; y += 4) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'smoke', ':', servers[this.room]));
-  }],
-  invis: [Object, 2, 3, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === data[1]);
-    for (let i = 0; i < (data[2]*160); i++) setTimeout(() => {
-      if (t) servers[this.room].d.push(A.template('Damage').init(Math.round(t.x+Math.floor(Math.random()*350)-250), Math.round(t.y+Math.floor(Math.random()*350)-250), 200, 200, 0, t.team, t.host))
-    }, Math.random()*(data[2]*1000));
   }],
   newmap: [FFA, 3, -1, function(data) {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
@@ -753,9 +730,6 @@ const Commands = {
   }],
   announce: [Object, 3, -1, function(data) {
     for (const server of Object.values(servers)) server.logs.push({m: '[Announcement]['+this.username+'] '+data.slice(1).join(' '), c: '#FFF87D'});
-  }],
-  global: [Object, 2, -1, function(data) {
-    for (const socket of sockets) socket.send({status: 'error', message: '[Global]['+this.username+'] '+data.slice(1).join(' ')});
   }],
   lockchat: [Object, 2, -1, function(data) {
     settings.chat = !settings.chat;
