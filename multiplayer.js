@@ -59,7 +59,7 @@ const auth = async(username, token) => {
   const text = await response.text();
   console.log(text);
   return text === 'true';
-}, clean = msg => msg.split(' ').reduce((a, word) => a.concat([Storage.filter.some(badword => word.toLowerCase().includes(badword)) ? '@#*%!' : word]), []).join(' ');
+}, clean = msg => msg.split(' ').reduce((a, word) => a.concat([Storage.filter.some(badword => word.toLowerCase().includes(badword)) ? 'bread' : word]), []).join(' ');
 const deathMessages = [
   `{victim} was killed by {killer}`,
   `{victim} was put out of their misery by {killer}`,
