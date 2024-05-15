@@ -37,7 +37,7 @@ const images = {
   },
   cosmetics: {
     'Plasma Ball': '/cosmetics/Plasma',
-    'PWR-DMG's HELM': '/cosmetics/pwr-dmg-helm',
+    "PWR-DMG'S HELM": '/cosmetics/pwr-dmg-helm',
     'venom': '/cosmetics/venom',
     'toxic': '/cosmetics/toxic',
     'spoider': '/cosmetics/spoider',
