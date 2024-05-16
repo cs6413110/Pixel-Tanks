@@ -14,6 +14,7 @@ class Client {
     this.fireType = 1;
     this.msg = '';
     this.blocked = new Set();
+    this.debug = {};
     this.key = [];
     this.ops = [];
     this.ups = [];
@@ -63,13 +64,16 @@ class Client {
     if (data.u) for (const u of data.u) {
       let e = this.hostupdate.entities.find(e => e.id === u[0]);
       if (!e) {
+        if (!this.debug[u[0]]) this.debug[u[0]] = [];
         e = {id: u[0]};
         this.hostupdate.entities.push(e);
         this.hostupdate[this.getIdType(e.id)].push(e);
       }
       for (let i = 1; i < u.length; i += 2) e[u[i]] = u[i+1];
+      this.debug[u[0]].push(JSON.stringify(u));
     }
     if (data.d) for (const d of data.d) {
+      this.debug[d].push('Deleted');
       let i = this.hostupdate.entities.findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate.entities.splice(i, 1);
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
@@ -548,8 +552,15 @@ class Client {
             this.blocked.add(params[1]);
           } else if (params[0] === 'unblock') {
             this.blocked.delete(params[1]);
-          } else if (params[0] === 'resize') {
-            PixelTanks.resizer = Number(params[1]);
+          } else if (params[0] === 'getghost') {
+            for (const e of this.hostupdate.entities) {
+              if (!Engine.collision(Math.floor((this.tank.x+40)/100)*100-1000, Math.floor((this.tank.y+40)/100)*100-700, 2100, 1500)) {
+                this.hostupdate.logs.unshift({m: 'Ghost: '+e.id, c: '#ffffff'});
+              }
+            }
+          } else if (params[0] === 'getdata') {
+            let id = Number(params[1]);
+            this.hostupdate.logs.unshift({m: JSON.stringify(this.debug[id]), c: '#ffffff'});
           } else this.socket.send({type: 'command', data: params});
         } else this.socket.send({type: 'chat', msg: this.msg});
         this.msg = '';
