@@ -34,6 +34,7 @@ class Client {
   }
 
   interpret(data) {
+    try {
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
@@ -78,6 +79,9 @@ class Client {
       if (i !== -1) this.hostupdate.entities.splice(i, 1);
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate[this.getIdType(d)].splice(i, 1);
+    }
+    } catch(e) {
+      this.hostupdate.logs.unshift({m: 'Error '+e, c: '#ffffff'});
     }
   }
 
