@@ -577,7 +577,7 @@ class Defense extends Multiplayer {
 }
 
 const Commands = {
-  getserverdata: [Object, 4, 1, function(data) {
+  getserverdata: [Object, 4, 2, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     if (t) t.socket.send({status: 'error', message: JSON.stringify(t.debug[Number(data[1])])});
   }],
