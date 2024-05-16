@@ -439,6 +439,7 @@ class Client {
     for (let i = 0; i < 4; i++) {
       const item = PixelTanks.userData.items[i];
       GUI.drawImage(PixelTanks.images.items[item], c[i], 908, 92, 92, 1);
+      GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.class+'ui'], 308, 952, 48, 48, 1);
       if (!this['canItem'+i]) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .5;
