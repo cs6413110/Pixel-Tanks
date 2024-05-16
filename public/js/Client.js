@@ -144,15 +144,6 @@ class Client {
       } else if (data.event === 'ping') {
         this.pings = this.pings.concat(Date.now()-this.pingstart).slice(-100);
         this.getPing();
-      } else if (data.event === 'link') {
-        if (confirm('Are you sure you want to go to this page?\n'+data.link)) {
-          let w = window.open(data.link);
-          if (data.link.includes('data:image/')) {
-            let image = new Image();
-            image.src = data.link;
-            w.document.write(image.outerHTML);
-          }
-        }
       }
     });
     this.socket.on('connect', () => {
@@ -554,13 +545,13 @@ class Client {
             this.blocked.delete(params[1]);
           } else if (params[0] === 'getghost') {
             for (const e of this.hostupdate.entities) {
-              if (!Engine.collision(Math.floor((this.tank.x+40)/100)*100-1000, Math.floor((this.tank.y+40)/100)*100-700, 2100, 1500)) {
+              let size = [80, 100, 10, 80, e.w][Math.floor(e.id)];
+              if (!Engine.collision(e.x, e.y, size, size, Math.floor((this.tank.x+40)/100)*100-1000, Math.floor((this.tank.y+40)/100)*100-700, 2100, 1500)) {
                 this.hostupdate.logs.unshift({m: 'Ghost: '+e.id, c: '#ffffff'});
               }
             }
           } else if (params[0] === 'getdata') {
-            let id = Number(params[1]);
-            this.hostupdate.logs.unshift({m: JSON.stringify(this.debug[id]), c: '#ffffff'});
+            window.open().document.write(JSON.stringify(this.debug[Number(params[1])]));
           } else this.socket.send({type: 'command', data: params});
         } else this.socket.send({type: 'chat', msg: this.msg});
         this.msg = '';
