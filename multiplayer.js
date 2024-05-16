@@ -132,10 +132,7 @@ class Multiplayer extends Engine {
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = m(nxs); (xda > 0 ? (x < m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x += xda) {
         for (const e of this.cells[x][y]) {
           let i = t.msg.d.indexOf(e.id);
-          if (i !== -1) {
-            t.privateLogs.push({m: 'Re-added updated deleted entity: '+e.id, c: '#ffffff'});
-            t.msg.d.splice(i, 1);
-          }
+          if (i !== -1) t.msg.d.splice(i, 1);
           t.msg.u.push(this.loadEntity(e)); // this.loadEntity can be changed to a static function
         }
       }
@@ -203,11 +200,8 @@ class Multiplayer extends Engine {
     for (const t of this.pt) {
       let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100, o = Engine.collision(ox, oy, w, h, tx, ty, 2100, 1500), n = Engine.collision(x, y, w, h, tx, ty, 2100, 1500);
       if (!o && n) {
-        let i = t.msg.d.indexOf(e.id);
-        if (i !== -1) {
-          t.privateLogs.push({m: 'Re-added updated deleted entity(Render: '+e.id, c: '#ffffff'});
-          t.msg.d.splice(i, 1);
-        }
+        let i = t.msg.d.indexOf(e.id);7
+        if (i !== -1) t.msg.d.splice(i, 1);
         t.msg.u.push(this.loadEntity(e));
       } else if (o && !n) {
         let i = t.msg.u.findIndex(u => u[0] === e.id);
