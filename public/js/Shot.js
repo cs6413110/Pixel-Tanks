@@ -18,7 +18,7 @@ class Shot {
     this.y = this.sy = y+d*Math.sin(Math.PI*r/180)-5;
     host.loadCells(this, this.x, this.y, 10, 10);
     host.s.push(this);
-    if (this.collision()) return this.destroy(); // for quick destroy, no need to even register this bullet's existance on the update stream.
+    if (this.collision()) return this.destroy(1); // for quick destroy, no need to even register this bullet's existance on the update stream.
     host.updateEntity(this, this.x, this.y, 10, 10, this.x, this.y, Shot.raw);
     this.raw = {id: this.id, type: type, team: team, x: this.x, y: this.y, sx: this.sx, sy: this.sy, r: this.r}; // temp
     this.updatedLast = Date.now();
@@ -85,8 +85,8 @@ class Shot {
     }
   }
   reset = () => this.cells.clear();
-  destroy() {
-    this.host.destroyEntity(this.id, this.x, this.y, 10, 10);
+  destroy(n) {
+    if (!n) this.host.destroyEntity(this.id, this.x, this.y, 10, 10);
     for (const cell of this.cells) {
       const c = cell.split('x');
       this.host.cells[c[0]][c[1]].delete(this);
