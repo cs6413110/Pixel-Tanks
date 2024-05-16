@@ -123,7 +123,7 @@ class Multiplayer extends Engine {
   static m = o => Math.max(0, Math.min(29, o))
   static m2 = o => Math.max(-1, Math.min(30, o));
   chunkload(t, ox, oy, x, y) {
-    const w = (t.username === 'bradley' ? 30 : 21), h = (t.username === 'bradley' ? 30 : 15), m = Multiplayer.m, m2 = Multiplayer.m2;
+    const w = 21, h = 15, m = Multiplayer.m, m2 = Multiplayer.m2;
     const ocx = Math.floor((ox+40)/100)+.5, ocy = Math.floor((oy+40)/100)+.5, ncx = Math.floor((x+40)/100)+.5, ncy = Math.floor((y+40)/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
     const ymin = ncy-h/2, ymax = ncy+h/2-1, xmin = ncx-w/2, xmax = ncx+w/2-1;
