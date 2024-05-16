@@ -134,6 +134,8 @@ class Multiplayer extends Engine {
           let i = t.msg.d.indexOf(e.id);
           if (i !== -1) t.msg.d.splice(i, 1);
           t.msg.u.push(this.loadEntity(e)); // this.loadEntity can be changed to a static function
+          if (!t.debug[e.id]) t.debug[e.id] = [];
+          t.debug[e.id].push('chunkloaded');
         }
       }
     }
@@ -148,6 +150,7 @@ class Multiplayer extends Engine {
           let i = t.msg.u.findIndex(u => u[0] === e.id);
           if (i !== -1) t.msg.u.splice(i, 1);
           t.msg.d.push(e.id);
+          t.debug[e.id].push('chunkunloaded');
         }
       }
     }
@@ -167,11 +170,16 @@ class Multiplayer extends Engine {
       t.privateLogs.length = 0;
       let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100;
       if (t.global !== this.global) t.global = t.msg.global = this.global;
-      for (const d of this.deletions) if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) t.msg.d.push(d[4]);
+      for (const d of this.deletions) if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
+        t.msg.d.push(d[4]);
+        t.debug[d[0]].push('del');
+      }
       for (const u of this.updates) {
         if (Engine.collision(u[0], u[1], u[2], u[3], tx, ty, 2100, 1500)) {
           let i = t.msg.u.indexOf(e => e[0] === u[4]);
           if (i >= 0) t.msg.u[i].push(...u.slice(5)); else t.msg.u.push(u.slice(4));
+          if (!t.debug[u[0]]) t.debug[u[0]] = [];
+          t.debug[u[0]].push('updated');
         }
       }
       if ((t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global)) {
@@ -200,13 +208,16 @@ class Multiplayer extends Engine {
     for (const t of this.pt) {
       let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100, o = Engine.collision(ox, oy, w, h, tx, ty, 2100, 1500), n = Engine.collision(x, y, w, h, tx, ty, 2100, 1500);
       if (!o && n) {
-        let i = t.msg.d.indexOf(e.id);7
+        let i = t.msg.d.indexOf(e.id);
         if (i !== -1) t.msg.d.splice(i, 1);
         t.msg.u.push(this.loadEntity(e));
+        if (!t.debug[e.id]) t.debug[e.id] = [];
+        t.debug[e.id].push('viewportload');
       } else if (o && !n) {
         let i = t.msg.u.findIndex(u => u[0] === e.id);
         if (i !== -1) t.msg.u.splice(i, 1);
         t.msg.d.push(e.id);
+        t.debug[e.id].push('viewportunload');
       }
     }
   }
@@ -563,6 +574,10 @@ class Defense extends Multiplayer {
 }
 
 const Commands = {
+  getserverdata: [Object, 4, 1, function(data) {
+    const t = servers[this.room].pt.find(t => t.username === this.username);
+    if (t) t.socket.send({status: 'error', message: JSON.stringify(t.debug[Number(data[1])])});
+  }],
   playerlist: [Object, 4, 1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     for (const tank of servers[this.room].pt) t.privateLogs.push({m: tank.username, c: '#FFFFFF'});
