@@ -18,6 +18,7 @@ class Tank {
     this.team = data.username+':'+this.id;
     this.x = host.spawn.x;
     this.y = host.spawn.y;
+    this.debug = {};
     this.logs = this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = 0;
     this.msg = {u: [], d: [], event: 'update'};
     this.privateLogs = A.template('arr');
