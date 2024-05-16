@@ -418,7 +418,7 @@ class Client {
     }
     for (const ex of e) this.drawExplosion(ex);
 
-    GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
+    GUI.draw.setTransform(0.6, 0, 0, 0.6, 0, 0);
     // beta chunkload debug
     if (this.temp)  {
       GUI.draw.fillStyle = '#ffffff';
