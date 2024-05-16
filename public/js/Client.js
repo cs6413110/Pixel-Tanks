@@ -74,7 +74,7 @@ class Client {
       this.debug[u[0]].push(JSON.stringify(u));
     }
     if (data.d) for (const d of data.d) {
-      this.debug[d].push('Deleted');
+      if (this.debug[d]) this.debug[d].push('Deleted'); else this.hostupdate.logs.unshift({m: 'del[unrec]: '+d, c: '#ff0000'});
       let i = this.hostupdate.entities.findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate.entities.splice(i, 1);
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
