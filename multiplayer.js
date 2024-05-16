@@ -150,6 +150,7 @@ class Multiplayer extends Engine {
           let i = t.msg.u.findIndex(u => u[0] === e.id);
           if (i !== -1) t.msg.u.splice(i, 1);
           t.msg.d.push(e.id);
+          if (!t.debug[e.id]) t.debug[e.id] = [];
           t.debug[e.id].push('chunkunloaded');
         }
       }
@@ -172,6 +173,7 @@ class Multiplayer extends Engine {
       if (t.global !== this.global) t.global = t.msg.global = this.global;
       for (const d of this.deletions) if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
         t.msg.d.push(d[4]);
+        if (!t.debug[d[0]]) t.debug[d[0]] = [];
         t.debug[d[0]].push('del');
       }
       for (const u of this.updates) {
@@ -217,6 +219,7 @@ class Multiplayer extends Engine {
         let i = t.msg.u.findIndex(u => u[0] === e.id);
         if (i !== -1) t.msg.u.splice(i, 1);
         t.msg.d.push(e.id);
+        if (!t.debug[e.id]) t.debug[e.id] = [];
         t.debug[e.id].push('viewportunload');
       }
     }
