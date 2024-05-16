@@ -34,7 +34,6 @@ class Client {
   }
 
   interpret(data) {
-    try {
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
@@ -71,17 +70,14 @@ class Client {
         this.hostupdate[this.getIdType(e.id)].push(e);
       }
       for (let i = 1; i < u.length; i += 2) e[u[i]] = u[i+1];
-      this.debug[u[0]].push(JSON.stringify(u));
+      this.debug[u[0]].push({x: this.tank.x, y: this.tank.y, u});
     }
     if (data.d) for (const d of data.d) {
-      if (this.debug[d]) this.debug[d].push('Deleted'); else this.hostupdate.logs.unshift({m: 'del[unrec]: '+d, c: '#ff0000'});
+      if (this.debug[d]) this.debug[d].push({x: this.tank.x, y: this.tank.y, u: [d]}); else this.hostupdate.logs.unshift({m: 'del[unrec]: '+d, c: '#ff0000'});
       let i = this.hostupdate.entities.findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate.entities.splice(i, 1);
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate[this.getIdType(d)].splice(i, 1);
-    }
-    } catch(e) {
-      this.hostupdate.logs.unshift({m: 'Error '+e, c: '#ffffff'});
     }
   }
 
