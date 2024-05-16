@@ -345,7 +345,6 @@ class Client {
   }
 
   frame() {
-    try {
     GUI.clear();
     this._fps++;
     this.render = requestAnimationFrame(() => this.frame());
@@ -404,7 +403,13 @@ class Client {
     for (const block of b) this.drawBlock(block);
     for (const shot of s) this.drawShot(shot);
     for (const ai of a) this.drawTank(ai);
-    for (const tank of t) this.drawTank(tank);
+    for (const tank of t) {
+      try {
+        this.drawTank(tank);
+      } catch(e) {
+        if (!this.hostupdate.logs[0].m.includes('error')) this.hostupdate.logs.unshift({m: 'error drawing tank', c: '#ffffff'});
+      }
+    }
     for (const block of b) if (block.s && block.hp !== block.maxHp) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(block.x-2, block.y+108, 104, 11);
@@ -523,9 +528,6 @@ class Client {
         }
       }
       Menus.menus.pause.draw([1200, 0, 400, 1000]);
-    }
-    } catch(e) {
-      this.hostupdate.logs.unshift({m: e, c: '#ff0000'});
     }
   }
 
