@@ -398,7 +398,7 @@ class Client {
         return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
       }
     }
-    GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
+    GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+(Math.round(1266.66667*PixelTanks.resizer))*PixelTanks.resizer, (-player.y+(Math.round(766.66667*PixelTanks.resizer))*PixelTanks.resizer);
     GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
     for (const block of b) this.drawBlock(block);
     for (const shot of s) this.drawShot(shot);
