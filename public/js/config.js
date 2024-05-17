@@ -14,6 +14,19 @@ const images = {
     barrel: '/blocks/barrel',
     halfbarrier: '/blocks/halfbarrier',
     smoke: '/blocks/nothing',//invis
+    blank: '/blocks/blank',
+    corner1: '/blocks/corner1',
+    corner2: '/blocks/corner2',
+    corner3: '/blocks/corner3',
+    corner4: '/blocks/corner4',
+    invert1: '/blocks/invert1',
+    invert2: '/blocks/invert2',
+    invert3: '/blocks/invert3',
+    invert4: '/blocks/invert4',
+    up: '/blocks/up',
+    left: '/blocks/left',
+    down: '/blocks/down',
+    right: '/blocks/right',
   },
   bullets: {
     //normal: '/bullets/normal', no image yet :(
