@@ -579,8 +579,12 @@ class Defense extends Multiplayer {
 const Commands = {
   getserverdata: [Object, 4, 2, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
-    if (t) t.socket.send({status: 'error', message: JSON.stringify(t.debug[Number(data[1])])});
+    t.socket.send({status: 'error', message: JSON.stringify(t.debug[Number(data[1])])});
   }],
+  getids: [Object, 4, -1, function(data) {
+    const t = servers[this.room].pt.find(t => t.username === this.username);
+    t.socket.send({status: 'error', message: JSON.stringify(t.debug.keys())});
+  }
   playerlist: [Object, 4, 1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     for (const tank of servers[this.room].pt) t.privateLogs.push({m: tank.username, c: '#FFFFFF'});
