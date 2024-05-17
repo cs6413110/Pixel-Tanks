@@ -205,7 +205,7 @@ class Client {
       GUI.drawImage(PixelTanks.images.blocks[corner3], b.x, b.y+50, 50, 50, 1, 0, 0, 0, 0, undefined, 0, 0, 50, 50);
       GUI.drawImage(PixelTanks.images.blocks[corner4], b.x+50, b.y+50, 50, 50, 1, 0, 0, 0, 0, undefined, 0, 0, 50, 50);
     }
-    GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type.includes('fire') ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type.includes('fire') ? 50 : PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
+    else GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type.includes('fire') ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type.includes('fire') ? 50 : PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
   }
 
   drawShot(s) {
