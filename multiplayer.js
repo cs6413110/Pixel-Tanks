@@ -584,7 +584,7 @@ const Commands = {
   getids: [Object, 4, -1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     t.socket.send({status: 'error', message: JSON.stringify(t.debug.keys())});
-  }
+  }],
   playerlist: [Object, 4, 1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     for (const tank of servers[this.room].pt) t.privateLogs.push({m: tank.username, c: '#FFFFFF'});
