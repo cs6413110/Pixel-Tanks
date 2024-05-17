@@ -200,10 +200,10 @@ class Client {
     const size = (b.type === 'airstrike' || b.type === 'smoke') ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
     if (b.type === 'void') {
       const voids = ["blank", "up", "left", "down", "right", "corner1", "corner2", "corner3", "corner4", "invert1", "invert2", "invert3", "invert4"];
-      GUI.drawImage(PixelTanks.images.blocks[corner2], b.x, b.y, 50, 50, 1, 0, 0, 0, 0, undefined, 0, 0, PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
-      GUI.drawImage(PixelTanks.images.blocks[corner1], b.x+50, b.y, 50, 50, 1, 0, 0, 0, 0, undefined, 0, 0, PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
-      GUI.drawImage(PixelTanks.images.blocks[corner3], b.x, b.y+50, 50, 50, 1, 0, 0, 0, 0, undefined, 0, 0, PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
-      GUI.drawImage(PixelTanks.images.blocks[corner4], b.x+50, b.y+50, 50, 50, 1, 0, 0, 0, 0, undefined, 0, 0, PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
+      GUI.drawImage(PixelTanks.images.blocks[corner2], b.x, b.y, 50, 50, 1, 0, 0, 0, 0, undefined, 0, 0, 50, 50);
+      GUI.drawImage(PixelTanks.images.blocks[corner1], b.x+50, b.y, 50, 50, 1, 0, 0, 0, 0, undefined, 0, 0, 50, 50);
+      GUI.drawImage(PixelTanks.images.blocks[corner3], b.x, b.y+50, 50, 50, 1, 0, 0, 0, 0, undefined, 0, 0, 50, 50);
+      GUI.drawImage(PixelTanks.images.blocks[corner4], b.x+50, b.y+50, 50, 50, 1, 0, 0, 0, 0, undefined, 0, 0, 50, 50);
     }
     GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type.includes('fire') ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type.includes('fire') ? 50 : PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
   }
