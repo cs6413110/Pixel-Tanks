@@ -583,7 +583,7 @@ const Commands = {
   }],
   getids: [Object, 4, -1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
-    t.socket.send({status: 'error', message: JSON.stringify(t.debug.keys())});
+    t.socket.send({status: 'error', message: JSON.stringify(Object.keys(t.debug))});
   }],
   playerlist: [Object, 4, 1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
