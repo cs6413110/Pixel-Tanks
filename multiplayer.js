@@ -173,15 +173,15 @@ class Multiplayer extends Engine {
       if (t.global !== this.global) t.global = t.msg.global = this.global;
       for (const d of this.deletions) if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
         t.msg.d.push(d[4]);
-        if (!t.debug[d[0]]) t.debug[d[0]] = [];
-        t.debug[d[0]].push('del');
+        if (!t.debug[d[4]]) t.debug[d[4]] = [];
+        t.debug[d[4]].push('del');
       }
       for (const u of this.updates) {
         if (Engine.collision(u[0], u[1], u[2], u[3], tx, ty, 2100, 1500)) {
           let i = t.msg.u.indexOf(e => e[0] === u[4]);
           if (i >= 0) t.msg.u[i].push(...u.slice(5)); else t.msg.u.push(u.slice(4));
-          if (!t.debug[u[0]]) t.debug[u[0]] = [];
-          t.debug[u[0]].push('updated');
+          if (!t.debug[u[4]]) t.debug[u[4]] = [];
+          t.debug[u[4]].push('updated');
         }
       }
       if ((t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global)) {
