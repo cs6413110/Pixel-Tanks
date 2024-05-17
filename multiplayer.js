@@ -82,7 +82,7 @@ const deathMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
   `{idot} has joined the battle`,
-  `{idot}`,
+  `Oh no, it's {idot}`,
 ], rageMessages = [
   `{idot} left the game`,
   `{idot} quit`,
