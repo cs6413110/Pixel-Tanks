@@ -174,7 +174,7 @@ class Multiplayer extends Engine {
       if (t.username === 'cs641311') this.global = '('+x+','+y+') - ('+tx+','+ty+')';
       if (t.global !== this.global) t.global = t.msg.global = this.global;
       for (const d of this.deletions) {
-        if (Math.floor(d) === 4 && t.username === 'cs641311') {
+        if (Math.floor(d[4]) === 4 && t.username === 'cs641311') {
           t.privateLogs.push({m: d+' => '+Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500), c: '#ff0000'});
         }
         if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
