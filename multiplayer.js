@@ -82,7 +82,7 @@ const deathMessages = [
   `{idot} joined the game`,
   `{idot} is now online`,
   `{idot} has joined the battle`,
-  `Oh no, it's {idot}`,
+  `{idot}`,
 ], rageMessages = [
   `{idot} left the game`,
   `{idot} quit`,
@@ -173,10 +173,15 @@ class Multiplayer extends Engine {
       const x = Math.floor((t.x+40)/100)-10, y = Math.floor((t.y+40)/100)-7, w = 2100, h = 1000;
       if (t.username === 'cs641311') this.global = '('+x+','+y+') - ('+tx+','+ty+')';
       if (t.global !== this.global) t.global = t.msg.global = this.global;
-      for (const d of this.deletions) if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
-        t.msg.d.push(d[4]);
-        if (!t.debug[d[4]]) t.debug[d[4]] = [];
-        t.debug[d[4]].push('del');
+      for (const d of this.deletions) {
+        if (Math.floor(d) === 4 && t.username === 'cs641311') {
+          t.privateLogs.push({m: d+' => '+Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500), c: '#ff0000'});
+        }
+        if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
+          t.msg.d.push(d[4]);
+          if (!t.debug[d[4]]) t.debug[d[4]] = [];
+          t.debug[d[4]].push('del');
+        }
       }
       for (const u of this.updates) {
         if (Engine.collision(u[0], u[1], u[2], u[3], tx, ty, 2100, 1500)) {
