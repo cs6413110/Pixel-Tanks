@@ -11,8 +11,6 @@ const images = {
     friendlyfire: '/blocks/friendlyfire',
     airstrike: '/blocks/airstrike',
     friendlyairstrike: '/blocks/friendlyairstrike',
-    barrel: '/blocks/barrel',
-    halfbarrier: '/blocks/halfbarrier',
     smoke: '/blocks/nothing',//invis
     blank: '/blocks/blank',
     corner1: '/blocks/corner1',
