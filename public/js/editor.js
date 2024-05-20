@@ -18,8 +18,6 @@ const button_key = {
   'B3': 'Gold Block',
   'B4': 'Barrier Block',
   'B5': 'Void Block',
-  'B6': 'Oil Barrel',
-  'B7': 'Half Barrier',
   'A0': 'Turret',
   'A1': 'Attacking AI',
   'A2': 'Supporting AI',
