@@ -174,6 +174,7 @@ class Multiplayer extends Engine {
       if (t.global !== this.global) t.global = t.msg.global = this.global;
       for (const d of this.deletions) {
         if (Math.floor(d[4]) === 4 && t.username === 'cs641311') {
+          if (!t.debug[d[4]]) t.debug[d[4]] = ['glbal fc']
           t.debug[d[4]].push('del coll('+t.x+' - '+tx+', '+t.y+' - '+ty+') '+d+'-'+Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500))
         }
         if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
