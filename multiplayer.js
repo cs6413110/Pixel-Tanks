@@ -143,6 +143,9 @@ class Multiplayer extends Engine {
       if (yda > 0 ? y <= oys-yl : y >= oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
         entity: for (const e of this.cells[x][y]) {
+          t.msg.d.push(e.id);
+          if (!t.debug[e.id]) t.debug[e.id] = [];
+          t.debug[e.id].push('del prep unloadchunk');
           for (const c of e.cells) {
             const [a, b] = c.split('x');
             if (xmin <= a && a <= xmax && ymin <= b && b <= ymax) continue entity;
@@ -172,16 +175,10 @@ class Multiplayer extends Engine {
       let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100;
       const x = Math.floor((t.x+40)/100)-10, y = Math.floor((t.y+40)/100)-7, w = 2100, h = 1000;
       if (t.global !== this.global) t.global = t.msg.global = this.global;
-      for (const d of this.deletions) {
-        if (Math.floor(d[4]) === 4 && t.username === 'cs641311') {
-          if (!t.debug[d[4]]) t.debug[d[4]] = ['glbal fc']
-          t.debug[d[4]].push('del coll('+t.x+' - '+tx+', '+t.y+' - '+ty+') '+d+'-'+Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500))
-        }
-        if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
-          t.msg.d.push(d[4]);
-          if (!t.debug[d[4]]) t.debug[d[4]] = [];
-          t.debug[d[4]].push('del');
-        }
+      for (const d of this.deletions) if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
+        t.msg.d.push(d[4]);
+        if (!t.debug[d[4]]) t.debug[d[4]] = [];
+        t.debug[d[4]].push('del');
       }
       for (const u of this.updates) {
         if (Engine.collision(u[0], u[1], u[2], u[3], tx, ty, 2100, 1500)) {
