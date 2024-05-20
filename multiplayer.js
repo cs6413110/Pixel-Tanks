@@ -171,11 +171,10 @@ class Multiplayer extends Engine {
       t.privateLogs.length = 0;
       let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100;
       const x = Math.floor((t.x+40)/100)-10, y = Math.floor((t.y+40)/100)-7, w = 2100, h = 1000;
-      if (t.username === 'cs641311') this.global = '('+x+','+y+') - ('+tx+','+ty+')';
       if (t.global !== this.global) t.global = t.msg.global = this.global;
       for (const d of this.deletions) {
         if (Math.floor(d[4]) === 4 && t.username === 'cs641311') {
-          t.privateLogs.push({m: d+' => '+Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500), c: '#ff0000'});
+          t.debug[d[4]].push('del coll('+t.x+' - '+tx+', '+t.y+' - '+ty+') '+d+'-'Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500))
         }
         if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
           t.msg.d.push(d[4]);
