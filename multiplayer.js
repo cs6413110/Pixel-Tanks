@@ -667,6 +667,10 @@ const Commands = {
   gpt: [Object, 4, -1, function(data) {
     gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
   }],
+  target: [Object, 2, 3, function(data) {
+    const t = servers[this.room].pt.find(t => t.username === data[1]);
+    for (let i = 0; i >= data[2]; i++) setTimeout(() => {servers[this.room].b.push(A.template('Block').init(t.x-50, t.y-50, Infinity, 'airstrike', ':', servers[this.room]))}, i*1000);
+  }],
   nuke: [Object, 2, 1, function(data) {
     for (let x = 0; x < 30; x += 2) for (let y = 0; y < 30; y += 2) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'airstrike', ':', servers[this.room]));
   }],
