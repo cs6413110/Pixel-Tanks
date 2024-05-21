@@ -9,11 +9,7 @@ class Damage {
     this.raw = {id: this.id};
     for (let i = Damage.args.length-1; i >= 0; i--) this[Damage.args[i]] = arguments[i];
     this.f = 0;
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) { // upgrade this soon for more dynamic rect
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx+w/100-.01))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy+h/100-.01)));
-      host.cells[cx][cy].add(this);
-      this.cells.add(cx+'x'+cy);
-    }
+    host.loadCells(this, x, y, w, h);
     const cache = new Set();
     for (const cell of this.cells) {
       const [cx, cy] = cell.split('x');
