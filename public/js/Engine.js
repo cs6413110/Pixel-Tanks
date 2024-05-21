@@ -16,6 +16,7 @@ class Engine {
       this.cells[y] = [];
       for (let x = 0; x < 30; x++) this.cells[y][x] = new Set();
     }
+    this.chunkDebug = {};
     this.map = new PF.Grid(30, 30);
     this.levelReader(levels[Math.floor(Math.random()*levels.length)]);
     this.i.push(setInterval(() => this.tick(), 1000/60));
@@ -194,6 +195,7 @@ class Engine {
         e.cells.add(`${x}x${y}`); 
       }
     }
+    this.chunkDebug[e.id] = [...e.cells];
   }
 
   updateEntity() {}
