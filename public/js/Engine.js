@@ -201,7 +201,7 @@ class Engine {
   updateEntity() {}
 
   ondeath(t, m={}) {
-    this.logs.push({m: this.deathMsg(t.username, m.username), c: (Engine.getTeam(m.team) === 'RED' ? '#FF7A7A' : (Engine.getTeam(m.team) === 'BLUE' ? '#7D7AFF' : '#FF8C00'))});
+    this.logs.push({m: this.deathMsg(t.username, m.username), c: if (m !== 'undefined') (Engine.getTeam(m.team) === 'RED' ? '#FF0000' : (Engine.getTeam(m.team) === 'BLUE' ? '#0000FF' : '#FF8C00')) else '#FF8C00'});
     if (t.privateLogs) t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     if (t.socket) t.ded = true;
