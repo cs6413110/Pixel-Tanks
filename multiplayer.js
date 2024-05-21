@@ -150,7 +150,6 @@ class Multiplayer extends Engine {
           let i = t.msg.u.findIndex(u => u[0] === e.id);
           if (i !== -1) t.msg.u.splice(i, 1);
           t.msg.d.push(e.id);
-          if (!t.debug[e.id]) t.debug[e.id] = [];
           t.debug[e.id].push('chunkunloaded');
         }
       }
