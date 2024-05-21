@@ -557,6 +557,8 @@ class Client {
                 this.hostupdate.logs.unshift({m: 'Ghost: '+e.id, c: '#ffffff'});
               }
             }
+          } else if (params[0] === 'resize') {
+            PixelTanks.resizer = .3
           } else if (params[0] === 'getdata') {
             window.open().document.write(JSON.stringify(this.debug[Number(params[1])]));
           } else this.socket.send({type: 'command', data: params});
