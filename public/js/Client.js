@@ -796,8 +796,8 @@ class Client {
             this.timers.class = {time: Date.now(), cooldown: 15000};
             this.invis = setTimeout(() => {
               this.canInvis = true;
-            }, 15000);
-          }, 30000);
+            }, 30000);
+          }, 15000);
         } else if (this.tank.invis) {
           this.tank.invis = false;
           clearTimeout(this.invis);
