@@ -581,6 +581,10 @@ const Commands = {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     t.socket.send({status: 'error', message: JSON.stringify(t.debug[Number(data[1])])});
   }],
+  getchunkdata: [Object, 4, 2, function(data) {
+    const t = servers[this.room].pt.find(t => t.username === this.username);
+    t.privateLogs.push({m: JSON.stringify(servers[this.room].chunkDebug[Number(data[1])]), c: '#ffffff'});
+  }],
   getids: [Object, 4, -1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     t.socket.send({status: 'error', message: JSON.stringify(Object.keys(t.debug))});
