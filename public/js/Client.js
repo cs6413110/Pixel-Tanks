@@ -537,9 +537,9 @@ class Client {
           GUI.drawImage(PixelTanks.images.tanks['bottom'+(t[i].baseFrame ? '' : '2')], 200, 250+i*90, 80, 80, 1, 40, 40, 0, 0, t[i].baseRotation);
           PixelTanks.renderTop(200, 250+i*90, 80, t[i].color, t[i].r, t[i].pushback);
           GUI.drawImage(PixelTanks.images.tanks.top, 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
-          if (t[i].cosmetic_body) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_body], 200, 250+i*90, a);
-          if (t[i].cosmetic) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic], 200, 250+i*90, a);
-          if (t[i].cosmetic_hat) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_hat], 200, 250+i*90, a);
+          if (t[i].cosmetic_body) this.renderCosmetic(t[i], PixelTanks.images.cosmetics[t[i].cosmetic_body], 200, 250+i*90, a);
+          if (t[i].cosmetic) this.renderCosmetic(t[i], PixelTanks.images.cosmetics[t[i].cosmetic], 200, 250+i*90, a);
+          if (t[i].cosmetic_hat) this.renderCosmetic(t[i], PixelTanks.images.cosmetics[t[i].cosmetic_hat], 200, 250+i*90, a);
         }
       }
       Menus.menus.pause.draw([1200, 0, 400, 1000]);
