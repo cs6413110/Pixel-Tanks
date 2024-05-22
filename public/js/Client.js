@@ -516,6 +516,7 @@ class Client {
     }
     
     if (this.paused) {
+      let teamname = Engine.getTeam(t.team);
       let a = 1;
       GUI.draw.globalAlpha = .7;
       GUI.draw.fillStyle = '#000000';
@@ -523,6 +524,15 @@ class Client {
       GUI.draw.globalAlpha = 1;
       if (t.length >= 1) {
         for (let i = 0; i < t.length; i++) {
+          if (teamname === 'RED') {
+            GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FF0000', 0);
+          } else if (teamname === 'BLUE') {
+            GUI.drawText(t[i].username, 10, 250+i*90, 30, '#0000FF', 0);
+          } else if (teamname === 'LOBBY') {
+            if (t.color === '#FF0000') {
+              GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FF0000', 0);
+            } else if (t.color === '#0000FF') GUI.drawText(t[i].username, 10, 250+i*90, 30, '#0000FF', 0);
+          } else GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FFFFFF', 0);
           GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FFFFFF', 0);
           PixelTanks.renderBottom(200, 250+i*90, 80, t[i].color, t[i].baseRotation);
           GUI.drawImage(PixelTanks.images.tanks['bottom'+(t[i].baseFrame ? '' : '2')], 200, 250+i*90, 80, 80, 1, 40, 40, 0, 0, t[i].baseRotation);
