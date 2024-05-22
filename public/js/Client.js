@@ -322,7 +322,7 @@ class Client {
     } else if (teamname === 'LOBBY') {
       if (t.color === '#FF0000') {
         GUI.drawText(username, t.x+40, t.y-25, 50, '#ff0000', 0.5);
-      } else GUI.drawText(username, t.x+40, t.y-25, 50, '#0000ff', 0.5);
+      } else if (t.color === '#0000FF') GUI.drawText(username, t.x+40, t.y-25, 50, '#0000ff', 0.5);
     } else GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
 
     if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
