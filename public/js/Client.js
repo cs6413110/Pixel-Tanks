@@ -245,10 +245,10 @@ class Client {
   }
 
 
-  renderCosmetic(t, i, a) {
+  renderCosmetic(t, i, x, y, a) {
     if (!i) return;
     let yd = i.height, xd = yd*40/45, frames = i.width/xd, speed = 100, frame = Math.floor(((Date.now()-this.animate)%(frames*speed))/speed); 
-    GUI.drawImage(i, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r, frame*xd, 0, xd, yd);
+    GUI.drawImage(i, x, y, 80, 90, a, 40, 40, 0, t.pushback, t.r, frame*xd, 0, xd, yd);
   }
 
   drawTank(t) {
@@ -264,9 +264,9 @@ class Client {
     GUI.draw.globalAlpha = a;
     PixelTanks.renderTop(t.x, t.y, 80, t.color, t.r, t.pushback);
     GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
-    if (t.cosmetic_body) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_body], a);
-    if (t.cosmetic) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic], a);
-    if (t.cosmetic_hat) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_hat], a);
+    if (t.cosmetic_body) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_body], t.x, t.y, a);
+    if (t.cosmetic) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic], t.x, t.y, a);
+    if (t.cosmetic_hat) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_hat], t.x, t.y, a);
     if ((!t.ded && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || (this.ded && !p && !t.ded) || (PixelTanks.userData.class === 'tactical' && !t.ded && !t.invis) || (PixelTanks.userData.class === 'tactical' && !t.ded && Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) < 200)) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(t.x-2, t.y+98, 84, 11);
@@ -537,9 +537,9 @@ class Client {
           GUI.drawImage(PixelTanks.images.tanks['bottom'+(t[i].baseFrame ? '' : '2')], 200, 250+i*90, 80, 80, 1, 40, 40, 0, 0, t[i].baseRotation);
           PixelTanks.renderTop(200, 250+i*90, 80, t[i].color, t[i].r, t[i].pushback);
           GUI.drawImage(PixelTanks.images.tanks.top, 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
-          if (t[i].cosmetic_body) GUI.drawImage(PixelTanks.images.cosmetics[t[i].cosmetic_body], 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
-          if (t[i].cosmetic) GUI.drawImage(PixelTanks.images.cosmetics[t[i].cosmetic], 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
-          if (t[i].cosmetic_hat) GUI.drawImage(PixelTanks.images.cosmetics[t[i].cosmetic_hat], 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
+          if (t[i].cosmetic_body) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_body], 200, 250+i*90, a);
+          if (t[i].cosmetic) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic], 200, 250+i*90, a);
+          if (t[i].cosmetic_hat) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_hat], 200, 250+i*90, a);
         }
       }
       Menus.menus.pause.draw([1200, 0, 400, 1000]);
