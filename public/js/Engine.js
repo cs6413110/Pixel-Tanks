@@ -47,7 +47,7 @@ class Engine {
     } else if (a === 'tape') {
       t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
     } else if (a === 'healmissile') {
-      t.hp = Math.min(t.maxHp, t.hp+t.maxHp/(10/3));
+      t.hp = t.hp//gottem
     } else if (a === 'glu') {
       clearInterval(t.gluInterval);
       clearTimeout(t.gluTimeout);
