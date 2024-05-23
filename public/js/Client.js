@@ -241,7 +241,7 @@ class Client {
 
   drawExplosion(e) {
     if (e.w === 200) GUI.drawImage(PixelTanks.images.animations['smoke'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, e.f*200, 0, 200, 200);
-    if (e.w !== 200) GUI.drawImage(PixelTanks.images.animations[(e.w === 49 ? 'heal' : '')+'explosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, e.f*50, 0, 50, 50);
+    if (e.w !== 200) GUI.drawImage(PixelTanks.images.animations[(e.w === 99 ? 'heal' : '')+'explosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, e.f*50, 0, 50, 50);
   }
 
 
