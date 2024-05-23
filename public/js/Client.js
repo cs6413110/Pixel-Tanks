@@ -188,7 +188,7 @@ class Client {
   }
 
   reset() {
-    const time = Date.now()
+    const time = new Date('Nov 28 2006').getTime();
     this.timers = {boost: time, powermissle: time, grapple: time, toolkit: time, class: {time: time, cooldown: -1}, items: [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}]};
     this.halfSpeed = false;
     this.tank.invis = false;
