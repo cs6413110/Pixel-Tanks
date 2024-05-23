@@ -252,7 +252,11 @@ class Client {
   }
 
   drawTank(t) {
-    const p = t.username === PixelTanks.user.username;
+    if (PixelTanks.user.username) {
+      const p = t.username === PixelTanks.user.username;
+    } else {
+      const p = false
+    }
     let a = 1;
     if (this.ded && t.invis && !p) return;
     if ((t.invis && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || t.ded) a = .5;
