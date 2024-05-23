@@ -252,7 +252,7 @@ class Client {
   }
 
   drawTank(t) {
-    if (PixelTanks.user.username) {
+    if (!t.role) {
       const p = t.username === PixelTanks.user.username;
     } else {
       const p = false
