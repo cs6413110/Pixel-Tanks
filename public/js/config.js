@@ -11,20 +11,7 @@ const images = {
     friendlyfire: '/blocks/friendlyfire',
     airstrike: '/blocks/airstrike',
     friendlyairstrike: '/blocks/friendlyairstrike',
-    smoke: '/blocks/nothing',//invis
-    blank: '/blocks/blank',
-    corner1: '/blocks/corner1',
-    corner2: '/blocks/corner2',
-    corner3: '/blocks/corner3',
-    corner4: '/blocks/corner4',
-    invert1: '/blocks/invert1',
-    invert2: '/blocks/invert2',
-    invert3: '/blocks/invert3',
-    invert4: '/blocks/invert4',
-    up: '/blocks/up',
-    left: '/blocks/left',
-    down: '/blocks/down',
-    right: '/blocks/right',
+    //smoke: '/blocks/nothing',//invis
   },
   bullets: {
     //normal: '/bullets/normal', no image yet :(
@@ -317,22 +304,5 @@ const images = {
     spike: '/items/spike',
     reflector: '/items/reflector',
     usb: '/items/usb',
-    toolkitui: '/items/toolkitui',
-    boostui: '/items/boostui',
-    powermissleui: '/items/powermissleui',
-    tacticalui: '/items/tacticalui',
-    stealthui: '/items/stealthui',
-    builderui: '/items/builderui',
-    warriorui: '/items/warriorui',
-    medicui: '/items/medicui',
-    fireui: '/items/fireui',
   }
-};
-const sounds = {
-  movement: '/movement_sound',
-  hurt: '/hurt_sound',
-  boom: '/boom_sound',
-  insta: '/insta_sound',
-  death: '/death_sound',
-  menu: '/menu_sound',
 };
