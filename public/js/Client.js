@@ -197,6 +197,7 @@ class Client {
   }
 
   drawBlock(b) {
+    if (b.type === 'smoke') return; // BREAD WHY IS THERE A SMOKE BLOCK >:(
     const size = (b.type === 'airstrike' || b.type === 'smoke') ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
     /*if (b.type === 'void') {
       const voids = ["blank", "up", "left", "down", "right", "corner1", "corner2", "corner3", "corner4", "invert1", "invert2", "invert3", "invert4"];
