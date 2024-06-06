@@ -18,11 +18,10 @@ class Tank {
     this.team = data.username+':'+this.id;
     this.x = host.spawn.x;
     this.y = host.spawn.y;
-    this.debug = {};
     this.logs = this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = 0;
     this.msg = {u: [], d: [], event: 'update'};
     this.privateLogs = A.template('arr');
-    host.updateEntity(this, this.x, this.y, 80, 80, this.x, this.y, Tank.raw);
+    host.updateEntity(this, Tank.raw);
     host.override(this);
     host.pt.push(this);
     host.loadCells(this, this.x, this.y, 80, 80);
@@ -34,8 +33,7 @@ class Tank {
   }
   setValue(p, v) {
     if (this.raw[p] === v && typeof v !== 'object') return; else this.raw[p] = v;
-    this.updatedLast = Date.now();
-    this.host.updateEntity(this, this.x, this.y, 80, 80, this.x, this.y, [p]);
+    this.host.updateEntity(this, [p]);
   }
   update() {
     const team = Engine.getTeam(this.team);

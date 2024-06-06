@@ -16,7 +16,6 @@ class Engine {
       this.cells[y] = [];
       for (let x = 0; x < 30; x++) this.cells[y][x] = new Set();
     }
-    this.chunkDebug = {};
     this.map = new PF.Grid(30, 30);
     this.levelReader(levels[Math.floor(Math.random()*levels.length)]);
     this.i.push(setInterval(() => this.tick(), 1000/60));
@@ -130,12 +129,12 @@ class Engine {
     t.emote = emote;
     if (t.canInvis) t.invis = data.invis;
     t.baseFrame = data.baseFrame;
-    if (!t.grapple) {
+    if (!t.grapple && t.x !== x && t.y !== y) {
       let chunkload = t.socket && (Math.floor((t.x+40)/100) !== Math.floor((x+40)/100) || Math.floor((t.y+40)/100) !== Math.floor((y+40)/100)), ox = t.x, oy = t.y;
       t.x = x;
       t.y = y;
-      this.updateEntity(t, t.x, t.y, 80, 80, ox, oy, Tank.u);
-      this.loadCells(t, t.x, t.y, 80, 80);
+      this.updateEntity(t, Tank.u);
+      this.loadCells(t, t.x, t.y, 80, 80); // could be optimized to run less, watch for flooring bottom right tank corner tho
       if (chunkload) this.chunkload(t, ox, oy, t.x, t.y);
     }
     t.r = r;
@@ -178,6 +177,7 @@ class Engine {
   static r = o => Math.max(0, Math.min(29, o));
 
   loadCells(e, ex, ey, w, h) {
+    if (e.cells.size) e.oldcells = [...e.cells];
     del: for (const cell of e.cells) {
       let c = cell.split('x'), xv = c[0], yv = c[1];
       for (let x = Engine.r(Math.floor(ex/100)); x <= Engine.r(Math.floor((ex+w-1)/100)); x++) {
@@ -195,7 +195,6 @@ class Engine {
         e.cells.add(`${x}x${y}`); 
       }
     }
-    this.chunkDebug[e.id] = [...e.cells];
   }
 
   updateEntity() {}

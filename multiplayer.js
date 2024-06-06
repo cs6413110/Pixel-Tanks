@@ -1,7 +1,7 @@
 const settings = {
   authserver: 'localhost',
   players_per_room: 10,
-  ups: 120,
+  upsl: 60, // updates per second limit
   port: 8080,
   chat: true,
   joining: true,
@@ -27,6 +27,17 @@ const save = () => {
   for (const p of Storage.key) fs.writeFileSync(p+'.json', JSON.stringify(Storage[p]));
 }
 for (const p of ['exit', 'SIGINT', 'SIGUSR1', 'SIGUSR2', 'uncaughtException']) process.on(p, save);
+process.on('uncaughtException', (err, origin) => {
+  for (const socket of sockets) if (['bradley', 'Celestial', 'cs641311'].includes(socket.username)) socket.send({status: 'error', message: `Error: ${err} Origin: ${origin}`});
+  console.error(err);
+  process.exit(0);
+});
+A.createTemplate('arr', Array, a => (a.length = 0));
+const m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o));
+Array.prototype.r = function(o) {
+  let i = this.indexOf(o);
+  if (i !== -1) this.splice(i, 1);
+}
 
 let sockets = new Set(), servers = {}, ffaLevels = [
   [["B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B0","B0","B0","B0","B0"],["B0","B4","B0","B4","B4","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B2","B0","B0","B2","B0","B0","B2","B0","B4","B0","B4","B0","B0","B0"],["B0","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B0","B0","B0","B1","B1","B0","B1","B1","B0","B0","B4","B0","B4","B0","B0","B0"],["B0","B4","B0","B0","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B0","B0","B0","B0","B1","B0","B1","B1","B0","B0","B4","B0","B4","B0","B0","B0"],["B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B2","B0","B0","B2","B0","B4","B0","B4","B0","B0","B0"],["B0","B4","B4","B4","B4","B4","B0","B0","B0","B0","B0","B0","B0","B3","B3","B3","B3","B0","B0","B0","B0","B0","B0","B0","B4","B0","B4","B4","B4","B4"],["B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B3","B3","B3","B2","B2","B2","B2","B3","B3","B3","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0"],["B5","B0","B0","B0","B0","B0","B0","B0","B3","B3","B2","B2","B2","B1","B1","B1","B1","B2","B2","B2","B3","B3","B0","B0","B0","B0","B0","B0","B0","B5"],["B5","B0","B0","B0","B0","B0","B0","B3","B2","B2","B1","B1","B1","B4","B0","B0","B4","B1","B1","B1","B2","B2","B3","B0","B0","B0","B0","B0","B0","B5"],["B5","B5","B0","B0","B0","B0","B0","B3","B2","B1","B4","B0","B4","B0","B0","B0","B0","B4","B0","B4","B1","B2","B3","B0","B0","B0","B0","B0","B5","B5"],["B5","B5","B0","B0","B0","B0","B3","B2","B1","B4","B0","B0","B0","B0","B3","B3","B0","B0","B0","B0","B4","B1","B2","B3","B0","B0","B0","B0","B5","B5"],["B5","B5","B0","B0","B0","B0","B3","B2","B1","B0","B0","B3","B0","B0","B0","B0","B0","B0","B3","B0","B0","B1","B2","B3","B0","B0","B0","B0","B5","B5"],["B5","B5","B5","B0","B0","B0","B3","B2","B1","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B1","B2","B3","B0","B0","B0","B5","B5","B5"],["B5","B5","B5","B0","B0","B3","B2","B1","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B1","B2","B3","B0","B0","B5","B5","B5"],["B5","B5","B5","B0","B0","B3","B2","B1","B0","B0","B3","B0","B0","B0","S","B0","B0","B0","B0","B3","B0","B0","B1","B2","B3","B0","B0","B5","B5","B5"],["B5","B5","B5","B0","B0","B3","B2","B1","B0","B0","B3","B0","B0","B0","B0","B0","B0","B0","B0","B3","B0","B0","B1","B2","B3","B0","B0","B5","B5","B5"],["B5","B5","B5","B0","B0","B3","B2","B1","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B1","B2","B3","B0","B0","B5","B5","B5"],["B5","B5","B5","B0","B0","B0","B3","B2","B1","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B1","B2","B3","B0","B0","B0","B5","B5","B5"],["B5","B5","B0","B0","B0","B0","B3","B2","B1","B0","B0","B3","B0","B0","B0","B0","B0","B0","B3","B0","B0","B1","B2","B3","B0","B0","B0","B0","B5","B5"],["B5","B5","B0","B0","B0","B0","B3","B2","B1","B4","B0","B0","B0","B0","B3","B3","B0","B0","B0","B0","B4","B1","B2","B3","B0","B0","B0","B0","B5","B5"],["B5","B5","B0","B0","B0","B0","B0","B3","B2","B1","B4","B0","B4","B0","B0","B0","B0","B4","B0","B4","B1","B2","B3","B0","B0","B0","B0","B0","B5","B5"],["B5","B0","B0","B0","B0","B0","B0","B3","B2","B2","B1","B1","B1","B4","B0","B0","B4","B1","B1","B1","B2","B2","B3","B0","B0","B0","B0","B0","B0","B5"],["B5","B0","B0","B0","B0","B0","B0","B0","B3","B3","B2","B2","B2","B1","B1","B1","B1","B2","B2","B2","B3","B3","B0","B0","B0","B0","B0","B0","B0","B5"],["B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B3","B3","B3","B2","B2","B2","B2","B3","B3","B3","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0"],["B4","B4","B4","B4","B0","B4","B0","B0","B0","B0","B0","B0","B0","B3","B3","B3","B3","B0","B0","B0","B0","B0","B0","B0","B4","B4","B4","B4","B4","B0"],["B0","B0","B0","B4","B0","B4","B0","B2","B0","B0","B2","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0"],["B0","B0","B0","B4","B0","B4","B0","B0","B1","B1","B0","B1","B0","B0","B0","B0","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B0","B0","B4","B0"],["B0","B0","B0","B4","B0","B4","B0","B0","B1","B1","B0","B1","B1","B0","B0","B0","B0","B0","B0","B0","B4","B0","B0","B0","B4","B0","B0","B0","B0","B0"],["B0","B0","B0","B4","B0","B4","B0","B2","B0","B0","B2","B0","B0","B2","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B4","B4","B4","B0","B4","B0"],["B0","B0","B0","B0","B0","B4","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0","B0"]],
@@ -47,11 +58,9 @@ let sockets = new Set(), servers = {}, ffaLevels = [
 const logger = fs.createWriteStream('log.txt', {flags: 'a'}), log = l => logger.write(`${l}\n`);
 const hasAccess = (username, clearanceLevel) => { // 1 => full auth only, 2 => admins and above, 3 => vips and above, 4 => any
   const isAdmin = Storage.admins.includes(username), isVIP = Storage.vips.includes(username);
-  if (clearanceLevel === 4 || Storage.owners.includes(username)) return true;
-  if (clearanceLevel === 3 && (isVIP || isAdmin)) return true;
-  if (clearanceLevel === 2 && isAdmin) return true;
-  return false;
+  return (clearanceLevel === 4 || Storage.owners.includes(username)) || (clearanceLevel === 3 && (isVIP || isAdmin)) || (clearanceLevel === 2 && isAdmin);
 }
+const loadEntity = e => e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, isNaN(e[c]) ? e[c] : Math.round(e[c]*10)/10), A.template('arr').concat(e.id));
 const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
   const text = await response.text();
@@ -108,20 +117,17 @@ const deathMessages = [
 ];
 
 class Multiplayer extends Engine {
-  constructor(levels) {
-    super(levels);
-    this.i.push(setInterval(() => this.eventSend(), 1000/settings.ups));
+  constructor(l) {
+    super(l);
   }
   override(t, ox, oy) {
-    this.updateEntity(t, t.x, t.y, 80, 80, ox, oy, Tank.u);
+    this.updateEntity(t, Tank.u);
     this.loadCells(t, t.x, t.y, 80, 80);
     if (t.socket && (Math.floor((ox+40)/100) !== Math.floor((t.x+40)/100) || Math.floor((oy+40)/100) !== Math.floor((t.y+40)/100))) this.chunkload(t, ox, oy, t.x, t.y);
     t.socket.send({event: 'override', data: [{key: 'x', value: t.x}, {key: 'y', value: t.y}]});
   }
-  static m = o => Math.max(0, Math.min(29, o))
-  static m2 = o => Math.max(-1, Math.min(30, o));
   chunkload(t, ox, oy, x, y) {
-    const w = 21, h = 15, m = Multiplayer.m, m2 = Multiplayer.m2;
+    const w = 21, h = 15;
     const ocx = Math.floor((ox+40)/100)+.5, ocy = Math.floor((oy+40)/100)+.5, ncx = Math.floor((x+40)/100)+.5, ncy = Math.floor((y+40)/100)+.5;
     const xd = ocx-ncx, yd = ocy-ncy, yda = yd < 0 ? -1 : 1, xda = xd < 0 ? -1 : 1, yl = Math.min(h, Math.abs(yd))*yda;
     const ymin = ncy-h/2, ymax = ncy+h/2-1, xmin = ncx-w/2, xmax = ncx+w/2-1;
@@ -129,11 +135,8 @@ class Multiplayer extends Engine {
       if (yda < 0 ? y <= nys+yl : y >= nys+yl) l = true;
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = m(nxs); (xda > 0 ? (x < m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x += xda) {
         for (const e of this.cells[x][y]) {
-          let i = t.msg.d.indexOf(e.id);
-          if (i !== -1) t.msg.d.splice(i, 1);
-          t.msg.u.push(this.loadEntity(e)); // this.loadEntity can be changed to a static function
-          if (!t.debug[e.id]) t.debug[e.id] = [];
-          t.debug[e.id].push('chunkloaded');
+          t.msg.d.r(e.id);
+          t.msg.u.push(loadEntity(e));
         }
       }
     }
@@ -141,19 +144,17 @@ class Multiplayer extends Engine {
       if (yda > 0 ? y <= oys-yl : y >= oys-yl) l = true;
       for (let oxs = (xda > 0 ? -1 : 0)+ocx+w/2*xda, x = m(oxs); (xda < 0 ? (x < m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(oxs-(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x -= xda) {
         entity: for (const e of this.cells[x][y]) {
-          if (!t.debug[e.id]) t.debug[e.id] = [];
-          t.debug[e.id].push('del prep unloadchunk');
-          for (const c of e.cells) {
-            const [a, b] = c.split('x');
-            if (xmin <= a && a <= xmax && ymin <= b && b <= ymax) continue entity;
+          for (const cell of e.cells) {
+            const c = cell.split('x');
+            if (xmin <= c[0] && c[0] <= xmax && ymin <= c[1] && c[1] <= ymax) continue entity;
           }
           let i = t.msg.u.findIndex(u => u[0] === e.id);
           if (i !== -1) t.msg.u.splice(i, 1);
           t.msg.d.push(e.id);
-          t.debug[e.id].push('chunkunloaded');
         }
       }
     }
+    this.send(t);
   }
 
   add(socket, data) {
@@ -163,74 +164,80 @@ class Multiplayer extends Engine {
     super.add(data);
   }
 
-  eventSend() {
-    for (const t of this.pt) {
-      t.msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
-      t.logs = this.logs.length;
-      t.privateLogs.length = 0;
-      let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100;
-      const x = Math.floor((t.x+40)/100)-10, y = Math.floor((t.y+40)/100)-7, w = 2100, h = 1000;
-      if (t.global !== this.global) t.global = t.msg.global = this.global;
-      for (const d of this.deletions) if (Engine.collision(d[0], d[1], d[2], d[3], tx, ty, 2100, 1500)) {
-        t.msg.d.push(d[4]);
-        if (!t.debug[d[4]]) t.debug[d[4]] = [];
-        t.debug[d[4]].push('del');
-      }
-      for (const u of this.updates) {
-        if (Engine.collision(u[0], u[1], u[2], u[3], tx, ty, 2100, 1500)) {
-          let i = t.msg.u.indexOf(e => e[0] === u[4]);
-          if (i >= 0) t.msg.u[i].push(...u.slice(5)); else t.msg.u.push(u.slice(4));
-          if (!t.debug[u[4]]) t.debug[u[4]] = [];
-          t.debug[u[4]].push('updated');
-        }
-      }
-      if ((t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global)) {
-        if (!t.busy) {
-          t.busy = true;
-          t.socket._send(pack(t.msg), {}, () => (t.busy = false));
-          t.lastSend = Date.now();
-          t.msg.u.length = t.msg.d.length = 0;
-          t.msg.global = t.msg.logs = undefined;
-        }
-      }
+  send(t) {
+    t.msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
+    t.logs = this.logs.length;
+    t.privateLogs.length = 0;
+    if (t.busy) return t.delayed = true;
+    if (t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global) {
+      t.busy = true;
+      t.delayed = false;
+      t.socket._send(pack(t.msg), {}, () => {
+        t.busy = false;
+        if (t.delayed) this.send(t);
+      });
+      t.lastSend = Date.now();
+      t.msg.u.length = t.msg.d.length = 0;
+      t.msg.global = t.msg.logs = undefined;
     }
-    this.updates.length = this.deletions.length = 0;
   }
 
-  updateEntity(e, x, y, w, h, ox, oy, c) {
-    let update = this.updates.find(u => u[4] === e.id);
-    if (!update) {
-      update = A.template('arr').concat(x, y, w, h, e.id);
-      this.updates.push(update);
-    }
-    for (const p of c) {
-      const i = update.indexOf(p), value = isNaN(e[p]) ? e[p] : Math.round(e[p]*10)/10;
-      if (i >= 5) update[i+1] = value; else update.push(p, value);
-    }
+  updateEntity(e, c) {
     for (const t of this.pt) {
-      let tx = (Math.floor((t.x+40)/100)-10)*100, ty = (Math.floor((t.y+40)/100)-7)*100, o = Engine.collision(ox, oy, w, h, tx, ty, 2100, 1500), n = Engine.collision(x, y, w, h, tx, ty, 2100, 1500);
+      const mx = Math.floor((t.x+40)/100)-10, my = Math.floor((t.y+40)/100)-7, w = 21, h = 15;
+      let n = false, o = false;
+      for (const cell of e.cells) {
+        const c = cell.split('x');
+        if (mx <= c[0] && c[0] < mx+w && my <= c[1] && c[1] < my+h) n = true;
+      }
+      if (e.oldcells) for (const cell of e.oldcells) {
+        const c = cell.split('x');
+        if (mx <= c[0] && c[0] < mx+w && my <= c[1] && c[1] < my+h) o = true;
+      }
+      if (e.oldcells === undefined) o = n;
       if (!o && n) {
-        let i = t.msg.d.indexOf(e.id);
-        if (i !== -1) t.msg.d.splice(i, 1);
-        t.msg.u.push(this.loadEntity(e));
-        if (!t.debug[e.id]) t.debug[e.id] = [];
-        t.debug[e.id].push('viewportload');
+        t.msg.d.r(e.id);
+        t.msg.u.push(loadEntity(e));
+        this.send(t);
+        continue;
       } else if (o && !n) {
         let i = t.msg.u.findIndex(u => u[0] === e.id);
         if (i !== -1) t.msg.u.splice(i, 1);
         t.msg.d.push(e.id);
-        if (!t.debug[e.id]) t.debug[e.id] = [];
-        t.debug[e.id].push('viewportunload');
+        this.send(t);
+        continue;
+      }
+      if (n) {
+        t.msg.u.push(c.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
+        this.send(t);
       }
     }
   }
 
-  loadEntity(e) {
-    return e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, isNaN(e[c]) ? e[c] : Math.round(e[c]*10)/10), A.template('arr').concat(e.id));
+  fullLoad() {
+
   }
 
-  destroyEntity(id, x, y, w, h) {
-    this.deletions.push(A.template('arr').concat(x, y, w, h, id));
+  unload() {
+
+  }
+
+  partialLoad() {
+
+  }
+
+  destroyEntity(e) {
+    pt: for (const t of this.pt) {
+      const mx = Math.floor((t.x+40)/100)-10, my = Math.floor((t.y+40)/100)-7, w = 21, h = 15;
+      for (const cell of e.cells) {
+        const c = cell.split('x');
+        if (mx <= c[0] && c[0] < mx+w && my <= c[1] && c[1] < my+h) {
+          t.msg.d.push(e.id);
+          this.send(t);
+          continue pt;
+        }
+      }
+    }
   }
 
   disconnect(socket, code, reason) {
@@ -241,7 +248,7 @@ class Multiplayer extends Engine {
           this.cells[x][y].delete(t);
         }
         if (t.grapple) t.grapple.bullet.destroy();
-        this.destroyEntity(t.id, t.x, t.y, 80, 80);
+        this.destroyEntity(t);
         t.release();
         return false;
       }
@@ -382,11 +389,7 @@ class TDM extends Multiplayer {
     const t = this.pt[this.pt.length-1];
     let red = 0, blue = 0;
     this.pt.forEach(tank => {
-      if (tank.color === '#FF0000') {
-        red++;
-      } else if (tank.color === '#0000FF') {
-        blue++;
-      }
+      if (tank.color === '#FF0000') red++; else blue++;
     });
     if (red > blue) t.color = '#0000FF';
     if (red < blue) t.color = '#FF0000';
@@ -575,20 +578,9 @@ class Defense extends Multiplayer {
     }
   }
 }
+const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM, 'defense': Defense};
 
 const Commands = {
-  getserverdata: [Object, 4, 2, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === this.username);
-    t.socket.send({status: 'error', message: JSON.stringify(t.debug[Number(data[1])])});
-  }],
-  getchunkdata: [Object, 4, 2, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === this.username);
-    t.privateLogs.push({m: JSON.stringify(servers[this.room].chunkDebug[Number(data[1])]), c: '#ffffff'});
-  }],
-  getids: [Object, 4, -1, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === this.username);
-    t.socket.send({status: 'error', message: JSON.stringify(Object.keys(t.debug))});
-  }],
   playerlist: [Object, 4, 1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     for (const tank of servers[this.room].pt) t.privateLogs.push({m: tank.username, c: '#FFFFFF'});
@@ -802,73 +794,6 @@ const Commands = {
   }],
 };
 
-const helpList = Commands;
-
-A.createTemplate('render', class {b = new Set(); pt = new Set(); ai = new Set(); s = new Set(); d = new Set()}, r => {
-  for (const property of ['b', 'pt', 'ai', 's', 'd']) r[property].clear();
-});
-A.createTemplate('message', class {u = []; b = []; pt = []; ai = []; s = []; d = []; event = 'hostupdate'; delete = {b: [], pt: [], ai: [], s: [], d: []}}, m => {
-  for (const property of ['b', 'pt', 'ai', 's', 'd']) {
-    m[property].length = 0;
-    m.delete[property].length = 0;
-  }
-});
-A.createTemplate('msg', class {u = []; d = []; logs = []; event = 'update'}, m => (m.u.length = m.d.length = m.logs.length = 0));
-A.createTemplate('arr', Array, a => (a.length = 0));
-const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM, 'defense': Defense};
-const Profile = (arr, update) => {
-  const functions = [];
-  for (let e of arr) {
-    if (typeof e !== 'function') continue;
-    if (/^\s*class\s+/.test(e.toString())) {
-      const n = e.name;
-      for (const p of Object.getOwnPropertyNames(e)) {
-        if (typeof e[p] === 'function') {
-          const f = {name: n+'.'+e[p].name, o: e[p], i: 0, t: 0, min: Infinity, max: 0};
-          e[p] = function() {
-            const start = process.hrtime();
-            const r = f.o.apply(this, arguments);
-            f.i++;
-            const end = process.hrtime(start);
-            const time = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
-            if (time < f.min) f.min = time;
-            if (time > f.max) f.max = time;
-            f.t = (f.t*(f.i-1)+time)/f.i;
-            update(functions);
-            return r;
-          }
-          Object.defineProperty(e[p], 'name', {value: f.name.split('.')[1]});
-          functions.push(f);
-        }
-      }
-      for (const p of Object.getOwnPropertyNames(e.prototype)) {
-        if (typeof e.prototype[p] === 'function') {
-          const f = {name: n+'.'+p, o: e.prototype[p], i: 0, t: 0, min: Infinity, max: 0};
-          e.prototype[p] = function() {
-            const start = process.hrtime();
-            const r = f.o.apply(this, arguments);
-            f.i++;
-            const end = process.hrtime(start);
-            const time = (end[0]+Math.floor(end[1]/1000000))+((end[1]%1000000)/1000000);
-            if (time < f.min) f.min = time;
-            if (time > f.max) f.max = time;
-            f.t = (f.t*(f.i-1)+time)/f.i;
-            update(functions);
-            return r;
-          }
-          Object.defineProperty(e.prototype[p], 'name', {value: p === 'constructor' ? n : p});
-          functions.push(f);
-        }
-      }
-    }
-  }
-}
-process.on('uncaughtException', (err, origin) => {
-  for (const socket of sockets) if (['bradley', 'Celestial', 'cs641311'].includes(socket.username)) socket.send({status: 'error', message: `Error: ${err} Origin: ${origin}`});
-  console.error(err);
-  process.exit(0);
-});
-
 const wss = new WebSocketServer({port: settings.port});
 wss.on('connection', socket => {
   socket._send = socket.send;
@@ -897,10 +822,10 @@ wss.on('connection', socket => {
       } else if (Storage.bans.includes(data.username)) {
         socket.send({status: 'error', message: 'You are banned!'});
         return setTimeout(() => socket.close());
-      } else if (!auth(socket.username, data.token)) {
+      }/* else if (!auth(socket.username, data.token)) {
         socket.send({status: 'error', message: 'Token is invalid. Login with the correct authserver.'});
         return setTimeout(() => socket.close());
-      }
+      }*/
       let server;
       for (const id in servers) {
         if (servers[id] instanceof joinKey[data.gamemode]) {

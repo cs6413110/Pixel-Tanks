@@ -9,7 +9,6 @@ class Block {
   }
   init(x, y, hp, type, team, host) {
     this.id = host.genId(1);
-    this.raw = {id: this.id};
     for (const i in Block.args) this[Block.args[i]] = arguments[i];
     this.maxHp = hp;
     if (!(this.c = type !== 'fire' && type !== 'airstrike' && type !== 'smoke')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : (type === 'smoke' ? 10000 : 6000));
@@ -18,18 +17,14 @@ class Block {
     if (type === 'smoke') for (let i = 0; i < 1600; i++) this.t.push(setTimeout(() => this.host.d.push(A.template('Damage').init(this.x+Math.floor(Math.random()*350)-150, this.y+Math.floor(Math.random()*350)-150, 200, 200, 0, this.team, this.host)), Math.random()*10000));
     if (this.c && this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && this.y <= 2900) host.map.setWalkableAt(Engine.r(Math.floor(this.x/100)), Engine.r(Math.floor(this.y/100)), false);
     host.loadCells(this, this.x, this.y, 100, 100);
-    host.updateEntity(this, this.x, this.y, 100, 100, this.x, this.y, type === 'void' || type === 'barrier' ? Block.raw2 : Block.raw);
-    for (const p of Block.raw) this.raw[p] = this[p]; // temp
+    host.updateEntity(this, type === 'void' || type === 'barrier' ? Block.raw2 : Block.raw);
     return this;
   }
   damage(d, type) {
     if (this.hp === Infinity) return;
     this.s = Date.now();
     if ((this.hp = Math.min(this.maxHp, this.hp-d)) <= 0) return this.destroy();
-    this.host.updateEntity(this, this.x, this.y, 100, 100, this.x, this.y, Block.update);
-    this.updatedLast = Date.now();
-    this.raw.s = this.s;
-    this.raw.hp = this.hp; // temp
+    this.host.updateEntity(this, Block.update);
   }
   reset() {
     for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'team', 's' ,'c', 'updatedLast', 'host']) this[property] = undefined;
@@ -37,7 +32,7 @@ class Block {
     this.t.length = 0;
   }
   destroy() {
-    this.host.destroyEntity(this.id, this.x, this.y, 100, 100);
+    this.host.destroyEntity(this);
     for (const t of this.t) clearTimeout(t);
     clearTimeout(this.sd);
     this.host.b.splice(this.host.b.indexOf(this), 1);

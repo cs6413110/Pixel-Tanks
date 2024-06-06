@@ -19,9 +19,7 @@ class Shot {
     host.loadCells(this, this.x, this.y, 10, 10);
     host.s.push(this);
     if (this.collision()) return this.destroy(1); // for quick destroy, no need to even register this bullet's existance on the update stream.
-    host.updateEntity(this, this.x, this.y, 10, 10, this.x, this.y, Shot.raw);
-    this.raw = {id: this.id, type: type, team: team, x: this.x, y: this.y, sx: this.sx, sy: this.sy, r: this.r}; // temp
-    this.updatedLast = Date.now();
+    host.updateEntity(this, Shot.raw);
   }
   collide(e) {
     let size = Shot.settings[this.type][2], o = size/2+10, isBlock = e instanceof Block, pullGrapple = (isBlock || !e) && this.type === 'grapple';
@@ -65,12 +63,9 @@ class Shot {
     if (((x < 0 || y < 0 || x+10 >= 3000 || y+10 >= 3000) && !this.target && this.collide()) || (this.target && (this.target.x === undefined || this.target.y === undefined))) return this.destroy();
     if (this.target) if (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded) return this.destroy();
     if (Math.floor(this.x/100) !== x1 || Math.floor(this.y/100) !== y2 || Math.floor((this.x+10)/100) !== x2 || Math.floor((this.y+10)/100) !== y2) this.host.loadCells(this, x, y, 10, 10);
-    let ox = this.x, oy = this.y;
-    this.host.updateEntity(this, this.x = x, this.y = y, 10, 10, ox, oy, Shot.u);
-    /* temp */
-    this.updatedLast = Date.now();
-    this.raw.x = x;
-    this.raw.y = y;
+    this.x = x;
+    this.y = y;
+    this.host.updateEntity(this, Shot.u);
     if (this.target) return;
     if (this.collision()) return this.destroy();
     if (this.type === 'shotgun') {
@@ -79,14 +74,12 @@ class Shot {
       this.damage = (1-this.d/300)*this.md;
     } else if (this.type === 'dynamite') {
       this.r += 5;
-      this.host.updateEntity(this, this.x, this.y, 10, 10, this.x, this.y, Shot.u2);
-      this.updatedLast = Date.now();
-      this.raw.r = this.r; // temp
+      this.host.updateEntity(this, Shot.u2);
     }
   }
   reset = () => this.cells.clear();
   destroy(n) {
-    if (!n) this.host.destroyEntity(this.id, this.x, this.y, 10, 10);
+    if (!n) this.host.destroyEntity(this);
     for (const cell of this.cells) {
       const c = cell.split('x');
       this.host.cells[c[0]][c[1]].delete(this);

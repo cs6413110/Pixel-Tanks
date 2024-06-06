@@ -6,7 +6,6 @@ class Damage {
   }
   init(x, y, w, h, a, team, host) {
     this.id = host.genId(4);
-    this.raw = {id: this.id};
     for (let i = Damage.args.length-1; i >= 0; i--) this[Damage.args[i]] = arguments[i];
     this.f = 0;
     host.loadCells(this, x, y, w, h);
@@ -28,9 +27,9 @@ class Damage {
     }
     this.i = setInterval(() => {
       this.f++;
-      this.host.updateEntity(this, this.x, this.y, this.w, this.h, this.x, this.y, ['f']);
+      this.host.updateEntity(this, ['f']);
     }, 18); // remove pls me this is pain // ye its pain but can't remove yet :(
-    this.host.updateEntity(this, this.x, this.y, this.w, this.h, this.x, this.y, Damage.raw);
+    this.host.updateEntity(this, Damage.raw);
     setTimeout(() => this.destroy(), 200);
   }
   reset() {
@@ -38,12 +37,12 @@ class Damage {
     this.cells.clear();
   }
   destroy() {
-    this.host.destroyEntity(this.id, this.x, this.y, this.w, this.h);
+    this.host.destroyEntity(this);
     clearInterval(this.i);
     this.host.d.splice(this.host.d.indexOf(this), 1);
     for (const cell of this.cells) {
-      const [x, y] = cell.split('x');
-      this.host.cells[x][y].delete(this);
+      const c = cell.split('x');
+      this.host.cells[c[0]][c[1]].delete(this);
     }
     this.release();
   }
