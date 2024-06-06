@@ -189,20 +189,9 @@ class Multiplayer extends Engine {
         if (mx <= c[0] && c[0] < mx+w && my <= c[1] && c[1] < my+h) o = true;
       }
       if (e.oldcells === undefined) o = n;
-      if (!o && n) {
-        
-        this.send(t);
-        continue;
-      } else if (o && !n) {
-        let i = t.msg.u.findIndex(u => u[0] === e.id);
-        if (i !== -1) t.msg.u.splice(i, 1);
-        t.msg.d.push(e.id);
-        this.send(t);
-        continue;
-      } else if (n) {
-        t.msg.u.push(c.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
-        this.send(t);
-      }
+      if (n) {
+        if (!o) this.load(t, e); else this.merge(t, e, c);
+      } else if (o) this.unload(t, e);
       if (n || (o && !n)) this.send(t);
     }
   }
