@@ -60,7 +60,6 @@ const hasAccess = (username, clearanceLevel) => { // 1 => full auth only, 2 => a
   const isAdmin = Storage.admins.includes(username), isVIP = Storage.vips.includes(username);
   return (clearanceLevel === 4 || Storage.owners.includes(username)) || (clearanceLevel === 3 && (isVIP || isAdmin)) || (clearanceLevel === 2 && isAdmin);
 }
-const loadEntity = e => e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, isNaN(e[c]) ? e[c] : Math.round(e[c]*10)/10), A.template('arr').concat(e.id));
 const auth = async(username, token) => {
   const response = await fetch('http://'+settings.authserver+`/verify?username=${username}&token=${token}`);
   const text = await response.text();
@@ -134,10 +133,7 @@ class Multiplayer extends Engine {
     for (let nys = (yda > 0 ? 0 : -1)+ncy-h/2*yda, y = m(nys), l = false; (yda > 0 ? (y < m2(nys+h*yda)) : (y > m2(nys+h*yda))); y += yda) {
       if (yda < 0 ? y <= nys+yl : y >= nys+yl) l = true;
       for (let nxs = (xda > 0 ? 0 : -1)+ncx-w/2*xda, x = m(nxs); (xda > 0 ? (x < m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda)) : (x > m2(nxs+(l ? Math.min(w, Math.abs(xd)) : w)*xda))); x += xda) {
-        for (const e of this.cells[x][y]) {
-          t.msg.d.r(e.id);
-          t.msg.u.push(loadEntity(e));
-        }
+        for (const e of this.cells[x][y]) this.load(t, e);
       }
     }
     for (let oys = (yda > 0 ? -1 : 0)+ocy+h/2*yda, y = m(oys), l = false; (yda < 0 ? (y < m2(oys-h*yda)) : (y > m2(oys-h*yda))); y -= yda) {
@@ -148,9 +144,7 @@ class Multiplayer extends Engine {
             const c = cell.split('x');
             if (xmin <= c[0] && c[0] <= xmax && ymin <= c[1] && c[1] <= ymax) continue entity;
           }
-          let i = t.msg.u.findIndex(u => u[0] === e.id);
-          if (i !== -1) t.msg.u.splice(i, 1);
-          t.msg.d.push(e.id);
+          this.unload(t, e);
         }
       }
     }
@@ -196,8 +190,7 @@ class Multiplayer extends Engine {
       }
       if (e.oldcells === undefined) o = n;
       if (!o && n) {
-        t.msg.d.r(e.id);
-        t.msg.u.push(loadEntity(e));
+        
         this.send(t);
         continue;
       } else if (o && !n) {
@@ -206,26 +199,38 @@ class Multiplayer extends Engine {
         t.msg.d.push(e.id);
         this.send(t);
         continue;
-      }
-      if (n) {
+      } else if (n) {
         t.msg.u.push(c.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
         this.send(t);
       }
+      if (n || (o && !n)) this.send(t);
     }
   }
-
-  fullLoad() {
-
+  static num = n => isNaN(n) ? n : Math.round(n*10)/10;
+  load(t, e) {
+    let i = t.msg.u.findIndex(u => u[0] === e.id);
+    if (i !== -1) t.msg.u.splice(i, 1);
+    t.msg.d.r(e.id);
+    t.msg.u.push(e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, Multiplayer.num(e[c])), A.template('arr').concat(e.id)));
   }
-
-  unload() {
-
+  unload(t, e) {
+    let i = t.msg.u.findIndex(u => u[0] === e.id);
+    if (i !== -1) t.msg.u.splice(i, 1);
+    t.msg.d.push(e.id);
   }
-
-  partialLoad() {
-
+  merge(t, e, c) {
+    let i = t.msg.u.findIndex(u => u[0] === e.id);
+    if (i !== -1) {
+      for (let l = 1; l < t.msg.u[i].length; l += 2) {
+        let m = c.indexOf(t.msg.u[i][l]);
+        if (m !== -1) {
+          t.msg.u[i][l+1] = Multiplayer.num(e[t.msg.u[i][l]]);
+          c.splice(m, 1);
+        }
+      }
+      for (const p of c) t.msg.u[i].push(p, Multiplayer.num(e[p]));
+    } else t.msg.u.push(c.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
   }
-
   destroyEntity(e) {
     pt: for (const t of this.pt) {
       const mx = Math.floor((t.x+40)/100)-10, my = Math.floor((t.y+40)/100)-7, w = 21, h = 15;
@@ -239,7 +244,6 @@ class Multiplayer extends Engine {
       }
     }
   }
-
   disconnect(socket, code, reason) {
     this.pt = this.pt.filter(t => {
       if (t.username === socket.username) {
