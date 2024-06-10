@@ -1,29 +1,25 @@
 class AI {
-  constructor(x, y, role, rank, team, host) {
+  static args = ['x', 'y', 'role', 'rank', 'team', 'host'];
+  static raw = ['role', 'rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static u = [];
+  constructor() {
+    this.cells = new Set();
     this.raw = {};
-    ['role', 'rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'id', 'class', 'flashbanged', 'dedEffect'].forEach(p => {
-      Object.defineProperty(this, p, {
-        get: () => this.raw[p],
-        set: v => this.setValue(p, v),
-        configurable: true,
-      });
-    });
+    this.items = [];
+  }
+  init(x, y, role, rank, team, host) {
+    this.id = host.genId(3);
+    for (const i in AI.args) this[AI.args[i]] = arguments[i];
     const displayNames = ["Aaran", "Aaren", "Aarman", "Aaron", "Abraham", "Ace", "Adam", "Addison", "Aden", "Adie", "Adrien", "Aiden", "Al", "Alan", "Albert", "Albie", "Aldred", "Alec", "Aled", "Alex", "Alexander", "Alexei", "Alf", "Alfie", "Alfred", "Ali", "Allan", "Alvin", "Ammar", "Andrea", "Andreas", "Andrew", "Andy", "Angus", "Anthony", "Antonio", "Archie", "Argyle", "Ari", "Aria", "Arian", "Arlo", "Arthur", "Ash", "Ashley", "Ashton", "Averon", "Avi", "Axel", "Bailey", "Barath", "Barkley", "Barney", "Baron", "Barry", "Baxter", "Buer", "Ben", "Benedict", "Benjamin", "Benji", "Bennett", "Benny", "Bernard", "Bill", "Billy", "Blake", "Bob", "Bobby", "Bowie", "Bracken", "Brad", "Braden", "Bradley", "Bread", "Brady", "Brandon", "Bret", "Brett", "Brian", "Brodie", "Brogan", "Brooke", "Brooklyn", "Bruce", "Bruno", "Bryce", "Bryson", "Buddy", "Bully", "Cade", "Cayde-6", "Caden",  "Calib", "Callie", "Calum", "Calvin", "Cameron", "Carl", "Karl", "Carlo", "Carlos", "Carson", "Carter", "Casey", "Casper", "Cassy", "Cayden", "Ceilan", "Chad", "Charles", "Charlie", "Chase", "Chester", "Chris", "Christian", "Christie", "Christoph", "Christopher", "Christy", "CJ", "Clark", "Clayton", "Clement", "Clifford", "Clyde", "Cody", "Cole", "Colin", "Colt", "Colton", "Connor", "Cooper", "Corbin", "Corrie", "Cosmo", "Craig", "Cruiz", "Cruz", "Cyrus", "Daegan", "Dakota", "Dale", "Dalton", "Damian", "Damien", "Dan", "Dane", "Daniel", "Danny", "Dante", "David", "Davis", "Davy", "Dawson", "Deacon", "Deagan", "Dean", "Dennis", "Denny", "Derek", "Deshawn", "Desmond", "Dev", "Devin", "Devon", "Dex", "Dexter", "Diego", "Dillan", "Donald", "Donnie", "Dorian", "Douglas", "Drew", "Dylan", "Ed", "Eddie", "Eden", "Edison", "Eduardo", "Edward", "Edwin", "Elliot", "Ellis", "Elvin", "Emile", "Enzo", "Eren", "Eric", "Ethan", "Evan", "Ezra", "Fazbear", "Farren", "Faruzan", "Felix", "Flint", "Flynn", "Francesco", "Francis", "Francisco", "Franco", "Frank", "Frankie", "Franklin", "Fred", "Freddie", "Frederick", "Gabriel", "Gareth", "Garrett", "Garry", "Gary", "Gavin", "Gene", "Geoff", "Geoffrey", "Geometry", "George", "Georgia", "Jorge", "Glenn", "Gordon", "Grant", "Grayson", "Greg", "Gregory", "Greig", "Griffin", "Gus", "Gustav", "Guy", "Hayden", "Hansen", "Hao", "Haris", "Harley", "Harold", "Harper", "Harrington", "Harris", "Harrison", "Harry", "Harvey", "Hector", "Henry", "Herbert", "Hiro", "Howard", "Howie", "Hubert", "Hugo", "Hunter", "Ian", "Igor", "Isaac", "Ivan", "Jace", "Jack", "Jackie", "Jackson", "Jacob", "Jacques", "Jake", "James", "Jamie", "Jared", "Jason", "Jaxson", "Jay", "Jayden", "Jayson", "Jean", "Jed", "Jeht", "Jeremy", "Jerrick", "Jerry", "Jesse", "Jock", "Jody", "Joe", "Joel", "Joey", "Johansson", "John", "Johnathan", "Johnny", "Jonas", "Joseph", "Josh", "Joshua", "Juan", "Jude", "Junior", "Justin", "Kade", "Kayden", "Kai", "Kalvin", "Kayne", "Keaton", "Keith", "Ken", "Kenneth", "Kenton", "Kevin", "Kirk", "Kodi", "Kris", "Kruz", "Kyle", "Kyro", "Lance", "Lancelot", "Landon", "Lauren", "Laurence", "Lee", "Lenny", "Leo", "Leon", "Leonardo", "Levi", "Levy", "Lewis", "Lex", "Liam", "Lincoln", "Lloyd", "Lock", "Logan", "Loki", "Lorenzo", "Louis", "Luca", "Lucas", "Luke", "Mac", "Mack", "Mackie", "Macy", "Maddox", "Madison", "Magnus", "Marco", "Marcos", "Marcus", "Mario", "Mark", "Martin", "Mason", "Mathew", "Matt", "Matteo", "Max", "Maximus", "Maxwell", "Michael", "Mickey", "Miguel", "Mika", "Mikey", "Miles", "Miller", "Milo", "Morgan", "Morris", "Morton", "Murray", "Muse", "Mylo", "Nate", "Nathan", "Nathaniel", "Neil", "Neo", "Nicholas", "Nick", "Nicky", "Nicolas", "Noah", "Noel", "Norman", "Odin", "Olaf", "Oliver", "Omar", "Oscar", "Oswald", "Otto", "Owen", "Oz", "Pablo", "Pacey", "Parker", "Patrick", "Paul", "Pedro", "Peirce", "Peter", "Philip", "Phoenix", "Porter", "Preston", "Prince", "Percy", "Quinn", "Quentin", "Ralph", "Ramsey", "Rana", "Raphael", "Ray", "Raymond", "Reed", "Regan", "Reggie", "Reid", "Ren", "Rio", "Rex", "Riccardo", "Rico", "Richard", "Riley", "Robert", "Robin", "Ronald", "Ronin", "Rookie", "Rowan", "Ruben", "Ruby", "Ryan", "Sam", "Samuel", "Saul", "Scott", "Sean", "Seb", "Sebastian", "Seth", "Shawn", "Sheriff", "Sidney", "Simon", "Skye", "Stanley", "Stephen", "Steve", "Steeve", "Stewart", "Sullivan", "Terry", "Theo", "Theodore", "Thomas", "Tim", "Timothy", "Titus", "Tobey", "Tobias", "Todd", "Tom", "Tommy", "Tony", "Travis", "Tristan", "Tyler", "Uzi", "Victor", "Vince", "Vincent", "Vincenzo", "Walter", "Wayde", "Wayne", "Will", "William", "Wilson", "Xander", "Xavier", "Xiao", "Yuri", "Zack",  "Zane", "Zenith", "Hehehe", "Loaf", "Bartholomew", "Obama", "Jeff", "Halp i can't aim", "Not_A_Turret", "Dingus", "AAAAA", "ToTallyHuman", "Fool", "Bafoon", "x-Cool-Dude-x", "Dummy",];
-    this.id = Math.random();
     this.username = displayNames[Math.floor(Math.random()*displayNames.length)]
-    this.role = role;
-    this.x = x;
-    this.y = y;
-    this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = this.shields = 0;
+    if (!this.team.includes(':')) this.team = this.username+':'+this.team;
+    this.maxHp = this.hp = this.rank*10+300;
     this.barrelSpeed = Math.random()*3+2;
-    this.rank = rank;
-    this.team = team.includes(':') ? team : this.username+':'+team;
-    this.host = host;
-    this.hp = rank * 10 + 300;
-    this.maxHp = this.hp;
     this.seeUser = this.target = this.obstruction = this.bond = this.path = this.damage = false;
-    this.fire = {time: 0, team: this.team};
+    this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = this.shields = 0;
     this.canFire = this.canPowermissle = this.canBoost = this.canBashed = true;
+    this.fire = {time: 0, team: this.team};
+    /*
     if (Math.random() < (rank/20)) this.canItem0 = true;
     if (Math.random() < (rank/20)) this.canItem1 = true;
     if (Math.random() < (rank/20)) this.canItem2 = true;
@@ -33,7 +29,7 @@ class AI {
     if (Math.random() < (rank/20)) this.cosmetic_hat = cosmetics[Math.floor(Math.random()*cosmetics.length)];
     if (Math.random() < (rank/20)) this.cosmetic = cosmetics[Math.floor(Math.random()*cosmetics.length)];
     if (Math.random() < (rank/20)) this.cosmetic_body = cosmetics[Math.floor(Math.random()*cosmetics.length)];
-    this.items = [];
+    */
     if (this.role !== 0) this.giveAbilities();
     const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
     if (summoner) {
@@ -44,13 +40,14 @@ class AI {
     } else {
       this.color = Engine.getRandomColor();
     }
-    this.cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (role === 0 ? .99 : .79)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (role === 0 ? .99 : .79))));
-      host.cells[cx][cy].add(this);
-      this.cells.add(cx+'x'+cy);
-    }
+    this.host.loadCells(this, this.x, this.y, 80, 80);
     this.lookInterval = setInterval(() => this.identify(), 200);
+    host.updateEntity(this, AI.raw);
+    for (const p of AI.raw) {
+      this.raw[p] = this[p];
+      Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
+    }
+    this.host.ai.push(this);
   }
 
   giveAbilities() {
@@ -165,14 +162,13 @@ class AI {
   }
 
   setValue(p, v) {
-    if (this.raw[p] === v) return;
-    this.updatedLast = Date.now();
-    this.raw[p] = v;
+    if (this.raw[p] === v && typeof v !== 'object') return; else this.raw[p] = v;
+    this.host.updateEntity(this, [p]);
   }
 
   update() {
     this.think();
-    if (!this.target && this.role === 0) this.r++;
+    if (!this.target && this.role === 0) this.r = (this.r+1)%360;
     if (!(this.role === 0 && this.mode === 0)) {
       const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
       this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
@@ -263,17 +259,7 @@ class AI {
     } else {
       this.path.t = this.path.o+Date.now()-this.obstruction.t;
     }
-    const cells = new Set();
-    for (let dx = this.x/100, dy = this.y/100, i = 0; i < 4; i++) {
-      const cx = Math.max(0, Math.min(29, Math.floor(i < 2 ? dx : dx + (this.role === 0 ? .99 : .79)))), cy = Math.max(0, Math.min(29, Math.floor(i % 2 ? dy : dy + (this.role === 0 ? .99 : .79))));
-      this.host.cells[cx][cy].add(this);
-      cells.add(cx+'x'+cy);
-    }
-    for (const cell of [...this.cells].filter(c => !cells.has(c))) {
-      const [x, y] = cell.split('x');
-      this.host.cells[x][y].delete(this);
-    }
-    this.cells = cells;
+    this.host.loadCells(this, this.x, this.y, 80, 80);
   }
 
   collision(x, y) {
@@ -421,8 +407,12 @@ class AI {
       }, 15);
     }, 10000);
   }
-
+  reset() {
+    for (const p of AI.raw) Object.defineProperty(this, p, {value: undefined, writable: true});
+    this.cells.clear();
+  }
   destroy() {
+    this.host.destroyEntity(this);
     clearInterval(this.lookInterval);
     const index = this.host.ai.indexOf(this);
     if (index !== -1) this.host.ai.splice(index, 1);
@@ -430,5 +420,6 @@ class AI {
       const [x, y] = cell.split('x');
       this.host.cells[x][y].delete(this);
     }
+    this.release();
   }
 }

@@ -5,13 +5,15 @@ class Tank {
   static u = ['x', 'y'];
   constructor() {
     this.cells = new Set();
+    this.raw = {};
+    this.msg = {u: [], d: [], event: 'update'};
+    this.privateLogs = [];
   }
   init(data, host) {
     this.id = host.genId(0);
-    this.raw = {id: this.id}
     for (const p of Tank.args) this[p] = data[p];
-    this.host = host;
     if (data.socket) this.socket = data.socket;
+    this.host = host;
     this.fire = {time: 0, team: this.team};
     this.hp = this.maxHp = this.rank*10+300;
     this.canBashed = this.canInvis = !(this.damage = false);
@@ -19,13 +21,11 @@ class Tank {
     this.x = host.spawn.x;
     this.y = host.spawn.y;
     this.logs = this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = 0;
-    this.msg = {u: [], d: [], event: 'update'};
-    this.privateLogs = A.template('arr');
     host.updateEntity(this, Tank.raw);
     host.override(this);
-    host.pt.push(this);
     host.loadCells(this, this.x, this.y, 80, 80);
     host.chunkload(this, -100000, -100000, this.x, this.y);
+    host.pt.push(this);
     for (const p of Tank.s) {
       this.raw[p] = this[p];
       Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
@@ -87,7 +87,6 @@ class Tank {
       }
     }
   }
-
   damageCalc(x, y, a, u) {
     if ((this.immune && a > 0) || this.ded || this.reflect) return;
     const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
@@ -101,7 +100,6 @@ class Tank {
     this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y};
     if (this.hp <= 0 && this.host.ondeath) this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
   }
-
   grappleCalc() { // direct setting of pos may cause chunkload issues
     const dx = this.grapple.target.x - this.x, dy = this.grapple.target.y - this.y, ox = this.x, oy = this.y;
     if (dx ** 2 + dy ** 2 > 400) {

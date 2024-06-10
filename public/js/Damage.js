@@ -6,13 +6,12 @@ class Damage {
   }
   init(x, y, w, h, a, team, host) {
     this.id = host.genId(4);
-    for (let i = Damage.args.length-1; i >= 0; i--) this[Damage.args[i]] = arguments[i];
-    this.f = 0;
+    for (const i in Damage.args) this[Damage.args[i]] = arguments[i];
     host.loadCells(this, x, y, w, h);
     const cache = new Set();
     for (const cell of this.cells) {
-      const [cx, cy] = cell.split('x');
-      for (const e of host.cells[cx][cy]) {
+      const c = cell.split('x');
+      for (const e of host.cells[c[0]][c[1]]) {
         if (cache.has(e.id)) continue;
         cache.add(e.id);
         const teamMatch = Engine.getTeam(team) === Engine.getTeam(e.team);
@@ -25,21 +24,16 @@ class Damage {
         }
       }
     }
-    this.i = setInterval(() => {
-      this.f++;
-      this.host.updateEntity(this, ['f']);
-    }, 18); // remove pls me this is pain // ye its pain but can't remove yet :(
     this.host.updateEntity(this, Damage.raw);
     setTimeout(() => this.destroy(), 200);
   }
   reset() {
-    // loop through unnecessary and set to undefined? Or maybe it doesn't matter since it will be auto reset on recycle?
+    for (const p of Damage.args) this[p] = undefined;
     this.cells.clear();
   }
   destroy() {
     this.host.destroyEntity(this);
-    clearInterval(this.i);
-    this.host.d.splice(this.host.d.indexOf(this), 1);
+    this.host.d.r(this);
     for (const cell of this.cells) {
       const c = cell.split('x');
       this.host.cells[c[0]][c[1]].delete(this);

@@ -18,7 +18,7 @@ class Shot {
     this.y = this.sy = y+d*Math.sin(Math.PI*r/180)-5;
     host.loadCells(this, this.x, this.y, 10, 10);
     host.s.push(this);
-    if (this.collision()) return this.destroy(1); // for quick destroy, no need to even register this bullet's existance on the update stream.
+    if (this.collision()) return this.destroy();
     host.updateEntity(this, Shot.raw);
   }
   collide(e) {
@@ -78,8 +78,8 @@ class Shot {
     }
   }
   reset = () => this.cells.clear();
-  destroy(n) {
-    if (!n) this.host.destroyEntity(this);
+  destroy() {
+    this.host.destroyEntity(this);
     for (const cell of this.cells) {
       const c = cell.split('x');
       this.host.cells[c[0]][c[1]].delete(this);

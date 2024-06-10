@@ -32,7 +32,6 @@ process.on('uncaughtException', (err, origin) => {
   console.error(err);
   process.exit(0);
 });
-A.createTemplate('arr', Array, a => (a.length = 0));
 const m = o => Math.max(0, Math.min(29, o)), m2 = o => Math.max(-1, Math.min(30, o));
 Array.prototype.r = function(o) {
   let i = this.indexOf(o);
@@ -175,24 +174,34 @@ class Multiplayer extends Engine {
       t.msg.global = t.msg.logs = undefined;
     }
   }
-
+  loadCells(e, ex, ey, w, h) { // optimize
+    const old = e.cells ? A.template('arr').concat(...e.cells) : null;
+    super.loadCells(e, ex, ey, w, h);
+    for (const t of this.pt) {
+      const mx = Math.floor((t.x+40)/100)-10, my = Math.floor((t.y+40)/100)-7, w = 21, h = 15;
+      let o = false, n = false;
+      if (old) for (const cell of old) {
+        const a = cell.split('x');
+        if (mx <= a[0] && a[0] < mx+w && my <= a[1] && a[1] < my+h) o = true;
+      }
+      for (const cell of e.cells) {
+        const a = cell.split('x');
+        if (mx <= a[0] && a[0] < mx+w && my <= a[1] && a[1] < my+h) n = true;
+      }
+      if (n && !o) this.load(t, e); else if (o && !n) this.unload(t, e); else continue;
+      this.send(t);
+    }
+  }
   updateEntity(e, c) {
     for (const t of this.pt) {
       const mx = Math.floor((t.x+40)/100)-10, my = Math.floor((t.y+40)/100)-7, w = 21, h = 15;
-      let n = false, o = false;
       for (const cell of e.cells) {
-        const c = cell.split('x');
-        if (mx <= c[0] && c[0] < mx+w && my <= c[1] && c[1] < my+h) n = true;
+        const a = cell.split('x');
+        if (mx <= a[0] && a[0] < mx+w && my <= a[1] && a[1] < my+h) {
+          this.merge(t, e, c);
+          this.send(t);
+        }
       }
-      if (e.oldcells) for (const cell of e.oldcells) {
-        const c = cell.split('x');
-        if (mx <= c[0] && c[0] < mx+w && my <= c[1] && c[1] < my+h) o = true;
-      }
-      if (e.oldcells === undefined) o = n;
-      if (n) {
-        if (!o) this.load(t, e); else this.merge(t, e, c);
-      } else if (o) this.unload(t, e);
-      if (n || (o && !n)) this.send(t);
     }
   }
   static num = n => isNaN(n) ? n : Math.round(n*10)/10;
@@ -210,6 +219,7 @@ class Multiplayer extends Engine {
   merge(t, e, c) {
     let i = t.msg.u.findIndex(u => u[0] === e.id);
     if (i !== -1) {
+      c = A.template('arr').concat(c);
       for (let l = 1; l < t.msg.u[i].length; l += 2) {
         let m = c.indexOf(t.msg.u[i][l]);
         if (m !== -1) {
@@ -218,7 +228,7 @@ class Multiplayer extends Engine {
         }
       }
       for (const p of c) t.msg.u[i].push(p, Multiplayer.num(e[p]));
-    } else t.msg.u.push(c.reduce((a, c) => a.concat(c, e[c]), A.template('arr').concat(e.id)));
+    } else t.msg.u.push(c.reduce((a, p) => a.concat(p, e[p]), A.template('arr').concat(e.id)));
   }
   destroyEntity(e) {
     pt: for (const t of this.pt) {
@@ -518,7 +528,7 @@ class Defense extends Multiplayer {
       wavePoints -= 10;
       const rank = Math.max(0, Math.min(20, Math.floor(Math.random()*wavePoints/2)));
       wavePoints -= rank*2;
-      this.ai.push(new AI(spawn.x+10, spawn.y+10, 1, rank, 'AI', this));
+      A.template('AI').init(spawn.x+10, spawn.y+10, 1, rank, 'AI', this);
     }
     this.updateStatus();
   }
@@ -714,7 +724,7 @@ const Commands = {
     for (let i = servers[this.room].ai.length-1; i >= 0; i--) servers[this.room].ai[i].destroy();
   }],
   ai: [Object, 2, 7, function(data) {
-    for (let i = 0; i < Number(data[5]); i++) servers[this.room].ai.push(new AI(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), data[6], servers[this.room]));
+    for (let i = 0; i < Number(data[5]); i++) A.template('AI').init(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), data[6], servers[this.room]);
   }],
   spectate: [Object, 3, 2, function(data) {
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = true;

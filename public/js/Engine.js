@@ -89,7 +89,7 @@ class Engine {
       }
       this.d.push(A.template('Damage').init(t.x, t.y, 80, 80, 50, t.team, this));
     } else if (a === 'turret') {
-      this.ai.push(new AI(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
+      A.template('AI').init(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this);
       for (let i = this.ai.length-1, turrets = 0; i >= 0; i--) if (this.ai[i].role === 0 && Engine.getUsername(this.ai[i].team) === t.username && ++turrets > 3) this.ai[i].destroy();
     } else if (a === 'bash') {
       t.buff = true; // name fix
@@ -110,11 +110,6 @@ class Engine {
     } else if (a.includes('flashbang')) {
       const h = a.replace('flashbang', '').split('x');
       this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'smoke', Engine.parseTeamExtras(t.team), this));
-    } else if (a === 'healwave') {
-      let allies = [];
-      for (const tank of this.pt) if (Engine.getTeam(tank.team) === Engine.getTeam(t.team) && (tank.x-t.x)**2+(tank.y-t.y)**2 < 90000 && t.id !== tank.id) allies.push(tank);
-      for (const ai of this.ai) if (Engine.getTeam(ai.team) === Engine.getTeam(t.team) && (ai.x-t.x)**2+(ai.y-t.y)**2 < 90000 && t.id !== ai.id) allies.push(ai);
-      for (const fren of allies) fren.hp += (fren.maxHp-fren.hp)/(2*Math.max(1, allies.length));
     }
   }
 
@@ -129,7 +124,7 @@ class Engine {
     t.emote = emote;
     if (t.canInvis) t.invis = data.invis;
     t.baseFrame = data.baseFrame;
-    if (!t.grapple && t.x !== x && t.y !== y) {
+    if (!t.grapple && (t.x !== x || t.y !== y)) {
       let chunkload = t.socket && (Math.floor((t.x+40)/100) !== Math.floor((x+40)/100) || Math.floor((t.y+40)/100) !== Math.floor((y+40)/100)), ox = t.x, oy = t.y;
       t.x = x;
       t.y = y;
@@ -177,7 +172,6 @@ class Engine {
   static r = o => Math.max(0, Math.min(29, o));
 
   loadCells(e, ex, ey, w, h) {
-    if (e.cells.size) e.oldcells = [...e.cells];
     del: for (const cell of e.cells) {
       let c = cell.split('x'), xv = c[0], yv = c[1];
       for (let x = Engine.r(Math.floor(ex/100)); x <= Engine.r(Math.floor((ex+w-1)/100)); x++) {
@@ -221,7 +215,7 @@ class Engine {
         } else if (e === 'B') {
           this.spawns[1] = {x: q*100, y: l*100};
         } else if (e.split('')[0] === 'A' && e.split('').length === 2) {
-          this.ai.push(new AI(q*100+10, l*100+10, Number(e.split('')[1]), 0/*rank*/, 'squad', this));
+          A.template('AI').init(q*100+10, l*100+10, Number(e.split('')[1]), 0/*rank*/, 'squad', this);
         } else if (key[e]) {
           this.b.push(A.template('Block').init(q*100, l*100, key[e][1], key[e][0], ':', this));
         }
