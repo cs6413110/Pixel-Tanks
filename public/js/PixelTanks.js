@@ -725,38 +725,38 @@ class PixelTanks {
           [416, 20, 108, 108, 'main', true],
           [232, 208, 488, 96, 'shop', true],
           //emergency cloak
-          [60, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [60, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
+          [60, 404, 136, 136, function() {PixelTanks.purchase(1, 0)}, true],
+          [60, 572, 136, 136, function() {PixelTanks.purchase(1, 1)}, true],
           //thermal armor
-          [228, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [228, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [228, 740, 136, 136, function() {PixelTanks.purchase(0)}, true],
+          [228, 404, 136, 136, function() {PixelTanks.purchase(1, 2)}, true],
+          [228, 572, 136, 136, function() {PixelTanks.purchase(1, 3)}, true],
+          [228, 740, 136, 136, function() {PixelTanks.purchase(1, 4)}, true],
           //scav
-          [396, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [396, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [396, 740, 136, 136, function() {PixelTanks.purchase(0)}, true],
+          [396, 404, 136, 136, function() {PixelTanks.purchase(1, 5)}, true],
+          [396, 572, 136, 136, function() {PixelTanks.purchase(1, 6)}, true],
+          [396, 740, 136, 136, function() {PixelTanks.purchase(1, 7)}, true],
           //lower cd
-          [564, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [564, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [564, 740, 136, 136, function() {PixelTanks.purchase(0)}, true],
+          [564, 404, 136, 136, function() {PixelTanks.purchase(1, 8)}, true],
+          [564, 572, 136, 136, function() {PixelTanks.purchase(1, 9)}, true],
+          [564, 740, 136, 136, function() {PixelTanks.purchase(1, 10)}, true],
           //relfect boost
-          [732, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [732, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
+          [732, 404, 136, 136, function() {PixelTanks.purchase(1, 11)}, true],
+          [732, 572, 136, 136, function() {PixelTanks.purchase(1, 12)}, true],
           //double boost
-          [900, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [900, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
+          [900, 404, 136, 136, function() {PixelTanks.purchase(1, 13)}, true],
+          [900, 572, 136, 136, function() {PixelTanks.purchase(1, 14)}, true],
           //gripple
-          [1068, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [1068, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [1068, 740, 136, 136, function() {PixelTanks.purchase(0)}, true],
+          [1068, 404, 136, 136, function() {PixelTanks.purchase(1, 15)}, true],
+          [1068, 572, 136, 136, function() {PixelTanks.purchase(1, 16)}, true],
+          [1068, 740, 136, 136, function() {PixelTanks.purchase(1, 17)}, true],
           //ai
-          [1236, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [1236, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [1236, 740, 136, 136, function() {PixelTanks.purchase(0)}, true],
+          [1236, 404, 136, 136, function() {PixelTanks.purchase(1, 18)}, true],
+          [1236, 572, 136, 136, function() {PixelTanks.purchase(1, 19)}, true],
+          [1236, 740, 136, 136, function() {PixelTanks.purchase(1, 20)}, true],
           //living
-          [1404, 404, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [1404, 572, 136, 136, function() {PixelTanks.purchase(0)}, true],
-          [1404, 740, 136, 136, function() {PixelTanks.purchase(0)}, true],
+          [1404, 404, 136, 136, function() {PixelTanks.purchase(1, 21)}, true],
+          [1404, 572, 136, 136, function() {PixelTanks.purchase(1, 22)}, true],
+          [1404, 740, 136, 136, function() {PixelTanks.purchase(1, 23)}, true],
         ],
         listeners: {},
         cdraw: function() {
@@ -802,7 +802,6 @@ class PixelTanks {
         PixelTanks.userData = PixelTanks.playerData['pixel-tanks'];
         if (!PixelTanks.userData) {
           PixelTanks.userData = {
-            username: PixelTanks.user.username,
             class: '',
             cosmetic: '',
             cosmetics: [],
@@ -810,20 +809,14 @@ class PixelTanks {
             deathEffects: [],
             color: '#ffffff',
             stats: [
-              1000000, // coins
+              0, // coins
               0, // crates
               1, // level
               0, // xp
-              1, // rank
+              0, // rank
             ],
-            classes: [
-              false, // tactical
-              false, // stealth
-              false, // warrior
-              false, // medic
-              false, // builder
-              false, // fire
-            ],
+            classes: [false, false, false, false, false, false],
+            perks: [false, false, false, false, false, false, false, false, false],
             items: ['duck_tape', 'weak', 'bomb', 'flashbang'],
             keybinds: {
               items: [49, 50, 51, 52],
@@ -974,20 +967,59 @@ class PixelTanks {
     GUI.draw.translate(-x-40/80*s, -y-40/80*s);
   }
 
-  static purchase(stat) {
-    // since u can like only buy classes the number relates to the index of the true/false value in the PixelTanks.userData.classes to determine whether you have it or not
-    const prices = [
-      70000, // tactical
-      30000, // stealth
-      80000, // warrior
-      40000, // medic
-      60000, // builder
-      90000, // fire
-    ];
-    if (PixelTanks.userData.classes[stat]) return alert('You already bought this.');
-    if (PixelTanks.userData.stats[0] < prices[stat]) return alert('Your brok boi.');
-    PixelTanks.userData.stats[0] -= prices[stat];
-    var newClass = stat;
-    PixelTanks.userData.classes[stat] = true;
+  static purchase(type, stat) {
+    if (!PixelTanks.userData.perks) PixelTanks.userData.perks = [false, false, false, false, false, false, false, false, false];
+    if (type === 0) { // classes
+      const prices = [
+        70000, // tactical
+        30000, // stealth
+        80000, // warrior
+        40000, // medic
+        60000, // builder
+        90000, // fire
+      ];
+      if (PixelTanks.userData.classes[stat]) return alert('You already bought this.');
+      if (PixelTanks.userData.stats[0] < prices[stat]) return alert('Your brok boi.');
+      PixelTanks.userData.stats[0] -= prices[stat];
+      PixelTanks.userData.classes[stat] = true;
+    } else if (type === 1) {
+      const prices = [
+        5000, // emergency shield 1
+        10000, // emergency shield 2
+        5000, // thermal armor 1
+        10000, // thermal armor 2
+        15000, // thermal armor 3
+        5000, // scavenger 1
+        10000, // scavenger 2
+        15000, // scavenger 3
+        5000, // faster cooldown 1
+        10000, // faster cooldown 2
+        15000, // faster cooldown 3
+        5000, // refresh 1
+        10000, // refresh 2
+        5000, // radar 1
+        10000, // radar 2
+        5000, // advanced hook 1
+        10000, // advanced hook 2
+        15000, // advanced hook 3
+        5000, // adrenaline 1
+        10000, // adrenaline 2
+        15000, // adrenaline 3
+        5000, // dying core 1
+        10000, // dying core 2
+        15000, // dying core 3
+      ];
+      const key = [2, 3, 3, 3, 2, 2, 3, 3, 3];
+      let i = stat, l = 0, o = 0;
+      while (i >= 0) {
+        i -= key[l];
+        if (i >= 0) l++; else o = key[l]+i+1;
+      }
+      let perk = PixelTanks.userData.perks[l];
+      if (!perk || perk < o) return alert('You already bought this.');
+      if (PixelTanks.userData.stats[0] < prices[stat]) return alert('Your brok boi.');
+      PixelTanks.userData.stats[0] -= prices[stat];
+      PixelTanks.userData.perks[l] = o;
+    }
   }
 }
