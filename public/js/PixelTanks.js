@@ -668,7 +668,15 @@ class PixelTanks {
             const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [904, 570]};
             for (const item in key) GUI.drawImage(PixelTanks.images.items[item], key[item][0], key[item][1], 80, 80, 1);
           } else if (this.perkTab) {
-            GUI.drawImage(PixelTanks.images.menus.perkTab, 634, 334, 332, 332, 1);
+            GUI.drawImage(PixelTanks.images.menus.perkTab, 634, 334, 332, 332, 1); //166x2
+            const perks = ['shield', 'thermal', 'scavenger', 'cooldown', 'refresh', 'radar', 'hook', 'adrenaline', 'core'];
+            const x = [652, 760, 868];
+            const y = [352, 460, 568];
+            for (let i = 0; i < 0; i++) {
+              let level = PixelTanks.userData.perks[i];
+              if (!level) level = 1;
+              GUI.drawImage(PixelTanks.images.menus[perks[i]+level], i%3, Math.floor(i/3), 80, 80, 1);
+            } 
           } else if (this.cosmeticTab) {
             const a = this.cosmeticMenu === 0, b = this.cosmeticMenu === Math.floor(PixelTanks.userData.cosmetics.length/16);
             GUI.drawImage(PixelTanks.images.menus.cosmeticTab, 518+(a ? 62 : 0), 280, 564-(a ? 62 : 0)-(b ? 62 : 0), 440, 1, 0, 0, 0, 0, undefined, (a ? 31 : 0), 0, 282-(a ? 31 : 0)-(b ? 31 : 0), 220);
@@ -706,12 +714,12 @@ class PixelTanks {
         buttons: [
           [416, 20, 108, 108, 'main', true],
           [880, 208, 488, 96, 'shop2', true],
-          [496, 404, 176, 176, function() {PixelTanks.purchase(0)}, true],
-          [712, 404, 176, 176, function() {PixelTanks.purchase(1)}, true],
-          [928, 404, 176, 176, function() {PixelTanks.purchase(4)}, true],
-          [496, 620, 176, 176, function() {PixelTanks.purchase(2)}, true],
-          [712, 620, 176, 176, function() {PixelTanks.purchase(5)}, true],
-          [928, 620, 176, 176, function() {PixelTanks.purchase(3)}, true],
+          [496, 404, 176, 176, function() {PixelTanks.purchase(0, 0)}, true],
+          [712, 404, 176, 176, function() {PixelTanks.purchase(0, 1)}, true],
+          [928, 404, 176, 176, function() {PixelTanks.purchase(0, 4)}, true],
+          [496, 620, 176, 176, function() {PixelTanks.purchase(0, 2)}, true],
+          [712, 620, 176, 176, function() {PixelTanks.purchase(0, 5)}, true],
+          [928, 620, 176, 176, function() {PixelTanks.purchase(0, 3)}, true],
         ],
         listeners: {},
         cdraw: function() {
@@ -983,32 +991,8 @@ class PixelTanks {
       PixelTanks.userData.stats[0] -= prices[stat];
       PixelTanks.userData.classes[stat] = true;
     } else if (type === 1) {
-      const prices = [
-        5000, // emergency shield 1
-        10000, // emergency shield 2
-        5000, // thermal armor 1
-        10000, // thermal armor 2
-        15000, // thermal armor 3
-        5000, // scavenger 1
-        10000, // scavenger 2
-        15000, // scavenger 3
-        5000, // faster cooldown 1
-        10000, // faster cooldown 2
-        15000, // faster cooldown 3
-        5000, // refresh 1
-        10000, // refresh 2
-        5000, // radar 1
-        10000, // radar 2
-        5000, // advanced hook 1
-        10000, // advanced hook 2
-        15000, // advanced hook 3
-        5000, // adrenaline 1
-        10000, // adrenaline 2
-        15000, // adrenaline 3
-        5000, // dying core 1
-        10000, // dying core 2
-        15000, // dying core 3
-      ];
+      const levelRequirements = [2, 4, 6, 8, 10, 12, 14, 16, 18];
+      const prices = [5000, 10000, 15000];
       const key = [2, 3, 3, 3, 2, 2, 3, 3, 3];
       let i = stat, l = 0, o = 0;
       while (i >= 0) {
@@ -1016,9 +1000,10 @@ class PixelTanks {
         if (i >= 0) l++; else o = key[l]+i+1;
       }
       let perk = PixelTanks.userData.perks[l];
-      if (!perk || perk < o) return alert('You already bought this.');
-      if (PixelTanks.userData.stats[0] < prices[stat]) return alert('Your brok boi.');
-      PixelTanks.userData.stats[0] -= prices[stat];
+      if (o <= perk) return alert('You already bought this.');
+      if (PixelTanks.userData.stats[4] < levelRequirements[l]) return alert('You need to be rank '+levelRequirements[l]+' to buy this!');
+      if (PixelTanks.userData.stats[0] < prices[o-1]) return alert('Your brok boi.');
+      PixelTanks.userData.stats[0] -= prices[o-1];
       PixelTanks.userData.perks[l] = o;
     }
   }
