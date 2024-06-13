@@ -109,6 +109,7 @@ class PixelTanks {
         ],
         listeners: {},
         cdraw: function() {
+          if (!PixelTanks.userData.perks) PixelTanks.userData.perks = [false, false, false, false, false, false, false, false, false];
           GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
           PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
@@ -976,7 +977,6 @@ class PixelTanks {
   }
 
   static purchase(type, stat) {
-    if (!PixelTanks.userData.perks) PixelTanks.userData.perks = [false, false, false, false, false, false, false, false, false];
     if (type === 0) { // classes
       const prices = [
         70000, // tactical
