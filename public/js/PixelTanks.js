@@ -547,10 +547,10 @@ class PixelTanks {
               }
             } else if (this.perkTab) {
               if (x < 634 || x > 966 || y < 334 || y > 666) return this.perkTab = false;
-              const x = [652, 760, 868];
-              const y = [352, 460, 568];
+              const xo = [652, 760, 868];
+              const yo = [352, 460, 568];
               for (let i = 0; i < 9; i++) {
-                if (Engine.collision(x, y, 0, 0, x[i%3], y[Math.floor(i/3)], 80, 80)) {
+                if (Engine.collision(x, y, 0, 0, xo[i%3], yo[Math.floor(i/3)], 80, 80)) {
                   let simple = PixelTanks.userData.perk.reduce((a, c) => a.concat(Math.floor(c)), []);
                   if (!simple.includes(i+1) && PixelTanks.userData.perks[i]) {
                     PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = i+1+PixelTanks.userData.perks[i]/10;
