@@ -110,6 +110,7 @@ class PixelTanks {
         listeners: {},
         cdraw: function() {
           if (!PixelTanks.userData.perks) PixelTanks.userData.perks = [false, false, false, false, false, false, false, false, false];
+          if (!PixelTanks.userData.perk) PixelTanks.userData.perk = [0, 0];
           GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
           PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
@@ -546,6 +547,17 @@ class PixelTanks {
               }
             } else if (this.perkTab) {
               if (x < 634 || x > 966 || y < 334 || y > 666) return this.perkTab = false;
+              const x = [652, 760, 868];
+              const y = [352, 460, 568];
+              for (let i = 0; i < 9; i++) {
+                if (Engine.collision(x, y, 0, 0, x[i%3], y[Math.floor(i/3)], 80, 80)) {
+                  let simple = PixelTanks.userData.perk.reduce((a, c) => a.concat(Math.floor(c)), []);
+                  if (!simple.includes(i+1) && PixelTanks.userData.perks[i]) {
+                    PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = i+1+PixelTanks.userData.perks[i]/10;
+                    alert('perk data -> '+JSON.stringify(PixelTanks.userData.perk));
+                  } 
+                }
+              }  
             } else if (this.cosmeticTab) {
               if (x < 518 || x > 1082 || y < 280 || y > 720) return Menus.menus.inventory.cosmeticTab = false;
               for (let i = 0; i < 16; i++) {
@@ -676,6 +688,17 @@ class PixelTanks {
             for (let i = 0; i < 9; i++) {
               let level = PixelTanks.userData.perks[i], lock = !level;
               if (lock) level = 1;
+              let simple = PixelTanks.userData.perk.reduce((a, c) => a.concat(Math.floor(c)), []);
+              if (simple.includes(i+1)) {
+                GUI.draw.strokeStyle = '#FFFFFF';
+                GUI.draw.lineWidth = 10;
+                GUI.draw.strokeRect(x[i%3], y[Math.floor(i/3)], 80, 80);
+              }
+              if (Math.floor(PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1]) === i+1) {
+                GUI.draw.strokeStyle = '#FFFF22';
+                GUI.draw.lineWidth = 10;
+                GUI.draw.strokeRect(x[i%3], y[Math.floor(i/3)], 80, 80);
+              }
               GUI.drawImage(PixelTanks.images.menus[perks[i]+level], x[i%3], y[Math.floor(i/3)], 80, 80, 1);
               if (lock) GUI.drawImage(PixelTanks.images.menus.locked, x[i%3], y[Math.floor(i/3)], 80, 80, 1);
             } 
@@ -827,6 +850,7 @@ class PixelTanks {
             ],
             classes: [false, false, false, false, false, false],
             perks: [false, false, false, false, false, false, false, false, false],
+            perk: [0, 0],
             items: ['duck_tape', 'weak', 'bomb', 'flashbang'],
             keybinds: {
               items: [49, 50, 51, 52],
@@ -855,6 +879,7 @@ class PixelTanks {
     if (!Menus.menus.inventory.healthTab && !Menus.menus.inventory.classTab && !Menus.menus.inventory.itemTab && !Menus.menus.inventory.cosmeticTab) Menus.menus.inventory[id] = true;
     if (n && id === 'itemTab') Menus.menus.inventory.currentItem = n;
     if (n && id === 'cosmeticTab') Menus.menus.inventory.cosmeticType = n;
+    if (n && id === 'perkTab') Menus.menus.inventory.currentPerk = n;
     Menus.redraw();
   } // OPTIMIZE
   
