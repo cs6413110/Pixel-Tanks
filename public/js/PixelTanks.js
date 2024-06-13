@@ -674,9 +674,10 @@ class PixelTanks {
             const x = [652, 760, 868];
             const y = [352, 460, 568];
             for (let i = 0; i < 9; i++) {
-              let level = PixelTanks.userData.perks[i];
-              if (!level) level = 1;
+              let level = PixelTanks.userData.perks[i], lock = !level;
+              if (lock) level = 1;
               GUI.drawImage(PixelTanks.images.menus[perks[i]+level], x[i%3], y[Math.floor(i/3)], 80, 80, 1);
+              if (lock) GUI.drawImage(PixelTanks.images.menus.locked, x[i%3], y[Math.floor(i/3)], 80, 80, 1);
             } 
           } else if (this.cosmeticTab) {
             const a = this.cosmeticMenu === 0, b = this.cosmeticMenu === Math.floor(PixelTanks.userData.cosmetics.length/16);
