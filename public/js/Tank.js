@@ -101,7 +101,7 @@ class Tank {
     if (this.hp <= 0 && this.host.ondeath) return this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
     let shield = Engine.hasPerk(this.perk, 1);
     if (shield) {
-      if ((this.hp <= 25 && shield%1 === .1) || (this.hp <= 50 && shield%1 === .2)) return this.shields += this.hp;
+      if ((this.hp <= 25 && shield%1 === .1) || (this.hp <= 50 && shield%1 === .2)) return this.shields = this.hp;
     }
   }
   grappleCalc() { // direct setting of pos may cause chunkload issues
