@@ -1,5 +1,5 @@
 class Tank {
-  static args = ['username', 'rank', 'class', 'perks', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'deathEffect', 'color'];
+  static args = ['username', 'rank', 'class', 'perk', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'deathEffect', 'color'];
   static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
   static s = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
   static u = ['x', 'y'];
@@ -98,7 +98,11 @@ class Tank {
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
     this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y};
-    if (this.hp <= 0 && this.host.ondeath) this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
+    if (this.hp <= 0 && this.host.ondeath) return this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
+    let shield = Engine.hasPerk(this.perk, 1);
+    if (shield) {
+      if ((this.hp <= 25 && shield%1 === .1) || (this.hp <= 50 && shield%1 === .2)) return this.shields += this.hp;
+    }
   }
   grappleCalc() { // direct setting of pos may cause chunkload issues
     const dx = this.grapple.target.x - this.x, dy = this.grapple.target.y - this.y, ox = this.x, oy = this.y;

@@ -554,7 +554,6 @@ class PixelTanks {
                   let simple = PixelTanks.userData.perk.reduce((a, c) => a.concat(Math.floor(c)), []);
                   if (!simple.includes(i+1) && PixelTanks.userData.perks[i]) {
                     PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = i+1+PixelTanks.userData.perks[i]/10;
-                    alert('perk data -> '+JSON.stringify(PixelTanks.userData.perk));
                   } 
                 }
               }  
@@ -690,7 +689,7 @@ class PixelTanks {
               if (lock) level = 1;
               let simple = PixelTanks.userData.perk.reduce((a, c) => a.concat(Math.floor(c)), []);
               if (simple.includes(i+1)) {
-                GUI.draw.strokeStyle = '#FFFFFF';
+                GUI.draw.strokeStyle = '#FFFF66';
                 GUI.draw.lineWidth = 10;
                 GUI.draw.strokeRect(x[i%3], y[Math.floor(i/3)], 80, 80);
               }
