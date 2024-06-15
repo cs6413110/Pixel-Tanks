@@ -16,7 +16,7 @@ class Tank {
     this.host = host;
     this.fire = {time: 0, team: this.team};
     this.hp = this.maxHp = this.rank*10+300;
-    this.canBashed = this.canInvis = !(this.damage = false);
+    this.canShield = this.canBashed = this.canInvis = !(this.damage = false);
     this.team = data.username+':'+this.id;
     this.x = host.spawn.x;
     this.y = host.spawn.y;
@@ -83,6 +83,12 @@ class Tank {
             setTimeout(() => {this.canBashed = true}, 1000);
             this.damageCalc(this.x, this.y, 100, Engine.getUsername(entity.team));
           }
+          let thermal = Engine.hasPerk(this.perk, 2);
+          if (thermal && !entity.thermaled) {
+            entity.thermaled = true;
+            setTimeout(() => (entity.thermaled = false), 500);
+            entity.damageCalc(entity.x, entity.y, thermal*10, Engine.getUsername(this.team));
+          }
         }
       }
     }
@@ -100,7 +106,11 @@ class Tank {
     this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y};
     if (this.hp <= 0 && this.host.ondeath) return this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
     let shield = Engine.hasPerk(this.perk, 1);
-    if ((this.hp <= 25 && shield === 1) || (this.hp <= 50 && shield === 2)) return this.shields = this.hp;
+    if (this.canShield) {
+      this.canShield = false;
+      setTimeout(() => (this.canShield = true), 5000);
+      if ((this.hp <= 25 && shield === 1) || (this.hp <= 50 && shield === 2)) return this.shields = this.hp;
+    }
   }
   grappleCalc() { // direct setting of pos may cause chunkload issues
     const dx = this.grapple.target.x - this.x, dy = this.grapple.target.y - this.y, ox = this.x, oy = this.y;
