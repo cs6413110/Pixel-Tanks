@@ -106,10 +106,11 @@ class Tank {
     this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y};
     if (this.hp <= 0 && this.host.ondeath) return this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
     let shield = Engine.hasPerk(this.perk, 1);
-    if (this.canShield) {
-      this.canShield = false;
-      setTimeout(() => (this.canShield = true), 5000);
-      if ((this.hp <= 25 && shield === 1) || (this.hp <= 50 && shield === 2)) return this.shields = this.hp;
+    if ((this.hp <= 25 && shield === 1) || (this.hp <= 50 && shield === 2)) {
+      if (this.canShield) {
+        this.canShield = false;
+        setTimeout(() => (this.canShield = true), 5000);
+      }
     }
   }
   grappleCalc() { // direct setting of pos may cause chunkload issues
