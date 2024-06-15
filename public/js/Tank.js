@@ -110,6 +110,7 @@ class Tank {
       if (this.canShield) {
         this.canShield = false;
         setTimeout(() => (this.canShield = true), 5000);
+        this.shields = this.hp;
       }
     }
   }
