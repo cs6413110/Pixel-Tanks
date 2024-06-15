@@ -270,7 +270,10 @@ class Engine {
     return true;
   }
   
-  static hasPerk = (p, n) => p.find(a => Math.floor(a) === n);
+  static hasPerk = (p, n) => {
+    let perk = p.find(a => Math.floor(a) === n);
+    if (perk) return (perk%1)*10; else return perk;
+  }
   static parseTeamExtras = s => s.replace('@leader', '').split('@requestor#')[0];
   static getUsername = s => Engine.parseTeamExtras(s).split(':')[0];
   static getTeam = s => Engine.parseTeamExtras(s).split(':')[1];
