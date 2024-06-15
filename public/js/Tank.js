@@ -84,7 +84,7 @@ class Tank {
             this.damageCalc(this.x, this.y, 100, Engine.getUsername(entity.team));
           }
           let thermal = Engine.hasPerk(this.perk, 2);
-          if (thermal && !entity.thermaled) {
+          if (thermal && !entity.thermaled && Engine.getTeam(this.team) !== Engine.getTeam(entity.team)) {
             entity.thermaled = true;
             setTimeout(() => (entity.thermaled = false), 500);
             entity.damageCalc(entity.x, entity.y, thermal*10, Engine.getUsername(this.team));
