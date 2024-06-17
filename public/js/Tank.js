@@ -1,6 +1,6 @@
 class Tank {
   static args = ['username', 'rank', 'class', 'perk', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'deathEffect', 'color'];
-  static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'radar', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
   static s = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
   static u = ['x', 'y'];
   constructor() {
@@ -63,6 +63,14 @@ class Tank {
             if (entity.type !== 'grapple') entity.team = this.team;
           }
         }
+      }
+    }
+    let radar = Engine.hasPerk(this.perk, 6); // radar can be offloaded to slowtick?
+    let enemies = [];
+    for (const t of this.host.pt) {
+      let d = Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)
+      if (Engine.getTeam(t.team) !== Engine.getTeam(this.team) && d < radar*700) {
+        enemies.push();
       }
     }
     let spikeLimiter = true;

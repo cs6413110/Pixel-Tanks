@@ -180,6 +180,10 @@ class Client {
     this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canToolkit = true;
     this.timers.toolkit = -1;
     this.timers.items = [{time: 0, cooldown: -1}, {time: 0, cooldown: -1,}, {time: 0, cooldown: -1}, {time: 0, cooldown: -1}]
+    if (Engine.hasPerk(PixelTanks.userData.perk, 3)) {
+      // class, powermissle
+      
+    }
   }
   
   getPing() {
@@ -188,11 +192,19 @@ class Client {
   }
 
   reset() {
-    const time = new Date('Nov 28 2006').getTime();
-    this.timers = {boost: time, powermissle: time, grapple: time, toolkit: time, class: {time: time, cooldown: -1}, items: [{time: time, cooldown: -1}, {time: time, cooldown: -1,}, {time: time, cooldown: -1}, {time: time, cooldown: -1}]};
+    this.timers = {
+      boost: -1,
+      powermissle: -1,
+      grapple: -1,
+      toolkit: -1,
+      class: {time: -1},
+      items: [{time: -1}, {time: -1}, {time: -1}, {time: -1}],
+    }
+    this.class.cooldown = [25, null, 30, 12, 25, 10][['tactical', 'stealth', 'builder', 'warrior', 'medic', 'fire'].indexOf(this.tank.class)];
+    for (let i = 0; i < 4; i++) this.timers.items[i].cooldown = [30, 30, 30, 4, 8, 10, 10, 25, 20, 4, 25, 20][['duck_tape', 'super_glu', 'shield', 'weak', 'strong', 'spike', 'reflector', 'usb', 'flashbang', 'bomb', 'dynamite', 'airstrike'].indexOf(PixelTanks.userData.items[i])];
     this.halfSpeed = false;
     this.tank.invis = false;
-    this.canClass = this.canFire = this.canBoost = this.canToolkit = this.canPowermissle = this.canInvis = this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canGrapple = true;
+    this.canFire = true;
     this.kills = 0;
   }
 
@@ -680,60 +692,42 @@ class Client {
   }
 
   useItem(id, slot) {
-    if (!this['canItem'+slot]) {
+    if (Date.now() < this.timers.items[slot].time+this.timers.items[slot].cooldown) {
       if (id === 'dynamite') {
         this.tank.use.push('dynamite');
         this.playAnimation('detonate');
       }
       return;
     }
-    let cooldown = 0;
     if (id === 'duck_tape') {
       this.tank.use.push('tape');
       this.playAnimation('tape');
-      cooldown = 30000;
     } else if (id === 'super_glu') {
       this.tank.use.push('glu');
       this.playAnimation('glu');
-      cooldown = 30000;
     } else if (id === 'shield') {
       this.tank.use.push('shield');
-      cooldown = 30000;
     } else if (id === 'weak') {
-      this.tank.use.push('block#'+(PixelTanks.userData.class === 'builder' ? 'strong' : 'weak'));
-      cooldown = 4000;
+      this.tank.use.push('block#weak');
     } else if (id === 'strong') {
-      this.tank.use.push('block#'+(PixelTanks.userData.class === 'builder' ? 'gold' : 'strong'));
-      cooldown = 8000;
+      this.tank.use.push('block#strong');
     } else if (id === 'spike') {
       this.tank.use.push('block#spike');
-      cooldown = 10000;
     } else if (id === 'reflector') {
       this.tank.use.push('reflector');
-      cooldown = 10000;
     } else if (id === 'usb') {
       this.fire('usb');
-      cooldown = 25000;//adding back lifetime
     } else if (id === 'flashbang') {
       this.tank.use.push(`flashbang${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
-      cooldown = 20000;
     } else if (id === 'bomb') {
       this.tank.use.push('bomb');
       this.tank.use.push('break');
-      cooldown = 4000;
     } else if (id === 'dynamite') {
       this.fire('dynamite');
-      cooldown = 25000;
     } else if (id === 'airstrike') {
       this.tank.use.push(`airstrike${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
-      cooldown = 20000;
     }
     this.timers.items[slot] = {cooldown: cooldown, time: Date.now()};
-    this['canItem'+slot] = false;
-    clearTimeout(this['itemTimeout'+slot]);
-    this['itemTimeout'+slot] = setTimeout(() => {
-      this['canItem'+slot] = true;
-    }, cooldown);
   }
 
   keyStart(e) {
@@ -771,21 +765,16 @@ class Client {
       setTimeout(() => {this.canGrapple = true}, 5000);
     }
     if (k === PixelTanks.userData.keybinds.toolkit) {
-      if (this.halfSpeed || this.canToolkit) {
+      if (this.halfSpeed || Date.now() > this.timers.toolkit+40000) {
         this.tank.use.push('toolkit');
         this.halfSpeed = !this.halfSpeed;
       }
       if (this.canToolkit) {
-        this.canToolkit = false;
         this.timers.toolkit = Date.now();
-        setTimeout(() => {this.canToolkit = true}, 40000);
         setTimeout(() => {this.halfSpeed = false}, 7500);
         this.playAnimation('toolkit');
       }
-      if (!this.halfSpeed && Date.now()-this.timers.toolkit < 7500) {
-        this.timers.toolkit = new Date('Nov 28 2006').getTime();
-        this.canToolkit = true;
-      }
+      if (!this.halfSpeed && Date.now()-this.timers.toolkit < 7500) this.timers.toolkit = -1;
     }
     if (k === 70) {
       if (this.dedTime < Date.now()-10000) {
@@ -794,35 +783,15 @@ class Client {
       }
     }
     if (k === PixelTanks.userData.keybinds.class) {
-      if (!this.canClass && PixelTanks.userData.class !== 'stealth') return;
-      this.canClass = false;
-      const c = PixelTanks.userData.class;
-      if (c === 'stealth') {
-        if (this.canInvis)  {
-          this.tank.invis = true;
-          this.canInvis = false;
-          this.timers.class = {time: Date.now(), cooldown: 30000};
-          this.invis = setTimeout(() => {
-            this.tank.invis = false;
-            this.timers.class = {time: Date.now(), cooldown: 15000};
-            this.invis = setTimeout(() => {
-              this.canInvis = true;
-            }, 30000);
-          }, 15000);
-        } else if (this.tank.invis) {
-          this.tank.invis = false;
-          clearTimeout(this.invis);
-          setTimeout(() => {
-            this.canInvis = true;
-          }, .5*(Date.now()-this.timers.class.time));
-          this.timers.class = {time: Date.now(), cooldown: .5*(Date.now()-this.timers.class.time)};
-        }
-      } else if (c === 'tactical') {
+      if (Date.now() < this.timers.class.cooldown+this.timers.class.time && this.tank.class !== 'stealth') return;
+      if (this.tank.class === 'stealth') {
+        
+      }
+      this.timers.class.time = Date.now();
+      if (c === 'tactical') {
         this.fire('megamissle');
-        this.timers.class = {time: Date.now(), cooldown: 25000};
       } else if (c === 'builder') {
         this.tank.use.push('turret');
-        this.timers.class = {time: Date.now(), cooldown: 30000}
       } else if (c === 'warrior') {
         this.tank.use.push('bash');
         clearTimeout(this.booster);
@@ -832,16 +801,12 @@ class Client {
           this.speed = 4;
           this.tank.immune = false;
         }, 1000);
-        this.timers.class = {time: Date.now(), cooldown: 12000};
       } else if (c === 'medic') {
         this.fire('healmissle');
-        this.tank.use.push('healmissile');
-        this.timers.class = {time: Date.now(), cooldown: 25000};//stop it ur wasting time :/
+        //this.tank.use.push('healmissile');
       } else if (c === 'fire') {
         for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+90+i});
-        this.timers.class = {time: Date.now(), cooldown: 10000};
       }
-      setTimeout(() => {this.canClass = true}, this.timers.class.cooldown);
     }
     if (k === 27) {
       this.paused = !this.paused;
@@ -863,19 +828,16 @@ class Client {
       if (!this.key[87] && !this.key[83]) this.up = null;
     }
     if (e.keyCode === PixelTanks.userData.keybinds.boost) {
-      if (this.canBoost) {
+      if (Date.now() > this.timers.boost+(this.ded ? 0 : 5000)) {
         this.speed = 16;
-        this.canBoost = false;
         this.tank.immune = true;
         this.timers.boost = Date.now();
         clearTimeout(this.booster);
-        clearTimeout(this.boostTimeout);
         this.booster = setTimeout(() => {
           this.speed = 4;
           this.tank.immune = false;
           if (PixelTanks.userData.class === 'stealth') this.tank.use.push('break');
         }, 500);
-        this.boostTimeout = setTimeout(() => {this.canBoost = true}, this.ded ? 0 : 5000);
       }
     }
   }
