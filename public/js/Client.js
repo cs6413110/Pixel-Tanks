@@ -436,18 +436,6 @@ class Client {
 
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
     // beta chunkload debug
-    if (this.temp)  {
-      GUI.draw.fillStyle = '#ffffff';
-      GUI.draw.fillRect(100, 100, 300, 300);
-      GUI.drawText(JSON.stringify(this.temp), 600, 100, 10, '#ffffff', .5);
-      let data = this.temp;
-      GUI.draw.fillStyle = '#00ff00';
-      GUI.draw.fillRect(100+data.nx*10, 100+data.ny*10, 10, 10);
-      for (const n of data.n) GUI.draw.fillRect(100+n.x*10, 100+n.y*10, 10, 10);
-      GUI.draw.fillStyle = '#ff0000';
-      GUI.draw.fillRect(100+data.ox*10, 100+data.ox*10, 10, 10);
-      for (const o of data.o) GUI.draw.fillRect(100+o.x*10, 100+o.y*10, 10, 10);
-    }
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
     GUI.drawText(this.kills, 1530, 40, 30, '#FFFFFF', 1);
     GUI.drawText(this.xp/10, 1530, 110, 30, '#FFFFFF', 1);
@@ -461,7 +449,7 @@ class Client {
       const item = PixelTanks.userData.items[i];
       GUI.drawImage(PixelTanks.images.items[item], c[i], 908, 92, 92, 1);
       GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.class+'ui'], 308, 952, 48, 48, 1);
-      if (!this['canItem'+i]) {
+      if (Date.now() < this.timers.items[item].time+this.timers.items[item].cooldown) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .5;
         GUI.draw.fillRect(c[i], 908, 92, 92);
