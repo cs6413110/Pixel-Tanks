@@ -715,7 +715,7 @@ class Client {
     } else if (id === 'airstrike') {
       this.tank.use.push(`airstrike${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
     }
-    this.timers.item[slot].time = Date.now();
+    this.timers.items[slot].time = Date.now();
   }
 
   keyStart(e) {
