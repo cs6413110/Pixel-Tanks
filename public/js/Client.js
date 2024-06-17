@@ -200,7 +200,7 @@ class Client {
       class: {time: -1},
       items: [{time: -1}, {time: -1}, {time: -1}, {time: -1}],
     }
-    this.class.cooldown = [25, null, 30, 12, 25, 10][['tactical', 'stealth', 'builder', 'warrior', 'medic', 'fire'].indexOf(this.tank.class)];
+    this.timers.class.cooldown = [25, null, 30, 12, 25, 10][['tactical', 'stealth', 'builder', 'warrior', 'medic', 'fire'].indexOf(this.tank.class)];
     for (let i = 0; i < 4; i++) this.timers.items[i].cooldown = [30, 30, 30, 4, 8, 10, 10, 25, 20, 4, 25, 20][['duck_tape', 'super_glu', 'shield', 'weak', 'strong', 'spike', 'reflector', 'usb', 'flashbang', 'bomb', 'dynamite', 'airstrike'].indexOf(PixelTanks.userData.items[i])];
     this.halfSpeed = false;
     this.tank.invis = false;
