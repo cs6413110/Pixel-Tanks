@@ -200,7 +200,7 @@ class Client {
       class: {time: -1},
       items: [{time: -1}, {time: -1}, {time: -1}, {time: -1}],
     }
-    this.timers.class.cooldown = 1000*[25, null, 30, 12, 25, 10][['tactical', 'stealth', 'builder', 'warrior', 'medic', 'fire'].indexOf(this.tank.class)];
+    this.timers.class.cooldown = 1000*[25, null, 30, 12, 25, 10][['tactical', 'stealth', 'builder', 'warrior', 'medic', 'fire'].indexOf(PixelTanks.uesrData.class)];
     for (let i = 0; i < 4; i++) this.timers.items[i].cooldown = 1000*[30, 30, 30, 4, 8, 10, 10, 25, 20, 4, 25, 20][['duck_tape', 'super_glu', 'shield', 'weak', 'strong', 'spike', 'reflector', 'usb', 'flashbang', 'bomb', 'dynamite', 'airstrike'].indexOf(PixelTanks.userData.items[i])];
     this.halfSpeed = false;
     this.tank.invis = false;
@@ -465,8 +465,7 @@ class Client {
       GUI.draw.fillRect(c[i], 908+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*92, 92, 92);
     }
     for (let i = 0; i < 5; i++) {
-      let time = i === 0 ? this.timers.class.time : this.timers[[null, 'powermissle', 'toolkit', 'boost', 'grapple'][i]];
-      time += i === 0 ? this.timers.class.cooldown : [null, 10000, 40000, 5000, 5000][i];
+      let time = (i === 0 ? this.timers.class.time : this.timers[[null, 'powermissle', 'toolkit', 'boost', 'grapple'][i]]) + [this.timers.class.cooldown, 10000, 40000, 5000, 5000][i];
       if (Date.now() <= time) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .5;
@@ -637,10 +636,8 @@ class Client {
 
   fire(type) {
     if (type === 2) {
-      if (!this.canPowermissle) return;
-      this.canPowermissle = false;
+      if (Date.now() <= this.timers.this.canPowermissle+10000) return;
       this.timers.powermissle = Date.now();
-      setTimeout(() => {this.canPowermissle = true;}, 10000);
     } else if (type === 0) {
       if (!this.canFire) return;
       this.canFire = false;
@@ -748,11 +745,11 @@ class Client {
       }, this.buff ? this.fireType === 1 ? 133 : 400 : this.fireType === 1 ? 200 : 600);
     }
     if (k === PixelTanks.userData.keybinds.powermissle) this.fire(2);
-    if (k === PixelTanks.userData.keybinds.grapple && this.canGrapple) {
-      this.fire('grapple');
-      this.canGrapple = false;
-      this.timers.grapple = Date.now();
-      setTimeout(() => {this.canGrapple = true}, 5000);
+    if (k === PixelTanks.userData.keybinds.grapple) {
+      if (Date.now() > this.timers.grapple+5000) {
+        this.fire('grapple');
+        this.timers.grapple = Date.now();
+      }
     }
     if (k === PixelTanks.userData.keybinds.toolkit) {
       if (this.halfSpeed || Date.now() > this.timers.toolkit+40000) {
@@ -773,14 +770,14 @@ class Client {
       }
     }
     if (k === PixelTanks.userData.keybinds.class) {
-      if (Date.now() < this.timers.class.cooldown+this.timers.class.time && this.tank.class !== 'stealth') return;
-      if (this.tank.class === 'stealth') {
+      if (Date.now() <= this.timers.class.cooldown+this.timers.class.time && PixelTanks.userData.class !== 'stealth') return;
+      if (PixelTanks.userData.class === 'stealth') {
         
       }
       this.timers.class.time = Date.now();
-      if (this.tank.class === 'tactical') this.fire('megamissle');
-      if (this.tank.class === 'builder') this.tank.use.push('turret');
-      if (this.tank.class === 'warrior') {
+      if (PixelTanks.userData.class === 'tactical') this.fire('megamissle');
+      if (PixelTanks.userData.class === 'builder') this.tank.use.push('turret');
+      if (PixelTanks.userData.class === 'warrior') {
         this.tank.use.push('bash');
         clearTimeout(this.booster);
         this.speed = 16;
@@ -790,8 +787,8 @@ class Client {
           this.tank.immune = false;
         }, 1000);
       }
-      if (this.tank.class === 'medic') this.fire('healmissle');
-      if (this.tank.class === 'fire') for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+90+i});
+      if (PixelTanks.userData.class === 'medic') this.fire('healmissle');
+      if (PixelTanks.userData.class === 'fire') for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+90+i});
     }
     if (k === 27) {
       this.paused = !this.paused;
