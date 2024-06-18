@@ -200,6 +200,7 @@ class Client {
       class: {time: -1},
       items: [{time: -1}, {time: -1}, {time: -1}, {time: -1}],
     }
+    this.mana = 15;
     this.timers.class.cooldown = 1000*[25, null, 30, 12, 25, 10][['tactical', 'stealth', 'builder', 'warrior', 'medic', 'fire'].indexOf(PixelTanks.userData.class)];
     for (let i = 0; i < 4; i++) this.timers.items[i].cooldown = 1000*[30, 30, 30, 4, 8, 10, 10, 25, 20, 4, 25, 20][['duck_tape', 'super_glu', 'shield', 'weak', 'strong', 'spike', 'reflector', 'usb', 'flashbang', 'bomb', 'dynamite', 'airstrike'].indexOf(PixelTanks.userData.items[i])];
     this.halfSpeed = false;
@@ -466,6 +467,7 @@ class Client {
     }
     for (let i = 0; i < 5; i++) {
       let time = (i === 0 ? this.timers.class.time : this.timers[[null, 'powermissle', 'toolkit', 'boost', 'grapple'][i]]) + [this.timers.class.cooldown, 10000, 40000, 5000, 5000][i];
+      if (PixelTanks.userData.class === 'stealth' && this.mana > 0) time = -1;
       if (Date.now() <= time) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .5;
@@ -636,7 +638,7 @@ class Client {
 
   fire(type) {
     if (type === 2) {
-      if (Date.now() <= this.timers.this.canPowermissle+10000) return;
+      if (Date.now() <= this.timers.powermissle+10000) return;
       this.timers.powermissle = Date.now();
     } else if (type === 0) {
       if (!this.canFire) return;
@@ -772,7 +774,22 @@ class Client {
     if (k === PixelTanks.userData.keybinds.class) {
       if (Date.now() <= this.timers.class.cooldown+this.timers.class.time && PixelTanks.userData.class !== 'stealth') return;
       if (PixelTanks.userData.class === 'stealth') {
-        
+        let time = Date.now()-this.timers.class.time;
+        if (this.tank.invis) {
+          this.mana = Math.min(0, this.mana-time/1000);
+          this.tank.invis = false;
+        } else {
+          this.mana = Math.max(this.mana+time/2000, 15);
+          this.timers.class.time = Date.now();
+          if (this.mana > 0) {
+            this.tank.invis = true;
+            this.stealthTimeout = setTimeout(() => {
+              this.mana = 0;
+              this.tank.invis = false;
+              this.timers.class.time = Date.now();
+            }, this.mana*1000);
+          }
+        }
       }
       this.timers.class.time = Date.now();
       if (PixelTanks.userData.class === 'tactical') this.fire('megamissle');
