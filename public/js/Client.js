@@ -179,7 +179,7 @@ class Client {
     PixelTanks.save();
     this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canToolkit = true;
     this.timers.toolkit = -1;
-    this.timers.items = [{time: 0, cooldown: -1}, {time: 0, cooldown: -1,}, {time: 0, cooldown: -1}, {time: 0, cooldown: -1}]
+    for (const item of this.timers.items) item.time = -1;
     if (Engine.hasPerk(PixelTanks.userData.perk, 3)) {
       // class, powermissle
       
