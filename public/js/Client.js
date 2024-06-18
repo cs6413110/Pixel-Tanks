@@ -775,15 +775,20 @@ class Client {
       if (Date.now() <= this.timers.class.cooldown+this.timers.class.time && PixelTanks.userData.class !== 'stealth') return;
       if (PixelTanks.userData.class === 'stealth') {
         let time = Date.now()-this.timers.class.time;
+        console.log('before: '+this.mana)
         if (this.tank.invis) {
           this.mana = Math.min(0, this.mana-time/1000);
           this.tank.invis = false;
+          this.timers.class.time = Date.now();
+          console.log('Exit: '+this.mana)
         } else {
           this.mana = Math.max(this.mana+time/2000, 15);
           this.timers.class.time = Date.now();
           if (this.mana > 0) {
+            console.log('Enter: '+this.mana);
             this.tank.invis = true;
             this.stealthTimeout = setTimeout(() => {
+              console.log('Force out');
               this.mana = 0;
               this.tank.invis = false;
               this.timers.class.time = Date.now();
