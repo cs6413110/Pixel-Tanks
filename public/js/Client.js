@@ -777,12 +777,12 @@ class Client {
         let time = Date.now()-this.timers.class.time;
         console.log('before: '+this.mana)
         if (this.tank.invis) {
-          this.mana = Math.min(0, this.mana-time/1000);
+          this.mana = Math.max(0, this.mana-time/1000);
           this.tank.invis = false;
           this.timers.class.time = Date.now();
           console.log('Exit: '+this.mana)
         } else {
-          this.mana = Math.max(this.mana+time/2000, 15);
+          this.mana = Math.min(this.mana+time/2000, 15);
           this.timers.class.time = Date.now();
           if (this.mana > 0) {
             console.log('Enter: '+this.mana);
