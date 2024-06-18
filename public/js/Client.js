@@ -465,7 +465,9 @@ class Client {
       GUI.draw.fillRect(c[i], 908+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*92, 92, 92);
     }
     for (let i = 0; i < 5; i++) {
-      if (!this['can'+['Class', 'Powermissle', 'Toolkit', 'Boost', 'Grapple'][i]]) {
+      let time = i === 0 ? this.timers.class.time : this.timers[[null, 'powermissle', 'toolkit', 'boost', 'grapple'][i]];
+      time += i === 0 ? this.timers.class.cooldown : [null, 10000, 40000, 5000, 5000][i];
+      if (Date.now() <= time) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .5;
         GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952, 48, 48);
@@ -756,13 +758,13 @@ class Client {
       if (this.halfSpeed || Date.now() > this.timers.toolkit+40000) {
         this.tank.use.push('toolkit');
         this.halfSpeed = !this.halfSpeed;
+        if (!this.halfSpeed) this.timers.toolkit = -1;
       }
-      if (this.canToolkit) {
+      if (Date.now() > this.timers.toolkit+40000) {
         this.timers.toolkit = Date.now();
         setTimeout(() => {this.halfSpeed = false}, 7500);
         this.playAnimation('toolkit');
       }
-      if (!this.halfSpeed && Date.now()-this.timers.toolkit < 7500) this.timers.toolkit = -1;
     }
     if (k === 70) {
       if (this.dedTime < Date.now()-10000) {
@@ -776,11 +778,9 @@ class Client {
         
       }
       this.timers.class.time = Date.now();
-      if (c === 'tactical') {
-        this.fire('megamissle');
-      } else if (c === 'builder') {
-        this.tank.use.push('turret');
-      } else if (c === 'warrior') {
+      if (this.tank.class === 'tactical') this.fire('megamissle');
+      if (this.tank.class === 'builder') this.tank.use.push('turret');
+      if (this.tank.class === 'warrior') {
         this.tank.use.push('bash');
         clearTimeout(this.booster);
         this.speed = 16;
@@ -789,12 +789,9 @@ class Client {
           this.speed = 4;
           this.tank.immune = false;
         }, 1000);
-      } else if (c === 'medic') {
-        this.fire('healmissle');
-        //this.tank.use.push('healmissile');
-      } else if (c === 'fire') {
-        for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+90+i});
       }
+      if (this.tank.class === 'medic') this.fire('healmissle');
+      if (this.tank.class === 'fire') for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+90+i});
     }
     if (k === 27) {
       this.paused = !this.paused;
