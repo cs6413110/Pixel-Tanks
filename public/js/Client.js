@@ -467,7 +467,7 @@ class Client {
     }
     for (let i = 0; i < 5; i++) {
       let time = (i === 0 ? this.timers.class.time : this.timers[[null, 'powermissle', 'toolkit', 'boost', 'grapple'][i]]) + [this.timers.class.cooldown, 10000, 40000, 5000, 5000][i];
-      if (PixelTanks.userData.class === 'stealth' && this.mana > 0) time = -1;
+      if (PixelTanks.userData.class === 'stealth') time = -1;
       if (Date.now() <= time) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .5;
@@ -775,20 +775,17 @@ class Client {
       if (Date.now() <= this.timers.class.cooldown+this.timers.class.time && PixelTanks.userData.class !== 'stealth') return;
       if (PixelTanks.userData.class === 'stealth') {
         let time = Date.now()-this.timers.class.time;
-        console.log('before: '+this.mana)
         if (this.tank.invis) {
           this.mana = Math.max(0, this.mana-time/1000);
           this.tank.invis = false;
           this.timers.class.time = Date.now();
-          console.log('Exit: '+this.mana)
+          clearTimeout(this.stealthTimeout);
         } else {
           this.mana = Math.min(this.mana+time/2000, 15);
           this.timers.class.time = Date.now();
           if (this.mana > 0) {
-            console.log('Enter: '+this.mana);
             this.tank.invis = true;
             this.stealthTimeout = setTimeout(() => {
-              console.log('Force out');
               this.mana = 0;
               this.tank.invis = false;
               this.timers.class.time = Date.now();
