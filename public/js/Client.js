@@ -471,8 +471,8 @@ class Client {
       if (PixelTanks.userData.class === 'stealth' && i === 0) {
         let mana = this.mana;
         if (this.tank.invis) {
-          mana = Math.max(0, energy-(Date.now()-this.timers.class.time)/1000);
-        } else mana = Math.min(15, energy+(Date.now()-this.timers.class.time)/2000);
+          mana = Math.max(0, mana-(Date.now()-this.timers.class.time)/1000);
+        } else mana = Math.min(15, mana+(Date.now()-this.timers.class.time)/2000);
         console.log(mana)
         if (mana === 15) {
           GUI.draw.fillStyle = '#ffffff'; // next 2 lines can be simplified
