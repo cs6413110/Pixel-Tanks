@@ -473,7 +473,6 @@ class Client {
         if (this.tank.invis) {
           mana = Math.max(0, mana-(Date.now()-this.timers.class.time)/1000);
         } else mana = Math.min(15, mana+(Date.now()-this.timers.class.time)/2000);
-        console.log(mana)
         if (mana === 15) {
           GUI.draw.fillStyle = '#ffffff'; // next 2 lines can be simplified
           GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-((i === 0 ? this.timers.class.time : this.timers[['class', 'powermissle', 'toolkit', 'boost', 'grapple'][i]])+[this.timers.class.cooldown, 10000, 40000, 5000, 5000][i]))%4000)/1000)-3)));
@@ -484,7 +483,7 @@ class Client {
           GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952, 48, 48);
           GUI.draw.fillStyle = PixelTanks.userData.color;
           GUI.draw.globalAlpha = 1;
-          GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952+mana/15*48, 48, 48);
+          GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952+(15-mana)/15*48, 48, 48);
         }
         continue;
       }
