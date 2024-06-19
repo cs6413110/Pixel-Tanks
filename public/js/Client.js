@@ -468,7 +468,7 @@ class Client {
     }
     for (let i = 0; i < 5; i++) {
       let time = (i === 0 ? this.timers.class.time : this.timers[[null, 'powermissle', 'toolkit', 'boost', 'grapple'][i]]) + [this.timers.class.cooldown, 10000, 40000, 5000, 5000][i];
-      if (PixelTanks.userData.class === 'stealth') {
+      if (PixelTanks.userData.class === 'stealth' && i === 0) {
         let mana = this.mana;
         if (this.tank.invis) {
           mana = Math.max(0, energy-(Date.now()-this.timers.class.time)/1000);
