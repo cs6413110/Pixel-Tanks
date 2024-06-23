@@ -185,8 +185,8 @@ class Client {
       if (PixelTanks.userData.class === 'stealth') {
         this.mana += (15-this.mana)*scavenger*.25;
       } else this.timers.class.time -= (this.timers.class.time+this.timers.class.cooldown-Date.now())*.25*scavenger;
-      this.timers.toolkit -= (this.timers.toolkit+40000-Date.now())*.25*scavenger;
-      this.timers.powermissle -= (this.timers.powermissle+10000-Date.now())*.25*scavenger;
+      this.timers.toolkit.time -= (this.timers.toolkit.time+this.timers.toolkit.cooldown-Date.now())*.25*scavenger;
+      this.timers.powermissle.time -= (this.timers.powermissle.time+this.timers.powermissle.cooldown-Date.now())*.25*scavenger;
     }
   }
   
@@ -794,8 +794,8 @@ class Client {
             if (PixelTanks.userData.class === 'stealth') {
               this.mana += (15-this.mana)*refresh*.5;
             } else this.timers.class.time -= (this.timers.class.time+this.timers.class.cooldown-Date.now())*.5*refresh;
-            this.timers.toolkit -= (this.timers.toolkit+40000-Date.now())*.5*refresh;
-            this.timers.powermissle -= (this.timers.powermissle+10000-Date.now())*.5*refresh;
+            this.timers.toolkit.time -= (this.timers.toolkit.time+this.timers.toolkit.cooldown-Date.now())*.5*refresh;
+            this.timers.powermissle.time -= (this.timers.powermissle.time+this.timers.powermissle.cooldown-Date.now())*.5*refresh;
           }
         }, 7500);
         this.playAnimation('toolkit');
