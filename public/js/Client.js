@@ -180,9 +180,13 @@ class Client {
     this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canToolkit = true;
     this.timers.toolkit = -1;
     for (const item of this.timers.items) item.time = -1;
-    if (Engine.hasPerk(PixelTanks.userData.perk, 3)) {
-      // class, powermissle
-      
+    let scavenger = Engine.hasPerk(PixelTanks.userData.perk, 3);
+    if (scavenger) {
+      if (PixelTanks.userData.class === 'stealth') {
+        this.mana += (15-this.mana)*scavenger*.25;
+      } else this.timers.class.time -= (this.timers.class.time+this.timers.class.cooldown-Date.now())*.25*scavenger;
+      this.timers.toolkit -= (this.timers.toolkit+40000-Date.now())*.25*scavenger;
+      this.timers.powermissle -= (this.timers.powermissle+10000-Date.now())*.25*scavenger;
     }
   }
   
@@ -192,17 +196,19 @@ class Client {
   }
 
   reset() {
+    let faster = Engine.hasPerk(PixelTanks.userData.perk, 4);
+    let m = faster ? 1-.05*faster : 1;
     this.timers = {
-      boost: -1,
-      powermissle: -1,
-      grapple: -1,
-      toolkit: -1,
+      boost: {time: -1, cooldown: m*5000},
+      powermissle: {time: -1, cooldown: m*10000},
+      grapple: {time: -1, cooldown: m*10000},
+      toolkit: {time: -1, cooldown: m*40000},
       class: {time: -1},
       items: [{time: -1}, {time: -1}, {time: -1}, {time: -1}],
     }
     this.mana = 15;
-    this.timers.class.cooldown = 1000*[25, null, 30, 12, 25, 10][['tactical', 'stealth', 'builder', 'warrior', 'medic', 'fire'].indexOf(PixelTanks.userData.class)];
-    for (let i = 0; i < 4; i++) this.timers.items[i].cooldown = 1000*[30, 30, 30, 4, 8, 10, 10, 25, 20, 4, 25, 20][['duck_tape', 'super_glu', 'shield', 'weak', 'strong', 'spike', 'reflector', 'usb', 'flashbang', 'bomb', 'dynamite', 'airstrike'].indexOf(PixelTanks.userData.items[i])];
+    this.timers.class.cooldown = m*1000*[25, 2, 30, 12, 25, 10][['tactical', 'stealth', 'builder', 'warrior', 'medic', 'fire'].indexOf(PixelTanks.userData.class)];
+    for (let i = 0; i < 4; i++) this.timers.items[i].cooldown = m*1000*[30, 30, 30, 4, 8, 10, 10, 25, 20, 4, 25, 20][['duck_tape', 'super_glu', 'shield', 'weak', 'strong', 'spike', 'reflector', 'usb', 'flashbang', 'bomb', 'dynamite', 'airstrike'].indexOf(PixelTanks.userData.items[i])];
     clearTimeout(this.stealthTimeout);
     this.halfSpeed = false;
     this.tank.invis = false;
@@ -437,7 +443,6 @@ class Client {
     for (const ex of e) this.drawExplosion(ex);
 
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
-    // beta chunkload debug
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
     GUI.drawText(this.kills, 1530, 40, 30, '#FFFFFF', 1);
     GUI.drawText(this.xp/10, 1530, 110, 30, '#FFFFFF', 1);
@@ -467,15 +472,16 @@ class Client {
       GUI.draw.fillRect(c[i], 908+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*92, 92, 92);
     }
     for (let i = 0; i < 5; i++) {
-      let time = (i === 0 ? this.timers.class.time : this.timers[[null, 'powermissle', 'toolkit', 'boost', 'grapple'][i]]) + [this.timers.class.cooldown, 10000, 40000, 5000, 5000][i];
+      let type = ['class', 'powermissle', 'toolkit', 'boost', 'grapple'][i];
+      let time = this.timers[type].time+this.timers[type].cooldown;
       if (PixelTanks.userData.class === 'stealth' && i === 0) {
         let mana = this.mana;
         if (this.tank.invis) {
           mana = Math.max(0, mana-(Date.now()-this.timers.class.time)/1000);
-        } else mana = Math.min(15, mana+(Date.now()-this.timers.class.time)/2000);
+        } else mana = Math.min(15, mana+(Date.now()-this.timers.class.time)/this.timers.class.cooldown);
         if (mana === 15) {
           GUI.draw.fillStyle = '#ffffff'; // next 2 lines can be simplified
-          GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-((i === 0 ? this.timers.class.time : this.timers[['class', 'powermissle', 'toolkit', 'boost', 'grapple'][i]])+[this.timers.class.cooldown, 10000, 40000, 5000, 5000][i]))%4000)/1000)-3)));
+          GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers[type].time+this.timers[type].cooldown))%4000)/1000)-3)));
           GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952, 48, 48);
         } else {
           GUI.draw.fillStyle = '#000000';
@@ -493,12 +499,12 @@ class Client {
         GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952, 48, 48);
       } else {
         GUI.draw.fillStyle = '#ffffff';
-        GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-((i === 0 ? this.timers.class.time : this.timers[['class', 'powermissle', 'toolkit', 'boost', 'grapple'][i]])+[this.timers.class.cooldown, 10000, 40000, 5000, 5000][i]))%4000)/1000)-3)));
+        GUI.draw.globalAlpha = .25*Math.abs(Math.sin(Math.PI*.5*((((Date.now()-(this.timers[type].time+this.timers[type].cooldown))%4000)/1000)-3)));
         GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952, 48, 48);
       }
       GUI.draw.fillStyle = PixelTanks.userData.color;
       GUI.draw.globalAlpha = 1;
-      GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952+Math.min((Date.now()-(i === 0 ? this.timers.class.time : this.timers[['class', 'powermissle', 'toolkit', 'boost', 'grapple'][i]]))/[this.timers.class.cooldown, 10000, 40000, 5000, 5000][i], 1)*48, 48, 48);
+      GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952+Math.min((Date.now()-this.timers[type].time)/this.timers[type].cooldown, 1)*48, 48, 48);
     }
     GUI.drawText(this.dedTime < Date.now()-10000 ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
     GUI.drawText('', 0, 0, 30, '#ffffff', 0); // set font size :) can probably be changed
@@ -657,8 +663,8 @@ class Client {
 
   fire(type) {
     if (type === 2) {
-      if (Date.now() <= this.timers.powermissle+10000) return;
-      this.timers.powermissle = Date.now();
+      if (Date.now() <= this.timers.powermissle.time+this.timers.powermissle.cooldown) return;
+      this.timers.powermissle.time = Date.now();
     } else if (type === 0) {
       if (!this.canFire) return;
       this.canFire = false;
@@ -767,20 +773,31 @@ class Client {
     }
     if (k === PixelTanks.userData.keybinds.powermissle) this.fire(2);
     if (k === PixelTanks.userData.keybinds.grapple) {
-      if (Date.now() > this.timers.grapple+5000) {
+      if (Date.now() > this.timers.grapple.time+this.timers.grapple.cooldown) {
         this.fire('grapple');
-        this.timers.grapple = Date.now();
+        this.timers.grapple.time = Date.now();
       }
     }
     if (k === PixelTanks.userData.keybinds.toolkit) {
-      if (this.halfSpeed || Date.now() > this.timers.toolkit+40000) {
+      if (this.halfSpeed || Date.now() > this.timers.toolkit.time+this.timers.toolkit.cooldown) {
         this.tank.use.push('toolkit');
+        clearTimeout(this.toolkitTimeout);
         this.halfSpeed = !this.halfSpeed;
-        if (!this.halfSpeed) this.timers.toolkit = -1;
+        if (!this.halfSpeed) this.timers.toolkit.time = -1;
       }
-      if (Date.now() > this.timers.toolkit+40000) {
-        this.timers.toolkit = Date.now();
-        setTimeout(() => {this.halfSpeed = false}, 7500);
+      if (Date.now() > this.timers.toolkit.time+this.timers.toolkit.cooldown) {
+        this.timers.toolkit.time = Date.now();
+        this.toolkitTimeout = setTimeout(() => {
+          this.halfSpeed = false;
+          let refresh = Engine.hasPerk(PixelTanks.userData.perk, 5);
+          if (refresh) {
+            if (PixelTanks.userData.class === 'stealth') {
+              this.mana += (15-this.mana)*refresh*.5;
+            } else this.timers.class.time -= (this.timers.class.time+this.timers.class.cooldown-Date.now())*.5*refresh;
+            this.timers.toolkit -= (this.timers.toolkit+40000-Date.now())*.5*refresh;
+            this.timers.powermissle -= (this.timers.powermissle+10000-Date.now())*.5*refresh;
+          }
+        }, 7500);
         this.playAnimation('toolkit');
       }
     }
@@ -800,7 +817,7 @@ class Client {
           this.timers.class.time = Date.now();
           clearTimeout(this.stealthTimeout);
         } else {
-          this.mana = Math.min(this.mana+time/2000, 15);
+          this.mana = Math.min(this.mana+time/this.timers.class.cooldown, 15);
           this.timers.class.time = Date.now();
           if (this.mana > 0) {
             this.tank.invis = true;
@@ -848,10 +865,10 @@ class Client {
       if (!this.key[87] && !this.key[83]) this.up = null;
     }
     if (e.keyCode === PixelTanks.userData.keybinds.boost) {
-      if (Date.now() > this.timers.boost+(this.ded ? 0 : 5000)) {
+      if (Date.now() > this.timers.boost.time+(this.ded ? 0 : this.timers.boost.cooldown)) {
         this.speed = 16;
         this.tank.immune = true;
-        this.timers.boost = Date.now();
+        this.timers.boost.time = Date.now();
         clearTimeout(this.booster);
         this.booster = setTimeout(() => {
           this.speed = 4;
