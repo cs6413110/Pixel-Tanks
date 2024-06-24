@@ -1,6 +1,6 @@
 class Damage {
   static args = ['x', 'y', 'w', 'h', 'a', 'team', 'host'];
-  static raw = ['x', 'y', 'w', 'h', 'f'];
+  static raw = ['x', 'y', 'w', 'h'];
   constructor() {
     this.cells = new Set();
   }
@@ -40,4 +40,4 @@ class Damage {
     }
     this.release();
   }
-}
+} // maybe remove this as an entity?

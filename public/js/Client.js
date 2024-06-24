@@ -65,7 +65,7 @@ class Client {
       let e = this.hostupdate.entities.find(e => e.id === u[0]);
       if (!e) {
         if (!this.debug[u[0]]) this.debug[u[0]] = [];
-        e = {id: u[0]};
+        e = {id: u[0], time: Date.now()};
         this.hostupdate.entities.push(e);
         this.hostupdate[this.getIdType(e.id)].push(e);
       }
@@ -256,8 +256,9 @@ class Client {
   }
 
   drawExplosion(e) {
-    if (e.w === 200) GUI.drawImage(PixelTanks.images.animations['smoke'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, e.f*200, 0, 200, 200);
-    if (e.w !== 200) GUI.drawImage(PixelTanks.images.animations[(e.w === 99 ? 'heal' : '')+'explosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, e.f*50, 0, 50, 50);
+    let frame = Math.floor((Date.now()-e.time)/18);
+    if (e.w === 200) GUI.drawImage(PixelTanks.images.animations['smoke'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*200, 0, 200, 200);
+    if (e.w !== 200) GUI.drawImage(PixelTanks.images.animations[(e.w === 99 ? 'heal' : '')+'explosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*50, 0, 50, 50);
   }
 
 
