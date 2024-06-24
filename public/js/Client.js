@@ -177,8 +177,6 @@ class Client {
     PixelTanks.userData.stats[3] += 10;
     PixelTanks.userData.stats[0] += coins;
     PixelTanks.save();
-    this.canItem0 = this.canItem1 = this.canItem2 = this.canItem3 = this.canToolkit = true;
-    this.timers.toolkit = -1;
     for (const item of this.timers.items) item.time = -1;
     let scavenger = Engine.hasPerk(PixelTanks.userData.perk, 3);
     if (scavenger) {
@@ -791,11 +789,7 @@ class Client {
           this.halfSpeed = false;
           let refresh = Engine.hasPerk(PixelTanks.userData.perk, 5);
           if (refresh) {
-            if (PixelTanks.userData.class === 'stealth') {
-              this.mana += (15-this.mana)*refresh*.5;
-            } else this.timers.class.time -= (this.timers.class.time+this.timers.class.cooldown-Date.now())*.5*refresh;
-            this.timers.toolkit.time -= (this.timers.toolkit.time+this.timers.toolkit.cooldown-Date.now())*.5*refresh;
-            this.timers.powermissle.time -= (this.timers.powermissle.time+this.timers.powermissle.cooldown-Date.now())*.5*refresh;
+            for (const item of this.timers.items) item.time -= (item.time+item.cooldown-Date.now())*.5*refresh;
           }
         }, 7500);
         this.playAnimation('toolkit');
