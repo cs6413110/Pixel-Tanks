@@ -27,31 +27,46 @@ class Network {
         callback();
       });
     }
-  }
-
-  class Loader {
-    static loadImage(source, t, i) {
-      this.total++;
-      return new Promise((resolve, reject) => {
-        const image = new Image();
-        image.crossOrigin = 'Anonymous';
-        image.onload = () => {
-          this.loaded++;
-          PixelTanks.updateBootProgress(Math.round(this.loaded/this.total*100)/100);
-          resolve(image);
+    
+    
+    static fsrc = (static failed = new Image()).src = '';
+    
+    
+    
+    static pending = [];
+    static loaded = 0;
+    static total = 0;
+    static errored = 0;
+    static load(pack) {
+      const timeout = 15; // Image Load Timeout(seconds)
+      // stop previous, stop rendering
+      for (const group of pack.groups)
+      {
+        let host = group.host || pack.host;
+        for (const id of group.load) {
+          let i = PixelTanks[group.ref][id] = new Image();
+          i.src = host+path+id;
+          i.onload = () => Network.handle(1, i);
+          i.timeout = setTimeout(i.onerror = () => Network.handle(0, i), timeout*1000);
+          Network.pending.push(i);
+          Network.total++;
         }
-        image.onerror = () => alert(`Failed to load image: ${source}`);
-        image.src = `https://cs6413110.github.io/Pixel-Tanks/public/images${source}.png`;
-        this.key[t][i] = image;
-      });
+      }
     }
-  
-    static async loadImages(key) {
-      Loader.key = key;
-      Loader.loaded = Loader.total = 0;
-      const promises = [];
-      for (const t in key) for (const i in key[t]) if (!i.endsWith('_')) promises.push(this.loadImage(key[t][i], t, i));
-      await Promise.all(promises);
-      PixelTanks.launch();
+    
+    static handle(s, i) {
+      clearTimeout(i.timeout);
+      if (s) {
+        Network.loaded++;
+      } else {
+        Network.errored++;
+        i = Network.failed;
+      }
+      let done = Network.loaded+Network.errored;
+      PixelTanks.updateBootProgress(done/Network.total);
+      if (done === Network.total) {
+        if (Network.errored) alert('Warning! Missing '+Network.errored+' images.');
+        PixelTanks.launch();
+      }
     }
   }

@@ -1,0 +1,16 @@
+{
+  "default_host": "https://cs6413110.github.io/Pixel-Tanks/public/",
+  "": [ // image loading
+    {
+      "ref": "blocks", // property stored as on PixelTanks.images
+      "path": "blocks", // Location on host, *optional host property to overwrite default
+      "load": ["void", "weak", "strong"]
+    },
+  ],
+  "cosmetics": { // cosmetics
+    "host": "",
+    "path": "",
+    "common": [], // rarities
+    "uncommon": []
+  },
+}
