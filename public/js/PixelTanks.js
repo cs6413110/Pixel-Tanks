@@ -62,8 +62,7 @@ class PixelTanks {
     let deathAmount = 1;
     config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
     config.onload = () => {
-      PixelTanks.images = images;
-      Network.load(PixelTanks.images);
+      Network.load(sourceMap);
     Menus.menus = {
       start: {
         buttons: [
