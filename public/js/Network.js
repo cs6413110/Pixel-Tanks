@@ -38,9 +38,9 @@ class Network {
       PixelTanks.images = {}; // reset
       const timeout = 15; // Image Load Timeout(seconds)
       // stop previous, stop rendering
-      for (const group of pack.map)
-      {
+      for (const group of pack.map) {
         let host = group.host || pack.host;
+        PixelTanks.images[group.ref] = {...group.meta};
         for (const id of group.load) {
           let i = PixelTanks.images[group.ref][id] = new Image();
           i.src = host+path+'/'+id;
