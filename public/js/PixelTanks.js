@@ -63,7 +63,7 @@ class PixelTanks {
     config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
     config.onload = () => {
       PixelTanks.images = images;
-      Loader.loadImages(PixelTanks.images);
+      Network.load(PixelTanks.images);
     Menus.menus = {
       start: {
         buttons: [

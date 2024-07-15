@@ -29,22 +29,20 @@ class Network {
     }
     
     
-    static fsrc = (static failed = new Image()).src = '';
-    
-    
     
     static pending = [];
     static loaded = 0;
     static total = 0;
     static errored = 0;
     static load(pack) {
+      PixelTanks.images = {}; // reset
       const timeout = 15; // Image Load Timeout(seconds)
       // stop previous, stop rendering
       for (const group of pack.groups)
       {
         let host = group.host || pack.host;
         for (const id of group.load) {
-          let i = PixelTanks[group.ref][id] = new Image();
+          let i = PixelTanks.images[group.ref][id] = new Image();
           i.src = host+path+id;
           i.onload = () => Network.handle(1, i);
           i.timeout = setTimeout(i.onerror = () => Network.handle(0, i), timeout*1000);
