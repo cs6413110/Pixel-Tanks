@@ -43,7 +43,7 @@ class Network {
         PixelTanks.images[group.ref] = {...group.meta};
         for (const id of group.load) {
           let i = PixelTanks.images[group.ref][id] = new Image();
-          i.src = host+group.path+'/'+id+'.png';
+          i.src = host+'/'+group.path+'/'+id+'.png';
           i.onload = () => Network.handle(1, i);
           i.timeout = setTimeout(i.onerror = () => Network.handle(0, i), timeout*1000);
           Network.pending.push(i);
@@ -58,7 +58,7 @@ class Network {
         Network.loaded++;
       } else {
         Network.errored++;
-        alert(i.src+' failed!');
+        alert(i.src+' failed with code '+s);
         i = Network.failed;
       }
       let done = Network.loaded+Network.errored;
