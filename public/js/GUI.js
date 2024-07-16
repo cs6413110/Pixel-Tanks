@@ -8,7 +8,7 @@ class GUI {
   }
 
   static drawImage(image, x, y, w, h, t, px, py, bx, by, a, cx, cy, cw, ch) {
-    if (image typeof Image && !image.src) return;
+    if (image instanceof Image && !image.src) return;
     if (a !== undefined) {
       GUI.draw.translate(x+px, y+py);
       GUI.draw.rotate(a*Math.PI/180);
