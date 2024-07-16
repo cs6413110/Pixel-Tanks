@@ -1,4 +1,4 @@
-class GUI {
+cclass GUI {
   static resize() {
     PixelTanks.resizer = window.innerHeight/1000;
     GUI.canvas.height = window.innerHeight;
@@ -8,7 +8,7 @@ class GUI {
   }
 
   static drawImage(image, x, y, w, h, t, px, py, bx, by, a, cx, cy, cw, ch) {
-    if (image instanceof Image && !image.src) return;
+    if (!image.src) return;
     if (a !== undefined) {
       GUI.draw.translate(x+px, y+py);
       GUI.draw.rotate(a*Math.PI/180);
