@@ -1,4 +1,4 @@
-cclass GUI {
+class GUI {
   static resize() {
     PixelTanks.resizer = window.innerHeight/1000;
     GUI.canvas.height = window.innerHeight;
