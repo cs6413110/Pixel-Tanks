@@ -1,6 +1,6 @@
 const sourceMap = {
   fail: 'data',
-  host: 'https://cs6413110.github.io/Pixel-Tanks/public/',
+  host: 'https://cs6413110.github.io/Pixel-Tanks/public',
   map: [ // image loading
     {
       ref: 'blocks', // property stored as on PixelTanks.images
