@@ -50,6 +50,8 @@ class Network {
           Network.total++;
         }
       }
+      PixelTanks.images.cosmetics = {};
+      PixelTanks.images.deathEffects = {};
     }
     
     static handle(s, i) {
