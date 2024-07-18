@@ -414,6 +414,7 @@ class AI {
   destroy() {
     this.host.destroyEntity(this);
     clearInterval(this.lookInterval);
+    clearInterval(this.fireInterval);
     const index = this.host.ai.indexOf(this);
     if (index !== -1) this.host.ai.splice(index, 1);
     for (const cell of this.cells) {
