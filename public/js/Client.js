@@ -778,8 +778,9 @@ class Client {
         this.tank.use.push('toolkit');
         clearTimeout(this.toolkitTimeout);
         this.halfSpeed = !this.halfSpeed;
-        if (!this.halfSpeed) this.timers.toolkit.time = -1;
-      } else if (Date.now() > this.timers.toolkit.time+this.timers.toolkit.cooldown) {
+        if (!this.halfSpeed) return this.timers.toolkit.time = -1;
+      }
+      if (Date.now() > this.timers.toolkit.time+this.timers.toolkit.cooldown) {
         this.timers.toolkit.time = Date.now();
         this.toolkitTimeout = setTimeout(() => {
           this.halfSpeed = false;
