@@ -163,7 +163,7 @@ class Multiplayer extends Engine {
     t.logs = this.logs.length;
     t.privateLogs.length = 0;
     if (t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global) {
-      t.busy = true;
+      //t.busy = true;
       t.delayed = false;
       t.socket._send(pack(t.msg), {}, () => {
         t.busy = false;
