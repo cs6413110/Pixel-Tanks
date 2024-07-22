@@ -158,10 +158,10 @@ class Multiplayer extends Engine {
   }
 
   send(t) {
+    if (t.busy || (t.lastSend && t.lastSend+1000/upsl < Date.now())) return t.delayed = true;
     t.msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
     t.logs = this.logs.length;
     t.privateLogs.length = 0;
-    if (t.busy) return t.delayed = true;
     if (t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global) {
       t.busy = true;
       t.delayed = false;
