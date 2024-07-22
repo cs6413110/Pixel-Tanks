@@ -158,12 +158,12 @@ class Multiplayer extends Engine {
   }
 
   send(t) {
-    //if (t.busy || (t.lastSend && t.lastSend+1000/settings.upsl > Date.now())) return t.delayed = true;
+    if ((busy && t.busy) || (upsl && t.lastSend && t.lastSend+1000/settings.upsl > Date.now())) return t.delayed = true;
     t.msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
     t.logs = this.logs.length;
     t.privateLogs.length = 0;
     if (t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global) {
-      //t.busy = true;
+      t.busy = true;
       t.delayed = false;
       t.socket._send(pack(t.msg), {}, () => {
         t.busy = false;
@@ -582,11 +582,21 @@ class Defense extends Multiplayer {
   }
 }
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM, 'defense': Defense};
-
+let upsl = true, busy = true;
 const Commands = {
+  upsl: [Object, 2, 1, function(data) {
+    const t = servers[this.room].pt.find(t => t.username === this.username);
+    upsl = !upsl;
+    t.privateLogs.push({m: 'UPSL is '+upsl, c: '#ffffff'});
+  }],
+  busy: [Object, 2, 1, function(data) {
+    const t = servers[this.room].pt.find(t => t.username === this.username);
+    busy = !busy;
+    t.privateLogs.push({m: 'BUSY is '+busy, c: '#ffffff'});
+  }],
   playerlist: [Object, 4, 1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
-    for (const tank of servers[this.room].pt) t.privateLogs.push({m: tank.username, c: '#FFFFFF'});
+    for (const tank of servers[this.room].pt) t.privateLogs.push({m: tank.username, c: '#ffffff'});
   }],
   copylist: [Object, 4, 1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username)
