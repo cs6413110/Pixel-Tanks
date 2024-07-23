@@ -1,7 +1,7 @@
 const settings = {
   authserver: 'localhost',
   players_per_room: 10,
-  upsl: 60, // updates per second limit
+  upsl: 120, // updates per second limit
   port: 8080,
   chat: true,
   joining: true,
