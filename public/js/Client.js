@@ -197,7 +197,7 @@ class Client {
     let faster = Engine.hasPerk(PixelTanks.userData.perk, 4);
     let m = faster ? 1-.05*faster : 1;
     let hook = Engine.hasPerk(PixelTanks.userData.perk, 7);
-    let grapple = hook ? 10000-hook*3000 : 10000; 
+    let grapple = hook ? 10000-hook*2000 : 10000; 
     this.timers = {
       boost: {time: -1, cooldown: m*5000},
       powermissle: {time: -1, cooldown: m*10000},
