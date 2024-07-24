@@ -417,11 +417,10 @@ class Client {
       this.team = player.team;
       if (!this.ded && player.ded && this.gamemode === 'ffa') this.dedTime = Date.now();
       this.ded = player.ded;
-      if (player.flashbanged) {
-        GUI.draw.fillStyle = '#ffffff';
-        GUI.draw.fillRect(0, 0, 1600, 1600);
-        return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
-      }
+    } else {
+      GUI.draw.fillStyle = '#ffffff';
+      GUI.draw.fillRect(0, 0, 1600, 1600);
+      return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
     }
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
     GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
