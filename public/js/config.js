@@ -42,6 +42,31 @@ const sourceMap = {
       load: ['airstrike', 'duck_tape', 'super_glu', 'shield', 'flashbang', 'bomb', 'dynamite', 'weak', 'strong', 'spike', 'reflector', 'usb'],
     },
   ],
+  cosmetic: {
+    common: ['angel_wings', 'blue_tint', 'chip', 'christmas_hat', 'christmas_lights', 'deep_scratch', 'dizzy', 'glitch', 'medic', 'mlg_glasses', 'motherboard', 'moustache', 'plasma', 'police', 'power_armor', 'rage', 'reindeer_hat', 'small_scratch', 'spikes', 'static', 'terminator', 'toxic'],
+    uncommon: [],
+    rare: [],
+    epic: [],
+    legendary: [],
+    mythic: [],
+  },
+  deathEffect: {
+  }
+  /*crate = [{
+          common: ['white horns', 'white wings', 'blue horns', 'gold horns', 'blue wings', 'gold wings', 'watermelon', 'Spooked', 'Cute Eyes', 'Army', 'Top Hat', 'X', 'Red Hoodie', 'Devil Wings', 'Devil Horns', 'Exclaimation Point', 'Orange Hoodie', 'GoldShield', 'Yellow Hoodie', 'Green Hoodie', 'Blue Hoodie', 'Purple Hoodie', 'Cancelled', 'Spirals', 'Speaker', 'Spikes', 'Candy Cane', 'Pumpkin Face', 'Mask', 'Purple-Pink Hoodie', 'Bunny Ears'],
+          uncommon: ['glitch', 'spoider', 'CompanionCube', 'PortalCube', 'half glitch', 'eye', 'Anime Eyes', 'Angry Eyes', 'Hard Hat', 'Present', 'Dead', 'Peace', 'Question Mark', 'Small Scratch', 'Kill = Ban', 'Reindeer Hat', 'Pumpkin Hat', 'Cat Ears', 'Cake', 'Cat Hat', 'bread', 'First Aid', 'silver', 'Fisher Hat', 'chip', 'eyes', 'zombie', 'googly', 'static', 'lava', 'void knight'],
+          rare: ['gold helment', 'toxic', 'Antlers', 'White helment', 'Blue Helment', 'Aqua Helment', 'Purple helment', 'Stripes', 'scoped', 'brain', 'Hands', 'Straw Hat', 'Hax', 'Tools', 'Money Eyes', 'Dizzy', 'Checkmark', 'Sweat', 'Scared', 'Blue Tint', 'Purple Top Hat', 'Purple Grad Hat', 'Eyebrows', 'Helment', 'Rudolph', 'Candy Corn', 'Flag', 'Katana',  'Swords', 'angry hoodie'],
+          epic: ['Aaron', 'hacker_hoodie', 'Plasma Ball', 'Hazard', 'Locked', 'Elf', 'Triple Gun', 'Evil Eyes', 'Gold', 'Rage', 'Onfire', 'Halo', 'Police', 'Deep Scratch', 'bluekatana', 'Assassin', 'Astronaut', 'Christmas Lights', 'No Mercy', 'Error', 'disguise', 'Lego', 'Paleontologist'],
+          legendary: ['Sun Roof', 'Blind', 'Redsus', 'Uno Reverse', 'Christmas Hat', 'Mini Tank',],
+          mythic: ['Terminator', 'MLG Glasses', 'Power Armor', 'venom'],
+        }, {
+          common: ['explode', 'nuke', 'insta', 'evan'], //bruh why am i common :(
+          uncommon: ['anvil', 'gameover', 'minecraft'],
+          rare: ['darksouls', 'magic', 'Cactus'],
+          epic: ['battery', 'skull', 'banhammer'],
+          legendary: ['error', 'tombstone', 'pokeball'],
+          mythic: ['clicked', 'cat'],
+        }];*/
 }
 /*const images = {
   cosmetics: {
