@@ -2,7 +2,7 @@ const settings = {
   authserver: 'localhost',
   players_per_room: 10,
   upsl: 120, // updates per second limit
-  port: 8080,
+  port: 8080,//bru
   chat: true,
   joining: true,
 }
