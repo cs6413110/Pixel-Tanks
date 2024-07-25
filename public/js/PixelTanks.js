@@ -108,6 +108,7 @@ class PixelTanks {
         ],
         listeners: {},
         cdraw: function() {
+          PixelTanks.convertCosmeticFormat(); // TEMP
           if (!PixelTanks.userData.perks) PixelTanks.userData.perks = [false, false, false, false, false, false, false, false, false];
           if (!PixelTanks.userData.perk) PixelTanks.userData.perk = [0, 0];
           GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
@@ -951,6 +952,14 @@ class PixelTanks {
         }, (nimber)-20);
       }, namber);
     }
+  }
+
+  static convertCosmeticsFormat() {
+    const c = a => a.replaceAll(' ', '_').toLowerCase();
+    for (const cosmetic of PixelTanks.userData.cosmetics) cosmetic = c(cosmetic);
+    PixelTanks.userData.cosmetic_body = c(PixelTanks.userData.cosmetic_body);
+    PixelTanks.userData.cosmetic = c(PixelTanks.userData.cosmetic);
+    PixelTanks.userData.cosmetic_hat = c(PixelTanks.userData.cosmetic_hat);
   }
 
   static upgrade() {
