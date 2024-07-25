@@ -43,6 +43,7 @@ const sourceMap = {
     },
   ],
   cosmetic: {
+    path: 'cosmetics',
     common: ['angel_wings', 'blue_tint', 'chip', 'christmas_hat', 'christmas_lights', 'deep_scratch', 'dizzy', 'glitch', 'medic', 'mlg_glasses', 'motherboard', 'moustache', 'plasma', 'police', 'power_armor', 'rage', 'reindeer_hat', 'small_scratch', 'spikes', 'static', 'terminator', 'toxic'],
     uncommon: [],
     rare: [],
