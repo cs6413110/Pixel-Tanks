@@ -604,6 +604,9 @@ const Commands = {
     for (const tank of servers[this.room].pt) s += tank.username+'   ';
     t.socket.send({status: 'error', message: s});
   }],
+  requestunmute: [Object, 4, 1, function(data) {
+    for (const s of servers) for (const t of s.pt) if (Storage.admins.includes(t.username)) t.privateLogs.push({m: this.username+' requested to be unmuted!', c: '#ffff00'});
+  }],
   msg: [Object, 4, -1, function(data) {
     if (Storage.mutes.includes(this.username)) return this.send({status: 'error', message: 'You are muted!'});
     const t = servers[this.room].pt.find(t => t.username === this.username), m = servers[this.room].pt.find(t => t.username === data[1]);
@@ -612,6 +615,7 @@ const Commands = {
     if (m) m.privateLogs.push(message);
   }],
   createteam: [FFA, 4, 2, function(data) {
+    if (Storage.mutes.includes(this.username)) return this.send({status: 'error', message: `You can't make teams when you're muted!`});
     if (clean(data[1]) !== data[1]) return this.send({status: 'error', message: 'Team name contains profanity'});
     if (servers[this.room].pt.find(t => Engine.getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
     if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
