@@ -605,7 +605,7 @@ const Commands = {
     t.socket.send({status: 'error', message: s});
   }],
   requestunmute: [Object, 4, 1, function(data) {
-    for (const s of servers) for (const t of s.pt) if (Storage.admins.includes(t.username)) t.privateLogs.push({m: this.username+' requested to be unmuted!', c: '#ffff00'});
+    for (const s of Object.values(servers)) for (const t of s.pt) if (Storage.admins.includes(t.username)) t.privateLogs.push({m: this.username+' requested to be unmuted!', c: '#ffff00'});
   }],
   msg: [Object, 4, -1, function(data) {
     if (Storage.mutes.includes(this.username)) return this.send({status: 'error', message: 'You are muted!'});
