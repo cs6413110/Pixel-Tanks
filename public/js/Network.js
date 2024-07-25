@@ -36,7 +36,6 @@ class Network {
       PixelTanks.images = {};
       for (const image of Network.pending) image.onload = () => {}
       Network.pending.length = 0;
-      const timeout = 15; // Image Load Timeout(seconds)
       // stop previous, stop rendering
       for (const group of pack.map) {
         let host = group.host || pack.host;
@@ -49,12 +48,12 @@ class Network {
       let host = pack.host || pack.cosmetic.host;
       for (const rarity of pack.cosmetic) for (const cosmetic of rarity) Network.perImage(cosmetic, host+'/'+pack.cosmetic.path+'/'+id, 'cosmetics');
     }
-
+    static timeout = 15;
     static perImage(name, src, ref) {
       let i = PixelTanks.images[ref][name] = new Image();
       i.src = src+'.png';
       i.onload = () => Network.handle(1, i);
-      i.timeout = setTimeout(i.onerror = () => Network.handle(0, i), timeout*1000);
+      i.timeout = setTimeout(i.onerror = () => Network.handle(0, i), Network.timeout*1000);
       Network.pending.push(i);
       Network.total++;
     }
