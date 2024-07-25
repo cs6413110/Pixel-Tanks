@@ -954,7 +954,7 @@ class PixelTanks {
     }
   }
 
-  static convertCosmeticsFormat() {
+  static convertCosmeticFormat() {
     const c = a => a.replaceAll(' ', '_').toLowerCase();
     for (const cosmetic of PixelTanks.userData.cosmetics) cosmetic = c(cosmetic);
     PixelTanks.userData.cosmetic_body = c(PixelTanks.userData.cosmetic_body);
