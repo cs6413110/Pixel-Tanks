@@ -46,7 +46,7 @@ class Network {
       PixelTanks.images.deathEffects = {};
       PixelTanks.crates = {cosmetic: pack.cosmetic, deathEffect: pack.deathEffect};
       let host = pack.host || pack.cosmetic.host;
-      for (const rarity of pack.cosmetic) for (const cosmetic of rarity) Network.perImage(cosmetic, host+'/'+pack.cosmetic.path+'/'+id, 'cosmetics');
+      for (const rarity of ['common']) for (const cosmetic of pack.cosmetic[rarity]) Network.perImage(cosmetic, host+'/'+pack.cosmetic.path+'/'+id, 'cosmetics');
     }
     static timeout = 15;
     static perImage(name, src, ref) {
