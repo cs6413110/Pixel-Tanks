@@ -936,7 +936,7 @@ class PixelTanks {
           if (type) GUI.drawImage(item, 600, 400, 400, 400, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-start)/PixelTanks.images[name][crate[type][rarity][number]+'_'].speed)%PixelTanks.images[name][crate[type][rarity][number]+'_'].frames)*200, 0, 200, 200);
           if (!type) GUI.drawImage(item, 600, 400, 400, 400, 1);
           GUI.drawText('You Got', 800, 200, 100, '#ffffff', 0.5);
-          GUI.drawText(crate[type][rarity][number], 800, 800, 50, '#ffffff', 0.5);
+          GUI.drawText(crate[type][rarity][number].split('_').reduce((a, c) => (a.concat(c.charAt(0).toUpperCase()+c.slice(1))), []).join(' '), 800, 800, 50, '#ffffff', 0.5);
           GUI.drawText(rarity, 800, 900, 30, {mythic: '#FF0000', legendary: '#FFFF00', epic: '#A020F0', rare: '#0000FF', uncommon: '#32CD32', common: '#FFFFFF'}[rarity], 0.5);
         }, 15); // use built in menus renderer instead?
         let done = false;
