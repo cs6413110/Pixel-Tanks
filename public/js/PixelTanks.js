@@ -746,7 +746,7 @@ class PixelTanks {
           [928, 620, 176, 176, function() {PixelTanks.purchase(0, 3)}, true],
         ],
         listeners: {},
-        keydown: function(e) {if (e.keyCode === 27) Menus.trigger('main')}
+        keydown: function(e) {if (e.keyCode === 27) Menus.trigger('main')},
         cdraw: function() {
           GUI.drawText(PixelTanks.userData.stats[0]+' coinage', 800, 350, 50, 0x000000, 0.5);
           if (newClass !== 'undefined') GUI.drawImage(PixelTanks.images.menus.alert, 406, 10, 20, 20, 1);
@@ -792,7 +792,7 @@ class PixelTanks {
           [1404, 740, 136, 136, function() {PixelTanks.purchase(1, 23)}, true],
         ],
         listeners: {},
-        keydown: function(e) {if (e.keyCode === 27) Menus.trigger('main')}
+        keydown: function(e) {if (e.keyCode === 27) Menus.trigger('main')},
         cdraw: function() {
           GUI.drawText(PixelTanks.userData.stats[0]+' coinage', 800, 350, 50, 0x000000, 0.5);
           if (newClass !== 'undefined') GUI.drawImage(PixelTanks.images.menus.alert, 406, 10, 20, 20, 1);
