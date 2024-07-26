@@ -60,8 +60,6 @@ class Shot {
     return false;
   }
   update() {
-    this.r += Math.random()*10;
-    this.host.updateEntity(this, Shot.u2);
     const time = Math.floor((Date.now()-this.e)/15), x = this.target ? this.target.x-this.offset[0] : time*this.xm+this.sx, y = this.target ? this.target.y-this.offset[1] : time*this.ym+this.sy, x1 = Math.floor(x/100), x2 = Math.floor((x+10)/100), y1 = Math.floor(y/100), y2 = Math.floor((y+10)/100);
     if (((x < 0 || y < 0 || x+10 >= 3000 || y+10 >= 3000) && !this.target && this.collide()) || (this.target && (this.target.x === undefined || this.target.y === undefined))) return this.destroy();
     if (this.target) if (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded) return this.destroy();
