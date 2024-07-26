@@ -895,7 +895,9 @@ class PixelTanks {
     for (let i = 0; i < stuffAmount; i++) {
       namber += nimber;
       setTimeout(() => {
-        const price = type ? 5 : 1, name = type ? 'deathEffects' : 'cosmetics', rand = Math.floor(Math.random()*1001), crate = [{
+        const price = type ? 5 : 1, name = type ? 'deathEffects' : 'cosmetics', rand = Math.floor(Math.random()*1001);
+        let crate = PixelTanks.crates;
+          /*crate = [{
           common: ['white horns', 'white wings', 'blue horns', 'gold horns', 'blue wings', 'gold wings', 'watermelon', 'Spooked', 'Cute Eyes', 'Army', 'Top Hat', 'X', 'Red Hoodie', 'Devil Wings', 'Devil Horns', 'Exclaimation Point', 'Orange Hoodie', 'GoldShield', 'Yellow Hoodie', 'Green Hoodie', 'Blue Hoodie', 'Purple Hoodie', 'Cancelled', 'Spirals', 'Speaker', 'Spikes', 'Candy Cane', 'Pumpkin Face', 'Mask', 'Purple-Pink Hoodie', 'Bunny Ears'],
           uncommon: ['glitch', 'spoider', 'CompanionCube', 'PortalCube', 'half glitch', 'eye', 'Anime Eyes', 'Angry Eyes', 'Hard Hat', 'Present', 'Dead', 'Peace', 'Question Mark', 'Small Scratch', 'Kill = Ban', 'Reindeer Hat', 'Pumpkin Hat', 'Cat Ears', 'Cake', 'Cat Hat', 'bread', 'First Aid', 'silver', 'Fisher Hat', 'chip', 'eyes', 'zombie', 'googly', 'static', 'lava', 'void knight'],
           rare: ['gold helment', 'toxic', 'Antlers', 'White helment', 'Blue Helment', 'Aqua Helment', 'Purple helment', 'Stripes', 'scoped', 'brain', 'Hands', 'Straw Hat', 'Hax', 'Tools', 'Money Eyes', 'Dizzy', 'Checkmark', 'Sweat', 'Scared', 'Blue Tint', 'Purple Top Hat', 'Purple Grad Hat', 'Eyebrows', 'Helment', 'Rudolph', 'Candy Corn', 'Flag', 'Katana',  'Swords', 'angry hoodie'],
@@ -909,7 +911,7 @@ class PixelTanks {
           epic: ['battery', 'skull', 'banhammer'],
           legendary: ['error', 'tombstone', 'pokeball'],
           mythic: ['clicked', 'cat'],
-        }];
+        }];*/
         let rarity;
         if (rand < 1) { // .1%
           rarity = 'mythic';
