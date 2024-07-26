@@ -47,7 +47,7 @@ const sourceMap = {
     common: ['medic', 'police', 'small_scratch', 'spikes', 'moustache', 'pumpkin_face', 'army', 'hardhat', 'halo', 'lego', 'present', 'pumpkin_hat', 'top_hat', 'stamp', 'dead', 'earmuffs', 'ban', 'sweat'],
     uncommon: ['chip', 'deep_scratch', 'evil_eye', 'inferno_eye', 'motherboard', 'blue_wings', 'blue_horns', 'white_wings', 'white_horns', 'gold_wings', 'gold_horns', 'devils_wings', 'devil_horns', 'hazard', 'angel_wings', 'bat_wings', 'locked', 'mini_tank', 'dust'],
     rare: ['blue_tint', 'glitch', 'blue_helment', 'white_helment', 'helment', 'gold_helment', 'hacker_hoodie', 'redsus', 'blind', 'magma'],
-    epic: ['christmas_hat', 'christmas_lights', 'dizzy', 'rage', 'toxic', 'crown', 'dark_crown' 'error'],
+    epic: ['christmas_hat', 'christmas_lights', 'dizzy', 'rage', 'toxic', 'crown', 'dark_crown', 'error'],
     legendary: ['hoodie', 'plasma'],
     mythic: ['terminator', 'mlg_glasses', 'power_armor'],
   },
