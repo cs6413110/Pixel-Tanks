@@ -44,7 +44,7 @@ class Network {
       }
       PixelTanks.images.cosmetics = {};
       PixelTanks.images.deathEffects = {};
-      PixelTanks.crates = {cosmetic: pack.cosmetic, deathEffect: pack.deathEffect};
+      PixelTanks.crates = [pack.cosmetic, pack.deathEffect];
       let host = pack.host || pack.cosmetic.host;
       for (const rarity of ['common']) for (const cosmetic of pack.cosmetic[rarity]) Network.perImage(cosmetic, host+'/'+pack.cosmetic.path+'/'+cosmetic, 'cosmetics');
     }
