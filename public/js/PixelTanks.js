@@ -928,7 +928,6 @@ class PixelTanks {
         } else { // 70%
           rarity = 'common'; 
         }
-        rarity = 'common'; // REMOVE ME
         let number = Math.floor(Math.random()*(crate[type][rarity].length)), item;
         for (const e in this.images[name]) if (e === crate[type][rarity][number]) item = this.images[name][e];
         if (item === undefined) return alert('Error while trying to give you cosmetic id "'+crate[type][rarity][number]+'"');
