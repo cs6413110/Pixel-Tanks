@@ -72,6 +72,7 @@ class AI {
       if (this.canPowermissle && this.role !== 0 && Math.random() <= 1/600) this.fireCalc(this.target.x, this.target.y, 'powermissle');
       if (this.canFire) this.fireCalc(this.target.x, this.target.y);
     }
+    if (this.role === 4 && Math.sqrt((this.target.x - this.x) ** 2 + (this.target.y - this.y) ** 2) < 50) this.host.useAbility(this, 'airstrike'+this.target.x+'x'+this.target.y);
     if (this.canClass && this.mode !== 0 && Math.random() < 1/300) {
       let cooldown = 0;
       if (this.class === 'tactical') {
