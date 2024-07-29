@@ -698,7 +698,7 @@ class PixelTanks {
                 GUI.draw.lineWidth = 10;
                 GUI.draw.strokeRect(x[i%3], y[Math.floor(i/3)], 80, 80);
               }
-              GUI.drawImage(PixelTanks.images.menus[perks[i]+level], x[i%3], y[Math.floor(i/3)], 80, 80, 1);
+              GUI.drawImage(PixelTanks.images.menus[perks[i]], x[i%3], y[Math.floor(i/3)], 80, 80, 1, 0, 0, 0, 0, undefined, (level-1)*40, 0, 40, 40);
               if (lock) GUI.drawImage(PixelTanks.images.menus.locked, x[i%3], y[Math.floor(i/3)], 80, 80, 1);
             } 
           } else if (this.cosmeticTab) {
