@@ -513,7 +513,7 @@ class PixelTanks {
           [448, 560, 88, 88, function() {PixelTanks.switchTab('cosmeticTab', 'cosmetic_body')}, false],
           [448, 220, 88, 88, function() {PixelTanks.switchTab('deathEffectsTab')}, false],
           [844, 816, 88, 88, function() {PixelTanks.switchTab('perkTab', 1)}, false],
-          [888, 816, 88, 88, function() {PixelTanks.switchTab('perkTab', 2)}, false],
+          [932, 816, 88, 88, function() {PixelTanks.switchTab('perkTab', 2)}, false],
         ],
         listeners: {
           mousedown: function(e) {
@@ -637,9 +637,9 @@ class PixelTanks {
             if (PixelTanks.userData.items[i] !== 'undefined') GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [404, 492, 580, 668][i], 820, 80, 80, 1);
             if (PixelTanks.userData.items[i] === 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, [404, 492, 580, 668][i], 820, 80, 80, 1);
           }
-          let perkKey = ['shield', 'thermal', 'scavenger', 'cooldown', 'refresh', 'radar', 'hook', 'adrenaline', 'core'];
+          let perkKey = [0, 'shield', 'thermal', 'scavenger', 'cooldown', 'refresh', 'radar', 'hook', 'adrenaline', 'core'];
           if (PixelTanks.userData.perk[0]) GUI.drawImage(PixelTanks.images.menus[perkKey[Math.floor(PixelTanks.userData.perk[0])]], 844, 816, 88, 88, 1, 0, 0, 0, 0, undefined, ((PixelTanks.userData.perk[0]%1)*10-1)*40, 0, 40, 40);
-          if (PixelTanks.userData.perk[1]) GUI.drawImage(PixelTanks.images.menus[perkKey[Math.floor(PixelTanks.userData.perk[1])]], 888, 816, 80, 80, 1, 0, 0, 0, 0, undefined, ((PixelTanks.userData.perk[1]%1)*10-1)*40, 0, 40, 40);
+          if (PixelTanks.userData.perk[1]) GUI.drawImage(PixelTanks.images.menus[perkKey[Math.floor(PixelTanks.userData.perk[1])]], 932, 816, 80, 80, 1, 0, 0, 0, 0, undefined, ((PixelTanks.userData.perk[1]%1)*10-1)*40, 0, 40, 40);
           PixelTanks.renderBottom(680, 380, 240, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
           PixelTanks.renderTop(680, 380, 240, PixelTanks.userData.color, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
