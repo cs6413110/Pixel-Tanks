@@ -72,7 +72,7 @@ class AI {
       if (this.canPowermissle && this.role !== 0 && Math.random() <= 1/600) this.fireCalc(this.target.x, this.target.y, 'powermissle');
       if (this.canFire) this.fireCalc(this.target.x, this.target.y);
     }
-    if (this.role === 4 && Math.sqrt((this.target.x - this.x) ** 2 + (this.target.y - this.y) ** 2) < 3000) this.fireCalc(this.target.x, this.target.y, 'megamissle');
+    if (this.role === 4 && Math.sqrt((this.target.x - this.x) ** 2 + (this.target.y - this.y) ** 2) < 150) this.fireCalc(this.target.x, this.target.y, 'megamissle');
     if (this.canClass && this.mode !== 0 && Math.random() < 1/300) {
       let cooldown = 0;
       if (this.class === 'tactical') {
