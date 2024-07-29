@@ -20,7 +20,7 @@ const sourceMap = {
     {
       ref: 'menus',
       path: 'menus',
-      load: ['ui', 'start', 'main', 'multiplayer', 'singleplayer', 'singleplayer2', 'victory', 'defeat', 'crate', 'settings1', 'settings2', 'inventory', 'classTab', 'itemTab', 'perkTab', 'cosmeticTab', 'shop', 'shop2', 'broke', 'htp1', 'htp2', 'htp3', 'htp4', 'pause', 'help', 'helpinventory', 'helpcosmetic', 'helpclass', 'helpmode', 'helpvocab', 'helpteam', 'broke', 'locked', 'alert', 'adrenaline1', 'adrenaline2', 'adrenaline3', 'cooldown1', 'cooldown2', 'cooldown3', 'core1', 'core2', 'core3', 'hook1', 'hook2', 'hook3', 'radar1', 'radar2', 'refresh1', 'refresh2', 'scavenger1', 'scavenger2', 'scavenger3', 'shield1', 'shield2', 'thermal1', 'thermal2', 'thermal3']
+      load: ['ui', 'start', 'main', 'multiplayer', 'singleplayer', 'singleplayer2', 'victory', 'defeat', 'crate', 'settings1', 'settings2', 'inventory', 'classTab', 'itemTab', 'perkTab', 'cosmeticTab', 'shop', 'shop2', 'broke', 'htp1', 'htp2', 'htp3', 'htp4', 'pause', 'help', 'helpinventory', 'helpcosmetic', 'helpclass', 'helpmode', 'helpvocab', 'helpteam', 'broke', 'locked', 'alert', 'adrenaline', 'cooldown', 'core', 'hook', 'radar', 'refresh', 'scavenger', 'shield', 'thermal'],
     },
     {
       ref: 'animations',
