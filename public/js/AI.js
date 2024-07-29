@@ -22,7 +22,7 @@ class AI {
     if (this.role === 4) {
       this.canFire = this.canPowermissle = false;
       this.fire = {time: 999999999, team: this.team};
-      this.barrelSpeed = 360;
+      this.barrelSpeed = 50;
     }
     /*
     if (Math.random() < (rank/20)) this.canItem0 = true;
