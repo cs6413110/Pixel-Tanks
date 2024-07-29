@@ -424,8 +424,10 @@ class Client {
     }
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
     GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
+    GUI.draw.imageSmoothingEnabled = true;
     for (const block of b) this.drawBlock(block);
     for (const shot of s) this.drawShot(shot);
+    GUI.draw.imageSmoothingEnabled = false;
     for (const ai of a) this.drawTank(ai);
     for (const tank of t) this.drawTank(tank);
     for (const block of b) if (block.s && block.hp !== block.maxHp) {
