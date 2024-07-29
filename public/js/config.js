@@ -25,7 +25,7 @@ const sourceMap = {
     {
       ref: 'animations',
       path: 'animations',
-      load: ['tape', 'glu', 'fire', 'text', 'detonate', 'weakbreak', 'explosion', 'healexplosion', 'smoke'],
+      load: ['tape', 'glu', 'fire', 'text', 'detonate', 'explosion', 'healexplosion', 'smoke'],
       meta: {
         tape_: { frames: 17, speed: 50 },
         toolkit_: { frames: 16, speed: 50 },
@@ -33,7 +33,6 @@ const sourceMap = {
         fire_: { frames: 1, speed: 50 },
         text_: { frames: 37, speed: 50 },
         detonate_: { frames: 28, speed: 20 },
-        weakbreak_: { frames: 37, speed: 10 },
       },
     },
     {
@@ -45,8 +44,8 @@ const sourceMap = {
   cosmetic: {
     path: 'cosmetics',
     common: ['medic', 'police', 'small_scratch', 'spikes', 'moustache', 'pumpkin_face', 'army', 'hardhat', 'halo', 'lego', 'present', 'pumpkin_hat', 'top_hat', 'stamp', 'dead', 'earmuffs', 'ban', 'sweat'],
-    uncommon: ['chip', 'deep_scratch', 'evil_eye', 'inferno_eye', 'motherboard', 'blue_wings', 'blue_horns', 'white_wings', 'white_horns', 'gold_wings', 'gold_horns', 'devils_wings', 'devil_horns', 'hazard', 'angel_wings', 'bat_wings', 'locked', 'mini_tank', 'dust'],
-    rare: ['blue_tint', 'glitch', 'blue_helment', 'white_helment', 'helment', 'gold_helment', 'hacker_hoodie', 'redsus', 'blind', 'magma'],
+    uncommon: ['chip', 'deep_scratch', 'evil_eye', 'inferno_eye', 'motherboard', 'blue_wings', 'blue_horns', 'white_wings', 'white_horns', 'gold_wings', 'gold_horns', 'devil_wings', 'devil_horns', 'hazard', 'angel_wings', 'bat_wings', 'locked', 'mini_tank', 'dust'],
+    rare: ['blue_tint', 'glitch', 'blue_helmet', 'white_helmet', 'helmet', 'gold_helmet', 'hacker_hoodie', 'sus', 'magma'],
     epic: ['christmas_hat', 'christmas_lights', 'dizzy', 'rage', 'toxic', 'crown', 'dark_crown', 'error'],
     legendary: ['hoodie', 'plasma'],
     mythic: ['terminator', 'mlg_glasses', 'power_armor'],
