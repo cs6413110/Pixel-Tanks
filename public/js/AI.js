@@ -22,6 +22,7 @@ class AI {
     if (this.role === 4) {
       this.canFire = this.canPowermissle = false;
       this.fire = {time: 999999999, team: this.team};
+      this.barrelSpeed = 360;
     }
     /*
     if (Math.random() < (rank/20)) this.canItem0 = true;
@@ -73,8 +74,9 @@ class AI {
       if (this.canFire) this.fireCalc(this.target.x, this.target.y);
     }
     if (this.role === 4 && Math.sqrt((this.target.x - this.x) ** 2 + (this.target.y - this.y) ** 2) < 100) {
-      //this.fireCalc(this.target.x, this.target.y, 'megamissle');
-      this.t.push(setTimeout(() => this.host.d.push(A.template('Damage').init(this.x-100, this.y-100, 300, 300, 500, this.team, this.host)), 0));
+      this.fireCalc(this.target.x, this.target.y, 'megamissle');
+      //this.t.push(setTimeout(() => this.host.d.push(A.template('Damage').init(this.x-100, this.y-100, 300, 300, 500, this.team, this.host)), 0));
+      return this.destroy();
     }
     if (this.canClass && this.mode !== 0 && Math.random() < 1/300) {
       let cooldown = 0;
