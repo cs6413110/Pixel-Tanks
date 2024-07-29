@@ -19,6 +19,7 @@ class AI {
     this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = this.shields = 0;
     this.canFire = this.canPowermissle = this.canBoost = this.canBashed = true;
     this.fire = {time: 0, team: this.team};
+    if (this.role === 4) this.canFire = this.canPowermissle = false;
     /*
     if (Math.random() < (rank/20)) this.canItem0 = true;
     if (Math.random() < (rank/20)) this.canItem1 = true;
@@ -30,7 +31,7 @@ class AI {
     if (Math.random() < (rank/20)) this.cosmetic = cosmetics[Math.floor(Math.random()*cosmetics.length)];
     if (Math.random() < (rank/20)) this.cosmetic_body = cosmetics[Math.floor(Math.random()*cosmetics.length)];
     */
-    if (this.role !== 0) this.giveAbilities();
+    if (this.role !== 0 && this.role !== 4) this.giveAbilities();
     const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
     if (summoner) {
       this.cosmetic_hat = summoner.cosmetic_hat;
