@@ -571,8 +571,10 @@ class Client {
   chat(e) {
     if (e.key.length === 1) this.msg = (this.msg+e.key).slice(0, 2000);
     if (e.keyCode === 8) this.msg = this.msg.slice(0, -1);
+    if (e.keyCode === 38 && this.lastMessage) this.msg = this.lastMessage;
     if (e.keyCode === 13) {
       if (this.msg !== '') {
+        this.lastMessage = this.msg;
         if (this.msg.charAt(0) === '/') {
           const params = this.msg.replace('/', '').split(' ');
           if (params[0] === 'ytdl') {
