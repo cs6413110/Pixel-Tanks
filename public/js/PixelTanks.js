@@ -109,6 +109,7 @@ class PixelTanks {
         listeners: {},
         cdraw: function() {
           PixelTanks.convertCosmeticFormat(); // TEMP
+          PixelTanks.userData.stats[4] = 20;
           if (!PixelTanks.userData.perks) PixelTanks.userData.perks = [false, false, false, false, false, false, false, false, false];
           if (!PixelTanks.userData.perk) PixelTanks.userData.perk = [0, 0];
           GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
