@@ -107,6 +107,9 @@ class Engine {
     } else if (a.includes('airstrike')) {
       const h = a.replace('airstrike', '').split('x');
       this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'airstrike', Engine.parseTeamExtras(t.team), this));
+    } else if (a.includes('instastrike')) {
+      const h = a.replace('instastrike', '').split('x');
+      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'instastrike', 'nuketank', this));
     } else if (a.includes('flashbang')) {
       const h = a.replace('flashbang', '').split('x');
       this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'smoke', Engine.parseTeamExtras(t.team), this));
