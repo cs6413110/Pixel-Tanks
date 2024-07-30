@@ -5,7 +5,7 @@ const sourceMap = {
     {
       ref: 'blocks', // property stored as on PixelTanks.images
       path: 'blocks', // Location on host, *optional host property to overwrite default
-      load: ['barrier', 'strong', 'weak', 'spike', 'floor', 'void', 'gold', 'fire', 'friendlyfire', 'airstrike', 'friendlyairstrike'],
+      load: ['barrier', 'strong', 'weak', 'spike', 'floor', 'void', 'gold', 'fire', 'friendlyfire', 'airstrike', 'instastrike', 'friendlyairstrike'],
     },
     {
       ref: 'bullets',
