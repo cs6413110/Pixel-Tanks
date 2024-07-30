@@ -74,7 +74,6 @@ class AI {
     }
     if (this.role === 4 && Math.sqrt((this.target.x - this.x) ** 2 + (this.target.y - this.y) ** 2) < 75) {
       this.host.useAbility(this, 'instastrike'+this.target.x+'x'+this.target.y);
-      this.hp = this.rank*10+310;
     }
     if (this.canClass && this.mode !== 0 && Math.random() < 1/300) {
       let cooldown = 0;
@@ -176,7 +175,6 @@ class AI {
 
   update() {
     this.think();
-    if (this.hp === this.rank*10+310) this.damageCalc(this.x, this.y, 510, Engine.getUsername(this.team));
     if (!this.target && this.role === 0) this.r = (this.r+1)%360;
     if (!(this.role === 0 && this.mode === 0)) {
       const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
