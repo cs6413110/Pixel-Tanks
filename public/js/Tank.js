@@ -1,6 +1,6 @@
 class Tank {
   static args = ['username', 'rank', 'class', 'perk', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'deathEffect', 'color'];
-  static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'radar', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'p', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
   static s = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
   static u = ['x', 'y'];
   constructor() {
@@ -37,6 +37,25 @@ class Tank {
   }
   update() {
     const team = Engine.getTeam(this.team);
+    let radar = Engine.hasPerk(this.perk, 6), dis = radar === 1 ? 700 : 1200;
+    if (radar) {
+      let target = false, cdis = false;
+      for (const t of this.pt.concat(this.ai)) {
+        let d = (t.x-this.x)**2+(t.y-this.y)**2;
+        if (d <= dis && d < cdis) {
+          target = t;
+          cdis = d;
+        }
+      }
+      if (target) {
+        clearTimeout(this.radarTimeout);
+        this.p = Math.atan((target.y-this.y)/(target.x-this.x))*180/Math.PI;
+        this.tracking = true;
+      } else {
+        if (this.tracking) this.radarTimeout = setTimeout(() => (this.p = false), 2000);
+        this.tracking = false;
+      }
+    }
     if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
       this.setValue('dedEffect', this.dedEffect); // REMOVE THIS TEMPORARY
@@ -63,14 +82,6 @@ class Tank {
             if (entity.type !== 'grapple') entity.team = this.team;
           }
         }
-      }
-    }
-    let radar = Engine.hasPerk(this.perk, 6); // radar can be offloaded to slowtick?
-    let enemies = [];
-    for (const t of this.host.pt) {
-      let d = Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2)
-      if (Engine.getTeam(t.team) !== Engine.getTeam(this.team) && d < radar*700) {
-        enemies.push();
       }
     }
     let spikeLimiter = true;
