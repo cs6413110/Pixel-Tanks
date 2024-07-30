@@ -684,7 +684,7 @@ const Commands = {
     gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
   }],
     target: [Object, 2, 3, function(data) {
-    if (data[2] >== 1001) return return this.send({status: 'error', message: `we canceled your command for the safety of the server. now stap u eveninainindmmmm juts spawn nuke tonks instead :)`});
+    if (data[2] >== 1001) return this.send({status: 'error', message: `we canceled your command for the safety of the server. now stap u eveninainindmmmm juts spawn nuke tonks instead :)`});
     const t = servers[this.room].pt.find(t => t.username === data[1]);
     for (let i = 0; i <= data[2]; i++) setTimeout(() => {servers[this.room].b.push(A.template('Block').init(t.x-50, t.y-50, Infinity, 'airstrike', ':', servers[this.room]))}, i*1000);
   }],
