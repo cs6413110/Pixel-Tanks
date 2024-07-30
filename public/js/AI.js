@@ -73,7 +73,7 @@ class AI {
       if (this.canFire) this.fireCalc(this.target.x, this.target.y);
     }
     if (this.role === 4 && Math.sqrt((this.target.x - this.x) ** 2 + (this.target.y - this.y) ** 2) < 75 && this.seeTarget) {
-      this.host.useAbility(this, 'instastrike'+this.target.x+'x'+this.target.y);
+      this.host.useAbility(this, 'instastrike'+(this.target.x-50)+'x'+(this.target.y-50));
     }
     if (this.canClass && this.mode !== 0 && Math.random() < 1/300) {
       let cooldown = 0;
