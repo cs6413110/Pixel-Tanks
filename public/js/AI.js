@@ -21,7 +21,7 @@ class AI {
     this.fire = {time: 0, team: this.team};
     if (this.role === 4) {
       this.canFire = this.canPowermissle = false;
-      this.fire = {time: 999999999, team: this.team};
+      //this.fire = {time: 999999999, team: this.team};
     }
     /*
     if (Math.random() < (rank/20)) this.canItem0 = true;
