@@ -446,8 +446,8 @@ class Client {
     GUI.drawText(this.coins, 1530, 200, 30, '#FFFFFF', 1);
     GUI.drawText(this.xp, 1530, 260, 30, '#FFFFFF', 1);
     GUI.draw.fillStyle = PixelTanks.userData.color;
-    GUI.draw.globalAlpha = 0.5;
     if (player.p) GUI.drawText(player.p, 800, 400, 30, '#ffffff', 1);
+    GUI.draw.globalAlpha = 0.5;
     const c = [508, 672, 836, 1000]; // x coords of items
     for (let i = 0; i < 4; i++) {
       const item = PixelTanks.userData.items[i];
