@@ -50,6 +50,7 @@ class Tank {
       if (target) {
         clearTimeout(this.radarTimeout);
         this.p = Math.atan((target.y-this.y)/(target.x-this.x))*180/Math.PI;
+        this.privateLogs.push({m: 'Tracking '+target.username+' with p='+this.p, c: '#ffffff'});
         this.tracking = true;
       } else {
         if (this.tracking) this.radarTimeout = setTimeout(() => (this.p = false), 2000);
