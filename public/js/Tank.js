@@ -39,7 +39,7 @@ class Tank {
     const team = Engine.getTeam(this.team);
     let radar = Engine.hasPerk(this.perk, 6), dis = radar === 1 ? 700 : 1200;
     if (radar) {
-      let target = false, cdis = false;
+      let target = false, cdis = Infinity;
       for (const t of this.host.pt.concat(this.host.ai)) {
         let d = (t.x-this.x)**2+(t.y-this.y)**2;
         if (d <= dis && d < cdis) {
