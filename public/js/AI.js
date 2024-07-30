@@ -74,6 +74,7 @@ class AI {
     }
     if (this.role === 4 && Math.sqrt((this.target.x - this.x) ** 2 + (this.target.y - this.y) ** 2) < 75) {
       this.host.useAbility(this, 'instastrike'+this.target.x+'x'+this.target.y);
+      this.damageCalc(this.x, this.y, 500, Engine.getUsername(entity.team));
     }
     if (this.canClass && this.mode !== 0 && Math.random() < 1/300) {
       let cooldown = 0;
