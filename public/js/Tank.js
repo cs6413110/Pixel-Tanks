@@ -40,7 +40,7 @@ class Tank {
     let radar = Engine.hasPerk(this.perk, 6), dis = radar === 1 ? 700 : 1200;
     if (radar) {
       let target = false, cdis = false;
-      for (const t of this.pt.concat(this.ai)) {
+      for (const t of this.host.pt.concat(this.host.ai)) {
         let d = (t.x-this.x)**2+(t.y-this.y)**2;
         if (d <= dis && d < cdis) {
           target = t;
