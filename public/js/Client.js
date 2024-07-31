@@ -446,6 +446,7 @@ class Client {
     GUI.drawText(this.coins, 1530, 200, 30, '#FFFFFF', 1);
     GUI.drawText(this.xp, 1530, 260, 30, '#FFFFFF', 1);
     if (Engine.hasPerk(PixelTanks.userData.perk, 6) && player.p) {
+      GUI.draw.fillText('fix', 800, 500, 30, '#ffffff', .5);
       GUI.draw.translate(800, 500);
       GUI.draw.rotate(player.p);
       GUI.draw.fillStyle = '#000000';
