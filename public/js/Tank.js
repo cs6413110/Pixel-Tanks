@@ -47,7 +47,7 @@ class Tank {
         if (d <= dis && t.ded && !this.ded) {
           if (Engine.getTeam(t.team) !== Engine.getTeam(this.team) && !t.invis) {
             enemies.push(t);
-          } else frens.push(t);
+          } else if (d !== 0) frens.push(t);
         }
       }
       for (const e of enemies) this.eradar.push(Engine.toAngle(e.x-this.x, e.y-this.y))
