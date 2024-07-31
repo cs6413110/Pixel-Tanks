@@ -1,7 +1,7 @@
 class Tank {
   static args = ['username', 'rank', 'class', 'perk', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'deathEffect', 'color'];
-  static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'p', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
-  static s = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'p', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'fradar', 'eradar', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static s = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'fradar', 'eradar', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
   static u = ['x', 'y'];
   constructor() {
     this.cells = new Set();
@@ -39,22 +39,17 @@ class Tank {
     const team = Engine.getTeam(this.team);
     let radar = Engine.hasPerk(this.perk, 6), dis = radar === 1 ? 700 : 1200;
     if (radar) {
-      let target = false, cdis = Infinity;
+      let enemies = [], frens = [];
       for (const t of this.host.pt.concat(this.host.ai)) {
         let d = Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2);
-        if (d <= dis && d < cdis && Engine.getTeam(t.team) !== Engine.getTeam(this.team) && t.ded && !this.ded && !t.invis) {
-          target = t;
-          cdis = d;
+        if (d <= dis && t.ded && !this.ded) {
+          if (Engine.getTeam(t.team) !== Engine.getTeam(this.team) && !t.invis) {
+            enemies.push(t);
+          } else frens.push(t);
         }
       }
-      if (target) {
-        clearTimeout(this.radarTimeout);
-        this.p = Engine.toAngle(target.x-this.x, target.y-this.y);
-        this.tracking = true;
-      } else {
-        if (this.tracking) this.radarTimeout = setTimeout(() => (this.p = false), 2000);
-        this.tracking = false;
-      }
+      for (const e of enemies) this.eradar.push(Engine.toAngle(e.x-this.x, e.y-this.y))
+      for (const f of frens) this.fradar.push(Engine.toAngle(f.x-this.x, f.y-this.y));
     }
     if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
