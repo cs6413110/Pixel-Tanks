@@ -445,7 +445,6 @@ class Client {
     GUI.drawText(this.crates, 1530, 150, 30, '#FFFFFF', 1);
     GUI.drawText(this.coins, 1530, 200, 30, '#FFFFFF', 1);
     GUI.drawText(this.xp, 1530, 260, 30, '#FFFFFF', 1);
-    GUI.draw.fillStyle = PixelTanks.userData.color;
     GUI.draw.translate(800, 500);
     GUI.draw.rotate(player.p);
     GUI.draw.fillStyle = '#000000';
@@ -453,6 +452,7 @@ class Client {
     GUI.draw.rotate(-player.p);
     GUI.draw.translate(-800, -500);
     GUI.draw.globalAlpha = 0.5;
+    GUI.draw.fillStyle = PixelTanks.userData.color;
     const c = [508, 672, 836, 1000]; // x coords of items
     for (let i = 0; i < 4; i++) {
       const item = PixelTanks.userData.items[i];
