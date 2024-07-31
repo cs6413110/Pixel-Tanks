@@ -129,8 +129,8 @@ class Tank {
     if ((this.hp <= this.maxHp*.1 && shield === 1) || (this.hp <= this.maxHp*.2 && shield === 2)) {
       if (this.canShield) {
         this.canShield = false;
-        setTimeout(() => (this.canShield = true), 5000);
-        this.shields = shield*50;
+        setTimeout(() => (this.canShield = true), 10000);
+        this.shields = this.hp;
       }
     }
   }
