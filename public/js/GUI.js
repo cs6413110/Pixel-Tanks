@@ -20,7 +20,7 @@ class GUI {
         GUI.draw.drawImage(image, a !== undefined ? -px+bx : x, a !== undefined ? -py+by : y, w, h);
       }
     } catch(e) {
-      console.log('Draw failed!');
+      console.log('Draw failed! '+e);
     }
     GUI.draw.globalAlpha = 1;
     if (a !== undefined) {
