@@ -448,10 +448,10 @@ class Client {
     if (Engine.hasPerk(PixelTanks.userData.perk, 6) && player.p) {
       GUI.draw.fillText('fix', 800, 500, 30, '#ffffff', .5);
       GUI.draw.translate(800, 500);
-      GUI.draw.rotate(player.p/180*Math.PI);
+      GUI.draw.rotate(player.p*Math.PI/180);
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(-10, 0, 20, 50);
-      GUI.draw.rotate(-player.p/180*Math.PI);
+      GUI.draw.rotate(-player.p*Math.PI/180);
       GUI.draw.translate(-800, -500);
     }
     GUI.draw.globalAlpha = 0.5;
