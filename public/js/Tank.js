@@ -42,7 +42,7 @@ class Tank {
       let target = false, cdis = Infinity;
       for (const t of this.host.pt.concat(this.host.ai)) {
         let d = Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2);
-        if (d <= dis && d < cdis && Engine.getTeam(t.team) !== Engine.getTeam(this.team)) {
+        if (d <= dis && d < cdis && Engine.getTeam(t.team) !== Engine.getTeam(this.team) && t.ded && !this.ded && !t.invis) {
           target = t;
           cdis = d;
         }
