@@ -12,6 +12,8 @@ class Tank {
   init(data, host) {
     this.id = host.genId(0);
     for (const p of Tank.args) this[p] = data[p];
+    this.eradar = [];
+    this.fradar = [];
     if (data.socket) this.socket = data.socket;
     this.host = host;
     this.fire = {time: 0, team: this.team};
