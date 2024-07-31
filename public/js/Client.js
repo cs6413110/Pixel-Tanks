@@ -450,7 +450,7 @@ class Client {
       GUI.draw.translate(800, 500);
       GUI.draw.rotate(player.p*Math.PI/180);
       GUI.draw.fillStyle = '#000000';
-      GUI.draw.fillRect(-10, 0, 20, 50);
+      GUI.draw.fillRect(-10, 50, 20, 50);
       GUI.draw.rotate(-player.p*Math.PI/180);
       GUI.draw.translate(-800, -500);
     }
