@@ -50,7 +50,6 @@ class Tank {
       if (target) {
         clearTimeout(this.radarTimeout);
         this.p = Engine.toAngle(target.y-this.y, target.x-this.x);
-        this.privateLogs.push({m: 'Tracking '+target.username+' with p='+this.p, c: '#ffffff'});
         this.tracking = true;
       } else {
         if (this.tracking) this.radarTimeout = setTimeout(() => (this.p = false), 2000);
