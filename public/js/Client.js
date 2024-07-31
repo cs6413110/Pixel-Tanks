@@ -445,13 +445,18 @@ class Client {
     GUI.drawText(this.crates, 1530, 150, 30, '#FFFFFF', 1);
     GUI.drawText(this.coins, 1530, 200, 30, '#FFFFFF', 1);
     GUI.drawText(this.xp, 1530, 260, 30, '#FFFFFF', 1);
-    if (Engine.hasPerk(PixelTanks.userData.perk, 6) && player.p) {
-      GUI.draw.fillText('fix', 800, 500, 30, '#ffffff', .5);
+    if (Engine.hasPerk(PixelTanks.userData.perk, 6)) {
       GUI.draw.translate(800, 500);
-      GUI.draw.rotate(player.p*Math.PI/180);
-      GUI.draw.fillStyle = '#000000';
-      GUI.draw.fillRect(-10, 50, 20, 50);
-      GUI.draw.rotate(-player.p*Math.PI/180);
+      for (const e of player.eradar) {
+        GUI.draw.rotate(player.p*Math.PI/180);
+        GUI.drawImage(PixelTanks.images.menus.arrow, -25, 60, 50, 50);
+        GUI.draw.rotate(-player.p*Math.PI/180);
+      }
+      for (const f of player.fradar) {
+        GUI.draw.rotate(player.p*Math.PI/180);
+        GUI.drawImage(PixelTanks.images.menus.arrow_friendly, -25, 60, 50, 50);
+        GUI.draw.rotate(-player.p*Math.PI/180);
+      }
       GUI.draw.translate(-800, -500);
     }
     GUI.draw.globalAlpha = 0.5;
