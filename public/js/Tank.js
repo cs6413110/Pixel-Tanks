@@ -49,7 +49,7 @@ class Tank {
       }
       if (target) {
         clearTimeout(this.radarTimeout);
-        this.p = Engine.toAngle(target.y-this.y, target.x-this.x);
+        this.p = Engine.toAngle(target.x-this.x, target.y-this.y);
         this.tracking = true;
       } else {
         if (this.tracking) this.radarTimeout = setTimeout(() => (this.p = false), 2000);
