@@ -233,7 +233,7 @@ class Multiplayer extends Engine {
       }
       for (const p of c) t.msg.u[i].push(p, Multiplayer.num(e[p]));
     } else t.msg.u.push(c.reduce((a, p) => {
-      a.push(p, e[p];
+      a.push(p, e[p]);
       return a;
     }, A.template('arr').concat(e.id)));
   }
