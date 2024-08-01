@@ -11,7 +11,7 @@ class Block {
     this.id = host.genId(1);
     for (const i in Block.args) this[Block.args[i]] = arguments[i];
     this.maxHp = hp;
-    if (!(this.c = type !== 'fire' && type !== 'airstrike' && type !== 'smoke' && type !== 'instastrike')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : (type === 'instastrike' ? 50 : (type === 'smoke' ? 10000 : 5500)));
+    if (!(this.c = type !== 'fire' && type !== 'airstrike' && type !== 'smoke' && type !== 'instastrike' && type !== 'doom')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : (type === 'instastrike' ? 50 : (type === 'smoke' ? 10000 : 5500)));
     if (type === 'spike') this.c = false;
     if (type === 'airstrike') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(A.template('Damage').init(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
     if (type === 'instastrike') this.t.push(setTimeout(() => this.host.d.push(A.template('Damage').init(this.x-50, this.y-50, 300, 300, 500, this.team, this.host)), 0));
