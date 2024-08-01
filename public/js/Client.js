@@ -446,13 +446,8 @@ class Client {
     GUI.drawText(this.crates, 1530, 150, 30, '#FFFFFF', 1);
     GUI.drawText(this.coins, 1530, 200, 30, '#FFFFFF', 1);
     GUI.drawText(this.xp, 1530, 260, 30, '#FFFFFF', 1);
-    try {
     if (Engine.hasPerk(PixelTanks.userData.perk, 6)) {
-      GUI.drawText(JSON.stringify(player.eradar), 800, 400, 30, '#ffffff', 1);
-      GUI.drawText(JSON.stringify(player.fradar), 800, 300, 30, '#ffffff', 1);
       GUI.draw.translate(800, 500);
-      if (typeof player.eradar == 'number') player.eradar = [player.eradar];
-      if (typeof player.fradar == 'number') player.fradar = [player.fradar];
       if (player.eradar) for (const e of player.eradar) {
         GUI.draw.rotate(e*Math.PI/180);
         GUI.drawImage(PixelTanks.images.menus.arrow, -25, 60, 50, 50, 1);
@@ -463,10 +458,6 @@ class Client {
         GUI.drawImage(PixelTanks.images.menus.arrow_friendly, -25, 60, 50, 50, 1);
         GUI.draw.rotate(-f*Math.PI/180);
       }
-      GUI.draw.translate(-800, -500);
-    }
-    } catch(e) {
-      this.hostupdate.logs.unshift({m: 'Err='+e+' | '+JSON.stringify(player.eradar)+' | '+(typeof player.eradar), c: '#ffffff'});
       GUI.draw.translate(-800, -500);
     }
     GUI.draw.globalAlpha = 0.5;
