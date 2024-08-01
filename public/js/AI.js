@@ -20,7 +20,7 @@ class AI {
     this.canFire = this.canPowermissle = this.canBoost = this.canBashed = true;
     this.fire = {time: 0, team: this.team};
     if (this.role === 4) {
-      this.canFire = this.canPowermissle = this.canBoost = false;
+      this.canFire = this.canPowermissle = false;
       //this.fire = {time: 999999999, team: this.team};
     }
     /*
