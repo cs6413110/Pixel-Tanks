@@ -208,7 +208,7 @@ class Multiplayer extends Engine {
       }
     }
   }
-  static num = n => n;//isNaN(n) ? n : Math.round(n*10)/10;
+  static num = n => isNaN(n) ? n : Math.round(n*10)/10;
   load(t, e) {
     let i = t.msg.u.findIndex(u => u[0] === e.id);
     if (i !== -1) t.msg.u.splice(i, 1);
@@ -232,7 +232,10 @@ class Multiplayer extends Engine {
         }
       }
       for (const p of c) t.msg.u[i].push(p, Multiplayer.num(e[p]));
-    } else t.msg.u.push(c.reduce((a, p) => a.concat(p, e[p]), A.template('arr').concat(e.id)));
+    } else t.msg.u.push(c.reduce((a, p) => {
+      a.push(p, e[p];
+      return a;
+    }, A.template('arr').concat(e.id)));
   }
   destroyEntity(e) {
     pt: for (const t of this.pt) {
