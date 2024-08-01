@@ -54,7 +54,6 @@ class Tank {
       for (const f of frens) this.fradar.push(Engine.toAngle(f.x-this.x, f.y-this.y));
       if (enemies.length) this.setValue('eradar', this.eradar);
       if (frens.length) this.setValue('fradar', this.fradar);
-      this.privateLogs.push({m: JSON.stringify(this.fradar)+' '+JSON.stringify(this.eradar), c: '#ffffff'})
     }
     if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
