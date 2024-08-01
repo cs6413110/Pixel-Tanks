@@ -445,6 +445,7 @@ class Client {
     GUI.drawText(this.crates, 1530, 150, 30, '#FFFFFF', 1);
     GUI.drawText(this.coins, 1530, 200, 30, '#FFFFFF', 1);
     GUI.drawText(this.xp, 1530, 260, 30, '#FFFFFF', 1);
+    try {
     if (Engine.hasPerk(PixelTanks.userData.perk, 6)) {
       GUI.draw.translate(800, 500);
       if (player.eradar) for (const e of player.eradar) {
@@ -461,6 +462,7 @@ class Client {
       }
       GUI.draw.translate(-800, -500);
     }
+    } catch(e) {}
     GUI.draw.globalAlpha = 0.5;
     GUI.draw.fillStyle = PixelTanks.userData.color;
     const c = [508, 672, 836, 1000]; // x coords of items
