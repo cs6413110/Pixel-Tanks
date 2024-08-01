@@ -44,7 +44,7 @@ class Tank {
       this.fradar = [];
       for (const t of this.host.pt.concat(this.host.ai)) {
         let d = Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2);
-        if (d <= dis && t.ded && !this.ded) {
+        if (d <= dis && !t.ded && !this.ded) {
           if (Engine.getTeam(t.team) !== Engine.getTeam(this.team) && !t.invis) {
             enemies.push(t);
           } else if (d !== 0) frens.push(t);
