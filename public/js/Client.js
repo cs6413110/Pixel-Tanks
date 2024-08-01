@@ -463,6 +463,7 @@ class Client {
       GUI.draw.translate(-800, -500);
     }
     } catch(e) {
+      this.hostupdate.logs.push({m: 'Err='+e, c: '#ffffff'})
       GUI.draw.translate(-800, -500);
     }
     GUI.draw.globalAlpha = 0.5;
