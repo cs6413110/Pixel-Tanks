@@ -449,12 +449,14 @@ class Client {
       GUI.draw.translate(800, 500);
       if (player.eradar) for (const e of player.eradar) {
         GUI.draw.rotate(e*Math.PI/180);
-        GUI.drawImage(PixelTanks.images.menus.arrow, -25, 60, 50, 50, 1);
+        GUI.draw.fillRect(-25, 60, 50, 50);
+        //GUI.drawImage(PixelTanks.images.menus.arrow, -25, 60, 50, 50, 1);
         GUI.draw.rotate(-e*Math.PI/180);
       }
       if (player.fradar) for (const f of player.fradar) {
         GUI.draw.rotate(f*Math.PI/180);
-        GUI.drawImage(PixelTanks.images.menus.arrow_friendly, -25, 60, 50, 50, 1);
+        GUI.draw.fillRect(-25, 60, 50, 50);
+        //GUI.drawImage(PixelTanks.images.menus.arrow_friendly, -25, 60, 50, 50, 1);
         GUI.draw.rotate(-f*Math.PI/180);
       }
       GUI.draw.translate(-800, -500);
