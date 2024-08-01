@@ -52,6 +52,7 @@ class Tank {
       }
       for (const e of enemies) this.eradar.push(Engine.toAngle(e.x-this.x, e.y-this.y))
       for (const f of frens) this.fradar.push(Engine.toAngle(f.x-this.x, f.y-this.y));
+      console.log(this.fradar, this.eradar);
       this.host.updateEntity(this, ['eradar']);
       this.host.updateEntity(this, ['fradar']);
     }
