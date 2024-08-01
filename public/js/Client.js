@@ -462,7 +462,9 @@ class Client {
       }
       GUI.draw.translate(-800, -500);
     }
-    } catch(e) {}
+    } catch(e) {
+      GUI.draw.translate(-800, -500);
+    }
     GUI.draw.globalAlpha = 0.5;
     GUI.draw.fillStyle = PixelTanks.userData.color;
     const c = [508, 672, 836, 1000]; // x coords of items
