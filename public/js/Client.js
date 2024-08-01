@@ -70,6 +70,7 @@ class Client {
         this.hostupdate[this.getIdType(e.id)].push(e);
       }
       for (let i = 1; i < u.length; i += 2) e[u[i]] = u[i+1];
+      for (let i = 1; i < u.length; i += 2) if (u[i] === u[i+1]) this.hostupdate.logs.unshift('Invalid: '+JSON.stringify(data));
       this.debug[u[0]].push({x: this.tank.x, y: this.tank.y, u});
     }
     if (data.d) for (const d of data.d) {
