@@ -461,7 +461,7 @@ class Client {
       GUI.draw.translate(-800, -500);
     }
     } catch(e) {
-      this.hostupdate.logs.push({m: 'Err='+e+' | '+JSON.stringify(player.eradar)+' | '+player.eradar, c: '#ffffff'})
+      this.hostupdate.logs.unshift({m: 'Err='+e+' | '+JSON.stringify(player.eradar)+' | '+(typeof player.eradar), c: '#ffffff'});
       GUI.draw.translate(-800, -500);
     }
     GUI.draw.globalAlpha = 0.5;
