@@ -407,7 +407,7 @@ class AI {
     clearInterval(this.healInterval);
     clearTimeout(this.healTimeout);
     if (this.hp <= 0) {
-      if (this.role === 4) this.host.useAbility(this, 'instastrike'+(this.target.x-50)+'x'+(this.target.y-50));
+      //if (this.role === 4) this.host.useAbility(this, 'instastrike'+(this.target.x-50)+'x'+(this.target.y-50));
       if (this.host.ondeath && this.role !== 0) this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
       return this.destroy();
     }
