@@ -448,12 +448,14 @@ class Client {
     try {
     if (Engine.hasPerk(PixelTanks.userData.perk, 6)) {
       GUI.draw.translate(800, 500);
-      if (player.eradar) for (const e of player.eradar) {
+      if (typeof player.eradar == 'number') player.eradar = [player.eradar];
+      if (typeof player.fradar == 'number') player.fradar = [player.fradar];
+      if (player.eradar.length) for (const e of player.eradar) {
         GUI.draw.rotate(e*Math.PI/180);
         GUI.drawImage(PixelTanks.images.menus.arrow, -25, 60, 50, 50, 1);
         GUI.draw.rotate(-e*Math.PI/180);
       }
-      if (player.fradar) for (const f of player.fradar) {
+      if (player.fradar.length) for (const f of player.fradar) {
         GUI.draw.rotate(f*Math.PI/180);
         GUI.drawImage(PixelTanks.images.menus.arrow_friendly, -25, 60, 50, 50, 1);
         GUI.draw.rotate(-f*Math.PI/180);
