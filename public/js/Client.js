@@ -447,9 +447,9 @@ class Client {
     GUI.drawText(this.xp, 1530, 260, 30, '#FFFFFF', 1);
     try {
     if (Engine.hasPerk(PixelTanks.userData.perk, 6)) {
-      GUI.draw.translate(800, 500);
       GUI.drawText(JSON.stringify(player.eradar), 800, 400, 30, '#ffffff', 1);
       GUI.drawText(JSON.stringify(player.fradar), 800, 300, 30, '#ffffff', 1);
+      GUI.draw.translate(800, 500);
       if (typeof player.eradar == 'number') player.eradar = [player.eradar];
       if (typeof player.fradar == 'number') player.fradar = [player.fradar];
       if (player.eradar) for (const e of player.eradar) {
