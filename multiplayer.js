@@ -208,7 +208,7 @@ class Multiplayer extends Engine {
       }
     }
   }
-  static num = n => isNaN(n) ? n : Math.round(n*10)/10;
+  static num = n => typeof n !== 'number' ? n : Math.round(n*10)/10;
   load(t, e) {
     let i = t.msg.u.findIndex(u => u[0] === e.id);
     if (i !== -1) t.msg.u.splice(i, 1);
