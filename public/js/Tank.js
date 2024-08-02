@@ -1,7 +1,7 @@
 class Tank {
   static args = ['username', 'rank', 'class', 'perk', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'deathEffect', 'color'];
   static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
-  static s = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'eradar', 'fradar', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static s = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
   static u = ['x', 'y'];
   constructor() {
     this.cells = new Set();
@@ -39,20 +39,17 @@ class Tank {
     const team = Engine.getTeam(this.team);
     let radar = Engine.hasPerk(this.perk, 6), dis = radar === 1 ? 700 : 1200;
     if (radar) {
-      let enemies = [], frens = [];
-      const eradar = [], fradar = [];
+      this.eradar.length = this.fradar.length = 0;
       for (const t of this.host.pt.concat(this.host.ai)) {
         let d = Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2);
-        if (d <= dis && !t.ded && !this.ded) {
-          if (Engine.getTeam(t.team) !== Engine.getTeam(this.team) && !t.invis) {
-            enemies.push(t);
-          } else if (d !== 0) frens.push(t);
+        if (d <= dis && !t.ded && !this.ded) { 
+          if (Engine.getTeam(t.team) !== Engine.getTeam(this.team)) {
+            if (!t.invis) this.eradar.push(Engine.toAngle(t.x-this.x, t.y-this.y));
+          } else if (d !== 0) this.fradar.push(Engine.toAngle(t.x-this.x, t.y-this.y));
         }
       }
-      for (const e of enemies) eradar.push(Engine.toAngle(e.x-this.x, e.y-this.y))
-      for (const f of frens) fradar.push(Engine.toAngle(f.x-this.x, f.y-this.y));
-      this.eradar = eradar;
-      this.fradar = fradar;
+      if (this.eradar.length) this.host.updateEntity(this, ['eradar']);
+      if (this.fradar.length) this.host.updateEntity(this, ['fradar']);
     }
     if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
