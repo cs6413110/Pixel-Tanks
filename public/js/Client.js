@@ -126,6 +126,9 @@ class Client {
         });
       } else if (data.event === 'ded') {
         this.reset();
+      } else if (data.event === 'sc') {
+        // single cooldown
+        this.timers[data.timer].time -= (this.timers[data.timer].time+this.timers[data.timer].cooldown-Date.now())*data.percent;
       } else if (data.event === 'gameover') {
         this.implode();
         Menus.menus[data.type].stats = {};
@@ -197,12 +200,10 @@ class Client {
   reset() {
     let faster = Engine.hasPerk(PixelTanks.userData.perk, 4);
     let m = faster ? 1-.05*faster : 1;
-    let hook = Engine.hasPerk(PixelTanks.userData.perk, 7);
-    let grapple = hook ? 5000-hook*1000 : 5000; //what are the possible values for hook and its just the 1000 that needs tweaking in order to get the perk right
     this.timers = {
       boost: {time: -1, cooldown: m*5000},
       powermissle: {time: -1, cooldown: m*10000},
-      grapple: {time: -1, cooldown: m*grapple},
+      grapple: {time: -1, cooldown: m*5000},
       toolkit: {time: -1, cooldown: m*40000},
       class: {time: -1},
       items: [{time: -1}, {time: -1}, {time: -1}, {time: -1}],
