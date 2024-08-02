@@ -50,8 +50,7 @@ class Tank {
           } else if (d !== 0) this.fradar.push(Engine.toAngle(t.x-this.x, t.y-this.y));
         }
       }
-      if (this.eradar.length) this.host.updateEntity(this, ['eradar']);
-      if (this.fradar.length) this.host.updateEntity(this, ['fradar']);
+      this.host.updateEntity(this, ['eradar', 'fradar']);
     }
     if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
