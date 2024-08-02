@@ -18,6 +18,8 @@ class Tank {
     this.hp = this.maxHp = this.rank*10+300;
     this.canShield = this.canBashed = this.canInvis = !(this.damage = false);
     this.team = data.username+':'+this.id;
+    this.eradar = [];
+    this.fradar = [];
     this.x = host.spawn.x;
     this.y = host.spawn.y;
     this.logs = this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = 0;
