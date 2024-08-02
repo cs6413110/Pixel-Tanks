@@ -242,7 +242,8 @@ class Client {
     } else if (s.type === 'shotgun') {
       GUI.drawImage(PixelTanks.images.bullets.shotgun, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+90);
     } else if (s.type === 'grapple') {
-      GUI.drawImage(PixelTanks.images.bullets.grapple, s.x, s.y, 45, 45, 1, 22.5, 22.5, 0, 0, s.r+90);
+      let l = Engine.getTeam(s.team) === 'LostKing', m = l ? (Date.now()-this.animate)/1000*360 : 0;
+      GUI.drawImage(PixelTanks.images.bullets[l ? 'scythe' : 'grapple'], s.x, s.y, 45, 45, 1, 22.5, 22.5, 0, 0, s.r+m);
       GUI.draw.lineWidth = 10;
       GUI.draw.beginPath();
       GUI.draw.strokeStyle = '#A9A9A9';
