@@ -95,16 +95,15 @@ const deathMessages = [
   `{idot} lost connection`,
   `{idot} didn't make it out alive`,
 ], tipMessages = [
-  `TIP: time the reflector better next time!`,
-  `TIP: Try switching class, maybe you're not good at that one!`,
+  `TIP: Time the reflector better next time!`,
+  `TIP: Try switching your class, maybe you're not good at that one!`,
   `TIP: These tips get shown when you die!`,
-  `TIP: blame the lag`,
+  `TIP: Blame the lag`,
   `TIP: If fighting is sure to result in victory then you must fight! -Sun Tzu`,
-  `TIP: Doing damage increases your chance of survival, while decreasing your enimies chance of survial`,
+  `TIP: Doing damage increases your chance of survival while decreasing your enemy's chance of survival`,
   `TIP: Taking damage reduces your chance of survival`,
   `TIP: Try dodging the bullets next time!`,
   `That was unwinnable, don't worry`,
-  `TIP: git good!`,
   `TIP: don't die!`,
   `TIP: If you are in a block, press ESC and then press the LEAVE button. Works every time!`,
   `Bad internet? Hit the router with a wrench. Trust me :)`,
@@ -112,6 +111,10 @@ const deathMessages = [
   `TIP: Try Using a mouse next time`,
   `How embarrassing...`,
   `TIP: Do better? idk I'm not paid enough for this...`,
+  `TIP: Also try Deep Rock Galactic!`,
+  `TIP: Do not kick barrels into the launch bay`,
+  `TIP: Smashing your computer into tiny pieces with a hammer will always solve the problem!`,
+  `Karl could've won that...`,
 ];
 
 class Multiplayer extends Engine {
