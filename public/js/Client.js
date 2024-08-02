@@ -229,8 +229,6 @@ class Client {
   }
 
   drawShot(s) {
-    GUI.draw.fillStyle = '#ff0000';
-    GUI.draw.fillRect(s.x, s.y, 10, 10);
     if (s.type == 'bullet') {
       GUI.drawImage(PixelTanks.images.blocks.void, s.x, s.y, 10, 10, .7, 5, 5, 0, 0, s.r+90);
     } else if (s.type === 'powermissle') {
@@ -243,7 +241,7 @@ class Client {
       GUI.drawImage(PixelTanks.images.bullets.shotgun, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+90);
     } else if (s.type === 'grapple') {
       let l = Engine.getUsername(s.team) === 'LostKing', m = l ? (Date.now()-this.animate)/1000*360*2 : 0;
-      GUI.drawImage(PixelTanks.images.bullets[l ? 'scythe' : 'grapple'], s.x, s.y, 90, 90, 1, 45, 45, 0, 0, s.r-m);
+      GUI.drawImage(PixelTanks.images.bullets[l ? 'scythe' : 'grapple'], s.x, s.y, 90, 90, 1, -45, -45, 0, 0, s.r-m);
       if (l) return;
       GUI.draw.lineWidth = 10;
       GUI.draw.beginPath();
