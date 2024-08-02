@@ -26,7 +26,7 @@ class Shot {
     if (size) return this.host.d.push(A.template('Damage').init(this.x-o, this.y-o, size, size, this.damage, this.team, this.host)); // damage change to square instead of rect hitbox?
     if (this.type === 'dynamite' || this.type === 'usb' || this.type === 'grapple') {
       const g = pullGrapple ? this.host.pt.find(t => t.username === Engine.getUsername(this.team)) : e;
-      let hook = Engine.hasPerk(g.perk, 7);
+      if (pullGrapple) let hook = Engine.hasPerk(g.perk, 7);
       if (pullGrapple && hook) return this.host.pt.find(t => t.username === Engine.getUsername(this.team)).socket.send({event: 'sc', timer: 'grapple', percent: hook*.25}) || 1;
       if (!(this.target = g) || (this.type === 'usb' && isBlock)) return true;
       this.offset = [g.x-this.x, g.y-this.y];
