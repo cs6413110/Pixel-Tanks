@@ -66,6 +66,8 @@ const auth = async(username, token) => {
   return text === 'true';
 }, clean = msg => msg.split(' ').reduce((a, word) => a.concat([Storage.filter.some(badword => word.toLowerCase().includes(badword)) ? 'bread' : word]), []).join(' ');
 const deathMessages = [
+  `{victim} became a crate because physics`,
+  `{victim} was Sullivan'd by {killer}`,
   `{victim} was killed by {killer}`,
   `{victim} was put out of their misery by {killer}`,
   `{victim} was assassinated by {killer}`,
@@ -84,17 +86,21 @@ const deathMessages = [
   `{victim} became another number in {killer}'s kill streak`,
   `{victim} got wrecked by {killer}`,
 ], joinMessages = [
+  `{idot} became an underpayed child worker`,
+  `{idot} exists for some reason`,
   `{idot} joined the game`,
   `{idot} is now online`,
   `{idot} has joined the battle`,
   `{idot}`,
 ], rageMessages = [
+  `{idot} became aarons electronic time`,
   `{idot} left the game`,
   `{idot} quit`,
   `{idot} disconnected`,
   `{idot} lost connection`,
   `{idot} didn't make it out alive`,
 ], tipMessages = [
+  `TIP: Maybe exist next time`,
   `TIP: Time the reflector better next time!`,
   `TIP: Try switching your class, maybe you're not good at that one!`,
   `TIP: These tips get shown when you die!`,
