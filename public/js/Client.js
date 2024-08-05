@@ -242,13 +242,13 @@ class Client {
     } else if (s.type === 'grapple') {
       let l = Engine.getUsername(s.team) === 'LostKing' || Engine.getTeam(s.team) === 'LostKing', m = l ? (Date.now()-this.animate)/1000*360*2 : 0;
       if (l) for (let i = 0; i < 10; i++) {
-        GUI.draw.globalAlpha = i === 0 ? 1 : .6;
+        GUI.draw.globalAlpha = i === 0 ? 1 : .2;
         let x = s.x-Math.sin((s.r+90))*i*10, y = s.y-Math.sin((s.r+90))*i*10, r = s.r+90-m+i*5;
-        GUI.drawImage(PixelTanks.images.bullets.scythe, x, y, 90, 90, 1, -45, -45, 0, 0, r);
+        GUI.drawImage(PixelTanks.images.bullets.scythe, x-45, y-45, 90, 90, 1, 45, 45, 0, 0, r);
       }
       GUI.draw.globalAlpha = 1;
       if (l) return;
-      GUI.drawImage(PixelTanks.images.bullets.grapple, s.x, s.y, 45, 45, 1, -22.5, -22.5, 0, 0, s.r+90);
+      GUI.drawImage(PixelTanks.images.bullets.grapple, s.x-22.5, s.y-22.5, 45, 45, 1, 22.5, 22.5, 0, 0, s.r+90);
       GUI.draw.lineWidth = 10;
       GUI.draw.beginPath();
       GUI.draw.strokeStyle = '#A9A9A9';
