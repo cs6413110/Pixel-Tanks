@@ -19,10 +19,6 @@ class AI {
     this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = this.shields = 0;
     this.canFire = this.canPowermissle = this.canBoost = this.canBashed = true;
     this.fire = {time: 0, team: this.team};
-    if (this.role === 4) {
-      this.canFire = this.canPowermissle = false;
-      //this.fire = {time: 999999999, team: this.team};
-    }
     /*
     if (Math.random() < (rank/20)) this.canItem0 = true;
     if (Math.random() < (rank/20)) this.canItem1 = true;
@@ -34,7 +30,7 @@ class AI {
     if (Math.random() < (rank/20)) this.cosmetic = cosmetics[Math.floor(Math.random()*cosmetics.length)];
     if (Math.random() < (rank/20)) this.cosmetic_body = cosmetics[Math.floor(Math.random()*cosmetics.length)];
     */
-    if (this.role !== 0 && this.role !== 4) this.giveAbilities();
+    if (this.role !== 0) this.giveAbilities();
     const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
     if (summoner) {
       this.cosmetic_hat = summoner.cosmetic_hat;
@@ -71,9 +67,6 @@ class AI {
       this.tr = Engine.toAngle(this.target.x - this.x, this.target.y - this.y);
       if (this.canPowermissle && this.role !== 0 && Math.random() <= 1/600) this.fireCalc(this.target.x, this.target.y, 'powermissle');
       if (this.canFire) this.fireCalc(this.target.x, this.target.y);
-    }
-    if (this.role === 4 && Math.sqrt((this.target.x - this.x) ** 2 + (this.target.y - this.y) ** 2) < 75 && this.seeTarget) {
-      this.host.useAbility(this, 'instastrike'+(this.target.x-50)+'x'+(this.target.y-50));
     }
     if (this.canClass && this.mode !== 0 && Math.random() < 1/300) {
       let cooldown = 0;
@@ -300,11 +293,9 @@ class AI {
       epx = sx;
       epy = sy;
     }
-    if ((this.role === 3 && this.bond) || (this.role === 1 && this.mode === 1 && !ranged) || (this.role === 4)) {
+    if ((this.role === 3 && this.bond) || (this.role === 1 && this.mode === 1 && !ranged)) {
       cir = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
-    } /*else if (this.role === 4) {
-      cir = [[0, -1], [1, 0], [0, 1], [-1, 0], [0, 0]];
-    }*/ else cir = [[0, -3], [1, -3], [2, -2], [3, -1], [3, 0], [3, 1], [2, 2], [1, 3], [0, 3], [-1, 3], [-2, 2], [-3, 1], [-3, 0], [-3, -1], [-2, -2], [-1, -3]];
+    } else cir = [[0, -3], [1, -3], [2, -2], [3, -1], [3, 0], [3, 1], [2, 2], [1, 3], [0, 3], [-1, 3], [-2, 2], [-3, 1], [-3, 0], [-3, -1], [-2, -2], [-1, -3]];
     if ((this.role === 3 && this.bond) || (this.mode === 1 && !ranged)) {
       tpx = sx;
       tpy = sy;
@@ -407,7 +398,6 @@ class AI {
     clearInterval(this.healInterval);
     clearTimeout(this.healTimeout);
     if (this.hp <= 0) {
-      //if (this.role === 4) this.host.useAbility(this, 'instastrike'+(this.target.x-50)+'x'+(this.target.y-50));
       if (this.host.ondeath && this.role !== 0) this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
       return this.destroy();
     }
