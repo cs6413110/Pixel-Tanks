@@ -645,12 +645,12 @@ const Commands = {
     if (servers[this.room].pt.find(t => t.username === this.username).team.includes('@leader')) return this.send({status: 'error', message: 'You must disband your team to join. (/leave)'});
     if (!servers[this.room].pt.find(t => Engine.getTeam(t.team) === data[1] && t.team.includes('@leader'))) return this.send({status: 'error', message: 'This team does not exist.'});
     servers[this.room].pt.find(t => t.username === this.username).team += '@requestor#'+data[1];
-    servers[this.room].logs.push({m: this.username+' requested to join team '+data[1]+'. Team owner can use /accept '+this.username+' to accept them.', c: '#0000FF'});
+    servers[this.room].logs.push({m: this.username+' requested to join team '+data[1]+'. Anyone in the team can use /accept '+this.username+' to accept them.', c: '#0000FF'});
   }],
   accept: [FFA, 4, 2, function(data) {
     const leader = servers[this.room].pt.find(t => t.username === this.username), requestor = servers[this.room].pt.find(t => t.username === data[1]);
     if (!requestor) return this.send({status: 'error', message: 'Player not found.'});
-    if (leader.team.includes('@leader') && requestor.team.includes('@requestor#') && Engine.getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
+    if requestor.team.includes('@requestor#') && Engine.getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
       requestor.team = data[1]+':'+Engine.getTeam(leader.team);
       for (const ai of servers[this.room].ai) if (Engine.getUsername(ai.team) === requestor.username) ai.team = requestor.username+':'+Engine.getTeam(requestor.team);
       servers[this.room].logs.push({ m: data[1]+' has joined team '+Engine.getTeam(leader.team), c: '#40C4FF' });
