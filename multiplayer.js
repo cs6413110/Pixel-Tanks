@@ -64,10 +64,9 @@ const auth = async(username, token) => {
   const text = await response.text();
   console.log(text);
   return text === 'true';
-}, clean = msg => msg.split(' ').reduce((a, word) => a.concat([Storage.filter.some(badword => word.toLowerCase().includes(badword)) ? 'bread' : word]), []).join(' ');
+}, clean = msg => msg.split(' ').reduce((a, word) => a.concat([Storage.filter.some(badword => word.toLowerCase().includes(badword)) ? '@!#$%' : word]), []).join(' ');
 const deathMessages = [
   `{victim} became a crate because physics`,
-  `{victim} was Sullivan'd by {killer}`,
   `{victim} was killed by {killer}`,
   `{victim} was put out of their misery by {killer}`,
   `{victim} was assassinated by {killer}`,
@@ -86,14 +85,12 @@ const deathMessages = [
   `{victim} became another number in {killer}'s kill streak`,
   `{victim} got wrecked by {killer}`,
 ], joinMessages = [
-  `{idot} became an underpayed child worker`,
   `{idot} exists for some reason`,
   `{idot} joined the game`,
   `{idot} is now online`,
   `{idot} has joined the battle`,
   `{idot}`,
 ], rageMessages = [
-  `{idot} became aarons electronic time`,
   `{idot} left the game`,
   `{idot} quit`,
   `{idot} disconnected`,
@@ -645,12 +642,12 @@ const Commands = {
     if (servers[this.room].pt.find(t => t.username === this.username).team.includes('@leader')) return this.send({status: 'error', message: 'You must disband your team to join. (/leave)'});
     if (!servers[this.room].pt.find(t => Engine.getTeam(t.team) === data[1] && t.team.includes('@leader'))) return this.send({status: 'error', message: 'This team does not exist.'});
     servers[this.room].pt.find(t => t.username === this.username).team += '@requestor#'+data[1];
-    servers[this.room].logs.push({m: this.username+' requested to join team '+data[1]+'. Anyone in the team can use /accept '+this.username+' to accept them.', c: '#0000FF'});
+    servers[this.room].logs.push({m: this.username+' requested to join team '+data[1]+'. Team owner can use /accept '+this.username+' to accept them.', c: '#0000FF'});
   }],
   accept: [FFA, 4, 2, function(data) {
     const leader = servers[this.room].pt.find(t => t.username === this.username), requestor = servers[this.room].pt.find(t => t.username === data[1]);
     if (!requestor) return this.send({status: 'error', message: 'Player not found.'});
-    if requestor.team.includes('@requestor#') && Engine.getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
+    if (leader.team.includes('@leader') && requestor.team.includes('@requestor#') && Engine.getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
       requestor.team = data[1]+':'+Engine.getTeam(leader.team);
       for (const ai of servers[this.room].ai) if (Engine.getUsername(ai.team) === requestor.username) ai.team = requestor.username+':'+Engine.getTeam(requestor.team);
       servers[this.room].logs.push({ m: data[1]+' has joined team '+Engine.getTeam(leader.team), c: '#40C4FF' });
@@ -702,7 +699,7 @@ const Commands = {
   nuke: [Object, 2, 1, function(data) {
     for (let x = 0; x < 30; x += 2) for (let y = 0; y < 30; y += 2) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'doom', ':', servers[this.room]));
   }],
-  arson: [Object, 2, 1, function(data) {
+  arson: [Object, 3, 1, function(data) {
     for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'fire', ':', servers[this.room]));
   }],
   newmap: [FFA, 3, -1, function(data) {
