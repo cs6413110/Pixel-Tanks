@@ -702,7 +702,7 @@ const Commands = {
   nuke: [Object, 2, 1, function(data) {
     for (let x = 0; x < 30; x += 2) for (let y = 0; y < 30; y += 2) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'doom', ':', servers[this.room]));
   }],
-  arson: [Object, 3, 1, function(data) {
+  arson: [Object, 2, 1, function(data) {
     for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'fire', ':', servers[this.room]));
   }],
   newmap: [FFA, 3, -1, function(data) {
