@@ -67,12 +67,6 @@ const auth = async(username, token) => {
 }, clean = msg => msg.split(' ').reduce((a, word) => a.concat([Storage.filter.some(badword => word.toLowerCase().includes(badword)) ? '@!#$%' : word]), []).join(' ');
 const deathMessages = [
   `{victim} died from {killer}`,
-  `{killer} spawn camped {victim}`,
-  `{killer} b hopped on {victim}'s grave`,
-  `{victim} couldn't handle {killer}'s workout routine`,
-  `{victim} became a crate because physics`,
-  `{victim} got end crystal'd by {killer}`,
-  `{victim} went to a farm up north with {killer}`,
   `{victim} was killed by {killer}`,
   `{victim} was put out of their misery by {killer}`,
   `{victim} was assassinated by {killer}`,
