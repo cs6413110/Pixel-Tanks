@@ -112,11 +112,6 @@ const deathMessages = [
   `{idot} didn't make it out alive`,
 ], tipMessages = [
   `TIP: give up`,
-  `git gud scrub`,
-  `TIP: play a better game lol`,
-  `TIP: Don't get /nuked lol`,
-  `TIP: Throw laptop at killer to get free crates`,
-  `TIP: Maybe exist next time`,
   `TIP: Time the reflector better next time!`,
   `TIP: Try switching your class, maybe you're not good at that one!`,
   `TIP: These tips get shown when you die!`,
@@ -133,10 +128,8 @@ const deathMessages = [
   `TIP: Try Using a mouse next time`,
   `How embarrassing...`,
   `TIP: Do better? idk I'm not paid enough for this...`,
-  `TIP: Also try Deep Rock Galactic!`,
-  `TIP: Do not kick barrels into the launch bay`,
-  `TIP: Smashing your computer into tiny pieces with a hammer will always solve the problem!`,
-  `Karl could've won that...`,
+  'There are items, abilities, and classes that can assist you'
+  'RIP: Rest in Pineapple'
 ];
 
 class Multiplayer extends Engine {
