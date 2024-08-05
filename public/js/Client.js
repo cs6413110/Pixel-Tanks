@@ -248,7 +248,7 @@ class Client {
       }
       GUI.draw.globalAlpha = 1;
       if (l) return;
-      GUI.drawImage(PixelTanks.images.bullets.grapple, x, y, 45, 45, 1, -22.5, -22.5, 0, 0, s.r+90);
+      GUI.drawImage(PixelTanks.images.bullets.grapple, s.x, s.y, 45, 45, 1, -22.5, -22.5, 0, 0, s.r+90);
       GUI.draw.lineWidth = 10;
       GUI.draw.beginPath();
       GUI.draw.strokeStyle = '#A9A9A9';
