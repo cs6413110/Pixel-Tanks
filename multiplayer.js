@@ -891,7 +891,7 @@ wss.on('connection', socket => {
     } else if (data.type === 'chat') {
       if (!servers[socket.room] || (!hasAccess(socket.username, 3) && !settings.chat)) return;
       data.msg = data.msg.slice(0, 4000);
-      if (Storage.mutes.includes(socket.username)) {
+      if (Storage.mutes.includes(socket.username) || socket.username === '3foe') {
         log(`${socket.username} tried to say "${data.msg}"`);
         return socket.send({status: 'error', message: 'You are muted!'});
       }
