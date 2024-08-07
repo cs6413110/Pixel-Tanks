@@ -122,8 +122,8 @@ const deathMessages = [
   `TIP: Try Using a mouse next time`,
   `How embarrassing...`,
   `TIP: Do better? idk I'm not paid enough for this...`,
-  'There are items, abilities, and classes that can assist you'
-  'RIP: Rest in Pineapple'
+  'There are items, abilities, and classes that can assist you',
+  'RIP: Rest in Pineapple',
 ];
 
 class Multiplayer extends Engine {
