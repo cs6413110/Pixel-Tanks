@@ -33,7 +33,8 @@ class Damage {
   }
   destroy() {
     this.host.destroyEntity(this);
-    this.host.d.r(this);
+    let i = this.host.d.indexOf(this);
+    if (i !== -1) this.host.d.splice(i, 1);
     for (const cell of this.cells) {
       const c = cell.split('x');
       this.host.cells[c[0]][c[1]].delete(this);
