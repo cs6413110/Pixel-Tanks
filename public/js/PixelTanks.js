@@ -5,6 +5,10 @@ class PixelTanks {
   }
 
   static setup() {
+    Array.prototype.r = function(o) {
+      let i = this.indexOf(o);
+      if (i !== -1) this.splice(i, 1);
+    } // temp modding, maybe remove
     document.body.innerHTML += `
     <style>
       html, body {
