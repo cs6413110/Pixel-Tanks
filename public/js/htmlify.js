@@ -26,6 +26,7 @@ class PixelTanks {
       }
     </style>`;
     GUI.canvas = document.createElement('CANVAS');
+    Menus.scaler = document.createElement('CANVAS');
     GUI.draw = GUI.canvas.getContext('2d');
     document.body.appendChild(GUI.canvas);
     PixelTanks.resizer = 1//window.innerHeight/1000;
