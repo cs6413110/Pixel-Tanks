@@ -13,10 +13,14 @@ class GUI {
       GUI.draw.rotate(a*Math.PI/180);
     }
     GUI.draw.globalAlpha = t;
-    if (cx || cy || cy || ch) {
-      GUI.draw.drawImage(image, cx, cy, cw, ch, a !== undefined ? -px+bx : x, a !== undefined ? -py+by : y, w, h);
-    } else {
-      GUI.draw.drawImage(image, a !== undefined ? -px+bx : x, a !== undefined ? -py+by : y, w, h);
+    try {
+      if (cx || cy || cy || ch) {
+        GUI.draw.drawImage(image, cx, cy, cw, ch, a !== undefined ? -px+bx : x, a !== undefined ? -py+by : y, w, h);
+      } else {
+        GUI.draw.drawImage(image, a !== undefined ? -px+bx : x, a !== undefined ? -py+by : y, w, h);
+      }
+    } catch(e) {
+      console.log('Draw failed!');
     }
     GUI.draw.globalAlpha = 1;
     if (a !== undefined) {
