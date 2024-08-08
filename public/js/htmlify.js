@@ -1,4 +1,6 @@
 class PixelTanks {
+  static loadMessages = ['Recharging Instas...', 'Summoning Turrets...', 'Sorting Cosmetics...', 'Spotting Stealths...', 'Putting Out Fires...', 'Generating Levels...', 'Loading Up Crates...', 'Filling Up Stocks...', 'Drawing Menus...', 'Placing Blocks...', 'Launching Missles...', 'Booting Game Engine...'];
+  
   static start() {
     PixelTanks.setup();
     PixelTanks.boot();
@@ -10,8 +12,6 @@ class PixelTanks {
       html, body {
         margin: 0;
         padding: 0;
-        max-height: 100vh;
-        max-width: 100vw;
         text-align: center;
         background-color: black;
       }
@@ -29,7 +29,7 @@ class PixelTanks {
     Menus.scaler = document.createElement('CANVAS');
     GUI.draw = GUI.canvas.getContext('2d');
     document.body.appendChild(GUI.canvas);
-    PixelTanks.resizer = 1//window.innerHeight/1000;
+    PixelTanks.resizer = 1//window.innerHeight/1000; // remove
     GUI.canvas.height = 1000;
     GUI.canvas.width = 1600;
     GUI.drawText('Loading Font', 800, 500, 50, '#fffff', 0.5);
@@ -52,7 +52,6 @@ class PixelTanks {
 
   static boot() {
     PixelTanks.user = {};
-    PixelTanks.loadMessages = ['Recharging Instas...', 'Summoning Turrets...', 'Sorting Cosmetics...', 'Spotting Stealths...', 'Putting Out Fires...', 'Generating Levels...', 'Loading Up Crates...', 'Filling Up Stocks...', 'Drawing Menus...', 'Placing Blocks...', 'Launching Missles...', 'Booting Game Engine...'];
     PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
     const config = document.createElement('SCRIPT');
     const newClass = 'undefined';
