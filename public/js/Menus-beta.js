@@ -10,8 +10,8 @@ class Menus {
   }
   
   static mouseLog(e) {
-    Menus.x = (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/PixelTanks.resizer;
-    Menus.y = e.clientY/PixelTanks.resizer;
+    Menus.x = (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)/window.innerHeight*1000;
+    Menus.y = e.clientY/window.innerHeight*1000;
   }
   
   static stop() {
