@@ -379,7 +379,7 @@ class Client {
       if (this.socket.status === 'connecting') {
         return this.drawStatus('Connecting...');
       } else if (this.socket.status === 'disconnected') {
-        //Menus.menus.quit.addListeners();
+        Menus.menus.quit.addListeners();
         return this.drawStatus('Disconnected!');
       } else if (this.socket.status === 'connected') {
         if (!this.hostupdate.pt.length) {
