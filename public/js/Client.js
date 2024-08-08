@@ -380,7 +380,7 @@ class Client {
         return this.drawStatus('Connecting...');
       } else if (this.socket.status === 'disconnected') {
         Menus.menus.quit.addListeners();
-        return this.drawStatus('Disconnected! Click To Return (hopefully)!');
+        return this.drawStatus('Disconnected! Click To Return!');
       } else if (this.socket.status === 'connected') {
         if (!this.hostupdate.pt.length) {
           GUI.draw.fillStyle = '#ffffff';
