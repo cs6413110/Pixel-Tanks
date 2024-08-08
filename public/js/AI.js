@@ -38,6 +38,29 @@ class AI {
       this.cosmetic_body = summoner.cosmetic_body;
       this.color = summoner.color;
     } else {
+      let crate = PixelTanks.crates;
+      for (let i = 0; i < 3; i++) {
+        let rand = Math.floor(Math.random()*1001);
+        let rarity;
+        if (rand < 1) { // .1%
+          rarity = 'mythic';
+        } else if (rand < 10) { // .9%
+          rarity = 'legendary';
+        } else if (rand < 50) { // 4%
+          rarity = 'epic';
+        } else if (rand < 150) { // 10%
+          rarity = 'rare';
+        } else if (rand < 300) { // 15%
+          rarity = 'uncommon';
+        } else { // 70%
+          rarity = 'common'; 
+        }
+        let number = Math.floor(Math.random()*(crate[0][rarity].length)), item;
+        for (const e in this.images[name]) if (e === crate[type][rarity][number]) item = this.images[name][e];
+        if (i === 0) this.cosmetic_hat = item;
+        if (i === 1) this.cosmetic = item;
+        if (i === 2) this.cosmetic_body = item;
+      }
       this.color = Engine.getRandomColor();
     }
     this.host.loadCells(this, this.x, this.y, 80, 80);
