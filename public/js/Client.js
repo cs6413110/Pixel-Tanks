@@ -662,6 +662,10 @@ class Client {
   }
 
   mousedown(e) {
+    if (this.socket && this.socket.status === 'disconnected') {
+      this.implode();
+      return Menus.trigger('main');
+    }
     this.keydown({keyCode: 1000+e.button});
     this.fire(e.button);
     clearInterval(this.fireInterval);
