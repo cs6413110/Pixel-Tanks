@@ -27,6 +27,7 @@ class Client {
     for (const listener of Client.listeners) document.addEventListener(listener, this[listener] = this[listener].bind(this));
     this.render = requestAnimationFrame(() => this.frame());
     this.animate = Date.now();
+    Menus.removeListeners();
   }
 
   getIdType(id) {
