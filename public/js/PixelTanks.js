@@ -819,6 +819,7 @@ class PixelTanks {
       },
       quit: {
         buttons: [[0, 0, 1600, 1000, function() {
+          Menus.removeListeners();
           this.paused = false;
           PixelTanks.user.player.implode();
           Menus.trigger('main');
