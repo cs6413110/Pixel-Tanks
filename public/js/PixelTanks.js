@@ -817,6 +817,16 @@ class PixelTanks {
         listeners: {},
         cdraw: () => {},
       },
+      quit: {
+        buttons: [[0, 0, 1600, 1000, function() {
+          this.paused = false;
+          PixelTanks.user.player.implode();
+          Menus.trigger('main');
+          this.multiplayer = undefined;
+        }, true]],
+        listeners: {},
+        cdraw: () => {},
+      },
     }
     
       for (const m in Menus.menus) {
