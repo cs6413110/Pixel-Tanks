@@ -379,8 +379,8 @@ class Client {
       if (this.socket.status === 'connecting') {
         return this.drawStatus('Connecting...');
       } else if (this.socket.status === 'disconnected') {
-        Menus.menus.quit.addListeners();
-        return this.drawStatus('Disconnected! Click To Return!');
+        //Menus.menus.quit.addListeners();
+        return this.drawStatus('Disconnected!');
       } else if (this.socket.status === 'connected') {
         if (!this.hostupdate.pt.length) {
           GUI.draw.fillStyle = '#ffffff';
