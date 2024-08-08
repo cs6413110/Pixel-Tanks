@@ -63,7 +63,8 @@ class AI {
           rarity = 'common'; 
         }
         let number = Math.floor(Math.random()*(crate[rarity].length)), item;
-        for (const e in crate[rarity]) if (e === crate[rarity][number]) item = crate[rarity][number];
+        item = crate[rarity][number];
+        //for (const e in crate[rarity]) if (e === crate[rarity][number]) item = crate[rarity][number];
         if (i === 0) this.cosmetic_hat = item;
         if (i === 1) this.cosmetic = item;
         if (i === 2) this.cosmetic_body = item;
