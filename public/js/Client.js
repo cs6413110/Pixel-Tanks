@@ -185,10 +185,10 @@ class Client {
     let scavenger = Engine.hasPerk(PixelTanks.userData.perk, 3);
     if (scavenger) {
       if (PixelTanks.userData.class === 'stealth') {
-        this.mana += (15-this.mana)*scavenger*.25;
-      } else this.timers.class.time -= (this.timers.class.time+this.timers.class.cooldown-Date.now())*.25*scavenger;
-      this.timers.toolkit.time -= (this.timers.toolkit.time+this.timers.toolkit.cooldown-Date.now())*.25*scavenger;
-      this.timers.powermissle.time -= (this.timers.powermissle.time+this.timers.powermissle.cooldown-Date.now())*.25*scavenger;
+        this.mana = Math.max(15, this.mana+15*scavenger*.25);
+      } else this.timers.class.time -= this.timers.class.cooldown*.25*scavenger;
+      this.timers.toolkit.time -= this.timers.toolkit.cooldown*.25*scavenger;
+      this.timers.powermissle.time -= this.timers.powermissle.cooldown*.25*scavenger;
     }
   }
   
