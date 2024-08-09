@@ -76,11 +76,9 @@ class Singleplayer extends Engine {
 
   ondeath(t, m) {
     if (t.username !== PixelTanks.userData.username) {
-      let clone = [];
-      for (const ai of this.ai) clone.push(ai.team);
-      alert(JSON.stringify(clone));
-      if (!this.ai.some(a => Engine.getTeam(a.team) === 'squad')) {
-        alert('v');
+      let e = 0;
+      for (const ai of this.ai) if (Engine.getTeam(ai.team) === 'squad') e++;
+      if (e === 1) {
         setTimeout(() => {
           PixelTanks.user.player.implode();
           Menus.menus.victory.stats = {kills: 'n/a', coins: 'n/a'};
