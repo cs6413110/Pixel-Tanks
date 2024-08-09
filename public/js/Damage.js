@@ -7,6 +7,7 @@ class Damage {
   init(x, y, w, h, a, team, host) {
     this.id = host.genId(4);
     for (const i in Damage.args) this[Damage.args[i]] = arguments[i];
+    this.time = Date.now();
     host.loadCells(this, x, y, w, h);
     const cache = new Set();
     for (const cell of this.cells) {
