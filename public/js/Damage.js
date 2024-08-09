@@ -26,6 +26,7 @@ class Damage {
       }
     }
     this.host.updateEntity(this, Damage.raw);
+    this.host.d.push(this);
     setTimeout(() => this.destroy(), 200);
   }
   reset() {
