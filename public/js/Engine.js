@@ -30,7 +30,7 @@ class Engine {
       for (let i = this.s.length-1; i >= 0; i--) {
         const s = this.s[i];
         if (Engine.getUsername(s.team) !== t.username || s.type !== 'dynamite') continue;
-        this.d.push(A.template('Damage').init(s.x-50, s.y-50, 100, 100, 100, s.team, this));
+        A.template('Damage').init(s.x-50, s.y-50, 100, 100, 100, s.team, this);
         s.destroy();
       }
     } else if (a === 'toolkit') {
@@ -87,7 +87,7 @@ class Engine {
           }
         }
       }
-      this.d.push(A.template('Damage').init(t.x, t.y, 80, 80, 50, t.team, this));
+      A.template('Damage').init(t.x, t.y, 80, 80, 50, t.team, this);
     } else if (a === 'turret') {
       A.template('AI').init(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this);
       for (let i = this.ai.length-1, turrets = 0; i >= 0; i--) if (this.ai[i].role === 0 && Engine.getUsername(this.ai[i].team) === t.username && ++turrets > 3) this.ai[i].destroy();
