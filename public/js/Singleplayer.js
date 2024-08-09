@@ -76,6 +76,7 @@ class Singleplayer extends Engine {
 
   ondeath(t, m) {
     if (t.username !== PixelTanks.userData.username) {
+      alert(JSON.stringify(this.ai));
       if (!this.ai.some(a => Engine.getTeam(a.team) === 'squad')) {
         alert('v');
         setTimeout(() => {
