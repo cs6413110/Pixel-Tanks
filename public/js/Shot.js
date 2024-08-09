@@ -23,7 +23,7 @@ class Shot {
   }
   collide(e) {
     let size = Shot.settings[this.type][2], o = size/2+10, isBlock = e instanceof Block, pullGrapple = (isBlock || !e) && this.type === 'grapple';
-    if (size) return A.template('Damage').init(this.x-o, this.y-o, size, size, this.damage, this.team, this.host) || true; // damage change to square instead of rect hitbox?
+    if (size) return A.template('Damage').init(this.x-o, this.y-o, size, size, this.damage, this.team, this.host) || 1; // damage change to square instead of rect hitbox?
     if (this.type === 'dynamite' || this.type === 'usb' || this.type === 'grapple') {
       const g = pullGrapple ? this.host.pt.find(t => t.username === Engine.getUsername(this.team)) : e;
       let hook = pullGrapple ? Engine.hasPerk(g.perk, 7) : false;
