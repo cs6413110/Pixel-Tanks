@@ -260,7 +260,7 @@ class Client {
   }
 
   drawExplosion(e) {
-    if (!e) return console.log(this.d);
+    if (!e) return console.log(this.hostupdate.d);
     let frame = Math.floor((Date.now()-e.time)/18);
     if (e.w === 200) GUI.drawImage(PixelTanks.images.animations['smoke'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*200, 0, 200, 200);
     if (e.w !== 200) GUI.drawImage(PixelTanks.images.animations[(e.w === 99 ? 'heal' : '')+'explosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*50, 0, 50, 50);
