@@ -5,10 +5,6 @@ class PixelTanks {
   }
 
   static setup() {
-    Array.prototype.r = function(o) {
-      let i = this.indexOf(o);
-      if (i !== -1) this.splice(i, 1);
-    } // temp modding, maybe remove
     document.body.innerHTML += `
     <style>
       html, body {
@@ -960,12 +956,7 @@ class PixelTanks {
         }, 15); // use built in menus renderer instead?
         let done = false;
         for (const i in PixelTanks.userData[name]) {
-          try {
           const [item, amount] = PixelTanks.userData[name][i].split('#');
-          } catch(e) {
-            alert(e);
-            alert('n='+name+' i='+i+' c='+PixelTanks.userData[name][i]);
-          }
           if (item === crate[type][rarity][number]) {
             done = true;
             PixelTanks.userData[name][i] = item+'#'+(Number(amount)+1);
