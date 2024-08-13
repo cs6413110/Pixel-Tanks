@@ -298,23 +298,39 @@ class Client {
       GUI.draw.fillRect(t.x, t.y+100, 80*t.hp/t.maxHp, 5);
     }
 
+    
     if (t.shields > 0) {
-      const p = t.username === PixelTanks.user.username;
-      let a = 1;
-      if (this.ded && t.invis && !p) return;
-      if ((t.invis && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || t.ded) a = .5;
-      if (t.invis && Engine.getTeam(this.team) !== Engine.getTeam(t.team)) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
-      if (a === 0) return;
-      GUI.draw.beginPath();
-      GUI.draw.fillStyle = '#7DF9FF';
-      GUI.draw.globalAlpha = a*((t.shields/100)*.4); // .2 max, .1 min
-      GUI.draw.arc(t.x+40, t.y+40, 66, 0, 2*Math.PI);
-      GUI.draw.fill();
-      GUI.draw.globalAlpha = 1;
-      GUI.draw.fillStyle = '#000000';
-      GUI.draw.fillRect(t.x-2, t.y+113, 84, 11);
-      GUI.draw.fillStyle = '#00FFFF';
-      GUI.draw.fillRect(t.x, t.y+115, 80*t.shields/100, 5);
+      if (!t.shielded) t.shieldMake = Date.now();
+      t.shielded = true;
+      // 15 for make, 9 for break
+      if (Date.now()-t.shieldMake > 15*200 && Date.now-t.shieldBreak > 9*200) {
+        const p = t.username === PixelTanks.user.username;
+        let a = 1;
+        if (this.ded && t.invis && !p) return;
+        if ((t.invis && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || t.ded) a = .5;
+        if (t.invis && Engine.getTeam(this.team) !== Engine.getTeam(t.team)) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
+        if (a === 0) return;
+        GUI.draw.beginPath();
+        GUI.draw.fillStyle = '#7DF9FF';
+        GUI.draw.globalAlpha = a*((t.shields/100)*.4); // .2 max, .1 min
+        GUI.draw.arc(t.x+40, t.y+40, 66, 0, 2*Math.PI);
+        GUI.draw.fill();
+        GUI.draw.globalAlpha = 1;
+        GUI.draw.fillStyle = '#000000';
+        GUI.draw.fillRect(t.x-2, t.y+113, 84, 11);
+        GUI.draw.fillStyle = '#00FFFF';
+        GUI.draw.fillRect(t.x, t.y+115, 80*t.shields/100, 5);
+      }
+    } else if (t.shielded) {
+      t.shieldBreak = Date.now();
+      t.shielded = false;
+    }
+    if (Date.now()-t.shieldBreak <= 9*200) {
+      let f = Math.floor((Date.now()-t.shieldBreak)/200);
+      GUI.drawImage(PixelTanks.images.shield_break, t.x-22, t.y-22, 132, 132, 1, 0, 0, 0, 0, undefined, f*132, 0, 132, 132);
+    } else if (Date.now()-shieldMake <= 15*200) {
+      let f = Math.floor((Date.now()-t.shieldMake)/200);
+      GUI.drawImage(PixelTanks.images.shield_make, t.x-22, t.y-22, 132, 132, 1, 0, 0, 0, 0, undefined, f*132, 0, 132, 132);
     }
 
     if (t.damage) {
