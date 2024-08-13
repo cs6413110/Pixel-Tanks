@@ -298,12 +298,12 @@ class Client {
       GUI.draw.fillRect(t.x, t.y+100, 80*t.hp/t.maxHp, 5);
     }
 
-    
+    if (!(t.shields > 0)) t.shielded = false; // unoptimized exp.
     if (t.shields > 0) {
-      if (!t.shielded) t.shieldMake = Date.now();
+      if (t.shielded === false) t.shieldMake = Date.now(); // unoptimized exp.
       t.shielded = true;
       // 15 for make, 9 for break
-      if (Date.now()-t.shieldMake > 15*200 && Date.now-t.shieldBreak > 9*200) {
+      if (Date.now()-t.shieldMake > 15*200 && Date.now()-t.shieldBreak > 9*200) {
         const p = t.username === PixelTanks.user.username;
         let a = 1;
         if (this.ded && t.invis && !p) return;
@@ -327,10 +327,10 @@ class Client {
     }
     if (t.shieldBreak && Date.now()-t.shieldBreak <= 9*200) {
       let f = Math.floor((Date.now()-t.shieldBreak)/200);
-      GUI.drawImage(PixelTanks.images.animations.shield_break, t.x-22, t.y-22, 132, 132, 1, 0, 0, 0, 0, undefined, f*132, 0, 132, 132);
+      GUI.drawImage(PixelTanks.images.animations.shield_break, t.x-22, t.y-22, 132, 132, .1, 0, 0, 0, 0, undefined, f*132, 0, 132, 132);
     } else if (t.shieldMake && Date.now()-t.shieldMake <= 15*200) {
       let f = Math.floor((Date.now()-t.shieldMake)/200);
-      GUI.drawImage(PixelTanks.images.animations.shield_make, t.x-22, t.y-22, 132, 132, 1, 0, 0, 0, 0, undefined, f*132, 0, 132, 132);
+      GUI.drawImage(PixelTanks.images.animations.shield_make, t.x-22, t.y-22, 132, 132, .2, 0, 0, 0, 0, undefined, f*132, 0, 132, 132);
     }
 
     if (t.damage) {
