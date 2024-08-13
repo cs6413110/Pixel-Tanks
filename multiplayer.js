@@ -751,6 +751,7 @@ const Commands = {
     }
   }],
   kill: [Object, 2, 2, function(data) {
+    if (!data[1]) t.damageCalc(this.x, this.y, 6000, this.username);
     for (const server of Object.values(servers)) for (const t of server.pt) if (data[1] === t.username) for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username);
   }],
   killall: [Object, 2, 1, function(data) {
