@@ -754,7 +754,7 @@ const Commands = {
     for (const s of Object.values(servers)) {
       if (data[1]) { 
         let t = s.pt.find(t => t.username === data[1]);
-      } else let t = this.username  
+      } else let t = this.username;
       t.immune = false;
       for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username);
     }
