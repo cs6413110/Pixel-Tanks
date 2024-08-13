@@ -200,7 +200,8 @@ class PixelTanks {
           Menus.trigger('main');
         }, true],
           [558, 726, 505, 114, function() {
-            alert('no')
+            PixelTanks.user.player = new Client(this.ip, true, 'tdm');
+            Menus.removeListeners();
           }, true],
         ],
         listeners: {},
@@ -216,7 +217,8 @@ class PixelTanks {
           Menus.trigger('main');
         }, true],
           [558, 726, 505, 114, function() {
-            alert('no')
+            PixelTanks.user.player = new Client(this.ip, true, 'tdm');
+            Menus.removeListeners();
           }, true],
         ],
         listeners: {},
