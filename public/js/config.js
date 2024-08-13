@@ -25,7 +25,7 @@ const sourceMap = {
     {
       ref: 'animations',
       path: 'animations',
-      load: ['tape', 'glu', 'fire', 'text', 'detonate', 'explosion', 'healexplosion', 'smoke'],
+      load: ['tape', 'glu', 'fire', 'text', 'detonate', 'explosion', 'healexplosion', 'smoke', 'shield_make', 'shield_break'],
       meta: {
         tape_: { frames: 17, speed: 50 },
         toolkit_: { frames: 16, speed: 50 },
