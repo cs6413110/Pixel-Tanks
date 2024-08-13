@@ -752,12 +752,8 @@ const Commands = {
   }],
   kill: [Object, 2, -1, function(data) {
     for (const s of Object.values(servers)) {
-      for (const s of Object.values(servers)) {
       let t = s.pt.find(t => t.username === (data[1] || this.username));
       if (!t) return;
-      t.immune = false;
-      for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username);
-    } 
       t.immune = false;
       for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username);
     }
