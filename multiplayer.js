@@ -433,6 +433,7 @@ class TDM extends Multiplayer {
           clearTimeout(t.fireTimeout);
           t.shields = 0;
           t.team = t.username+':'+(t.color === '#FF0000' ? 'RED' : 'BLUE');
+          t.socket.send({event: 'ded'});
         });
         this.levelReader(tdmLevels[Math.floor(Math.random()*tdmLevels.length)]);
       } else if (this.pt.length >= 4) this.global = this.time-Math.floor((Date.now()-this.readytime)/1000);
@@ -482,7 +483,6 @@ class TDM extends Multiplayer {
             tank.hp = tank.maxHp;
             tank.shields = 0;
             tank.ded = false;
-            t.socket.send({event: 'ded'});
           });
           for (let i = this.s.length-1; i >= 0; i--) this.s[i].destroy();
           for (let i = this.ai.length-1; i >= 0; i--) this.ai[i].destroy();
