@@ -303,7 +303,7 @@ class Client {
       if (t.shielded === false) t.shieldMake = Date.now(); // unoptimized exp.
       t.shielded = true;
       // 15 for make, 9 for break
-      if (Date.now()-t.shieldMake > 15*200 && Date.now()-t.shieldBreak > 9*200) {
+      if ((!t.shieldMake || Date.now()-t.shieldMake > 15*200) && (!t.shieldBreak || Date.now()-t.shieldBreak > 9*200)) {
         const p = t.username === PixelTanks.user.username;
         let a = 1;
         if (this.ded && t.invis && !p) return;
