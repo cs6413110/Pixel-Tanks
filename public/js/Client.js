@@ -309,7 +309,7 @@ class Client {
         if ((t.invis && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || t.ded) a = .5;
         if (t.invis && Engine.getTeam(this.team) !== Engine.getTeam(t.team)) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
         if (a === 0) return;
-        GUI.drawImage(PixelTanks.images.animations.shield_make, t.x-22, t.y-22, 132, 132, a*((t.shields/100)*.4), 0, 0, 0, 0, undefined, 14*132, 0, 132, 132);
+        GUI.drawImage(PixelTanks.images.animations.shield_make, t.x-22, t.y-22, 124, 124, a*((t.shields/100)*.4), 0, 0, 0, 0, undefined, 14*132, 0, 132, 132);
         GUI.draw.fillStyle = '#000000';
         GUI.draw.fillRect(t.x-2, t.y+113, 84, 11);
         GUI.draw.fillStyle = '#00FFFF';
@@ -321,10 +321,10 @@ class Client {
     }
     if (t.shieldBreak && Date.now()-t.shieldBreak <= 9*200) {
       let f = Math.floor((Date.now()-t.shieldBreak)/200);
-      GUI.drawImage(PixelTanks.images.animations.shield_break, t.x-22, t.y-22, 132, 132, .2, 0, 0, 0, 0, undefined, f*132, 0, 132, 132);
+      GUI.drawImage(PixelTanks.images.animations.shield_break, t.x-22, t.y-22, 124, 124, .2, 0, 0, 0, 0, undefined, f*132, 0, 132, 132);
     } else if (t.shieldMake && Date.now()-t.shieldMake <= 15*200) {
       let f = Math.floor((Date.now()-t.shieldMake)/200);
-      GUI.drawImage(PixelTanks.images.animations.shield_make, t.x-22, t.y-22, 132, 132, .4, 0, 0, 0, 0, undefined, f*132, 0, 132, 132);
+      GUI.drawImage(PixelTanks.images.animations.shield_make, t.x-22, t.y-22, 124, 124, .4, 0, 0, 0, 0, undefined, f*132, 0, 132, 132);
     }
 
     if (t.damage) {
