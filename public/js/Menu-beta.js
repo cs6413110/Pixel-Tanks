@@ -1,11 +1,9 @@
 class Menu {
   constructor(data, id) {
-    const {buttons, listeners, cdraw} = data;
     this.id = id;
-    this.buttons = buttons;
-    this.listeners = listeners;
-    this.buttonEffect = true;
-    this.cdraw = cdraw.bind(this);
+    this.buttons = data.buttons;
+    this.listeners = data.listeners;
+    this.cdraw = data.cdraw.bind(this);
     this.listeners.click = this.onclick;
     for (const l in this.listeners) this.listeners[l] = this.listeners[l].bind(this);
     for (const b of this.buttons) {
@@ -29,14 +27,6 @@ class Menu {
   removeListeners() {
     for (const l in this.listeners) window.removeEventListener(l, this.listeners[l]);
   }
-  
-  onclick() {
-    for (const b of this.buttons) {
-      if (Engine.collision(Menus.x, Menus.y, 0, 0, this.render[0]+b[0], this.render[1]+b[1], b[2]*this.render[2]/1600, b[3]*this.render[3]/1000)) {
-        return typeof b[4] === 'function' ? b[4]() : Menus.trigger(b[4]);
-      }
-    }
-  }
 
   compile() {
     this.cache = [];
@@ -49,6 +39,10 @@ class Menu {
       if (PixelTanks.images.menus[this.id]) draw.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3]);
       this.cache.push([x, y, w, h, canvas]);
     }
+
+    this.b = [];
+    for (const b of this.buttons) {
+    }
   }
   
   draw(render) {
@@ -58,17 +52,5 @@ class Menu {
     }
     if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], this.render[0], this.render[1], this.render[2], this.render[3], 1);
     this.cdraw();
-    if (!this.buttonEffect) return;
-    for (const b of this.buttons) {
-      if (b[5]) {
-        const [x, y, w, h, canvas] = this.cache[this.buttons.indexOf(b)];
-        if (Engine.collision(x, y, w, h, Menus.x, Menus.y, 0, 0)) {
-          b[6] = Math.min(b[6]+1, 10);
-        } else {
-          b[6] = Math.max(b[6]-1, 0);
-        }
-        GUI.drawImage(canvas, x-b[6], y-b[6]*h/w, w+b[6]*2, h+b[6]*2*h/w, 1);
-      }
-    }
   }
 }
