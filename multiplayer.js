@@ -86,7 +86,6 @@ const deathMessages = [
   `{victim} got wrecked by {killer}`,
 ], joinMessages = [
   `{idot} is here`,
-  `{idot}, better late then never!`,
   `{idot} arrived`,
   `{idot} is no longer afk`,
   `{idot} exists for some reason`,
@@ -105,8 +104,6 @@ const deathMessages = [
   `{idot} lost connection`,
   `{idot} didn't make it out alive`,
 ], tipMessages = [
-  `TIP: give up`,
-  `TIP: Time the reflector better next time!`,
   `TIP: Try switching your class, maybe you're not good at that one!`,
   `TIP: These tips get shown when you die!`,
   `TIP: Blame the lag`,
