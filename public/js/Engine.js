@@ -51,7 +51,7 @@ class Engine {
       clearInterval(t.gluInterval);
       clearTimeout(t.gluTimeout);
       t.gluInterval = setInterval(() => {
-        t.hp = Math.min(t.maxHp, t.hp+.5);
+        t.hp = Math.min(t.maxHp, t.hp+.1);
       }, 15);
       t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
     } else if (a.includes('block#')) {
