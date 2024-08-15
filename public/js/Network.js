@@ -51,6 +51,7 @@ class Network {
     static timeout = 15;
     static perImage(name, src, ref) {
       let i = PixelTanks.images[ref][name] = new Image();
+      i.crossOrigin = 'anonymous';
       i.src = src+'.png';
       i.onload = () => Network.handle(1, i);
       i.timeout = setTimeout(i.onerror = () => Network.handle(0, i), Network.timeout*1000);
