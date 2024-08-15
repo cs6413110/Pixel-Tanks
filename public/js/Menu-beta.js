@@ -6,16 +6,13 @@ class Menu {
     this.listeners = data.listeners;
     this.cdraw = data.cdraw.bind(this);
     for (const b of data.buttons) {
-      let button = document.createElement('button');
-      button.style = '';
+      let button = document.createElement('INPUT');
+      button.type = 'image';
       button.onclick = () => (typeof b[4] === 'function' ? b[4]() :  Menus.trigger(b[4]));
-      Menu.scaler.width = b[2];
-      Menu.scaler.height = b[3];
+      button.width = Menu.scaler.width = b[2];
+      button.height = Menu.scaler.height = b[3];
       Menu.scaler.getContext('2d').drawImage(PixelTanks.images.menus[id], -b[0], -b[1]);
-      const image = document.createElement('IMG');
-      alert(Menu.scaler.toDataURL());
-      image.src = Menu.scaler.toDataURL();
-      button.innerHTML = image.outerHTML;
+      button.src = Menu.scaler.toDataURL();
       document.body.appendChild(button);
     }
     this.render = [0, 0, 1600, 1000]; // rewrite structure
