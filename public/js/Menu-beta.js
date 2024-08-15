@@ -1,7 +1,6 @@
 class Menu {
   static scaler = document.createElement('canvas');
   constructor(data, id) {
-    try {
     this.id = id;
     this.listeners = data.listeners;
     this.cdraw = data.cdraw.bind(this);
@@ -10,6 +9,7 @@ class Menu {
       const oldload = PixelTanks.images.menus[this.id].onload;
       PixelTanks.images.menus[this.id].onload = () => {
         oldload();
+        try {
         for (const b of data.buttons) {
           let button = document.createElement('INPUT');
           button.type = 'image';
@@ -20,10 +20,8 @@ class Menu {
           button.src = Menu.scaler.toDataURL();
           document.body.appendChild(button);
         }
+        } catch(e) {alert(e)}
       }
-    }
-    } catch(e) {
-      alert(e);
     }
   }
   
