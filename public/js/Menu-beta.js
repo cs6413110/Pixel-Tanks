@@ -15,9 +15,9 @@ class Menu {
           let button = document.createElement('INPUT');
           button.type = 'image';
           button.onclick = () => (typeof b[4] === 'function' ? b[4]() :  Menus.trigger(b[4]));
-          button.width = 1000*(Menu.scaler.width = b[2])/window.innerHeight;
-          button.height = 1000*(Menu.scaler.height = b[3])/window.innerHeight;
-          const leftOffset = (window.innerWidth-window.innerHeight*1.6)/2+b[0];
+          button.width = window.innerHeight*(Menu.scaler.width = b[2])/1000;
+          button.height = window.innerHeight*(Menu.scaler.height = b[3])/1000;
+          const leftOffset = (window.innerWidth-window.innerHeight*1.6)/2+b[0]/1000*window.innerHeight;
           button.style = 'position: absolute; left: '+leftOffset+'px; top: '+b[1]+'px';
           Menu.scaler.getContext('2d').drawImage(PixelTanks.images.menus[id], -b[0], -b[1]);
           button.src = Menu.scaler.toDataURL();
