@@ -1,6 +1,7 @@
 class Menu {
   static scaler = document.createElement('canvas');
   constructor(data, id) {
+    try {
     this.id = id;
     this.listeners = data.listeners;
     this.cdraw = data.cdraw.bind(this);
@@ -23,6 +24,9 @@ class Menu {
         oldload();
         this.compile();
       }
+    }
+    } catch(e) {
+      alert(e);
     }
   }
   
