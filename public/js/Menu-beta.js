@@ -13,7 +13,7 @@ class Menu {
       Menu.scaler.height = b[3];
       Menu.scaler.getContext('2d').drawImage(PixelTanks.images.menus[id], -b[0], -b[1]);
       const image = document.createElement('IMG');
-      image.src = Menu.scaler.toDataUrl();
+      image.src = Menu.scaler.toDataURL();
       button.innerHTML = image;
       document.body.appendChild(button);
     }
