@@ -14,6 +14,7 @@ class AI {
     this.username = displayNames[Math.floor(Math.random()*displayNames.length)]
     if (!this.team.includes(':')) this.team = this.username+':'+this.team;
     this.maxHp = this.hp = this.rank*10+300;
+    if (role === 0) this.maxHp = this.hp = 99999;//ez
     this.barrelSpeed = Math.random()*3+2;
     this.seeUser = this.target = this.obstruction = this.bond = this.path = this.damage = false;
     this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = this.shields = 0;
