@@ -48,6 +48,7 @@ const sourceMap = {
     rare: ['blue_tint', 'glitch', 'blue_helmet', 'white_helmet', 'helmet', 'gold_helmet', 'hacker_hoodie', 'sus', 'magma', 'veins', 'hoodie',],
     epic: ['christmas_hat', 'christmas_lights', 'dizzy', 'rage', 'toxic', 'crown', 'error', 'dark_crown'],
     legendary: ['plasma', 'cry',],
+    admin: ['dark_crown'],
     mythic: ['terminator', 'mlg_glasses', 'power_armor'], //STOAP
   },
   deathEffect: {
