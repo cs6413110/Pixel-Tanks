@@ -449,6 +449,7 @@ class TDM extends Multiplayer {
       if ((this.time-(Date.now()-this.readytime)/1000) <= 0) {
         this.global = '======(RED)'+this.wins.RED+' v.s '+this.wins.BLUE+'(BLUE)======';
         this.mode = 2;
+        this.pt.forEach(t => t.socket.send({event: 'ded'}));
       }
     }
   }
