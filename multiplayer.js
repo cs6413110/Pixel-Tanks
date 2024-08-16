@@ -759,7 +759,7 @@ const Commands = {
   killall: [Object, 2, 1, function(data) {
     for (const t of servers[this.room].pt) for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username);
   }],
-  killai: [Object, 2, 1, function(data) {
+  killai: [Object, 1, 1, function(data) {
     for (let i = servers[this.room].ai.length-1; i >= 0; i--) servers[this.room].ai[i].destroy();
   }],
   ai: [Object, 2, 7, function(data) {
