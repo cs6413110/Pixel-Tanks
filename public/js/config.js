@@ -48,6 +48,7 @@ const sourceMap = {
     rare: ['blue_tint', 'glitch', 'blue_helmet', 'white_helmet', 'helmet', 'gold_helmet', 'hacker_hoodie', 'sus', 'magma', 'veins', 'hoodie'],
     epic: ['christmas_hat', 'christmas_lights', 'dizzy', 'rage', 'toxic', 'crown', 'error'],
     legendary: ['plasma', 'cry'],    //imma just delete the cosmetic
+    admin: [], // LOL IT NEEDS ADMIN TO NOT EPLODE
     mythic: ['terminator', 'mlg_glasses', 'power_armor', 'corrupted'], //STOAP
   },
   deathEffect: {
