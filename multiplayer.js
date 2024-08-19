@@ -631,8 +631,14 @@ const Commands = {
     if (Storage.mutes.includes(this.username)) return this.send({status: 'error', message: 'You are muted!'});
     const t = servers[this.room].pt.find(t => t.username === this.username), m = servers[this.room].pt.find(t => t.username === data[1]);
     const message = {m: `[${this.username}->${data[1]}] ${clean(data.slice(2).join(' '))}`, c: '#FFFFFF'};
-    if (t) t.privateLogs.push(message);
-    if (m) m.privateLogs.push(message);
+    if (t) {
+      t.privateLogs.push(message);
+      servers[this.room].send(t);
+    }
+    if (m) {
+      m.privateLogs.push(message);
+      servers[this.room].send(m);
+    }
   }],
   createteam: [FFA, 4, 2, function(data) {
     if (Storage.mutes.includes(this.username)) return this.send({status: 'error', message: `You can't make teams when you're muted!`});
@@ -795,7 +801,10 @@ const Commands = {
     for (let i = Math.min(logs.length, Number(data[1])); i >= 0; i--) t.privateLogs.push({m: logs[i], c: '#A9A9A9'});
   }],
   announce: [Object, 3, -1, function(data) {
-    for (const server of Object.values(servers)) server.logs.push({m: '[Announcement]['+this.username+'] '+data.slice(1).join(' '), c: '#FFF87D'});
+    for (const server of Object.values(servers)) {
+      server.logs.push({m: '[Announcement]['+this.username+'] '+data.slice(1).join(' '), c: '#FFF87D'});
+      for (const t of servers.pt) server.send(t);
+    }
   }],
   lockchat: [Object, 2, -1, function(data) {
     settings.chat = !settings.chat;
@@ -899,6 +908,7 @@ wss.on('connection', socket => {
         return socket.send({status: 'error', message: 'You are muted!'});
       }
       servers[socket.room].logs.push({m: `[${socket.username}] ${clean(data.msg)}`, c: '#ffffff'});
+      for (const t of servers[socket.room].pt) servers[socket.room].send(t);
       log(`[${socket.username}] ${clean(data.msg)}`);
     } else if (data.type === 'logs') {
       if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
