@@ -899,7 +899,7 @@ class Client {
         this.timers.boost.time = Date.now();
         let preStealth = PixelTanks.userData.class === 'stealth' && this.tank.invis;
         if (!preStealth) {
-          this.mana = Math.min(this.mana+time/this.timers.class.cooldown, 15);
+          this.mana = Math.min(this.mana+(Date.now()-this.timers.class.time)/this.timers.class.cooldown, 15);
           this.timers.class.time = Date.now();
           if (this.mana >= .5) this.tank.invis = true;
         }
