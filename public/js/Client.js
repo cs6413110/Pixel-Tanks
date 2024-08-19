@@ -897,11 +897,24 @@ class Client {
         this.speed = 16;
         this.tank.immune = true;
         this.timers.boost.time = Date.now();
+        let preStealth = PixelTanks.userData.class === 'stealth' && this.tanks.invis;
+        if (PixelTanks.userData.class === 'stealth' && !preStealth) {
+          this.mana = Math.min(this.mana+time/this.timers.class.cooldown, 15);
+          this.timers.class.time = Date.now();
+          if (this.mana >= .5) this.tank.invis = true;
+        }
         clearTimeout(this.booster);
         this.booster = setTimeout(() => {
           this.speed = 4;
           this.tank.immune = false;
-          if (PixelTanks.userData.class === 'stealth') this.tank.use.push('break');
+          if (PixelTanks.userData.class === 'stealth') {
+            this.tank.use.push('break');
+            if (!preStealth) {
+              this.tank.invis = false;
+              this.mana -= .5;
+              this.timers.class.time = Date.now();
+            }
+          }
         }, 500);
       }
     }
