@@ -126,6 +126,13 @@ const deathMessages = [
 class Multiplayer extends Engine {
   constructor(l) {
     super(l);
+    Object.defineProperty(this, p, {get: () => this.rawglobal, set: (v) => {
+      this.rawglobal = v;
+      for (const t of this.pt) {
+        t.msg.global = v;
+        this.send(t);
+      }
+    }, configurable: true});
   }
   override(t, ox, oy) {
     this.updateEntity(t, Tank.u);
