@@ -119,7 +119,7 @@ class Client {
       this.sendInterval = setInterval(() => this.send(), 1000/60);
       this.getPing();
     });
-    this.pinger = setInterval(() =>  {
+    this.pinger = setInterval(() => {
       this.ops = this.ops.concat(this._ops).slice(-100);
       this.ups = this.ups.concat(this._ups).slice(-100);
       this.fps = this.fps.concat(this._fps).slice(-100);
@@ -568,7 +568,7 @@ class Client {
     if (e.keyCode === 8) this.msg = this.msg.slice(0, -1);
     if (e.keyCode === 9) {
       const runoff = this.msg.split(' ').reverse()[0];
-      for (const player of this.players) if (player.startsWith(runoff)) return this.msg = this.msg.split(' ').reverse().slice(1).reverse().concat(player);
+      for (const player of this.players) if (player.startsWith(runoff)) return this.msg = this.msg.split(' ').reverse().slice(1).reverse().concat(player).join(' ');
     }
     if (e.keyCode === 38 && this.lastMessage) this.msg = this.lastMessage;
     if (e.keyCode === 13) {
