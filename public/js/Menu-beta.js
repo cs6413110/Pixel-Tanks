@@ -12,7 +12,7 @@ class Menu {
         oldload();
         for (const b of data.buttons) {
           let button = document.createElement('BUTTON'), image = document.createElement('IMG');
-          button.onclick = () => (typeof b[4] === 'function' ? b[4]() :  Menus.trigger(b[4]));
+          button.onclick = () => (typeof b[4] === 'function' ? b[4].bind(this)() :  Menus.trigger(b[4]));
           button.width = image.width = window.innerHeight*(Menu.scaler.width = b[2])/1000;
           button.height = image.height = window.innerHeight*(Menu.scaler.height = b[3])/1000;
           const leftOffset = (window.innerWidth-window.innerHeight*1.6)/2+b[0]/1000*window.innerHeight;
