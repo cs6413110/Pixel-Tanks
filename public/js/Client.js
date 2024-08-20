@@ -658,9 +658,8 @@ class Client {
       setInterval(() => {
         this.implode();
         return Menus.trigger('main');
-        }, 0);
-      }
-  }
+      }, 0);
+    }
     clearInterval(this.fireInterval);
     this.keyup({keyCode: 1000+e.button});
   }
