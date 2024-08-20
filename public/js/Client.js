@@ -88,42 +88,6 @@ class Client {
     this.socket.on('message', data => {
       if (data.event === 'update') {
         this.interpret(data);
-      } if (data.event === 'hostupdate') {
-        this._ups++;
-        this.hostupdate.tickspeed = data.tickspeed;
-        this.hostupdate.global = data.global;
-        let compiledLogs = [];
-        GUI.draw.font = '30px Font';
-        for (const log of data.logs) {
-          let words = log.m.split(' '), len = 0, line = '';
-          for (const word of words) {
-            len += GUI.draw.measureText(word).width;
-            if (len > 800) {
-              compiledLogs.push({m: line, c: log.c, chunk: true});
-              len = 0;
-              line = '';
-            }
-            line += word+' ';
-          }
-          compiledLogs.push({m: line, c: log.c, chunk: false});
-        }
-        if (this.hostupdate.logs.length > 100) this.hostupdate.logs.pop();
-        this.hostupdate.logs.unshift(...compiledLogs.reverse());
-        for (let i = 0; i < this.hostupdate.logs.length; i++) {
-          let username = this.hostupdate.logs[i].m.split(']')[0];
-          if (username.includes('->')) username = username.split('->')[0];
-          username = username.split('[')[1];
-          if (this.blocked.has(username)) this.hostupdate.logs[i].m = '<blocked message from '+username+'>';
-        }
-        entities.forEach(p => {
-          if (data[p].length) data[p].forEach(e => {
-            const index = this.hostupdate[p].findIndex(obj => obj.id === e.id);
-            if (index !== -1) {
-              this.hostupdate[p][index] = e;
-            } else this.hostupdate[p].push(e);
-          });
-          if (data.delete[p].length) this.hostupdate[p] = this.hostupdate[p].filter(e => !data.delete[p].includes(e.id));
-        });
       } else if (data.event === 'ded') {
         this.reset();
       } else if (data.event === 'sc') {
@@ -148,7 +112,7 @@ class Client {
       } else if (data.event === 'ping') {
         this.pings = this.pings.concat(Date.now()-this.pingstart).slice(-100);
         this.getPing();
-      }
+      } else if (data.event === 'list') this.players = data.players;
     });
     this.socket.on('connect', () => {
       this.socket.send(this.joinData);
@@ -160,6 +124,7 @@ class Client {
       this.ups = this.ups.concat(this._ups).slice(-100);
       this.fps = this.fps.concat(this._fps).slice(-100);
       this._ops = this._ups = this._fps = 0;
+      this.socket.send({event: 'list'});
     }, 1000);
   }
 
@@ -601,6 +566,10 @@ class Client {
   chat(e) {
     if (e.key.length === 1) this.msg = (this.msg+e.key).slice(0, 2000);
     if (e.keyCode === 8) this.msg = this.msg.slice(0, -1);
+    if (e.keyCode === 9) {
+      const runoff = this.msg.split(' ').reverse()[0];
+      for (const player of this.players) if (player.startsWith(runoff)) return this.msg = this.msg.split(' ').reverse().slice(1).reverse().concat(player);
+    }
     if (e.keyCode === 38 && this.lastMessage) this.msg = this.lastMessage;
     if (e.keyCode === 13) {
       if (this.msg !== '') {
