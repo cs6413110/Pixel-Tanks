@@ -278,7 +278,14 @@ class Engine {
     let perk = p.find(a => Math.floor(a) === n);
     if (perk) return Math.round((perk%1)*10); else return perk;
   }
-  static parseTeamExtras = s => s.replace('@leader', '').split('@requestor#')[0];
+  static parseTeamExtras = s => {
+    try {
+    s.replace('@leader', '').split('@requestor#')[0];
+    } catch(e) {
+      console.log('ERR: '+e+' parsed='+s);
+      this.logs.push({m: 'ERR: '+e+' parsed='+s, c: '#ff0000'});
+    }
+  }
   static getUsername = s => Engine.parseTeamExtras(s).split(':')[0];
   static getTeam = s => Engine.parseTeamExtras(s).split(':')[1];
   static collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
