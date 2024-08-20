@@ -124,7 +124,7 @@ class Client {
       this.ups = this.ups.concat(this._ups).slice(-100);
       this.fps = this.fps.concat(this._fps).slice(-100);
       this._ops = this._ups = this._fps = 0;
-      this.socket.send({event: 'list'});
+      this.socket.send({type: 'list'});
     }, 1000);
   }
 
