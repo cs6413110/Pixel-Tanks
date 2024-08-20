@@ -63,10 +63,8 @@ class PixelTanks {
     Menus.menus = {
       start: {
         buttons: [
-          [544, 648, 216, 116, function() {PixelTanks.auth(this.username, this.password, 'login')}, true],
-          [840, 648, 216, 116, function() {PixelTanks.auth(this.username, this.password, 'signup')}, true],
-          [564, 392, 456, 80, function() {this.type = 'username'}, false],
-          [564, 520, 456, 80, function() {this.type = 'password'}, false],
+          [544, 648, 216, 116, function() {PixelTanks.auth(this.username.value, this.password.value, 'login')}, true],
+          [840, 648, 216, 116, function() {PixelTanks.auth(this.username.value, this.password.value, 'signup')}, true],
         ],
         listeners: {
           keydown: function(e) {
