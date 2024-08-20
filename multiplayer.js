@@ -918,7 +918,7 @@ wss.on('connection', socket => {
       for (const t of servers[socket.room].pt) servers[socket.room].send(t);
       log(`[${socket.username}] ${clean(data.msg)}`);
     } else if (data.type === 'logs') {
-      if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs});
+      if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs}); // Dead?
     } else if (data.type === 'command') {
       const f = Commands[data.data[0]];
       if (!f) return socket.send({status: 'error', message: 'Command not found.'});
@@ -927,6 +927,8 @@ wss.on('connection', socket => {
       if (!hasAccess(socket.username, f[1])) return socket.send({status: 'error', message: `You don't have access to this.`});
       log(`${socket.username} ran command: ${data.data.join(' ')}`);
       f[3].bind(socket)(data.data);
+    } else if (data.type === 'list') {
+      socket.send({event: 'list', players: servers[socket.room].pt.reduce((a, c) => a.concat(c.username), [])});
     } else if (data.type === 'stats') {
       let gamemodes = {FFA: [], DUELS: [], TDM: [], Defense: [], event: 'stats'};
       for (const id in servers) {
