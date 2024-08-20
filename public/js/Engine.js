@@ -280,7 +280,7 @@ class Engine {
   }
   static parseTeamExtras = s => {
     try {
-    s.replace('@leader', '').split('@requestor#')[0];
+      return s.replace('@leader', '').split('@requestor#')[0];
     } catch(e) {
       console.log('ERR: '+e+' parsed='+s);
       this.logs.push({m: 'ERR: '+e+' parsed='+s, c: '#ff0000'});
