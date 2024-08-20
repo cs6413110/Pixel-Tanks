@@ -17,7 +17,7 @@ class Menu {
           button.height = image.height = window.innerHeight*(Menu.scaler.height = b[3])/1000;
           const leftOffset = (window.innerWidth-window.innerHeight*1.6)/2+b[0]/1000*window.innerHeight;
           button.style = 'position: absolute; left: '+leftOffset+'px; top: '+(window.innerHeight*b[1]/1000)+'px; padding: 0;';  
-          Menu.scaler.getContext('2d').drawImage(PixelTanks.images.menus[id], -b[0], -b[1]);
+          Menu.scaler.getContext('2d').drawImage(PixelTanks.images.menus[id], -b[0], -b[1], 1600, 1000);
           image.src = Menu.scaler.toDataURL();
           button.appendChild(image);
           document.body.appendChild(button);
