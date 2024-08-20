@@ -30,12 +30,12 @@ class Menu {
   
   addListeners() {
     for (const l in this.listeners) window.addEventListener(l, () => this.listeners[l]());
-    for (const b of this.buttons) b.style.visibility = 'visible';
+    for (const b of this.elements) b.style.visibility = 'visible';
   }
   
   removeListeners() {
     for (const l in this.listeners) window.removeEventListener(l, this.listeners[l]);
-    for (const b of this.buttons) b.style.visibility = 'hidden';
+    for (const b of this.elements) b.style.visibility = 'hidden';
   }
   
   draw(render) {
