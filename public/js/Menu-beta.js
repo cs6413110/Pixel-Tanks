@@ -10,7 +10,6 @@ class Menu {
       const oldload = PixelTanks.images.menus[this.id].onload;
       PixelTanks.images.menus[this.id].onload = () => {
         oldload();
-        try {
         for (const b of data.buttons) {
           let button = document.createElement('BUTTON'), image = document.createElement('IMG');
           button.onclick = () => (typeof b[4] === 'function' ? b[4]() :  Menus.trigger(b[4]));
@@ -22,9 +21,9 @@ class Menu {
           image.src = Menu.scaler.toDataURL();
           button.appendChild(image);
           document.body.appendChild(button);
+          button.style.visibility = 'hidden';
           this.elements.push(button);
         }
-        } catch(e) {alert(e)}
       }
     }
   }
