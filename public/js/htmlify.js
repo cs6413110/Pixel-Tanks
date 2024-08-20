@@ -70,21 +70,28 @@ class PixelTanks {
         ],
         listeners: {
           keydown: function(e) {
-            if (e.key.length === 1) this[this.type] += e.key;
-            if (e.keyCode === 8) this[this.type] = this[this.type].slice(0, -1);
-            if (e.keyCode === 13) PixelTanks.auth(this.username, this.password, 'login');
-            if (e.keyCode === 9) this.type = this.type === 'username' ? 'password' : 'username';
+            if (e.keyCode === 13) PixelTanks.auth(this.username.value, this.password.value, 'login');
           }
         },
         cdraw: function() {
-          if (!this.type) {
-            this.type = 'username';
-            this.username = '';
-            this.password = '';
+          if (!this.username) {
+            this.username = document.createElement('INPUT');
+            this.password = document.createElement('INPUT');
+            this.username.width = this.password.length = window.innerHeight*.456;
+            this.username.height = this.password.height = window.innerHeight*.08;
+            const left = (window.innerWidth-window.innerHeight*1.6)/2+.564*window.innerHeight;
+            this.username.style = 'position: absolute; top: '+(.392*window.innerHeight)+'px; left: '+left+'px;';
+            this.password.style = 'position: absolute; top: '+(.520*window.innerHeight)+'px; left: '+left+'px;';
+            this.username.type = 'username';
+            this.password.type = 'password';
+            this.username.autocomplete = 'username';
+            this.password.autocomplete = 'current-password';
+            this.username.maxLength = 20;
+            this.password.maxLength = 100;
+            document.body.appendChild(this.username);
+            document.body.appendChild(this.password);
+            this.elements.push(this.username, this.password);
           }
-          if (this.username.length > 20) return;
-          GUI.drawText(this.username, 574, 407, 50, '#000000', 0);
-          GUI.drawText(this.password.replace(/./g, '*'), 574, 535, 50, '#000000', 0);
         },
       },
       main: {
