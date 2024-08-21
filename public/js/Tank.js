@@ -91,7 +91,7 @@ class Tank {
             if (entity.type === 'fire') {
               this.fire.team = entity.team;
               this.fire.time = Date.now();
-            } else if (entity.type === 'spike' && !teamMatch && spikeLimiter !== undefined) spikeLimiter = this.damageCalc(this.x, this.y, 1, Engine.getUsername(entity.team)) || true;
+            } else if (entity.type === 'spike' && !teamMatch && spikeLimiter) spikeLimiter = this.damageCalc(this.x, this.y, .5, Engine.getUsername(entity.team)) && false;
           }
         } else if (entity instanceof Tank || entity instanceof AI) {
           if (entity.buff && !this.ded && !this.immune && this.canBashed && Engine.getTeam(entity.team) !== Engine.getTeam(this.team) && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 80, 80)) {
