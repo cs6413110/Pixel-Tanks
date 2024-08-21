@@ -733,7 +733,7 @@ const Commands = {
   ban: [Object, 2, -1, function(data) {
     if (Storage.admins.includes(data[1]) || Storage.owners.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
     Storage.bans.push(data[1]);
-    let msg = ' banned by '+this.username+' for ' + data[2] ? ' committing the felony '+data.slice(2).join(' ') : ' no reason ez!';
+    let msg = ' banned by '+this.username+' for ' + (data[2] ? ' committing the felony '+data.slice(2).join(' ') : ' no reason ez!');
     servers[this.room].logs.push({m: data[1]+' was'+msg, c: '#FF0000'});
     servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You were'+msg});
     for (const socket of sockets) if (socket.username === data[1]) setTimeout(() => socket.close());
