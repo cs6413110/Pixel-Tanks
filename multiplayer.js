@@ -738,7 +738,7 @@ const Commands = {
       servers[this.room].logs.push({m: data[1]+' was banned by '+this.username+' for commiting the felony: '+(data[2]), c: '#FF0000'});
       servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You were banned for commiting the felony: '+(data[2])});
     } else {
-      servers[this.room].logs.push({m: data[1]+' was banned by '+this.username+' for no reason ez!", c: '#FF0000'});
+      servers[this.room].logs.push({m: data[1]+' was banned by '+this.username+' for no reason ez!', c: '#FF0000'});
       servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You were banned for no reason ez!'});
     }
     for (const socket of sockets) if (socket.username === data[1]) setTimeout(() => socket.close());
