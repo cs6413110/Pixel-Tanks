@@ -730,11 +730,17 @@ const Commands = {
       servers[this.room].override(t, ox, oy);
     }
   }],
-  ban: [Object, 2, 2, function(data) {
+  ban: [Object, 2, -1, function(data) {
     if (Storage.admins.includes(data[1]) || Storage.owners.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
+    if (!data[1]) return this.send({status: 'error', message: `u want to ban urself??? ok ig`});
     Storage.bans.push(data[1]);
-    servers[this.room].logs.push({m: data[1]+' was banned by '+this.username, c: '#FF0000'});
-    servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You are banned!'});
+    if (data[2]) {
+      servers[this.room].logs.push({m: data[1]+' was banned by '+this.username+' for commiting the felony: '+(data[2]), c: '#FF0000'});
+      servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You were banned for commiting the felony: '+(data[2])});
+    } else {
+      servers[this.room].logs.push({m: data[1]+' was banned by '+this.username+' for no reason ez!", c: '#FF0000'});
+      servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You were banned for no reason ez!'});
+    }
     for (const socket of sockets) if (socket.username === data[1]) setTimeout(() => socket.close());
   }],
   banlist: [Object, 2, -1, function(data) {
