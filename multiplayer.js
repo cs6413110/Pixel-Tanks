@@ -732,15 +732,10 @@ const Commands = {
   }],
   ban: [Object, 2, -1, function(data) {
     if (Storage.admins.includes(data[1]) || Storage.owners.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
-    if (!data[1]) return this.send({status: 'error', message: `u want to ban urself??? ok ig`});
     Storage.bans.push(data[1]);
-    if (data[2]) {
-      servers[this.room].logs.push({m: data[1]+' was banned by '+this.username+' for commiting the felony: '+(data[2]), c: '#FF0000'});
-      servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You were banned for commiting the felony: '+(data[2])});
-    } else {
-      servers[this.room].logs.push({m: data[1]+' was banned by '+this.username+' for no reason ez!', c: '#FF0000'});
-      servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You were banned for no reason ez!'});
-    }
+    let msg = ' banned by '+this.username+' for ' + data[2] ? ' committing the felony '+data.slice(2).join(' ') : ' no reason ez!';
+    servers[this.room].logs.push({m: data[1]+' was'+msg, c: '#FF0000'});
+    servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You were'+msg});
     for (const socket of sockets) if (socket.username === data[1]) setTimeout(() => socket.close());
   }],
   banlist: [Object, 2, -1, function(data) {
