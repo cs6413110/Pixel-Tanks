@@ -34,7 +34,9 @@ class PixelTanks {
     GUI.canvas.width = 1600;
     GUI.drawText('Loading Font', 800, 500, 50, '#fffff', 0.5);
     window.oncontextmenu = () => false;
-    window.addEventListener('resize', GUI.resize);
+    window.addEventListener('resize', () => { // TEMP move to GUI as static function
+      for (const menu in Menus.menus) Menus.menus[menu].adapt();
+    });
     window.addEventListener('mousemove', Menus.mouseLog);
   }
 
