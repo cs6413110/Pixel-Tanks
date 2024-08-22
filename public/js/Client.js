@@ -372,19 +372,17 @@ class Client {
     const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
     if (this.dx) {
       var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : (this.buffed ? 1.5 : 1));
-      if (this.collision(x, this.tank.y)) {
-        this.tank.x = x;
-        this.left = this.dx.a < 0;
-      } else this.left = null;
+      let xR = this.collision(x, this.tank.y, 'x', this.dx.a);
+      this.tank.x = xR;
+      this.left = x === xR ? this.dx.a < 0 : null;
       this.dx.t = Date.now()-(Date.now()-this.dx.t)%15;
       this.dx.o = this.tank.x;
     }
     if (this.dy) {
       var y = this.dy.o+Math.floor((Date.now()-this.dy.t)/15)*this.dy.a*this.speed*(this.halfSpeed ? .5 : (this.buffed ? 1.5 : 1));
-      if (this.collision(this.tank.x, y)) {
-        this.tank.y = y;
-        this.up = this.dy.a < 0;
-      } else this.up = null;
+      let yR = this.collision(this.tank.x, y, 'y', this.dy.a);
+      this.tank.y = yR;
+      this.up = y === yR ? this.dy.a < 0 : null;
       this.dy.t = Date.now()-(Date.now()-this.dy.t)%15;
       this.dy.o = this.tank.y;
     }
@@ -680,19 +678,18 @@ class Client {
     }
   }
 
-  collision(x, y) {
-    if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return false;
-    if (this.ded || (this.tank.invis && this.tank.immune && !this.halfSpeed)) return true;
-    var l = 0, blocks = this.hostupdate.b, len = blocks.length;
-    while (l<len) {
-      if ((x > blocks[l].x || x + 80 > blocks[l].x) && (x < blocks[l].x + 100 || x + 80 < blocks[l].x + 100) && (y > blocks[l].y || y + 80 > blocks[l].y) && (y < blocks[l].y + 100 || y + 80 < blocks[l].y + 100)) {
+  collision(x, y, v, p) { // x, y, velocity-axis, polarity
+    let r = v && p;
+    if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return r ? (p > 0 ? 3000 : 0) : false;
+    if (this.ded) return true;
+    for (const b of this.hostupdate.blocks) {
+      if ((x > b.x || x+80 > b.x) && (x < b.x+100 || x+80 < b.x+100) && (y > b.y || y+80 > b.y) && (y < b.y+100 || y+80 < b.y+100)) {
         if (this.tank.invis && this.tank.immune) {
-          if (block[l].type === 'void') return false;
-        } else if (['void', 'barrier', 'weak', 'strong', 'gold'].includes(blocks[l].type)) return false;
+          if (b.type === 'void') return r ? (p < 0 ? b[v]+100 : b[v]) : false;
+        } else if (['void', 'barrier', 'weak', 'strong', 'gold'].includes(b.type)) return r ? (p < 0 ? b[v]+100 : b[v]) : false;
       }
-      l++;
     }
-    return true;
+    return r ? (v === 1 ? x : y) : false;
   }
 
   playAnimation(id) {
