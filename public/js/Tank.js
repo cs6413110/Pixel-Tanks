@@ -97,7 +97,7 @@ class Tank {
           if (entity.buff && !this.ded && !this.immune && this.canBashed && Engine.getTeam(entity.team) !== Engine.getTeam(this.team) && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 80, 80)) {
             this.canBashed = false;
             setTimeout(() => {this.canBashed = true}, 1000);
-            this.damageCalc(this.x, this.y, 50, Engine.getUsername(entity.team));
+            this.damageCalc(this.x, this.y, 100, Engine.getUsername(entity.team));
           }
           let thermal = Engine.hasPerk(this.perk, 2), size = entity.role === 0 ? 100 : 80;
           if (!this.ded && thermal && !entity.thermaled && Engine.getTeam(this.team) !== Engine.getTeam(entity.team) && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, size, size)) {
