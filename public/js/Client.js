@@ -299,7 +299,9 @@ class Client {
     if (t.damage) {
       const {x, y, d} = t.damage;
       for (let i = 0; i < 2; i++) {
-        GUI.drawText((d < 0 ? '+' : '-')+Math.abs(Math.round(d)), x, y, Math.round(d/5)+[20, 15][i], ['#ffffff', (d < 0 ? '#00ff00' : (Engine.getTeam(this.team) === Engine.getTeam(t.team) ? '#ff0000' : '#0000ff'))][i], 0.5);
+        GUI.drawText((d < 0 ? '+' : '-')+Math.abs(Math.round(d)), x, y, Math.round(d/5)+[20, 15][i], [(d < 0 ? '#80ff80' : (Engine.getTeam(this.team) === Engine.getTeam(t.team) ? '#ff8080' : '#8080ff')), (d < 0 ? '#00ff00' : (Engine.getTeam(this.team) === Engine.getTeam(t.team) ? '#ff0000' : '#0000ff'))][i], 0.5);
+        //added new, the old one is still here if it's bad tho
+        //GUI.drawText((d < 0 ? '+' : '-')+Math.abs(Math.round(d)), x, y, Math.round(d/5)+[20, 15][i], ['#ffffff', (d < 0 ? '#00ff00' : (Engine.getTeam(this.team) === Engine.getTeam(t.team) ? '#ff0000' : '#0000ff'))][i], 0.5);
       }
     }
 
