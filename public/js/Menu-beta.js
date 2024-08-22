@@ -11,7 +11,7 @@ class Menu {
   }
   compile() {
     // remove old elements from dom to reduce lag here eventually
-    this.elements.length = 0;
+    this.elements = this.elements.reduce((a, c) => (c.tagName !== 'button' ? a.concat(c) : a), []);
     for (const b of this.buttons) {
       let button = document.createElement('BUTTON'), image = document.createElement('IMG');
       button.onclick = () => (typeof b[4] === 'function' ? b[4].bind(this)() :  Menus.trigger(b[4]));
@@ -19,7 +19,7 @@ class Menu {
       button.height = window.innerHeight*(button.h = Menu.scaler.height = b[3])/1000;
       const leftOffset = (window.innerWidth-window.innerHeight*1.6)/2+(button.x = b[0])/1000*window.innerHeight;
       button.style = 'position: absolute; left: '+leftOffset+'px; top: '+(window.innerHeight*(button.y = b[1])/1000)+'px; padding: 0; border: 0;';
-      image.style = 'width: 100%; height: 100%';
+      image.style = 'max-width: 100%; max-height: 100%';
       Menu.scaler.getContext('2d').drawImage(GUI.canvas, -b[0], -b[1], 1600, 1000);
       image.src = Menu.scaler.toDataURL();
       button.appendChild(image);
