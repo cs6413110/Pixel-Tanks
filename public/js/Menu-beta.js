@@ -36,7 +36,7 @@ class Menu {
     }
   }
   addListeners() {
-    for (const l in this.listeners) window.addEventListener(l, this.listeners[l];
+    for (const l in this.listeners) window.addEventListener(l, this.listeners[l]);
     for (const b of this.elements) b.style.visibility = 'visible';
   }
   removeListeners() {
