@@ -267,8 +267,11 @@ class Multiplayer extends Engine {
     }
   }
   disconnect(socket, code, reason) {
+    let team, isLeader;
     this.pt = this.pt.filter(t => {
       if (t.username === socket.username) {
+        team = Engine.getTeam(t.team);
+        isLeader = t.team.includes('@leader');
         for (const cell of t.cells) {
           const [x, y] = cell.split('x');
           this.cells[x][y].delete(t);
@@ -286,7 +289,7 @@ class Multiplayer extends Engine {
     if (this.pt.length === 0) {
       this.i.forEach(i => clearInterval(i));
       delete servers[socket.room];
-    }
+    } else if (isLeader) for (const t of this.pt) if (Engine.getTeam(t.team) === team) return t.team += '@leader';
   }
 
   deathMsg(victim, killer) {
