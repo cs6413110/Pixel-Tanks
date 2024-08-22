@@ -681,7 +681,7 @@ class Client {
   collision(x, y, v, p) { // x, y, velocity-axis, polarity
     let r = v && p;
     if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return r ? (p > 0 ? 3000 : 0) : false;
-    if (this.ded) return true;
+    if (this.ded) return r ? ;
     for (const b of this.hostupdate.blocks) {
       if ((x > b.x || x+80 > b.x) && (x < b.x+100 || x+80 < b.x+100) && (y > b.y || y+80 > b.y) && (y < b.y+100 || y+80 < b.y+100)) {
         if (this.tank.invis && this.tank.immune) {
@@ -689,7 +689,7 @@ class Client {
         } else if (['void', 'barrier', 'weak', 'strong', 'gold'].includes(b.type)) return r ? (p < 0 ? b[v]+100 : b[v]) : false;
       }
     }
-    return r ? (v === 1 ? x : y) : false;
+    return r ? (v === 'x' ? x : y) : false;
   }
 
   playAnimation(id) {
