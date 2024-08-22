@@ -12,7 +12,7 @@ class Menu {
   compile() {
     // remove old elements from dom to reduce lag here eventually
     this.elements.length = 0;
-    for (const b of data.buttons) {
+    for (const b of this.buttons) {
       let button = document.createElement('BUTTON'), image = document.createElement('IMG');
       button.onclick = () => (typeof b[4] === 'function' ? b[4].bind(this)() :  Menus.trigger(b[4]));
       button.width = window.innerHeight*(button.w = Menu.scaler.width = b[2])/1000;
@@ -43,7 +43,7 @@ class Menu {
     for (const l in this.listeners) window.removeEventListener(l, this.listeners[l]);
     for (const b of this.elements) b.style.visibility = 'hidden';
   }
-  draw(render) {
+  draw() {
     if (PixelTanks.images.menus[this.id]) GUI.drawImage(PixelTanks.images.menus[this.id], 0, 0, 1600, 1000, 1);
     this.cdraw();
     if (!this.loaded) this.loaded = this.compile() || 1;
