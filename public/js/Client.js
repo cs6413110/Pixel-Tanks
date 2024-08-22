@@ -299,7 +299,7 @@ class Client {
     if (t.damage) {
       const {x, y, d} = t.damage;
       for (let i = 0; i < 2; i++) {
-        GUI.drawText((d < 0 ? '+' : '-')+Math.round(d), x, y, Math.round(d/5)+[20, 15][i], ['#ffffff', Engine.getTeam(this.team) === Engine.getTeam(t.team) ? '#ff0000' : '#0000ff'][i], 0.5);
+        GUI.drawText((d < 0 ? '+' : '-')+Math.abs(Math.round(d)), x, y, Math.round(d/5)+[20, 15][i], ['#ffffff', t.damage < 0 ? '#00ff00' : Engine.getTeam(this.team) === Engine.getTeam(t.team) ? '#ff0000' : '#0000ff'][i], 0.5);
       }
     }
 
