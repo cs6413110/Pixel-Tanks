@@ -132,7 +132,7 @@ class Client {
   generateWorld() {
     this.world = new Singleplayer(this.ip);
     setTimeout(() => {
-      this.world.add(this.joinData.tank);
+      this.world.add({...this.joinData.tank});
       setInterval(() => this.send(), 1000/60);
     });
   }
