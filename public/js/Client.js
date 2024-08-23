@@ -389,7 +389,7 @@ class Client {
     }
     this.tank.baseRotation = (this.left === null) ? (this.up ? 180 : 0) : (this.left ? (this.up === null ? 90 : (this.up ? 135 : 45)) : (this.up === null ? 270 : (this.up ? 225: 315)));
     if (this.b) this.tank.baseFrame = ((this.b.o ? 0 : 1)+Math.floor((Date.now()-this.b.t)/120))%2;
-    const player = t.find(tank => tank.username === PixelTanks.user.username);
+    let player = t.find(tank => tank.username === PixelTanks.user.username);
     if (player) {
       player = {...player};
       player.x = this.tank.x;
