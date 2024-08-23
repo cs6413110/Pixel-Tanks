@@ -128,9 +128,11 @@ class Engine {
     if (t.canInvis) t.invis = data.invis;
     t.baseFrame = data.baseFrame;
     if (!t.grapple && (t.x !== x || t.y !== y)) {
+      console.log('a');
       let chunkload = t.socket && (Math.floor((t.x+40)/100) !== Math.floor((x+40)/100) || Math.floor((t.y+40)/100) !== Math.floor((y+40)/100)), ox = t.x, oy = t.y;
       t.x = x;
       t.y = y;
+      console.log('b');
       this.updateEntity(t, Tank.u);
       console.log('Loading cells'+[t, t.x, t.y, 80, 80]);
       this.loadCells(t, t.x, t.y, 80, 80); // could be optimized to run less, watch for flooring bottom right tank corner tho
