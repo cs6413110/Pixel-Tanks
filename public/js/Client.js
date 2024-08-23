@@ -684,8 +684,8 @@ class Client {
     for (const b of this.hostupdate.b) {
       if ((x > b.x || x+80 > b.x) && (x < b.x+100 || x+80 < b.x+100) && (y > b.y || y+80 > b.y) && (y < b.y+100 || y+80 < b.y+100)) {
         if (this.tank.invis && this.tank.immune) {
-          if (b.type === 'void') if (r) returns.push(p < 0 ? b[v]+100 : b[v]-80) else return false;
-        } else if (['void', 'barrier', 'weak', 'strong', 'gold'].includes(b.type)) if (r) returns.push(p < 0 ? b[v]+100 : b[v]-80) else return false;
+          if (b.type === 'void') if (r) returns.push(p < 0 ? b[v]+100 : b[v]-80); else return false;
+        } else if (['void', 'barrier', 'weak', 'strong', 'gold'].includes(b.type)) if (r) returns.push(p < 0 ? b[v]+100 : b[v]-80); else return false;
       }
     }
     if (returns.length) return returns.sort((a, b) => p < 0 ? a-b : b-a))[0];
