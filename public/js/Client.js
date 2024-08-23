@@ -372,8 +372,9 @@ class Client {
     const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
     if (this.dx) {
       var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : (this.buffed ? 1.5 : 1));
+      
       let xR = this.collision(x, this.tank.y, 'x', this.dx.a);
-      this.tank.x = xR;
+      if (this.collision(this.dx.o, this.tank.y)) this.tank.x = xR;
       this.left = x === xR ? this.dx.a < 0 : null;
       this.dx.t = Date.now()-(Date.now()-this.dx.t)%15;
       this.dx.o = this.tank.x;
@@ -381,7 +382,7 @@ class Client {
     if (this.dy) {
       var y = this.dy.o+Math.floor((Date.now()-this.dy.t)/15)*this.dy.a*this.speed*(this.halfSpeed ? .5 : (this.buffed ? 1.5 : 1));
       let yR = this.collision(this.tank.x, y, 'y', this.dy.a);
-      this.tank.y = yR;
+      if (this.collision(this.tank.x, this.dy.o)) this.tank.y = yR;
       this.up = y === yR ? this.dy.a < 0 : null;
       this.dy.t = Date.now()-(Date.now()-this.dy.t)%15;
       this.dy.o = this.tank.y;
