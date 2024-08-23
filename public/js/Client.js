@@ -391,6 +391,7 @@ class Client {
     if (this.b) this.tank.baseFrame = ((this.b.o ? 0 : 1)+Math.floor((Date.now()-this.b.t)/120))%2;
     const player = t.find(tank => tank.username === PixelTanks.user.username);
     if (player) {
+      player = {...player};
       player.x = this.tank.x;
       player.y = this.tank.y;
       player.r = this.tank.r;
