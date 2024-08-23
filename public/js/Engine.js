@@ -129,6 +129,9 @@ class Engine {
     if (t.canInvis) t.invis = data.invis;
     t.baseFrame = data.baseFrame;
     console.log(t.x, x, t.y, y);
+    console.log(!t.grapple && (t.x !== x || t.y !== y))
+    console.log(!t.grapple);
+    console.log((t.x !== x || t.y !== y));
     if (!t.grapple && (t.x !== x || t.y !== y)) {
       console.log('a');
       let chunkload = t.socket && (Math.floor((t.x+40)/100) !== Math.floor((x+40)/100) || Math.floor((t.y+40)/100) !== Math.floor((y+40)/100)), ox = t.x, oy = t.y;
