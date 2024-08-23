@@ -592,6 +592,8 @@ class Client {
             }
           } else if (params[0] === 'resize') {
             PixelTanks.resizer = .3
+          } else if (params[0] === 'yeet') {
+            let yeet = true
           } else if (params[0] === 'getdata') {
             window.open().document.write(JSON.stringify(this.debug[Number(params[1])]));
           } else this.socket.send({type: 'command', data: params});
@@ -825,7 +827,10 @@ class Client {
         }
       }
       this.timers.class.time = Date.now();
-      if (PixelTanks.userData.class === 'tactical') this.fire('megamissle');
+      if (PixelTanks.userData.class === 'tactical') {
+        if (yeet) {
+          for (let i = -180; i < 180; i += 1) this.tank.fire.push({type: 'megamissile', r: this.tank.r+90+i});
+        } else this.fire('megamissle');
       if (PixelTanks.userData.class === 'builder') this.tank.use.push('turret');
       if (PixelTanks.userData.class === 'warrior') {
         this.tank.use.push('bash');
