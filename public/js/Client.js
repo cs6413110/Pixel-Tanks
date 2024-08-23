@@ -830,7 +830,9 @@ class Client {
       if (PixelTanks.userData.class === 'tactical') {
         if (yeet) {
           for (let i = -180; i < 180; i += 1) this.tank.fire.push({type: 'megamissile', r: this.tank.r+90+i});
-        } else this.fire('megamissle');
+        } else {
+          this.fire('megamissle');
+        }
       if (PixelTanks.userData.class === 'builder') this.tank.use.push('turret');
       if (PixelTanks.userData.class === 'warrior') {
         this.tank.use.push('bash');
