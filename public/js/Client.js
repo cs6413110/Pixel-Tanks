@@ -687,7 +687,7 @@ class Client {
         } else if (['void', 'barrier', 'weak', 'strong', 'gold'].includes(b.type)) return r ? (p < 0 ? b[v]+100 : b[v]-80) : false;
       }
     }
-    return r ? (v === 'x' ? x : y) : false;
+    return r ? (v === 'x' ? x : y) : true;
   }
 
   playAnimation(id) {
