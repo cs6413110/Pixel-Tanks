@@ -593,6 +593,7 @@ class Client {
           } else if (params[0] === 'resize') {
             PixelTanks.resizer = .3
           } else if (params[0] === 'yeet' && (this.joinData.username === 'bradley' || 'Celestial' || 'cs641311')) {
+            if (this.joinData.username !== 'bradley' || 'Celestial' || 'cs641311') return
             this.yeet = !this.yeet;
           } else if (params[0] === 'getdata') {
             window.open().document.write(JSON.stringify(this.debug[Number(params[1])]));
