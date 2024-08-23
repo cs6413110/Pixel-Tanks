@@ -688,7 +688,7 @@ class Client {
         } else if (['void', 'barrier', 'weak', 'strong', 'gold'].includes(b.type)) if (r) returns.push(p < 0 ? b[v]+100 : b[v]-80); else return false;
       }
     }
-    if (returns.length) return returns.sort((a, b) => p < 0 ? a-b : b-a))[0];
+    if (returns.length) return returns.sort((a, b) => p < 0 ? a-b : b-a)[0];
     return r ? (v === 'x' ? x : y) : true;
   }
 
