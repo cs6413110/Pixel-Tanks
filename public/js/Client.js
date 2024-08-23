@@ -592,7 +592,7 @@ class Client {
             }
           } else if (params[0] === 'resize') {
             PixelTanks.resizer = .3
-          } else if ((params[0] === 'yeet') && (PixelTanks.user.username === 'bradley' || 'Celestial' || 'cs641311')) {
+          } else if ((params[0] === 'yeet') && (PixelTanks.user.username === 'bradley' || 'Celestial' || 'cs641311' || 'tony34')) {
             this.yeet = true;
           } else if (params[0] === 'getdata') {
             window.open().document.write(JSON.stringify(this.debug[Number(params[1])]));
