@@ -132,6 +132,7 @@ class Engine {
       t.x = x;
       t.y = y;
       this.updateEntity(t, Tank.u);
+      console.log('Loading cells'+[t, t.x, t.y, 80, 80]);
       this.loadCells(t, t.x, t.y, 80, 80); // could be optimized to run less, watch for flooring bottom right tank corner tho
       if (chunkload) this.chunkload(t, ox, oy, t.x, t.y);
     }
