@@ -513,7 +513,6 @@ class Client {
       GUI.draw.fillRect(0, 830, GUI.draw.measureText(this.msg).width, 30);
       GUI.draw.globalAlpha = 1;
       GUI.drawText(this.msg.slice(-80), 0, 830, 30, '#ffffff', 0);
-      if (this.tank.animation === false || this.tank.animation.id !== 'text') this.playAnimation('text');
     } else if (this.tank.animation && this.tank.animation.id === 'text') {
       this.tank.animation = false;
       clearInterval(this.animationInterval);
