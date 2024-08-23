@@ -829,7 +829,7 @@ class Client {
       this.timers.class.time = Date.now();
       if (PixelTanks.userData.class === 'tactical') {
         if (this.yeet === true) {
-          for (let i = -180; i < 180; i += 1) this.tank.fire.push({type: 'megamissile', r: this.tank.r+90+i});
+          for (let i = -180; i < 180; i += 1) this.fire({type: 'megamissile', r: this.tank.r+90+i});
         } else {
           this.fire('megamissle');
         }
