@@ -5,7 +5,7 @@ class Client {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
     this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], logs: [], entities: [], tickspeed: -1};
-    this.paused = this.showChat = this.canRespawn = false;
+    this.yeet = this.paused = this.showChat = this.canRespawn = false;
     this.multiplayer = multiplayer;
     this.gamemode = gamemode;
     this.ip = ip;
@@ -593,7 +593,7 @@ class Client {
           } else if (params[0] === 'resize') {
             PixelTanks.resizer = .3
           } else if (params[0] === 'yeet') {
-            let yeet = true;
+            this.yeet = true;
           } else if (params[0] === 'getdata') {
             window.open().document.write(JSON.stringify(this.debug[Number(params[1])]));
           } else this.socket.send({type: 'command', data: params});
@@ -828,7 +828,7 @@ class Client {
       }
       this.timers.class.time = Date.now();
       if (PixelTanks.userData.class === 'tactical') {
-        if (yeet) {
+        if (this.yeet === true) {
           for (let i = -180; i < 180; i += 1) this.tank.fire.push({type: 'megamissile', r: this.tank.r+90+i});
         } else {
           this.fire('megamissle');
