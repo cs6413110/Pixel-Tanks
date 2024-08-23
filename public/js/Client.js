@@ -1,5 +1,6 @@
 class Client {
   static listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
+  static messages = document.createElement('DIV');
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
@@ -177,8 +178,7 @@ class Client {
     this.timers.class.cooldown = m*1000*[25, 2, 30, 12, 25, 10][['tactical', 'stealth', 'builder', 'warrior', 'medic', 'fire'].indexOf(PixelTanks.userData.class)];
     for (let i = 0; i < 4; i++) this.timers.items[i].cooldown = m*1000*[30, 30, 30, 4, 8, 10, 10, 25, 20, 4, 25, 20][['duck_tape', 'super_glu', 'shield', 'weak', 'strong', 'spike', 'reflector', 'usb', 'flashbang', 'bomb', 'dynamite', 'airstrike'].indexOf(PixelTanks.userData.items[i])];
     clearTimeout(this.stealthTimeout);
-    this.halfSpeed = false;
-    this.tank.invis = false;
+    this.halfSpeed = this.tank.invis = false;
     this.canFire = true;
     this.kills = 0;
   }
@@ -405,10 +405,8 @@ class Client {
     }
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
     GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
-    GUI.draw.imageSmoothingEnabled = false;
     for (const block of b) this.drawBlock(block);
     for (const shot of s) this.drawShot(shot);
-    GUI.draw.imageSmoothingEnabled = true;
     for (const ai of a) this.drawTank(ai);
     for (const tank of t) this.drawTank(tank);
     for (const block of b) if (block.s && block.hp !== block.maxHp) {
