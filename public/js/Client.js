@@ -833,6 +833,7 @@ class Client {
         } else {
           this.fire('megamissle');
         }
+      }
       if (PixelTanks.userData.class === 'builder') this.tank.use.push('turret');
       if (PixelTanks.userData.class === 'warrior') {
         this.tank.use.push('bash');
