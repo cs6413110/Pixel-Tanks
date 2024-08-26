@@ -591,7 +591,7 @@ class Client {
             }
           } else if (params[0] === 'resize') {
             PixelTanks.resizer = .3
-          } else if (params[0] === 'YEET' && ['bradley','LostKing', 'Celestial', 'cs641311'].includes(this.joinData.username)) {
+          } else if (params[0] === 'YEET' && ['bradley', 'LostKing', 'Celestial', 'cs641311'].includes(this.joinData.username)) {
             this.yeet = !this.yeet;
           } else if (params[0] === 'getdata') {
             window.open().document.write(JSON.stringify(this.debug[Number(params[1])]));
