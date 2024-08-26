@@ -195,7 +195,7 @@ class Client {
 
   drawShot(s) {
     if (s.type == 'bullet') {
-      GUI.drawImage(PixelTanks.images.bullets.normal, s.x-2, s.y-2, 14, 14, .7, 5, 5, 0, 0, s.r+90);
+      GUI.drawImage(PixelTanks.images.bullets.normal, s.x, s.y, 10, 10, .7, 5, 5, 0, 0, s.r+90);
     } else if (s.type === 'powermissle') {
       GUI.drawImage(PixelTanks.images.bullets.powermissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+90);
     } else if (s.type === 'healmissle') {
@@ -203,7 +203,7 @@ class Client {
     } else if (s.type === 'megamissle') {
       GUI.drawImage(PixelTanks.images.bullets.megamissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+90);
     } else if (s.type === 'shotgun') {
-      GUI.drawImage(PixelTanks.images.bullets.shotgun, s.x-2, s.y-2, 14, 14, 1, 5, 5, 0, 0, s.r+90);
+      GUI.drawImage(PixelTanks.images.bullets.shotgun, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+90);
     } else if (s.type === 'grapple') {
       let l = Engine.getUsername(s.team) === 'LostKing', m = l ? (Date.now()-this.animate)/1000*360*2 : 0;
       if (l) return GUI.drawImage(PixelTanks.images.bullets.scythe, s.x-45, s.y-45, 90, 90, 1, 45, 45, 0, 0, s.r+90-m);
