@@ -195,7 +195,7 @@ class Client {
 
   drawShot(s) {
     if (s.type == 'bullet') {
-      GUI.drawImage(PixelTanks.images.blocks.void, s.x, s.y, 10, 10, .7, 5, 5, 0, 0, s.r+90);
+      GUI.drawImage(PixelTanks.images.bullets.normal, s.x, s.y, 10, 10, .7, 5, 5, 0, 0, s.r+90);
     } else if (s.type === 'powermissle') {
       GUI.drawImage(PixelTanks.images.bullets.powermissle, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+90);
     } else if (s.type === 'healmissle') {
