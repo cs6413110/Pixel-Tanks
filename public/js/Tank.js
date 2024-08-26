@@ -59,7 +59,10 @@ class Tank {
     }
     if (this.pushback !== 0) this.pushback += 0.5; // maybe change to (-this.pushback)?
     if (Date.now()-this.fire.time < 4000 && Engine.getTeam(this.fire.team) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire.team));
-    if (this.damage) this.damage.y--;
+    if (this.damage) {
+      this.damage.y--;
+      this.host.updateEntity(this, ['damage']);
+    }
     if (this.grapple) this.grappleCalc();
     if (this.reflect) { // redo this
       const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
