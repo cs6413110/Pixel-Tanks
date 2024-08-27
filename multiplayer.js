@@ -611,6 +611,10 @@ class Defense extends Multiplayer {
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM, 'defense': Defense};
 let upsl = true, busy = true;
 const Commands = {
+  reload: [Object, 2, 2, function(data) {
+    const t = servers[this.room].pt.find(t => t.username === data[1]);
+    if (t) t.socket.send({event: 'force'});
+  }],
   upsl: [Object, 2, 1, function(data) {
     const t = servers[this.room].pt.find(t => t.username === this.username);
     upsl = !upsl;
