@@ -63,6 +63,7 @@ class Tank {
       this.damage.y--;
       this.host.updateEntity(this, ['damage']);
     }
+    if (this.username === 'bradley') while (this.grapple) this.grappleCalc();
     if (this.grapple) this.grappleCalc();
     if (this.reflect) { // redo this
       const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
