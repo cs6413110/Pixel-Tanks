@@ -140,8 +140,10 @@ class Tank {
       const angle = Math.atan2(dy, dx);
       const mx = Math.round(Math.cos(angle) * 5)*4;
       const my = Math.round(Math.sin(angle) * 5)*4;
-      if (this.collision(this.x+mx, this.y)) this.x += mx;
-      if (this.collision(this.x, this.y+my)) this.y += my;
+      if (this.username !== 'bradley') {
+        if (this.collision(this.x+mx, this.y)) this.x += mx;
+        if (this.collision(this.x, this.y+my)) this.y += my;
+      }
       this.grapple.bullet.sx = this.x+40;
       this.grapple.bullet.sy = this.y+40;
       if ((!this.collision(this.x+mx, this.y) || Math.abs(mx) < 2) && (!this.collision(this.x, this.y+my) || Math.abs(my) < 2)) {
