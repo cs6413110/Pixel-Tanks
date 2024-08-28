@@ -204,7 +204,6 @@ class AI {
       const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
       this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
     }
-    if (this.team !== undefined) console.log(this);
     const team = Engine.getTeam(this.team);
     /*if (this.dedEffect) {
       this.dedEffect.time = Date.now() - this.dedEffect.start;
