@@ -10,7 +10,7 @@ const sourceMap = {
     {
       ref: 'bullets',
       path: 'bullets',
-      load: ['normal', 'shotgun', 'powermissle', 'healmissle', 'megamissle', 'grapple', 'dynamite', 'fire', 'usb', 'scythe'],
+      load: ['normal', 'shotgun', 'powermissle', 'healmissle', 'megamissle', 'grapple', 'dynamite', 'fire', 'usb', 'scythe', 'yoink'],
     },
     {
       ref: 'tanks',
