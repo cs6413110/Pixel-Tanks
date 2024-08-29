@@ -71,6 +71,24 @@ const drawer = (e) => {
   }
 }
 
+
+const convert = () => {
+  let output = '';
+  for (let y = 0; y < 60; y++) {
+    for (let x = 0; x < 60; x++) {
+      let id = world[y][x], s = y*60+x, next;
+      do {
+        s++;
+        if (s >= 3600) output += ''
+        next = world[Math.floor(s/60)][s%60];
+        if (id !== next) 
+      } while ();
+      
+    }
+  }
+}
+
+
 const render = () => {
   draw.clearRect(0, 0, 600, 600);
   draw.strokeStyle = '#000000';
