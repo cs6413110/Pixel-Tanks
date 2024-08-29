@@ -1,3 +1,4 @@
+<script>
 window.oncontextmenu = () => false;
 
 const canvas = document.createElement('canvas'), draw = canvas.getContext('2d'), output = document.createElement('div'), coords = document.createElement('div'), select = document.createElement('div'), porter = document.createElement('BUTTON');
@@ -89,13 +90,17 @@ const ex = () => {
 }
 
 const im = s => {
-  let chars = s.split('');
-  for (let i = 0; i < chars.length; i++) {
-    if (!isNaN)
+  let chars = s.split(''), a = [];
+  main: for (let i = 0; i < chars.length; i++) {
+    a.push(chars[i]);
+    for (let q = 1, n = ''; true; q++) if (isNaN(chars[i+q])) {
+      alert(i+q);
+      a.push(q === 0 ? );
+      continue main;
+    } else n += chars[i+q];
+    a.push(Number(n));
   }
-  for (const c of s.split('')) {
-    if (!isNaN(c)) 
-  }
+  alert(a);
 }
 
 
@@ -105,6 +110,13 @@ document.documentElement.appendChild(d);
 d.addEventListener('click', () => {
   alert(ex());
 });
+let f = document.createElement('BUTTON');
+f.innerHTML = 'asdf';
+document.documentElement.appendChild(f);
+f.addEventListener('click', () => {
+  im(prompt());
+});
+
 
 
 const render = () => {
@@ -124,3 +136,4 @@ const render = () => {
   requestAnimationFrame(render);
 }
 requestAnimationFrame(render);
+</script>
