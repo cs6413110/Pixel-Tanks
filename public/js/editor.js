@@ -1,4 +1,3 @@
-<script>
 window.oncontextmenu = () => false;
 
 const canvas = document.createElement('canvas'), draw = canvas.getContext('2d'), output = document.createElement('div'), coords = document.createElement('div'), select = document.createElement('div'), porter = document.createElement('BUTTON');
@@ -68,10 +67,9 @@ window.addEventListener('mouseup', e => clearInterval(drawLoop));
 const drawer = (e) => {
   if (x > 0 && y > 0 && x < 600 && y < 600) {
     world[Math.floor(y/10)][Math.floor(x/10)] = e.button === 0 ? current : 'B0';
-    output.innerHTML = JSON.stringify(world);
+    output.innerHTML = ex();
   }
 }
-
 
 const ex = () => {
   let output = '', p = world[0][0], streak = 0;
@@ -94,30 +92,28 @@ const im = s => {
   main: for (let i = 0; i < chars.length; i++) {
     a.push(chars[i]);
     for (let q = 1, n = ''; true; q++) if (isNaN(chars[i+q])) {
-      alert(i+q);
-      a.push(q === 0 ? );
+      a.push(q === 1 ? 1 : Number(n));
+      i += q-1;
       continue main;
     } else n += chars[i+q];
     a.push(Number(n));
   }
-  alert(a);
+  let l = 0, x = 0, y = 0;
+  for (let i = 0; i < a.length; i += 2) {
+    for (let m = 0; m < a[i+1]; m++) {
+      world[Math.floor(l/60)][l%60] = a[i];
+      l++;
+    }
+  }
 }
 
-
-const d = document.createElement('BUTTON');
-d.innerHTML = 'asdfasdf';
-document.documentElement.appendChild(d);
-d.addEventListener('click', () => {
-  alert(ex());
+let importer = document.createElement('BUTTON');
+importer.innerHTML = 'Import';
+document.documentElement.appendChild(importer);
+importer.addEventListener('click', () => {
+  im(prompt('Input level code:'));
+  output.innerHTML = ex();
 });
-let f = document.createElement('BUTTON');
-f.innerHTML = 'asdf';
-document.documentElement.appendChild(f);
-f.addEventListener('click', () => {
-  im(prompt());
-});
-
-
 
 const render = () => {
   draw.clearRect(0, 0, 600, 600);
@@ -136,4 +132,3 @@ const render = () => {
   requestAnimationFrame(render);
 }
 requestAnimationFrame(render);
-</script>
