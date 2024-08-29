@@ -10,6 +10,7 @@ document.documentElement.appendChild(coords);
 document.documentElement.appendChild(output);
 document.documentElement.appendChild(canvas);
 document.documentElement.appendChild(select);
+document.documentElement.appendChild(porter);
 
 const key = [
   ['X', 'Eraser', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAQAAAB0m0auAAAADElEQVR42mNkIBIAAABSAAI2VLqiAAAAAElFTkSuQmCC'],
