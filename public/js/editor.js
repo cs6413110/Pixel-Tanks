@@ -72,21 +72,39 @@ const drawer = (e) => {
 }
 
 
-const convert = () => {
-  let output = '';
+const ex = () => {
+  let output = '', p = world[0][0], streak = 0;
   for (let y = 0; y < 60; y++) {
     for (let x = 0; x < 60; x++) {
-      let id = world[y][x], s = y*60+x, next;
-      do {
-        s++;
-        if (s >= 3600) output += ''
-        next = world[Math.floor(s/60)][s%60];
-        if (id !== next) 
-      } while ();
-      
+      let c = world[y][x];
+      if (p === c) streak++;
+      if (p !== c || (x === 59 && y === 59)) {
+        output += streak === 1 ? p : p+streak;
+        streak = 1;
+        p = c;
+      }
     }
   }
+  return output;
 }
+
+const im = s => {
+  let chars = s.split('');
+  for (let i = 0; i < chars.length; i++) {
+    if (!isNaN)
+  }
+  for (const c of s.split('')) {
+    if (!isNaN(c)) 
+  }
+}
+
+
+const d = document.createElement('BUTTON');
+d.innerHTML = 'asdfasdf';
+document.documentElement.appendChild(d);
+d.addEventListener('click', () => {
+  alert(ex());
+});
 
 
 const render = () => {
