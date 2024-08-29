@@ -213,7 +213,7 @@ class Client {
       if (l) return GUI.drawImage(PixelTanks.images.bullets.yoink, s.x-22.5, s.y-22.5, 45, 45, 1, 22.5, 22.5, 0, 0, s.r+90-m);
       l = Engine.getUsername(s.team) === 'a';
       if (l) {
-        GUI.drawImage(PixelTanks.images.bullets.leech, s.x-22.5, s.y-22.5, 45, 45, 1, 22.5, 22.5, 0, 0, s.r+90);
+        GUI.drawImage(PixelTanks.images.bullets.leech, s.x-45, s.y-45, 90, 90, 1, 45, 45, 0, 0, s.r+90);
         GUI.draw.lineWidth = 10;
         GUI.draw.beginPath();
         GUI.draw.strokeStyle = '#ef9292';
