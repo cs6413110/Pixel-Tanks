@@ -12,13 +12,13 @@ document.documentElement.appendChild(canvas);
 document.documentElement.appendChild(select);
 
 const key = [
-  ['0', 'Eraser', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAQAAAB0m0auAAAADElEQVR42mNkIBIAAABSAAI2VLqiAAAAAElFTkSuQmCC'],
-  ['1', 'Weak Block', 'blocks/weak'],
-  ['2', 'Strong Block', 'blocks/strong'],
-  ['3', 'Gold Block', 'blocks/gold'],
-  ['4', 'Barrier Block', 'blocks/barrier'],
-  ['5', 'Void Block', 'blocks/void'],
-  ['6', 'Spike', 'blocks/spike'],
+  ['X', 'Eraser', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAQAAAB0m0auAAAADElEQVR42mNkIBIAAABSAAI2VLqiAAAAAElFTkSuQmCC'],
+  ['Q', 'Weak Block', 'blocks/weak'],
+  ['Z', 'Strong Block', 'blocks/strong'],
+  ['G', 'Gold Block', 'blocks/gold'],
+  ['I', 'Barrier Block', 'blocks/barrier'],
+  ['R', 'Void Block', 'blocks/void'],
+  ['V', 'Spike', 'blocks/spike'],
   ['T', 'Turret', 'cosmetics/hoodie'],
   ['W', 'Adv. AI', 'cosmetics/police'],
   ['P', 'Dis. AI', 'cosmetics/blue_helmet'],
