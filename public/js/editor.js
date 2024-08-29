@@ -1,6 +1,6 @@
 window.oncontextmenu = () => false;
 
-const canvas = document.createElement('canvas'), draw = canvas.getContext('2d'), output = document.createElement('div'), coords = document.createElement('div'), select = document.createElement('div'), porter = document.createElement('BUTTON');
+const canvas = document.createElement('canvas'), draw = canvas.getContext('2d'), output = document.createElement('div'), coords = document.createElement('div'), select = document.createElement('div');
 document.documentElement.innerHTML += '<h1>Pixel Tanks Level Editor</h1>';
 canvas.width = 599;
 canvas.height = 599;
@@ -10,7 +10,6 @@ document.documentElement.appendChild(coords);
 document.documentElement.appendChild(output);
 document.documentElement.appendChild(canvas);
 document.documentElement.appendChild(select);
-document.documentElement.appendChild(porter);
 
 const key = [
   ['X', 'Eraser', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAQAAAB0m0auAAAADElEQVR42mNkIBIAAABSAAI2VLqiAAAAAElFTkSuQmCC'],
