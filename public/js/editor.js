@@ -66,7 +66,7 @@ window.addEventListener('mouseup', e => clearInterval(drawLoop));
 
 const drawer = (e) => {
   if (x > 0 && y > 0 && x < 600 && y < 600) {
-    world[Math.floor(y/10)][Math.floor(x/10)] = e.button === 0 ? current : 'B0';
+    world[Math.floor(y/10)][Math.floor(x/10)] = e.button === 0 ? current : 'X';
     output.innerHTML = ex();
   }
 }
