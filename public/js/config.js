@@ -49,7 +49,7 @@ const sourceMap = {
     epic: ['christmas_hat', 'christmas_lights', 'dizzy', 'rage', 'toxic', 'crown', 'error', 'dark_crown',  'lostcrown',],
     legendary: ['plasma', 'cry', 'missing',],    //imma just delete the cosmetic
     admin: [], // LOL IT NEEDS ADMIN TO NOT EPLODE DELETE IT THEN
-    mythic: ['terminator', 'mlg_glasses', 'power_armor', 'corrupted'], //STOAP
+    mythic: ['terminator', 'mlg_glasses', 'power_armor', 'corrupted', 'oneterminator',], //STOAP
   },
   deathEffect: {
   }
