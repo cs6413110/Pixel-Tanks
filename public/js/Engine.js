@@ -219,10 +219,10 @@ class Engine {
       } else n += chars[i+q];
       a.push(Number(n));
     }
-    let l = 0, x = 0, y = 0;
+    let l = 0;
     for (let i = 0; i < a.length; i += 2) {
       for (let m = 0; m < a[i+1]; m++) {
-        let y = Math.floor(i/60)*100, y = (i%60)*100;
+        let y = Math.floor(i/60)*100, x = (i%60)*100;
         if (a[i] === 'S') {
           this.spawn = {x, y};
         } else if (a[i] === 'A') {
