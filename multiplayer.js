@@ -1,7 +1,7 @@
 const settings = {
   authserver: 'localhost',
   players_per_room: 10,
-  upsl: 120, // updates per second limit
+  upsl: 120,
   port: 8080,
   chat: true,
   joining: true,
@@ -709,15 +709,15 @@ const Commands = {
   gpt: [Object, 4, -1, function(data) {
     gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
   }],
-    target: [Object, 2, 3, function(data) {
+  target: [Object, 2, 3, function(data) {
     const t = servers[this.room].pt.find(t => t.username === data[1]);
-    for (let i = 0; i <= data[2]; i++) setTimeout(() => {servers[this.room].b.push(A.template('Block').init(t.x-50, t.y-50, Infinity, 'airstrike', ':', servers[this.room]))}, i*1000);
+    for (let i = 0; i <= data[2]; i++) setTimeout(() => {servers[this.room].b.push(A.template('Block').init(t.x-50, t.y-50, 'airstrike', ':', servers[this.room]))}, i*1000);
   }],
   nuke: [Object, 2, 1, function(data) {
-    for (let x = 0; x < 60; x += 2) for (let y = 0; y < 60; y += 2) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'airstrike', ':', servers[this.room]));
+    for (let x = 0; x < 60; x += 2) for (let y = 0; y < 60; y += 2) servers[this.room].b.push(A.template('Block').init(x*100, y*100, 'airstrike', ':', servers[this.room]));
   }],
   arson: [Object, 3, 1, function(data) {
-    for (let x = 0; x < 60; x++) for (let y = 0; y < 60; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'fire', ':', servers[this.room]));
+    for (let x = 0; x < 60; x++) for (let y = 0; y < 60; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, 'fire', ':', servers[this.room]));
   }],
   newmap: [FFA, 3, -1, function(data) {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
