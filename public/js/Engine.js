@@ -208,7 +208,28 @@ class Engine {
 
   levelReader(level) {
     for (let i = this.b.length-1; i >= 0; i--) this.b[i].destroy();
-    const key = {'B7': ['halfbarrier', Infinity], 'B6': ['barrel', 100], 'B5': ['void', Infinity], 'B4': ['barrier', Infinity], 'B3': ['gold', 300], 'B2': ['strong', 200], 'B1': ['weak', 100]};
+
+    const key = [
+  ['X', 'Eraser', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAQAAAB0m0auAAAADElEQVR42mNkIBIAAABSAAI2VLqiAAAAAElFTkSuQmCC'],
+  ['Q', 'Weak Block', 'blocks/weak'],
+  ['Z', 'Strong Block', 'blocks/strong'],
+  ['G', 'Gold Block', 'blocks/gold'],
+  ['I', 'Barrier Block', 'blocks/barrier'],
+  ['R', 'Void Block', 'blocks/void'],
+  ['V', 'Spike', 'blocks/spike'],
+  ['T', 'Turret', 'cosmetics/hoodie'],
+  ['W', 'Adv. AI', 'cosmetics/police'],
+  ['P', 'Dis. AI', 'cosmetics/blue_helmet'],
+  ['D', 'Def. AI', 'cosmetics/terminator'],
+  ['S', 'Global Spawn', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAH0lEQVR42mNk+C/xn4GKgHHUwFEDRw0cNXDUwJFqIABtgCnNTYQqZgAAAABJRU5ErkJggg=='],
+  ['A', 'Spawn A', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAHklEQVR42mP8z8AARNQDjKMGjho4auCogaMGjlQDAUwCJ+0NBcXlAAAAAElFTkSuQmCC'],
+  ['B', 'Spawn B', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAH0lEQVR42mNkkPj/n4GKgHHUwFEDRw0cNXDUwJFqIABbdCnNVZ8NSQAAAABJRU5ErkJggg=='],
+];
+    const key = {Q: 'weak', Z: 'strong', G: 'gold', I: 'barrier', R: 'void', V: 'spike'};
+    
+
+
+    
     for (let l = 0; l < level.length; l++) {
       for (let q = 0; q < level[l].length; q++) {
         const e = level[l][q];
