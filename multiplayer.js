@@ -44,7 +44,9 @@ let sockets = new Set(), servers = {}, ffaLevels = [
 
 
 ], duelsLevels = [
+  'X1179BX806AX1613',
 ], tdmLevels = [
+  'X1179BX806AX1613'
 ];
 
 const logger = fs.createWriteStream('log.txt', {flags: 'a'}), log = l => logger.write(`${l}\n`);
