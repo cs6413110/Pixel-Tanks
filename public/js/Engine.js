@@ -89,7 +89,7 @@ class Engine {
       }
       A.template('Damage').init(t.x, t.y, 80, 80, 50, t.team, this);
     } else if (a === 'turret') {
-      A.template('AI').init(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this));
+      A.template('AI').init(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this);
       for (let i = this.ai.length-1, turrets = 0; i >= 0; i--) if (this.ai[i].role === 0 && Engine.getUsername(this.ai[i].team) === t.username && ++turrets > 3) this.ai[i].destroy();
     } else if (a === 'bash') {
       t.buff = true; // name fix
@@ -230,7 +230,7 @@ class Engine {
         } else if (a[i] === 'B') {
           this.spawns[1] = {x: q*100, y: l*100};
         } else if (['T', 'W', 'P', 'D'].includes(a[i])) {
-          A.template('AI').init(q*100+10, l*100+10, ['T', 'W', 'P', 'D'].indexOf(ai[i], 20, 'squad', this);
+          A.template('AI').init(q*100+10, l*100+10, ['T', 'W', 'P', 'D'].indexOf(ai[i]), 20, 'squad', this);
         } else if (key[a[i]]) this.b.push(A.template('Block').init(q*100, l*100, key[e][1], key[e][0], ':', this));
         l++;
       }
