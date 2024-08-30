@@ -59,7 +59,7 @@ class Engine {
       const type = a.replace('block#', '');
       for (const coord of coords) {
         if (t.r >= coord.r[0] && t.r < coord.r[1]) {
-          this.b.push(A.template('Block').init(t.x+coord.dx, t.y+coord.dy, {strong: 200, weak: 100, gold: 300, spike: 100, barrel: 100}[type], type, t.team, this));
+          this.b.push(A.template('Block').init(t.x+coord.dx, t.y+coord.dy, type, t.team, this));
           break;
         }
       }
@@ -106,13 +106,10 @@ class Engine {
       }, 500);
     } else if (a.includes('airstrike')) {
       const h = a.replace('airstrike', '').split('x');
-      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'airstrike', Engine.parseTeamExtras(t.team), this));
-    } else if (a.includes('instastrike')) {
-      const h = a.replace('instastrike', '').split('x');
-      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'instastrike', 'nuketank', this));
+      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), 'airstrike', Engine.parseTeamExtras(t.team), this));
     } else if (a.includes('flashbang')) {
       const h = a.replace('flashbang', '').split('x');
-      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), Infinity, 'smoke', Engine.parseTeamExtras(t.team), this));
+      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), 'smoke', Engine.parseTeamExtras(t.team), this));
     }
   }
 
@@ -151,7 +148,7 @@ class Engine {
         const [cx, cy] = cell.split('x');
         let hasFire = false;
         for (const entity of this.cells[cx][cy]) if (entity instanceof Block && entity.type === 'fire' && Engine.getUsername(entity.team) === t.username && entity.x/100 === cx && entity.y/100 === cy) hasFire = true;
-        if (!hasFire) this.b.push(A.template('Block').init(cx*100, cy*100, 100, 'fire', Engine.parseTeamExtras(t.team), this));
+        if (!hasFire) this.b.push(A.template('Block').init(cx*100, cy*100, 'fire', Engine.parseTeamExtras(t.team), this));
       }
     }
     for (const exe of use) this.useAbility(t, exe);
