@@ -222,15 +222,16 @@ class Engine {
     let l = 0, x = 0, y = 0;
     for (let i = 0; i < a.length; i += 2) {
       for (let m = 0; m < a[i+1]; m++) {
+        let y = Math.floor(i/60)*100, y = (i%60)*100;
         if (a[i] === 'S') {
-          this.spawn = { x: q * 100, y: l * 100 };
+          this.spawn = {x, y};
         } else if (a[i] === 'A') {
-          this.spawns[0] = {x: q*100, y: l*100};
+          this.spawns[0] = {x, y};
         } else if (a[i] === 'B') {
-          this.spawns[1] = {x: q*100, y: l*100};
+          this.spawns[1] = {x, y};
         } else if (['T', 'W', 'P', 'D'].includes(a[i])) {
-          A.template('AI').init(q*100+10, l*100+10, ['T', 'W', 'P', 'D'].indexOf(ai[i]), 20, 'squad', this);
-        } else if (key[a[i]]) this.b.push(A.template('Block').init(q*100, l*100, key[e][1], key[e][0], ':', this));
+          A.template('AI').init(x+10, y+10, ['T', 'W', 'P', 'D'].indexOf(ai[i]), 20, 'squad', this);
+        } else if (key[a[i]]) this.b.push(A.template('Block').init(x, y, key[ai[i]], 100, ':', this));
         l++;
       }
     }
