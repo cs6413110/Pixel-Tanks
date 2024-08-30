@@ -163,7 +163,7 @@ class Tank {
     this.cells.clear();
   }
   collision(x, y) {
-    if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return false;
+    if (x < 0 || y < 0 || x + 80 > 6000 || y + 80 > 6000) return false;
     for (const b of this.host.b) if (Engine.collision(x, y, 80, 80, b.x, b.y, 100, 100) && b.c) return false;
     return true;
   }
