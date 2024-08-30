@@ -74,7 +74,7 @@ class Engine {
         t.grapple = false;
       }
       const hx = Math.floor(t.x/100), hy = Math.floor(t.y/100);
-      for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) {
+      for (let i = Math.max(0, hx-1); i <= Math.min(59, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(59, hy+1); l++) {
         for (const entity of this.cells[i][l]) {
           if (entity instanceof Block) {
             if (Engine.getTeam(entity.team) !== Engine.getTeam(t.team)) {
@@ -172,7 +172,7 @@ class Engine {
     for (const t of this.pt) t.update();
   }
 
-  static r = o => Math.max(0, Math.min(29, o));
+  static r = o => Math.max(0, Math.min(59, o));
 
   loadCells(e, ex, ey, w, h) {
     del: for (const cell of e.cells) {
