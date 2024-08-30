@@ -224,7 +224,7 @@ class Engine {
       for (let m = 0; m < a[i+1]; m++) {
         let y = Math.floor(i/60)*100, x = (i%60)*100;
         if (a[i] === 'S') {
-          this.spawn = {x, y};
+          this.spawn = {x: x, y: y};
         } else if (a[i] === 'A') {
           this.spawns[0] = {x, y};
         } else if (a[i] === 'B') {
