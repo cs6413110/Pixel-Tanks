@@ -715,10 +715,10 @@ const Commands = {
     for (let i = 0; i <= data[2]; i++) setTimeout(() => {servers[this.room].b.push(A.template('Block').init(t.x-50, t.y-50, Infinity, 'airstrike', ':', servers[this.room]))}, i*1000);
   }],
   nuke: [Object, 2, 1, function(data) {
-    for (let x = 0; x < 30; x += 2) for (let y = 0; y < 30; y += 2) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'airstrike', ':', servers[this.room]));
+    for (let x = 0; x < 60; x += 2) for (let y = 0; y < 60; y += 2) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'airstrike', ':', servers[this.room]));
   }],
   arson: [Object, 3, 1, function(data) {
-    for (let x = 0; x < 30; x++) for (let y = 0; y < 30; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'fire', ':', servers[this.room]));
+    for (let x = 0; x < 60; x++) for (let y = 0; y < 60; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, Infinity, 'fire', ':', servers[this.room]));
   }],
   newmap: [FFA, 3, -1, function(data) {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
