@@ -1,5 +1,5 @@
 class Block {
-  static args = ['x', 'y', 'hp', 'type', 'team', 'host'];
+  static args = ['x', 'y', 'type', 'team', 'host'];
   static raw = ['x', 'y', 'type', 'team', 'maxHp', 'hp'];
   static raw2 = ['x', 'y', 'type', 'team'];
   static update = ['s', 'hp'];
@@ -7,10 +7,10 @@ class Block {
     this.cells = new Set();
     this.t = []; // can be removed maybe?
   }
-  init(x, y, hp, type, team, host) {
+  init(x, y, type, team, host) {
     this.id = host.genId(1);
     for (const i in Block.args) this[Block.args[i]] = arguments[i];
-    this.maxHp = hp;
+    this.maxHp = this.hp = [Infinity, Infinity, 300, 200, 100, 50][['void', 'barrier', 'gold', 'strong', 'weak', 'spike'].indexOf(type)];
     if (!(this.c = type !== 'fire' && type !== 'airstrike' && type !== 'smoke')) this.sd = setTimeout(() => this.destroy(), type === 'fire' ? 2500 : (type === 'smoke' ? 10000 : 6000));
     if (type === 'spike') this.c = false;
     if (type === 'airstrike') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(A.template('Damage').init(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
