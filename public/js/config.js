@@ -10,7 +10,7 @@ const sourceMap = {
     {
       ref: 'bullets',
       path: 'bullets',
-      load: ['normal', 'shotgun', 'powermissle', 'healmissle', 'megamissle', 'grapple', 'dynamite', 'fire', 'usb', 'scythe', 'yoink', 'leech',],
+      load: ['normal', 'shotgun', 'powermissle', 'healmissle', 'megamissle', 'grapple', 'dynamite', 'fire', 'usb', 'scythe', 'yoink', 'leech', 'rust'],//DONT REMOVE. STOP BEING MEAN TO DMG :((. idc if its bad, let him have his fun, orelse all customs go away
     },
     {
       ref: 'tanks',
