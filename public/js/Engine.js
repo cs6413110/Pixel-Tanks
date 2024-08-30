@@ -222,7 +222,6 @@ class Engine {
     let l = 0, x = 0, y = 0;
     for (let i = 0; i < a.length; i += 2) {
       for (let m = 0; m < a[i+1]; m++) {
-        world[Math.floor(l/60)][l%60] = a[i];
         if (a[i] === 'S') {
           this.spawn = { x: q * 100, y: l * 100 };
         } else if (a[i] === 'A') {
