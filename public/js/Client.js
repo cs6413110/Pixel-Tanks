@@ -400,7 +400,7 @@ class Client {
     }
     const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
     if (this.dx) {
-      var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : (this.buffed ? 1.5 : 1));
+      var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : 1);
       let xR = this.collision(x, this.tank.y, 'x', this.dx.a), xD = this.collision(this.dx.o, this.tank.y);
       if (xD || (!xD && this.collision(x, this.tank.y))) this.tank.x = xR;
       this.left = x === xR ? this.dx.a < 0 : null;
@@ -408,7 +408,7 @@ class Client {
       this.dx.o = this.tank.x;
     }
     if (this.dy) {
-      var y = this.dy.o+Math.floor((Date.now()-this.dy.t)/15)*this.dy.a*this.speed*(this.halfSpeed ? .5 : (this.buffed ? 1.5 : 1));
+      var y = this.dy.o+Math.floor((Date.now()-this.dy.t)/15)*this.dy.a*this.speed*(this.halfSpeed ? .5 : 1);
       let yR = this.collision(this.tank.x, y, 'y', this.dy.a), yD = this.collision(this.tank.x, this.dy.o);
       if (yD || (!yD && this.collision(this.tank.x, y))) this.tank.y = yR;
       this.up = y === yR ? this.dy.a < 0 : null;
@@ -698,7 +698,7 @@ class Client {
       if (!this.canFire) return;
       this.canFire = false;
       clearTimeout(this.fireTimeout);
-      this.fireTimeout = setTimeout(() => {this.canFire = true}, this.buff ? this.fireType === 1 ? 133 : 400 : this.fireType === 1 ? 200 : 600);
+      this.fireTimeout = setTimeout(() => {this.canFire = true}, this.fireType === 1 ? 200 : 600);
     } else if (!isNaN(type)) return;
     var fireType = ['grapple', 'megamissle', 'dynamite', 'usb', 'healmissle', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? 'powermissle' : (!isNaN(type) ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
     while (l<(fireType === 1 ? 1 : 15)) {
@@ -799,7 +799,7 @@ class Client {
       this.fireInterval = setInterval(() => {
         this.canFire = true;
         this.fire(0);
-      }, this.buff ? this.fireType === 1 ? 133 : 400 : this.fireType === 1 ? 200 : 600);
+      }, this.fireType === 1 ? 200 : 600);
     }
     if (k === PixelTanks.userData.keybinds.powermissle) this.fire(2);
     if (k === PixelTanks.userData.keybinds.grapple) {
@@ -866,7 +866,7 @@ class Client {
         this.booster = setTimeout(() => {
           this.speed = 4;
           this.tank.immune = false;
-        }, 1000);
+        }, 250);
       }
       if (PixelTanks.userData.class === 'medic') this.fire('healmissle');
       if (PixelTanks.userData.class === 'fire') for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+90+i});
