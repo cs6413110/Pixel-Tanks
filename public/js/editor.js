@@ -5,7 +5,6 @@ document.documentElement.innerHTML += '<h1>Pixel Tanks Level Editor</h1>';
 canvas.width = 599;
 canvas.height = 599;
 canvas.tabIndex = 1;
-porter.innerHTML = 'Import';
 document.documentElement.appendChild(coords);
 document.documentElement.appendChild(output);
 document.documentElement.appendChild(canvas);
