@@ -208,42 +208,31 @@ class Engine {
 
   levelReader(level) {
     for (let i = this.b.length-1; i >= 0; i--) this.b[i].destroy();
-
-    const key = [
-  ['X', 'Eraser', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAQAAAB0m0auAAAADElEQVR42mNkIBIAAABSAAI2VLqiAAAAAElFTkSuQmCC'],
-  ['Q', 'Weak Block', 'blocks/weak'],
-  ['Z', 'Strong Block', 'blocks/strong'],
-  ['G', 'Gold Block', 'blocks/gold'],
-  ['I', 'Barrier Block', 'blocks/barrier'],
-  ['R', 'Void Block', 'blocks/void'],
-  ['V', 'Spike', 'blocks/spike'],
-  ['T', 'Turret', 'cosmetics/hoodie'],
-  ['W', 'Adv. AI', 'cosmetics/police'],
-  ['P', 'Dis. AI', 'cosmetics/blue_helmet'],
-  ['D', 'Def. AI', 'cosmetics/terminator'],
-  ['S', 'Global Spawn', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAH0lEQVR42mNk+C/xn4GKgHHUwFEDRw0cNXDUwJFqIABtgCnNTYQqZgAAAABJRU5ErkJggg=='],
-  ['A', 'Spawn A', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAHklEQVR42mP8z8AARNQDjKMGjho4auCogaMGjlQDAUwCJ+0NBcXlAAAAAElFTkSuQmCC'],
-  ['B', 'Spawn B', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAH0lEQVR42mNkkPj/n4GKgHHUwFEDRw0cNXDUwJFqIABbdCnNVZ8NSQAAAABJRU5ErkJggg=='],
-];
     const key = {Q: 'weak', Z: 'strong', G: 'gold', I: 'barrier', R: 'void', V: 'spike'};
-    
-
-
-    
-    for (let l = 0; l < level.length; l++) {
-      for (let q = 0; q < level[l].length; q++) {
-        const e = level[l][q];
-        if (e === 'S') {
+    let chars = level.split(''), a = [];
+    main: for (let i = 0; i < chars.length; i++) {
+      a.push(chars[i]);
+      for (let q = 1, n = ''; true; q++) if (isNaN(chars[i+q])) {
+        a.push(q === 1 ? 1 : Number(n));
+        i += q-1;
+        continue main;
+      } else n += chars[i+q];
+      a.push(Number(n));
+    }
+    let l = 0, x = 0, y = 0;
+    for (let i = 0; i < a.length; i += 2) {
+      for (let m = 0; m < a[i+1]; m++) {
+        world[Math.floor(l/60)][l%60] = a[i];
+        if (a[i] === 'S') {
           this.spawn = { x: q * 100, y: l * 100 };
-        } else if (e === 'A') {
+        } else if (a[i] === 'A') {
           this.spawns[0] = {x: q*100, y: l*100};
-        } else if (e === 'B') {
+        } else if (a[i] === 'B') {
           this.spawns[1] = {x: q*100, y: l*100};
-        } else if (e.split('')[0] === 'A' && e.split('').length === 2) {
-          A.template('AI').init(q*100+10, l*100+10, Number(e.split('')[1]), 0/*rank*/, 'squad', this);
-        } else if (key[e]) {
-          this.b.push(A.template('Block').init(q*100, l*100, key[e][1], key[e][0], ':', this));
-        }
+        } else if (['T', 'W', 'P', 'D'].includes(a[i])) {
+          A.template('AI').init(q*100+10, l*100+10, ['T', 'W', 'P', 'D'].indexOf(ai[i], 20, 'squad', this);
+        } else if (key[a[i]]) this.b.push(A.template('Block').init(q*100, l*100, key[e][1], key[e][0], ':', this));
+        l++;
       }
     }
   }
