@@ -434,6 +434,9 @@ class Client {
     }
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
     GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
+    GUI.drawImage(PixelTanks.images.blocks.floor, 0, 3000, 3000, 3000, 1);
+    GUI.drawImage(PixelTanks.images.blocks.floor, 3000, 0, 3000, 3000, 1);
+    GUI.drawImage(PixelTanks.images.blocks.floor, 3000, 3000, 3000, 3000, 1);
     for (const block of b) this.drawBlock(block);
     for (const shot of s) this.drawShot(shot);
     for (const ai of a) this.drawTank(ai);
@@ -712,7 +715,7 @@ class Client {
 
   collision(x, y, v, p) { // x, y, velocity-axis, polarity
     let r = v && p;
-    if (x < 0 || y < 0 || x + 80 > 3000 || y + 80 > 3000) return r ? (p > 0 ? 2920 : 0) : false;
+    if (x < 0 || y < 0 || x + 80 > 6000 || y + 80 > 6000) return r ? (p > 0 ? 5920 : 0) : false;
     if (this.ded) return r ? (v === 'x' ? x : y) : true;
     let returns = [];
     for (const b of this.hostupdate.b) {
