@@ -1,6 +1,43 @@
 class Client {
   static listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
-  static messages = document.createElement('DIV');
+  /*static {
+    document.body.innerHTML += `
+    <div id='viewport'>
+      <div id='messages'></div>
+      <div id='spacer'><input id='input' /></div>
+    </div>
+    <style> #viewport width, #spacer height
+    #viewport {
+      border: 1px solid black;
+      position: absolute;
+      max-height: 100%;
+    }
+    #messages { #height 
+      overflow-y: scroll;
+    }
+    #message { #color per element
+      padding: 2px;
+      padding-left: 5px;
+      padding-right: 5px;
+      background-color: rgba(0, 0, 0, .2);
+      display: table;
+    }
+    #input {
+      background-color: rgba(0, 0, 0, .2);
+      border: none;
+      outline: none;
+      color: white;
+      width: 100%;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    </style>
+    `;
+    this.viewport = document.getElementById('viewport');
+    this.messages = document.getElementById('messages');
+    this.input = document.getElementById('input');
+  }*/
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
