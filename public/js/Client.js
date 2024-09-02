@@ -32,11 +32,11 @@ class Client {
       display: none;
     }
     </style>`;
-    this.listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
-    this.viewport = document.getElementById('viewport');
-    this.messages = document.getElementById('messages');
-    this.input = document.getElementById('input');
-    this.viewport.style.display = 'none';
+    Client.listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
+    Client.viewport = document.getElementById('viewport');
+    Client.messages = document.getElementById('messages');
+    Client.input = document.getElementById('input');
+    Client.viewport.style.display = 'none';
   }
   constructor(ip, multiplayer, gamemode) {
     try {
