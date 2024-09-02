@@ -39,9 +39,10 @@ class Client {
     this.viewport.style.display = 'none';
   }
   constructor(ip, multiplayer, gamemode) {
+    try {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
-    this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], logs: [], entities: [], tickspeed: -1};
+    this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], entities: [], tickspeed: -1};
     this.yeet = this.paused = this.canRespawn = false;
     this.multiplayer = multiplayer;
     this.gamemode = gamemode;
@@ -50,7 +51,6 @@ class Client {
     this.lastUpdate = {};
     this.speed = 4;
     this.fireType = 1;
-    this.msg = '';
     this.blocked = new Set();
     this.debug = {};
     this.key = [];
@@ -66,6 +66,7 @@ class Client {
     for (const listener of Client.listeners) document.addEventListener(listener, this[listener] = this[listener].bind(this));
     this.render = requestAnimationFrame(() => this.frame());
     this.animate = Date.now();
+    } catch(e) {alert(e)}
   }
 
   getIdType(id) {
@@ -73,6 +74,7 @@ class Client {
   }
 
   interpret(data) {
+    try {
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
@@ -102,6 +104,7 @@ class Client {
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate[this.getIdType(d)].splice(i, 1);
     }
+    } catch(e) {alert(e)}
   }
 
   connect() {
@@ -403,6 +406,7 @@ class Client {
   }
 
   frame() {
+    try {
     GUI.clear();
     this._fps++;
     this.render = requestAnimationFrame(() => this.frame());
@@ -589,9 +593,11 @@ class Client {
       }
       Menus.menus.pause.draw([1200, 0, 400, 1000]);
     }
+    } catch(e) {alert(e)};
   }
 
   chat(e) {
+    try {
     if (e.keyCode === 9) {
       const runoff = this.input.value.split(' ').reverse()[0];
       for (const player of this.players) if (player.startsWith(runoff)) return this.input.value = this.input.value.split(' ').reverse().slice(1).reverse().concat(player).join(' ');
@@ -606,6 +612,7 @@ class Client {
       this.input.style.display = 'none';
       for (let i = 0; i < this.messages.children.length-3; i++) this.messages.children[i].style.display = 'none';
     }
+    } catch(e) {alert(e)}
   }
 
   keydown(e) {
