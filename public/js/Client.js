@@ -93,11 +93,10 @@ class Client {
         this.hostupdate[this.getIdType(e.id)].push(e);
       }
       for (let i = 1; i < u.length; i += 2) e[u[i]] = u[i+1];
-      for (let i = 1; i < u.length; i += 2) if (u[i] === u[i+1]) this.hostupdate.logs.unshift('Invalid: '+JSON.stringify(data));
       this.debug[u[0]].push({x: this.tank.x, y: this.tank.y, u});
     }
     if (data.d) for (const d of data.d) {
-      if (this.debug[d]) this.debug[d].push({x: this.tank.x, y: this.tank.y, u: [d]}); else this.hostupdate.logs.unshift({m: 'del[unrec]: '+d, c: '#ff0000'});
+      if (this.debug[d]) this.debug[d].push({x: this.tank.x, y: this.tank.y, u: [d]});
       let i = this.hostupdate.entities.findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate.entities.splice(i, 1);
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
