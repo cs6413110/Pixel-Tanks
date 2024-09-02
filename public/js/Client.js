@@ -41,7 +41,7 @@ class Client {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
     this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], logs: [], entities: [], tickspeed: -1};
-    this.yeet = this.paused = this.showChat = this.canRespawn = false;
+    this.yeet = this.paused = this.canRespawn = false;
     this.multiplayer = multiplayer;
     this.gamemode = gamemode;
     this.ip = ip;
@@ -547,27 +547,6 @@ class Client {
       GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952+Math.min((Date.now()-this.timers[type].time)/this.timers[type].cooldown, 1)*48, 48, 48);
     }
     GUI.drawText(this.dedTime < Date.now()-10000 ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
-    GUI.drawText('', 0, 0, 30, '#ffffff', 0); // set font size :) can probably be changed
-    for (let i = Math.ceil(this.chatScroll/30), l = this.hostupdate.logs.length-i, v = i; i < (this.showChat ? v+Math.min(26, l) : Math.min(3, l)); i++) {
-      const log = this.hostupdate.logs[i];
-      GUI.draw.fillStyle = '#000000';
-      GUI.draw.globalAlpha = .2;
-      GUI.draw.fillRect(0, this.chatScroll+800-i*30, GUI.draw.measureText(log.m).width, 30);
-      GUI.draw.globalAlpha = 1;
-      GUI.drawText(log.m, 0, this.chatScroll+800-i*30, 30, log.c, 0);
-    }
-
-    if (this.showChat) {
-      GUI.draw.fillStyle = '#000000';
-      GUI.draw.globalAlpha = .2;
-      GUI.draw.fillRect(0, 830, GUI.draw.measureText(this.msg).width, 30);
-      GUI.draw.globalAlpha = 1;
-      GUI.drawText(this.msg.slice(-80), 0, 830, 30, '#ffffff', 0);
-    } else if (this.tank.animation && this.tank.animation.id === 'text') {
-      this.tank.animation = false;
-      clearInterval(this.animationInterval);
-      clearTimeout(this.animationTimeout);
-    }
     
     if (this.debugMode) {// 0 = disabled, 1 = ping, 2 = fps, 3 = ops, 4 = ups
       const infoset = [null, this.pings, this.fps, this.ops, this.ups][this.debugMode];
@@ -612,55 +591,27 @@ class Client {
   }
 
   chat(e) {
-
     if (e.keyCode === 9) {
-      const runoff = this.msg.split(' ').reverse()[0];
-      for (const player of this.players) if (player.startsWith(runoff)) return this.msg = this.msg.split(' ').reverse().slice(1).reverse().concat(player).join(' ');
+      const runoff = this.input.value.split(' ').reverse()[0];
+      for (const player of this.players) if (player.startsWith(runoff)) return this.input.value = this.input.value.split(' ').reverse().slice(1).reverse().concat(player).join(' ');
     }
-    if (e.keyCode === 38 && this.lastMessage) this.msg = this.lastMessage;
+    if (e.keyCode === 38 && this.lastMessage) this.input.value = this.lastMessage;
     if (e.keyCode === 13) {
-      if (this.msg !== '') {
-        this.lastMessage = this.msg;
-        if (this.msg.charAt(0) === '/') {
-          const params = this.msg.replace('/', '').split(' ');
-          if (params[0] === 'ytdl') {
-            const id = this.msg.includes('=') ? this.msg.replace('/ytdl ', '').split('=')[1] : this.msg.replace('/ytdl ', '');
-            const a = document.createElement('a'), source = 'http://141.148.128.231/download';
-            a.href = source+id+'.mp4';
-            a.download = id+'.mp4';
-            a.click();
-          } else if (params[0] === 'block') {
-            this.blocked.add(params[1]);
-          } else if (params[0] === 'unblock') {
-            this.blocked.delete(params[1]);
-          } else if (params[0] === 'getghost') {
-            for (const e of this.hostupdate.entities) {
-              let size = [80, 100, 10, 80, e.w][Math.floor(e.id)];
-              if (!Engine.collision(e.x, e.y, size, size, Math.floor((this.tank.x+40)/100)*100-1000, Math.floor((this.tank.y+40)/100)*100-700, 2100, 1500)) {
-                this.hostupdate.logs.unshift({m: 'Ghost: '+e.id, c: '#ffffff'});
-              }
-            }
-          } else if (params[0] === 'resize') {
-            PixelTanks.resizer = .3
-          } else if (params[0] === 'getdata') {
-            window.open().document.write(JSON.stringify(this.debug[Number(params[1])]));
-          } else this.socket.send({type: 'command', data: params});
-        } else this.socket.send({type: 'chat', msg: this.msg});
-        this.msg = '';
+      if (this.input.value.length) {
+        this.lastMessage = this.input.value;
+        this.socket.send({type: 'chat', msg: this.input.value});
+        this.input.value = '';
       }
-      this.showChat = false;
+      this.input.style.display = 'none';
+      for (let i = 0; i < this.messages.children.length-3; i++) this.messages.children[i].style.display = 'none';
     }
-  }
-
-  mousewheel(e) {
-    if (this.showChat) this.chatScroll = Math.min(this.hostupdate.logs.length*30, Math.max(0, this.chatScroll+e.wheelDeltaY));
   }
 
   keydown(e) {
     if (e.ctrlKey || e.metaKey) return;
     if (e.preventDefault) e.preventDefault();
     if (!this.key[e.keyCode]) {
-      if (this.showChat) return this.chat(e);
+      if (document.activeElement.tagName === 'INPUT') return this.chat(e);
       this.keyStart(e);
       this.keyLoop(e);
       this.key[e.keyCode] = setInterval(this.keyLoop.bind(this), 15, e);
@@ -800,8 +751,9 @@ class Client {
     }
     for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i+1}`]) this.useItem(PixelTanks.userData.items[i], i);
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
-      this.chatScroll = 0;
-      this.showChat = true;
+      // reset scroll.
+      for (const m of this.messages.children) m.style.display = 'block';
+      this.input.style.display = 'block';
     }
     if (k === 9) {
       this.fireType = this.fireType < 2 ? 2 : 1;
