@@ -36,7 +36,7 @@ class Client {
     this.viewport = document.getElementById('viewport');
     this.messages = document.getElementById('messages');
     this.input = document.getElementById('input');
-    this.viewport.style.display = 'none';
+    //this.viewport.style.display = 'none';
   }
   constructor(ip, multiplayer, gamemode) {
     try {
