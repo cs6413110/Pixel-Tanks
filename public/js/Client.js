@@ -1,6 +1,6 @@
 class Client {
   static listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
-  /*static {
+  static {
     document.body.innerHTML += `
     <div id='viewport'>
       <div id='messages'></div>
@@ -32,12 +32,11 @@ class Client {
     ::-webkit-scrollbar {
       display: none;
     }
-    </style>
-    `;
+    </style>`;
     this.viewport = document.getElementById('viewport');
     this.messages = document.getElementById('messages');
     this.input = document.getElementById('input');
-  }*/
+  }
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
@@ -75,28 +74,12 @@ class Client {
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
-      let compiledLogs = [];
-      GUI.draw.font = '30px Font';
       for (const log of data.logs) {
-        let words = log.m.split(' '), len = 0, line = '';
-        for (const word of words) {
-          len += GUI.draw.measureText(word).width;
-          if (len > 800) {
-            compiledLogs.push({m: line, c: log.c, chunk: true});
-            len = 0;
-            line = '';
-          }
-          line += word+' ';
-        }
-        compiledLogs.push({m: line, c: log.c, chunk: false});
-      }
-      if (this.hostupdate.logs.length > 100) this.hostupdate.logs.pop();
-      this.hostupdate.logs.unshift(...compiledLogs.reverse());
-      for (let i = 0; i < this.hostupdate.logs.length; i++) {
-        let username = this.hostupdate.logs[i].m.split(']')[0];
-        if (username.includes('->')) username = username.split('->')[0];
-        username = username.split('[')[1];
-        if (this.blocked.has(username)) this.hostupdate.logs[i].m = '<blocked message from '+username+'>';
+        const msg = document.createElement('DIV');
+        msg.id = 'message';
+        msg.innerHTML = log.m;
+        msg.style.color = log.c;
+        Client.messages.appendChild(msg);
       }
     }
     if (data.u) for (const u of data.u) {
@@ -629,8 +612,7 @@ class Client {
   }
 
   chat(e) {
-    if (e.key.length === 1) this.msg = (this.msg+e.key).slice(0, 2000);
-    if (e.keyCode === 8) this.msg = this.msg.slice(0, -1);
+
     if (e.keyCode === 9) {
       const runoff = this.msg.split(' ').reverse()[0];
       for (const player of this.players) if (player.startsWith(runoff)) return this.msg = this.msg.split(' ').reverse().slice(1).reverse().concat(player).join(' ');
@@ -672,11 +654,6 @@ class Client {
 
   mousewheel(e) {
     if (this.showChat) this.chatScroll = Math.min(this.hostupdate.logs.length*30, Math.max(0, this.chatScroll+e.wheelDeltaY));
-  }
-
-  paste(e) {
-    e.preventDefault();
-    if (this.showChat) this.msg += e.clipboardData.getData('text');
   }
 
   keydown(e) {
