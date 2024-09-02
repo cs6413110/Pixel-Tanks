@@ -1,5 +1,4 @@
 class Client {
-  static listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
   static {
     document.body.innerHTML += `
     <div id='viewport'>
@@ -33,6 +32,7 @@ class Client {
       display: none;
     }
     </style>`;
+    this.listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup', 'paste', 'mousewheel'];
     this.viewport = document.getElementById('viewport');
     this.messages = document.getElementById('messages');
     this.input = document.getElementById('input');
