@@ -36,7 +36,7 @@ class Client {
     this.viewport = document.getElementById('viewport');
     this.messages = document.getElementById('messages');
     this.input = document.getElementById('input');
-    this.viewport.style.display = 'none';
+    this.messages.style.display = this.input.style.display = 'none';
   }
   constructor(ip, multiplayer, gamemode) {
     try {
@@ -62,7 +62,6 @@ class Client {
     this.reset();
     if (this.multiplayer) this.connect();
     if (!this.multiplayer) this.generateWorld();
-    Client.viewport.style.display = 'block';
     for (const listener of Client.listeners) document.addEventListener(listener, this[listener] = this[listener].bind(this));
     this.render = requestAnimationFrame(() => this.frame());
     this.animate = Date.now();
