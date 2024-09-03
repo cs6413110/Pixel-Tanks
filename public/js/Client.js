@@ -763,6 +763,8 @@ class Client {
       // reset scroll.
       alert('setting to visible');
       Client.input.style.visibility = 'visible';
+      alert(Client.input.style.visibility);
+      Client.input.value = 'asdfasdf';
       for (const m of Children.messages.children) m.style.visibility = 'visible';
     }
     if (k === 9) {
