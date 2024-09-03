@@ -5,18 +5,18 @@ class Client {
       <div id='messages'></div>
       <div id='spacer'><input id='input' /></div>
     </div>
-    <style> #viewport width, #spacer height
+    <style>
     #viewport {
       border: 1px solid orange; 
       margin: 0;
       padding: 0;
       position: absolute;
     }
-    #messages { #height 
+    #messages {
       height: 300px;
       overflow-y: scroll;
     }
-    #message { #color per element
+    #message {
       padding: 2px;
       padding-left: 5px;
       padding-right: 5px;
@@ -33,7 +33,7 @@ class Client {
     ::-webkit-scrollbar {
       display: none;
     }
-    </style>`;
+    </style>`; // #viewport width, #spacer height
     this.listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup'];
     this.viewport = document.getElementById('viewport');
     this.messages = document.getElementById('messages');
