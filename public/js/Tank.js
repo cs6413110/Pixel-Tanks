@@ -40,15 +40,14 @@ class Tank {
   }
   update() {
     const team = Engine.getTeam(this.team);
-    let radar = Engine.hasPerk(this.perk, 6), dis = radar === 1 ? 700 : 1200;
+    let radar = Engine.hasPerk(this.perk, 6);
     if (radar) {
       this.eradar.length = this.fradar.length = 0;
       for (const t of this.host.pt.concat(this.host.ai)) {
-        let d = Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2);
-        if (d <= dis && !t.ded && !this.ded) { 
+        if (!t.ded && !this.ded) { 
           if (Engine.getTeam(t.team) !== Engine.getTeam(this.team)) {
             if (!t.invis) this.eradar.push(Engine.toAngle(t.x-this.x, t.y-this.y));
-          } else if (d !== 0) this.fradar.push(Engine.toAngle(t.x-this.x, t.y-this.y));
+          } else if (d !== 0 && radar > 1) this.fradar.push(Engine.toAngle(t.x-this.x, t.y-this.y));
         }
       }
       this.host.updateEntity(this, ['eradar', 'fradar']);
