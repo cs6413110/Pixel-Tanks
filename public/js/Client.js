@@ -7,8 +7,8 @@ class Client {
     </div>
     <style>
     #viewport {
-      border: 1px solid orange; 
       position: absolute;
+      max-height: 100%;
     }
     #messages {
       overflow-y: scroll;
@@ -19,6 +19,7 @@ class Client {
       padding-right: 5px;
       background-color: rgba(0, 0, 0, .2);
       display: table;
+      visibility: hidden;
     }
     #input {
       background-color: rgba(0, 0, 0, .2);
@@ -26,6 +27,7 @@ class Client {
       outline: none;
       color: white;
       width: 100%;
+      visibility: hidden;
     }
     ::-webkit-scrollbar {
       display: none;
@@ -61,11 +63,13 @@ class Client {
     Client.viewport = document.getElementById('viewport');
     Client.messages = document.getElementById('messages');
     Client.input = document.getElementById('input');
-    Client.input.style.visibility = 'hidden';
+    this.resize();
     this.animate = Date.now();
   }
 
   resize() {
+    Client.messages.style.width = window.innerHeight*1.6/2+'px';
+    document.getElementById('spacer').style.height = window.innerHeight*.8;
     
   }
 
