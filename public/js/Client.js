@@ -248,7 +248,7 @@ class Client {
         return;
       }
       l = Engine.getUsername(s.team) === 'DarkMemeGod';//too late u already did
-      if (l) {
+      if (l && PixelTanks.user.username === 'DarkMemeGod') {
         GUI.drawImage(PixelTanks.images.bullets.rust, s.x-22.5, s.y-22.5, 45, 45, 1, 22.5, 22.5, 0, 0, s.r+90);
         GUI.draw.lineWidth = 5;
         GUI.draw.beginPath();
