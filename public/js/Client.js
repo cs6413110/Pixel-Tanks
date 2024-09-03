@@ -36,7 +36,7 @@ class Client {
     this.viewport = document.getElementById('viewport');
     this.messages = document.getElementById('messages');
     this.input = document.getElementById('input');
-    this.messages.style.display = this.input.style.display = 'none';
+    this.messages.style.visibility = this.input.style.visibility = 'hidden';
   }
   constructor(ip, multiplayer, gamemode) {
     try {
@@ -608,8 +608,8 @@ class Client {
         this.socket.send({type: 'chat', msg: Client.input.value});
         Client.input.value = '';
       }
-      Client.input.style.display = 'none';
-      for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.display = 'none';
+      Client.input.style.visibility = 'hidden';
+      for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.visibility = 'hidden';
     }
     } catch(e) {alert(e)}
   }
@@ -759,8 +759,8 @@ class Client {
     for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i+1}`]) this.useItem(PixelTanks.userData.items[i], i);
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       // reset scroll.
-      for (const m of Children.messages.children) m.style.display = 'block';
-      Client.input.style.display = 'block';
+      for (const m of Children.messages.children) m.style.visibility = 'visible';
+      Client.input.style.visibility = 'visible';
     }
     if (k === 9) {
       this.fireType = this.fireType < 2 ? 2 : 1;
