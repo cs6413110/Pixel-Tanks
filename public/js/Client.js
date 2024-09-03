@@ -79,6 +79,7 @@ class Client {
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
       for (const log of data.logs) {
+        alert('log: '+JSON.stringify(log));
         const msg = document.createElement('DIV');
         msg.id = 'message';
         msg.innerHTML = log.m;
