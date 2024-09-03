@@ -83,8 +83,6 @@ class Client {
         msg.id = 'message';
         msg.innerHTML = log.m;
         msg.style.color = log.c;
-        alert(msg.innerHTML);
-        alert(msg);
         Client.messages.appendChild(msg);
       }
     }
@@ -763,7 +761,6 @@ class Client {
     for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i+1}`]) this.useItem(PixelTanks.userData.items[i], i);
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       // reset scroll.
-      alert('setting to visible');
       Client.input.style.visibility = 'visible';
       alert(Client.input.style.visibility);
       Client.input.value = 'asdfasdf';
