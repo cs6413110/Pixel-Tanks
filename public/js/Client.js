@@ -32,10 +32,6 @@ class Client {
     }
     </style>`; // #viewport width, #spacer height
     this.listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup'];
-    Client.viewport = document.getElementById('viewport');
-    Client.messages = document.getElementById('messages');
-    Client.input = document.getElementById('input');
-    Client.input.style.visibility = 'hidden';
   }
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
@@ -62,6 +58,10 @@ class Client {
     if (!this.multiplayer) this.generateWorld();
     for (const listener of Client.listeners) document.addEventListener(listener, this[listener] = this[listener].bind(this));
     this.render = requestAnimationFrame(() => this.frame());
+    Client.viewport = document.getElementById('viewport');
+    Client.messages = document.getElementById('messages');
+    Client.input = document.getElementById('input');
+    Client.input.style.visibility = 'hidden';
     this.animate = Date.now();
   }
 
