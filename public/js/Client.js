@@ -7,11 +7,10 @@ class Client {
     </div>
     <style> #viewport width, #spacer height
     #viewport {
-      border: 1px solid black;
+      border: 1px solid orange; 
+      margin: 0;
+      padding: 0;
       position: absolute;
-      top: 0;
-      left: 0;
-      max-height: 100%;
     }
     #messages { #height 
       height: 300px;
