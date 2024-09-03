@@ -9,9 +9,12 @@ class Client {
     #viewport {
       border: 1px solid black;
       position: absolute;
+      top: 0;
+      left: 0;
       max-height: 100%;
     }
     #messages { #height 
+      height: 300px;
       overflow-y: scroll;
     }
     #message { #color per element
