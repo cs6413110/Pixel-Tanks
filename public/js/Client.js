@@ -35,7 +35,7 @@ class Client {
     Client.viewport = document.getElementById('viewport');
     Client.messages = document.getElementById('messages');
     Client.input = document.getElementById('input');
-    //Client.input.style.visibility = 'hidden';
+    Client.input.style.visibility = 'hidden';
   }
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
@@ -761,6 +761,7 @@ class Client {
     for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i+1}`]) this.useItem(PixelTanks.userData.items[i], i);
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       // reset scroll.
+      document.getElementById('input').style.visibility = 'visible';
       Client.input.style.visibility = 'visible';
       alert(Client.input.style.visibility);
       Client.input.value = 'asdfasdf';
