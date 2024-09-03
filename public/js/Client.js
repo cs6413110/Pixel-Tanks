@@ -35,7 +35,7 @@ class Client {
     this.viewport = document.getElementById('viewport');
     this.messages = document.getElementById('messages');
     this.input = document.getElementById('input');
-    this.messages.style.visibility = this.input.style.visibility = 'hidden';
+    //this.messages.style.visibility = this.input.style.visibility = 'hidden';
   }
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
@@ -609,8 +609,8 @@ class Client {
         this.socket.send({type: 'chat', msg: Client.input.value});
         Client.input.value = '';
       }
-      Client.input.style.visibility = 'hidden';
-      for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.visibility = 'hidden';
+      //Client.input.style.visibility = 'hidden';
+      //for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.visibility = 'hidden';
     }
     } catch(e) {alert(e)}
   }
