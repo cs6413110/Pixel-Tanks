@@ -529,7 +529,11 @@ class PixelTanks {
                     if (PixelTanks.userData.classes[[[0, 5, 3], [1, 4, 2]][xm][ym]]) {
                       const lastClass = PixelTanks.userData.class;
                       PixelTanks.userData.class = [['tactical', 'fire', 'medic'], ['stealth', 'builder', 'warrior']][xm][ym];
-                      if (PixelTanks.userData.class === lastClass) PixelTanks.userData.class = 'undefined';
+                      this.loaded = false;
+                      if (PixelTanks.userData.class === lastClass) {
+                        PixelTanks.userData.class = 'undefined';
+                        this.loaded = false;
+                      }
                     } else alert('You need to buy this first!');
                     return;
                   }
@@ -543,7 +547,11 @@ class PixelTanks {
                   if (!PixelTanks.userData.items.includes(item) || PixelTanks.userData.items[this.currentItem-1] === item) {
                     const lastItem = PixelTanks.userData.items[this.currentItem-1];
                     PixelTanks.userData.items[this.currentItem-1] = item;
-                    if (item === lastItem) PixelTanks.userData.items[this.currentItem-1] = 'undefined';
+                    this.loaded = false;
+                    if (item === lastItem) {
+                      PixelTanks.userData.items[this.currentItem-1] = 'undefined';
+                      this.loaded = false;
+                    }
                   } else alert('You are not allowed to have more than 1 of the same item');
                   return;
                 }
@@ -557,6 +565,7 @@ class PixelTanks {
                   let simple = PixelTanks.userData.perk.reduce((a, c) => a.concat(Math.floor(c)), []);
                   if (!simple.includes(i+1) && PixelTanks.userData.perks[i]) {
                     PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = i+1+PixelTanks.userData.perks[i]/10;
+                    this.loaded = false;
                   } 
                 }
               }  
@@ -567,10 +576,12 @@ class PixelTanks {
                   if (e.button === 0) {
                     let co = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i].split('#')[0]
                     PixelTanks.userData[Menus.menus.inventory.cosmeticType] = PixelTanks.userData[Menus.menus.inventory.cosmeticType] === co ? '' : co;
+                    this.loaded = false;
                   } else {
                     const [cosmetic, amount] = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i].split('#');
                     if (amount === undefined || Number(amount) <= 1) return PixelTanks.userData.cosmetics.splice(this.cosmeticMenu*16+i, 1);
                     PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i] = cosmetic+'#'+(Number(amount)-1);
+                    this.loaded = false;
                   }
                   return;
                 }
@@ -586,6 +597,7 @@ class PixelTanks {
                     const [deathEffect, amount] = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i].split('#');
                     if (amount === undefined || Number(amount) <= 1) return PixelTanks.userData.deathEffects.splice(this.deathEffectsMenu*16+i, 1);
                     PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i] = deathEffect+'#'+(Number(amount)-1);
+                    this.loaded = false;
                   }
                   return;
                 }
