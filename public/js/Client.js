@@ -8,12 +8,9 @@ class Client {
     <style>
     #viewport {
       border: 1px solid orange; 
-      margin: 0;
-      padding: 0;
       position: absolute;
     }
     #messages {
-      height: 300px;
       overflow-y: scroll;
     }
     #message {
@@ -41,7 +38,6 @@ class Client {
     this.messages.style.visibility = this.input.style.visibility = 'hidden';
   }
   constructor(ip, multiplayer, gamemode) {
-    try {
     this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
     this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], entities: [], tickspeed: -1};
@@ -67,7 +63,10 @@ class Client {
     for (const listener of Client.listeners) document.addEventListener(listener, this[listener] = this[listener].bind(this));
     this.render = requestAnimationFrame(() => this.frame());
     this.animate = Date.now();
-    } catch(e) {alert(e)}
+  }
+
+  resize() {
+    
   }
 
   getIdType(id) {
@@ -761,6 +760,7 @@ class Client {
     for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i+1}`]) this.useItem(PixelTanks.userData.items[i], i);
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       // reset scroll.
+      alert('setting to visible');
       for (const m of Children.messages.children) m.style.visibility = 'visible';
       Client.input.style.visibility = 'visible';
     }
