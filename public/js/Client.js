@@ -35,7 +35,7 @@ class Client {
     this.listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup'];
     this.viewport = document.getElementById('viewport');
     this.messages = document.getElementById('messages');
-    this.input = document.getElementById('input');
+    Client.input = document.getElementById('input');
     //this.viewport.style.display = 'none';
   }
   constructor(ip, multiplayer, gamemode) {
@@ -600,17 +600,17 @@ class Client {
   chat(e) {
     try {
     if (e.keyCode === 9) {
-      const runoff = this.input.value.split(' ').reverse()[0];
-      for (const player of this.players) if (player.startsWith(runoff)) return this.input.value = this.input.value.split(' ').reverse().slice(1).reverse().concat(player).join(' ');
+      const runoff = Client.input.value.split(' ').reverse()[0];
+      for (const player of this.players) if (player.startsWith(runoff)) return Client.input.value = Client.input.value.split(' ').reverse().slice(1).reverse().concat(player).join(' ');
     }
-    if (e.keyCode === 38 && this.lastMessage) this.input.value = this.lastMessage;
+    if (e.keyCode === 38 && this.lastMessage) Client.input.value = this.lastMessage;
     if (e.keyCode === 13) {
-      if (this.input.value.length) {
-        this.lastMessage = this.input.value;
-        this.socket.send({type: 'chat', msg: this.input.value});
-        this.input.value = '';
+      if (Client.input.value.length) {
+        this.lastMessage = Client.input.value;
+        this.socket.send({type: 'chat', msg: Client.input.value});
+        Client.input.value = '';
       }
-      this.input.style.display = 'none';
+      Client.input.style.display = 'none';
       for (let i = 0; i < this.messages.children.length-3; i++) this.messages.children[i].style.display = 'none';
     }
     } catch(e) {alert(e)}
@@ -762,7 +762,7 @@ class Client {
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       // reset scroll.
       for (const m of this.messages.children) m.style.display = 'block';
-      this.input.style.display = 'block';
+      Client.input.style.display = 'block';
     }
     if (k === 9) {
       this.fireType = this.fireType < 2 ? 2 : 1;
