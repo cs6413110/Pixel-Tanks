@@ -35,8 +35,8 @@ class Client {
     this.listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup'];
     this.viewport = document.getElementById('viewport');
     this.messages = document.getElementById('messages');
-    Client.input = document.getElementById('input');
-    //this.viewport.style.display = 'none';
+    this.input = document.getElementById('input');
+    this.viewport.style.display = 'none';
   }
   constructor(ip, multiplayer, gamemode) {
     try {
@@ -79,7 +79,6 @@ class Client {
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
       for (const log of data.logs) {
-        alert('log: '+JSON.stringify(log));
         const msg = document.createElement('DIV');
         msg.id = 'message';
         msg.innerHTML = log.m;
@@ -611,7 +610,7 @@ class Client {
         Client.input.value = '';
       }
       Client.input.style.display = 'none';
-      for (let i = 0; i < this.messages.children.length-3; i++) this.messages.children[i].style.display = 'none';
+      for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.display = 'none';
     }
     } catch(e) {alert(e)}
   }
@@ -761,7 +760,7 @@ class Client {
     for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i+1}`]) this.useItem(PixelTanks.userData.items[i], i);
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       // reset scroll.
-      for (const m of this.messages.children) m.style.display = 'block';
+      for (const m of Children.messages.children) m.style.display = 'block';
       Client.input.style.display = 'block';
     }
     if (k === 9) {
