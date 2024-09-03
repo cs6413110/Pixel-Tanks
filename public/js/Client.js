@@ -32,9 +32,9 @@ class Client {
     }
     </style>`; // #viewport width, #spacer height
     this.listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup'];
-    this.viewport = document.getElementById('viewport');
-    this.messages = document.getElementById('messages');
-    this.input = document.getElementById('input');
+    Client.viewport = document.getElementById('viewport');
+    Client.messages = document.getElementById('messages');
+    Client.input = document.getElementById('input');
     //Client.input.style.visibility = 'hidden';
   }
   constructor(ip, multiplayer, gamemode) {
@@ -606,7 +606,7 @@ class Client {
     }
     if (e.keyCode === 38 && this.lastMessage) Client.input.value = this.lastMessage;
     if (e.keyCode === 13) {
-      if (Client.input.value.length) {
+      if (Client.input.value !== '') {
         this.lastMessage = Client.input.value;
         this.socket.send({type: 'chat', msg: Client.input.value});
         Client.input.value = '';
