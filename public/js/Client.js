@@ -764,12 +764,9 @@ class Client {
     }
     for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i+1}`]) this.useItem(PixelTanks.userData.items[i], i);
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
-      // reset scroll.
-      document.getElementById('input').style.visibility = 'visible';
       Client.input.style.visibility = 'visible';
-      alert(Client.input.style.visibility);
-      Client.input.value = 'asdfasdf';
       for (const m of Children.messages.children) m.style.visibility = 'visible';
+      Client.input.value = '';
     }
     if (k === 9) {
       this.fireType = this.fireType < 2 ? 2 : 1;
