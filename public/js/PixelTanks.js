@@ -1,4 +1,6 @@
 class PixelTanks {
+  static loadMessages = ['Recharging Instas...', 'Summoning Turrets...', 'Sorting Cosmetics...', 'Spotting Stealths...', 'Putting Out Fires...', 'Generating Levels...', 'Loading Up Crates...', 'Filling Up Stocks...', 'Drawing Menus...', 'Placing Blocks...', 'Launching Missles...', 'Booting Game Engine...'];
+  
   static start() {
     PixelTanks.setup();
     PixelTanks.boot();
@@ -9,34 +11,32 @@ class PixelTanks {
     <style>
       html, body {
         margin: 0;
-        max-height: 100vh;
-        max-width: 100vw;
         padding: 0;
-        overflow: hidden;
         text-align: center;
         background-color: black;
       }
       canvas {
         display: inline;
+        height: 100%;
+        width: calc(100vh*1.6);
       }
       @font-face {
         font-family: 'Font';
         src: url('https://cs6413110.github.io/Pixel-Tanks/public/fonts/PixelOperator.ttf') format('truetype');
       }
     </style>`;
-    Menus.scaler = document.createElement('CANVAS');
     GUI.canvas = document.createElement('CANVAS');
+    Menus.scaler = document.createElement('CANVAS');
     GUI.draw = GUI.canvas.getContext('2d');
-    GUI.draw.imageSmoothingEnabled = Menus.scaler.getContext('2d').imageSmoothingEnabled = false;
     document.body.appendChild(GUI.canvas);
-    PixelTanks.resizer = window.innerHeight/1000;
-    GUI.canvas.height = window.innerHeight;
-    GUI.canvas.width = window.innerHeight*1.6;
-    GUI.canvas.style = 'background-color: black;';
-    GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
+    PixelTanks.resizer = 1//window.innerHeight/1000; // remove
+    GUI.canvas.height = 1000;
+    GUI.canvas.width = 1600;
     GUI.drawText('Loading Font', 800, 500, 50, '#fffff', 0.5);
     window.oncontextmenu = () => false;
-    window.addEventListener('resize', GUI.resize);
+    window.addEventListener('resize', () => { // TEMP move to GUI as static function
+      for (const menu in Menus.menus) Menus.menus[menu].adapt();
+    });
     window.addEventListener('mousemove', Menus.mouseLog);
   }
 
@@ -54,7 +54,6 @@ class PixelTanks {
 
   static boot() {
     PixelTanks.user = {};
-    PixelTanks.loadMessages = ['Recharging Instas...', 'Summoning Turrets...', 'Sorting Cosmetics...', 'Spotting Stealths...', 'Putting Out Fires...', 'Generating Levels...', 'Loading Up Crates...', 'Filling Up Stocks...', 'Drawing Menus...', 'Placing Blocks...', 'Launching Missles...', 'Booting Game Engine...'];
     PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
     const config = document.createElement('SCRIPT');
     const newClass = 'undefined';
@@ -66,28 +65,31 @@ class PixelTanks {
     Menus.menus = {
       start: {
         buttons: [
-          [544, 648, 216, 116, function() {PixelTanks.auth(this.username, this.password, 'login')}, true],
-          [840, 648, 216, 116, function() {PixelTanks.auth(this.username, this.password, 'signup')}, true],
-          [564, 392, 456, 80, function() {this.type = 'username'}, false],
-          [564, 520, 456, 80, function() {this.type = 'password'}, false],
+          [544, 648, 216, 116, function() {PixelTanks.auth(this.username.value, this.password.value, 'login')}, true],
+          [840, 648, 216, 116, function() {PixelTanks.auth(this.username.value, this.password.value, 'signup')}, true],
         ],
         listeners: {
           keydown: function(e) {
-            if (e.key.length === 1) this[this.type] += e.key;
-            if (e.keyCode === 8) this[this.type] = this[this.type].slice(0, -1);
-            if (e.keyCode === 13) PixelTanks.auth(this.username, this.password, 'login');
-            if (e.keyCode === 9) this.type = this.type === 'username' ? 'password' : 'username';
+            if (e.keyCode === 13) PixelTanks.auth(this.username.value, this.password.value, 'login');
           }
         },
         cdraw: function() {
-          if (!this.type) {
-            this.type = 'username';
-            this.username = '';
-            this.password = '';
+          if (!this.username) {
+            this.username = document.createElement('INPUT');
+            this.password = document.createElement('INPUT');
+            const left = (window.innerWidth-window.innerHeight*1.6)/2+.564*window.innerHeight;
+            this.username.style = 'position: absolute; background: transparent; border: none; top: '+(.392*window.innerHeight)+'px; left: '+left+'px; width: '+(window.innerHeight*.456)+'px; height: '+(window.innerHeight*.08)+'px;';
+            this.password.style = 'position: absolute; background: transparent; border: none; top: '+(.520*window.innerHeight)+'px; left: '+left+'px; width: '+(window.innerHeight*.456)+'px; height: '+(window.innerHeight*.08)+'px;';
+            this.username.type = 'username';
+            this.password.type = 'password';
+            this.username.autocomplete = 'username';
+            this.password.autocomplete = 'current-password';
+            this.username.maxLength = 20;
+            this.password.maxLength = 100;
+            document.body.appendChild(this.username);
+            document.body.appendChild(this.password);
+            this.elements.push(this.username, this.password);
           }
-          if (this.username.length > 20) return;
-          GUI.drawText(this.username, 574, 407, 50, '#000000', 0);
-          GUI.drawText(this.password.replace(/./g, '*'), 574, 535, 50, '#000000', 0);
         },
       },
       main: {
@@ -185,7 +187,7 @@ class PixelTanks {
               [890, 594],
             ];
             for (const c of levelCoords) {
-              if (x > c[0]*1600/1049 && x < (c[0]+160)*1600/1049 && y > c[1]*1000/653 && y < (c[1]+40)*1000/653) {
+              if (x > c[0]*1600/1049 && x < (c[0]+80)*1600/1049 && y > c[1]*1000/653 && y < (c[1]+74)*1000/653) {
                 Menus.removeListeners();
                 PixelTanks.user.player = new Client(levelCoords.indexOf(c)+10, false, null);
               }
@@ -200,15 +202,14 @@ class PixelTanks {
           Menus.trigger('main');
         }, true],
           [558, 726, 505, 114, function() {
-            PixelTanks.user.player = new Client(this.ip, true, 'tdm');
-            Menus.removeListeners();
+            alert('no')
           }, true],
         ],
         listeners: {},
         cdraw: function() {
-          GUI.drawText('Coins: '+Menus.menus.victory.stats[coins], 800, 800, 50, '#ffffff', 0.5);
-          GUI.drawText('Crates: '+Menus.menus.victory.stats[crates], 800, 900, 50, '#ffffff', 0.5);
-          GUI.drawText('Xp: '+Menus.menus.victory.stats[xp], 800, 1000, 50, '#ffffff', 0.5);
+          //GUI.drawText('Coins: '+Menus.menus.victory.stats[coins], 800, 800, 50, '#ffffff', 0.5);
+          //GUI.drawText('Crates: '+Menus.menus.victory.stats[crates], 800, 900, 50, '#ffffff', 0.5);
+          //GUI.drawText('Xp: '+Menus.menus.victory.stats[xp], 800, 1000, 50, '#ffffff', 0.5);
         },
       },
       defeat: {
@@ -217,8 +218,7 @@ class PixelTanks {
           Menus.trigger('main');
         }, true],
           [558, 726, 505, 114, function() {
-            PixelTanks.user.player = new Client(this.ip, true, 'tdm');
-            Menus.removeListeners();
+            alert('no')
           }, true],
         ],
         listeners: {},
@@ -529,7 +529,11 @@ class PixelTanks {
                     if (PixelTanks.userData.classes[[[0, 5, 3], [1, 4, 2]][xm][ym]]) {
                       const lastClass = PixelTanks.userData.class;
                       PixelTanks.userData.class = [['tactical', 'fire', 'medic'], ['stealth', 'builder', 'warrior']][xm][ym];
-                      if (PixelTanks.userData.class === lastClass) PixelTanks.userData.class = 'undefined';
+                      this.loaded = false;
+                      if (PixelTanks.userData.class === lastClass) {
+                        PixelTanks.userData.class = 'undefined';
+                        this.loaded = false;
+                      }
                     } else alert('You need to buy this first!');
                     return;
                   }
@@ -543,7 +547,11 @@ class PixelTanks {
                   if (!PixelTanks.userData.items.includes(item) || PixelTanks.userData.items[this.currentItem-1] === item) {
                     const lastItem = PixelTanks.userData.items[this.currentItem-1];
                     PixelTanks.userData.items[this.currentItem-1] = item;
-                    if (item === lastItem) PixelTanks.userData.items[this.currentItem-1] = 'undefined';
+                    this.loaded = false;
+                    if (item === lastItem) {
+                      PixelTanks.userData.items[this.currentItem-1] = 'undefined';
+                      this.loaded = false;
+                    }
                   } else alert('You are not allowed to have more than 1 of the same item');
                   return;
                 }
@@ -555,9 +563,9 @@ class PixelTanks {
               for (let i = 0; i < 9; i++) {
                 if (Engine.collision(x, y, 0, 0, xo[i%3], yo[Math.floor(i/3)], 80, 80)) {
                   let simple = PixelTanks.userData.perk.reduce((a, c) => a.concat(Math.floor(c)), []);
-                  if (PixelTanks.userData.perks[i]) {
-                    if (simple.includes(i+1)) PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = 'undefined';
-                    if (!simple.includes(i+1)) PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = i+1+PixelTanks.userData.perks[i]/10;
+                  if (!simple.includes(i+1) && PixelTanks.userData.perks[i]) {
+                    PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = i+1+PixelTanks.userData.perks[i]/10;
+                    this.loaded = false;
                   } 
                 }
               }  
@@ -568,10 +576,12 @@ class PixelTanks {
                   if (e.button === 0) {
                     let co = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i].split('#')[0]
                     PixelTanks.userData[Menus.menus.inventory.cosmeticType] = PixelTanks.userData[Menus.menus.inventory.cosmeticType] === co ? '' : co;
+                    this.loaded = false;
                   } else {
                     const [cosmetic, amount] = PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i].split('#');
                     if (amount === undefined || Number(amount) <= 1) return PixelTanks.userData.cosmetics.splice(this.cosmeticMenu*16+i, 1);
                     PixelTanks.userData.cosmetics[this.cosmeticMenu*16+i] = cosmetic+'#'+(Number(amount)-1);
+                    this.loaded = false;
                   }
                   return;
                 }
@@ -587,6 +597,7 @@ class PixelTanks {
                     const [deathEffect, amount] = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i].split('#');
                     if (amount === undefined || Number(amount) <= 1) return PixelTanks.userData.deathEffects.splice(this.deathEffectsMenu*16+i, 1);
                     PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i] = deathEffect+'#'+(Number(amount)-1);
+                    this.loaded = false;
                   }
                   return;
                 }
@@ -642,10 +653,8 @@ class PixelTanks {
             if (PixelTanks.userData.items[i] === 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, [404, 492, 580, 668][i], 820, 80, 80, 1);
           }
           let perkKey = [0, 'shield', 'thermal', 'scavenger', 'cooldown', 'refresh', 'radar', 'hook', 'adrenaline', 'core'];
-          if (PixelTanks.userData.perk[0] !== 'undefined') GUI.drawImage(PixelTanks.images.menus[perkKey[Math.floor(PixelTanks.userData.perk[0])]], 844, 816, 88, 88, 1, 0, 0, 0, 0, undefined, ((PixelTanks.userData.perk[0]%1)*10-1)*40, 0, 40, 40);
-          if (PixelTanks.userData.perk[1] !== 'undefined') GUI.drawImage(PixelTanks.images.menus[perkKey[Math.floor(PixelTanks.userData.perk[1])]], 932, 816, 80, 80, 1, 0, 0, 0, 0, undefined, ((PixelTanks.userData.perk[1]%1)*10-1)*40, 0, 40, 40);
-          if (PixelTanks.userData.perk[0] === 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, 848, 820, 80, 80, 1);
-          if (PixelTanks.userData.perk[1] === 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, 936, 820, 80, 80, 1);
+          if (PixelTanks.userData.perk[0]) GUI.drawImage(PixelTanks.images.menus[perkKey[Math.floor(PixelTanks.userData.perk[0])]], 844, 816, 88, 88, 1, 0, 0, 0, 0, undefined, ((PixelTanks.userData.perk[0]%1)*10-1)*40, 0, 40, 40);
+          if (PixelTanks.userData.perk[1]) GUI.drawImage(PixelTanks.images.menus[perkKey[Math.floor(PixelTanks.userData.perk[1])]], 932, 816, 80, 80, 1, 0, 0, 0, 0, undefined, ((PixelTanks.userData.perk[1]%1)*10-1)*40, 0, 40, 40);
           PixelTanks.renderBottom(680, 380, 240, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
           PixelTanks.renderTop(680, 380, 240, PixelTanks.userData.color, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
@@ -666,7 +675,7 @@ class PixelTanks {
           if (newClass !== 'undefined') GUI.drawImage(PixelTanks.images.menus.alert, 1102, 806, 20, 20, 1);
           const deathEffectData = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect+'_'];
           if (PixelTanks.userData.deathEffect && deathEffectData) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 448, 220, 88, 88, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
-          if (!PixelTanks.userData.deathEffect) GUI.drawImage(PixelTanks.images.menus.broke, 448, 220, 88, 88, 1);
+          if (!PixelTanks.userData.deathEffect && deathEffectData) GUI.drawImage(PixelTanks.images.menus.broke, 448, 220, 88, 88, 1);
           Menus.menus.inventory.buttonEffect = true;
           if (this.perkTab || this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.deathEffectsTab) {
             Menus.menus.inventory.buttonEffect = false;
@@ -686,7 +695,7 @@ class PixelTanks {
             }
           } else if (this.itemTab) {
             GUI.drawImage(PixelTanks.images.menus.itemTab, 580, 334, 440, 332, 1);
-            const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [924, 570]};
+            const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [904, 570]};
             for (const item in key) GUI.drawImage(PixelTanks.images.items[item], key[item][0], key[item][1], 80, 80, 1);
           } else if (this.perkTab) {
             GUI.drawImage(PixelTanks.images.menus.perkTab, 634, 334, 332, 332, 1); //166x2
@@ -818,16 +827,6 @@ class PixelTanks {
         listeners: {},
         cdraw: () => {},
       },
-      quit: {
-        buttons: [[0, 0, 1600, 1000, function() {
-          this.paused = false;
-          PixelTanks.user.player.implode();
-          Menus.trigger('main');
-          this.multiplayer = undefined;
-        }, true]],
-        listeners: {},
-        cdraw: () => {},
-      },
     }
     
       for (const m in Menus.menus) {
@@ -923,7 +922,7 @@ class PixelTanks {
           uncommon: ['glitch', 'spoider', 'CompanionCube', 'PortalCube', 'half glitch', 'eye', 'Anime Eyes', 'Angry Eyes', 'Hard Hat', 'Present', 'Dead', 'Peace', 'Question Mark', 'Small Scratch', 'Kill = Ban', 'Reindeer Hat', 'Pumpkin Hat', 'Cat Ears', 'Cake', 'Cat Hat', 'bread', 'First Aid', 'silver', 'Fisher Hat', 'chip', 'eyes', 'zombie', 'googly', 'static', 'lava', 'void knight'],
           rare: ['gold helment', 'toxic', 'Antlers', 'White helment', 'Blue Helment', 'Aqua Helment', 'Purple helment', 'Stripes', 'scoped', 'brain', 'Hands', 'Straw Hat', 'Hax', 'Tools', 'Money Eyes', 'Dizzy', 'Checkmark', 'Sweat', 'Scared', 'Blue Tint', 'Purple Top Hat', 'Purple Grad Hat', 'Eyebrows', 'Helment', 'Rudolph', 'Candy Corn', 'Flag', 'Katana',  'Swords', 'angry hoodie'],
           epic: ['Aaron', 'hacker_hoodie', 'Plasma Ball', 'Hazard', 'Locked', 'Elf', 'Triple Gun', 'Evil Eyes', 'Gold', 'Rage', 'Onfire', 'Halo', 'Police', 'Deep Scratch', 'bluekatana', 'Assassin', 'Astronaut', 'Christmas Lights', 'No Mercy', 'Error', 'disguise', 'Lego', 'Paleontologist', 'hollow_eye'],
-          legendary: ['Sun Roof', 'Blind', 'Redsus', 'Uno Reverse', 'Christmas Hat', 'Mini Tank', 'cry'],
+          legendary: ['Sun Roof', 'Blind', 'Redsus', 'Uno Reverse', 'Christmas Hat', 'Mini Tank',],
           mythic: ['Terminator', 'MLG Glasses', 'Power Armor', 'venom'],
         }, {
           common: ['explode', 'nuke', 'insta', 'evan'], //bruh why am i common :(
