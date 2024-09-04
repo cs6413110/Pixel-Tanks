@@ -769,7 +769,7 @@ class Client {
     for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i+1}`]) this.useItem(PixelTanks.userData.items[i], i);
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       Client.input.style.visibility = 'visible';
-      for (const m of Children.messages.children) m.style.visibility = 'visible';
+      for (const m of Client.messages.children) m.style.visibility = 'visible';
       Client.input.focus();
     }
     if (k === 9) {
