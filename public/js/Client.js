@@ -68,8 +68,9 @@ class Client {
 
   resize() {
     Client.messages.style.width = window.innerHeight*1.6/2+'px';
-    document.getElementById('spacer').style.height = window.innerHeight*.8;
-    
+    document.getElementById('spacer').style.height = window.innerHeight*.2+'px';
+    Client.viewport.style.width = Math.max(0, (window.innerWidth-window.innerHeight*1.6)/2);
+    Client.messages.style.height = window.innerHeight*.8+'px';
   }
 
   getIdType(id) {
@@ -620,10 +621,10 @@ class Client {
   }
 
   keydown(e) {
+    if (document.activeElement.tagName === 'INPUT') return this.chat(e);
     if (e.ctrlKey || e.metaKey) return;
     if (e.preventDefault) e.preventDefault();
     if (!this.key[e.keyCode]) {
-      if (document.activeElement.tagName === 'INPUT') return this.chat(e);
       this.keyStart(e);
       this.keyLoop(e);
       this.key[e.keyCode] = setInterval(this.keyLoop.bind(this), 15, e);
