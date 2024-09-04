@@ -2,7 +2,7 @@ class Client {
   static {
     document.body.innerHTML += `
     <div id='viewport'>
-      <div id='messages'></div>
+      <div id='scrollbar'><div id='messages'></div></div>
       <div id='spacer'><input id='input' /></div>
     </div>
     <style>
@@ -10,11 +10,15 @@ class Client {
       position: absolute;
       max-height: 100%;
     }
+    #scrollbar {
+      position: relative;
+      overflow-y: scroll;
+    }
     #messages {
-      display: flex;
+      position: absolute;
+      bottom: 0;
     }
     #message {
-      align-self: flex-end;
       font-family: Font;
       padding: 2px;
       padding-left: 5px;
