@@ -61,7 +61,6 @@ class Client {
     for (const listener of Client.listeners) document.addEventListener(listener, this[listener] = this[listener].bind(this));
     this.render = requestAnimationFrame(() => this.frame());
     Client.viewport = document.getElementById('viewport');
-    Client.scroll = document.getElementById('scrollbar');
     Client.messages = document.getElementById('messages');
     Client.input = document.getElementById('input');
     Client.messages.innerHTML = '';
@@ -86,12 +85,12 @@ class Client {
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
       for (const log of data.logs) {
-        const msg = document.createElement('DIV'), a = Client.scroll.scrollTop === Client.scroll.scrollHeight-Client.scroll.clientHeight;
+        const msg = document.createElement('DIV'), a = Client.messages.scrollTop === Client.messges.scrollHeight-Client.messges.clientHeight;
         msg.id = 'message';
         msg.innerHTML = log.m;
         msg.style.color = log.c;
         Client.messages.appendChild(msg);
-        if (a) Client.scroll.scrollTop = Client.scroll.scrollHeight-Client.scroll.clientHeight;
+        if (a) Client.messges.scrollTop = Client.messges.scrollHeight-Client.messges.clientHeight;
       }
     }
     if (data.u) for (const u of data.u) {
@@ -621,7 +620,7 @@ class Client {
       }
       Client.input.style.visibility = 'hidden';
       for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.visibility = 'hidden';
-      Client.scroll.scrollTop = Client.scroll.scrollHeight-Client.scroll.clientHeight;
+      Client.messges.scrollTop = Client.messges.scrollHeight-Client.messges.clientHeight;
     }
     } catch(e) {alert(e)}
   }
@@ -772,7 +771,7 @@ class Client {
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       Client.input.style.visibility = 'visible';
       for (const m of Client.messages.children) m.style.visibility = 'visible';
-      Client.scroll.scrollTop = Client.scroll.scrollHeight-Client.scroll.clientHeight;
+      Client.messges.scrollTop = Client.messges.scrollHeight-Client.messges.clientHeight;
       Client.input.focus();
     }
     if (k === 9) {
