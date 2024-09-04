@@ -2,7 +2,7 @@ class Client {
   static {
     document.body.innerHTML += `
     <div id='viewport'>
-      <div id='messages'></div>
+      <div id='overflow'><div id='messages'></div></div>
       <div id='spacer'><input id='input' /></div>
     </div>
     <style>
@@ -10,8 +10,10 @@ class Client {
       position: absolute;
       max-height: 100%;
     }
-    #messages {
+    #overflow {
       overflow-y: scroll;
+    }
+    #messages {
       display: table-cell;
       vertical-align: bottom;
     }
@@ -75,7 +77,7 @@ class Client {
     Client.messages.style.width = (window.innerHeight*1.6/2)+'px';
     document.getElementById('spacer').style.height = (window.innerHeight*.2)+'px';
     Client.viewport.style.left = Math.max(0, (window.innerWidth-window.innerHeight*1.6)/2)+'px';
-    Client.messages.style.height = (window.innerHeight*.8)+'px';
+    document.getElementById('overflow').height = (window.innerHeight*.8)+'px';
   }
 
   getIdType(id) {
