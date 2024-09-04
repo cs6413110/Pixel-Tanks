@@ -767,7 +767,6 @@ class Client {
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       Client.input.style.visibility = 'visible';
       for (const m of Children.messages.children) m.style.visibility = 'visible';
-      Client.input.value = '';
     }
     if (k === 9) {
       this.fireType = this.fireType < 2 ? 2 : 1;
