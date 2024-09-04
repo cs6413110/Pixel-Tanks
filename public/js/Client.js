@@ -33,7 +33,7 @@ class Client {
     ::-webkit-scrollbar {
       display: none;
     }
-    </style>`; // #viewport width, #spacer height
+    </style>`;
     this.listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup'];
   }
   constructor(ip, multiplayer, gamemode) {
@@ -71,7 +71,6 @@ class Client {
   resize() {
     Client.messages.style.width = (window.innerHeight*1.6/2)+'px';
     document.getElementById('spacer').style.height = (window.innerHeight*.2)+'px';
-    document.getElementById('spacer').style.border = '1px solid orange';
     Client.viewport.style.left = Math.max(0, (window.innerWidth-window.innerHeight*1.6)/2)+'px';
     Client.messages.style.height = (window.innerHeight*.8)+'px';
   }
@@ -616,9 +615,8 @@ class Client {
         this.socket.send({type: 'chat', msg: Client.input.value});
         Client.input.value = '';
       }
-      alert('Hiding');
       Client.input.style.visibility = 'hidden';
-      for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.visibility = 'hidden';
+      //for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.visibility = 'hidden';
     }
     } catch(e) {alert(e)}
   }
