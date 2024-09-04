@@ -11,12 +11,11 @@ class Client {
       max-height: 100%;
     }
     #scrollbar {
-      position: relative;
       overflow-y: scroll;
     }
     #messages {
-      position: absolute;
-      bottom: 0;
+      display: table-end;
+      vertical-align: bottom;
     }
     #message {
       font-family: Font;
