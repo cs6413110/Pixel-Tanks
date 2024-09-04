@@ -2,21 +2,16 @@ class Client {
   static {
     document.body.innerHTML += `
     <div id='viewport'>
-      <div id='scrollbar'><div id='messages'></div></div>
+      <div id='messages'></div>
       <div id='spacer'><input id='input' /></div>
     </div>
     <style>
     #viewport {
       position: absolute;
-      max-height: 100%;
-    }
-    #scrollbar {
-      overflow-y: scroll;
+      bottom: 0;
     }
     #messages {
-      text-align: left;
-      display: table-cell;
-      vertical-align: bottom;
+      overflow-y: scroll;
     }
     #message {
       font-family: Font;
@@ -78,7 +73,7 @@ class Client {
     Client.messages.style.width = (window.innerHeight*1.6/2)+'px';
     document.getElementById('spacer').style.height = (window.innerHeight*.2)+'px';
     Client.viewport.style.left = Math.max(0, (window.innerWidth-window.innerHeight*1.6)/2)+'px';
-    Client.scroll.style.height = (window.innerHeight*.8)+'px';
+    Client.messages.style.maxHeight = (window.innerHeight*.8)+'px';
   }
 
   getIdType(id) {
