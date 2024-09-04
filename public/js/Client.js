@@ -36,7 +36,7 @@ class Client {
     this.listeners = ['keydown', 'keyup', 'mousemove', 'mousedown', 'mouseup'];
   }
   constructor(ip, multiplayer, gamemode) {
-    this.xp = this.crates = this.kills = this.coins = this.chatScroll = this._ops = this._ups = this._fps = this.debugMode = 0;
+    this.xp = this.crates = this.kills = this.coins = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
     this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], entities: [], tickspeed: -1};
     this.yeet = this.paused = this.canRespawn = false;
@@ -85,12 +85,12 @@ class Client {
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
       for (const log of data.logs) {
-        const msg = document.createElement('DIV'), a = Client.messages.scrollTop === Client.messges.scrollHeight-Client.messges.clientHeight;
+        const msg = document.createElement('DIV'), a = Client.messages.scrollTop === Client.messages.scrollHeight-Client.messages.clientHeight;
         msg.id = 'message';
         msg.innerHTML = log.m;
         msg.style.color = log.c;
         Client.messages.appendChild(msg);
-        if (a) Client.messges.scrollTop = Client.messges.scrollHeight-Client.messges.clientHeight;
+        if (a) Client.messages.scrollTop = Client.messages.scrollHeight-Client.messages.clientHeight;
       }
     }
     if (data.u) for (const u of data.u) {
@@ -620,7 +620,7 @@ class Client {
       }
       Client.input.style.visibility = 'hidden';
       for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.visibility = 'hidden';
-      Client.messges.scrollTop = Client.messges.scrollHeight-Client.messges.clientHeight;
+      Client.messages.scrollTop = Client.messages.scrollHeight-Client.messages.clientHeight;
     }
     } catch(e) {alert(e)}
   }
@@ -771,7 +771,7 @@ class Client {
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       Client.input.style.visibility = 'visible';
       for (const m of Client.messages.children) m.style.visibility = 'visible';
-      Client.messges.scrollTop = Client.messges.scrollHeight-Client.messges.clientHeight;
+      Client.messages.scrollTop = Client.messages.scrollHeight-Client.messages.clientHeight;
       Client.input.focus();
     }
     if (k === 9) {
