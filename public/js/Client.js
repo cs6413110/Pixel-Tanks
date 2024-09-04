@@ -14,7 +14,6 @@ class Client {
       display: flex;
     }
     #message {
-      display: inline-block;
       align-self: flex-end;
       font-family: Font;
       padding: 2px;
