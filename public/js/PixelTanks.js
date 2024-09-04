@@ -24,6 +24,9 @@ class PixelTanks {
         font-family: 'Font';
         src: url('https://cs6413110.github.io/Pixel-Tanks/public/fonts/PixelOperator.ttf') format('truetype');
       }
+      * {
+        font-family: Font;
+      }
     </style>`;
     GUI.canvas = document.createElement('CANVAS');
     Menus.scaler = document.createElement('CANVAS');
@@ -36,6 +39,7 @@ class PixelTanks {
     window.oncontextmenu = () => false;
     window.addEventListener('resize', () => { // TEMP move to GUI as static function
       for (const menu in Menus.menus) Menus.menus[menu].adapt();
+      if (PixelTanks.user.player) PixelTanks.user.player.resize();
     });
     window.addEventListener('mousemove', Menus.mouseLog);
   }
