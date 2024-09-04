@@ -19,7 +19,6 @@ class Client {
       padding-right: 5px;
       background-color: rgba(0, 0, 0, .2);
       display: table;
-      visibility: hidden;
     }
     #input {
       background-color: rgba(0, 0, 0, .2);
