@@ -14,7 +14,8 @@ class Client {
       overflow-y: scroll;
     }
     #messages {
-      display: table-end;
+      text-align: left;
+      display: table-cell;
       vertical-align: bottom;
     }
     #message {
