@@ -66,6 +66,7 @@ class Client {
     for (const listener of Client.listeners) document.addEventListener(listener, this[listener] = this[listener].bind(this));
     this.render = requestAnimationFrame(() => this.frame());
     Client.viewport = document.getElementById('viewport');
+    Client.scroll = document.getElementById('scrollbar');
     Client.messages = document.getElementById('messages');
     Client.input = document.getElementById('input');
     Client.messages.innerHTML = '';
@@ -77,7 +78,7 @@ class Client {
     Client.messages.style.width = (window.innerHeight*1.6/2)+'px';
     document.getElementById('spacer').style.height = (window.innerHeight*.2)+'px';
     Client.viewport.style.left = Math.max(0, (window.innerWidth-window.innerHeight*1.6)/2)+'px';
-    document.getElementById('scrollbar').style.height = (window.innerHeight*.8)+'px';
+    Client.scroll.style.height = (window.innerHeight*.8)+'px';
   }
 
   getIdType(id) {
@@ -624,6 +625,7 @@ class Client {
       }
       Client.input.style.visibility = 'hidden';
       for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.visibility = 'hidden';
+      Client.scroll.scrollTop = Client.scroll.scrollHeight-Client.scroll.clientHeight;
     }
     } catch(e) {alert(e)}
   }
@@ -774,6 +776,7 @@ class Client {
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       Client.input.style.visibility = 'visible';
       for (const m of Client.messages.children) m.style.visibility = 'visible';
+      Client.scroll.scrollTop = Client.scroll.scrollHeight-Client.scroll.clientHeight;
       Client.input.focus();
     }
     if (k === 9) {
