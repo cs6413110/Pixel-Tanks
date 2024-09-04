@@ -27,6 +27,9 @@ class PixelTanks {
       * {
         font-family: Font;
       }
+      input {
+        font-size: auto;
+      }
     </style>`;
     GUI.canvas = document.createElement('CANVAS');
     Menus.scaler = document.createElement('CANVAS');
