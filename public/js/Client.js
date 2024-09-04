@@ -23,7 +23,6 @@ class Client {
       padding-left: 5px;
       padding-right: 5px;
       background-color: rgba(0, 0, 0, .2);
-      display: table;
     }
     #input {
       font-family: Font;
