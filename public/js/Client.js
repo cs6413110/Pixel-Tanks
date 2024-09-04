@@ -14,6 +14,7 @@ class Client {
       overflow-y: scroll;
     }
     #message {
+      font-family: Font;
       padding: 2px;
       padding-left: 5px;
       padding-right: 5px;
@@ -21,6 +22,7 @@ class Client {
       display: table;
     }
     #input {
+      font-family: Font;
       background-color: rgba(0, 0, 0, .2);
       border: none;
       outline: none;
