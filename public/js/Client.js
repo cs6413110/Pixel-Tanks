@@ -77,7 +77,7 @@ class Client {
     Client.messages.style.width = (window.innerHeight*1.6/2)+'px';
     document.getElementById('spacer').style.height = (window.innerHeight*.2)+'px';
     Client.viewport.style.left = Math.max(0, (window.innerWidth-window.innerHeight*1.6)/2)+'px';
-    document.getElementById('overflow').style.height = (window.innerHeight*.8)+'px';
+    document.getElementById('scrollbar').style.height = (window.innerHeight*.8)+'px';
   }
 
   getIdType(id) {
