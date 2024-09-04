@@ -64,6 +64,7 @@ class Client {
     Client.viewport = document.getElementById('viewport');
     Client.messages = document.getElementById('messages');
     Client.input = document.getElementById('input');
+    Client.messages.innerHTML = '';
     this.resize();
     this.animate = Date.now();
   }
@@ -612,11 +613,13 @@ class Client {
     if (e.keyCode === 13) {
       if (Client.input.value !== '') {
         this.lastMessage = Client.input.value;
-        this.socket.send({type: 'chat', msg: Client.input.value});
+        if (Client.input.value.charAt(0) === '/') { 
+          this.socket.send({type: 'command', data: Client.input.value.replace('/', '').split(' ')});
+        } else this.socket.send({type: 'chat', msg: Client.input.value});
         Client.input.value = '';
       }
       Client.input.style.visibility = 'hidden';
-      //for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.visibility = 'hidden';
+      for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.visibility = 'hidden';
     }
     } catch(e) {alert(e)}
   }
@@ -767,6 +770,7 @@ class Client {
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       Client.input.style.visibility = 'visible';
       for (const m of Children.messages.children) m.style.visibility = 'visible';
+      Client.input.focus();
     }
     if (k === 9) {
       this.fireType = this.fireType < 2 ? 2 : 1;
