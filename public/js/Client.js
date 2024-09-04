@@ -15,6 +15,7 @@ class Client {
     }
     #message {
       font-family: Font;
+      text-align: left;
       padding: 2px;
       padding-left: 5px;
       padding-right: 5px;
