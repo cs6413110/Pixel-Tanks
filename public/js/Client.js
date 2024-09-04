@@ -18,10 +18,11 @@ class Client {
       padding: 2px;
       padding-left: 5px;
       padding-right: 5px;
+      font-size: 15px;
       background-color: rgba(0, 0, 0, .2);
     }
     #input {
-      font-family: Font;
+      font-size: 15px;
       background-color: rgba(0, 0, 0, .2);
       border: none;
       outline: none;
