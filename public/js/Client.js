@@ -91,11 +91,12 @@ class Client {
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
       for (const log of data.logs) {
-        const msg = document.createElement('DIV');
+        const msg = document.createElement('DIV'), a = Client.scroll.scrollTop === Client.scroll.scrollHeight-Client.scroll.clientHeight;
         msg.id = 'message';
         msg.innerHTML = log.m;
         msg.style.color = log.c;
         Client.messages.appendChild(msg);
+        if (a) Client.scroll.scrollTop = Client.scroll.scrollHeight-Client.scroll.clientHeight;
       }
     }
     if (data.u) for (const u of data.u) {
