@@ -165,7 +165,7 @@ class Client {
   }
 
   generateWorld() {
-    this.world = new Singleplayer(this.ip);
+    if (this.gamemode === null) this.world = new Singleplayer(this.ip); else this.world = new Lobby();
     setTimeout(() => {
       this.world.add({...this.joinData.tank});
       setInterval(() => this.send(), 1000/60);
