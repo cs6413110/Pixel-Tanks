@@ -44,7 +44,11 @@ class PixelTanks {
       for (const menu in Menus.menus) Menus.menus[menu].adapt();
       if (PixelTanks.user.player) PixelTanks.user.player.resize();
     });
-    window.addEventListener('selectstart', () => document.activeElement.tagName === 'INPUT');
+    window.addEventListener('selectstart', e => {
+      if (document.activeElement.tagName === 'INPUT') return true;
+      e.preventDefault();
+      return false;
+    });
     window.addEventListener('mousemove', Menus.mouseLog);
   }
 
