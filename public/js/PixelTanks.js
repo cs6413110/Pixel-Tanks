@@ -45,7 +45,7 @@ class PixelTanks {
       if (PixelTanks.user.player) PixelTanks.user.player.resize();
     });
     window.addEventListener('selectstart', e => {
-      if (document.activeElement.tagName === 'INPUT') return true;
+      if (Client.input.style.visibility === 'visible') return true;
       e.preventDefault();
       return false;
     });
