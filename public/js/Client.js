@@ -86,7 +86,7 @@ class Client {
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
       for (const log of data.logs) {
-        const msg = document.createElement('DIV'), a = Client.messages.scrollTop === Client.messages.scrollHeight-Client.messages.clientHeight;
+        const msg = document.createElement('SPAN'), a = Client.messages.scrollTop === Client.messages.scrollHeight-Client.messages.clientHeight;
         msg.id = 'message';
         msg.innerHTML = log.m;
         msg.style.color = log.c;
