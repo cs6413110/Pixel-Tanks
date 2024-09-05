@@ -196,7 +196,7 @@ class PixelTanks {
             for (const c of levelCoords) {
               if (x > c[0]*1600/1049 && x < (c[0]+80)*1600/1049 && y > c[1]*1000/653 && y < (c[1]+74)*1000/653) {
                 Menus.removeListeners();
-                PixelTanks.user.player = new Client(levelCoords.indexOf(c)+10, false, null);
+                PixelTanks.user.player = new Client(levelCoords.indexOf(c)+1, false, null);//rip the 0 lol
               }
             }
           }
