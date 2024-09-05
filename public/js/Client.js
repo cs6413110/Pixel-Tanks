@@ -22,6 +22,9 @@ class Client {
       font-size: 20px;
       background-color: rgba(0, 0, 0, .2);
     }
+    #message img {
+      max-width: 200px;
+    }
     #input {
       font-size: 20px;
       background-color: rgba(0, 0, 0, .2);
