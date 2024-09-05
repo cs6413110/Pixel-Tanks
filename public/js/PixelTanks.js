@@ -44,11 +44,13 @@ class PixelTanks {
       for (const menu in Menus.menus) Menus.menus[menu].adapt();
       if (PixelTanks.user.player) PixelTanks.user.player.resize();
     });
-    window.addEventListener('selectstart', e => {
+    let ui = e => {
       if (Client.input.style.visibility === 'visible') return true;
       e.preventDefault();
       return false;
-    });
+    };
+    window.addEventListener('selectstart', ui);
+    window.addEventListner('dragstart', ui);
     window.addEventListener('mousemove', Menus.mouseLog);
   }
 
