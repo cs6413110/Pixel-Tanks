@@ -47,7 +47,7 @@ class Tank {
         if (!t.ded && !this.ded) { 
           if (Engine.getTeam(t.team) !== Engine.getTeam(this.team)) {
             if (!t.invis) this.eradar.push(Engine.toAngle(t.x-this.x, t.y-this.y));
-          } else if (d !== 0 && radar > 1) this.fradar.push(Engine.toAngle(t.x-this.x, t.y-this.y));
+          } else if (t.x !== this.x && t.y !== this.y && radar > 1) this.fradar.push(Engine.toAngle(t.x-this.x, t.y-this.y));
         }
       }
       this.host.updateEntity(this, ['eradar', 'fradar']);
