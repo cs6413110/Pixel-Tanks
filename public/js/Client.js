@@ -14,7 +14,7 @@ class Client {
       overflow-y: scroll;
     }
     #message {
-      overflow: hidden;
+      display: table;
       text-align: left;
       padding: 2px;
       padding-left: 5px;
