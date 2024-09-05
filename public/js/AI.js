@@ -215,7 +215,7 @@ class AI {
     // if (this.grapple) this.grappleCalc(); No grapple for AI yet...
     if (this.reflect) {
       const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
-      for (let i = Math.max(0, hx-2); i <= Math.min(29, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(29, hy+2); l++) {
+      for (let i = Math.max(0, hx-2); i <= Math.min(59, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(59, hy+2); l++) {
         for (const entity of this.host.cells[i][l]) {
           if (entity instanceof Shot) {
             const xd = entity.x-(this.x+40), yd = entity.y-(this.y+40), td = Math.sqrt(xd**2+yd**2);
@@ -347,7 +347,7 @@ class AI {
     }
     for (const c of cir) {
       const x = c[0]+epx, y = c[1]+epy, d = (x-tpx)**2+(y-tpy)**2;
-      if (x >= 0 && y >= 0 && x <= 29 && y <= 29) coords.push({x, y, d});
+      if (x >= 0 && y >= 0 && x <= 59 && y <= 59) coords.push({x, y, d});
     }
     if (!coords.length) return this.path = {p: [], m: this.mode, t: Date.now(), o: Date.now()};
     coords.sort((a, b) => this.mode !== 2 ? a.d - b.d : b.d - a.d);
@@ -418,7 +418,7 @@ class AI {
   damageCalc(x, y, a, u) {
     if (this.immune+500 > Date.now() || this.reflect) return;
     const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
-    for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) for (const entity of this.host.cells[i][l]) {
+    for (let i = Math.max(0, hx-1); i <= Math.min(59, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(59, hy+1); l++) for (const entity of this.host.cells[i][l]) {
       if (entity instanceof Shot) if (entity.target) if (entity.target.id === this.id && entity.type === 'usb') a *= Engine.getTeam(entity.team) === Engine.getTeam(this.team) ? .9 : 1.1;
     }
     if (this.shields > 0 && a > 0) return this.shields -= a;
