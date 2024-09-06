@@ -1,8 +1,1 @@
-break game
-or fix game
-
-that is the question
-
-
-violence is not the answer, its a question
-and the answer is yes
+Pixel Tanks is a multiplayer and singleplayer battle royale indie game. It is very buggy and experimental since it is in beta. It is designed to be an unblockable fun game to play with friends at work or school.
