@@ -37,7 +37,10 @@ class Shot {
       return false;
     } else if (this.type === 'fire') {
       if (isBlock) return this.host.b.push(A.template('Block').init(e.x, e.y, 'fire', this.team, this.host));
-      if (e && !e.immune) e.fire = {team: this.team, time: Date.now()};
+      if (e && !e.immune) {
+        e.fireTime = Date.now();
+        e.fire = this.team;
+      }
     } else if (e) {
       if (isBlock) e.damage(this.damage); else if (Engine.getTeam(e.team) !== Engine.getTeam(this.team)) e.damageCalc(this.x, this.y, this.damage, Engine.getUsername(this.team));
     }
