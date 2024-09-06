@@ -14,7 +14,8 @@ class Tank {
     for (const p of Tank.args) this[p] = data[p];
     if (data.socket) this.socket = data.socket;
     this.host = host;
-    this.fire = {time: 0, team: this.team};
+    this.fire = false;
+    this.fireTime = 0;
     this.hp = this.maxHp = this.rank*10+300;
     this.canShield = this.canBashed = this.canInvis = !(this.damage = false);
     this.team = data.username+':'+this.id;
@@ -57,7 +58,9 @@ class Tank {
       this.setValue('dedEffect', this.dedEffect); // REMOVE THIS TEMPORARY
     }
     if (this.pushback !== 0) this.pushback += 0.5; // maybe change to (-this.pushback)?
-    if (Date.now()-this.fire.time < 4000 && Engine.getTeam(this.fire.team) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire.team));
+    if (Date.now()-this.fireTime < 4000) {
+      if (this.fire && Engine.getTeam(this.fire) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire));
+    } else this.fire = false;
     if (this.damage) {
       this.damage.y--;
       this.host.updateEntity(this, ['damage']);
@@ -92,8 +95,8 @@ class Tank {
         if (entity instanceof Block) {
           if (!this.ded && !this.immune && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
             if (entity.type === 'fire') {
-              this.fire.team = entity.team;
-              this.fire.time = Date.now();
+              this.fire = entity.team;
+              this.fireTime = Date.now();
             } else if (entity.type === 'spike' && !teamMatch && spikeLimiter) spikeLimiter = this.damageCalc(this.x, this.y, .5, Engine.getUsername(entity.team)) && false;
           }
         } else if (entity instanceof Tank || entity instanceof AI) {
