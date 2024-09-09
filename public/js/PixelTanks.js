@@ -621,6 +621,7 @@ class PixelTanks {
                     if (PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i] === lastDeath) {
                         PixelTanks.userData.deathEffect = 'undefined';
                         this.loaded = false;
+                      }
                     }
                   return;
                 }
