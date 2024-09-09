@@ -66,6 +66,12 @@ class PixelTanks {
     GUI.draw.fillRect(410, 610, progress*780, 40);
   }
 
+  static renderCosmetic(i, x, y, w, h, r) { // usage: PixelTanks.renderCosmetic(image, x, y, width, height, rotation);
+    if (!i) return;
+    let yd = i.height, xd = yd*40/45, frames = i.width/xd, speed = 100, frame = Math.floor(((Date.now()-this.animate)%(frames*speed))/speed); 
+    GUI.drawImage(i, x, y, 80, 90, 1, 40, 40, 0, 0, r, frame*xd, 0, xd, yd);
+  }
+
   static boot() {
     PixelTanks.user = {};
     PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
@@ -1051,12 +1057,6 @@ class PixelTanks {
     GUI.draw.fill();
     GUI.draw.rotate(-a*Math.PI/180);
     GUI.draw.translate(-x-40/80*s, -y-40/80*s);
-  }
-
-  static renderCosmetic(i, x, y, w, h, r) { // usage: PixelTanks.renderCosmetic(image, x, y, width, height, rotation);
-    if (!i) return;
-    let yd = i.height, xd = yd*40/45, frames = i.width/xd, speed = 100, frame = Math.floor(((Date.now()-this.animate)%(frames*speed))/speed); 
-    GUI.drawImage(i, x, y, 80, 90, 1, 40, 40, 0, 0, r, frame*xd, 0, xd, yd);
   }
 
   static purchase(type, stat) {
