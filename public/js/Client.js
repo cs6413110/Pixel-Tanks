@@ -644,7 +644,7 @@ class Client {
   }
 
   mousemove(e) {
-    this.mouse = {x: (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2), y: e.clientY};
+    this.mouse = {x: (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)*1000/window.innerHeight, y: e.clientY*1000/window.innerHeight};
     this.tank.r = Engine.toAngle(e.clientX-window.innerWidth/2, e.clientY-window.innerHeight/2);
   }
 
