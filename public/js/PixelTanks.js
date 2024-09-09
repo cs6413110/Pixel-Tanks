@@ -578,8 +578,13 @@ class PixelTanks {
                 if (Engine.collision(x, y, 0, 0, xo[i%3], yo[Math.floor(i/3)], 80, 80)) {
                   let simple = PixelTanks.userData.perk.reduce((a, c) => a.concat(Math.floor(c)), []);
                   if (!simple.includes(i+1) && PixelTanks.userData.perks[i]) {
+                    const lastperk = PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1];
                     PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = i+1+PixelTanks.userData.perks[i]/10;
                     this.loaded = false;
+                    if (PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] === lastperk) {
+                        PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = 'undefined';
+                        this.loaded = false;
+                      }
                   } 
                 }
               }  
@@ -610,9 +615,13 @@ class PixelTanks {
                   } else {
                     const [deathEffect, amount] = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i].split('#');
                     if (amount === undefined || Number(amount) <= 1) return PixelTanks.userData.deathEffects.splice(this.deathEffectsMenu*16+i, 1);
+                    const lastDeath = PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i];
                     PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i] = deathEffect+'#'+(Number(amount)-1);
                     this.loaded = false;
-                  }
+                    if (PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i] === lastDeath) {
+                        PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i] = 'undefined';
+                        this.loaded = false;
+                    }
                   return;
                 }
               }
@@ -668,7 +677,9 @@ class PixelTanks {
           }
           let perkKey = [0, 'shield', 'thermal', 'scavenger', 'cooldown', 'refresh', 'radar', 'hook', 'adrenaline', 'core'];
           if (PixelTanks.userData.perk[0]) GUI.drawImage(PixelTanks.images.menus[perkKey[Math.floor(PixelTanks.userData.perk[0])]], 844, 816, 88, 88, 1, 0, 0, 0, 0, undefined, ((PixelTanks.userData.perk[0]%1)*10-1)*40, 0, 40, 40);
-          if (PixelTanks.userData.perk[1]) GUI.drawImage(PixelTanks.images.menus[perkKey[Math.floor(PixelTanks.userData.perk[1])]], 932, 816, 80, 80, 1, 0, 0, 0, 0, undefined, ((PixelTanks.userData.perk[1]%1)*10-1)*40, 0, 40, 40);
+          if (!PixelTanks.userData.perk[0]) GUI.drawImage(PixelTanks.images.menus.broke, 844, 816, 88, 88, 1);
+          if (PixelTanks.userData.perk[1]) GUI.drawImage(PixelTanks.images.menus[perkKey[Math.floor(PixelTanks.userData.perk[1])]], 932, 816, 88, 88, 1, 0, 0, 0, 0, undefined, ((PixelTanks.userData.perk[1]%1)*10-1)*40, 0, 40, 40);
+          if (!PixelTanks.userData.perk[1]) GUI.drawImage(PixelTanks.images.menus.broke, 932, 816, 88, 88, 1);
           PixelTanks.renderBottom(680, 380, 240, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
           PixelTanks.renderTop(680, 380, 240, PixelTanks.userData.color, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
@@ -689,7 +700,7 @@ class PixelTanks {
           if (newClass !== 'undefined') GUI.drawImage(PixelTanks.images.menus.alert, 1102, 806, 20, 20, 1);
           const deathEffectData = PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect+'_'];
           if (PixelTanks.userData.deathEffect && deathEffectData) GUI.drawImage(PixelTanks.images.deathEffects[PixelTanks.userData.deathEffect], 448, 220, 88, 88, 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-this.time)/deathEffectData.speed)%deathEffectData.frames)*200, 0, 200, 200);
-          if (!PixelTanks.userData.deathEffect && deathEffectData) GUI.drawImage(PixelTanks.images.menus.broke, 448, 220, 88, 88, 1);
+          if (!(PixelTanks.userData.deathEffect && deathEffectData)) GUI.drawImage(PixelTanks.images.menus.broke, 448, 220, 88, 88, 1);
           Menus.menus.inventory.buttonEffect = true;
           if (this.perkTab || this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.deathEffectsTab) {
             Menus.menus.inventory.buttonEffect = false;
