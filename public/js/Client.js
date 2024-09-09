@@ -85,7 +85,6 @@ class Client {
   }
 
   interpret(data) {
-    try {
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
     if (data.logs) {
@@ -116,7 +115,6 @@ class Client {
       i = this.hostupdate[this.getIdType(d)].findIndex(e => e.id === d);
       if (i !== -1) this.hostupdate[this.getIdType(d)].splice(i, 1);
     }
-    } catch(e) {alert(e)}
   }
 
   connect() {
@@ -224,11 +222,7 @@ class Client {
   drawBlock(b) {
     if (b.type === 'smoke') return; // BREAD WHY IS THERE A SMOKE BLOCK >:(
     const size = (b.type === 'airstrike' || b.type === 'smoke' || b.type === 'instastrike' || b.type === 'doom') ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
-    try {
-      GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type.includes('fire') ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type.includes('fire') ? 50 : PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
-    } catch(e) {
-      console.log('err drawing '+type+' '+b.type);
-    }
+    GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type.includes('fire') ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type.includes('fire') ? 50 : PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
   }
 
   drawShot(s) {
@@ -418,7 +412,6 @@ class Client {
   }
 
   frame() {
-    try {
     GUI.clear();
     this._fps++;
     this.render = requestAnimationFrame(() => this.frame());
@@ -603,12 +596,11 @@ class Client {
       }
       Menus.menus.pause.draw([1200, 0, 400, 1000]);
     }
-    } catch(e) {alert(e)};
   }
 
   chat(e) {
-    try {
     if (e.keyCode === 9) {
+      e.preventDefault();
       const runoff = Client.input.value.split(' ').reverse()[0];
       for (const player of this.players) if (player.startsWith(runoff)) return Client.input.value = Client.input.value.split(' ').reverse().slice(1).reverse().concat(player).join(' ');
     }
@@ -625,7 +617,6 @@ class Client {
       for (let i = 0; i < Client.messages.children.length-3; i++) Client.messages.children[i].style.visibility = 'hidden';
       Client.messages.scrollTop = Client.messages.scrollHeight-Client.messages.clientHeight;
     }
-    } catch(e) {alert(e)}
   }
 
   keydown(e) {
