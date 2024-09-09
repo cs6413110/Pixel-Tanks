@@ -619,7 +619,7 @@ class PixelTanks {
                     PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i] = deathEffect+'#'+(Number(amount)-1);
                     this.loaded = false;
                     if (PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i] === lastDeath) {
-                        PixelTanks.userData.deathEffects[this.deathEffectsMenu*16+i] = 'undefined';
+                        PixelTanks.userData.deathEffect = 'undefined';
                         this.loaded = false;
                     }
                   return;
