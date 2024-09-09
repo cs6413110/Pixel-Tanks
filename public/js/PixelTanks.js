@@ -577,15 +577,9 @@ class PixelTanks {
               for (let i = 0; i < 9; i++) {
                 if (Engine.collision(x, y, 0, 0, xo[i%3], yo[Math.floor(i/3)], 80, 80)) {
                   let simple = PixelTanks.userData.perk.reduce((a, c) => a.concat(Math.floor(c)), []);
-                  if (!simple.includes(i+1) && PixelTanks.userData.perks[i]) {
-                    const lastperk = PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1];
-                    PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = i+1+PixelTanks.userData.perks[i]/10;
-                    this.loaded = false;
-                    if (PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] === lastperk) {
-                        PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = 'undefined';
-                        this.loaded = false;
-                      }
-                  } 
+                  if (!simple.includes(i+1) && PixelTanks.userData.perks[i]) PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = i+1+PixelTanks.userData.perks[i]/10;
+                  if (simple.includes(i+1) && PixelTanks.userData.perks[i]) PixelTanks.userData.perk[Menus.menus.inventory.currentPerk-1] = 'undefined';
+                  this.loaded = false;
                 }
               }  
             } else if (this.cosmeticTab) {
