@@ -832,7 +832,7 @@ class PixelTanks {
         },
       },
       pause: {
-        buttons: [[128, 910, 1460, 76, function() {
+        buttons: [[1218, 910, 368, 76, function() {
           this.paused = false;
           PixelTanks.user.player.implode();
           Menus.trigger('main');
