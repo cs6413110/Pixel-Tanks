@@ -855,7 +855,7 @@ class Client {
       if (this.paused) {
         Menus.menus.pause.addListeners();
       } else {
-        Menus.removeListeners();
+        Menus.menus.pause.removeListeners();
       }
     }
     if (k === 18) {
