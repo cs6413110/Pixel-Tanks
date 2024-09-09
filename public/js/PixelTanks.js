@@ -69,7 +69,7 @@ class PixelTanks {
   static renderCosmetic(i, x, y, w, h, r) { // usage: PixelTanks.renderCosmetic(image, x, y, width, height, rotation);
     if (!i) return;
     let yd = i.height, xd = yd*40/45, frames = i.width/xd, speed = 100, frame = Math.floor((Date.now()%(frames*speed))/speed); 
-    GUI.drawImage(i, x, y, 80, 90, 1, w/2, w/2, 0, 0, r, frame*xd, 0, xd, yd);
+    GUI.drawImage(i, x, y, w, h, 1, w/2, w/2, 0, 0, r, frame*xd, 0, xd, yd);
   }
 
   static boot() {
