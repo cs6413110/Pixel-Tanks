@@ -845,7 +845,7 @@ class Client {
         this.booster = setTimeout(() => {
           this.speed = 4;
           this.tank.immune = false;
-        }, 250);
+        }, 500);
       }
       if (PixelTanks.userData.class === 'medic') this.fire('healmissle');
       if (PixelTanks.userData.class === 'fire') for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+90+i});
