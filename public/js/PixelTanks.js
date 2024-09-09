@@ -161,9 +161,9 @@ class PixelTanks {
             for (const deathEffect of Object.keys(deathEffects)) deathEffectData.push(deathEffect+'#'+deathEffects[deathEffect]);
             PixelTanks.userData.deathEffects = deathEffectData;
           }*/
-          if (PixelTanks.userData.cosmetic_body !== 'undefined') renderCosmetic((PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body]), 160, 180, 1200, 600, 0);
-          if (PixelTanks.userData.cosmetic !== 'undefined') renderCosmetic((PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic]), 160, 180, 1200, 600, 0);
-          if (PixelTanks.userData.cosmetic_hat !== 'undefined') renderCosmetic((PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat]), 160, 180, 1200, 600, 0);
+          //if (PixelTanks.userData.cosmetic_body !== 'undefined') renderCosmetic((PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body]), 160, 180, 1200, 600, 0);
+          //if (PixelTanks.userData.cosmetic !== 'undefined') renderCosmetic((PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic]), 160, 180, 1200, 600, 0);
+          //if (PixelTanks.userData.cosmetic_hat !== 'undefined') renderCosmetic((PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat]), 160, 180, 1200, 600, 0);
           if (newClass !== 'undefined') GUI.drawImage(PixelTanks.images.menus.alert, 530, 830, 20, 20, 1);
         },
       },
