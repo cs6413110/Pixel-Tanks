@@ -69,7 +69,7 @@ class PixelTanks {
   static renderCosmetic(i, x, y, w, h, r) { // usage: PixelTanks.renderCosmetic(image, x, y, width, height, rotation);
     if (!i) return;
     let yd = i.height, xd = yd*40/45, frames = i.width/xd, speed = 100, frame = Math.floor(((Date.now()-this.animate)%(frames*speed))/speed); 
-    GUI.drawImage(i, x, y, 80, 90, 1, 40, 40, 0, 0, r, frame*xd, 0, xd, yd);
+    GUI.drawImage(i, x, y, 80, 90, 1, w/2, w/2, 0, 0, r, frame*xd, 0, xd, yd);
   }
 
   static boot() {
@@ -130,8 +130,6 @@ class PixelTanks {
         ],
         listeners: {},
         cdraw: function() {
-          PixelTanks.convertCosmeticFormat(); // TEMP
-          PixelTanks.userData.stats[4] = 20;
           if (!PixelTanks.userData.perks) PixelTanks.userData.perks = [false, false, false, false, false, false, false, false, false];
           if (!PixelTanks.userData.perk) PixelTanks.userData.perk = [0, 0];
           GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
@@ -139,32 +137,9 @@ class PixelTanks {
           GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
           PixelTanks.renderTop(1200, 600, 160, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.top, 1200, 600, 160, 180, 1);
-          /*if (!PixelTanks.userData.cosmetics[0].includes('#')) {
-            let cosmetics = {};
-            for (const cosmetic of PixelTanks.userData.cosmetics) {
-              if (cosmetics[cosmetic] === undefined) {
-                cosmetics[cosmetic] = 1;
-              } else cosmetics[cosmetic]++;
-            }
-            let cosmeticData = [];
-            for (const cosmetic of Object.keys(cosmetics)) cosmeticData.push(cosmetic+'#'+cosmetics[cosmetic]);
-            PixelTanks.userData.cosmetics = cosmeticData;
-          }
-          if (!PixelTanks.userData.deathEffects[0].includes('#')) {
-            let deathEffects = {};
-            for (const deathEffect of PixelTanks.userData.deathEffects) {
-              if (deathEffects[deathEffect] === undefined) {
-                deathEffects[deathEffect] = 1;
-              } else deathEffects[deathEffect]++;
-            }
-            let deathEffectData = [];
-            for (const deathEffect of Object.keys(deathEffects)) deathEffectData.push(deathEffect+'#'+deathEffects[deathEffect]);
-            PixelTanks.userData.deathEffects = deathEffectData;
-          }*/
-          //if (PixelTanks.userData.cosmetic_body !== 'undefined') renderCosmetic((PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body]), 160, 180, 1200, 600, 0);
-          //if (PixelTanks.userData.cosmetic !== 'undefined') renderCosmetic((PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic]), 160, 180, 1200, 600, 0);
-          //if (PixelTanks.userData.cosmetic_hat !== 'undefined') renderCosmetic((PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat]), 160, 180, 1200, 600, 0);
-          if (newClass !== 'undefined') GUI.drawImage(PixelTanks.images.menus.alert, 530, 830, 20, 20, 1);
+          if (PixelTanks.userData.cosmetic_body !== '') PixelTanks.renderCosmetic(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 1200, 600, 160, 180, 0);
+          if (PixelTanks.userData.cosmetic !== '') PixelTanks.renderCosmetic(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 1200, 600, 160, 180, 0);
+          if (PixelTanks.userData.cosmetic_hat !== '') PixelTanks.renderCosmetic(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 1200, 600, 160, 180, 0);
         },
       },
       singleplayer: {
@@ -685,9 +660,9 @@ class PixelTanks {
           GUI.drawImage(PixelTanks.images.tanks.bottom, 680, 380, 240, 240, 1);
           PixelTanks.renderTop(680, 380, 240, PixelTanks.userData.color, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
           GUI.drawImage(PixelTanks.images.tanks.top, 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
-          if (PixelTanks.userData.cosmetic_body && PixelTanks.userData.cosmetic_body !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
-          if (PixelTanks.userData.cosmetic && PixelTanks.userData.cosmetic !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
-          if (PixelTanks.userData.cosmetic_hat && PixelTanks.userData.cosmetic_hat !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 680, 380, 240, 270, 1, 120, 120, 0, 0, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
+          if (PixelTanks.userData.cosmetic_body !== 'undefined') PixelTanks.renderCosmetic(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 680, 380, 240, 270, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
+          if (PixelTanks.userData.cosmetic !== 'undefined') PixelTanks.renderCosmetic(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 680, 380, 240, 270, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
+          if (PixelTanks.userData.cosmetic_hat !== 'undefined') PixelTanks.renderCosmetic(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 680, 380, 240, 270, (-Math.atan2(this.target.x, this.target.y)*180/Math.PI+360)%360);
           const key = {tactical: [7, 7], fire: [7, 61], medic: [7, 115], stealth: [61, 7], builder: [61, 61], warrior: [61, 115]};
           if (!PixelTanks.userData.class) PixelTanks.userData.class = 'undefined';
           if (!PixelTanks.userData.classes || !PixelTanks.userData.class || PixelTanks.userData.class === 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, 1112, 816, 88, 88, 1);
@@ -750,7 +725,7 @@ class PixelTanks {
             GUI.drawImage(PixelTanks.images.menus.cosmeticTab, 518+(a ? 62 : 0), 280, 564-(a ? 62 : 0)-(b ? 62 : 0), 440, 1, 0, 0, 0, 0, undefined, (a ? 31 : 0), 0, 282-(a ? 31 : 0)-(b ? 31 : 0), 220);
             for (let i = this.cosmeticMenu*16; i < Math.min((this.cosmeticMenu+1)*16, PixelTanks.userData.cosmetics.length); i++) {
               try {
-                GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetics[i].split('#')[0]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88, 1);
+                PixelTanks.renderCosmetic(PixelTanks.images.cosemtics[PixelTanks.userData.cosmetics[i].split('#')[0]], 598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88, 0);
               } catch(e) {
                 GUI.draw.fillStyle = '#FF0000';
                 GUI.draw.fillRect(598+(i%4)*108, 298+Math.floor((i%16)/4)*108, 88, 88);
