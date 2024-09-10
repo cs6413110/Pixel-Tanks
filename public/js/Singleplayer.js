@@ -1,9 +1,8 @@
 class Singleplayer extends Engine {
   constructor(level) {
-    if (typeof level === 'object') { // custom level handler for breads
-      super([level.code]);
-      
-      this.level = level.name;
+    if (level === null) {
+      super(['R1685X10RX4RX3RX4R36X10RX4RX3RX4R36X10RX4RX3RX4R36X10R2X2R2X3R2X2R37X10RX13R36X10RX13R36X24R36X24RXR34Z10RX13RX2R33X10RX13RX3R32X10RX17R32X2IX4IX2RX17R32X10RX17R32X2TX4TXRX18R32X8RX15RX3R32X7RX16RX2R40X17RXR34X24R36X24R36XSX22R36X24R36X24R37X2R7X4R7X2R37X4RX14RX4R36X4RX14RX4R36X4RX14RX4R391']);
+      this.ondeath = () => {}; // don't deal with this rn...
     } else {
       const levels = [
       'R3066I29R31IX3Q2IZ2X4QX2QX2I2X3GX3IR31IX5IZX5QX3QX3ZX3QX2IR31IX2SX2IX3IXQX4ZX2QX3QTQZIR31IX8ZIX3QX2QX2GX4QXZIR31IX7Z2IX2QX3QGXIZX4GXIR31I29R145',
@@ -15,40 +14,13 @@ class Singleplayer extends Engine {
       'R1871I33R27IG31IR27ISX2Q2X2WX3Q2X3QXQX3WX4Q3WIR27IG31IR27I33R1456',
       'R3600',
       'R3600',
-    ];
+      ];
       if (level > levels.length || level < 1) level = 1;
       super([levels[level-1]]);
-      this.level = level;
     }
   }
 
   ontick() {
-
-    /*
-      DELETE ALL THESE COMMENTS AFTER U READ
-      How to use custom levels with custom names(for tutorials):
-      
-      When creating the tank, do:
-      ...new Client({name: 'bread-level#128372183213', code: *insert code NO COMMA*}, false, null)
-
-      To run a normal level do:
-      ...new Client(1, false, null);
-      *runs the first level in existance*
-
-      HOW DO I DRAW MEH TEXT:
-
-      Use the tutorial below. The level name for custom levels is the one you set :)
-    */
-    if (this.level === 1) {
-      // GUI.drawText(...
-    } else if (this.level === 'custom bread level') {
-      const drawBlockX = 5, drawBlockY = 3;
-      GUI.drawText('HALP', drawBlockX*100+50, drawBlockY*100+50, 50, '#FFFFFF', .5);
-      // 50 => Text size
-      // F spam => color hex code
-      // .5 => center text(0 = start left, 1 = start right)
-      // delete all my comments when u add ur cringe
-    }
   }
 
   ondeath(t, m) {
