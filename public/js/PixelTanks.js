@@ -28,7 +28,7 @@ class PixelTanks {
         font-family: Font;
       }
       input {
-        font-size: 30px;
+        font-size: .08vh;
       }
     </style>`;
     GUI.canvas = document.createElement('CANVAS');
