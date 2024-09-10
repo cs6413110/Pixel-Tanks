@@ -667,7 +667,7 @@ class PixelTanks {
         buttons: [[1218, 910, 368, 76, function() {
           this.paused = false;
           PixelTanks.user.player.implode();
-          Menus.trigger('main');
+          PixelTanks.main();
           this.multiplayer = undefined;
         }, true]],
         listeners: {},
@@ -675,9 +675,7 @@ class PixelTanks {
       },
     }
     
-      for (const m in Menus.menus) {
-        Menus.menus[m] = new Menu(Menus.menus[m], m);
-        }
+      for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
     }
     document.head.appendChild(config);
     PixelTanks.socket = new MegaSocket(window.location.protocol === 'https:' ? 'wss://'+window.location.hostname : 'ws://141.148.128.231', {keepAlive: true, reconnect: true, autoconnect: true});
@@ -738,11 +736,13 @@ class PixelTanks {
       });
   }
 
-  static auth(u, p, t) {
-    Network.auth(u, p, t, () => PixelTanks.getData(() => {
-      Menus.removeListeners();
-      PixelTanks.user.player = new Client(null, false, null);
-    }));
+  static auth(u, p, t) { // simplify direct call to Network.auth
+    Network.auth(u, p, t, () => PixelTanks.getData(() => PixelTanks.main()));
+  }
+  
+  static main() {
+    Menus.removeListeners();
+    PixelTanks.user.player = new Client(null, false, null);
   }
 
   static switchTab(id, n) {
