@@ -19,7 +19,7 @@ class Client {
       padding: 2px;
       padding-left: 5px;
       padding-right: 5px;
-      font-size: 0.4vh;
+      font-size: 80vh;
       background-color: rgba(0, 0, 0, .2);
     }
     #message img {
