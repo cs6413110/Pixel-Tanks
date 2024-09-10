@@ -44,7 +44,7 @@ class Client {
     this.xp = this.crates = this.kills = this.coins = this._ops = this._ups = this._fps = this.debugMode = 0;
     this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
     this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], entities: [], tickspeed: -1};
-    this.yeet = this.paused = this.canRespawn = false;
+    this.paused = this.canRespawn = false;
     this.multiplayer = multiplayer;
     this.gamemode = gamemode;
     this.ip = ip;
@@ -166,7 +166,7 @@ class Client {
   }
 
   generateWorld() {
-    if (this.gamemode === null) this.world = new Singleplayer(this.ip); else this.world = new Lobby();
+    this.world = new Singleplayer(this.ip);
     setTimeout(() => {
       this.world.add({...this.joinData.tank});
       setInterval(() => this.send(), 1000/60);
