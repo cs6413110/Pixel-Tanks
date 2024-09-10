@@ -742,7 +742,7 @@ class PixelTanks {
     Network.auth(u, p, t, () => PixelTanks.getData(() => {
       Menus.removeListeners();
       PixelTanks.user.player = new Client(null, false, null);
-    });
+    }));
   }
 
   static switchTab(id, n) {
