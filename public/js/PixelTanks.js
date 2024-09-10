@@ -6,9 +6,21 @@ class PixelTanks {
     PixelTanks.boot();
   }
 
+  static shortcut() {
+    if (PixelTanks.user.player) PixelTanks.user.player.implode();
+    PixelTanks.user.player = new Client('141.148.128.231:8080', true, confirm('Ok for ffa, cancel for tdm') ? 'ffa' : 'tdm');
+    Menus.removeListeners();
+  }
+  
   static setup() {
     document.body.innerHTML += `
+    <button id='cut' onclick='PixelTanks.shortcut()'>FFA Shortcut</button>
     <style>
+      #cut {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
       html, body {
         margin: 0;
         padding: 0;
