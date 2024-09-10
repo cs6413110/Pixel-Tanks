@@ -124,36 +124,6 @@ class PixelTanks {
           }
         },
       },
-      main: {
-        buttons: [
-          [972, 840, 88, 88, 'settings1', true],
-          [532, 616, 536, 136, 'multiplayer', true],
-          [648, 840, 88, 88, 'shop', true],
-          [540, 840, 88, 88, 'inventory', true],
-          [756, 840, 88, 88, 'crate', true],
-          [864, 840, 88, 88, 'help', true],
-          [532, 392, 536, 136, 'singleplayer', true],
-          /*[320, 920, 80, 80, function() {
-            clearInterval(PixelTanks.autosave);
-            PixelTanks.user.token = undefined;
-            PixelTanks.user.username = undefined;
-            Menus.trigger('start');
-          }],*/ // logout
-        ],
-        listeners: {},
-        cdraw: function() {
-          if (!PixelTanks.userData.perks) PixelTanks.userData.perks = [false, false, false, false, false, false, false, false, false];
-          if (!PixelTanks.userData.perk) PixelTanks.userData.perk = [0, 0];
-          GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
-          PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
-          GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
-          PixelTanks.renderTop(1200, 600, 160, PixelTanks.userData.color);
-          GUI.drawImage(PixelTanks.images.tanks.top, 1200, 600, 160, 180, 1);
-          if (PixelTanks.userData.cosmetic_body !== '') PixelTanks.renderCosmetic(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 1200, 600, 160, 180, 0);
-          if (PixelTanks.userData.cosmetic !== '') PixelTanks.renderCosmetic(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 1200, 600, 160, 180, 0);
-          if (PixelTanks.userData.cosmetic_hat !== '') PixelTanks.renderCosmetic(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 1200, 600, 160, 180, 0);
-        },
-      },
       singleplayer: {
         buttons: [
           [25, 28, 80, 74, 'main', true],
@@ -284,7 +254,7 @@ class PixelTanks {
           }
         }
       },
-      crate: {
+      /*crate: {
         buttons: [
           [416, 20, 81, 81, 'main', true],
           [232, 308, 488, 488, function() {PixelTanks.openCrate(0, cosmetAmount)}, false],
@@ -309,58 +279,11 @@ class PixelTanks {
           if (deathAmount === 10) GUI.draw.strokeRect(1072, 816, 104, 52);
           if (deathAmount === 100) GUI.draw.strokeRect(1196, 816, 104, 52);
         }
-      },
+      },*/
       settings: {
         buttons: [
           [59, 56, 53, 53, 'main', true],
           [397, 65, 38, 35, 'keybinds', true],
-        ],
-        listeners: {},
-        cdraw: function() {},
-      },
-      htp1: {
-        buttons: [
-          [12, 12, 120, 120, 'main', true],
-          [476, 224, 320, 80, 'htp2', true],
-          [804, 224, 320, 80, 'htp3', true],
-          [1132, 224, 320, 80, 'htp4', true],
-        ],
-        listeners: {},
-        cdraw: function() {},
-      },
-      htp2: {
-        buttons: [
-          [12, 12, 120, 120, 'main', true],
-          [148, 224, 320, 80, 'htp1', true],
-          [804, 224, 320, 80, 'htp3', true],
-          [1132, 224, 320, 80, 'htp4', true],
-        ],
-        listeners: {},
-        cdraw: function() {},
-      },
-      htp3: {
-        buttons: [
-          [12, 12, 120, 120, 'main', true],
-          [148, 224, 320, 80, 'htp1', true],
-          [476, 224, 320, 80, 'htp2', true],
-          [1132, 224, 320, 80, 'htp4', true],
-        ],
-        listeners: {},
-        cdraw: function() {},
-      },
-      htp4: {
-        buttons: [
-          [12, 12, 120, 120, 'main', true],
-          [148, 224, 320, 80, 'htp1', true],
-          [476, 224, 320, 80, 'htp2', true],
-          [804, 224, 320, 80, 'htp3', true],
-        ],
-        listeners: {},
-        cdraw: function() {},
-      },
-      void: {
-        buttons: [
-          [12, 12, 120, 120, 'main', true],
         ],
         listeners: {},
         cdraw: function() {},
@@ -418,96 +341,6 @@ class PixelTanks {
         listeners: {},
         cdraw: function() {
         },
-      },
-      help: {
-        buttons: [
-          [44, 44, 80, 80, 'main', true],
-          [684, 764, 236, 80, 'helpinventory', true],
-          [1024, 764, 236, 80, 'helpcosmetic', true],
-          [1344, 764, 236, 80, 'helpclass', true],
-          [44, 884, 236, 80, 'helpmode', true],
-          [364, 884, 236, 80, 'helpvocab', true],
-          [1344, 884, 236, 80, 'helpteam', true],
-        ],
-        listeners: {
-          mousedown: function(e) {
-            const {x, y} = Menus;
-            const helpCoords = [
-              [44, 644],
-              [364, 644],
-              [684, 644],
-              [1024, 644],
-              [1344, 644],
-              [44, 764],
-              [364, 764],
-              [684, 884],
-              [1344, 884],
-            ];
-            for (const c of helpCoords) {
-              if (x > c[0] && x < c[0]+80 && y > c[1] && y < c[1]+74) {
-                Menus.removeListeners();
-                PixelTanks.user.player = new Client(helpCoords.indexOf(c)+1, false, null);
-              }
-            }
-          }
-        },
-        cdraw: function() {
-          const helpCoords = [
-              [44, 644],
-              [364, 644],
-              [684, 644],
-              [1024, 644],
-              [1344, 644],
-              [44, 764],
-              [364, 764],
-              [684, 884],
-              [1344, 884],
-            ];
-          GUI.draw.fillStyle = '#000000';
-          for (const c of helpCoords) GUI.draw.fillRect(c[0], c[1], 80, 74);
-        },
-      },
-      helpinventory: {
-        buttons: [
-          [120, 132, 120, 120, 'help', true],
-        ],
-        listeners: {},
-        cdraw: function() {},
-      },
-      helpcosmetic: {
-        buttons: [
-          [120, 132, 120, 120, 'help', true],
-        ],
-        listeners: {},
-        cdraw: function() {},
-      },
-      helpclass: {
-        buttons: [
-          [120, 132, 120, 120, 'help', true],
-        ],
-        listeners: {},
-        cdraw: function() {},
-      },
-      helpmode: {
-        buttons: [
-          [120, 132, 120, 120, 'help', true],
-        ],
-        listeners: {},
-        cdraw: function() {},
-      },
-      helpvocab: {
-        buttons: [
-          [120, 132, 120, 120, 'help', true],
-        ],
-        listeners: {},
-        cdraw: function() {},
-      },
-      helpteam: {
-        buttons: [
-          [120, 132, 120, 120, 'help', true],
-        ],
-        listeners: {},
-        cdraw: function() {},
       },
       inventory: {
         buttons: [
@@ -906,7 +739,10 @@ class PixelTanks {
   }
 
   static auth(u, p, t) {
-    Network.auth(u, p, t, () => PixelTanks.getData(() => Menus.trigger(t === 'login' ? 'main' : 'htp1')));
+    Network.auth(u, p, t, () => PixelTanks.getData(() => {
+      Menus.removeListeners();
+      PixelTanks.user.player = new Client(null, false, null);
+    });
   }
 
   static switchTab(id, n) {
