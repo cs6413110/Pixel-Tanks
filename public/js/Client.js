@@ -19,14 +19,14 @@ class Client {
       padding: 2px;
       padding-left: 5px;
       padding-right: 5px;
-      font-size: 2vh;
+      font-size: 3vh;
       background-color: rgba(0, 0, 0, .2);
     }
     #message img {
       max-width: 200px;
     }
     #input {
-      font-size: 2vh;
+      font-size: 3vh;
       background-color: rgba(0, 0, 0, .2);
       border: none;
       outline: none;
