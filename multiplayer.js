@@ -104,7 +104,6 @@ const deathMessages = [
   `TIP: Try switching your class, maybe you're not good at that one!`,
   `TIP: These tips get shown when you die!`,
   `TIP: Blame the lag`,
-  `TIP: If fighting is sure to result in victory then you must fight! -Sun Tzu`,
   `TIP: Doing damage increases your chance of survival while decreasing your enemy's chance of survival`,
   `TIP: Taking damage reduces your chance of survival`,
   `TIP: Try dodging the bullets next time!`,
@@ -116,8 +115,10 @@ const deathMessages = [
   `TIP: Try Using a mouse next time`,
   `How embarrassing...`,
   `TIP: Do better? idk I'm not paid enough for this...`,
-  'There are items, abilities, and classes that can assist you',
-  'RIP: Rest in Pineapple',
+  `There are items, abilities, and classes that can assist you`,
+  `RIP: Rest in Pineapple`,
+  `Try complaining about how bad your class is instead of trying a new one!`,
+  `Turret spam won't always help you...`,
 ];
 
 class Multiplayer extends Engine {
