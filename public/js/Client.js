@@ -870,7 +870,7 @@ class Client {
       if (!this.key[87] && !this.key[83]) this.up = null;
     }
     if (e.keyCode === PixelTanks.userData.keybinds.boost) {
-      if ((Date.now() > this.timers.boost.time+(this.ded ? 0 : this.timers.boost.cooldown)) || Engine.hasPerk(PixelTanks.userData.perk, 7)) {
+      if ((Date.now() > this.timers.boost.time+(this.ded ? 0 : this.timers.boost.cooldown))) {
         this.speed = 16;
         this.tank.immune = true;
         this.timers.boost.time = Date.now();
