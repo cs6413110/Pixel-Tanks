@@ -463,6 +463,7 @@ class Client {
       return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
     }
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
+    GUI.drawImage(PixelTanks.images.blocks.void, -5000, -5000, 10000, 10000, 1);
     GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
     GUI.drawImage(PixelTanks.images.blocks.floor, 0, 3000, 3000, 3000, 1);
     GUI.drawImage(PixelTanks.images.blocks.floor, 3000, 0, 3000, 3000, 1);
