@@ -72,7 +72,7 @@ class Network {
       PixelTanks.updateBootProgress(done/Network.total);
       if (done === Network.total) {
         if (Network.errored) alert('Warning! Missing '+Network.errored+' images.');
-        PixelTanks.launch();
+        Network.callback();
       }
     }
   }
