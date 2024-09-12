@@ -84,16 +84,22 @@ class PixelTanks {
     GUI.drawImage(i, x, y, w, h, 1, w/2, w/2, 0, 0, r, frame*xd, 0, xd, yd);
   }
 
+  static loadTexturePack(configURL, callback) {
+    const config = document.createElement('SCRIPT');
+    config.src = configURL;
+    config.onload = () => {
+      Network.load(window.sourceMap);
+      callback();
+    }
+  }
+
   static boot() {
     PixelTanks.user = {};
     PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
-    const config = document.createElement('SCRIPT');
     const newClass = 'undefined';
     let cosmetAmount = 1;
     let deathAmount = 1;
-    config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
-    config.onload = () => {
-      Network.load(window.sourceMap);
+    PixelTanks.loadTexturePack('https://cs6413110.github.io/Pixel-Tanks/public/js/config.js', () => {
     Menus.menus = {
       start: {
         buttons: [
