@@ -93,7 +93,7 @@ class PixelTanks {
     let deathAmount = 1;
     config.src = 'https://cs6413110.github.io/Pixel-Tanks/public/js/config.js';
     config.onload = () => {
-      Network.load(sourceMap);
+      Network.load(window.sourceMap);
     Menus.menus = {
       start: {
         buttons: [
