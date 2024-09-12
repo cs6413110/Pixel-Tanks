@@ -95,7 +95,7 @@ class PixelTanks {
     config.src = configURL;
     config.onload = () => {
       Network.load(window.sourceMap);
-      callback();
+      Network.callback = callback;
     }
     document.head.appendChild(config);
   }
@@ -107,7 +107,8 @@ class PixelTanks {
     let cosmetAmount = 1;
     let deathAmount = 1;
     PixelTanks.loadTexturePack('https://cs6413110.github.io/Pixel-Tanks/public/js/config.js', () => {
-    Menus.menus = {
+      PixelTanks.launch();
+      Menus.menus = {
       start: {
         buttons: [
           [544, 648, 216, 116, function() {PixelTanks.auth(this.username.value, this.password.value, 'login')}, true],
