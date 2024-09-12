@@ -870,6 +870,7 @@ class Client {
       if (!this.key[65] && !this.key[68]) this.left = null;
       if (!this.key[87] && !this.key[83]) this.up = null;
     }
+    if (e.keyCode === 8) this.reset();
     if (e.keyCode === PixelTanks.userData.keybinds.boost) {
       if ((Date.now() > this.timers.boost.time+(this.ded ? 0 : this.timers.boost.cooldown))) {
         this.speed = 16;
