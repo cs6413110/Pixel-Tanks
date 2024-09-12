@@ -52,7 +52,7 @@ window.sourceMap = {
     uncommon: ['chip', 'deep_scratch', 'evil_eye', 'inferno_eye', 'motherboard', 'blue_wings', 'blue_horns', 'white_wings', 'white_horns', 'gold_wings', 'gold_horns', 'devil_wings', 'devil_horns', 'hazard', 'angel_wings', 'bat_wings', 'locked', 'mini_tank', 'dust', 'pouch'],
     rare: ['blue_tint', 'glitch', 'blue_helmet', 'white_helmet', 'helmet', 'gold_helmet', 'hacker_hoodie', 'hoodie', 'purple', 'sus', 'veins', 'cookie'],
     epic: ['christmas_hat', 'christmas_lights', 'dizzy', 'rage', 'toxic', 'crown', 'darkcrown', 'error', 'dark_crown',  'lostcrown', 'blue_crown', 'supersight'],
-    legendary: ['plasma', 'cry', 'missing',],    //imma just delete the cosmetic
+    legendary: ['plasma', 'cry', 'missing'],    //imma just delete the cosmetic
     admin: [], // LOL IT NEEDS ADMIN TO NOT EPLODE DELETE IT THEN
     mythic: ['terminator', 'mlg_glasses', 'power_armor', 'corrupted', 'oneterminator'], //STOAP
   },
