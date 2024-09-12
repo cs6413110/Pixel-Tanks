@@ -8,6 +8,11 @@ window.sourceMap = {
       load: ['barrier', 'strong', 'weak', 'spike', 'floor', 'void', 'gold', 'fire', 'friendlyfire', 'airstrike', 'instastrike', 'doom', 'friendlyairstrike'],
     },
     {
+      ref: 'ice', // property stored as on PixelTanks.images
+      path: 'ice', // Location on host, *optional host property to overwrite default
+      load: ['barrier', 'strong', 'weak', 'spike', 'floor', 'void', 'gold', 'fire', 'friendlyfire', 'airstrike', 'friendlyairstrike'],
+    },
+    {
       ref: 'bullets',
       path: 'bullets',
       load: ['normal', 'shotgun', 'powermissle', 'healmissle', 'megamissle', 'grapple', 'dynamite', 'fire', 'usb', 'scythe', 'yoink', 'leech', 'rust'],//DONT REMOVE. STOP BEING MEAN TO DMG :((. idc if its bad, let him have his fun, orelse all customs go away. also u broke game by keeping the comma stoopid idot
