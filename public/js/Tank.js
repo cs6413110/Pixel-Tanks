@@ -65,7 +65,6 @@ class Tank {
       this.damage.y--;
       this.host.updateEntity(this, ['damage']);
     }
-    if (Engine.hasPerk(this.perk, 7)) while (this.grapple) this.grappleCalc();
     if (this.grapple) this.grappleCalc();
     if (this.reflect) { // redo this
       const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
@@ -108,8 +107,8 @@ class Tank {
           let thermal = Engine.hasPerk(this.perk, 2), size = entity.role === 0 ? 100 : 80;
           if (!this.ded && thermal && !entity.thermaled && Engine.getTeam(this.team) !== Engine.getTeam(entity.team) && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, size, size)) {
             entity.thermaled = true;
-            setTimeout(() => (entity.thermaled = false), 500);
-            entity.damageCalc(entity.x, entity.y, thermal*5, Engine.getUsername(this.team));
+            setTimeout(() => (entity.thermaled = false), 1000);
+            entity.damageCalc(entity.x, entity.y, thermal*10, Engine.getUsername(this.team));
           }
         }
       }
