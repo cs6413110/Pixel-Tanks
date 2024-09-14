@@ -321,7 +321,7 @@ class Client {
       GUI.draw.fillStyle = '#00FF00';
       GUI.draw.fillRect(t.x, t.y+100, 80*t.hp/t.maxHp, 5);
     }
-    if (this.role === 0) {
+    if (t.role === 0) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(t.x-2, t.y+108, 84, 11);
       GUI.draw.fillStyle = '#FFFF00';
