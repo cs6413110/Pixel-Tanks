@@ -392,7 +392,7 @@ class AI {
         if (!this.seeTimeout) this.seeTimeout = setTimeout(() => {
           this.mode = 0;
           this.target = false;
-        }, previousTargetExists ? 10000 : 0);
+        }, previousTargetExists && this.role !== 0 ? 10000 : 0);
       }
     } else {
       if (this.target) this.seeTimeout = clearTimeout(this.seeTimeout);
