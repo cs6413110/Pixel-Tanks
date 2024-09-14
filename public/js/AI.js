@@ -1,6 +1,6 @@
 class AI {
   static args = ['x', 'y', 'role', 'rank', 'team', 'host'];
-  static raw = ['role', 'rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static raw = ['role', 'rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'ammo', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
   static u = [];
   constructor() {
     this.cells = new Set();
@@ -31,7 +31,7 @@ class AI {
     if (Math.random() < (rank/20)) this.cosmetic = cosmetics[Math.floor(Math.random()*cosmetics.length)];
     if (Math.random() < (rank/20)) this.cosmetic_body = cosmetics[Math.floor(Math.random()*cosmetics.length)];
     */
-    if (this.role !== 0) this.giveAbilities();
+    if (this.role !== 0) this.giveAbilities(); else this.ammo = 200;
     const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
     if (summoner) {
       this.cosmetic_hat = summoner.cosmetic_hat;
@@ -416,6 +416,7 @@ class AI {
       this.canFire = false;
       setTimeout(() => {this.canFire = true}, type === 'shotgun' ? 600 : 200);
     }
+    if (this.role === --this.ammo) this.destroy();
   }
 
   damageCalc(x, y, a, u) {
