@@ -321,6 +321,12 @@ class Client {
       GUI.draw.fillStyle = '#00FF00';
       GUI.draw.fillRect(t.x, t.y+100, 80*t.hp/t.maxHp, 5);
     }
+    if (this.role === 0) {
+      GUI.draw.fillStyle = '#000000';
+      GUI.draw.fillRect(t.x-2, t.y+108, 84, 11);
+      GUI.draw.fillStyle = '#FFFF00';
+      GUI.draw.fillRect(t.x, t.y+110, 80*t.ammo/200, 5);
+    }
 
     if (t.shields > 0) {
       if (t.shielded === false) t.shieldMake = Date.now(); // unoptimized exp.
