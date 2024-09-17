@@ -91,7 +91,7 @@ const deathMessages = [
   `{idot} has joined the battle`,
   `{idot}`,
 ], rageMessages = [
-  `{idot} went to play minecraft instead`,
+  `{idot} went to play awesome tanks instead`,
   `{idot} touched grass`,
   `{idot} didnt like the game`,
   `{idot} gave up`,
@@ -117,8 +117,6 @@ const deathMessages = [
   `TIP: Do better? idk I'm not paid enough for this...`,
   `There are items, abilities, and classes that can assist you`,
   `RIP: Rest in Pineapple`,
-  `Try complaining about how bad your class is instead of trying a new one!`,
-  `Turret spam won't always help you...`,
 ];
 
 class Multiplayer extends Engine {
