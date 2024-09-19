@@ -801,6 +801,8 @@ const Commands = {
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) {
       t.hp = t.maxHp;
       t.ded = false;
+      t.socket.send({event: 'ded'});
+      return;
     }
   }],
   switch: [TDM, 3, 2, function(data) {
