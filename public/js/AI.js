@@ -213,7 +213,7 @@ class AI {
     if (this.pushback !== 0) this.pushback += 0.5;
     if (Date.now()-this.fireTime < 4000) {
       if (this.fire && Engine.getTeam(this.fire) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire));
-    }
+    } else this.fire = false;
     if (this.damage) this.damage.y--;
     // if (this.grapple) this.grappleCalc(); No grapple for AI yet...
     if (this.reflect) {
