@@ -449,5 +449,6 @@ class AI {
       this.host.cells[x][y].delete(this);
     }
     this.release();
+    console.log(this);
   }
 }
