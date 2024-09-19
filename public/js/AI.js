@@ -242,17 +242,8 @@ class AI {
         if (entity instanceof Block) {
           if (!this.ded && this.immune+500 < Date.now() && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) {
             if (entity.type === 'fire') {
-              if (this.fire) {
-                clearTimeout(this.fireTimeout);
-                this.fire = {team: entity.team, frame: this.fire.frame};
-              } else {
-                this.fire = {team: entity.team, frame: 0};
-                this.fireInterval ??= setInterval(() => this.fire.frame ^= 1, 50);
-              }
-              this.fireTimeout = setTimeout(() => {
-                clearInterval(this.fireInterval);
-                this.fire = false;
-              }, 4000);
+              this.fire = entity.team;
+              this.fireTime = Date.now();
             } else if (entity.type === 'spike' && !teamMatch) this.damageCalc(this.x, this.y, 1, Engine.getUsername(entity.team));
           }
         } else if (entity instanceof Tank || entity instanceof AI) {
