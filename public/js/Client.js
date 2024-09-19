@@ -847,10 +847,10 @@ class Client {
       if (PixelTanks.userData.class === 'warrior') {
         this.tank.use.push('bash');
         clearTimeout(this.booster);
-        this.speed = 36;
+        this.speed = 16;
         this.tank.immune = true;
         this.booster = setTimeout(() => {
-          this.speed = 14;
+          this.speed = 4;
           this.tank.immune = false;
         }, 500);
       }
