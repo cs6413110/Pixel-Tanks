@@ -607,6 +607,18 @@ class Defense extends Multiplayer {
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM, 'defense': Defense};
 let upsl = true, busy = true;
 const Commands = {
+  admin: [Object, 1, 2, function(data) {
+    if (!Storage.admins.includes(data[1])) Storage.admins.push(data[1]);
+  }],
+  vip: [Object, 2, 2, function(data) {
+    if (!Storage.vips.includes(data[1])) Storage.vips.push(data[1]);
+  }],
+  removeadmin: [Object, 1, 2, function(data) {
+    if (Storage.admins.includes(data[1])) Storage.admins.splice(Storage.admins.indexOf(data[1]), 1);
+  }],
+  removevip: [Object, 2, 2, function(data) {
+    if (Storage.vips.includes(data[1])) Storage.vips.splice(Storage.vips.indexOf(data[1]), 1);
+  }],
   reload: [Object, 2, 2, function(data) {
     const t = servers[this.room].pt.find(t => t.username === data[1]);
     if (t) t.socket.send({event: 'force'});
@@ -901,7 +913,7 @@ wss.on('connection', socket => {
       socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
       if (!servers[socket.room] || (!hasAccess(socket.username, 3) && !settings.chat)) return;
-      if (Storage.mutes.includes(socket.username) || socket.username === '3foe') {
+      if (Storage.mutes.includes(socket.username)) {
         log(`${socket.username} tried to say "${data.msg}"`);
         return socket.send({status: 'error', message: 'You are muted!'});
       }
