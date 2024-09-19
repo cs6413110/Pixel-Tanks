@@ -31,6 +31,6 @@ class MegaSocket {
   }
   on = (e, o) => this.callstack[e].push(o);
   no = e => this.callstack[e] = [];
-  send = d => (if (this.socket.readyState === 1)this.socket.send(msgpackr.pack(d)));
+  send = d => (if (this.socket.readyState === 1) this.socket.send(msgpackr.pack(d)));
   close = () => this.socket.close();
 }
