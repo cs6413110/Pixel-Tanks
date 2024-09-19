@@ -830,18 +830,6 @@ const Commands = {
       servers['${this.room}'].pt.find(t => t.username === '${this.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
     }`);
   }],
-  admin: [Object, 1, 2, function(data) {
-    if (!Storage.admins.includes(data[1])) Storage.admins.push(data[1]);
-  }],
-  vip: [Object, 2, 2, function(data) {
-    if (!Storage.vips.includes(data[1])) Storage.vips.push(data[1]);
-  }],
-  removeadmin: [Object, 1, 2, function(data) {
-    if (Storage.admins.includes(data[1])) Storage.admins.splice(Storage.admins.indexOf(data[1]), 1);
-  }],
-  removevip: [Object, 2, 2, function(data) {
-    if (Storage.vips.includes(data[1])) Storage.vips.splice(Storage.vips.indexOf(data[1]), 1);
-  }],
   twrite: [Object, 1, 4, function(data) {
     eval(`try {
       const server = servers['${this.room}'], tank = server.pt.find(t => t.username === '${data[1]}');
