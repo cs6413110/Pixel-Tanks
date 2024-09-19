@@ -218,6 +218,7 @@ class Client {
     this.halfSpeed = this.tank.invis = false;
     this.canFire = true;
     this.kills = 0;
+    this.dedTime = undefined;
   }
 
   drawBlock(b) {
