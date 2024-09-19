@@ -670,7 +670,7 @@ class Client {
       this.implode();
       return Menus.trigger('main');
     }
-    clearInterval(this.fireInterval);
+    if (e.button === 0) clearInterval(this.fireInterval);
     this.keyup({keyCode: 1000+e.button});
   }
 
