@@ -478,7 +478,7 @@ class Client {
     for (const block of b) this.drawBlock(block);
     if (this.ip === null) {
       GUI.draw.drawImage(PixelTanks.images.menus.inventory_, 2000, 4300, 400, 300);
-      if (Engine.collision(player.x, player.y, 80, 80, 2000, 4300, 400, 300)) this.world.global = 'Press I to Interact'; else this.world.global = ''; 
+      if (Engine.collision(player.x, player.y, 80, 80, 2000, 4300, 400, 300)) this.hostupdate.global = 'Press I to Interact'; else this.hostupdate.global = ''; 
     }
     for (const ai of a) this.drawTank(ai);
     for (const tank of t) this.drawTank(tank);
