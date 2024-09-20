@@ -658,6 +658,7 @@ class Client {
   mousedown(e) {
     this.keydown({keyCode: 1000+e.button});
     this.fire(e.button);
+    if (e.button === 2) return;
     clearInterval(this.fireInterval);
     this.fireInterval = setInterval(() => {
       this.canFire = true;
