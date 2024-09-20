@@ -1,4 +1,10 @@
-
+const settings = {
+  authserver: 'localhost',
+  players_per_room: 10,
+  upsl: 120,
+  port: 8080,
+  chat: true,
+  joining: true,
 }
 
 const fs = require('fs'), fetch = require('node-fetch');
