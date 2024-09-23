@@ -34,7 +34,7 @@ class Menu {
         c.width = window.innerHeight*e.w/1000;
         c.height = window.innerHeight*e.h/1000;
       }
-      e.style.left = (window.innerWidth-window.innerHeight*1.6)/2+(window.innerHeight*e.x/1000)+'px';
+      e.style.left = Math.max(0, (window.innerWidth-window.innerHeight*1.6)/2)+(window.innerHeight*e.x/1000)+'px';
       e.style.top = (window.innerHeight*e.y/1000)+'px';
     }
   }
