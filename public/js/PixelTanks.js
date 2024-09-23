@@ -124,6 +124,11 @@ class PixelTanks {
             this.username = document.createElement('INPUT');
             this.password = document.createElement('INPUT');
             const left = (window.innerWidth-window.innerHeight*1.6)/2+.564*window.innerHeight;
+            this.username.x = this.password.x = left;
+            this.username.w = this.password.w = .456*1600;
+            this.username.h = this.password.h = 80;
+            this.username.y = 392;
+            this.password.y = 520;
             this.username.style = 'position: absolute; background: transparent; border: none; top: '+(.392*window.innerHeight)+'px; left: '+left+'px; width: '+(window.innerHeight*.456)+'px; height: '+(window.innerHeight*.08)+'px;';
             this.password.style = 'position: absolute; background: transparent; border: none; top: '+(.520*window.innerHeight)+'px; left: '+left+'px; width: '+(window.innerHeight*.456)+'px; height: '+(window.innerHeight*.08)+'px;';
             this.username.type = 'username';
