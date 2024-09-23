@@ -92,7 +92,7 @@ class Engine {
       A.template('AI').init(Math.floor(t.x / 100) * 100 + 10, Math.floor(t.y / 100) * 100 + 10, 0, t.rank, t.team, this);
       let turrets = [];
       for (const ai of this.ai) if (ai.role === 0 && Engine.getUsername(ai.team) === t.username) turrets.push(ai);
-      if (turrets.length > 3) turrets.sort((a, b) =>  a.ammo-b.ammo)[0].destroy();
+      if (turrets.length > t.maxTurrets) turrets.sort((a, b) =>  a.ammo-b.ammo)[0].destroy();
     } else if (a === 'bash') {
       t.buff = true; // name fix
       setTimeout(() => { t.buff = false }, 1000);
