@@ -960,7 +960,7 @@ class Client {
     for (const listener of Client.listeners) document.removeEventListener(listener, this[listener]);
     cancelAnimationFrame(this.render);
     Menus.menus.pause.removeListeners();
-    Menus.softUntrigger();
+    if (this.menu) Menus.softUntrigger();
     PixelTanks.user.player = undefined;
   }
 }
