@@ -582,7 +582,13 @@ class Client {
         GUI.draw.fillRect(1600-infoset.length*8+i*8, 800-info, 10, info);
       }
     }
-    if (this.menu) Menus.menus[this.menu].draw();
+    if (this.menu) {
+      GUI.draw.globalAlpha = .2;
+      GUI.draw.fillStyle = '#000000';
+      GUI.draw.fillRect(0, 0, 1600, 1000);
+      GUI.draw.globalAlpha = 1;
+      Menus.menus[this.menu].draw();
+    }
     if (this.paused) { // Override with menus?
       let a = 1;
       GUI.draw.globalAlpha = 1;
