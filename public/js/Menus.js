@@ -25,6 +25,16 @@ class Menus {
     Menus.current = name;
     Menus.menus[Menus.current].addListeners();
   }
+
+  static softTrigger(name) {
+    PixelTanks.user.player.menu = name;
+    for (const b of Menus.menus[name].elements) b.style.visibility = 'visible';
+  }
+
+  static softUntrigger() {
+    PixelTanks.user.player.menu = false;
+    for (const b of Menus.menus[name].elements) b.style.visibility = 'hidden';
+  }
   
   static redraw() {
     if (!Menus.current) return;
