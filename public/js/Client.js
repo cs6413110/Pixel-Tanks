@@ -792,7 +792,7 @@ class Client {
       this.fireType = this.fireType < 2 ? 2 : 1;
       clearInterval(this.fireInterval);
     }
-    if (k === 73) Menus.softTrigger('inventory');
+    if (k === 73 && this.ip === null) Menus.softTrigger('inventory');
     if (k === PixelTanks.userData.keybinds.fire) {
       this.fire(0);
       clearInterval(this.fireInterval);
@@ -950,6 +950,7 @@ class Client {
     for (const listener of Client.listeners) document.removeEventListener(listener, this[listener]);
     cancelAnimationFrame(this.render);
     Menus.menus.pause.removeListeners();
+    Menus.softUntrigger();
     PixelTanks.user.player = undefined;
   }
 }
