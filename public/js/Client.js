@@ -802,7 +802,7 @@ class Client {
       this.fireType = this.fireType < 2 ? 2 : 1;
       clearInterval(this.fireInterval);
     }
-    if (k === 69 && this.ip === null) Menus.softTrigger('inventory');
+    if (k === 73 && this.ip === null) Menus.softTrigger('inventory');
     if (k === PixelTanks.userData.keybinds.fire) {
       this.fire(0);
       clearInterval(this.fireInterval);
