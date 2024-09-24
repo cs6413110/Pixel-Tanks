@@ -32,8 +32,8 @@ class Menus {
   }
 
   static softUntrigger() {
+    for (const b of Menus.menus[PixelTanks.user.player.menu].elements) b.style.visibility = 'hidden';
     PixelTanks.user.player.menu = false;
-    for (const b of Menus.menus[name].elements) b.style.visibility = 'hidden';
   }
   
   static redraw() {
