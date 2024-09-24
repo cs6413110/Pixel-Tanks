@@ -580,8 +580,12 @@ class Client {
         GUI.draw.fillRect(1600-infoset.length*8+i*8, 800-info, 10, info);
       }
     }
+
+    if (this.menu) {
+      Menus.menus[this.menu].cdraw();
+    }
     
-    if (this.paused) {
+    if (this.paused) { // Override with menus?
       let a = 1;
       GUI.draw.globalAlpha = 1;
       GUI.draw.fillStyle = '#000000';
@@ -785,6 +789,7 @@ class Client {
       this.fireType = this.fireType < 2 ? 2 : 1;
       clearInterval(this.fireInterval);
     }
+    if (k === 73) this.menu = 'inventory';
     if (k === PixelTanks.userData.keybinds.fire) {
       this.fire(0);
       clearInterval(this.fireInterval);
