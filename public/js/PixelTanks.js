@@ -768,6 +768,7 @@ class PixelTanks {
     if (n && id === 'itemTab') Menus.menus.inventory.currentItem = n;
     if (n && id === 'cosmeticTab') Menus.menus.inventory.cosmeticType = n;
     if (n && id === 'perkTab') Menus.menus.inventory.currentPerk = n;
+    Menus.menus.inventory.loaded = false;
     Menus.redraw();
   } // OPTIMIZE
   
