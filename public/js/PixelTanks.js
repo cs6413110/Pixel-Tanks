@@ -784,35 +784,12 @@ class PixelTanks {
       setTimeout(() => {
         const price = type ? 5 : 1, name = type ? 'deathEffects' : 'cosmetics', rand = Math.floor(Math.random()*1001);
         let crate = PixelTanks.crates;
-          /*crate = [{
-          common: ['white horns', 'white wings', 'blue horns', 'gold horns', 'blue wings', 'gold wings', 'watermelon', 'Spooked', 'Cute Eyes', 'Army', 'Top Hat', 'X', 'Red Hoodie', 'Devil Wings', 'Devil Horns', 'Exclaimation Point', 'Orange Hoodie', 'GoldShield', 'Yellow Hoodie', 'Green Hoodie', 'Blue Hoodie', 'Purple Hoodie', 'Cancelled', 'Spirals', 'Speaker', 'Spikes', 'Candy Cane', 'Pumpkin Face', 'Mask', 'Purple-Pink Hoodie', 'Bunny Ears'],
-          uncommon: ['glitch', 'spoider', 'CompanionCube', 'PortalCube', 'half glitch', 'eye', 'Anime Eyes', 'Angry Eyes', 'Hard Hat', 'Present', 'Dead', 'Peace', 'Question Mark', 'Small Scratch', 'Kill = Ban', 'Reindeer Hat', 'Pumpkin Hat', 'Cat Ears', 'Cake', 'Cat Hat', 'bread', 'First Aid', 'silver', 'Fisher Hat', 'chip', 'eyes', 'zombie', 'googly', 'static', 'lava', 'void knight'],
-          rare: ['gold helment', 'toxic', 'Antlers', 'White helment', 'Blue Helment', 'Aqua Helment', 'Purple helment', 'Stripes', 'scoped', 'brain', 'Hands', 'Straw Hat', 'Hax', 'Tools', 'Money Eyes', 'Dizzy', 'Checkmark', 'Sweat', 'Scared', 'Blue Tint', 'Purple Top Hat', 'Purple Grad Hat', 'Eyebrows', 'Helment', 'Rudolph', 'Candy Corn', 'Flag', 'Katana',  'Swords', 'angry hoodie'],
-          epic: ['Aaron', 'hacker_hoodie', 'Plasma Ball', 'Hazard', 'Locked', 'Elf', 'Triple Gun', 'Evil Eyes', 'Gold', 'Rage', 'Onfire', 'Halo', 'Police', 'Deep Scratch', 'bluekatana', 'Assassin', 'Astronaut', 'Christmas Lights', 'No Mercy', 'Error', 'disguise', 'Lego', 'Paleontologist', 'hollow_eye'],
-          legendary: ['Sun Roof', 'Blind', 'Redsus', 'Uno Reverse', 'Christmas Hat', 'Mini Tank',],
-          mythic: ['Terminator', 'MLG Glasses', 'Power Armor', 'venom'],
-        }, {
-          common: ['explode', 'nuke', 'insta', 'evan'], //bruh why am i common :(
-          uncommon: ['anvil', 'gameover', 'minecraft'],
-          rare: ['darksouls', 'magic', 'Cactus'],
-          epic: ['battery', 'skull', 'banhammer'],
-          legendary: ['error', 'tombstone', 'pokeball'],
-          mythic: ['clicked', 'cat'],
-        }];*/
-        let rarity;
-        if (rand < 1) { // .1%
-          rarity = 'mythic';
-        } else if (rand < 10) { // .9%
-          rarity = 'legendary';
-        } else if (rand < 50) { // 4%
-          rarity = 'epic';
-        } else if (rand < 150) { // 10%
-          rarity = 'rare';
-        } else if (rand < 300) { // 15%
-          rarity = 'uncommon';
-        } else { // 70%
-          rarity = 'common'; 
-        }
+        let rarity = 'common'; // 70%
+        if (rand < 300) rarity = 'uncommon'; // 15%
+        if (rand < 150) rarity = 'rare'; // 10%
+        if (rand < 50) rarity = 'epic'; // 4%
+        if (rand < 10) rarity = 'legendary'; // .9%
+        if (rand < 1) rarity = 'mythic'; // .1%
         let number = Math.floor(Math.random()*(crate[type][rarity].length)), item;
         for (const e in this.images[name]) if (e === crate[type][rarity][number]) item = this.images[name][e];
         if (item === undefined) return alert('Error while trying to give you cosmetic id "'+crate[type][rarity][number]+'"');
@@ -843,7 +820,7 @@ class PixelTanks {
     }
   }
 
-  static convertCosmeticFormat() {
+  static convertCosmeticFormat() { // TEMP
     const c = a => a.replaceAll(' ', '_').toLowerCase();
     for (let cosmetic of PixelTanks.userData.cosmetics) cosmetic = c(cosmetic);
     PixelTanks.userData.cosmetic_body = c(PixelTanks.userData.cosmetic_body);
