@@ -643,7 +643,7 @@ class Client {
 
   keydown(e) {
     if (e.keyCode === 27) return Menus.softUntrigger();
-    if (this.menu) Menus.menus[this.menu].listeners?.keydown(e);
+    if (this.menu) return Menus.menus[this.menu].listeners?.keydown(e);
     if (document.activeElement.tagName === 'INPUT') return this.chat(e);
     if (e.ctrlKey || e.metaKey) return;
     if (e.preventDefault) e.preventDefault();
@@ -655,7 +655,7 @@ class Client {
   }
 
   keyup(e) {
-    if (this.menu) Menus.menus[this.menu].listeners?.keyup(e);
+    if (this.menu) return Menus.menus[this.menu].listeners?.keyup(e);
     if (e.preventDefault) e.preventDefault();
     clearInterval(this.key[e.keyCode]);
     this.key[e.keyCode] = false;
@@ -669,13 +669,13 @@ class Client {
   }
 
   mousemove(e) {
-    if (this.menu) Menus.menus[this.menu].listeners?.mousemove(e);
+    if (this.menu) return Menus.menus[this.menu].listeners?.mousemove(e);
     this.mouse = {x: (e.clientX-(window.innerWidth-window.innerHeight*1.6)/2)*1000/window.innerHeight, y: e.clientY*1000/window.innerHeight};
     this.tank.r = Engine.toAngle(e.clientX-window.innerWidth/2, e.clientY-window.innerHeight/2);
   }
 
   mousedown(e) {
-    if (this.menu) Menus.menus[this.menu].listeners?.mousedown(e);
+    if (this.menu) return Menus.menus[this.menu].listeners?.mousedown(e);
     this.keydown({keyCode: 1000+e.button});
     this.fire(e.button);
     if (e.button === 2) return;
@@ -687,7 +687,7 @@ class Client {
   }
 
   mouseup(e) {
-    if (this.menu) Menus.menus[this.menu].listeners?.mouseup(e);
+    if (this.menu) return Menus.menus[this.menu].listeners?.mouseup(e);
     if (this.socket && this.socket.status === 'disconnected') {
       return // TEMP FIX
       this.implode();
