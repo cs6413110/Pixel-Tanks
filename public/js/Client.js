@@ -240,7 +240,7 @@ class Client {
     } else if (s.type === 'shotgun') {
       GUI.drawImage(PixelTanks.images.bullets.shotgun, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+90);
     } else if (s.type === 'grapple') {
-      /*l = Engine.getUsername(s.team) === 'LostKing', m = (Date.now()-this.animate)/1000*360*2;
+      l = Engine.getUsername(s.team) === 'LostKing', m = (Date.now()-this.animate)/1000*360*2;
       if (l) return GUI.drawImage(PixelTanks.images.bullets.scythe, s.x-45, s.y-45, 90, 90, 1, 45, 45, 0, 0, s.r+90-m);
       l = Engine.getUsername(s.team) === 'Celestial';
       if (l) {
@@ -264,7 +264,7 @@ class Client {
         const t = this.hostupdate.pt.find(t => t.username === s.team.split(':')[0]);
         if (t) GUI.draw.lineTo(t.x+40, t.y+40);
         GUI.draw.stroke();
-        return;*/
+        return;
       }
       GUI.drawImage(PixelTanks.images.bullets.grapple, s.x-22.5, s.y-22.5, 45, 45, 1, 22.5, 22.5, 0, 0, s.r+90);
       GUI.draw.lineWidth = 10;
