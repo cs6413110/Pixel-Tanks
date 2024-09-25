@@ -23,6 +23,7 @@ class Tank {
     this.fradar = [];
     this.x = host.spawn.x;
     this.y = host.spawn.y;
+    this.maxTurrets = 3;
     this.grapple = false;
     this.logs = this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = 0;
     host.updateEntity(this, Tank.raw);
