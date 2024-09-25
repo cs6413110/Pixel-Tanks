@@ -8,7 +8,7 @@ class PixelTanks {
 
   static shortcut() {
     if (PixelTanks.user.player) PixelTanks.user.player.implode();
-    PixelTanks.user.player = new Client('141.148.128.231:8080', true, confirm('Ok for ffa, cancel for tdm') ? 'ffa' : 'tdm');
+    PixelTanks.user.player = new Client('141.148.128.231:8000', true, confirm('Ok for ffa, cancel for tdm') ? 'ffa' : 'tdm');
     Menus.removeListeners();
   }
   
@@ -256,7 +256,7 @@ class PixelTanks {
           if (!this.gamemode) {
             this.gamemode = 'ffa';
             this.output = {FFA: '', DUELS: '', TDM: ''};
-            this.ip = '141.148.128.231:8080';
+            this.ip = '141.148.128.231:8000';
             this.listeners.keydown({keyCode: -1, key: ''});
           }
           GUI.drawText(this.gamemode, 1200, 800, 50, '#FFFFFF', 0.5);
