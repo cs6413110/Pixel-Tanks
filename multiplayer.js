@@ -624,7 +624,7 @@ const Commands = {
     const t = servers[this.room].pt.find(t => t.username === data[1]);
     if (t) t.socket.send({event: 'force'});
   }],
-  upsl: [Object, 2, 1, function(data) {
+  upsl: [Object, 2, 1, function(data) { // remove?
     const t = servers[this.room].pt.find(t => t.username === this.username);
     upsl = !upsl;
     t.privateLogs.push({m: 'UPSL is '+upsl, c: '#ffffff'});
@@ -725,16 +725,6 @@ const Commands = {
   gpt: [Object, 4, -1, function(data) {
     gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
   }],
-  target: [Object, 2, 3, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === data[1]);
-    for (let i = 0; i <= data[2]; i++) setTimeout(() => {servers[this.room].b.push(A.template('Block').init(t.x-50, t.y-50, 'airstrike', ':', servers[this.room]))}, i*1000);
-  }],
-  nuke: [Object, 2, 1, function(data) {
-    for (let x = 0; x < 60; x += 2) for (let y = 0; y < 60; y += 2) servers[this.room].b.push(A.template('Block').init(x*100, y*100, 'airstrike', ':', servers[this.room]));
-  }],
-  arson: [Object, 3, 1, function(data) {
-    for (let x = 0; x < 60; x++) for (let y = 0; y < 60; y++) servers[this.room].b.push(A.template('Block').init(x*100, y*100, 'fire', ':', servers[this.room]));
-  }],
   newmap: [FFA, 3, -1, function(data) {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
     if (isNaN(levelID) || levelID % 1 !== 0 || levelID >= ffaLevels.length) return this.send({status: 'error', message: 'Out of range or invalid input.'});
@@ -785,9 +775,6 @@ const Commands = {
       t.immune = false;
       for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username);
     }
-  }],
-  killall: [Object, 2, 1, function(data) {
-    for (const t of servers[this.room].pt) for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username);
   }],
   killai: [Object, 1, 1, function(data) {
     for (let i = servers[this.room].ai.length-1; i >= 0; i--) servers[this.room].ai[i].destroy();
