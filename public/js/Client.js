@@ -642,7 +642,7 @@ class Client {
   }
 
   keydown(e) {
-    if (e.keyCode === 69) return Menus.softUntrigger();
+    if (this.menu && e.keyCode === 69) return Menus.softUntrigger();
     if (this.menu) return Menus.menus[this.menu].listeners?.keydown(e);
     if (document.activeElement.tagName === 'INPUT') return this.chat(e);
     if (e.ctrlKey || e.metaKey) return;
