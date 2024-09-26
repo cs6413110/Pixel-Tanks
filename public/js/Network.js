@@ -42,11 +42,13 @@ class Network {
         PixelTanks.images[group.ref] = {...group.meta};
         for (const id of group.load) Network.perImage(id, host+'/'+group.path+'/'+id, group.ref);
       }
-      PixelTanks.images.cosmetics = {};
-      PixelTanks.images.deathEffects = {};
+      PixelTanks.images.cosmetics = {...pack.cosmetic.meta};
+      PixelTanks.images.deathEffects = {...pack.deathEffect.meta};
       PixelTanks.crates = [pack.cosmetic, pack.deathEffect];
       let host = pack.host || pack.cosmetic.host;
       for (const rarity of ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic', 'admin']) for (const cosmetic of pack.cosmetic[rarity]) Network.perImage(cosmetic, host+'/'+pack.cosmetic.path+'/'+cosmetic, 'cosmetics');
+      host = pack.host || pack.deathEffect.host;
+      for (const rarity of ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic', 'admin']) for (const deathEffect of pack.deathEffect[rarity]) Network.perImage(deathEffect, host+'/'+pack.deathEffect.path+'/'+deathEffect, 'deathEffects');
     }
     static timeout = 15;
     static perImage(name, src, ref) {
