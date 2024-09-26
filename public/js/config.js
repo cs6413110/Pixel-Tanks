@@ -49,8 +49,15 @@ window.sourceMap = {
     epic: ['christmas_hat', 'christmas_lights', 'dizzy', 'rage', 'toxic', 'error', 'supersight'],
     legendary: ['plasma', 'cry', 'missing', 'thedark'],
     admin: ['hoodie', 'darkcrown', 'lostcrown'],
-    mythic: ['terminator', 'mlg_glasses', 'power_armor', 'corrupted', 'oneterminator'], //STOAP
+    mythic: ['terminator', 'mlg_glasses', 'power_armor', 'corrupted', 'oneterminator'],
   },
   deathEffect: {
+    path: 'animations',
+    common: ['explode', 'nuke', 'insta', 'evan'],
+    uncommon: ['anvil', 'gameover', 'minecraft'],
+    rare: ['darksouls', 'magic', 'Cactus'],
+    epic: ['battery', 'skull', 'banhammer'],
+    legendary: ['error', 'tombstone', 'pokeball'],
+    mythic: ['clicked', 'cat'],
   }
 }
