@@ -48,7 +48,7 @@ class Network {
       let host = pack.host || pack.cosmetic.host;
       for (const rarity of ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic', 'admin']) for (const cosmetic of pack.cosmetic[rarity]) Network.perImage(cosmetic, host+'/'+pack.cosmetic.path+'/'+cosmetic, 'cosmetics');
       host = pack.host || pack.deathEffect.host;
-      for (const rarity of ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic', 'admin']) for (const deathEffect of pack.deathEffect[rarity]) Network.perImage(deathEffect, host+'/'+pack.deathEffect.path+'/'+deathEffect, 'deathEffects');
+      for (const rarity of ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic']) for (const deathEffect of pack.deathEffect[rarity]) Network.perImage(deathEffect, host+'/'+pack.deathEffect.path+'/'+deathEffect, 'deathEffects');
     }
     static timeout = 15;
     static perImage(name, src, ref) {
