@@ -565,33 +565,6 @@ class Client {
       GUI.draw.globalAlpha = 1;
       Menus.menus[this.menu].draw();
     }
-    if (this.paused) { // Override with menus?
-      let a = 1;
-      GUI.draw.globalAlpha = 1;
-      GUI.draw.fillStyle = '#000000';
-      if (t.length >= 1) {
-        for (let i = 0; i < t.length; i++) {
-          let teamname = Engine.getTeam(t[i].team);
-          if (teamname === 'RED') {
-            GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FF0000', 0);
-          } else if (teamname === 'BLUE') {
-            GUI.drawText(t[i].username, 10, 250+i*90, 30, '#0000FF', 0);
-          } else if (teamname === 'LOBBY') {
-            if (t[i].color === '#FF0000') {
-              GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FF0000', 0);
-            } else if (t[i].color === '#0000FF') GUI.drawText(t[i].username, 10, 250+i*90, 30, '#0000FF', 0);
-          } else GUI.drawText(t[i].username, 10, 250+i*90, 30, '#FFFFFF', 0);
-          PixelTanks.renderBottom(200, 250+i*90, 80, t[i].color, t[i].baseRotation);
-          GUI.drawImage(PixelTanks.images.tanks['bottom'+(t[i].baseFrame ? '' : '2')], 200, 250+i*90, 80, 80, 1, 40, 40, 0, 0, t[i].baseRotation);
-          PixelTanks.renderTop(200, 250+i*90, 80, t[i].color, t[i].r, t[i].pushback);
-          GUI.drawImage(PixelTanks.images.tanks.top, 200, 250+i*90, 80, 90, 1, 40, 40, 0, t[i].pushback, t[i].r);
-          if (t[i].cosmetic_body) this.renderCosmetic(t[i], PixelTanks.images.cosmetics[t[i].cosmetic_body], 200, 250+i*90, a);
-          if (t[i].cosmetic) this.renderCosmetic(t[i], PixelTanks.images.cosmetics[t[i].cosmetic], 200, 250+i*90, a);
-          if (t[i].cosmetic_hat) this.renderCosmetic(t[i], PixelTanks.images.cosmetics[t[i].cosmetic_hat], 200, 250+i*90, a);
-        }
-      }
-      Menus.menus.pause.draw([1200, 0, 400, 1000]);
-    }
   }
 
   chat(e) {
@@ -756,7 +729,6 @@ class Client {
   }
 
   keyStart(e) {
-    if (this.paused && e.keyCode !== 27) return;
     const k = e.keyCode;
     if ([65, 68].includes(k)) {
       this.dx = {o: this.tank.x, t: Date.now(), a: k === 65 ? -1 : 1, b: false};
@@ -855,14 +827,7 @@ class Client {
       if (PixelTanks.userData.class === 'medic') this.fire('healmissle');
       if (PixelTanks.userData.class === 'fire') for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+90+i});
     }
-    if (k === 27) {
-      this.paused = !this.paused;
-      if (this.paused) {
-        Menus.menus.pause.addListeners();
-      } else {
-        Menus.menus.pause.removeListeners();
-      }
-    }
+    if (k === 27) Menus.softTrigger('pause');
     if (k === 18) {
       this.debugMode++;
       if (this.debugMode >= 5) this.debugMode = 0; 
