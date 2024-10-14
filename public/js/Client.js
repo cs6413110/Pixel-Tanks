@@ -327,7 +327,7 @@ class Client {
     if (t.shieldBreak && Date.now()-t.shieldBreak <= 9*100) {
       let f = Math.floor((Date.now()-t.shieldBreak)/100);
       GUI.drawImage(PixelTanks.images.animations.shield_break, t.x-22, t.y-22, 124, 124, .4, 0, 0, 0, 0, undefined, f*132, 0, 132, 132);
-    } else if (t.shieldMake && Date.now()-t.shieldMake <= 15*100) {
+    } else if (t.shieldMake && Date.now()-t.shieldMake <= 15*100 && t.shieldMake > t.shieldBreak) {
       let f = Math.floor((Date.now()-t.shieldMake)/100);
       GUI.drawImage(PixelTanks.images.animations.shield_make, t.x-22, t.y-22, 124, 124, .4, 0, 0, 0, 0, undefined, f*132, 0, 132, 132);
       GUI.draw.fillStyle = '#000000';
