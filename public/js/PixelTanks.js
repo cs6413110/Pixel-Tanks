@@ -734,12 +734,15 @@ class PixelTanks {
       },
       pause: {
         buttons: [[1218, 910, 368, 76, function() {
-          this.paused = false;
+          Menus.softUntrigger('pause');
           PixelTanks.user.player.implode();
           PixelTanks.main();
-          this.multiplayer = undefined;
         }, true]],
-        listeners: {},
+        listeners: {
+          keydown: e => {
+            if (e.keyCode === 27) Menus.softUntrigger('pause');
+          }
+        },
         cdraw: () => {},
       },
     }
