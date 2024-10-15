@@ -292,6 +292,7 @@ class Engine {
       return s.replace('@leader', '').split('@requestor#')[0];
     } catch(e) {
       console.log('ERR: '+e+' parsed='+s);
+      return 'ERRORED:ERRORED';
     }
   }
   static getUsername = s => Engine.parseTeamExtras(s).split(':')[0];
