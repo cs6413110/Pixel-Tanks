@@ -291,7 +291,7 @@ class Engine {
     try {
       return s.replace('@leader', '').split('@requestor#')[0];
     } catch(e) {
-      console.log('ERR: '+e+' parsed='+s);
+      console.log('ERR: '+e+' parsed='+s+' Trace='+e.stack);
       return 'ERRORED:ERRORED';
     }
   }
