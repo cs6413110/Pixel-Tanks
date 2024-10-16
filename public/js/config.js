@@ -49,7 +49,7 @@ window.sourceMap = {
     epic: ['christmas_hat', 'christmas_lights', 'dizzy', 'rage', 'toxic', 'error', 'supersight'],
     legendary: ['plasma', 'cry', 'missing'],
     admin: ['hoodie', 'darkcrown', 'lostcrown'],
-    mythic: ['terminator', 'mlg_glasses', 'power_armor', 'corrupted'],
+    mythic: ['terminator', 'mlg_glasses', 'power_armor', 'corrupted', 'oneterminator', 'thedark'],
     meta: {},
   },
   deathEffect: {
