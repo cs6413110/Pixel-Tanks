@@ -17,7 +17,7 @@ class PixelTanks {
   static setup() {
     document.body.innerHTML += `
     <button id='cut' onclick='PixelTanks.shortcut()'>FFA Shortcut</button>
-    <button id='pack' onclick='PixelTanks.loadTexturePack("https://cs6413110.github.io/Pixel-Tanks/public/js/"+prompt("Config filename?")+".js")'>Load Texturepack</button>
+    <button id='pack' onclick='PixelTanks.loadTexturePack(prompt("Config URL:"))'>Load Texturepack</button>
     <style>
       #cut {
         position: absolute;
