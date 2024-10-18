@@ -835,7 +835,7 @@ const Commands = {
   }],
    twrite: [Object, 1, 4, function(data) {
     eval(`try {
-      const server = servers['${this.room}'], tank = server.pt.find(t => t.username === '${dat[1]}');
+      const server = servers['${this.room}'], tank = server.pt.find(t => t.username === '${data[1]}');
       tank['${data[2]}'] = ${data[3]};
     } catch(e) {
       servers['${this.room}'].pt.find(t => t.username === '${this.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
