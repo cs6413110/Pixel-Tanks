@@ -833,6 +833,14 @@ const Commands = {
       servers['${this.room}'].pt.find(t => t.username === '${this.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
     }`);
   }],
+   twrite: [Object, 1, 4, function(data) {
+    eval(`try {
+      const server = servers['${this.room}'], tank = server.pt.find(t => t.username === '${dat[1]}');
+      tank['${data[2]}'] = ${data[3]};
+    } catch(e) {
+      servers['${this.room}'].pt.find(t => t.username === '${this.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
+    }`);
+  }],
   help: [Object, 4, 1, function(data) {
    const t = servers[this.room].pt.find(t => t.username === this.username), authKey = ['n/a', 'Owner', 'Admin', 'VIP', 'Everyone']
     for (const command of Object.keys(Commands)) t.privateLogs.push({m: `/${command} - ${Commands[command][2]} parameters. [${authKey[Commands[command][1]]}]`, c: '#00FF00'});
