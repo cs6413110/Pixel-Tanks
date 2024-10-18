@@ -300,7 +300,7 @@ class Client {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(t.x-2, t.y+108, 84, 11);
       GUI.draw.fillStyle = '#FFFF00';
-      GUI.draw.fillRect(t.x, t.y+110, 80*t.ammo/1000000, 5);
+      GUI.draw.fillRect(t.x, t.y+110, 80*t.ammo/60, 5);
     }
 
     if (t.shields > 0) {
