@@ -1,4 +1,4 @@
-cosmet purgewindow.sourceMap = {
+window.sourceMap = {
   fail: 'data',
   host: 'https://cs6413110.github.io/Pixel-Tanks/public/images',
   map: [ // image loading
