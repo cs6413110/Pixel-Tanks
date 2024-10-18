@@ -31,7 +31,7 @@ class AI {
     if (Math.random() < (rank/20)) this.cosmetic = cosmetics[Math.floor(Math.random()*cosmetics.length)];
     if (Math.random() < (rank/20)) this.cosmetic_body = cosmetics[Math.floor(Math.random()*cosmetics.length)];
     */
-    if (this.role !== 0) this.giveAbilities(); else this.ammo = 100;
+    if (this.role !== 0) this.giveAbilities(); else this.ammo = 60;
     const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
     if (summoner) {
       this.cosmetic_hat = summoner.cosmetic_hat;
