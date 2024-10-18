@@ -259,7 +259,7 @@ class Client {
     if (!e) return console.log(this.hostupdate.d);
     let frame = Math.floor((Date.now()-e.time)/18);
     if (e.w === 200) GUI.drawImage(PixelTanks.images.animations['smoke'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*200, 0, 200, 200);
-    if (e.w === 300) GUI.drawImage(PixelTanks.images.animations['healexplosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*300, 0, 300, 300);
+    if (e.w === 300) GUI.drawImage(PixelTanks.images.animations['healexplosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*300, 0, 300, 300); // temp remove?
     if (e.w !== 200 && e.w !== 300) GUI.drawImage(PixelTanks.images.animations['explosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*50, 0, 50, 50);
   }
 
