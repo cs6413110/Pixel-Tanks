@@ -359,7 +359,7 @@ class PixelTanks {
       },
       settings1: {
         buttons: [
-          //[416, 20, 108, 108, 'main', true],
+          [416, 20, 108, 108, function() {Menus.softUntrigger('settings1')}, true],
           //[880, 208, 488, 96, 'settings2', true],
         ],
         listeners: {
@@ -376,7 +376,6 @@ class PixelTanks {
           keydown: function(e) {
             PixelTanks.userData.keybinds[Menus.menus.settings1.selected] = e.keyCode;
             PixelTanks.save();
-            if (e.keyCode === 27) Menus.softUntrigger('settings1');
           }
         },
         cdraw: function() {
