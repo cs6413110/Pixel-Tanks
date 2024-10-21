@@ -739,7 +739,7 @@ class PixelTanks {
           PixelTanks.user.player.implode();
           PixelTanks.main();
         }, true],
-                 [1218, 824, 368, 76, 'settings1', true],
+                 [1218, 824, 368, 76, 'settings1', true]
                  ],
         listeners: {
           keydown: e => {
