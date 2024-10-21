@@ -738,8 +738,9 @@ class PixelTanks {
           Menus.softUntrigger('pause');
           PixelTanks.user.player.implode();
           PixelTanks.main();
-        }, true]],
-        [1218, 824, 368, 76, 'settings1', true],
+        }, true],
+                 [1218, 824, 368, 76, 'settings1', true],
+                 ],
         listeners: {
           keydown: e => {
             if (e.keyCode === 27) Menus.softUntrigger('pause');
