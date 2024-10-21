@@ -359,8 +359,8 @@ class PixelTanks {
       },
       settings1: {
         buttons: [
-          [416, 20, 108, 108, 'main', true],
-          [880, 208, 488, 96, 'settings2', true],
+          //[416, 20, 108, 108, 'main', true],
+          //[880, 208, 488, 96, 'settings2', true],
         ],
         listeners: {
           mousedown: function(e) {
@@ -376,6 +376,7 @@ class PixelTanks {
           keydown: function(e) {
             PixelTanks.userData.keybinds[Menus.menus.settings1.selected] = e.keyCode;
             PixelTanks.save();
+            if (e.keyCode === 27) Menus.softUntrigger('settings1');
           }
         },
         cdraw: function() {
@@ -738,6 +739,7 @@ class PixelTanks {
           PixelTanks.user.player.implode();
           PixelTanks.main();
         }, true]],
+        [1218, 824, 368, 76, 'settings1', true],
         listeners: {
           keydown: e => {
             if (e.keyCode === 27) Menus.softUntrigger('pause');
