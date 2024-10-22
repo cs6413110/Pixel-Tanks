@@ -213,7 +213,7 @@ class Client {
       items: [{time: -1}, {time: -1}, {time: -1}, {time: -1}],
     }
     this.mana = 15;
-    this.timers.class.cooldown = m*1000*[25, 2, 30, 15, 25, 10][['tactical', 'stealth', 'builder', 'warrior', 'medic', 'fire'].indexOf(PixelTanks.userData.class)];
+    this.timers.class.cooldown = m*1000*[25, 2, 30, 15, 30, 10][['tactical', 'stealth', 'builder', 'warrior', 'medic', 'fire'].indexOf(PixelTanks.userData.class)];
     for (let i = 0; i < 4; i++) this.timers.items[i].cooldown = m*1000*[30, 30, 30, 4, 8, 10, 10, 25, 20, 4, 25, 20][['duck_tape', 'super_glu', 'shield', 'weak', 'strong', 'spike', 'reflector', 'usb', 'flashbang', 'bomb', 'dynamite', 'airstrike'].indexOf(PixelTanks.userData.items[i])];
     clearTimeout(this.stealthTimeout);
     this.halfSpeed = this.tank.invis = false;
@@ -823,7 +823,7 @@ class Client {
           this.tank.immune = false;
         }, 500);
       }
-      if (PixelTanks.userData.class === 'medic') this.fire('healmissle');
+      if (PixelTanks.userData.class === 'medic') this.tank.use.push('healburst');
       if (PixelTanks.userData.class === 'fire') for (let i = -30; i < 30; i += 5) this.tank.fire.push({type: 'fire', r: this.tank.r+90+i});
     }
     if (k === 27) Menus.softTrigger('pause');
