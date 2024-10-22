@@ -297,6 +297,7 @@ class Engine {
   }
   static getUsername = s => Engine.parseTeamExtras(s).split(':')[0];
   static getTeam = s => Engine.parseTeamExtras(s).split(':')[1];
+  static match = (a, b) => Engine.getTeam(a.team) === Engine.getTeam(b.team);
   static collision = (x, y, w, h, x2, y2, w2, h2) => (x + w > x2 && x < x2 + w2 && y + h > y2 && y < y2 + h2);
   static toAngle = (x, y) => (-Math.atan2(x, y)*180/Math.PI+360)%360;
   static toPoint = angle => {
