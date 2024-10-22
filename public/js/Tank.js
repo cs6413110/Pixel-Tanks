@@ -126,7 +126,7 @@ class Tank {
     if (a < 0) {
       clearInterval(this.medicInterval);
       clearTimeout(this.medicTimeout);
-      this.medicInterval = setInterval(() => (t.hp = Math.min(this.maxHp, this.hp+10), 1000);
+      this.medicInterval = setInterval(() => (t.hp = Math.min(this.maxHp, this.hp+10)), 1000);
       this.medicTimeout = setTimeout(() => clearInterval(this.medicInterval), 10000);
     }
     clearTimeout(this.damageTimeout);
