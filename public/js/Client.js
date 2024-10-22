@@ -748,7 +748,7 @@ class Client {
     }
     if (k === 69 && this.ip === null) {
       if (Engine.collision(this.tank.x, this.tank.y, 80, 80, 2000, 4300, 400, 300)) Menus.softTrigger('inventory');
-      if (Engine.collision(this.tank.x, this.tank.y, 80, 80, 1900, 3400, 600, 300)) Menus.softTrigger('crate');// now it is EZ
+      if (Engine.collision(this.tank.x, this.tank.y, 80, 80, 1900, 3400, 600, 300)) Menus.softTrigger('shop');// now it is EZ
     }
     if (k === PixelTanks.userData.keybinds.fire) {
       this.fire(0);
