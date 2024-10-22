@@ -46,7 +46,7 @@ class Engine {
     } else if (a === 'tape') {
       t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
     } else if (a === 'healburst') {
-      A.template('Damage').init(t.x-60, t.y-60, 200, 200, -250, this.team, this.host);
+      A.template('Damage').init(t.x-60, t.y-60, 200, 200, -250, t.team, this);
     } else if (a === 'glu') {
       clearInterval(t.gluInterval);
       clearTimeout(t.gluTimeout);
