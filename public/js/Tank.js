@@ -123,6 +123,12 @@ class Tank {
     }
     if (this.shields > 0 && a > 0) return this.shields -= a;
     this.hp = Math.max(Math.min(this.maxHp, this.hp-a), 0);
+    if (a < 0) {
+      clearInterval(this.medicInterval);
+      clearTimeout(this.medicTimeout);
+      this.medicInterval = setInterval(() => (t.hp = Math.min(this.maxHp, this.hp+10), 1000);
+      this.medicTimeout = setTimeout(() => clearInterval(this.medicInterval), 10000);
+    }
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
     this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y};
