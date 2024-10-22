@@ -746,8 +746,10 @@ class Client {
       this.fireType = this.fireType < 2 ? 2 : 1;
       clearInterval(this.fireInterval);
     }
-    if (k === 69 && this.ip === null && this.x > 2000 && this.x < 2400 && this.y > 4300 && this.y < 4600) Menus.softTrigger('inventory');
-    if (k === 69 && this.ip === null && this.x > 1900 && this.x < 2500 && this.y > 3400 && this.y < 3700) Menus.softTrigger('crate');
+    if (k === 69 && this.ip === null) {
+      if (Engine.collision(this.tank.x, this.tank.y, 80, 80, 2000, 4300, 400, 300)) Menus.softTrigger('inventory');
+      if (Engine.collision(this.tank.x, this.tank.y, 80, 80, 1900, 3400, 600, 300)) alert('no crate for u');// crates aren't a menu bread, sorry
+    }
     if (k === PixelTanks.userData.keybinds.fire) {
       this.fire(0);
       clearInterval(this.fireInterval);
