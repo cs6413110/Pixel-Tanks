@@ -15,7 +15,7 @@ class Block {
     if (type === 'spike') this.c = false;
     if (type === 'airstrike') for (let i = 0; i < 80; i++) this.t.push(setTimeout(() => this.host.d.push(A.template('Damage').init(this.x+Math.floor(Math.random()*250)-50, this.y+Math.floor(Math.random()*250)-50, 100, 100, 50, this.team, this.host)), 5000+Math.random()*500));
     if (type === 'smoke') for (let i = 0; i < 1600; i++) this.t.push(setTimeout(() => this.host.d.push(A.template('Damage').init(this.x+Math.floor(Math.random()*350)-150, this.y+Math.floor(Math.random()*350)-150, 200, 200, 0, this.team, this.host)), Math.random()*10000));
-    if (this.c && this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 2900 && this.y >= 0 && this.y <= 2900) host.map.setWalkableAt(Engine.r(Math.floor(this.x/100)), Engine.r(Math.floor(this.y/100)), false);
+    if (this.c && this.x % 100 === 0 && this.y % 100 === 0 && this.x >= 0 && this.x <= 5900 && this.y >= 0 && this.y <= 5900) host.map.setWalkableAt(Engine.r(Math.floor(this.x/100)), Engine.r(Math.floor(this.y/100)), false);
     host.loadCells(this, this.x, this.y, 100, 100);
     host.updateEntity(this, type === 'void' || type === 'barrier' ? Block.raw2 : Block.raw);
     return this;
