@@ -36,10 +36,7 @@ class Tank {
       Object.defineProperty(this, p, {get: () => this.raw[p], set: v => this.setValue(p, v), configurable: true});
     }
   }
-  setValue(p, v) {
-    if (this.raw[p] === v && typeof v !== 'object') return; else this.raw[p] = v;
-    this.host.updateEntity(this, [p]);
-  }
+  setValue = (p, v) => (this.raw[p] === v && typeof v !== 'object') && ((this.raw[p] = v) || this.host.updateEntity(this, [p]));
   update() {
     const radar = Engine.hasPerk(this.perk, 6);
     if (radar && !this.ded) {
