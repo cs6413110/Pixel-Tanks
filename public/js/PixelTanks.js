@@ -351,7 +351,6 @@ class PixelTanks {
       },*/
       settings: {
         buttons: [
-          [59, 56, 53, 53, 'main', true],
           [397, 65, 38, 35, 'keybinds', true],
         ],
         listeners: {},
@@ -390,7 +389,6 @@ class PixelTanks {
       },
       settings2: {
         buttons: [
-          [416, 20, 108, 108, 'main', true],
           [232, 208, 488, 96, 'settings1', true],
           //top 6
           [165, 404, 176, 176, function() {PixelTanks.purchase(0)}, true],
@@ -668,7 +666,6 @@ class PixelTanks {
       },
       shop: {
         buttons: [
-          [416, 20, 108, 108, 'main', true],
           [880, 208, 488, 96, 'shop2', true],
           [496, 404, 176, 176, function() {PixelTanks.purchase(0, 0)}, true],
           [712, 404, 176, 176, function() {PixelTanks.purchase(0, 1)}, true],
@@ -687,7 +684,6 @@ class PixelTanks {
       },
       shop2: {
         buttons: [
-          [416, 20, 108, 108, 'main', true],
           [232, 208, 488, 96, 'shop', true],
           //emergency cloak
           [60, 404, 136, 136, function() {PixelTanks.purchase(1, 0)}, true],
