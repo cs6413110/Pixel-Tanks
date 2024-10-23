@@ -73,7 +73,7 @@ class Tank {
         const teamMatch = Engine.match(this, entity);
         if (!this.immune && entity instanceof Block) {
           if (!Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) continue;
-          if (entity.type === 'fire') this.fire = entity.team && this.fireTime = Date.now();
+          if (entity.type === 'fire') (this.fire = entity.team) && (this.fireTime = Date.now());
           if (entity.type === 'spike' && !teamMatch && spikeLimiter) spikeLimiter = this.damageCalc(this.x, this.y, .5, Engine.getUsername(entity.team)) && 0;
         } else if (!teamMatch && !entity.ded && (entity instanceof Tank || entity instanceof AI)) {
           if (!this.immune && entity.buff && this.canBashed && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 80, 80)) {
