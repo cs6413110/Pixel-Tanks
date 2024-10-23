@@ -18,7 +18,7 @@ class AI {
     this.seeUser = this.target = this.obstruction = this.bond = this.path = this.damage = false;
     this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = this.shields = 0;
     this.canFire = this.canPowermissle = this.canBoost = this.canBashed = true;
-    this.fire = false;
+    this.fire = this.reloading = false;
     this.fireTime = 0;
     /*
     if (Math.random() < (rank/20)) this.canItem0 = true;
@@ -199,8 +199,8 @@ class AI {
   }
 
   update() {
-    this.think();
-    if (!this.target && this.role === 0) this.r = (this.r+1)%360;
+    if (!this.reloading) this.think(); else this.ammo += .1;
+    if ((!this.target && this.role === 0) || this.reloading) this.r = (this.r+1)%360;
     if (!(this.role === 0 && this.mode === 0)) {
       const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
       this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
@@ -407,7 +407,7 @@ class AI {
       this.canFire = false;
       setTimeout(() => {this.canFire = true}, type === 'shotgun' ? 600 : 200);
     }
-    if (this.role === --this.ammo) this.destroy();
+    if (this.role === --this.ammo) this.reloading = true;
   }
 
   damageCalc(x, y, a, u) {
