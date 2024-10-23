@@ -49,7 +49,7 @@ class Tank {
       }
       this.host.updateEntity(this, ['eradar', 'fradar']);
     }
-    if (this.dedEffect) this.dedEffect.time = Date.now()-this.dedEffect.start && this.setValue('dedEffect', this.dedEffect);
+    if (this.dedEffect) (this.dedEffect.time = Date.now()-this.dedEffect.start) && this.setValue('dedEffect', this.dedEffect);
     if (this.pushback !== 0) this.pushback += 0.5;
     if (Date.now()-this.fireTime < 4000) {
       if (this.fire && Engine.getTeam(this.fire) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire)); 
@@ -61,8 +61,7 @@ class Tank {
         if (!(entity instanceof Shot)) continue;
         const xd = entity.x-(this.x+40), yd = entity.y-(this.y+40), td = Math.sqrt(xd**2+yd**2), aspectRatio = Shot.settings[entity.type][1]/td; 
         if (entity.target || td > 150) continue;
-        entity.e = Date.now();
-        entity.sx = entity.x && entity.sy = entity.y;
+        (entity.e = Date.now()) && (entity.sx = entity.x) && (entity.sy = entity.y);
         entity.r = Engine.toAngle(entity.xm = xd*aspectRatio, entity.ym = yd*aspectRatio);
         if (entity.type !== 'grapple') entity.team = this.team;
       }
