@@ -87,7 +87,7 @@ class Client {
   }
 
   moveDrones() {
-    for (const drone of drones) {
+    for (const drone of this.drones) {
       const yd = drone[4]-this.tank.y, xd = drone[3]-this.tank.x, tr = Engine.toAngle(xd, yd);
       const diff = (tr-drone[5]+360)%360, dir = diff < 180 ? 1 : -1;
       drone[5] = diff > 3 ? (drone[5]+dir*3+360)%360 : tr;
@@ -479,6 +479,7 @@ class Client {
     }
     for (const ex of e) this.drawExplosion(ex);
     for (const drone of this.drones) {
+      GUI.drawImage(PixelTanks.iamges.menus.drone, drone[3], drone[4], 100, 100);
       GUI.drawImage(PixelTanks.images.menus.drone, drone[3], drone[4], 100, 100, 1, 10, 50, 0, 0, drone[5], Math.floor(drone[9])*100, 0, 100, 100);
       //GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
      // GUI.drawImage(PixelTanks.images.animations['healexplosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*300, 0, 300, 300);
