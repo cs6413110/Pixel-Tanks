@@ -88,7 +88,7 @@ class Client {
 
   moveDrones() {
     for (const drone of this.drones) {
-      const yd = drone[4]-this.tank.y+40, xd = drone[3]-this.tank.x+40, tr = Engine.toAngle(xd, yd)-90;
+      const yd = drone[4]-this.tank.y+40, xd = drone[3]-this.tank.x+40, tr = Engine.toAngle(xd, yd);
       const diff = (tr-drone[5]+360)%360, dir = diff < 180 ? 1 : -1;
       drone[5] = diff > 3 ? (drone[5]+dir*3+360)%360 : tr;
       drone[3] += xd > 0 ? -2 : 2;
