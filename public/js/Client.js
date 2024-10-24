@@ -468,6 +468,7 @@ class Client {
     for (const ex of e) this.drawExplosion(ex);
 
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
+    if (this.menu) return Menus.menus[this.menu].draw();
     GUI.drawImage(PixelTanks.images.menus.ui, 0, 0, 1600, 1000, 1);
     GUI.drawText(this.kills, 1530, 40, 30, '#FFFFFF', 1);
     GUI.drawText(this.xp/10, 1530, 110, 30, '#FFFFFF', 1);
@@ -555,13 +556,6 @@ class Client {
         for (const key in colorset) if (info >= key) GUI.draw.fillStyle = colorset[key];
         GUI.draw.fillRect(1600-infoset.length*8+i*8, 800-info, 10, info);
       }
-    }
-    if (this.menu) {
-      GUI.draw.globalAlpha = .2;
-      GUI.draw.fillStyle = '#000000';
-      GUI.draw.fillRect(0, 0, 1600, 1000);
-      GUI.draw.globalAlpha = 1;
-      Menus.menus[this.menu].draw();
     }
   }
 
