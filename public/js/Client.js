@@ -854,7 +854,7 @@ class Client {
       if (!this.key[87] && !this.key[83]) this.up = null;
     }
     if (e.keyCode === 8 && this.ip === null) this.reset();
-    if (e.keyCode === 77 && this.ip === null) this.drones.push([this.tank.x, this.tank.y, this.tank.r, this.tank.x, this.tank.y, 0, false, false, 0]);
+    if (e.keyCode === 77 && this.ip === null) this.drones.push([this.tank.x, this.tank.y, this.tank.r, this.tank.x, this.tank.y, this.tank.r, 0, false, false, 0]);
     if (e.keyCode === PixelTanks.userData.keybinds.boost) {
       if ((Date.now() > this.timers.boost.time+(this.ded ? 0 : this.timers.boost.cooldown))) {
         this.speed = 16;
