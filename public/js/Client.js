@@ -60,6 +60,7 @@ class Client {
     this.ups = [];
     this.fps = [];
     this.pings = [];
+    this.drones = []; // [ox, oy, or, x, y, r, type, idle, scan, frame]
     this.joinData = {username: PixelTanks.user.username, token: PixelTanks.user.token, type: 'join', gamemode: this.gamemode, tank: {rank: PixelTanks.userData.stats[4], perk: PixelTanks.userData.perk, username: PixelTanks.user.username, class: PixelTanks.userData.class, cosmetic_hat: PixelTanks.userData.cosmetic_hat, cosmetic: PixelTanks.userData.cosmetic, cosmetic_body: PixelTanks.userData.cosmetic_body, deathEffect: PixelTanks.userData.deathEffect, color: PixelTanks.userData.color === "random" ? Engine.getRandomColor() : PixelTanks.userData.color}};
     this.reset();
     if (this.multiplayer) this.connect();
@@ -83,6 +84,19 @@ class Client {
 
   getIdType(id) {
     return ['pt', 'b', 's', 'ai', 'd'][Math.floor(id)];
+  }
+
+  moveDrones() {
+    for (const drone of drones) {
+      const yd = drone[4]-this.tank.y, xd = drone[3]-this.tank.x, tr = Engine.toAngle(xd, yd);
+      const diff = (tr-drone[5]+360)%360, dir = diff < 180 ? 1 : -1;
+      drone[5] = diff > 3 ? (drone[5]+dir*3+360)%360 : tr;
+      drone[3] += xd > 0 ? -2 : 2;
+      drone[4] += yd > 0 ? -2 : 2;
+    }
+    this.drones.filter(drone => {
+      return true;
+    });
   }
 
   interpret(data) {
@@ -466,6 +480,9 @@ class Client {
       GUI.draw.fillRect(block.x, block.y+110, 100*block.hp/block.maxHp, 5);
     }
     for (const ex of e) this.drawExplosion(ex);
+    for (const drone of this.drones) {
+      GUI.drawImage(PixelTanks.images.menus.drone, drone[3], drone[4]);
+    }
 
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
     if (this.menu) return Menus.menus[this.menu].draw();
@@ -835,6 +852,7 @@ class Client {
       if (!this.key[87] && !this.key[83]) this.up = null;
     }
     if (e.keyCode === 8 && this.ip === null) this.reset();
+    if (e.keyCode === 17 && this.ip === null) this.drones.push([this.tank.x, this.tank.y, this.tank.r, this.tank.x, this.tank.y, 0, false, false, 0]);
     if (e.keyCode === PixelTanks.userData.keybinds.boost) {
       if ((Date.now() > this.timers.boost.time+(this.ded ? 0 : this.timers.boost.cooldown))) {
         this.speed = 16;
