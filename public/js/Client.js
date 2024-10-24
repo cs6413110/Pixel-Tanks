@@ -88,7 +88,7 @@ class Client {
 
   moveDrones() {
     for (const drone of this.drones) {
-      const yd = drone[4]-this.tank.y, xd = drone[3]-this.tank.x, tr = Engine.toAngle(xd, yd);
+      const yd = drone[4]-this.tank.y, xd = drone[3]-this.tank.x, tr = Engine.toAngle(xd, yd)-90;
       const diff = (tr-drone[5]+360)%360, dir = diff < 180 ? 1 : -1;
       drone[5] = diff > 3 ? (drone[5]+dir*3+360)%360 : tr;
       drone[3] += xd > 0 ? -2 : 2;
@@ -480,7 +480,7 @@ class Client {
     for (const ex of e) this.drawExplosion(ex);
     for (const drone of this.drones) {
       try {
-      GUI.drawImage(PixelTanks.images.menus.drone, drone[3], drone[4], 100, 100, 1, 0, 0, 0, 0, drone[5], Math.floor(drone[9])*100, 0, 100, 100);
+      //GUI.drawImage(PixelTanks.images.menus.drone, drone[3], drone[4], 100, 100, 1, 0, 0, 0, 0, drone[5], Math.floor(drone[9])*100, 0, 100, 100);
       GUI.drawImage(PixelTanks.images.menus.drone, drone[3], drone[4], 100, 100, 1, 10, 50, 0, 0, drone[5], Math.floor(drone[9])*100, 0, 100, 100);
       } catch(e) {
         alert(e);
@@ -753,6 +753,7 @@ class Client {
       this.b = {o: this.tank.baseFrame, t: Date.now()};
     }
     for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i+1}`]) this.useItem(PixelTanks.userData.items[i], i);
+    if (e.keyCode === 77 && this.ip === null) this.drones.push([this.tank.x, this.tank.y, this.tank.r, this.tank.x, this.tank.y, this.tank.r, 0, false, false, 0]);
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       Client.input.style.visibility = 'visible';
       for (const m of Client.messages.children) m.style.visibility = 'visible';
@@ -858,7 +859,6 @@ class Client {
       if (!this.key[87] && !this.key[83]) this.up = null;
     }
     if (e.keyCode === 8 && this.ip === null) this.reset();
-    if (e.keyCode === 77 && this.ip === null) this.drones.push([this.tank.x, this.tank.y, this.tank.r, this.tank.x, this.tank.y, this.tank.r, 0, false, false, 0]);
     if (e.keyCode === PixelTanks.userData.keybinds.boost) {
       if ((Date.now() > this.timers.boost.time+(this.ded ? 0 : this.timers.boost.cooldown))) {
         this.speed = 16;
