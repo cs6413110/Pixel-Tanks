@@ -94,9 +94,6 @@ class Client {
       drone[3] += xd > 0 ? -2 : 2;
       drone[4] += yd > 0 ? -2 : 2;
     }
-    this.drones.filter(drone => {
-      return true;
-    });
   }
 
   interpret(data) {
