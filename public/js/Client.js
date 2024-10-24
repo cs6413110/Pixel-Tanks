@@ -450,11 +450,11 @@ class Client {
     for (const shot of s) this.drawShot(shot);
     for (const block of b) this.drawBlock(block);
     if (this.ip === null) {
-      GUI.draw.drawImage(PixelTanks.images.menus.inventory_, 1300, 3900, 300, 300);
-      GUI.draw.drawImage(PixelTanks.images.menus.crate_, 1600, 4200, 300, 100);
+      GUI.draw.drawImage(PixelTanks.images.menus.inventory_, 2600, 2900, 300, 300);
+      GUI.draw.drawImage(PixelTanks.images.menus.crate_, 2200, 2600, 300, 100);
       let msg = '';
-      if (Engine.collision(player.x, player.y, 80, 80, 1300, 3900, 300, 300)) msg = 'Press E For Inventory';
-      if (Engine.collision(player.x, player.y, 80, 80, 1500, 4200, 500, 200)) msg = 'Press E To Open Crate';
+      if (Engine.collision(player.x, player.y, 80, 80, 2600, 2900, 300, 300)) msg = 'Press E For Inventory';
+      if (Engine.collision(player.x, player.y, 80, 80, 2200, 2600, 300, 200)) msg = 'Press E To Open Crate';
       this.hostupdate.global = msg;
     }
     for (const ai of a) this.drawTank(ai);
