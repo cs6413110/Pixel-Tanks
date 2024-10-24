@@ -481,7 +481,8 @@ class Client {
     for (const drone of this.drones) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(drone[3]-5, drone[4]-5, 10, 10);
-      GUI.drawImage(PixelTanks.images.menus.drone, drone[3]-20, drone[4]-50, 100, 100, 1, 20, 50, 0, 0, drone[5], Math.floor(drone[9])*100, 0, 100, 100);
+      const distance = Math.sqrt((drone[3]-this.tank.x-40)**2+(drone[4]-this.tank.y-40)**2);
+      GUI.drawImage(PixelTanks.images.menus[distance < 50 ? 'drone_scan' : 'drone'], drone[3]-20, drone[4]-50, 100, 100, 1, 20, 50, 0, 0, drone[5], Math.floor(drone[9])*100, 0, 100, 100);
     }
     this.moveDrones();
 
