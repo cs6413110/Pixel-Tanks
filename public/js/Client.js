@@ -88,7 +88,7 @@ class Client {
 
   moveDrones() {
     for (const drone of this.drones) {
-      const yd = drone[4]-this.tank.y+40, xd = drone[3]-this.tank.x+40, tr = Engine.toAngle(xd, yd);
+      const yd = drone[4]-this.tank.y-40, xd = drone[3]-this.tank.x-40, tr = Engine.toAngle(xd, yd);
       const diff = (tr-drone[5]+360)%360, dir = diff < 180 ? 1 : -1;
       drone[5] = diff > 3 ? (drone[5]+dir*3+360)%360 : tr;
       drone[3] += xd > 0 ? -2 : 2;
@@ -481,7 +481,7 @@ class Client {
     for (const drone of this.drones) {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(drone[3]-5, drone[4]-5, 10, 10);
-      GUI.drawImage(PixelTanks.images.menus.drone, drone[3], drone[4], 100, 100, 1, 20, 50, 0, 0, drone[5], Math.floor(drone[9])*100, 0, 100, 100);
+      GUI.drawImage(PixelTanks.images.menus.drone, drone[3]-10, drone[4]-50, 100, 100, 1, 20, 50, 0, 0, drone[5], Math.floor(drone[9])*100, 0, 100, 100);
     }
     this.moveDrones();
 
