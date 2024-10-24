@@ -82,17 +82,15 @@ class Client {
     Client.messages.style.maxHeight = (window.innerHeight*.8)+'px';
   }
 
-  getIdType(id) {
-    return ['pt', 'b', 's', 'ai', 'd'][Math.floor(id)];
-  }
+  getIdType = id => ['pt', 'b', 's', 'ai', 'd'][Math.floor(id)];
 
   moveDrones() {
     for (const drone of this.drones) {
-      const yd = drone[4]-this.tank.y-40, xd = drone[3]-this.tank.x-40, tr = Engine.toAngle(xd, yd);
+      const yd = drone[4]-this.tank.y-40, xd = drone[3]-this.tank.x-40, tr = Engine.toAngle(xd, yd), p = Engine.toPoint(tr);
       const diff = (tr-drone[5]+360)%360, dir = diff < 180 ? 1 : -1;
       drone[5] = diff > 3 ? (drone[5]+dir*3+360)%360 : tr;
-      drone[3] += xd > 0 ? -2 : 2;
-      drone[4] += yd > 0 ? -2 : 2;
+      drone[3] += p.x;
+      drone[4] += p.y;
       drone[9] = (drone[9]+.2)%3;
     }
   }
