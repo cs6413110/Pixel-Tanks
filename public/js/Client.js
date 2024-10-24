@@ -753,7 +753,7 @@ class Client {
       this.b = {o: this.tank.baseFrame, t: Date.now()};
     }
     for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i+1}`]) this.useItem(PixelTanks.userData.items[i], i);
-    if (e.keyCode === 77 && this.ip === null) this.drones.push([this.tank.x, this.tank.y, this.tank.r, this.tank.x, this.tank.y, this.tank.r, 0, false, false, 0]);
+    if (e.keyCode === 77) this.drones.push([this.tank.x, this.tank.y, this.tank.r, this.tank.x, this.tank.y, this.tank.r, 0, false, false, 0]);
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       Client.input.style.visibility = 'visible';
       for (const m of Client.messages.children) m.style.visibility = 'visible';
