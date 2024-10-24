@@ -93,8 +93,7 @@ class Client {
       drone[5] = diff > 3 ? (drone[5]+dir*3+360)%360 : tr;
       drone[3] += xd > 0 ? -2 : 2;
       drone[4] += yd > 0 ? -2 : 2;
-      drone[9] += .2;
-      if (drone[9] === 3) drone[9] = 0;
+      drone[9] = (drone[9]+.2)%3;
     }
   }
 
