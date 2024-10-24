@@ -479,8 +479,12 @@ class Client {
     }
     for (const ex of e) this.drawExplosion(ex);
     for (const drone of this.drones) {
+      try {
       GUI.drawImage(PixelTanks.iamges.menus.drone, drone[3], drone[4], 100, 100);
       GUI.drawImage(PixelTanks.images.menus.drone, drone[3], drone[4], 100, 100, 1, 10, 50, 0, 0, drone[5], Math.floor(drone[9])*100, 0, 100, 100);
+      } catch(e) {
+        alert(e);
+      }
       //GUI.drawImage(PixelTanks.images.tanks.top, t.x, t.y, 80, 90, a, 40, 40, 0, t.pushback, t.r);
      // GUI.drawImage(PixelTanks.images.animations['healexplosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*300, 0, 300, 300);
     }
