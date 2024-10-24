@@ -478,7 +478,11 @@ class Client {
       GUI.draw.fillRect(block.x, block.y+110, 100*block.hp/block.maxHp, 5);
     }
     for (const ex of e) this.drawExplosion(ex);
-    for (const drone of this.drones) GUI.drawImage(PixelTanks.images.menus.drone, drone[3], drone[4], 100, 100, 1, 20, 50, 0, 0, drone[5], Math.floor(drone[9])*100, 0, 100, 100);
+    for (const drone of this.drones) {
+      GUI.draw.fillStyle = '#000000';
+      GUI.draw.fillRect(drone[3]-5, drone[4]-5, 10, 10);
+      GUI.drawImage(PixelTanks.images.menus.drone, drone[3], drone[4], 100, 100, 1, 20, 50, 0, 0, drone[5], Math.floor(drone[9])*100, 0, 100, 100);
+    }
     this.moveDrones();
 
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
