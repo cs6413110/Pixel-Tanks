@@ -94,6 +94,7 @@ class Client {
       drone[3] += xd > 0 ? -2 : 2;
       drone[4] += yd > 0 ? -2 : 2;
       drone[9] += .2;
+      if (drone[9] === 3) drone[9] = 0;
     }
   }
 
