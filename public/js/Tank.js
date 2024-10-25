@@ -1,6 +1,6 @@
 class Tank {
   static args = ['username', 'rank', 'class', 'perk', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'deathEffect', 'color'];
-  static raw = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static raw = ['authority', 'rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
   static s = ['rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
   static u = ['x', 'y'];
   constructor() {
@@ -26,6 +26,8 @@ class Tank {
     this.maxTurrets = 3;
     this.grapple = false;
     this.logs = this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = 0;
+    this.authority = '';
+    for (const level of ['VIP', 'Admin', 'Owner']) if (Storage[level.toLowerCase()+'s'].includes(data.username)) this.authority = level;
     host.updateEntity(this, Tank.raw);
     host.override(this);
     host.loadCells(this, this.x, this.y, 80, 80);
