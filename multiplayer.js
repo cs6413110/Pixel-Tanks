@@ -904,7 +904,9 @@ wss.on('connection', socket => {
         log(`${socket.username} tried to say "${data.msg}"`);
         return socket.send({status: 'error', message: 'You are muted!'});
       }
-      servers[socket.room].logs.push({m: `[${socket.username}] ${clean(data.msg)}`, c: '#ffffff'});
+      let role;
+      for (const level of ['VIP', 'Admin', 'Owner']) if (Storage[level.toLowerCase()+'s'].includes(socket.username)) role = level;
+      servers[socket.room].logs.push({m: (role ? '['+role+']' : '')+`${socket.username}: ${clean(data.msg)}`, c: '#ffffff'});
       for (const t of servers[socket.room].pt) servers[socket.room].send(t);
       log(`[${socket.username}] ${clean(data.msg)}`);
     } else if (data.type === 'logs') {
