@@ -199,23 +199,16 @@ class AI {
   }
 
   update() {
-    if (!this.reloading) this.think(); else this.ammo += .1;
-    if ((!this.target && this.role === 0) || this.reloading) this.r = (this.r+1)%360;
-    if (!(this.role === 0 && this.mode === 0)) {
-      const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
-      this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
+    if (!this.reloading) this.think(); else {
+      this.ammo += .1;
+      if (this.ammo >= 120) this.reloading = false;
     }
     const team = Engine.getTeam(this.team);
-    /*if (this.dedEffect) {
-      this.dedEffect.time = Date.now() - this.dedEffect.start;
-      this.setValue('dedEffect', this.dedEffect); // REMOVE THIS TEMPORARY
-    } No death effects for AI yet...*/
     if (this.pushback !== 0) this.pushback += 0.5;
     if (Date.now()-this.fireTime < 4000) {
       if (this.fire && Engine.getTeam(this.fire) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire));
     } else this.fire = false;
     if (this.damage) this.damage.y--;
-    // if (this.grapple) this.grappleCalc(); No grapple for AI yet...
     if (this.reflect) {
       const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
       for (let i = Math.max(0, hx-2); i <= Math.min(59, hx+2); i++) for (let l = Math.max(0, hy-2); l <= Math.min(59, hy+2); l++) {
@@ -255,6 +248,16 @@ class AI {
         }
       }
     }
+    if ((!this.target && this.role === 0) || this.reloading) return this.r = (this.r+1)%360;
+    if (!(this.role === 0 && this.mode === 0)) {
+      const diff = (this.tr-this.r+360)%360, dir = diff < 180 ? 1 : -1;
+      this.r = diff > this.barrelSpeed ? (this.r+dir*this.barrelSpeed+360)%360 : this.tr;
+    }
+    /*if (this.dedEffect) {
+      this.dedEffect.time = Date.now() - this.dedEffect.start;
+      this.setValue('dedEffect', this.dedEffect); // REMOVE THIS TEMPORARY
+    } No death effects for AI yet...*/
+    // if (this.grapple) this.grappleCalc(); No grapple for AI yet...
   }
 
   move() {
