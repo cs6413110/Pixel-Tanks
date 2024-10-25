@@ -42,7 +42,7 @@ class Client {
   }
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this._ops = this._ups = this._fps = this.debugMode = 0;
-    this.tank = {use: [], fire: [], r: 0, x: 0, y: 0};
+    this.tank = {use: [], fire: [], r: 0, x: 0, y: 0, baseRotation: 0};
     this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], entities: [], tickspeed: -1};
     this.paused = this.canRespawn = false;
     this.multiplayer = multiplayer;
@@ -434,7 +434,9 @@ class Client {
       this.dy.t = Date.now()-(Date.now()-this.dy.t)%15;
       this.dy.o = this.tank.y;
     }
-    this.tank.baseRotation = (this.left === null) ? (this.up ? 180 : 0) : (this.left ? (this.up === null ? 90 : (this.up ? 135 : 45)) : (this.up === null ? 270 : (this.up ? 225: 315)));
+    const br = (this.left === null) ? (this.up ? 180 : 0) : (this.left ? (this.up === null ? 90 : (this.up ? 135 : 45)) : (this.up === null ? 270 : (this.up ? 225: 315)));
+    const diff = (br-this.tank.baseRotation+360)%360, dir = diff < 180 ? 1 : -1;
+    this.tank.baseRotation = diff > 5 ? (drone[5]+dir*5+360)%360 : br;
     if (this.b) this.tank.baseFrame = ((this.b.o ? 0 : 1)+Math.floor((Date.now()-this.b.t)/120))%2;
     const player = t.find(tank => tank.username === PixelTanks.user.username);
     if (player) {
