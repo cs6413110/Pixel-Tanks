@@ -906,7 +906,7 @@ wss.on('connection', socket => {
       }
       let role;
       for (const level of ['VIP', 'Admin', 'Owner']) if (Storage[level.toLowerCase()+'s'].includes(socket.username)) role = level;
-      servers[socket.room].logs.push({m: (role ? '['+role+']' : '')+`${socket.username}: ${clean(data.msg)}`, c: '#ffffff'});
+      servers[socket.room].logs.push({m: (role ? '['+role+'] ' : '')+`${socket.username}: ${clean(data.msg)}`, c: '#ffffff'});
       for (const t of servers[socket.room].pt) servers[socket.room].send(t);
       log(`[${socket.username}] ${clean(data.msg)}`);
     } else if (data.type === 'logs') {
