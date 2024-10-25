@@ -26,8 +26,6 @@ class Tank {
     this.maxTurrets = 3;
     this.grapple = false;
     this.logs = this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = 0;
-    this.authority = '';
-    for (const level of ['VIP', 'Admin', 'Owner']) if (Storage[level.toLowerCase()+'s'].includes(data.username)) this.authority = level;
     host.updateEntity(this, Tank.raw);
     host.override(this);
     host.loadCells(this, this.x, this.y, 80, 80);
