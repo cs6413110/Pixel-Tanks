@@ -895,8 +895,8 @@ wss.on('connection', socket => {
         return setImmediate(() => socket.close());
       }
       socket.room = server;
-      data.authority = '';
-      for (const level of ['VIP', 'Admin', 'Owner']) if (Storage[level.toLowerCase()+'s'].includes(data.username)) data.authority = level;
+      data.tank.authority = '';
+      for (const level of ['VIP', 'Admin', 'Owner']) if (Storage[level.toLowerCase()+'s'].includes(data.username)) data.tank.authority = level;
       servers[server].add(socket, data.tank);
     } else if (data.type === 'ping') {
       socket.send({event: 'ping', id: data.id});
