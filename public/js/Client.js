@@ -84,14 +84,28 @@ class Client {
 
   getIdType = id => ['pt', 'b', 's', 'ai', 'd'][Math.floor(id)];
 
-  moveDrones() {
-    for (const drone of this.drones) {
-      const yd = drone[4]-this.tank.y-40, xd = drone[3]-this.tank.x-40, tr = Engine.toAngle(xd, yd)-90, a = Math.sqrt(yd**2+xd**2)/2;
+  moveDrones() {                        // 0   1   2   3  4  5  6    7    8    9     10    11
+    for (const drone of this.drones) { // [ox, oy, or, x, y, r, tx, ty, type, idle, scan, frame]
+      const xd = drone[3]-drone[6], yd = drone[4]-drone[7], tr = Engine.toAngle(xd, yd)-90, d = Math.sqrt(yd**2+xd**2), a = d/2;
       const diff = (tr-drone[5]+360)%360, dir = diff < 180 ? 1 : -1;
       drone[5] = diff > 3 ? (drone[5]+dir*3+360)%360 : tr;
+      if (Math.random() < (drone[9] ? .04 : .02) && (drone[8] === 1 || d < 200)) drone[9] = !drone[9]; // idling % chance
+      if ((!drone[6] && !drone[7]) || !Math.sqrt((drone[3]-drone[6])**2+(drone[4]-drone[7])**2)) {
+        drone[9] = true; // idle when reached destination
+        d[6] = Math.random() < .5 ? 70 : -70;
+        d[7] = Math.random()*140-70;
+        if (Math.random() < .5) { // % chance to swap
+          let temp = d[6];
+          d[6] = d[7];
+          d[7] = temp;
+        }
+        d[6] += this.tank.x+40; // assign to player offset
+        d[7] += this.tank.y+40;
+      }
+      if (drone[9]) continue; // idling return
       drone[3] -= xd/a;
       drone[4] -= yd/a;
-      drone[9] = (drone[9]+.2)%3;
+      drone[11] = (drone[11]+.2)%3; 
     }
   }
 
@@ -484,7 +498,7 @@ class Client {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(drone[3]-5, drone[4]-5, 10, 10);
       const distance = Math.sqrt((drone[3]-this.tank.x-40)**2+(drone[4]-this.tank.y-40)**2);
-      GUI.drawImage(PixelTanks.images.menus[distance < 100 ? 'drone_scan' : 'drone'], drone[3]-200, drone[4]-200, 400, 400, 1, 200, 200, 0, 0, drone[5], Math.floor(drone[9])*200, 0, 200, 200);
+      GUI.drawImage(PixelTanks.images.menus[distance < 100 ? 'drone_scan' : 'drone'], drone[3]-200, drone[4]-200, 400, 400, 1, 200, 200, 0, 0, drone[5], Math.floor(drone[11])*200, 0, 200, 200);
     }
     this.moveDrones();
 
