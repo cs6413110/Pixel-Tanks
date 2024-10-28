@@ -88,7 +88,7 @@ class Client {
     try {
     for (const drone of this.drones) { // [ox, oy, or, x, y, r, tx, ty, type, idle, scan, frame]
       let xd = drone[3]-drone[6]-this.tank.x-40, yd = drone[4]-drone[7]-this.tank.y-40, tr = Engine.toAngle(xd, yd)-90, d = Math.sqrt(yd**2+xd**2), a = d/2;
-      if (drone[9] && d < 200) tr = Engine.toAngle(drone[3]-this.tank.x-40, drone[4]-this.tank.y-40);
+      if (drone[9] && d < 200) tr = Engine.toAngle(drone[3]-this.tank.x-40, drone[4]-this.tank.y-40)-90;
       const diff = (tr-drone[5]+360)%360, dir = diff < 180 ? 1 : -1;
       drone[5] = diff > 3 ? (drone[5]+dir*3+360)%360 : tr;
       drone[11] = (drone[11]+.2)%3; 
