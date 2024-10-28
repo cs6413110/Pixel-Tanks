@@ -92,7 +92,7 @@ class Client {
       const diff = (tr-drone[5]+360)%360, dir = diff < 180 ? 1 : -1;
       drone[5] = diff > 3 ? (drone[5]+dir*3+360)%360 : tr;
       drone[11] = (drone[11]+.2)%3; 
-      if (Math.random() < (drone[9] ? .08 : .04) && (drone[8] === 1 || d < 200)) drone[9] = !drone[9]; // idling % chance
+      if (Math.random() < (drone[9] ? .008 : .004) && (drone[8] === 1 || d < 200)) drone[9] = !drone[9]; // idling % chance
       if ((!drone[6] && !drone[7]) || d < 20) {
         drone[9] = true; // idle when reached destination
         drone[6] = Math.random() < .5 ? 70 : -70;
