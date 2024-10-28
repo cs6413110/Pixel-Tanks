@@ -499,7 +499,7 @@ class Client {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(drone[3]-5, drone[4]-5, 10, 10);
       const xd = drone[3]-this.tank.x-40, yd = drone[4]-this.tank.y-40, distance = Math.sqrt(xd**2+yd**2), a = Engine.toAngle(xd, yd)-90+360, ad = Math.abs(drone[5]-a);
-      GUI.drawImage(PixelTanks.images.menus[((ad < 20 || ad > 340) && distance < 100) ? 'drone_scan' : 'drone'], drone[3]-200, drone[4]-200, 400, 400, 1, 200, 200, 0, 0, drone[5], Math.floor(drone[11])*200, 0, 200, 200);
+      GUI.drawImage(PixelTanks.images.menus[((ad < 10 || ad > 350) && distance < 100) ? 'drone_scan' : 'drone'], drone[3]-200, drone[4]-200, 400, 400, 1, 200, 200, 0, 0, drone[5], Math.floor(drone[11])*200, 0, 200, 200);
     }
     this.moveDrones();
 
