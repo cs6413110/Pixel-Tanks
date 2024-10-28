@@ -93,15 +93,15 @@ class Client {
       if (Math.random() < (drone[9] ? .04 : .02) && (drone[8] === 1 || d < 200)) drone[9] = !drone[9]; // idling % chance
       if ((!drone[6] && !drone[7]) || !Math.sqrt((drone[3]-drone[6])**2+(drone[4]-drone[7])**2)) {
         drone[9] = true; // idle when reached destination
-        d[6] = Math.random() < .5 ? 70 : -70;
-        d[7] = Math.random()*140-70;
+        drone[6] = Math.random() < .5 ? 70 : -70;
+        drone[7] = Math.random()*140-70;
         if (Math.random() < .5) { // % chance to swap
-          let temp = d[6];
-          d[6] = d[7];
-          d[7] = temp;
+          let temp = drone[6];
+          drone[6] = drone[7];
+          drone[7] = temp;
         }
-        d[6] += this.tank.x+40; // assign to player offset
-        d[7] += this.tank.y+40;
+        drone[6] += this.tank.x+40; // assign to player offset
+        drone[7] += this.tank.y+40;
       }
       if (drone[9]) continue; // idling return
       drone[3] -= xd/a;
