@@ -402,6 +402,7 @@ class Client {
   }
 
   frame() {
+    GUI.draw.fillStyle = '#ffffff';
     GUI.clear();
     this._fps++;
     this.render = requestAnimationFrame(() => this.frame());
