@@ -812,7 +812,7 @@ const Commands = {
   }],
   announce: [Object, 3, -1, function(data) {
     for (const server of Object.values(servers)) {
-      server.logs.push({m: '[Announcement]['+this.username+'] '+data.slice(1).join(' '), c: '#FFF87D'});
+      server.logs.push({m: '[Announcement]['+this.role+']['+this.username+'] '+data.slice(1).join(' '), c: '#FFF87D'});
       for (const t of server.pt) server.send(t);
     }
   }],
