@@ -720,7 +720,7 @@ const Commands = {
     for (const t of servers[this.room].pt) if (Engine.getTeam(t.team) === team) t.privateLogs.push(msg);
   }],
   gpt: [Object, 4, -1, function(data) {
-    gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? data.gpt : err, c: '#DFCFBE'}));
+    gpt({prompt: data.slice(1).join(' '), model: 'gpt-4'}, (err, data) => servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err === null ? JSON.stringify(data.gpt) : err, c: '#DFCFBE'}));
   }],
   newmap: [FFA, 3, -1, function(data) {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
