@@ -812,7 +812,7 @@ const Commands = {
   }],
   announce: [Object, 3, -1, function(data) {
     for (const server of Object.values(servers)) {
-      server.logs.push({m: '[Announcement]['+(hasAccess(socket.username, 1) ? 'Owner' : (hasAccess(socket.username, 2)) ? 'Admin' : 'VIP')+']['+this.username+'] '+data.slice(1).join(' '), c: '#FFF87D'});
+      server.logs.push({m: '[Announcement]['+(hasAccess(this.username, 1) ? 'Owner' : (hasAccess(this.username, 2)) ? 'Admin' : 'VIP')+']['+this.username+'] '+data.slice(1).join(' '), c: '#FFF87D'});
       for (const t of server.pt) server.send(t);
     }
   }],
