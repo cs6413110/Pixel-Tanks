@@ -45,7 +45,7 @@ class Tank {
     if (radar && !this.ded) {
       this.eradar.length = this.fradar.length = 0;
       for (const t of this.host.pt.concat(this.host.ai)) {
-        if (t.ded && t.x !== this.x && t.y !== this.y) continue;
+        if (t.ded || (t.x === this.x && t.y === this.y) || Math.sqrt((t.x-this.x)**2+(t.y-this.y)**2) < 400) continue;
         if (!Engine.match(t, this)) {
           if (!t.invis) this.eradar.push(Engine.toAngle(t.x-this.x, t.y-this.y));
         } else if (radar > 1) this.fradar.push(Engine.toAngle(t.x-this.x, t.y-this.y));
