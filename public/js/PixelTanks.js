@@ -9,7 +9,7 @@ class PixelTanks {
   static shortcut() {
     if (PixelTanks.user.player) PixelTanks.user.player.implode();
     let port = '8080';
-    if (['cs641311', 'bradley'].includes(PixelTanks.user.username)) port = prompt('port');
+    if (['cs641311'].includes(PixelTanks.user.username)) port = prompt('port');
     PixelTanks.user.player = new Client('141.148.128.231:'+port, true, confirm('Ok for ffa, cancel for tdm') ? 'ffa' : 'tdm');
     Menus.removeListeners();
   }
