@@ -20,8 +20,8 @@ class AI {
     this.canFire = this.canPowermissle = this.canBoost = this.canBashed = true;
     this.fire = this.reloading = false;
     this.fireTime = 0;
-    for (let i = 0; i < 4; i++) if (Math.random() < rank/20) this['canItem'+i] = true;
-    if (Math.random() < (rank/20)) this.canClass = true;
+    if (this.role !== 0) for (let i = 0; i < 4; i++) if (Math.random() < rank/20) this['canItem'+i] = true;
+    if (this.role !== 0) if (Math.random() < (rank/20)) this.canClass = true;
     if (this.role !== 0) this.giveAbilities(); else this.ammo = 120;
     const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
     if (summoner) {
