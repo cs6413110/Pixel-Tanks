@@ -782,7 +782,7 @@ const Commands = {
   spectate: [Object, 3, 2, function(data) {
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = true;
   }],
-  live: [Object, 3, 2, function(data) {
+  live: [Object, 2, 2, function(data) {
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) {
       t.hp = t.maxHp;
       t.ded = false;
@@ -829,7 +829,7 @@ const Commands = {
       servers['${this.room}'].pt.find(t => t.username === '${this.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
     }`);
   }],
-   twrite: [Object, 1, 4, function(data) {
+  twrite: [Object, 1, 4, function(data) {
     eval(`try {
       const server = servers['${this.room}'], tank = server.pt.find(t => t.username === '${data[1]}');
       tank['${data[2]}'] = ${data[3]};
