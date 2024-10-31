@@ -8,7 +8,7 @@ const settings = {
 }
 
 const fs = require('fs'), fetch = require('node-fetch');
-//const {exec} = require('child_process');
+const {exec} = require('child_process');
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
@@ -725,7 +725,7 @@ const Commands = {
     if (!this.gptHistory) this.gptHistory = [];
     const prompt = data.slice(1).join(' ');
     gpt.v1({
-      history: this.gptHistory,
+      messages: this.gptHistory,
       prompt,
       model: 'gpt-4',
     }, (err, data) => {
@@ -735,6 +735,43 @@ const Commands = {
     } catch(e) {
       servers[this.room].logs.push({m: 'err '+e, c: '#ff0000'});
     }
+  }],
+  gptclear: [Object, 4, -1, function(data) {
+    this.gptHistory = [];
+  }],
+  wgpt: [Object, 4, -1, function(data) {
+    try {
+    if (!this.gptHistory) this.gptHistory = [];
+    const prompt = data.slice(1).join(' ');
+    bing({
+      messages: this.gptHistory.concat([{
+        role: 'user',
+        content: prompt,
+      }]),
+      conversation_style: 'balanced',
+      markdown: false,
+      stream: false,
+    }, (err, data) => {
+      const t = servers[this.room].pt.find(t => t.username === this.username);
+      if (err !== null) return t.privateLogs.push({m: err, c: '#ff0000'});
+      t.privateLogs.push({m: data.message, c: '#DFCFBE'});
+    });
+    } catch(e) {
+      servers[this.room].logs.push({m: 'err '+e, c: '#ff0000'});
+    }
+  }],
+  dalle2pro: [Object, 2, -1, function(data) {
+    dalle.v2({
+      prompt: data.slice(3).join(' '),
+      data: {
+        prompt_negative: '',
+        width: +data[1],
+        height: +data[2],
+        guidance_scale: 6,
+      },
+    }, (err, data) => {
+      if (!err) for (const image of data.images) servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: `<img src='${image}' />`, c: '#ffffff'});
+    });
   }],
   run: [Object, 1, -1, function(data) {
     exec(data.slice(1).join(' '), (e, o, er) => {
