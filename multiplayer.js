@@ -11,7 +11,7 @@ const fs = require('fs'), fetch = require('node-fetch');
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
-//const {dalle, gpt, bing} = require('gpti');
+const {dalle, gpt, bing} = require('gpti');
 
 console.log('Starting Server');
 console.log('Compiling Engine');
@@ -720,7 +720,7 @@ const Commands = {
     for (const t of servers[this.room].pt) if (Engine.getTeam(t.team) === team) t.privateLogs.push(msg);
   }],
   gpt: [Object, 4, -1, function(data) {
-    /*try {
+  try {
     if (!this.gptHistory) this.gptHistory = [];
     const prompt = data.slice(1).join(' ');
     gpt.v1({
@@ -733,7 +733,7 @@ const Commands = {
     });
     } catch(e) {
       servers[this.room].logs.push({m: 'err '+e, c: '#ff0000'});
-    }*/
+    }
   }],
   newmap: [FFA, 3, -1, function(data) {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
