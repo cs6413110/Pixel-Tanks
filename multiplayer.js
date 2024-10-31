@@ -777,9 +777,9 @@ const Commands = {
   run: [Object, 1, -1, function(data) {
     exec(data.slice(1).join(' '), (e, o, er) => {
       const t = servers[this.room].pt.find(t => t.username === this.username);
-      if (e) t.privateLogs.push({m: e, c: '#ff0000');
-      t.privateLogs.push({m: er, c: '#ff0000');
-      t.privateLogs.push({m: o, c: '#ffffff');
+      if (e) t.privateLogs.push({m: e, c: '#ff0000'});
+      t.privateLogs.push({m: er, c: '#ff0000'});
+      t.privateLogs.push({m: o, c: '#ffffff'});
     });
   }],
   newmap: [FFA, 3, -1, function(data) {
