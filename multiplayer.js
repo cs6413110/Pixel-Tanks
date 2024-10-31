@@ -755,7 +755,7 @@ const Commands = {
       stream: false,
     }, (err, data) => {
       const t = servers[this.room].pt.find(t => t.username === this.username);
-      if (err !== null) return t.privateLogs.push({m: JSON.stringify(err_, c: '#ff0000'});
+      if (err !== null) return t.privateLogs.push({m: JSON.stringify(err), c: '#ff0000'});
       t.privateLogs.push({m: data.message, c: '#DFCFBE'});
     });
     } catch(e) {
