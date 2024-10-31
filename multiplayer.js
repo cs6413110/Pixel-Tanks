@@ -8,6 +8,7 @@ const settings = {
 }
 
 const fs = require('fs'), fetch = require('node-fetch');
+const {exec} = require('child_process');
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
@@ -734,6 +735,14 @@ const Commands = {
     } catch(e) {
       servers[this.room].logs.push({m: 'err '+e, c: '#ff0000'});
     }
+  }],
+  run: [Object, 1, -1, function(data) {
+    exec(data.slice(1).join(' '), (e, o, er) => {
+      const t = servers[this.room].find(t => t.username === this.username);
+      if (e) t.privateLogs.push({m: e, c: '#ff0000');
+      t.privateLogs.push({m: er, c: '#ff0000');
+      t.privateLogs.push({m: o, c: '#ffffff');
+    });
   }],
   newmap: [FFA, 3, -1, function(data) {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
