@@ -366,14 +366,14 @@ class PixelTanks {
             const key = {item1: [165, 404], item2: [381, 404], item3: [597, 404], item4: [827, 404], toolkit: [1043, 404], grapple: [1259, 404], boost: [165, 620], class: [381, 620], fire: [597, 620], powermissle: [827, 620], chat: [1043, 620], pause: [1259, 620]};
             for (const p in key) if (Menus.x > key[p][0] && Menus.x < key[p][0]+176 && Menus.y > key[p][1] && Menus.y < key[p][1]+176) {
               if (Menus.menus.settings1.selected === p) {
-                PixelTanks.userData.keybinds[Menus.menus.settings1.selected] = 1000+e.button; // mouse handler
+                if (!PixelTanks.hasKeybind(1000+e.button)) PixelTanks.userData.keybinds[Menus.menus.settings1.selected] = 1000+e.button; // mouse handler
                 return PixelTanks.save();
               } else return Menus.menus.settings1.selected = p;
             }
             
           },
           keydown: function(e) {
-            PixelTanks.userData.keybinds[Menus.menus.settings1.selected] = e.keyCode;
+            if (!PixelTanks.hasKeybind(e.keyCode)) PixelTanks.userData.keybinds[Menus.menus.settings1.selected] = e.keyCode;
             PixelTanks.save();
           }
         },
@@ -807,6 +807,8 @@ class PixelTanks {
         callback();
       });
   }
+
+  static hasKeybind = k => ['item1', 'item2', 'item3', 'item4', 'toolkit', 'grapple', 'boost', 'class', 'firing', 'powermissle', 'chat', 'pause'].some(v => PixelTanks.userData.keybinds[v] === k);
 
   static auth(u, p, t) { // simplify direct call to Network.auth
     Network.auth(u, p, t, () => PixelTanks.getData(() => PixelTanks.main()));
