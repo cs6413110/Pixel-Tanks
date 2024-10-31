@@ -732,7 +732,7 @@ const Commands = {
       markdown: false,
     }, (err, data) => {
       if (!err) this.gptHistory.push({role: 'user', content: prompt}, {role: 'assistant', content: data.gpt});
-      servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err || data.gpt, c: '#DFCFBE'});
+      servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: JSON.stringify(err) || data.gpt, c: '#DFCFBE'});
     });
     } catch(e) {
       servers[this.room].logs.push({m: 'err '+e, c: '#ff0000'});
@@ -755,7 +755,7 @@ const Commands = {
       stream: false,
     }, (err, data) => {
       const t = servers[this.room].pt.find(t => t.username === this.username);
-      if (err !== null) return t.privateLogs.push({m: err, c: '#ff0000'});
+      if (err !== null) return t.privateLogs.push({m: JSON.stringify(err_, c: '#ff0000'});
       t.privateLogs.push({m: data.message, c: '#DFCFBE'});
     });
     } catch(e) {
