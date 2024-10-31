@@ -373,7 +373,7 @@ class PixelTanks {
             
           },
           keydown: function(e) {
-            if (!PixelTanks.hasKeybind(e.keyCode)) PixelTanks.userData.keybinds[Menus.menus.settings1.selected] = e.keyCode;
+            if (!PixelTanks.hasKeybind(e.keyCode)) PixelTanks.userData.keybinds[Menus.menus.settings1.selected] = e.keyCode; else alert('Imagine being so lazy you only hit 1 key to win');
             PixelTanks.save();
           }
         },
