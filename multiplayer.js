@@ -11,7 +11,7 @@ const fs = require('fs'), fetch = require('node-fetch');
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
-const {dalle, gpt, bing} = require('gpti');
+//const {dalle, gpt, bing} = require('gpti');
 
 console.log('Starting Server');
 console.log('Compiling Engine');
@@ -720,20 +720,20 @@ const Commands = {
     for (const t of servers[this.room].pt) if (Engine.getTeam(t.team) === team) t.privateLogs.push(msg);
   }],
   gpt: [Object, 4, -1, function(data) {
-    try {
-    if (!socket.gptHistory) socket.gptHistory = [];
+    /*try {
+    if (!this.gptHistory) this.gptHistory = [];
     const prompt = data.slice(1).join(' ');
     gpt.v1({
-      history: socket.gptHistory,
+      history: this.gptHistory,
       prompt,
       model: 'gpt-4',
     }, (err, data) => {
-      if (!err) socket.gptHistory.push({role: 'user', content: prompt}, {role: 'assistant', content: data.gpt});
+      if (!err) this.gptHistory.push({role: 'user', content: prompt}, {role: 'assistant', content: data.gpt});
       servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err || data.gpt, c: '#DFCFBE'});
     });
     } catch(e) {
       servers[this.room].logs.push({m: 'err '+e, c: '#ff0000'});
-    }
+    }*/
   }],
   newmap: [FFA, 3, -1, function(data) {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
