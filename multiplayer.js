@@ -728,7 +728,8 @@ const Commands = {
     gpt.v1({
       messages: this.gptHistory,
       prompt,
-      model: 'gpt-4',
+      model: 'GPT-4',
+      markdown: false,
     }, (err, data) => {
       if (!err) this.gptHistory.push({role: 'user', content: prompt}, {role: 'assistant', content: data.gpt});
       servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: err || data.gpt, c: '#DFCFBE'});
