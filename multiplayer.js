@@ -8,7 +8,7 @@ const settings = {
 }
 
 const fs = require('fs'), fetch = require('node-fetch');
-const {exec} = require('child_process');
+//const {exec} = require('child_process');
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
