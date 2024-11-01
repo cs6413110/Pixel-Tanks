@@ -94,7 +94,7 @@ class Tank {
     }
   }
   damageCalc(x, y, a, u) {
-    if (((this.reflect || this.immune) && a > 0) || this.ded) return;
+    if ((((Date.now()-this.core) < 1000 || this.reflect || this.immune) && a > 0) || this.ded) return;
     const hx = Math.floor((this.x+40)/100), hy = Math.floor((this.y+40)/100);
     for (let i = Math.max(0, hx-1); i <= Math.min(29, hx+1); i++) for (let l = Math.max(0, hy-1); l <= Math.min(29, hy+1); l++) for (const entity of this.host.cells[i][l]) {
       if (entity instanceof Shot) if (entity.target) if (entity.target.id === this.id && entity.type === 'usb' && a >= 0) a = Math.max(0, a+(Math.abs(a/5))*(Engine.getTeam(entity.team) === Engine.getTeam(this.team) ? -1 : 1));
@@ -111,7 +111,7 @@ class Tank {
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
     this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y};
     let core = Engine.hasPerk(this.perk, 9), shield = Engine.hasPerk(this.perk, 1);
-    if (this.hp <= 0 && this.host.ondeath) if (!core || Math.random() > 0.80) return this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
+    if (this.hp <= 0 && this.host.ondeath) if (!core || Math.random() > 0.80) return this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u)); else; this.core = Date.now();
     if ((this.hp <= this.maxHp*.1 && shield === 1) || (this.hp <= this.maxHp*.2 && shield === 2)) {
       if (this.canShield) {
         this.canShield = false;
