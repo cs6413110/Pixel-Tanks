@@ -8,13 +8,13 @@ const settings = {
 }
 
 const fs = require('fs'), fetch = require('node-fetch');
-const Discord = require('discord.js');
+//const Discord = require('discord.js');
 const {exec} = require('child_process');
 const {pack} = require('msgpackr/pack');
 const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
 const {dalle, gpt, bing} = require('gpti');
-
+/*
 const client = new Discord.Client();
 const token = fs.readFileSync('discord.json');
 const channel = '1301321677220741180'; // temp, move to file
@@ -25,7 +25,7 @@ client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 	console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
 });
-client.login(token);
+client.login(token);*/
 
 console.log('Starting Server');
 console.log('Compiling Engine');
