@@ -445,7 +445,7 @@ class Client {
       this.dx.o = this.tank.x;
     }
     if (this.dy) {
-      var y = this.dy.o+Math.floor((Date.now()-this.dy.t)/15)*this.dy.a*this.speed*(this.halfSpeed ? .5 : 1)*(doubleSpeed ? 2 : 1);
+      var y = this.dy.o+Math.floor((Date.now()-this.dy.t)/15)*this.dy.a*this.speed*(this.halfSpeed ? .5 : 1)*(doubleSpeed ? 1.25 : 1);
       let yR = this.collision(this.tank.x, y, 'y', this.dy.a), yD = this.collision(this.tank.x, this.dy.o);
       if (yD || (!yD && this.collision(this.tank.x, y))) this.tank.y = yR;
       this.up = y === yR ? this.dy.a < 0 : null;
