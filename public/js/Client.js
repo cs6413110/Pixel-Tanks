@@ -435,8 +435,9 @@ class Client {
       } else return this.drawStatus('Loading...');
     }
     const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
+    let wind = Engine.hasPerk(PixelTanks.userData.perk, 8), doubleSpeed = wind && ((Date.now()-this.timers.class.time) < 1000+2000*wind);
     if (this.dx) {
-      var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : 1);
+      var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : 1)*(doubleSpeed ? 2 : 1);
       let xR = this.collision(x, this.tank.y, 'x', this.dx.a), xD = this.collision(this.dx.o, this.tank.y);
       if (xD || (!xD && this.collision(x, this.tank.y))) this.tank.x = xR;
       this.left = x === xR ? this.dx.a < 0 : null;
@@ -444,7 +445,7 @@ class Client {
       this.dx.o = this.tank.x;
     }
     if (this.dy) {
-      var y = this.dy.o+Math.floor((Date.now()-this.dy.t)/15)*this.dy.a*this.speed*(this.halfSpeed ? .5 : 1);
+      var y = this.dy.o+Math.floor((Date.now()-this.dy.t)/15)*this.dy.a*this.speed*(this.halfSpeed ? .5 : 1)*(doubleSpeed ? 2 : 1);
       let yR = this.collision(this.tank.x, y, 'y', this.dy.a), yD = this.collision(this.tank.x, this.dy.o);
       if (yD || (!yD && this.collision(this.tank.x, y))) this.tank.y = yR;
       this.up = y === yR ? this.dy.a < 0 : null;
