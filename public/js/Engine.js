@@ -207,8 +207,8 @@ class Engine {
   destroyEntity() {}
 
   ondeath(t, m={}) {
-    let ez = Engine.hasPerk(t.perk, 7);
-    if (ez) A.template('Damage').init(t.x-99, t.y-99, 298, 298, [0, 100, 300, 500][ez], t.team, this);
+    let core = Engine.hasPerk(t.perk, 7);
+    if (core) setTimeout(() => A.template('Damage').init(t.x-99, t.y-99, 298, 298, [0, 100, 300, 500][core], t.team, this), 500);
     this.logs.push({m: this.deathMsg(t.username, m.username), c: (m.username === undefined ? '#FF8C00': (Engine.getTeam(m.team) === 'RED' ? '#FF0000' : (Engine.getTeam(m.team) === 'BLUE' ? '#0000FF' : '#FF8C00')))});
     if (t.privateLogs) t.privateLogs.push({m: this.tipMsg(t.username, m.username), c: '#80FFF9'});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
