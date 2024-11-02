@@ -17,7 +17,7 @@ const {dalle, gpt, bing} = require('gpti');
 
 const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]});
 const token = fs.readFileSync('discord.json', 'utf8');
-console.log(token);
+console.log(JSON.stringify(token));
 const channel = '1301321677220741180'; // temp, move to file
 client.on('messageCreate', m => {
   console.log('Message in general channel: '+(m.channel.id === channel));
