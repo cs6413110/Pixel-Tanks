@@ -21,7 +21,7 @@ console.log(JSON.stringify(token));
 const channel = '1301321677220741180'; // temp, move to file
 client.on('messageCreate', m => {
   console.log('Message in general channel: '+(m.channel.id === channel));
-  for (const server of Object.values(servers)) server.logs.push({m: '[DISCORD] '+m.content, c: '#ffffff'});
+  for (const server of Object.values(servers)) server.logs.push({m: '[DISCORD] ['+m.author.username+']'+m.content, c: '#ffffff'});
 });
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -984,6 +984,7 @@ wss.on('connection', socket => {
       }
       let role;
       for (const level of ['VIP', 'Admin', 'Owner']) if (Storage[level.toLowerCase()+'s'].includes(socket.username)) role = level;
+      client.channels.cache.get(channel)?.send((role ? '['+role+'] ' : '')+`${socket.username}: ${clean(data.msg)}`);
       servers[socket.room].logs.push({m: (role ? '['+role+'] ' : '')+`${socket.username}: ${clean(data.msg)}`, c: '#ffffff'});
       for (const t of servers[socket.room].pt) servers[socket.room].send(t);
       log(`[${socket.username}] ${clean(data.msg)}`);
