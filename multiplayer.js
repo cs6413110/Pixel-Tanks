@@ -25,7 +25,6 @@ client.on('messageCreate', m => {
 });
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
-  console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
 });
 client.login(token);
 
