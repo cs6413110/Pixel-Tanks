@@ -15,15 +15,16 @@ const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
 const {dalle, gpt, bing} = require('gpti');
 
-const client = new Discord.Client();
+const client = new Discord.Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]});
 const token = fs.readFileSync('discord.json');
 const channel = '1301321677220741180'; // temp, move to file
 client.on('messageCreate', m => {
-  for (const server of servers) server.logs.push({m, c: '#ffffff'});
+  console.log('Message in general channel: '+(m.channel.id === channel));
+  for (const server of servers) server.logs.push({m.content, c: '#ffffff'});
 });
 client.on('ready', () => {
-	console.log(`Logged in as ${client.user.tag}!`);
-	console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
+  console.log(`Logged in as ${client.user.tag}!`);
+  console.log(`Bot has started, with ${client.users.size} users, in ${client.channels.size} channels of ${client.guilds.size} guilds.`); 
 });
 client.login(token);
 
