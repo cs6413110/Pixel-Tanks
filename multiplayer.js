@@ -15,7 +15,7 @@ const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
 const {dalle, gpt, bing} = require('gpti');
 
-const client = Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]});
+const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]});
 const token = fs.readFileSync('discord.json');
 const channel = '1301321677220741180'; // temp, move to file
 client.on('messageCreate', m => {
