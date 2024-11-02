@@ -21,7 +21,7 @@ console.log(JSON.stringify(token));
 const channel = '1301321677220741180'; // temp, move to file
 client.on('messageCreate', m => {
   console.log('Message in general channel: '+(m.channel.id === channel));
-  for (const server of servers) server.logs.push({m: m.content, c: '#ffffff'});
+  for (const server of Object.values(servers)) server.logs.push({m: '[DISCORD] '+m.content, c: '#ffffff'});
 });
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
