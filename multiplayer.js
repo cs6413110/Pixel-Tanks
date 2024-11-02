@@ -20,8 +20,9 @@ const token = fs.readFileSync('discord.json', 'utf8').replace(/\n/g, '');
 console.log(JSON.stringify(token));
 const channel = '1301321677220741180'; // temp, move to file
 client.on('messageCreate', m => {
-  console.log('Message in general channel: '+(m.channel.id === channel));
-  for (const server of Object.values(servers)) server.logs.push({m: '[DISCORD] ['+m.author.username+']'+m.content, c: '#ffffff'});
+  if (m.channel.id !== channel || m.author.id === 'Pixel Tanks#4272') return;
+  
+  for (const server of Object.values(servers)) server.logs.push({m: '[DISCORD]['+m.author.username+', '+m.author.id+'] '+m.content, c: '#ffffff'});
 });
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
