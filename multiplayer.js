@@ -16,17 +16,14 @@ const {WebSocketServer} = require('ws');
 const {dalle, gpt, bing} = require('gpti');
 
 const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]});
-const token = fs.readFileSync('discord.json', 'utf8').replace(/\n/g, '');
-console.log(JSON.stringify(token));
-const channel = '1301321677220741180'; // temp, move to file
+const token = fs.readFileSync('discord.json', 'utf8').replace(/\n/g, ''), channel = '1301321677220741180'; // temp, move to file
+const toDiscord = m => client.channels.cache.get(channel)?.send(m);
 client.on('messageCreate', m => {
   if (m.channel.id !== channel || m.author.id === '1301716399999160392') return;
-  
+  if (m.content.startsWith('/')) return; // offload to command execution
   for (const server of Object.values(servers)) server.logs.push({m: '[DISCORD]['+m.author.username+'] '+m.content, c: '#ffffff'});
 });
-client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-});
+client.on('ready', () => console.log(`Logged in as ${client.user.tag}!`));
 client.login(token);
 
 console.log('Starting Server');
@@ -180,8 +177,9 @@ class Multiplayer extends Engine {
 
   add(socket, data) {
     data.socket = socket; // this can moved to the join handler?
-    log(`${socket.username} joined`); // this.logs.push and log can be merged?
-    this.logs.push({m: this.joinMsg(data.username), c: '#66FF00'});
+    let join = this.joinMsg(data.username);
+    toDiscord(join);
+    this.logs.push({m: join, c: '#66FF00'});
     super.add(data);
   }
 
@@ -296,8 +294,9 @@ class Multiplayer extends Engine {
       return true;
     });
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === socket.username) this.ai[i].destroy();
-    log(`${socket.username} left`);
-    this.logs.push({m: this.rageMsg(socket.username), c: '#E10600'});
+    let leave = this.rageMsg(socket.username);
+    toDiscord(leave);
+    this.logs.push({m: leave, c: '#E10600'});
     if (this.pt.length === 0) {
       this.i.forEach(i => clearInterval(i));
       delete servers[socket.room];
@@ -979,16 +978,12 @@ wss.on('connection', socket => {
       socket.send({event: 'ping', id: data.id});
     } else if (data.type === 'chat') {
       if (!servers[socket.room] || (!hasAccess(socket.username, 3) && !settings.chat)) return;
-      if (Storage.mutes.includes(socket.username)) {
-        log(`${socket.username} tried to say "${data.msg}"`);
-        return socket.send({status: 'error', message: 'You are muted!'});
-      }
-      let role;
+      if (Storage.mutes.includes(socket.username)) return socket.send({status: 'error', message: 'You are muted!'});
+      let role, m = (role ? '['+role+'] ' : '')+`${socket.username}: ${clean(data.msg)}`;
       for (const level of ['VIP', 'Admin', 'Owner']) if (Storage[level.toLowerCase()+'s'].includes(socket.username)) role = level;
-      client.channels.cache.get(channel)?.send((role ? '['+role+'] ' : '')+`${socket.username}: ${clean(data.msg)}`);
-      servers[socket.room].logs.push({m: (role ? '['+role+'] ' : '')+`${socket.username}: ${clean(data.msg)}`, c: '#ffffff'});
+      toDiscord(m);
+      servers[socket.room].logs.push({m, c: '#ffffff'});
       for (const t of servers[socket.room].pt) servers[socket.room].send(t);
-      log(`[${socket.username}] ${clean(data.msg)}`);
     } else if (data.type === 'logs') {
       if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs}); // Dead?
     } else if (data.type === 'command') {
