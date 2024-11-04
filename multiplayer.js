@@ -954,7 +954,7 @@ client.on('messageCreate', m => {
     }};
     if (!discordAcceptable.includes(data[0])) return toDiscord('Invalid command. Not in list: '+discordAcceptable);
     const f = Commands[data[0]]
-    if (data.data.length !== f[2] && f[2] !== -1) return socket.send({status: 'error', message: 'Wrong number of arguments.'});
+    if (data.length !== f[2] && f[2] !== -1) return socket.send({status: 'error', message: 'Wrong number of arguments.'});
     if (!hasAccess(m.author.id, f[1])) return socket.send({status: 'error', message: `You(${m.author.id}) don't have access to this.`});
     log(`(${m.author.id})${socket.username} ran command: ${data.join(' ')}`);
     return f[3](data.data, socket, server, t, t.privateLogs);
