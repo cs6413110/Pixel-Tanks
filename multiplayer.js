@@ -83,6 +83,7 @@ const deathMessages = [
   `{victim} was fed a healthy dose of explosives by {killer}`,
   `{victim} became another number in {killer}'s kill streak`,
   `{victim} got wrecked by {killer}`,
+  `{victim} was converted to healing items by {killer}`,
 ], joinMessages = [
   `{idot} is here`,
   `{idot} arrived`,
@@ -102,7 +103,8 @@ const deathMessages = [
   `{idot} disconnected`,
   `{idot} lost connection`,
   `{idot} didn't make it out alive`,
-], tipMessages = [
+  `{idot} doesn't like pickles`,
+], tipMessages = [ 
   `TIP: Try switching your class, maybe you're not good at that one!`,
   `TIP: These tips get shown when you die!`,
   `TIP: Blame the lag`,
@@ -115,10 +117,18 @@ const deathMessages = [
   `Bad internet? Hit the router with a wrench. Trust me :)`,
   `Must've been your keyboard`,
   `TIP: Try using a mouse next time`,
-  `How embarrassing...`,
+  `At least you got a kill before you died! You got a kill. . . right?`,
   `TIP: Do better? idk I'm not paid enough for this...`,
   `There are items, abilities, and classes that can assist you`,
   `RIP: Rest in Pineapple`,
+  `Why are these tips so mean?`,
+  `Died to an insta did you? Try blaming the lag`,
+  `KABOOM! you know, this tip would be pretty funny if you died to shotgun or something`,
+  `Aw cmon, I had 12 bucks on you to win that!`,
+  `Lost? There's a king that can relate to that.`,
+  `TIP: ↑ ↑ ↓ ↓ ← → ← → B A START`,
+  `I'm lost again. Where is this? Looks. . . too smart for me.`,
+  `Wow! You suck!`,
 ];
 
 class Multiplayer extends Engine {
@@ -630,7 +640,7 @@ const Commands = {
   }],
   requestunmute: [Object, 4, 1, (data, socket, server) => {
     if (!Storage.mutes.includes(socket.username)) return socket.send({status: 'error', message: `You aren't muted!`});
-    if (socket.muteTimer && socket.muteTimer+10000 > Date.now()) return socket.send({status: 'error', message: `Wait 10 seconds before using this again!`});
+    if (socket.muteTimer && socket.muteTimer+100000 > Date.now()) return socket.send({status: 'error', message: `Wait 10 seconds before using this again!`});
     socket.muteTimer = Date.now();
     for (const s of Object.values(servers)) for (const t of s.pt) if (Storage.admins.includes(t.username) || Storage.owners.includes(t.username)) t.privateLogs.push({m: this.username+' requested to be unmuted!', c: '#ffff00'});
   }],
