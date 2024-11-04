@@ -926,8 +926,9 @@ wss.on('connection', socket => {
     } else if (data.type === 'chat') {
       if (!servers[socket.room] || (!hasAccess(socket.username, 3) && !settings.chat)) return;
       if (Storage.mutes.includes(socket.username)) return socket.send({status: 'error', message: 'You are muted!'});
-      let role, m = (role ? '['+role+'] ' : '')+`${socket.username}: ${clean(data.msg)}`;
+      let role;
       for (const level of ['VIP', 'Admin', 'Owner']) if (Storage[level.toLowerCase()+'s'].includes(socket.username)) role = level;
+      let m = (role ? '['+role+'] ' : '')+`${socket.username}: ${clean(data.msg)}`
       toDiscord(m);
       servers[socket.room].logs.push({m, c: '#ffffff'});
       for (const t of servers[socket.room].pt) servers[socket.room].send(t);
