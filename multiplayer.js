@@ -15,30 +15,6 @@ const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
 const {dalle, gpt, bing} = require('gpti');
 
-const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]});
-const token = fs.readFileSync('discord.json', 'utf8').replace(/\n/g, ''), channel = '1301321677220741180'; // temp, move to file
-const toDiscord = m => client.channels.cache.get(channel)?.send(m);
-client.on('messageCreate', m => {
-  if (m.channel.id !== channel || m.author.id === '1301716399999160392') return;
-  if (m.content.startsWith('/')) {
-    // potential freeze, unfreeze, gpts, newmap, killai, ai, swrite, twrite
-    const discordAcceptable = ['admin', 'removeadmin', 'vip', 'removevip', 'reload', 'playerlist', 'msg', 'filter', 'allow', 'run', 'ban', 'banlist', 'pardon', 'mute', 'unmute', 'kick', 'kill', 'spectate', 'live', 'reboot', 'flushlogs', 'getlogs', 'announce', 'lockchat', 'lockdown', ];
-    const socket = {username: m.author.id, send: d => {
-      toDiscord(d.message);
-    }}, data = m.content.replace('/', '').split(' '), t = {username: m.author.id}, logs = {push: () => {
-      toDiscord(d.m);
-    }};
-    if (!discordAcceptable.includes(data[0])) return toDiscord('Invalid command. Not in list: '+discordAcceptable);
-    toDiscord(m.content+'asdf'+JSON.stringify(data));
-    //Commands[data[0]](data, socket, {}, t, logs);
-  }
-  for (const server of Object.values(servers)) server.logs.push({m: '[DISCORD]['+m.author.username+'] '+m.content, c: '#ffffff'});
-});
-
-
-client.on('ready', () => console.log(`Logged in as ${client.user.tag}!`));
-client.login(token);
-
 console.log('Starting Server');
 console.log('Compiling Engine');
 fs.writeFileSync('engine.js', [`const PF = require('pathfinding');`, fs.readFileSync('./public/js/Engine.js'), fs.readFileSync('./public/js/Tank.js'), fs.readFileSync('./public/js/Block.js'), fs.readFileSync('./public/js/Shot.js'), fs.readFileSync('./public/js/AI.js'), fs.readFileSync('./public/js/Damage.js'), fs.readFileSync('./public/js/A.js'), 'module.exports = {Engine, Tank, Block, Shot, AI, Damage, A}'].join(''));
@@ -962,3 +938,24 @@ wss.on('connection', socket => {
   });
 });
 console.log('Listening on port '+settings.port);
+
+const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]});
+const token = fs.readFileSync('discord.json', 'utf8').replace(/\n/g, ''), channel = '1301321677220741180'; // temp, move to file
+const toDiscord = m => client.channels.cache.get(channel)?.send(m);
+client.on('messageCreate', m => {
+  if (m.channel.id !== channel || m.author.id === '1301716399999160392') return;
+  if (m.content.startsWith('/')) {
+    // potential freeze, unfreeze, gpts, newmap, killai, ai, swrite, twrite
+    const discordAcceptable = ['admin', 'removeadmin', 'vip', 'removevip', 'reload', 'playerlist', 'msg', 'filter', 'allow', 'run', 'ban', 'banlist', 'pardon', 'mute', 'unmute', 'kick', 'kill', 'spectate', 'live', 'reboot', 'flushlogs', 'getlogs', 'announce', 'lockchat', 'lockdown', ];
+    const socket = {username: m.author.id, send: d => {
+      toDiscord(d.message);
+    }}, data = m.content.replace('/', '').split(' '), t = {username: m.author.id}, logs = {push: () => {
+      toDiscord(d.m);
+    }};
+    if (!discordAcceptable.includes(data[0])) return toDiscord('Invalid command. Not in list: '+discordAcceptable);
+    return Commands[data[0]](data, socket, {}, t, logs);
+  }
+  for (const server of Object.values(servers)) server.logs.push({m: '[DISCORD]['+m.author.username+'] '+m.content, c: '#ffffff'});
+});
+client.on('ready', () => console.log(`Logged in as ${client.user.tag}!`));
+client.login(token);
