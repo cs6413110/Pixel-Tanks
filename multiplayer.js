@@ -659,8 +659,8 @@ const Commands = {
   }],
   msg: [Object, 4, -1, (data, socket, server, t, logs) => {
     if (Storage.mutes.includes(t.username)) return socket.send({status: 'error', message: 'You are muted!'});
-    let tank;
-    for (const s of Object.values(servers)) for (const pt of s.pt) if (pt.username === data[1]) tank = pt;
+    let m;
+    for (const s of Object.values(servers)) for (const pt of s.pt) if (pt.username === data[1]) m = pt;
     const message = {m: `[${t.username}->${data[1]}] ${clean(data.slice(2).join(' '))}`, c: '#FFFFFF'};
     if (t) {
       logs.push(message);
