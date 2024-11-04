@@ -20,9 +20,21 @@ const token = fs.readFileSync('discord.json', 'utf8').replace(/\n/g, ''), channe
 const toDiscord = m => client.channels.cache.get(channel)?.send(m);
 client.on('messageCreate', m => {
   if (m.channel.id !== channel || m.author.id === '1301716399999160392') return;
-  if (m.content.startsWith('/')) return; // offload to command execution
+  if (m.content.startsWith('/')) {
+    // potential freeze, unfreeze, gpts, newmap, killai, ai, swrite, twrite
+    const discordAcceptable = ['admin', 'removeadmin', 'vip', 'removevip', 'reload', 'playerlist', 'msg', 'filter', 'allow', 'run', 'ban', 'banlist', 'pardon', 'mute', 'unmute', 'kick', 'kill', 'spectate', 'live', 'reboot', 'flushlogs', 'getlogs', 'announce', 'lockchat', 'lockdown', ];
+    const socket = {username: m.author.id, send: d => {
+      toDiscord(d.message);
+    }}, data = m.content.slice(1).split(' '), t = {username: m.author.id}, logs = {push: () => {
+      toDiscord(d.m);
+    }};
+    if (!discordAcceptable.includes(data[0])) return toDiscord('Invalid command. Not in list: '+discordAcceptable);
+    Commands[data[0]](data, socket, {}, t, logs);
+  }
   for (const server of Object.values(servers)) server.logs.push({m: '[DISCORD]['+m.author.username+'] '+m.content, c: '#ffffff'});
 });
+
+
 client.on('ready', () => console.log(`Logged in as ${client.user.tag}!`));
 client.login(token);
 
@@ -647,7 +659,8 @@ const Commands = {
   }],
   msg: [Object, 4, -1, (data, socket, server, t, logs) => {
     if (Storage.mutes.includes(t.username)) return socket.send({status: 'error', message: 'You are muted!'});
-    const tank = server.pt.find(t => t.username === data[1]);
+    let tank;
+    for (const s of Object.values(servers)) for (const pt of s.pt) if (pt.username === data[1]) tank = pt;
     const message = {m: `[${t.username}->${data[1]}] ${clean(data.slice(2).join(' '))}`, c: '#FFFFFF'};
     if (t) {
       logs.push(message);
@@ -741,8 +754,13 @@ const Commands = {
     if (Storage.admins.includes(data[1]) || Storage.owners.includes(data[1])) return socket.send({status: 'error', message: `You can't ban another admin!`});
     Storage.bans.push(data[1]);
     let msg = ' banned by '+t.username+' for ' + (data[2] ? 'committing the felony: '+data.slice(2).join(' ') : 'no reason ez!');
-    server.logs.push({m: data[1]+' was'+msg, c: '#FF0000'});
-    server.pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You were'+msg});
+    for (const s of Object.values(servers)) {
+      const victim = server.pt.find(t => t.username === data[1]);
+      if (victim) {
+        s.logs.push({m: data[1]+' was'+msg, c: '#FF0000'});
+        victim.socket.send({status: 'error', message: 'You were'+msg});
+      }
+    }
     for (const socket of sockets) if (socket.username === data[1]) setTimeout(() => socket.close());
   }],
   banlist: [Object, 2, -1, (data, socket, server, t, logs) => {
@@ -756,11 +774,11 @@ const Commands = {
   mute: [Object, 3, 2, (data, socket, server, t) => {
     if (Storage.mutes.includes(data[1])) return socket.send({status: 'error', message: 'They are already muted!'});
     Storage.mutes.push(data[1]);
-    server.logs.push({m: data[1]+' was muted by '+t.username, c: '#FFFF22'});
+    for (const s of Object.values(servers)) if (s.pt.some(t => t.username === data[1])) s.logs.push({m: data[1]+' was muted by '+t.username, c: '#FFFF22'});
   }],
   unmute: [Object, 3, 2, (data, socket, server, t) => {
     Storage.mutes.splice(Storage.mutes.indexOf(data[1]), 1);
-    server.logs.push({m: data[1]+' was unmuted by '+t.username, c: '#0000FF'});
+    for (const s of Object.values(servers)) if (s.pt.some(t => t.username === data[1])) s.logs.push({m: data[1]+' was unmuted by '+t.username, c: '#0000FF'});
   }],
   kick: [Object, 3, 2, (data, socket, server, t) => {
     for (const socket of sockets) if (socket.username === data[1]) {
@@ -842,9 +860,9 @@ const Commands = {
       servers['${socket.room}'].pt.find(t => t.username === '${socket.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
     }`);
   }],
-  help: [Object, 4, 1, function(data) {
-   const t = servers[this.room].pt.find(t => t.username === this.username), authKey = ['n/a', 'Owner', 'Admin', 'VIP', 'Everyone']
-    for (const command of Object.keys(Commands)) t.privateLogs.push({m: `/${command} - ${Commands[command][2]} parameters. [${authKey[Commands[command][1]]}]`, c: '#00FF00'});
+  help: [Object, 4, 1, (data, socket, server, t, logs) => {
+    const authKey = ['n/a', 'Owner', 'Admin', 'VIP', 'Everyone'];
+    for (const command of Object.keys(Commands)) logs.push({m: `/${command} - ${Commands[command][2]} parameters. [${authKey[Commands[command][1]]}]`, c: '#00FF00'});
   }],
 };
 
