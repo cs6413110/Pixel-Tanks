@@ -949,11 +949,11 @@ client.on('messageCreate', m => {
     const discordAcceptable = ['admin', 'removeadmin', 'vip', 'removevip', 'reload', 'playerlist', 'msg', 'filter', 'allow', 'run', 'ban', 'banlist', 'pardon', 'mute', 'unmute', 'kick', 'kill', 'spectate', 'live', 'reboot', 'flushlogs', 'getlogs', 'announce', 'lockchat', 'lockdown', ];
     const socket = {username: m.author.username, send: d => {
       toDiscord(d.message);
-    }}, data = m.content.replace('/', '').split(' '), t = {username: m.author.username}, logs = {push: () => {
+    }}, data = m.content.replace('/', '').split(' '), t = {username: m.author.username}, logs = {push: d => {
       toDiscord(d.m);
     }};
     if (!discordAcceptable.includes(data[0])) return toDiscord('Invalid command. Not in list: '+discordAcceptable);
-    const f = Commands[data[0]]
+    const f = Commands[data[0]];
     if (data.length !== f[2] && f[2] !== -1) return socket.send({status: 'error', message: 'Wrong number of arguments.'});
     if (!hasAccess(m.author.id, f[1])) return socket.send({status: 'error', message: `You(${m.author.id}) don't have access to this.`});
     log(`(${m.author.id})${socket.username} ran command: ${data.join(' ')}`);
