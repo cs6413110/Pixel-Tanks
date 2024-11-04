@@ -30,7 +30,7 @@ client.on('messageCreate', m => {
     }};
     if (!discordAcceptable.includes(data[0])) return toDiscord('Invalid command. Not in list: '+discordAcceptable);
     toDiscord(data);
-    Commands[data[0]](data, socket, {}, t, logs);
+    //Commands[data[0]](data, socket, {}, t, logs);
   }
   for (const server of Object.values(servers)) server.logs.push({m: '[DISCORD]['+m.author.username+'] '+m.content, c: '#ffffff'});
 });
