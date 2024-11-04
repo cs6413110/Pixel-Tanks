@@ -945,6 +945,7 @@ const toDiscord = m => client.channels.cache.get(channel)?.send(m);
 client.on('messageCreate', m => {
   if (m.channel.id !== channel || m.author.id === '1301716399999160392') return;
   if (m.content.startsWith('/')) {
+    m.delete(1000);
     // potential freeze, unfreeze, gpts, newmap, killai, ai, swrite, twrite
     const discordAcceptable = ['admin', 'removeadmin', 'vip', 'removevip', 'reload', 'playerlist', 'msg', 'filter', 'allow', 'run', 'ban', 'banlist', 'pardon', 'mute', 'unmute', 'kick', 'kill', 'spectate', 'live', 'reboot', 'flushlogs', 'getlogs', 'announce', 'lockchat', 'lockdown', ];
     const socket = {username: m.author.username, send: d => {
