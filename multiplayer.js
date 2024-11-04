@@ -184,8 +184,8 @@ class Multiplayer extends Engine {
   }
 
   send(t) {
-    if (busy && t.busy) return t.delayed = true;
-    if (upsl && t.lastSend && t.lastSend+1000/settings.upsl > Date.now()) {
+    if (t.busy) return t.delayed = true;
+    if (t.lastSend && t.lastSend+1000/settings.upsl > Date.now()) {
       clearTimeout(t.sendTimer);
       t.sendTimer = setTimeout(() => this.send(t), (t.lastSend+1000/settings.upsl)-Date.now());
     }
@@ -620,297 +620,226 @@ class Defense extends Multiplayer {
   }
 }
 const joinKey = {'ffa': FFA, 'duels': DUELS, 'tdm': TDM, 'defense': Defense};
-let upsl = true, busy = true;
 const Commands = {
-  admin: [Object, 1, 2, function(data) {
+  admin: [Object, 1, 2, data => {
     if (!Storage.admins.includes(data[1])) Storage.admins.push(data[1]);
   }],
-  vip: [Object, 2, 2, function(data) {
+  vip: [Object, 2, 2, data => {
     if (!Storage.vips.includes(data[1])) Storage.vips.push(data[1]);
   }],
-  removeadmin: [Object, 1, 2, function(data) {
+  removeadmin: [Object, 1, 2, data => {
     if (Storage.admins.includes(data[1])) Storage.admins.splice(Storage.admins.indexOf(data[1]), 1);
   }],
-  removevip: [Object, 2, 2, function(data) {
+  removevip: [Object, 2, 2, data => {
     if (Storage.vips.includes(data[1])) Storage.vips.splice(Storage.vips.indexOf(data[1]), 1);
   }],
-  reload: [Object, 2, 2, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === data[1]);
-    if (t) t.socket.send({event: 'force'});
+  reload: [Object, 2, 2, data => {
+    for (const s of Object.values(servers)) for (const t of s.pt) if (t.username === data[1]) t.socket.send({event: 'force'});
   }],
-  upsl: [Object, 2, 1, function(data) { // remove?
-    const t = servers[this.room].pt.find(t => t.username === this.username);
-    upsl = !upsl;
-    t.privateLogs.push({m: 'UPSL is '+upsl, c: '#ffffff'});
+  playerlist: [Object, 4, 1, (data, socket, server, t, logs) => {
+    for (const tank of server.pt) logs.push({m: tank.username, c: '#ffffff'});
   }],
-  busy: [Object, 2, 1, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === this.username);
-    busy = !busy;
-    t.privateLogs.push({m: 'BUSY is '+busy, c: '#ffffff'});
-  }],
-  playerlist: [Object, 4, 1, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === this.username);
-    for (const tank of servers[this.room].pt) t.privateLogs.push({m: tank.username, c: '#ffffff'});
-  }],
-  copylist: [Object, 4, 1, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === this.username)
-    let s = '';
-    for (const tank of servers[this.room].pt) s += tank.username+'   ';
-    t.socket.send({status: 'error', message: s});
-  }],
-  requestunmute: [Object, 4, 1, function(data) {
-    if (!Storage.mutes.includes(this.username)) return this.send({status: 'error', message: `You aren't muted!`});
-    if (this.muteTimer && this.muteTimer+100000000000000000000000000000000000000000000000000 > Date.now()) return this.send({status: 'error', message: `Wait FOREVER seconds before using this!`});
-    this.muteTimer = Date.now();
+  requestunmute: [Object, 4, 1, (data, socket, server) => {
+    if (!Storage.mutes.includes(socket.username)) return socket.send({status: 'error', message: `You aren't muted!`});
+    if (socket.muteTimer && socket.muteTimer+10000 > Date.now()) return socket.send({status: 'error', message: `Wait 10 seconds before using this again!`});
+    socket.muteTimer = Date.now();
     for (const s of Object.values(servers)) for (const t of s.pt) if (Storage.admins.includes(t.username) || Storage.owners.includes(t.username)) t.privateLogs.push({m: this.username+' requested to be unmuted!', c: '#ffff00'});
   }],
-  msg: [Object, 4, -1, function(data) {
-    if (Storage.mutes.includes(this.username)) return this.send({status: 'error', message: 'You are muted!'});
-    const t = servers[this.room].pt.find(t => t.username === this.username), m = servers[this.room].pt.find(t => t.username === data[1]);
-    const message = {m: `[${this.username}->${data[1]}] ${clean(data.slice(2).join(' '))}`, c: '#FFFFFF'};
+  msg: [Object, 4, -1, (data, socket, server, t, logs) => {
+    if (Storage.mutes.includes(t.username)) return socket.send({status: 'error', message: 'You are muted!'});
+    const tank = server.pt.find(t => t.username === data[1]);
+    const message = {m: `[${t.username}->${data[1]}] ${clean(data.slice(2).join(' '))}`, c: '#FFFFFF'};
     if (t) {
-      t.privateLogs.push(message);
-      servers[this.room].send(t);
+      logs.push(message);
+      server.send(t);
     }
     if (m) {
       m.privateLogs.push(message);
-      servers[this.room].send(m);
+      server.send(m);
     }
   }],
-  createteam: [FFA, 4, 2, function(data) {
-    if (Storage.mutes.includes(this.username)) return this.send({status: 'error', message: `You can't make teams when you're muted!`});
-    if (clean(data[1]) !== data[1]) return this.send({status: 'error', message: 'Team name contains profanity'});
-    if (servers[this.room].pt.find(t => Engine.getTeam(t.team) === data[1])) return this.send({status: 'error', message: 'This team already exists.'});
-    if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return this.send({status: 'error', message: 'Team name not allowed.'});
-    servers[this.room].pt.find(t => t.username === this.username).team = this.username+':'+data[1]+'@leader';
-    for (const ai of servers[this.room].ai) if (Engine.getUsername(ai.team) === this.username) ai.team = this.username+':'+data[1];
+  createteam: [FFA, 4, 2, (data, socket, server, t) => {
+    if (Storage.mutes.includes(t.username)) return socket.send({status: 'error', message: `You can't make teams when you're muted!`});
+    if (clean(data[1]) !== data[1]) return socket.send({status: 'error', message: 'Team name contains profanity'});
+    if (server.pt.find(t => Engine.getTeam(t.team) === data[1])) return socket.send({status: 'error', message: 'This team already exists.'});
+    if (data[1].includes('@leader') || data[1].includes('@requestor#') || data[1].includes(':') || data[1].length > 20) return socket.send({status: 'error', message: 'Team name not allowed.'});
+    t.team = t.username+':'+data[1]+'@leader';
+    for (const ai of server.ai) if (Engine.getUsername(ai.team) === t.username) ai.team = t.username+':'+data[1];
   }],
-  join: [FFA, 4, 2, function(data) {
-    if (servers[this.room].pt.find(t => t.username === this.username).team.includes('@leader')) return this.send({status: 'error', message: 'You must disband your team to join. (/leave)'});
-    if (!servers[this.room].pt.find(t => Engine.getTeam(t.team) === data[1] && t.team.includes('@leader'))) return this.send({status: 'error', message: 'This team does not exist.'});
-    servers[this.room].pt.find(t => t.username === this.username).team += '@requestor#'+data[1];
-    servers[this.room].logs.push({m: this.username+' requested to join team '+data[1]+'. Team owner can use /accept '+this.username+' to accept them.', c: '#0000FF'});
+  join: [FFA, 4, 2, (data, socket, server, t, logs) => {
+    if (t.team.includes('@leader')) return socket.send({status: 'error', message: 'You must disband your team to join. (/leave)'});
+    if (!server.pt.find(t => Engine.getTeam(t.team) === data[1] && t.team.includes('@leader'))) return socket.send({status: 'error', message: 'This team does not exist.'});
+    t.team += '@requestor#'+data[1];
+    server.logs.push({m: t.username+' requested to join team '+data[1]+'. The team owner can use /accept '+t.username+' to accept them.', c: '#0000FF'});
   }],
-  accept: [FFA, 4, 2, function(data) {
-    const leader = servers[this.room].pt.find(t => t.username === this.username), requestor = servers[this.room].pt.find(t => t.username === data[1]);
-    if (!requestor) return this.send({status: 'error', message: 'Player not found.'});
+  accept: [FFA, 4, 2, (data, socket, server, t, logs) => {
+    const leader = t, requestor = server.pt.find(t => t.username === data[1]);
+    if (!requestor) return socket.send({status: 'error', message: 'Player not found.'});
     if (leader.team.includes('@leader') && requestor.team.includes('@requestor#') && Engine.getTeam(leader.team) === requestor.team.split('@requestor#')[1]) {
       requestor.team = data[1]+':'+Engine.getTeam(leader.team);
-      for (const ai of servers[this.room].ai) if (Engine.getUsername(ai.team) === requestor.username) ai.team = requestor.username+':'+Engine.getTeam(requestor.team);
-      servers[this.room].logs.push({ m: data[1]+' has joined team '+Engine.getTeam(leader.team), c: '#40C4FF' });
+      for (const ai of server.ai) if (Engine.getUsername(ai.team) === requestor.username) ai.team = requestor.username+':'+Engine.getTeam(requestor.team);
+      server.logs.push({m: data[1]+' has joined team '+Engine.getTeam(leader.team), c: '#40C4FF'});
     }
   }],
   leave: [FFA, 4, 1, function(data) {
-    const target = servers[this.room].pt.find(t => t.username === this.username), team = Engine.getTeam(target.team);
-    servers[this.room].pt.forEach(t => {
-      if (Engine.getTeam(t.team) === team && (target.team.includes('@leader') || this.username === t.username)) {
-        t.team = t.username+':'+Math.random();
-        for (const ai of servers[this.room].ai) if (Engine.getUsername(ai.team) === t.username) ai.team = t.username+':'+Engine.getTeam(t.team);
+    const target = t, team = Engine.getTeam(target.team);
+    for (const tank of server.pt) {
+      if (Engine.match(t, tank) && (t.team.includes('@leader') || tank.username === t.username)) {
+        tank.team = tank.username+':'+Math.random();
+        for (const ai of server.ai) if (Engine.getUsername(ai.team) === tank.username) ai.team = tank.username+':'+Engine.getTeam(tank.team);
       }
-    });
-  }],
-  freeze: [Object, 2, 2, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === data[1]);
-    if (t) {
-      const x = t.x, y = t.y;
-      t.freezeInterval = setInterval(() => {
-        let ox = t.x, oy = t.y;
-        t.x = x;
-        t.y = y;
-        servers[this.room].override(t, ox, oy);
-      }, 15);
     }
   }],
-  unfreeze: [Object, 2, 2, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === data[1]);
+  freeze: [Object, 2, 2, (data, socket, server) => {
+    const t = server.pt.find(t => t.username === data[1]);
+    if (!t) return socket.send({status: 'error', message: 'Player not found!'});
+    const x = t.x, y = t.y;
+    t.freezeInterval = setInterval(() => {
+      let ox = t.x, oy = t.y;
+      t.x = x;
+      t.y = y;
+      server.override(t, ox, oy);
+    }, 15);
+  }],
+  unfreeze: [Object, 2, 2, (data, socket, server) => {
+    const t = server.pt.find(t => t.username === data[1]);
     if (t) clearInterval(t.freezeInterval);
   }],
-  filter: [Object, 3, 2, function(data) {
+  filter: [Object, 3, 2, data => {
     if (!Storage.filter.includes(data[1].toLowerCase())) Storage.filter.push(data[1].toLowerCase());
   }],
-  allow: [Object, 2, 2, function(data) {
+  allow: [Object, 2, 2, data => {
     if (Storage.filter.includes(data[1].toLowerCase())) Storage.filter.splice(Storage.filter.indexOf(data[1].toLowerCase()), 1);
   }],
-  t: [Object, 4, -1, function(data) {
-    if (Storage.mutes.includes(this.username)) return this.send({status: 'error', message: 'You are muted!'}); 
-    const team = Engine.getTeam(servers[this.room].pt.find(t => t.username === this.username).team), msg = {m: '[TEAM]['+this.username+'] '+clean(data.slice(1).join(' ')), c: '#FFFFFF'};
-    for (const t of servers[this.room].pt) if (Engine.getTeam(t.team) === team) t.privateLogs.push(msg);
+  t: [Object, 4, -1, (data, socket, server, t) => {
+    if (Storage.mutes.includes(t.username)) return socket.send({status: 'error', message: 'You are muted!'});
+    for (const tank of server.pt) if (Engine.match(t, tank)) tank.privateLogs.push({m: '[TEAM]['+t.username+'] '+clean(data.slice(1).join(' ')), c: '#FFFFFF'});
   }],
-  gpt: [Object, 4, -1, function(data) {
-  try {
-    if (!this.gptHistory) this.gptHistory = [];
-    const prompt = data.slice(1).join(' ');
-    gpt.v1({
-      messages: this.gptHistory,
-      prompt,
-      model: 'GPT-4',
-      markdown: false,
-    }, (err, data) => {
-      if (!err) this.gptHistory.push({role: 'user', content: prompt}, {role: 'assistant', content: data.gpt});
-      servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: JSON.stringify(err) || data.gpt, c: '#DFCFBE'});
-    });
-    } catch(e) {
-      servers[this.room].logs.push({m: 'err '+e, c: '#ff0000'});
-    }
-  }],
-  gptclear: [Object, 4, -1, function(data) {
-    this.gptHistory = [];
-  }],
-  wgpt: [Object, 4, -1, function(data) {
-    try {
-    if (!this.gptHistory) this.gptHistory = [];
-    const prompt = data.slice(1).join(' ');
-    bing({
-      messages: this.gptHistory.concat([{
-        role: 'user',
-        content: prompt,
-      }]),
-      conversation_style: 'balanced',
-      markdown: false,
-      stream: false,
-    }, (err, data) => {
-      const t = servers[this.room].pt.find(t => t.username === this.username);
-      if (err !== null) return t.privateLogs.push({m: JSON.stringify(err), c: '#ff0000'});
-      t.privateLogs.push({m: data.message, c: '#DFCFBE'});
-    });
-    } catch(e) {
-      servers[this.room].logs.push({m: 'err '+e, c: '#ff0000'});
-    }
-  }],
-  dalle2pro: [Object, 2, -1, function(data) {
-    dalle.v2({
-      prompt: data.slice(3).join(' '),
-      data: {
-        prompt_negative: '',
-        width: +data[1],
-        height: +data[2],
-        guidance_scale: 6,
-      },
-    }, (err, data) => {
-      if (!err) for (const image of data.images) servers[this.room].pt.find(t => t.username === this.username).privateLogs.push({m: `<img src='${image}' />`, c: '#ffffff'});
-    });
-  }],
-  run: [Object, 1, -1, function(data) {
+  gpt: [Object, 4, -1, () => {}],
+  gptclear: [Object, 4, -1, () => {}],
+  wgpt: [Object, 4, -1, () => {}],
+  dalle2pro: [Object, 2, -1, () => {}],
+  run: [Object, 1, -1, (data, socket, server, t, logs) => {
     exec(data.slice(1).join(' '), (e, o, er) => {
-      const t = servers[this.room].pt.find(t => t.username === this.username);
-      if (e) t.privateLogs.push({m: e, c: '#ff0000'});
-      t.privateLogs.push({m: er, c: '#ff0000'});
-      t.privateLogs.push({m: o, c: '#ffffff'});
+      if (e) logs.push({m: e, c: '#ff0000'});
+      logs.push({m: er, c: '#ff0000'});
+      logs.push({m: o, c: '#ffffff'});
     });
   }],
-  newmap: [FFA, 3, -1, function(data) {
+  newmap: [FFA, 3, -1, (data, socket, server) => {
     let levelID = data[1] ? Number(data[1]) : Math.floor(Math.random()*ffaLevels.length);
-    if (isNaN(levelID) || levelID % 1 !== 0 || levelID >= ffaLevels.length) return this.send({status: 'error', message: 'Out of range or invalid input.'});
-    servers[this.room].levelReader(ffaLevels[levelID]);
-    for (const t of servers[this.room].pt) {
+    if (isNaN(levelID) || levelID % 1 !== 0 || levelID >= ffaLevels.length) return socket.send({status: 'error', message: 'Out of range or invalid input.'});
+    server.levelReader(ffaLevels[levelID]);
+    for (const t of server.pt) {
       let ox = t.x, oy = t.y;
-      t.x = servers[this.room].spawn.x;
-      t.y = servers[this.room].spawn.y;
-      servers[this.room].override(t, ox, oy);
+      t.x = server.spawn.x;
+      t.y = server.spawn.y;
+      server.override(t, ox, oy);
     }
   }],
-  ban: [Object, 2, -1, function(data) {
-    if (Storage.admins.includes(data[1]) || Storage.owners.includes(data[1])) return this.send({status: 'error', message: `You can't ban another admin!`});
+  ban: [Object, 2, -1, (data, socket, server, t) => {
+    if (Storage.admins.includes(data[1]) || Storage.owners.includes(data[1])) return socket.send({status: 'error', message: `You can't ban another admin!`});
     Storage.bans.push(data[1]);
-    let msg = ' banned by '+this.username+' for ' + (data[2] ? 'committing the felony: '+data.slice(2).join(' ') : 'no reason ez!');
-    servers[this.room].logs.push({m: data[1]+' was'+msg, c: '#FF0000'});
-    servers[this.room].pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You were'+msg});
+    let msg = ' banned by '+t.username+' for ' + (data[2] ? 'committing the felony: '+data.slice(2).join(' ') : 'no reason ez!');
+    server.logs.push({m: data[1]+' was'+msg, c: '#FF0000'});
+    server.pt.find(t => t.username === data[1])?.socket.send({status: 'error', message: 'You were'+msg});
     for (const socket of sockets) if (socket.username === data[1]) setTimeout(() => socket.close());
   }],
-  banlist: [Object, 2, -1, function(data) {
-    const t = servers[this.room].pt.find(t => t.username === this.username);
-    t.privateLogs.push({m: '-----Ban List-----', c: '#00FF00'});
-    for (const ban of Storage.bans) t.privateLogs.push({m: ban, c: '#00FF00'});
+  banlist: [Object, 2, -1, (data, socket, server, t, logs) => {
+    logs.push({m: '-----Ban List-----', c: '#00FF00'});
+    for (const ban of Storage.bans) logs.push({m: ban, c: '#00FF00'});
   }],
-  pardon: [Object, 2, 2, function(data) {
+  pardon: [Object, 2, 2, (data, socket, server, t) => {
     Storage.bans.splice(Storage.bans.indexOf(data[1]), 1);
-    servers[this.room].logs.push({m: data[1]+' was pardoned by '+this.username, c: '#0000FF'});
+    server.logs.push({m: data[1]+' was pardoned by '+t.username, c: '#0000FF'});
   }],
-  mute: [Object, 3, 2, function(data) {
-    if (Storage.mutes.includes(data[1])) return this.send({status: 'error', message: 'They are already muted!'});
+  mute: [Object, 3, 2, (data, socket, server, t) => {
+    if (Storage.mutes.includes(data[1])) return socket.send({status: 'error', message: 'They are already muted!'});
     Storage.mutes.push(data[1]);
-    servers[this.room].logs.push({m: data[1]+' was muted by '+this.username, c: '#FFFF22'});
+    server.logs.push({m: data[1]+' was muted by '+t.username, c: '#FFFF22'});
   }],
-  unmute: [Object, 3, 2, function(data) {
+  unmute: [Object, 3, 2, (data, socket, server, t) => {
     Storage.mutes.splice(Storage.mutes.indexOf(data[1]), 1);
-    servers[this.room].logs.push({m: data[1]+' was unmuted by '+this.username, c: '#0000FF'});
+    server.logs.push({m: data[1]+' was unmuted by '+t.username, c: '#0000FF'});
   }],
-  kick: [Object, 3, 2, function(data) {
+  kick: [Object, 3, 2, (data, socket, server, t) => {
     for (const socket of sockets) if (socket.username === data[1]) {
-      socket.send({status: 'error', message: 'You have been kicked by '+this.username});
+      socket.send({status: 'error', message: 'You have been kicked by '+t.username});
       setTimeout(() => socket.close());
     }
   }],
-  kill: [Object, 2, -1, function(data) {
+  kill: [Object, 2, -1, (data, socket) => {
     for (const s of Object.values(servers)) {
-      let t = s.pt.find(t => t.username === (data[1] || this.username));
+      let t = s.pt.find(t => t.username === (data[1] || socket.username));
       if (!t) return;
       t.immune = false;
-      for (let i = 0; i < 2; i++) t.damageCalc(t.x, t.y, 6000, this.username);
+      t.shield = false;
+      t.reflect = false;
+      while (!t.ded) {
+        t.core = -1;
+        t.damageCalc(t.x, t.y, 6000, socket.username);
+      }
     }
   }],
-  killai: [Object, 1, 1, function(data) {
-    for (let i = servers[this.room].ai.length-1; i >= 0; i--) servers[this.room].ai[i].destroy();
+  killai: [Object, 1, 1, (data, socket, server) => {
+    for (let i = server.ai.length-1; i >= 0; i--) server.ai[i].destroy();
   }],
-  ai: [Object, 2, 7, function(data) {
-    for (let i = 0; i < Number(data[5]); i++) A.template('AI').init(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), data[6], servers[this.room]);
+  ai: [Object, 2, 7, (data, socket, server) => {
+    for (let i = 0; i < Number(data[5]); i++) A.template('AI').init(Math.floor(Number(data[1]) / 100) * 100 + 10, Math.floor(Number(data[2]) / 100) * 100 + 10, Number(data[3]), Math.min(20, Math.max(0, Number(data[4]))), data[6], server);
   }],
-  spectate: [Object, 3, 2, function(data) {
+  spectate: [Object, 3, 2, data => {
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = true;
   }],
-  live: [Object, 2, 2, function(data) {
+  live: [Object, 2, 2, data => {
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) {
       t.hp = t.maxHp;
       t.ded = false;
-      t.socket.send({event: 'ded'});
-      return;
+      return t.socket.send({event: 'ded'});
     }
   }],
-  switch: [TDM, 3, 2, function(data) {
-    if (servers[this.room].mode === 0) for (const t of servers[this.room].pt) if (t.username === (data.length === 1 ? this.username : data[1])) t.color = t.color === '#FF0000' ? '#0000FF' : '#FF0000';
+  switch: [TDM, 3, 2, (data, socket, server) => {
+    if (server.mode === 0) for (const t of server.pt) if (t.username === (data.length === 1 ? socket.username : data[1])) t.color = t.color === '#FF0000' ? '#0000FF' : '#FF0000';
   }],
-  start: [TDM, 3, 1, function() {
-    if (servers[this.room].mode === 0) {
-      servers[this.room].readytime = Date.now();
-      servers[this.room].time = 0;
+  start: [TDM, 3, 1, (data, socket, server) => {
+    if (server.mode === 0) {
+      server.readytime = Date.now();
+      server.time = 0;
     }
   }],
-  reboot: [Object, 2, 1, function() {
+  reboot: [Object, 2, 1, () => {
     for (const socket of sockets) socket.send({status: 'error', message: 'Restarting Server!'});
     process.exit(1);
   }],
-  flushlogs: [Object, 2, -1, function() {
-    fs.writeFileSync('log.txt', '');
+  flushlogs: [Object, 2, -1, () => fs.writeFileSync('log.txt', '')],
+  getlogs: [Object, 2, 2, (data, socket, server, t, logs) => {
+    const log = fs.readFileSync('log.txt').toString().split('\n').slice(1).reverse();
+    for (let i = Math.min(log.length, Number(data[1])); i >= 0; i--) logs.push({m: log[i], c: '#A9A9A9'});
   }],
-  getlogs: [Object, 2, 2, function(data) {
-    const logs = fs.readFileSync('log.txt').toString().split('\n').slice(1).reverse(), t = servers[this.room].pt.find(t => t.username === this.username);
-    for (let i = Math.min(logs.length, Number(data[1])); i >= 0; i--) t.privateLogs.push({m: logs[i], c: '#A9A9A9'});
-  }],
-  announce: [Object, 3, -1, function(data) {
+  announce: [Object, 3, -1, (data, socket, server) => {
     for (const server of Object.values(servers)) {
-      server.logs.push({m: '[Announcement]['+(hasAccess(this.username, 1) ? 'Owner' : (hasAccess(this.username, 2)) ? 'Admin' : 'VIP')+']['+this.username+'] '+data.slice(1).join(' '), c: '#FFF87D'});
+      server.logs.push({m: '[Announcement]['+(hasAccess(socket.username, 1) ? 'Owner' : (hasAccess(socket.username, 2)) ? 'Admin' : 'VIP')+']['+socket.username+'] '+data.slice(1).join(' '), c: '#FFF87D'});
       for (const t of server.pt) server.send(t);
     }
   }],
-  lockchat: [Object, 2, -1, function(data) {
+  lockchat: [Object, 2, -1, () => {
     settings.chat = !settings.chat;
   }],
-  lockdown: [Object, 2, -1, function(data) {
+  lockdown: [Object, 2, -1, () => {
     settings.joining = !settings.joining;
   }],
-  swrite: [Object, 1, 3, function(data) {
+  swrite: [Object, 1, 3, (data, socket) => {
     eval(`try {
-      servers['${this.room}']['${data[1]}'] = ${data[2]};
+      servers['${socket.room}']['${data[1]}'] = ${data[2]};
     } catch(e) {
-      servers['${this.room}'].pt.find(t => t.username === '${this.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
+      servers['${socket.room}'].pt.find(t => t.username === '${socket.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
     }`);
   }],
-  twrite: [Object, 1, 4, function(data) {
+  twrite: [Object, 1, 4, (data, socket) => {
     eval(`try {
-      const server = servers['${this.room}'], tank = server.pt.find(t => t.username === '${data[1]}');
+      const server = servers['${socket.room}'], tank = server.pt.find(t => t.username === '${data[1]}');
       tank['${data[2]}'] = ${data[3]};
     } catch(e) {
-      servers['${this.room}'].pt.find(t => t.username === '${this.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
+      servers['${socket.room}'].pt.find(t => t.username === '${socket.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
     }`);
   }],
   help: [Object, 4, 1, function(data) {
@@ -987,13 +916,13 @@ wss.on('connection', socket => {
     } else if (data.type === 'logs') {
       if (servers[data.room]) socket.send({event: 'logs', logs: servers[data.room].logs}); // Dead?
     } else if (data.type === 'command') {
-      const f = Commands[data.data[0]];
+      const f = Commands[data.data[0]], server = servers[socket.room], t = server.pt.find(t => t.username === socket.username);
       if (!f) return socket.send({status: 'error', message: 'Command not found.'});
-      if (!(servers[socket.room] instanceof f[0])) return socket.send({status: 'error', message: 'This command is not available in this server type.'});
+      if (!(server instanceof f[0])) return socket.send({status: 'error', message: 'This command is not available in this server type.'});
       if (data.data.length !== f[2] && f[2] !== -1) return socket.send({status: 'error', message: 'Wrong number of arguments.'});
       if (!hasAccess(socket.username, f[1])) return socket.send({status: 'error', message: `You don't have access to this.`});
       log(`${socket.username} ran command: ${data.data.join(' ')}`);
-      f[3].bind(socket)(data.data);
+      f[3](data.data, socket, server, t, t.privateLogs);
     } else if (data.type === 'list') {
       socket.send({event: 'list', players: servers[socket.room].pt.reduce((a, c) => a.concat(c.username), [])});
     } else if (data.type === 'stats') {
