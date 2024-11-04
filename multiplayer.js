@@ -957,7 +957,7 @@ client.on('messageCreate', m => {
     if (data.length !== f[2] && f[2] !== -1) return socket.send({status: 'error', message: 'Wrong number of arguments.'});
     if (!hasAccess(m.author.id, f[1])) return socket.send({status: 'error', message: `You(${m.author.id}) don't have access to this.`});
     log(`(${m.author.id})${socket.username} ran command: ${data.join(' ')}`);
-    return f[3](data.data, socket, server, t, t.privateLogs);
+    return f[3](data, socket, {}, t, logs);
   }
   for (const server of Object.values(servers)) server.logs.push({m: '[DISCORD]['+m.author.username+'] '+m.content, c: '#ffffff'});
 });
