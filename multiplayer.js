@@ -25,7 +25,7 @@ client.on('messageCreate', m => {
     const discordAcceptable = ['admin', 'removeadmin', 'vip', 'removevip', 'reload', 'playerlist', 'msg', 'filter', 'allow', 'run', 'ban', 'banlist', 'pardon', 'mute', 'unmute', 'kick', 'kill', 'spectate', 'live', 'reboot', 'flushlogs', 'getlogs', 'announce', 'lockchat', 'lockdown', ];
     const socket = {username: m.author.id, send: d => {
       toDiscord(d.message);
-    }}, data = m.content.slice(1).split(' '), t = {username: m.author.id}, logs = {push: () => {
+    }}, data = m.content.replace('/', '').split(' '), t = {username: m.author.id}, logs = {push: () => {
       toDiscord(d.m);
     }};
     if (!discordAcceptable.includes(data[0])) return toDiscord('Invalid command. Not in list: '+discordAcceptable);
