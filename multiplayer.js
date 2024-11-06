@@ -780,8 +780,11 @@ const Commands = {
       t.immune = false;
       t.shield = false;
       t.reflect = false;
-      t.core = -1;
-      t.damageCalc(t.x, t.y, 6000, socket.username);
+      while (!t.ded) {
+        t.core = -1;
+        t.damageCalc(t.x, t.y, 6000, socket.username);
+        t.immune = false;
+      }
     }
   }],
   killai: [Object, 1, 1, (data, socket, server) => {
