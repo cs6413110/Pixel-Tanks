@@ -207,7 +207,7 @@ class Engine {
   destroyEntity() {}
 
   ondeath(t, m={}) {
-    let core = Engine.hasPerk(this.perk, 7), x = t.x-99, y = t.y-99;
+    let core = Engine.hasPerk(t.perk, 7), x = t.x-99, y = t.y-99;
     if (core) {
       this.immune = true;
       setTimeout(() => A.template('Damage').init(x, y, 298, 298, [0, 100, 300, 500][core], t.team, this), core ? 1000 : 0);
