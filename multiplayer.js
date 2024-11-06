@@ -681,7 +681,7 @@ const Commands = {
       server.logs.push({m: data[1]+' has joined team '+Engine.getTeam(leader.team), c: '#40C4FF'});
     }
   }],
-  leave: [FFA, 4, 1, function(data) {
+  leave: [FFA, 4, 1, (data, socket, server, t) => {
     const target = t, team = Engine.getTeam(target.team);
     for (const tank of server.pt) {
       if (Engine.match(t, tank) && (t.team.includes('@leader') || tank.username === t.username)) {
