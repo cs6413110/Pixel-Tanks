@@ -64,47 +64,9 @@ const auth = async(username, token) => {
   console.log(text);
   return text === 'true';
 }, clean = msg => msg.split(' ').reduce((a, word) => a.concat([Storage.filter.some(badword => word.toLowerCase().includes(badword)) ? '@!#$%' : word]), []).join(' ');
-const deathMessages = [
-  `{victim} died from {killer}`,
-  `{victim} was killed by {killer}`,
-  `{victim} was put out of their misery by {killer}`,
-  `{victim} was assassinated by {killer}`,
-  `{victim} was comboed by {killer}`,
-  `{victim} was eliminated by {killer}`,
-  `{victim} was crushed by {killer}`,
-  `{victim} was sniped by {killer}`,
-  `{victim} was exploded by {killer}`,
-  `{victim} was executed by {killer}`,
-  `{victim} was deleted by {killer}`,
-  `{victim} proved no match for {killer}`,
-  `{victim} was outplayed by {killer}`,
-  `{victim} was obliterated by {killer}`,
-  `{victim} fell prey to {killer}`,
-  `{victim} was fed a healthy dose of explosives by {killer}`,
-  `{victim} became another number in {killer}'s kill streak`,
-  `{victim} got wrecked by {killer}`,
-  `{victim} was converted to healing items by {killer}`,
-], joinMessages = [
-  `{idot} is here`,
-  `{idot} arrived`,
-  `{idot} is no longer afk`,
-  `{idot} exists for some reason`,
-  `{idot} joined the game`,
-  `{idot} is now online`,
-  `{idot} has joined the battle`,
-  `{idot}`,
-], rageMessages = [
-  `{idot} went to play awesome tanks instead`,
-  `{idot} touched grass`,
-  `{idot} didnt like the game`,
-  `{idot} gave up`,
-  `{idot} left the game`,
-  `{idot} quit`,
-  `{idot} disconnected`,
-  `{idot} lost connection`,
-  `{idot} didn't make it out alive`,
-  `{idot} doesn't like pickles`,
-]
+const deathMessages = [`{victim} was killed by {killer}`, `{victim} was put out of their misery by {killer}`, `{victim} was assassinated by {killer}`, `{victim} was comboed by {killer}`, `{victim} was eliminated by {killer}`, `{victim} was crushed by {killer}`, `{victim} was sniped by {killer}`, `{victim} was exploded by {killer}`, `{victim} was executed by {killer}`, `{victim} was deleted by {killer}`, `{victim} proved no match for {killer}`, `{victim} was outplayed by {killer}`, `{victim} was obliterated by {killer}`, `{victim} fell prey to {killer}`, `{victim} became another number in {killer}'s kill streak`, `{victim} got wrecked by {killer}`];
+const joinMessages = [`{player} joined the game`, `{player} is now online`, `{player} has joined the battle`];
+const rageMessages = [`{player} left the game`, `{player} quit`, `{player} disconnected`, `{player} lost connection`];
 
 class Multiplayer extends Engine {
   constructor(l) {
@@ -232,10 +194,7 @@ class Multiplayer extends Engine {
         }
       }
       for (const p of c) t.msg.u[i].push(p, Multiplayer.num(e[p]));
-    } else t.msg.u.push(c.reduce((a, p) => {
-      a.push(p, e[p]);
-      return a;
-    }, A.template('arr').concat(e.id)));
+    } else t.msg.u.push(c.reduce((a, p) => a.concat(p, e[p]), A.template('arr').concat(e.id)));
   }
   destroyEntity(e) {
     pt: for (const t of this.pt) {
@@ -827,6 +786,10 @@ const wss = new WebSocketServer({port: settings.port});
 wss.on('connection', socket => {
   socket._send = socket.send;
   socket.send = data => socket._send(pack(data));
+  socket.kick = e => {
+    socket.send({status: 'error', message: e});
+    setTimeout(() => socket.close());
+  }
   sockets.add(socket);
   socket.on('message', data => {
     try {
@@ -836,27 +799,18 @@ wss.on('connection', socket => {
     }
     if (!socket.username) socket.username = data.username;
     if (data.type === 'update') {
-      if (Storage.bans.includes(data.username)) {
-        socket.send({status: 'error', message: 'You are banned!'});
-        return setTimeout(() => socket.close());
-      }
-      if (servers[socket.room]) servers[socket.room].update(data);
+      if (Storage.bans.includes(data.username)) return socket.kick('You are banned!');
+      if (servers[socket.room]) servers[socket.room].update(data); else return socket.kick(`You aren't in a room!`);
     } else if (data.type === 'join') {
-      if (!hasAccess(data.username, 3) && !settings.joining) {
-        socket.send({status: 'error', message: `Joining is disabled.`});
-        return setTimeout(() => socket.close());
-      } else if (clean(data.username) !== data.username) {
-        socket.send({status: 'error', message: `Your username didn't pass the profanity check.`});
-        return setTimeout(() => socket.close());
-      } else if (Storage.bans.includes(data.username)) {
-        socket.send({status: 'error', message: 'You are banned!'});
-        return setTimeout(() => socket.close());
-      }/* else if (!auth(socket.username, data.token)) {
+      if (Storage.bans.includes(data.username)) return socket.kick('You are banned!');
+      if (clean(data.username) !== data.username) return socket.kick(`Your username didn't pass the profanity check.`);
+      if (!hasAccess(data.username, 3) && !settings.joining) return socket.kick('Joining is disabled!');
+      /* else if (!auth(socket.username, data.token)) {
         socket.send({status: 'error', message: 'Token is invalid. Login with the correct authserver.'});
         return setTimeout(() => socket.close());
       }*/
       let server;
-      for (const id in servers) {
+      for (const id in servers) { // OPTIMIZE THIS
         if (servers[id] instanceof joinKey[data.gamemode]) {
           if (data.gamemode === 'ffa' && servers[id].pt.length >= settings.players_per_room) continue;
           if (data.gamemode === 'duels' && servers[id].pt.length !== 1) continue;
@@ -866,17 +820,12 @@ wss.on('connection', socket => {
           break;
         }
       }
-      if (!server) {
-        server = Math.random();
-        servers[server] = new joinKey[data.gamemode]();
-      }
-      if (servers[server].pt.some(t => t.username === socket.username)) {
-        socket.send({status: 'error', message: 'You are already in the server!'});
-        return setImmediate(() => socket.close());
-      }
+      if (!server) servers[server = Math.random()] = new joinKey[data.gamemode]();
+      if (servers[server].pt.some(t => t.username === socket.username)) return socket.kick('You are already in the server!');
       socket.room = server;
-      data.tank.authority = '';
+      data.tank.authority = ''; // OPTIMIZE THIS
       for (const level of ['VIP', 'Admin', 'Owner']) if (Storage[level.toLowerCase()+'s'].includes(data.username)) data.tank.authority = level;
+      // PREPEND SOCKET TO DATA
       servers[server].add(socket, data.tank);
     } else if (data.type === 'ping') {
       socket.send({event: 'ping', id: data.id});
