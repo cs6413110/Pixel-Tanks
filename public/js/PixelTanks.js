@@ -750,8 +750,8 @@ class PixelTanks {
 
   static launch() {  
     setTimeout(() => {
-      if (window.u && window.p) return PixelTanks.auth(window.u, window.p, 'login');
       Menus.trigger('start');
+      if (window.u && window.p) PixelTanks.auth(window.u, window.p, 'login');
     }, 200);
   }
 
