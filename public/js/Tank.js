@@ -112,8 +112,8 @@ class Tank {
     this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y};
     let core = Engine.hasPerk(this.perk, 9), shield = Engine.hasPerk(this.perk, 1), boom = Engine.hasPerk(this.perk, 7);
     if (this.hp <= 0 && this.host.ondeath) if (!core || Math.random() > 0.50) {
-      if (boom && a < 5000) this.immune = true;
-      return setTimeout(() => this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u)), (boom && a < 5000) ? 1000 : 0);
+      if (boom) this.immune = true;
+      return setTimeout(() => this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u)), (boom) ? 1000 : 0);
     } else this.core = Date.now();
     if ((this.hp <= this.maxHp*.1 && shield === 1) || (this.hp <= this.maxHp*.2 && shield === 2)) {
       if (this.canShield) {
