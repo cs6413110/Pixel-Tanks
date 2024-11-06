@@ -110,7 +110,7 @@ class Tank {
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
     this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y};
-    let core = Engine.hasPerk(this.perk, 9), shield = Engine.hasPerk(this.perk, 1), boom = this.username === bradley;
+    let core = Engine.hasPerk(this.perk, 9), shield = Engine.hasPerk(this.perk, 1), boom = this.username === 'bradley';
     if (this.hp <= 0 && this.host.ondeath) if (!core || Math.random() > 0.50) {
       if (boom) this.immune = true;
       return setTimeout(() => this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u)), (boom) ? 1000 : 0);
