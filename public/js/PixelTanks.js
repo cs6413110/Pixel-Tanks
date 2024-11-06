@@ -749,7 +749,10 @@ class PixelTanks {
   }
 
   static launch() {  
-    setTimeout(() => Menus.trigger('start'), 200);
+    setTimeout(() => {
+      if (window.u && window.p) return PixelTanks.auth(window.u, window.p, 'login');
+      Menus.trigger('start');
+    }, 200);
   }
 
   static save() {
