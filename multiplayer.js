@@ -104,32 +104,7 @@ const deathMessages = [
   `{idot} lost connection`,
   `{idot} didn't make it out alive`,
   `{idot} doesn't like pickles`,
-], tipMessages = [ 
-  `TIP: Try switching your class, maybe you're not good at that one!`,
-  `TIP: These tips get shown when you die!`,
-  `TIP: Blame the lag`,
-  `TIP: Doing damage increases your chance of survival while decreasing your enemy's chance of survival`,
-  `TIP: Taking damage reduces your chance of survival`,
-  `TIP: Try dodging the bullets next time!`,
-  `That was unwinnable, don't worry`,
-  `TIP: don't die!`,
-  `TIP: If you are in a block, press ESC and the LEAVE button. Works every time!`,
-  `Bad internet? Hit the router with a wrench. Trust me :)`,
-  `Must've been your keyboard`,
-  `TIP: Try using a mouse next time`,
-  `At least you got a kill before you died! You got a kill. . . right?`,
-  `TIP: Do better? idk I'm not paid enough for this...`,
-  `There are items, abilities, and classes that can assist you`,
-  `RIP: Rest in Pineapple`,
-  `Why are these tips so mean?`,
-  `Died to an insta did you? Try blaming the lag`,
-  `KABOOM! you know, this tip would be pretty funny if you died to shotgun or something`,
-  `Aw cmon, I had 12 bucks on you to win that!`,
-  `Lost? There's a king that can relate to that.`,
-  `TIP: ↑ ↑ ↓ ↓ ← → ← → B A START`,
-  `I'm lost again. Where is this? Looks. . . too smart for me.`,
-  `Wow! You suck!`,
-];
+]
 
 class Multiplayer extends Engine {
   constructor(l) {
@@ -305,10 +280,6 @@ class Multiplayer extends Engine {
   deathMsg(victim, killer) {
     log(`${killer} killed ${victim}`); // temp log file death
     return deathMessages[Math.floor(Math.random()*deathMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
-  }
-
-  tipMsg(player, killer) {
-    return tipMessages[Math.floor(Math.random()*tipMessages.length)].replace('{victim}', player).replace('{killer}', killer);
   }
 
   joinMsg(player) {
