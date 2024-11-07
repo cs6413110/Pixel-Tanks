@@ -208,15 +208,12 @@ class Engine {
 
   ondeath(t, m={}) {
     let core = Engine.hasPerk(t.perk, 7), x = t.x-99, y = t.y-99;
-    if (core) {
-      this.immune = true;
-      setTimeout(() => A.template('Damage').init(x, y, 298, 298, [0, 100, 300, 500][core], t.team, this), core ? 1000 : 0);
-    }
+    if (core) setTimeout(() => A.template('Damage').init(x, y, 298, 298, [0, 100, 300, 500][core], t.team, this), 500);
     this.logs.push({m: this.deathMsg(t.username, m.username), c: (m.username === undefined ? '#FF8C00': (Engine.getTeam(m.team) === 'RED' ? '#FF0000' : (Engine.getTeam(m.team) === 'BLUE' ? '#0000FF' : '#FF8C00')))});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
-    if (t.socket) setTimeout(() => t.ded = true, core ? 1000 : 0);
+    if (t.socket) t.ded = true;
     if (m.socket) m.socket.send({event: 'kill'});
-    if (m.deathEffect) setTimeout(() => t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0}, core ? 1000 : 0);
+    if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0};
   }
 
   levelReader(level) {
