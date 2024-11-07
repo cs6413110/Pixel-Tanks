@@ -817,6 +817,7 @@ class PixelTanks {
   
   static main() {
     Menus.removeListeners();
+    if (PixelTanks.user.player) PixelTanks.user.player.implode();
     PixelTanks.user.player = new Client(null, false, null);
   }
 
