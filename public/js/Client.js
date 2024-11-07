@@ -665,9 +665,9 @@ class Client {
   mouseup(e) {
     if (this.menu) return Menus.menus[this.menu].listeners?.mouseup(e);
     if (this.socket && this.socket.status === 'disconnected') {
-      return // TEMP FIX
-      this.implode();
-      return Menus.trigger('main');
+      if (PixelTanks.user.player) PixelTanks.user.player.implode();
+      PixelTanks.user.player = new Client('141.148.128.231:8080', true, confirm('Ok for ffa, cancel for tdm') ? 'ffa' : 'tdm');
+      Menus.removeListeners();
     }
     if (e.button === 0) clearInterval(this.fireInterval);
     this.keyup({keyCode: 1000+e.button});
