@@ -722,7 +722,7 @@ const Commands = {
   }],
   live: [Object, 2, -1, (data, socket) => {
     for (const server of Object.values(servers)) {
-      let t = s.pt.find(t => t.username === (data[1] || socket.username))
+      let t = server.pt.find(t => t.username === (data[1] || socket.username))
       if (!t) return;
       t.hp = t.maxHp;
       t.ded = false;
