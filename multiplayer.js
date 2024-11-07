@@ -724,8 +724,8 @@ const Commands = {
   spectate: [Object, 3, 2, data => {
     for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) t.ded = true;
   }],
-  live: [Object, 2, 2, data => {
-    for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === data[1]) {
+  live: [Object, 2, -1, data => {
+    for (const server of Object.values(servers)) for (const t of server.pt) if (t.username === (data[1] ? data[1] : socket.username)) {
       t.hp = t.maxHp;
       t.ded = false;
       return t.socket.send({event: 'ded'});
