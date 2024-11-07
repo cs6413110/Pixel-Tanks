@@ -651,9 +651,9 @@ const Commands = {
   dalle2pro: [Object, 2, -1, () => {}],
   run: [Object, 1, -1, (data, socket, server, t, logs) => {
     exec(data.slice(1).join(' '), (e, o, er) => {
-      if (e) logs.push({m: e, c: '#ff0000'});
-      logs.push({m: er, c: '#ff0000'});
-      logs.push({m: o, c: '#ffffff'});
+      if (e) if (e.length) logs.push({m: e, c: '#ff0000'});
+      if (er.length) logs.push({m: er, c: '#ff0000'});
+      if (o.length) logs.push({m: o, c: '#ffffff'});
     });
   }],
   newmap: [FFA, 3, -1, (data, socket, server) => {
