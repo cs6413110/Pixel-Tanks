@@ -710,7 +710,7 @@ const Commands = {
       t.immune = false;
       t.shield = false;
       t.reflect = false;
-      for (let i = 0; i < 3; i++) t.damageCalc(t.x, t.y, 6000, socket.username);
+      t.damageCalc(t.x, t.y, 6000, socket.username);
     }
   }],
   killai: [Object, 1, 1, (data, socket, server) => {   h  
