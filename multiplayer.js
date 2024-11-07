@@ -242,11 +242,11 @@ class Multiplayer extends Engine {
   }
 
   joinMsg(player) {
-    return joinMessages[Math.floor(Math.random()*joinMessages.length)].replace('{idot}', player);
+    return joinMessages[Math.floor(Math.random()*joinMessages.length)].replace('{player}', player);
   }
 
   rageMsg(player) {
-    return rageMessages[Math.floor(Math.random()*rageMessages.length)].replace('{idot}', player);
+    return rageMessages[Math.floor(Math.random()*rageMessages.length)].replace('{player}', player);
   }
 }
 
