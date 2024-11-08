@@ -667,6 +667,16 @@ const Commands = {
       server.override(t, ox, oy);
     }
   }],
+  loadmap: [FFA, 2, 2, (data, socket, server) => {
+    //if (isNaN(levelID) || levelID % 1 !== 0 || levelID >= ffaLevels.length) return socket.send({status: 'error', message: 'Out of range or invalid input.'});
+    server.levelReader(data[1]);
+    for (const t of server.pt) {
+      let ox = t.x, oy = t.y;
+      t.x = server.spawn.x;
+      t.y = server.spawn.y;
+      server.override(t, ox, oy);
+    }
+  }],
   ban: [Object, 2, -1, (data, socket, server, t) => {
     if (Storage.admins.includes(data[1]) || Storage.owners.includes(data[1])) return socket.send({status: 'error', message: `You can't ban another admin!`});
     Storage.bans.push(data[1]);
