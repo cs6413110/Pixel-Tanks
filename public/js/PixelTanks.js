@@ -665,7 +665,10 @@ class PixelTanks {
       },
       shop: {
         buttons: [
-          [880, 208, 488, 96, 'shop2', true],
+          [880, 208, 488, 96, function() {
+          Menus.softUntrigger('shop');
+          Menus.softTrigger('shop2');
+        }, true],
           [496, 404, 176, 176, function() {PixelTanks.purchase(0, 0)}, true],
           [712, 404, 176, 176, function() {PixelTanks.purchase(0, 1)}, true],
           [928, 404, 176, 176, function() {PixelTanks.purchase(0, 4)}, true],
@@ -683,7 +686,10 @@ class PixelTanks {
       },
       shop2: {
         buttons: [
-          [232, 208, 488, 96, 'shop', true],
+          [232, 208, 488, 96, function() {
+          Menus.softUntrigger('shop2');
+          Menus.softTrigger('shop');
+        }, true],
           //emergency cloak
           [60, 404, 136, 136, function() {PixelTanks.purchase(1, 0)}, true],
           [60, 572, 136, 136, function() {PixelTanks.purchase(1, 1)}, true],
