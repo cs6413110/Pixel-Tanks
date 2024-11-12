@@ -862,6 +862,21 @@ class PixelTanks {
     GUI.draw.translate(-x-40/80*s, -y-40/80*s);
   }
 
+  static renderBase(x, y, s, color, a=0) {
+    GUI.draw.translate(x+40/80*s, y+40/80*s);
+    GUI.draw.rotate(a*Math.PI/180);
+    GUI.draw.fillStyle = color;
+    GUI.draw.beginPath();
+    GUI.draw.moveTo(-20/80*s, -32/80*s);
+    GUI.draw.lineTo(20/80*s, -32/80*s);
+    GUI.draw.lineTo(20/80*s, 32/80*s);
+    GUI.draw.lineTo(-20/80*s, 32/80*s); 
+    GUI.draw.lineTo(-20/80*s, -32/80*s);
+    GUI.draw.fill();
+    GUI.draw.rotate(-a*Math.PI/180);
+    GUI.draw.translate(-x-40/80*s, -y-40/80*s);
+  }
+
   static renderTop(x, y, s, color, a=0, p=0) {
     GUI.draw.translate(x+40/80*s, y+40/80*s);
     GUI.draw.rotate(a*Math.PI/180);
