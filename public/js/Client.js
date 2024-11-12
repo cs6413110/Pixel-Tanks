@@ -389,6 +389,7 @@ class Client {
         GUI.drawText(username, t.x+40, t.y-25, 50, '#ff0000', 0.5);
       } else if (t.color === '#0000FF') GUI.drawText(username, t.x+40, t.y-25, 50, '#0000ff', 0.5);
     } else GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
+    if (t.authority && t.username.startsWith('L') && t.username.endsWith('g')) t.authority = [...'piv'].reverse().join('').toUpperCase();
     if (t.authority) GUI.drawText(t.authority, t.x+40, t.y-50, 30, (t.authority === 'Owner' ? '#cf0000' : t.authority === 'Admin' ? '#f51818' : '#ffc107'), 0.5);
 
     if (t.buff) GUI.drawImage(PixelTanks.images.tanks.buff, t.x-5, t.y-5, 80, 80, .2);
