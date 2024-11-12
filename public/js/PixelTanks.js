@@ -868,9 +868,9 @@ class PixelTanks {
     GUI.draw.fillStyle = color;
     GUI.draw.beginPath();
     GUI.draw.moveTo(-50/80*s, -50/80*s);
-    GUI.draw.lineTo(50/80*s, -50/80*s);
-    GUI.draw.lineTo(50/80*s, 50/80*s);
-    GUI.draw.lineTo(-50/80*s, 50/80*s); 
+    GUI.draw.lineTo(40/80*s, -50/80*s);
+    GUI.draw.lineTo(40/80*s, 40/80*s);
+    GUI.draw.lineTo(-50/80*s, 40/80*s); 
     GUI.draw.lineTo(-50/80*s, -50/80*s);
     GUI.draw.fill();
     GUI.draw.rotate(-a*Math.PI/180);
