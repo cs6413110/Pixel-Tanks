@@ -302,7 +302,7 @@ class Client {
     if ((t.invis && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || t.ded) a = .5;
     if (t.invis && Engine.getTeam(this.team) !== Engine.getTeam(t.team)) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
     GUI.draw.globalAlpha = a;
-    if (t.role !== 0) PixelTanks.renderBottom(t.x, t.y, 80, t.color, t.baseRotation) else PixelTanks.renderBase(t.x, t.y, 80, t.color, t.baseRotation);
+    if (t.role !== 0) PixelTanks.renderBottom(t.x, t.y, 80, t.color, t.baseRotation); else PixelTanks.renderBase(t.x, t.y, 80, t.color, t.baseRotation);
     GUI.drawImage(PixelTanks.images.tanks[t.role === 0 ? 'base' : 'bottom'+(t.baseFrame ? '' : '2')], t.x, t.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation);
     if (t.fire && (!t.invis || Engine.getTeam(this.team) === Engine.getTeam(t.team))) GUI.drawImage(PixelTanks.images.animations.fire, t.x, t.y, 80, 80, 1, 0, 0, 0, 0, undefined, 29*(Math.floor((Date.now()-this.animate)/80)%2), 0, 29, 29);
     GUI.draw.globalAlpha = a;
