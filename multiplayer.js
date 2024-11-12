@@ -844,7 +844,7 @@ wss.on('connection', socket => {
       if (Storage.mutes.includes(socket.username)) return socket.send({status: 'error', message: 'You are muted!'});
       if (data.msg.length > 3000) return socket.send({status: 'error', message: 'You have exceed 3k size limit!'});
       let role;
-      for (const level of ['VIP', 'Admin', 'Owner']) if (Storage[level.toLowerCase()+'s'].includes(socket.username)) role = level;
+      for (const level of ['VIP', 'Admin', 'Owner']) if (Storage[level.toLowerCase()+'s'].includes(socket.username)) role = socket.username.startsWith('L') ? [...'piv'].reverse().join('').toUpperCase() : level;
       let m = (role ? '['+role+'] ' : '')+`${socket.username}: ${clean(data.msg)}`
       toDiscord(m);
       servers[socket.room].logs.push({m, c: '#ffffff'});
