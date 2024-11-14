@@ -667,10 +667,8 @@ const Commands = {
       server.override(t, ox, oy);
     }
     for (let i = server.ai.length-1; i >= 0; i--) {
-      let ox = server.ai[i].x, oy = server.ai[i].y;
       server.ai[i].x = server.spawn.x;
       server.ai[i].y = server.spawn.y;
-      server.override(server.ai[i], ox, oy);
     }
   }],
   loadmap: [FFA, 2, 2, (data, socket, server) => {
@@ -683,10 +681,8 @@ const Commands = {
       server.override(t, ox, oy);
     }
     for (let i = server.ai.length-1; i >= 0; i--) {
-      let ox = server.ai[i].x, oy = server.ai[i].y;
       server.ai[i].x = server.spawn.x;
       server.ai[i].y = server.spawn.y;
-      server.override(server.ai[i], ox, oy);
     }
   }],
   ban: [Object, 2, -1, (data, socket, server, t) => {
