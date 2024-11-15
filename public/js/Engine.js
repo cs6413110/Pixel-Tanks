@@ -117,8 +117,8 @@ class Engine {
         t.reflect = false;
       }, 500);
     } else if (a.includes('airstrike')) {
-      const h = a.replace('airstrike', '').split('x');
-      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), 'airstrike', Engine.parseTeamExtras(t.team), this));
+      const rotation = Math.floor(Math.random()*360), h = a.replace('airstrike', '').split('x');
+      for (let i = -2; i <= 2; i++) this.b.push(A.template('Block').init(h[0]+i*Math.cos(Math.PI*rotation/180)*100, h[1]+i*Math.sin(Math.PI*rotation/180)*100, 'airstrike', Engine.parseTeamExtras(t.team), this));
     } else if (a.includes('flashbang')) {
       const h = a.replace('flashbang', '').split('x');
       this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), 'smoke', Engine.parseTeamExtras(t.team), this));
