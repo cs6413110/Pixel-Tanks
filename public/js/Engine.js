@@ -118,7 +118,11 @@ class Engine {
       }, 500);
     } else if (a.includes('airstrike')) {
       const rotation = Math.floor(Math.random()*360), h = a.replace('airstrike', '').split('x');
-      for (let i = -2; i <= 2; i++) this.b.push(A.template('Block').init(h[0]+i*Math.cos(Math.PI*rotation/180)*100, h[1]+i*Math.sin(Math.PI*rotation/180)*100, 'airstrike', Engine.parseTeamExtras(t.team), this));
+      for (let i = -2; i <= 2; i++) {
+        const airstrike = A.template('Block').init(h[0]+i*Math.cos(Math.PI*rotation/180)*100, h[1]+i*Math.sin(Math.PI*rotation/180)*100, 'airstrike', Engine.parseTeamExtras(t.team), this);
+        airstrike.timer = i/2+5;
+        this.b.push(airstrike);
+      }
     } else if (a.includes('flashbang')) {
       const h = a.replace('flashbang', '').split('x');
       this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), 'smoke', Engine.parseTeamExtras(t.team), this));
