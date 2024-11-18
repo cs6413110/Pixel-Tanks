@@ -463,6 +463,7 @@ class PixelTanks {
       },
       inventory: {
         buttons: [
+          [416, 20, 108, 108, 'main', true],
           [1064, 460, 88, 88, PixelTanks.upgrade, true],
           [1112, 816, 88, 88, function() {PixelTanks.switchTab('classTab')}, false],
           [400, 816, 88, 88, function() {PixelTanks.switchTab('itemTab', 1)}, false],
