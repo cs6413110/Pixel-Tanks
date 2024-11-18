@@ -327,7 +327,7 @@ class PixelTanks {
           }
         }
       },
-      /*crate: {
+      crate: {
         buttons: [
           [416, 20, 108, 108, 'main', true],
           [232, 308, 488, 488, function() {PixelTanks.openCrate(0, cosmetAmount)}, false],
@@ -400,7 +400,7 @@ class PixelTanks {
     }
   }
         }
-      },*/
+      },
       settings: {
         buttons: [
           
