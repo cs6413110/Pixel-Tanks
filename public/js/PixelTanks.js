@@ -143,6 +143,61 @@ class PixelTanks {
           }
         },
       },
+      main: {
+        buttons: [
+          [972, 840, 88, 88, 'settings1', true],
+          [532, 616, 536, 136, 'multiplayer', true],
+          [648, 840, 88, 88, 'shop', true],
+          [540, 840, 88, 88, 'inventory', true],
+          [756, 840, 88, 88, 'crate', true],
+          [864, 840, 88, 88, 'help', true],
+          [532, 392, 536, 136, 'singleplayer', true],
+          /*[320, 920, 80, 80, function() {
+            clearInterval(PixelTanks.autosave);
+            PixelTanks.user.token = undefined;
+            PixelTanks.user.username = undefined;
+            Menus.trigger('start');
+          }],*/ // logout
+        ],
+        listeners: {},
+        cdraw: function() {
+          PixelTanks.convertCosmeticFormat(); // TEMP
+          PixelTanks.userData.stats[4] = 20;
+          if (!PixelTanks.userData.perks) PixelTanks.userData.perks = [false, false, false, false, false, false, false, false, false];
+          if (!PixelTanks.userData.perk) PixelTanks.userData.perk = [0, 0];
+          GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
+          PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
+          GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
+          PixelTanks.renderTop(1200, 600, 160, PixelTanks.userData.color);
+          GUI.drawImage(PixelTanks.images.tanks.top, 1200, 600, 160, 180, 1);
+          /*if (!PixelTanks.userData.cosmetics[0].includes('#')) {
+            let cosmetics = {};
+            for (const cosmetic of PixelTanks.userData.cosmetics) {
+              if (cosmetics[cosmetic] === undefined) {
+                cosmetics[cosmetic] = 1;
+              } else cosmetics[cosmetic]++;
+            }
+            let cosmeticData = [];
+            for (const cosmetic of Object.keys(cosmetics)) cosmeticData.push(cosmetic+'#'+cosmetics[cosmetic]);
+            PixelTanks.userData.cosmetics = cosmeticData;
+          }
+          if (!PixelTanks.userData.deathEffects[0].includes('#')) {
+            let deathEffects = {};
+            for (const deathEffect of PixelTanks.userData.deathEffects) {
+              if (deathEffects[deathEffect] === undefined) {
+                deathEffects[deathEffect] = 1;
+              } else deathEffects[deathEffect]++;
+            }
+            let deathEffectData = [];
+            for (const deathEffect of Object.keys(deathEffects)) deathEffectData.push(deathEffect+'#'+deathEffects[deathEffect]);
+            PixelTanks.userData.deathEffects = deathEffectData;
+          }*/
+          if (PixelTanks.userData.cosmetic_body !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 1200, 600, 160, 180, 1);
+          if (PixelTanks.userData.cosmetic !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 1200, 600, 160, 180, 1);
+          if (PixelTanks.userData.cosmetic_hat !== 'undefined') GUI.drawImage(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 1200, 600, 160, 180, 1);
+          if (newClass !== 'undefined') GUI.drawImage(PixelTanks.images.menus.alert, 530, 830, 20, 20, 1);
+        },
+      },
       singleplayer: {
         buttons: [
           [25, 28, 80, 74, 'main', true],
