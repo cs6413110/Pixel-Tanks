@@ -804,7 +804,7 @@ class PixelTanks {
               grapple: 82,
               boost: 16,
               class: 70,
-              firing: 32,
+              fire: 32,
               powermissle: 86,
               chat: 13,
               pause: 27,
@@ -866,7 +866,7 @@ class PixelTanks {
     }
   }
 
-  static hasKeybind = k => ['item1', 'item2', 'item3', 'item4', 'toolkit', 'grapple', 'boost', 'class', 'firing', 'powermissle', 'chat', 'pause'].some(v => PixelTanks.userData.keybinds[v] === k);
+  static hasKeybind = k => ['item1', 'item2', 'item3', 'item4', 'toolkit', 'grapple', 'boost', 'class', 'fire', 'powermissle', 'chat', 'pause'].some(v => PixelTanks.userData.keybinds[v] === k);
 
   static auth(u, p, t) { // simplify direct call to Network.auth
     Network.auth(u, p, t, () => PixelTanks.getData(() => PixelTanks.main()));
