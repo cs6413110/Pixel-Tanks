@@ -18,9 +18,9 @@ class AI {
     this.seeUser = this.target = this.obstruction = this.bond = this.path = this.damage = false;
     this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = this.shields = 0;
     this.canFire = this.canPowermissle = this.canBoost = this.canBashed = true;
-    this.fire = this.reloading = false;
+    this.fire = this.reloading = this.canClass = false;
     this.fireTime = 0;
-    if (this.role !== 0) for (let i = 0; i < 4; i++) if (Math.random() < rank/20) this['canItem'+i] = true;
+    for (let i = 0; i < 4; i++) if (Math.random() < rank/20) this['canItem'+i] = this.role !== 0;
     if (this.role !== 0) if (Math.random() < (rank/20)) this.canClass = true;
     if (this.role !== 0) this.giveAbilities(); else this.ammo = 120;
     const summoner = host.pt.find(t => t.username === Engine.getUsername(this.team));
