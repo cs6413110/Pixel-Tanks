@@ -669,12 +669,12 @@ class PixelTanks {
           Menus.softUntrigger('shop');
           Menus.softTrigger('shop2');
         }, true],
-          [496, 404, 176, 176, function() {PixelTanks.purchase(0, 0)}, true],
-          [712, 404, 176, 176, function() {PixelTanks.purchase(0, 1)}, true],
-          [928, 404, 176, 176, function() {PixelTanks.purchase(0, 4)}, true],
-          [496, 620, 176, 176, function() {PixelTanks.purchase(0, 2)}, true],
-          [712, 620, 176, 176, function() {PixelTanks.purchase(0, 5)}, true],
-          [928, 620, 176, 176, function() {PixelTanks.purchase(0, 3)}, true],
+          [326, 544, 194, 79, function() {PixelTanks.purchase(0, 0)}, true],
+          [792, 544, 194, 79, function() {PixelTanks.purchase(0, 1)}, true],
+          [1249, 544, 194, 79, function() {PixelTanks.purchase(0, 4)}, true],
+          [326, 873, 194, 79, function() {PixelTanks.purchase(0, 2)}, true],
+          [792, 873, 194, 79, function() {PixelTanks.purchase(0, 5)}, true],
+          [1249, 873, 194, 79, function() {PixelTanks.purchase(0, 3)}, true],
         ],
         listeners: {},
         keydown: function(e) {if (e.keyCode === 27) Menus.trigger('main')},
