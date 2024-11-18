@@ -716,6 +716,7 @@ class Client {
   }
 
   useItem(id, slot) {
+    let gottem = Engine.hasPerk(PixelTanks.userData.perk, 7);
     if (Date.now() < this.timers.items[slot].time+this.timers.items[slot].cooldown) {
       if (id === 'dynamite') {
         this.tank.use.push('dynamite');
@@ -723,7 +724,6 @@ class Client {
       }
       return;
     }
-    let block = Engine.hasPerk(PixelTanks.userData.perk, 7);
     if (id === 'duck_tape') {
       this.tank.use.push('tape');
       this.playAnimation('tape');
@@ -733,11 +733,11 @@ class Client {
     } else if (id === 'shield') {
       this.tank.use.push('shield');
     } else if (id === 'weak') {
-      this.tank.use.push('block#'+(block ? 'strong' : 'weak')');
+      this.tank.use.push('block#'+(gottem ? 'strong' : 'weak')');
     } else if (id === 'strong') {
-      this.tank.use.push('block#'+(block ? 'gold' : 'strong'));
+      this.tank.use.push('block#'+(gottem ? 'gold' : 'strong'));
     } else if (id === 'spike') {
-      this.tank.use.push('block#'+(block ? 'barrier' : 'spike'));
+      this.tank.use.push('block#'+(gottem ? 'barrier' : 'spike'));
     } else if (id === 'reflector') {
       this.tank.use.push('reflector');
     } else if (id === 'usb') {
