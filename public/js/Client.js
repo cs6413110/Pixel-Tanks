@@ -733,7 +733,7 @@ class Client {
     } else if (id === 'shield') {
       this.tank.use.push('shield');
     } else if (id === 'weak') {
-      this.tank.use.push('block#'+(gottem ? 'strong' : 'weak')');
+      this.tank.use.push('block#'+(gottem ? 'strong' : 'weak'));
     } else if (id === 'strong') {
       this.tank.use.push('block#'+(gottem ? 'gold' : 'strong'));
     } else if (id === 'spike') {
