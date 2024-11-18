@@ -691,10 +691,7 @@ class PixelTanks {
       },
       shop2: {
         buttons: [
-          [232, 208, 488, 96, function() {
-          Menus.softUntrigger('shop2');
-          Menus.softTrigger('shop');
-        }, true],
+          [232, 208, 488, 96, 'shop', true],
           //emergency cloak
           [60, 404, 136, 136, function() {PixelTanks.purchase(1, 0)}, true],
           [60, 572, 136, 136, function() {PixelTanks.purchase(1, 1)}, true],
