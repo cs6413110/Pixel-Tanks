@@ -275,7 +275,7 @@ class PixelTanks {
       },
       /*crate: {
         buttons: [
-          [416, 20, 81, 81, 'main', true],
+          [416, 20, 108, 108, 'main', true],
           [232, 308, 488, 488, function() {PixelTanks.openCrate(0, cosmetAmount)}, false],
           [880, 308, 488, 488, function() {PixelTanks.openCrate(1, deathAmount)}, false],
           [300, 816, 104, 52, function() {cosmetAmount = 1}, false],
@@ -665,10 +665,12 @@ class PixelTanks {
       },
       shop: {
         buttons: [
+          [416, 20, 108, 108, 'main', true],
           [880, 208, 488, 96, function() {
           Menus.softUntrigger('shop');
           Menus.softTrigger('shop2');
         }, true],
+          //[880, 208, 488, 96, 'shop2', true], //for when menus return
           [326, 544, 194, 79, function() {PixelTanks.purchase(0, 0)}, true],
           [792, 544, 194, 79, function() {PixelTanks.purchase(0, 1)}, true],
           [1249, 544, 194, 79, function() {PixelTanks.purchase(0, 4)}, true],
