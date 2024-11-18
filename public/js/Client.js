@@ -723,6 +723,7 @@ class Client {
       }
       return;
     }
+    let block = Engine.hasPerk(PixelTanks.userData.perk, 7);
     if (id === 'duck_tape') {
       this.tank.use.push('tape');
       this.playAnimation('tape');
@@ -732,11 +733,11 @@ class Client {
     } else if (id === 'shield') {
       this.tank.use.push('shield');
     } else if (id === 'weak') {
-      this.tank.use.push('block#weak');
+      this.tank.use.push('block#'+(block ? 'strong' : 'weak')');
     } else if (id === 'strong') {
-      this.tank.use.push('block#strong');
+      this.tank.use.push('block#'+(block ? 'gold' : 'strong'));
     } else if (id === 'spike') {
-      this.tank.use.push('block#spike');
+      this.tank.use.push('block#'+(block ? 'barrier' : 'spike'));
     } else if (id === 'reflector') {
       this.tank.use.push('reflector');
     } else if (id === 'usb') {
