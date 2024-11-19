@@ -55,7 +55,7 @@ class Tank {
     if (this.dedEffect) (this.dedEffect.time = Date.now()-this.dedEffect.start) && this.setValue('dedEffect', this.dedEffect);
     if (this.pushback !== 0) this.pushback += 0.5;
     if (Date.now()-this.fireTime < 4000) {
-      if (this.fire && Engine.getTeam(this.fire) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25, Engine.getUsername(this.fire)); 
+      if (this.fire && Engine.getTeam(this.fire) !== Engine.getTeam(this.team)) this.damageCalc(this.x, this.y, .25*(this.fireRank/50+.6), Engine.getUsername(this.fire)); 
     } else this.fire = false;
     if (this.damage) this.damage.y-- && this.host.updateEntity(this, ['damage']);
     if (this.grapple) this.grappleCalc();
@@ -76,7 +76,7 @@ class Tank {
         const teamMatch = Engine.match(this, entity);
         if (!this.immune && entity instanceof Block) {
           if (!Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) continue;
-          if (entity.type === 'fire') (this.fire = entity.team) && (this.fireTime = Date.now());
+          if (entity.type === 'fire') (this.fire = entity.team) && (this.fireTime = Date.now()) && (this.fireRank = entity.rank);
           if (entity.type === 'spike' && !teamMatch && spikeLimiter) spikeLimiter = this.damageCalc(this.x, this.y, .5, Engine.getUsername(entity.team)) && 0;
         } else if (!teamMatch && !entity.ded && (entity instanceof Tank || entity instanceof AI)) {
           if (!this.immune && entity.buff && this.canBashed && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 80, 80)) {
@@ -104,7 +104,7 @@ class Tank {
     if (a < 0) {
       clearInterval(this.medicInterval);
       clearTimeout(this.medicTimeout);
-      this.medicInterval = setInterval(() => (this.hp = Math.min(this.maxHp, this.hp+10)), 1000);
+      this.medicInterval = setInterval(() => (this.hp = Math.min(this.maxHp, this.hp+10*(-a/150)), 1000);
       this.medicTimeout = setTimeout(() => clearInterval(this.medicInterval), 10000);
     }
     clearTimeout(this.damageTimeout);
