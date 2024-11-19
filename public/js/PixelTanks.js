@@ -874,6 +874,7 @@ class PixelTanks {
   
   static main() {
     Menus.removeListeners();
+    if (PixelTanks.user.player) PixelTanks.user.player.implode();
     alert('We are working on adding old menus back! Please be paitent! Cosmetics/Menus should be fixed within the week.');
     Menus.trigger('main');
     //Menus.removeListeners();
