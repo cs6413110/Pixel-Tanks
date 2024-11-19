@@ -728,7 +728,7 @@ class Client {
     } else if (id === 'strong') {
       this.tank.use.push('block#'+(gottem ? 'gold' : 'strong'));
     } else if (id === 'spike') {
-      this.tank.use.push('block#spike');
+      this.tank.use.push('block#'+(gottem ? 'barrier' : 'spike'));
     } else if (id === 'reflector') {
       this.tank.use.push('reflector');
     } else if (id === 'usb') {
