@@ -56,12 +56,12 @@ class Engine {
     } else if (a === 'tape') {
       t.hp = Math.min(t.maxHp, t.hp+t.maxHp/4);
     } else if (a === 'healburst') {
-      A.template('Damage').init(t.x-110, t.y-110, 300, 300, -150, t.team, this);
+      A.template('Damage').init(t.x-110, t.y-110, 300, 300, -150*(t.rank/50+.6), t.team, this);
     } else if (a === 'glu') {
       clearInterval(t.gluInterval);
       clearTimeout(t.gluTimeout);
       t.gluInterval = setInterval(() => {
-        t.hp = Math.min(t.maxHp, t.hp+.5);
+        t.hp = Math.min(t.maxHp, t.hp+.5*(t.rank/50+.6));
       }, 15);
       t.gluTimeout = setTimeout(() => clearInterval(t.gluInterval), 5000);
     } else if (a.includes('block#')) {
@@ -105,7 +105,7 @@ class Engine {
       if (turrets.length > t.maxTurrets) turrets.sort((a, b) =>  a.ammo-b.ammo)[0].destroy();
     } else if (a === 'bash') {
       t.buff = true; // name fix
-      setTimeout(() => { t.buff = false }, 1000);
+      setTimeout(() => (t.buff = false), 1000);
     } else if (a === 'invis') {
       t.invis = true;
       setTimeout(() => { t.invis = false }, 20000);
