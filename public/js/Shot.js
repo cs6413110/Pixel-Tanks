@@ -40,6 +40,7 @@ class Shot {
       if (e && !e.immune) {
         e.fireTime = Date.now();
         e.fire = this.team;
+        e.fireRank = this.rank;
       }
     } else if (e) {
       if (isBlock) e.damage(this.damage); else if (Engine.getTeam(e.team) !== Engine.getTeam(this.team)) e.damageCalc(this.x, this.y, this.damage, Engine.getUsername(this.team));
