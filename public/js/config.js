@@ -25,13 +25,12 @@ window.sourceMap = {
     {
       ref: 'animations',
       path: 'animations',
-      load: ['tape', 'glu', 'fire', 'text', 'detonate', 'explosion', 'healexplosion', 'smoke', 'shield_make', 'shield_break'],
+      load: ['tape', 'glu', 'fire', 'detonate', 'explosion', 'healexplosion', 'smoke', 'shield_make', 'shield_break'],
       meta: {
         tape_: { frames: 17, speed: 50 },
         toolkit_: { frames: 16, speed: 50 },
         glu_: { frames: 45, speed: 50 },
         fire_: { frames: 1, speed: 50 },
-        text_: { frames: 37, speed: 50 },
         detonate_: { frames: 28, speed: 20 },
       },
     },
