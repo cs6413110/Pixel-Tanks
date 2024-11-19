@@ -150,7 +150,6 @@ class PixelTanks {
           [648, 840, 88, 88, 'shop', true],
           [540, 840, 88, 88, 'inventory', true],
           [756, 840, 88, 88, 'crate', true],
-          [864, 840, 88, 88, 'help', true],
           [532, 392, 536, 136, 'singleplayer', true],
           /*[320, 920, 80, 80, function() {
             clearInterval(PixelTanks.autosave);
