@@ -6,6 +6,7 @@ window.sourceMap = {
       ref: 'blocks', // property stored as on PixelTanks.images
       path: 'blocks', // Location on host, *optional host property to overwrite default
       load: ['barrier', 'strong', 'weak', 'spike', 'floor', 'void', 'gold', 'fire', 'friendlyfire', 'airstrike', 'friendlyairstrike'],
+      zones: ['', '', ''],
     },
     {
       ref: 'bullets',
