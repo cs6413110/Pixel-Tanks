@@ -452,7 +452,7 @@ class PixelTanks {
               }
             } else if (this.itemTab) {
               if (x < 580 || x > 1020 || y < 334 || y > 666) return this.itemTab = this.loaded = false;
-              const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [924, 570]};
+              const key = {airstrike: [598, 352], super_glu: [706, 352], duck_tape: [814, 352], shield: [922, 352], flashbang: [598, 460], bomb: [706, 460], dynamite: [814, 460], usb: [922, 460], weak: [598, 568], strong: [706, 568], spike: [814, 568], reflector: [922, 568]};
               for (const item in key) {
                 if (Engine.collision(x, y, 0, 0, key[item][0], key[item][1], 80, 80)) {
                   if (!PixelTanks.userData.items.includes(item) || PixelTanks.userData.items[this.currentItem-1] === item) {
@@ -612,7 +612,7 @@ class PixelTanks {
             }
           } else if (this.itemTab) {
             GUI.drawImage(PixelTanks.images.menus.itemTab, 580, 334, 440, 332, 1);
-            const key = {airstrike: [600, 354], super_glu: [708, 354], duck_tape: [816, 354], shield: [924, 354], flashbang: [600, 462], bomb: [708, 462], dynamite: [816, 462], usb: [924, 462], weak: [600, 570], strong: [708, 570], spike: [816, 570], reflector: [924, 570]};
+            const key = {airstrike: [598, 352], super_glu: [706, 352], duck_tape: [814, 352], shield: [922, 352], flashbang: [598, 460], bomb: [706, 460], dynamite: [814, 460], usb: [922, 460], weak: [598, 568], strong: [706, 568], spike: [814, 568], reflector: [922, 568]};
             for (const item in key) GUI.drawImage(PixelTanks.images.items[item], key[item][0], key[item][1], 80, 80, 1);
           } else if (this.perkTab) {
             GUI.drawImage(PixelTanks.images.menus.perkTab, 634, 334, 332, 332, 1); //166x2
