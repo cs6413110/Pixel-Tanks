@@ -37,11 +37,9 @@ class Singleplayer extends Engine {
       return PixelTanks.user.player.killRewards();
     }
     t.ded = true;
-    setTimeout(() => {
-      PixelTanks.user.player.implode();
-      Menus.menus.defeat.stats = {kills: 'n/a', coins: 'n/a'};
-      Menus.trigger('defeat');
-    }, 2000);
+    PixelTanks.user.player.implode();
+    Menus.menus.defeat.stats = {kills: 'n/a', coins: 'n/a'};
+    Menus.trigger('defeat');
   }
 
   override(data) {
