@@ -129,7 +129,7 @@ class Tank {
     }
   }
   grappleCalc() { // direct setting of pos may cause chunkload issues
-    if (this.stunned) return this.grapple = false;
+    if (this.stunned) return this.grapple.bullet.destroy() && (this.grapple = false);
     const dx = this.grapple.target.x - this.x, dy = this.grapple.target.y - this.y, ox = this.x, oy = this.y;
     if (dx ** 2 + dy ** 2 > 400) {
       const angle = Math.atan2(dy, dx);
