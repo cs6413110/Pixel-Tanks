@@ -481,7 +481,7 @@ class Client {
     for (const block of b) this.drawBlock(block);
     for (const ai of a) this.drawTank(ai);
     for (const tank of t) this.drawTank(tank);
-    for (const block of b) if (block.s && block.hp !== block.maxHp) {
+    for (const block of b) if (block.s && block.hp !== block.maxHp && b.type === 'fire' || b.type === 'airstrike') {
       GUI.draw.fillStyle = '#000000';
       GUI.draw.fillRect(block.x-2, block.y+108, 104, 11);
       GUI.draw.fillStyle = '#0000FF';
