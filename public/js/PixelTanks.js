@@ -582,7 +582,7 @@ class PixelTanks {
           const key = {tactical: [7, 7], fire: [7, 61], medic: [7, 115], stealth: [61, 7], builder: [61, 61], warrior: [61, 115]};
           if (!PixelTanks.userData.class) PixelTanks.userData.class = 'undefined';
           if (!PixelTanks.userData.classes || !PixelTanks.userData.class || PixelTanks.userData.class === 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, 1112, 816, 88, 88, 1);
-          if (PixelTanks.userData.classes && PixelTanks.userData.class && PixelTanks.userData.class !== 'undefined') GUI.drawImage(PixelTanks.images.menus.classTab, 1112, 816, 88, 88, 1, 0, 0, 0, 0, undefined, key[PixelTanks.userData.class][0], key[PixelTanks.userData.class][1], 44, 44);
+          if (PixelTanks.userData.classes && PixelTanks.userData.class && PixelTanks.userData.class !== 'undefined') GUI.drawImage(PixelTanks.images.menus.classTab, 1112, 816, 88, 88, 1, 0, 0, 0, 0, undefined, key[PixelTanks.userData.class][0]*4, key[PixelTanks.userData.class][1]*4, 176, 176);
           if (PixelTanks.userData.cosmetic_hat && PixelTanks.userData.cosmetic_hat !== 'undefined') PixelTanks.renderCosmetic(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_hat], 448, 360, 88, 88, 0);
           if (PixelTanks.userData.cosmetic && PixelTanks.userData.cosmetic !== 'undefined') PixelTanks.renderCosmetic(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic], 448, 460, 88, 88, 0);
           if (PixelTanks.userData.cosmetic_body && PixelTanks.userData.cosmetic_body !== 'undefined') PixelTanks.renderCosmetic(PixelTanks.images.cosmetics[PixelTanks.userData.cosmetic_body], 448, 560, 88, 88, 0);
@@ -689,6 +689,7 @@ class PixelTanks {
       },
       shop2: {
         buttons: [
+          [416, 20, 108, 108, 'main', true],
           [232, 208, 488, 96, 'shop', true],
           //emergency cloak
           [60, 404, 136, 136, function() {PixelTanks.purchase(1, 0)}, true],
