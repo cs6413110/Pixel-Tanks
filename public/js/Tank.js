@@ -69,7 +69,6 @@ class Tank {
         if (entity.type !== 'grapple') entity.team = this.team;
       }
     }
-    let spikeLimiter = true;
     if (!this.ded) for (const cell of this.cells) {
       const c = cell.split('x'), x = c[0], y = c[1];
       for (const entity of this.host.cells[x][y]) {
@@ -77,7 +76,16 @@ class Tank {
         if (!this.immune && entity instanceof Block) {
           if (!Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 100, 100)) continue;
           if (entity.type === 'fire') (this.fire = entity.team) && (this.fireTime = Date.now()) && (this.fireRank = this.host.pt.find(t => t.username === Engine.getUsername(entity.team))?.rank || 20);
-          if (entity.type === 'spike' && !teamMatch && spikeLimiter) spikeLimiter = this.damageCalc(this.x, this.y, .5, Engine.getUsername(entity.team)) && 0;
+          if (entity.type === 'spike' && !teamMatch) {
+            entity.destroy();
+            t.stunned = true;
+            this.host.updateEntity(this, ['stunned']);
+            clearTimeout(this.stunTimeout);
+            this.stunTimeout = setTimeout(() => {
+              t.stunned = false;
+              this.host.updateEntity(this, ['stunned']);
+            }, 1000);
+          };
         } else if (!teamMatch && !entity.ded && (entity instanceof Tank || entity instanceof AI)) {
           if (!this.immune && entity.buff && this.canBashed && Engine.collision(this.x, this.y, 80, 80, entity.x, entity.y, 80, 80)) {
             this.canBashed = false;
@@ -121,6 +129,7 @@ class Tank {
     }
   }
   grappleCalc() { // direct setting of pos may cause chunkload issues
+    if (this.stunned) return this.grapple = false;
     const dx = this.grapple.target.x - this.x, dy = this.grapple.target.y - this.y, ox = this.x, oy = this.y;
     if (dx ** 2 + dy ** 2 > 400) {
       const angle = Math.atan2(dy, dx);
