@@ -455,23 +455,22 @@ class Client {
       GUI.draw.fillRect(0, 0, 1600, 1600);
       return GUI.drawText('Loading Terrain', 800, 500, 100, '#000000', 0.5);
     }
-    if (this.dx && !player.stunned) {
+    if (this.dx) {
       var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : 1)*(doubleSpeed ? 1.25 : 1);
       let xR = this.collision(x, this.tank.y, 'x', this.dx.a), xD = this.collision(this.dx.o, this.tank.y);
-      if (xD || (!xD && this.collision(x, this.tank.y))) this.tank.x = xR;
+      if (!player.stunned) if (xD || (!xD && this.collision(x, this.tank.y))) this.tank.x = xR;
       this.left = x === xR ? this.dx.a < 0 : null;
       this.dx.t = Date.now()-(Date.now()-this.dx.t)%15;
       this.dx.o = this.tank.x;
     }
-    if (this.dy && !player.stunned) {
+    if (this.dy) {
       var y = this.dy.o+Math.floor((Date.now()-this.dy.t)/15)*this.dy.a*this.speed*(this.halfSpeed ? .5 : 1)*(doubleSpeed ? 1.25 : 1);
       let yR = this.collision(this.tank.x, y, 'y', this.dy.a), yD = this.collision(this.tank.x, this.dy.o);
-      if (yD || (!yD && this.collision(this.tank.x, y))) this.tank.y = yR;
+      if (!player.stunned) if (yD || (!yD && this.collision(this.tank.x, y))) this.tank.y = yR;
       this.up = y === yR ? this.dy.a < 0 : null;
       this.dy.t = Date.now()-(Date.now()-this.dy.t)%15;
       this.dy.o = this.tank.y;
     }
-    //if (player.stunned) this.dy.t = this.dx.t = Date.now();
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
     GUI.drawImage(PixelTanks.images.blocks.void, -5000, -5000, 10000, 10000, 1);
     GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
