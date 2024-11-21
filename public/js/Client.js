@@ -894,13 +894,7 @@ class Client {
   send() {
     const {x, y, r, use, fire, animation} = this.tank;
     const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank};
-    if (x === this.lastUpdate.x && y === this.lastUpdate.y && r === this.lastUpdate.r && use.length === 0 && fire.length === 0 && animation === this.lastUpdate.animation) return;
-    this._ops++;
-    if (this.multiplayer) {
-      this.socket.send(updateData);
-    } else {
-      this.world.update(updateData);
-      this.hostupdate = {
+    if (!this.multiplayer) this.hostupdate = {
         pt: [{...this.world.pt[0]}],
         b: this.world.b,
         s: this.world.s,
@@ -908,7 +902,9 @@ class Client {
         d: this.world.d,
         logs: this.world.logs.reverse(),
       }
-    }
+    if (x === this.lastUpdate.x && y === this.lastUpdate.y && r === this.lastUpdate.r && use.length === 0 && fire.length === 0 && animation === this.lastUpdate.animation) return;
+    this._ops++;
+    if (this.multiplayer) this.socket.send(updateData); else this.world.update(updateData);
     this.lastUpdate = {x, y, r, animation}
     this.tank.fire = [];
     this.tank.use = [];
