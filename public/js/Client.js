@@ -471,7 +471,7 @@ class Client {
       this.dy.t = Date.now()-(Date.now()-this.dy.t)%15;
       this.dy.o = this.tank.y;
     }
-    if (player.stunned) this.dy.t = this.dx.t = Date.now();
+    //if (player.stunned) this.dy.t = this.dx.t = Date.now();
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
     GUI.drawImage(PixelTanks.images.blocks.void, -5000, -5000, 10000, 10000, 1);
     GUI.drawImage(PixelTanks.images.blocks.floor, 0, 0, 3000, 3000, 1);
