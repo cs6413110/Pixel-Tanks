@@ -78,11 +78,11 @@ class Tank {
           if (entity.type === 'fire') (this.fire = entity.team) && (this.fireTime = Date.now()) && (this.fireRank = this.host.pt.find(t => t.username === Engine.getUsername(entity.team))?.rank || 20);
           if (entity.type === 'spike' && !teamMatch) {
             entity.destroy();
-            t.stunned = true;
+            this.stunned = true;
             this.host.updateEntity(this, ['stunned']);
             clearTimeout(this.stunTimeout);
             this.stunTimeout = setTimeout(() => {
-              t.stunned = false;
+              this.stunned = false;
               this.host.updateEntity(this, ['stunned']);
             }, 1000);
           };
