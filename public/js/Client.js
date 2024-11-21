@@ -436,7 +436,7 @@ class Client {
     }
     const t = this.hostupdate.pt, b = this.hostupdate.b, s = this.hostupdate.s, a = this.hostupdate.ai, e = this.hostupdate.d;
     let wind = Engine.hasPerk(PixelTanks.userData.perk, 8), doubleSpeed = wind && ((Date.now()-this.timers.class.time) < 1000+2000*wind);
-    if (this.dx) {
+    if (this.dx && !player.stunned) {
       var x = this.dx.o+Math.floor((Date.now()-this.dx.t)/15)*this.dx.a*this.speed*(this.halfSpeed ? .5 : 1)*(doubleSpeed ? 1.25 : 1);
       let xR = this.collision(x, this.tank.y, 'x', this.dx.a), xD = this.collision(this.dx.o, this.tank.y);
       if (xD || (!xD && this.collision(x, this.tank.y))) this.tank.x = xR;
@@ -444,7 +444,7 @@ class Client {
       this.dx.t = Date.now()-(Date.now()-this.dx.t)%15;
       this.dx.o = this.tank.x;
     }
-    if (this.dy) {
+    if (this.dy && !player.stunned) {
       var y = this.dy.o+Math.floor((Date.now()-this.dy.t)/15)*this.dy.a*this.speed*(this.halfSpeed ? .5 : 1)*(doubleSpeed ? 1.25 : 1);
       let yR = this.collision(this.tank.x, y, 'y', this.dy.a), yD = this.collision(this.tank.x, this.dy.o);
       if (yD || (!yD && this.collision(this.tank.x, y))) this.tank.y = yR;
@@ -452,6 +452,7 @@ class Client {
       this.dy.t = Date.now()-(Date.now()-this.dy.t)%15;
       this.dy.o = this.tank.y;
     }
+    if (player.stunned) this.dy.t = this.dx.t = Date.now();
     const br = (this.left === null) ? (this.up ? 180 : 0) : (this.left ? (this.up === null ? 90 : (this.up ? 135 : 45)) : (this.up === null ? 270 : (this.up ? 225: 315)));
     const diff = (br-this.tank.baseRotation+360)%360, dir = diff < 180 ? 1 : -1;
     this.tank.baseRotation = diff > 12 ? (this.tank.baseRotation+dir*12+360)%360 : br;
