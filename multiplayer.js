@@ -620,21 +620,6 @@ const Commands = {
       }
     }
   }],
-  freeze: [Object, 2, 2, (data, socket, server) => {
-    const t = server.pt.find(t => t.username === data[1]);
-    if (!t) return socket.send({status: 'error', message: 'Player not found!'});
-    const x = t.x, y = t.y;
-    t.freezeInterval = setInterval(() => {
-      let ox = t.x, oy = t.y;
-      t.x = x;
-      t.y = y;
-      server.override(t, ox, oy);
-    }, 15);
-  }],
-  unfreeze: [Object, 2, 2, (data, socket, server) => {
-    const t = server.pt.find(t => t.username === data[1]);
-    if (t) clearInterval(t.freezeInterval);
-  }],
   filter: [Object, 3, 2, data => {
     if (!Storage.filter.includes(data[1].toLowerCase())) Storage.filter.push(data[1].toLowerCase());
   }],
@@ -757,10 +742,6 @@ const Commands = {
       server.readytime = Date.now();
       server.time = 0;
     }
-  }],
-  reboot: [Object, 2, 1, () => {
-    for (const socket of sockets) socket.send({status: 'error', message: 'Restarting Server!'});
-    process.exit(1);
   }],
   flushlogs: [Object, 2, -1, () => fs.writeFileSync('log.txt', '')],
   getlogs: [Object, 2, 2, (data, socket, server, t, logs) => {
