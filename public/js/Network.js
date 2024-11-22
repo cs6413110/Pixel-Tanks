@@ -42,13 +42,20 @@ class Network {
         PixelTanks.images[group.ref] = {...group.meta};
         for (const id of group.load) Network.perImage(id, host+'/'+group.path+'/'+id, group.ref);
       }
+      PixelTanks.images.blocks = {};
       PixelTanks.images.cosmetics = {...pack.cosmetic.meta};
       PixelTanks.images.deathEffects = {...pack.deathEffect.meta};
       PixelTanks.crates = [pack.cosmetic, pack.deathEffect];
-      let host = pack.host || pack.cosmetic.host;
+      let host = pack.cosmetic.host || pack.host;
       for (const rarity of ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic', 'admin']) for (const cosmetic of pack.cosmetic[rarity]) Network.perImage(cosmetic, host+'/'+pack.cosmetic.path+'/'+cosmetic, 'cosmetics');
-      host = pack.host || pack.deathEffect.host;
+      host = pack.deathEffect.host || pack.host;
       for (const rarity of ['common', 'uncommon', 'rare', 'epic', 'legendary', 'mythic']) for (const deathEffect of pack.deathEffect[rarity]) Network.perImage(deathEffect, host+'/'+pack.deathEffect.path+'/'+deathEffect, 'deathEffects');
+      host = pack.blocks.host || pack.host;
+      for (const id of pack.blocks.load) Network.perImage(id, host+'/blocks/'+id, 'blocks');
+      for (const zone of pack.blocks.zones) {
+        for (const id of packs.blocks.perZone) Network.perImage(id, host+'/blocks/'+zone+'/'+id, zone);
+        PixelTanks.images.blocks[zone] = {...PixelTanks.images[zone], ...PixelTanks.images.blocks}; // ref or unref
+      }
     }
     static timeout = 15;
     static perImage(name, src, ref) {
