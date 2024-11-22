@@ -53,6 +53,7 @@ class Network {
       host = pack.blocks.host || pack.host;
       for (const id of pack.blocks.load) Network.perImage(id, host+'/blocks/'+id, 'blocks');
       for (const zone of pack.blocks.zones) {
+        PixelTanks.images[zone] = {};
         for (const id of pack.blocks.perZone) Network.perImage(id, host+'/blocks/'+zone+'/'+id, zone);
         PixelTanks.images.blocks[zone] = {...PixelTanks.images[zone], ...PixelTanks.images.blocks}; // ref or unref
       }
