@@ -250,7 +250,7 @@ class Client {
   drawBlock(b) {
     if (b.type === 'smoke') return; // BREAD WHY IS THERE A SMOKE BLOCK >:(
     const size = (b.type === 'airstrike' || b.type === 'smoke' || b.type === 'instastrike' || b.type === 'doom') ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
-    GUI.drawImage(PixelTanks.images.blocks[type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type.includes('fire') ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type.includes('fire') ? 50 : PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
+    GUI.drawImage(PixelTanks.images.blocks[this.zone ? this.zone : 'battlegrounds'][type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type.includes('fire') ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type.includes('fire') ? 50 : PixelTanks.images.blocks[type].width, PixelTanks.images.blocks[type].height);
   }
 
   drawShot(s) {
