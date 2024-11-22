@@ -3,12 +3,6 @@ window.sourceMap = {
   host: 'https://cs6413110.github.io/Pixel-Tanks/public/images',
   map: [ // image loading
     {
-      ref: 'blocks', // property stored as on PixelTanks.images
-      path: 'blocks', // Location on host, *optional host property to overwrite default
-      load: ['barrier', 'strong', 'weak', 'spike', 'floor', 'void', 'gold', 'fire', 'friendlyfire', 'airstrike', 'friendlyairstrike'],
-      zones: ['', '', ''],
-    },
-    {
       ref: 'bullets',
       path: 'bullets',
       load: ['normal', 'shotgun', 'powermissle', 'megamissle', 'grapple', 'dynamite', 'fire', 'usb'],//DONT REMOVE. STOP BEING MEAN TO DMG :((. idc if its bad, let him have his fun, orelse all customs go away. also u broke game by keeping the comma stoopid idot
@@ -41,6 +35,12 @@ window.sourceMap = {
       load: ['airstrike', 'duck_tape', 'super_glu', 'shield', 'flashbang', 'bomb', 'dynamite', 'weak', 'strong', 'spike', 'reflector', 'usb'],
     },
   ],
+  blocks: {
+    path: 'blocks',
+    load: ['spike', 'fire', 'friendlyfire', 'airstrike', 'friendlyairstrike'],
+    perZone: ['barrier', 'strong', 'weak', 'floor', 'void', 'gold'],
+    zones: ['battlegrounds', 'cave', 'deep', 'ice'],
+  },
   cosmetic: {
     path: 'cosmetics',
     common: ['medic', 'police', 'small_scratch', 'spikes', 'moustache', 'pumpkin_face', 'army', 'hardhat', 'halo', 'lego', 'present', 'pumpkin_hat', 'top_hat', 'stamp', 'dead', 'earmuffs', 'ban', 'sweat', 'lava', 'ink', 'bricks'],
