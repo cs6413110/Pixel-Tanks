@@ -34,7 +34,7 @@ class Singleplayer extends Engine {
           Menus.trigger('victory');
         }, 3000)
       }
-      return PixelTanks.user.player.killRewards();
+      //return PixelTanks.user.player.killRewards();
     }
     t.ded = true;
     PixelTanks.user.player.implode();
