@@ -472,12 +472,11 @@ class Client {
       this.dy.o = this.tank.y;
     }
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
-    let LAFF = this.zone ? this.zone : 'battlegrounds';
-    GUI.drawImage(PixelTanks.images.blocks.(LAFF).void, -5000, -5000, 10000, 10000, 1);
-    GUI.drawImage(PixelTanks.images.blocks.(LAFF).floor, 0, 0, 3000, 3000, 1);
-    GUI.drawImage(PixelTanks.images.blocks.(LAFF).floor, 0, 3000, 3000, 3000, 1);
-    GUI.drawImage(PixelTanks.images.blocks.(LAFF).floor, 3000, 0, 3000, 3000, 1);
-    GUI.drawImage(PixelTanks.images.blocks.(LAFF).floor, 3000, 3000, 3000, 3000, 1);
+    GUI.drawImage(PixelTanks.images.blocks.battlegrounds.void, -5000, -5000, 10000, 10000, 1);
+    GUI.drawImage(PixelTanks.images.blocks.battlegrounds.floor, 0, 0, 3000, 3000, 1);
+    GUI.drawImage(PixelTanks.images.blocks.battlegrounds.floor, 0, 3000, 3000, 3000, 1);
+    GUI.drawImage(PixelTanks.images.blocks.battlegrounds.floor, 3000, 0, 3000, 3000, 1);
+    GUI.drawImage(PixelTanks.images.blocks.battlegrounds.floor, 3000, 3000, 3000, 3000, 1);
     for (const shot of s) this.drawShot(shot);
     for (const block of b) this.drawBlock(block);
     for (const ai of a) this.drawTank(ai);
