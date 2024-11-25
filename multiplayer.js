@@ -700,6 +700,13 @@ const Commands = {
     Storage.mutes.splice(Storage.mutes.indexOf(data[1]), 1);
     for (const s of Object.values(servers)) if (s.pt.some(t => t.username === data[1])) s.logs.push({m: data[1]+' was unmuted by '+t.username, c: '#0000FF'});
   }],
+   reboot: [Object, 2, 1, function() {
+    process.exit(1);
+  }],
+  sread: [Object, 1, 2, function(data) {
+    const value = servers[this.room][data[1]];
+    if (value !== undefined) servers[this.room].logs.push({m: typeof value === Object ? JSON.stringify(value) : value, c: '#FFFFFF'});
+  }],
   kick: [Object, 3, 2, (data, socket, server, t) => {
     for (const socket of sockets) if (socket.username === data[1]) {
       socket.send({status: 'error', message: 'You have been kicked by '+t.username});
