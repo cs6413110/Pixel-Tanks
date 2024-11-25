@@ -851,7 +851,7 @@ class PixelTanks {
         if (!done) PixelTanks.userData[name].unshift(crate[type][rarity][number]+'#1');
         setTimeout(() => {
           clearInterval(render);
-          if (i+1 < stuffAmount) Menus.trigger('void'); else Menus.trigger('crate');
+          if (i+1 >= stuffAmount) Menus.trigger('crate');
           PixelTanks.save();
         }, (nimber)-20);
       }, namber);
