@@ -567,7 +567,7 @@ class PixelTanks {
             if (PixelTanks.userData.items[i] !== 'undefined') GUI.drawImage(PixelTanks.images.items[PixelTanks.userData.items[i]], [404, 492, 580, 668][i], 820, 80, 80, 1);
             if (PixelTanks.userData.items[i] === 'undefined') GUI.drawImage(PixelTanks.images.menus.broke, [404, 492, 580, 668][i], 820, 80, 80, 1);
           }
-          let perkKey = [0, 'shield', 'thermal', 'scavenger', 'cooldown', 'refresh', 'radar', 'hook', 'adrenaline', 'core'];
+          let perkKey = [0, 'shield', 'thermal', 'scavenger', 'cooldown', 'refresh', 'radar', 'upgrader', 'adrenaline', 'core'];
           if (PixelTanks.userData.perk[0] && (PixelTanks.userData.perk[0] !== 'undefined')) GUI.drawImage(PixelTanks.images.menus[perkKey[Math.floor(PixelTanks.userData.perk[0])]], 844, 816, 88, 88, 1, 0, 0, 0, 0, undefined, ((PixelTanks.userData.perk[0]%1)*10-1)*40, 0, 40, 40); else GUI.drawImage(PixelTanks.images.menus.broke, 844, 816, 88, 88, 1);
           if (PixelTanks.userData.perk[1] && (PixelTanks.userData.perk[1] !== 'undefined')) GUI.drawImage(PixelTanks.images.menus[perkKey[Math.floor(PixelTanks.userData.perk[1])]], 932, 816, 88, 88, 1, 0, 0, 0, 0, undefined, ((PixelTanks.userData.perk[1]%1)*10-1)*40, 0, 40, 40); else GUI.drawImage(PixelTanks.images.menus.broke, 932, 816, 88, 88, 1);
           PixelTanks.renderBottom(680, 380, 240, PixelTanks.userData.color);
