@@ -42,6 +42,7 @@ class Client {
   }
   constructor(ip, multiplayer, gamemode) {
     this.xp = this.crates = this.kills = this.coins = this._ops = this._ups = this._fps = this.debugMode = 0;
+    this.zone = 'battlegrounds';
     this.tank = {use: [], fire: [], r: 0, baseRotation: 0};
     this.hostupdate = {b: [], s: [], pt: [], d: [], ai: [], entities: [], tickspeed: -1};
     this.paused = this.canRespawn = false;
@@ -250,7 +251,7 @@ class Client {
   drawBlock(b) {
     if (b.type === 'smoke') return; // BREAD WHY IS THERE A SMOKE BLOCK >:(
     const size = (b.type === 'airstrike' || b.type === 'smoke' || b.type === 'instastrike' || b.type === 'doom') ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
-    GUI.drawImage(PixelTanks.images.blocks[this.zone ? this.zone : 'battlegrounds'][type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type.includes('fire') ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type.includes('fire') ? 50 : PixelTanks.images.blocks[this.zone ? this.zone : 'battlegrounds'][type].width, PixelTanks.images.blocks[this.zone ? this.zone : 'battlegrounds'][type].height);
+    GUI.drawImage(PixelTanks.images.blocks[this.zone][type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type.includes('fire') ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type.includes('fire') ? 50 : PixelTanks.images.blocks[this.zone][type].width, PixelTanks.images.blocks[this.zone][type].height);
   }
 
   drawShot(s) {
@@ -472,11 +473,11 @@ class Client {
       this.dy.o = this.tank.y;
     }
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
-    GUI.drawImage(PixelTanks.images.blocks[this.zone ? this.zone : 'battlegrounds'].void, -5000, -5000, 10000, 10000, 1);
-    GUI.drawImage(PixelTanks.images.blocks[this.zone ? this.zone : 'battlegrounds'].floor, 0, 0, 3000, 3000, 1);
-    GUI.drawImage(PixelTanks.images.blocks[this.zone ? this.zone : 'battlegrounds'].floor, 0, 3000, 3000, 3000, 1);
-    GUI.drawImage(PixelTanks.images.blocks[this.zone ? this.zone : 'battlegrounds'].floor, 3000, 0, 3000, 3000, 1);
-    GUI.drawImage(PixelTanks.images.blocks[this.zone ? this.zone : 'battlegrounds'].floor, 3000, 3000, 3000, 3000, 1);
+    GUI.drawImage(PixelTanks.images.blocks[this.zone].void, -5000, -5000, 10000, 10000, 1);
+    GUI.drawImage(PixelTanks.images.blocks[this.zone].floor, 0, 0, 3000, 3000, 1);
+    GUI.drawImage(PixelTanks.images.blocks[this.zone].floor, 0, 3000, 3000, 3000, 1);
+    GUI.drawImage(PixelTanks.images.blocks[this.zone].floor, 3000, 0, 3000, 3000, 1);
+    GUI.drawImage(PixelTanks.images.blocks[this.zone].floor, 3000, 3000, 3000, 3000, 1);
     for (const shot of s) this.drawShot(shot);
     for (const block of b) this.drawBlock(block);
     for (const ai of a) this.drawTank(ai);
@@ -612,9 +613,9 @@ class Client {
   keydown(e) {
     if (this.menu && e.keyCode === 69) return Menus.softUntrigger();
     if (this.menu) return Menus.menus[this.menu].listeners?.keydown(e);
-    if (e.keyCode === 77) return this.zone = prompt('input one: battlegrounds, cave, ice, deep');
     if (document.activeElement.tagName === 'INPUT') return this.chat(e);
     if (e.ctrlKey || e.metaKey) return;
+    if (e.keyCode === 77) return this.zone = prompt('input one: battlegrounds, cave, ice, deep');
     if (e.preventDefault) e.preventDefault();
     if (!this.key[e.keyCode]) {
       this.keyStart(e);
