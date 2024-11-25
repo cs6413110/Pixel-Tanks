@@ -8,14 +8,14 @@ document.documentElement.appendChild(coords);
 document.documentElement.appendChild(output);
 document.documentElement.appendChild(canvas);
 document.documentElement.appendChild(select);
-
+const zone = prompt('Enter zone: battlegrounds, cave, ice, deep');
 const key = [
   ['X', 'Eraser', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAQAAAB0m0auAAAADElEQVR42mNkIBIAAABSAAI2VLqiAAAAAElFTkSuQmCC'],
-  ['Q', 'Weak Block', 'blocks/weak'],
-  ['Z', 'Strong Block', 'blocks/strong'],
-  ['G', 'Gold Block', 'blocks/gold'],
-  ['I', 'Barrier Block', 'blocks/barrier'],
-  ['R', 'Void Block', 'blocks/void'],
+  ['Q', 'Weak Block', 'blocks/'+zone+'/weak'],
+  ['Z', 'Strong Block', 'blocks/'+zone+'/strong'],
+  ['G', 'Gold Block', 'blocks/'+zone+'/gold'],
+  ['I', 'Barrier Block', 'blocks/'+zone+'/barrier'],
+  ['R', 'Void Block', 'blocks/'+zone+'/void'],
   ['V', 'Spike', 'blocks/spike'],
   ['T', 'Turret', 'cosmetics/hoodie'],
   ['W', 'Adv. AI', 'cosmetics/police'],
