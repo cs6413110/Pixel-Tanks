@@ -474,7 +474,7 @@ class Client {
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
     GUI.drawImage(PixelTanks.images.blocks.battlegrounds.void, -5000, -5000, 10000, 10000, 1);
     GUI.drawImage(PixelTanks.images.blocks.battlegrounds.floor, 0, 0, 3000, 3000, 1);
-    GUI.drawImage(PixelTanks.images.blocks.battlegroundsfloor, 0, 3000, 3000, 3000, 1);
+    GUI.drawImage(PixelTanks.images.blocks.battlegrounds.floor, 0, 3000, 3000, 3000, 1);
     GUI.drawImage(PixelTanks.images.blocks.battlegrounds.floor, 3000, 0, 3000, 3000, 1);
     GUI.drawImage(PixelTanks.images.blocks.battlegrounds.floor, 3000, 3000, 3000, 3000, 1);
     for (const shot of s) this.drawShot(shot);
@@ -612,6 +612,7 @@ class Client {
   keydown(e) {
     if (this.menu && e.keyCode === 69) return Menus.softUntrigger();
     if (this.menu) return Menus.menus[this.menu].listeners?.keydown(e);
+    if (e.keyCode === 77) return this.zone = prompt('input one: battlegrounds, cave, ice, deep');
     if (document.activeElement.tagName === 'INPUT') return this.chat(e);
     if (e.ctrlKey || e.metaKey) return;
     if (e.preventDefault) e.preventDefault();
