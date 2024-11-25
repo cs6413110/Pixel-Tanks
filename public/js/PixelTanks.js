@@ -590,7 +590,7 @@ class PixelTanks {
           Menus.menus.inventory.buttonEffect = true;
           if (this.perkTab || this.healthTab || this.classTab || this.itemTab || this.cosmeticTab || this.deathEffectsTab) {
             Menus.menus.inventory.buttonEffect = false;
-            GUI.drawImage(PixelTanks.images.blocks.void, 0, 0, 1600, 1600, .7);
+            GUI.drawImage(PixelTanks.images.blocks.battlegrounds.void, 0, 0, 1600, 1600, .7);
           }
           if (this.classTab) {
             GUI.drawImage(PixelTanks.images.menus.classTab, 688, 334, 224, 332, 1);
