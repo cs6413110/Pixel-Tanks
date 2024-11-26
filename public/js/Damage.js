@@ -30,7 +30,7 @@ class Damage {
     setTimeout(() => this.destroy(), 200);
   }
   reset() {
-    for (const p of Damage.args) this[p] = undefined;
+    for (const p of Damage.args) delete this[p];
     this.cells.clear();
   }
   destroy() {
