@@ -651,7 +651,7 @@ const Commands = {
     for (const template of Object.keys(A.templates)) {
       const properties = new Set();
       for (const recycled of A[template]) for (const property of Object.keys(recycled)) properties.add(property);
-      t.privateLogs.push({m: template+' -> '+A['_'+template]+' : '+A[template].length+' : '+(new Array(properties)), c: '#00ff00'});
+      t.privateLogs.push({m: template+' -> '+A['_'+template]+' : '+A[template].length+' : '+Array.from(properties).join(' '), c: '#00ff00'});
     }
   }],
   run: [Object, 1, -1, (data, socket, server, t, logs) => {
