@@ -35,10 +35,6 @@ process.on('uncaughtException', (err, origin) => {
   process.exit(0);
 });
 const m = o => Math.max(0, Math.min(59, o)), m2 = o => Math.max(-1, Math.min(60, o));
-Array.prototype.r = function(o) {
-  let i = this.indexOf(o);
-  if (i !== -1) this.splice(i, 1);
-}
 
 let sockets = new Set(), servers = {}, ffaLevels = [
   'R968I9X6QX2I9R33IX2IXZX5Q5X5IX4IR33IX4IXI5X3GX5IXIX2IR33I2X3IXIX3IX4ZGX3IXI2XIR33IX4IXIX3IX3GX6GX3IR33IZI4XI3GIX4QX4IXI4R33IX15QX3IX5IR33IX6I2X7QXI2X6IR33IXZ4XI10QI2XZ2X3IR33X2Z4X2QX4QX2IXIX2Z2Q3XR33X4Z2X2I2XIX6IX2Z2X2Q2R33X8IX2GZI2GIXIXQZ2XGX2R33I4X4IX2IX3ZX2IQ2Z2XGX2R33X3IX4IQXIXSXIXQIX2Z2XG2XR33X3IQ2X2IX2ZX3IX2IX2Z2X4R33X3IXQ2XIXIGI2ZGX2IX8R33X3IXQ3IX6IXI2X2I4X2R33X3IX4IXIX2QX4QX2IX2IX2R33IGI2X3I2QI10XIX2IXIR33IX6I2X9I2XIGI2XIR33IX5IX4I3X4QX7IR33I4XIX5GXIXGXGQ2XI4ZIR33IX3GX6IXIX2ZX2QXIX4IR33IXI2XIQ2ZX2IXGXGXGXQ2IX3I2R33IX2IXIXZQ2XI3X6QIX4IR33IX4IX3QX11ZXIX2IR33I9X9I9R1045',
@@ -185,7 +181,8 @@ class Multiplayer extends Engine {
   load(t, e) {
     let i = t.msg.u.findIndex(u => u[0] === e.id);
     if (i !== -1) t.msg.u.splice(i, 1);
-    t.msg.d.r(e.id);
+    i = t.msg.d.indexOf(e.id);
+    if (i !== -1) t.msg.d.splice(i, 1);
     t.msg.u.push(e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, Multiplayer.num(e[c])), A.template('arr').concat(e.id)));
   }
   unload(t, e) {
