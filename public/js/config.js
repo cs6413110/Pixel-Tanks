@@ -15,18 +15,19 @@ window.sourceMap = {
     {
       ref: 'menus',
       path: 'menus',
-      load: ['drone', 'drone_scan', 'drone_in', 'drone_open', 'drone_out', 'ui', 'start', 'main', 'multiplayer', 'singleplayer', 'singleplayer2', 'victory', 'defeat', 'crate', 'settings1', 'settings2', 'inventory', 'classTab', 'itemTab', 'perkTab', 'cosmeticTab', 'shop', 'shop2', 'broke', 'pause', 'broke', 'locked', 'alert', 'adrenaline', 'cooldown', 'core', 'radar', 'refresh', 'scavenger', 'shield', 'thermal', 'arrow', 'arrow_friendly', 'upgrader'],
+      load: ['world1', 'world2', 'world3', 'world4', 'world5', 'drone', 'drone_scan', 'drone_in', 'drone_open', 'drone_out', 'ui', 'start', 'main', 'multiplayer', 'singleplayer', 'singleplayer2', 'victory', 'defeat', 'crate', 'settings1', 'settings2', 'inventory', 'classTab', 'itemTab', 'perkTab', 'cosmeticTab', 'shop', 'shop2', 'broke', 'pause', 'broke', 'locked', 'alert', 'adrenaline', 'cooldown', 'core', 'radar', 'refresh', 'scavenger', 'shield', 'thermal', 'arrow', 'arrow_friendly', 'upgrader'],
     },
     {
       ref: 'animations',
       path: 'animations',
-      load: ['tape', 'glu', 'fire', 'detonate', 'explosion', 'healexplosion', 'smoke', 'shield_make', 'shield_break'],
+      load: ['lightning', 'tape', 'glu', 'fire', 'detonate', 'explosion', 'healexplosion', 'smoke', 'shield_make', 'shield_break'],
       meta: {
         tape_: { frames: 17, speed: 50 },
         toolkit_: { frames: 16, speed: 50 },
         glu_: { frames: 45, speed: 50 },
         fire_: { frames: 1, speed: 50 },
         detonate_: { frames: 28, speed: 20 },
+        lightning_: { frames: 20, speed: 35 },
       },
     },
     {
