@@ -641,10 +641,15 @@ const Commands = {
     if (Storage.mutes.includes(t.username)) return socket.send({status: 'error', message: 'You are muted!'});
     for (const tank of server.pt) if (Engine.match(t, tank)) tank.privateLogs.push({m: '[TEAM]['+t.username+'] '+clean(data.slice(1).join(' ')), c: '#FFFFFF'});
   }],
-  gpt: [Object, 4, -1, () => {}],
-  gptclear: [Object, 4, -1, () => {}],
-  wgpt: [Object, 4, -1, () => {}],
-  dalle2pro: [Object, 2, -1, () => {}],
+  perf: [Object, 4, -1, (data, socket, server, t) => {
+    let n = [0, 0, 0, 0, 0]; // blocks, bullets, explosions, ai, players
+    t.privateLogs.push({m: 'Performance Stats: ', c: '#00ff00'});
+    t.privateLogs.push({m: 'setTimeout delay: '+tickspeed, c: '#00ff00'});
+    for (const s of Object.values(servers)) n = [n[0]+s.b.length, n[1]+s.s.length, n[2]+s.d.length, n[3]+s.ai.length, n[4]+s.pt.length];
+    t.privateLogs.push({m: '[Blocks, Bullets, Explosions, AI, Players] => '+JSON.stringify(n), c: '#00ff00'});
+    t.privateLogs.push({m: 'Object Pools:', c: '#00ff00'});
+    for (const template of Object.keys(A.templates)) t.privateLogs.push({m: template+' -> '+A[template].length, c: '#00ff00})
+  }],
   run: [Object, 1, -1, (data, socket, server, t, logs) => {
     exec(data.slice(1).join(' '), (e, o, er) => {
       if (e) if (e.length) logs.push({m: e, c: '#ff0000'});
@@ -799,16 +804,27 @@ const Commands = {
   }],
 };
 
+let received = sent = 0;
+let ips, ops;
+setInterval(() => {
+  ips = received;
+  ops = sent;
+  received = sent = 0;
+}, 1000);
 const wss = new WebSocketServer({port: settings.port});
 wss.on('connection', socket => {
   socket._send = socket.send;
-  socket.send = data => socket._send(pack(data));
+  socket.send = data => {
+    sent++;
+    socket._send(pack(data));
+  }
   socket.kick = e => {
     socket.send({status: 'error', message: e});
     setTimeout(() => socket.close());
   }
   sockets.add(socket);
   socket.on('message', data => {
+    received++;
     try {
       data = unpack(data);
     } catch(e) {
