@@ -24,7 +24,7 @@ class Block {
     if ((this.hp = Math.min(this.maxHp, this.hp-d)) <= 0) return this.destroy(); else this.host.updateEntity(this, Block.update);
   }
   reset() {
-    for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'team', 's' ,'c', 'updatedLast', 'host']) this[property] = undefined;
+    for (const property of ['x', 'y', 'maxHp', 'hp', 'type', 'team', 's' ,'c', 'updatedLast', 'host']) delete this[property];
     this.cells.clear();
     this.t.length = 0;
   }
