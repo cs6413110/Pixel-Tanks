@@ -154,7 +154,7 @@ class Tank {
     this.host.override(this, ox, oy);
   }
   reset() {
-    for (const p of Tank.s) Object.defineProperty(this, p, {value: undefined, writable: true});
+    for (const p of Tank.s) delete this[p];//Object.defineProperty(this, p, {value: undefined, writable: true});
     this.cells.clear();
   }
   collision(x, y) {
