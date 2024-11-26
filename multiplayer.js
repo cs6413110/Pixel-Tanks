@@ -711,7 +711,7 @@ const Commands = {
     Storage.mutes.splice(Storage.mutes.indexOf(data[1]), 1);
     for (const s of Object.values(servers)) if (s.pt.some(t => t.username === data[1])) s.logs.push({m: data[1]+' was unmuted by '+t.username, c: '#0000FF'});
   }],
-   reboot: [Object, 2, 1, function() {
+   restart: [Object, 2, 1, function() {
     process.exit(1);
   }],
   sread: [Object, 1, 2, function(data) {
@@ -894,7 +894,7 @@ client.on('messageCreate', m => {
   if (m.content.startsWith('/')) {
     m.delete(1000);
     // potential freeze, unfreeze, gpts, newmap, killai, ai, swrite, twrite
-    const discordAcceptable = ['admin', 'removeadmin', 'vip', 'removevip', 'reload', 'playerlist', 'msg', 'filter', 'allow', 'run', 'ban', 'banlist', 'pardon', 'mute', 'unmute', 'kick', 'kill', 'spectate', 'live', 'reboot', 'flushlogs', 'getlogs', 'announce', 'lockchat', 'lockdown', ];
+    const discordAcceptable = ['admin', 'removeadmin', 'vip', 'removevip', 'reload', 'playerlist', 'msg', 'filter', 'allow', 'run', 'ban', 'banlist', 'pardon', 'mute', 'unmute', 'kick', 'kill', 'spectate', 'live', 'restart', 'flushlogs', 'getlogs', 'announce', 'lockchat', 'lockdown', ];
     const socket = {username: m.author.username, send: d => {
       toDiscord(d.message);
     }}, data = m.content.replace('/', '').split(' '), t = {username: m.author.username}, logs = {push: d => {
