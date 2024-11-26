@@ -68,10 +68,19 @@ const deathMessages = [`{victim} was killed by {killer}`, `{victim} was put out 
 const joinMessages = [`{player} joined the game`, `{player} is now online`, `{player} has joined the battle`];
 const rageMessages = [`{player} left the game`, `{player} quit`, `{player} disconnected`, `{player} lost connection`];
 
+
+let tickspeed, getTickspeed = t => {
+  tickspeed = Date.now()-t;
+  setTimeout(() => getTickspeed(Date.now()));
+}
+getTickspeed(Date.now());
+
+
 class Multiplayer extends Engine {
   constructor(l) {
     super(l);
-    Object.defineProperty(this, 'global', {get: () => this.rawglobal, set: (v) => {
+    this.zone = ['battlegrounds', 'cave', 'ice', 'deep', 'gem'][Math.floor(Math.random()*5)];
+    Object.defineProperty(this, 'global', {get: () => this.rawglobal, set: v => {
       this.rawglobal = v;
       for (const t of this.pt) {
         t.msg.global = v;
@@ -126,6 +135,7 @@ class Multiplayer extends Engine {
       t.sendTimer = setTimeout(() => this.send(t), (t.lastSend+1000/settings.upsl)-Date.now());
     }
     t.msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
+    t.msg.tickspeed = tickspeed;
     t.logs = this.logs.length;
     t.privateLogs.length = 0;
     if (t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global) {
