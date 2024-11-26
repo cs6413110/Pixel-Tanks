@@ -648,7 +648,7 @@ const Commands = {
     for (const s of Object.values(servers)) n = [n[0]+s.b.length, n[1]+s.s.length, n[2]+s.d.length, n[3]+s.ai.length, n[4]+s.pt.length];
     t.privateLogs.push({m: '[Blocks, Bullets, Explosions, AI, Players] => '+JSON.stringify(n), c: '#00ff00'});
     t.privateLogs.push({m: 'Object Pools:', c: '#00ff00'});
-    for (const template of Object.keys(A.templates)) t.privateLogs.push({m: template+' -> '+A[template].length, c: '#00ff00})
+    for (const template of Object.keys(A.templates)) t.privateLogs.push({m: template+' -> '+A[template].length, c: '#00ff00'})
   }],
   run: [Object, 1, -1, (data, socket, server, t, logs) => {
     exec(data.slice(1).join(' '), (e, o, er) => {
