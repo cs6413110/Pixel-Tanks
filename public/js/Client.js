@@ -114,6 +114,7 @@ class Client {
   interpret(data) {
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
+    if (data.tickspeed) this.hostupdate.tickspeed = data.tickspeed;
     if (data.logs) {
       for (const log of data.logs) {
         const msg = document.createElement('DIV'), a = Client.messages.scrollTop === Client.messages.scrollHeight-Client.messages.clientHeight;
@@ -576,6 +577,7 @@ class Client {
       GUI.draw.fillRect([308, 408, 1120, 1196, 1272][i], 952+Math.min((Date.now()-this.timers[type].time)/this.timers[type].cooldown, 1)*48, 48, 48);
     }
     GUI.drawText(this.dedTime < Date.now()-10000 ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
+    GUI.drawText('TPS: '+(this.hostupdate?.tickspeed || ''), 200, 30, 30 '#ffffff', 0);
     
     if (this.debugMode) {// 0 = disabled, 1 = ping, 2 = fps, 3 = ops, 4 = ups
       const infoset = [null, this.pings, this.fps, this.ops, this.ups][this.debugMode];
