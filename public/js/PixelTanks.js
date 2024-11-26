@@ -150,7 +150,7 @@ class PixelTanks {
           [648, 840, 88, 88, 'shop', true],
           [540, 840, 88, 88, 'inventory', true],
           [756, 840, 88, 88, 'crate', true],
-          [532, 392, 536, 136, 'singleplayer', true],
+          [532, 392, 536, 136, 'world1', true],
           /*[320, 920, 80, 80, function() {
             clearInterval(PixelTanks.autosave);
             PixelTanks.user.token = undefined;
@@ -196,49 +196,200 @@ class PixelTanks {
           if (newClass !== 'undefined') GUI.drawImage(PixelTanks.images.menus.alert, 530, 830, 20, 20, 1);
         },
       },
-      singleplayer: {
+      world1: {
         buttons: [
-          [25, 28, 80, 74, 'main', true],
+          [416, 20, 108, 108, 'main', true],
+          [1144, 20, 108, 108, 'world2', true],
         ],
         listeners: {
           mousedown: function(e) {
             const {x, y} = Menus;
             const levelCoords = [
-              [31, 179],
-              [244, 179],
-              [452, 179],
-              [672, 179],
-              [890, 179],
-              [31, 262],
-              [244, 262],
-              [452, 262],
-              [672, 262],
-              [890, 262],
-              [31, 345],
-              [244, 345],
-              [452, 345],
-              [672, 345],
-              [890, 345],
-              [31, 428],
-              [244, 428],
-              [452, 428],
-              [672, 428],
-              [890, 428],
-              [31, 511],
-              [244, 511],
-              [452, 511],
-              [672, 511],
-              [890, 511],
-              [31, 594],
-              [244, 594],
-              [452, 594],
-              [672, 594],
-              [890, 594],
+              [116, 248],
+              [356, 204],
+              [596, 260],
+              [839, 240],
+              [1056, 204],
+              [1272, 272],
+              [1420, 400],
+              [1212, 536],
+              [964, 516],
+              [732, 560],
+              [508, 528],
+              [284, 480],
+              [64, 548],
+              [36, 676],
+              [148, 804],
+              [384, 844],
+              [624, 788],
+              [864, 808],
+              [1100, 848],
+              [1336, 808],
             ];
             for (const c of levelCoords) {
-              if (x > c[0]*1600/1049 && x < (c[0]+80)*1600/1049 && y > c[1]*1000/653 && y < (c[1]+74)*1000/653) {
+              if (x > c[0]*1600/1000 && x < (c[0]+200)*1600/1000 && y > c[1]*1000/653 && y < (c[1]+100)*1000/653) {
                 Menus.removeListeners();
                 PixelTanks.user.player = new Client(levelCoords.indexOf(c)+1, false, null);//rip the 0 lol
+              }
+            }
+          }
+        },
+        cdraw: function() {},
+      },
+      world2: {
+        buttons: [
+          [416, 20, 108, 108, 'world1', true],
+          [1144, 20, 108, 108, 'world3', true],
+        ],
+        listeners: {
+          mousedown: function(e) {
+            const {x, y} = Menus;
+            const levelCoords = [
+              [116, 248],
+              [356, 204],
+              [596, 260],
+              [839, 240],
+              [1056, 204],
+              [1272, 272],
+              [1420, 400],
+              [1212, 536],
+              [964, 516],
+              [732, 560],
+              [508, 528],
+              [284, 480],
+              [64, 548],
+              [36, 676],
+              [148, 804],
+              [384, 844],
+              [624, 788],
+              [864, 808],
+              [1100, 848],
+              [1336, 808],
+            ];
+            for (const c of levelCoords) {
+              if (x > c[0]*1600/1000 && x < (c[0]+200)*1600/1000 && y > c[1]*1000/653 && y < (c[1]+100)*1000/653) {
+                Menus.removeListeners();
+                PixelTanks.user.player = new Client(levelCoords.indexOf(c)+21, false, null);//rip the 0 lol
+              }
+            }
+          }
+        },
+        cdraw: function() {},
+      },
+      world3: {
+        buttons: [
+          [416, 20, 108, 108, 'world2', true],
+          [1144, 20, 108, 108, 'world4', true],
+        ],
+        listeners: {
+          mousedown: function(e) {
+            const {x, y} = Menus;
+            const levelCoords = [
+              [116, 248],
+              [356, 204],
+              [596, 260],
+              [839, 240],
+              [1056, 204],
+              [1272, 272],
+              [1420, 400],
+              [1212, 536],
+              [964, 516],
+              [732, 560],
+              [508, 528],
+              [284, 480],
+              [64, 548],
+              [36, 676],
+              [148, 804],
+              [384, 844],
+              [624, 788],
+              [864, 808],
+              [1100, 848],
+              [1336, 808],
+            ];
+            for (const c of levelCoords) {
+              if (x > c[0]*1600/1000 && x < (c[0]+200)*1600/1000 && y > c[1]*1000/653 && y < (c[1]+100)*1000/653) {
+                Menus.removeListeners();
+                PixelTanks.user.player = new Client(levelCoords.indexOf(c)+41, false, null);//rip the 0 lol
+              }
+            }
+          }
+        },
+        cdraw: function() {},
+      },
+      world4: {
+        buttons: [
+          [416, 20, 108, 108, 'world3', true],
+          [1144, 20, 108, 108, 'world5', true],
+        ],
+        listeners: {
+          mousedown: function(e) {
+            const {x, y} = Menus;
+            const levelCoords = [
+              [116, 248],
+              [356, 204],
+              [596, 260],
+              [839, 240],
+              [1056, 204],
+              [1272, 272],
+              [1420, 400],
+              [1212, 536],
+              [964, 516],
+              [732, 560],
+              [508, 528],
+              [284, 480],
+              [64, 548],
+              [36, 676],
+              [148, 804],
+              [384, 844],
+              [624, 788],
+              [864, 808],
+              [1100, 848],
+              [1336, 808],
+            ];
+            for (const c of levelCoords) {
+              if (x > c[0]*1600/1000 && x < (c[0]+200)*1600/1000 && y > c[1]*1000/653 && y < (c[1]+100)*1000/653) {
+                Menus.removeListeners();
+                PixelTanks.user.player = new Client(levelCoords.indexOf(c)+61, false, null);//rip the 0 lol
+              }
+            }
+          }
+        },
+        cdraw: function() {},
+      },
+      world5: {
+        buttons: [
+          [416, 20, 108, 108, 'world4', true],
+          [1144, 20, 108, 108, 'world1', true],
+        ],
+        listeners: {
+          mousedown: function(e) {
+            const {x, y} = Menus;
+            const levelCoords = [
+              [116, 248],
+              [356, 204],
+              [596, 260],
+              [839, 240],
+              [1056, 204],
+              [1272, 272],
+              [1420, 400],
+              [1212, 536],
+              [964, 516],
+              [732, 560],
+              [508, 528],
+              [284, 480],
+              [64, 548],
+              [36, 676],
+              [148, 804],
+              [384, 844],
+              [624, 788],
+              [864, 808],
+              [1100, 848],
+              [1336, 808],
+            ];
+            for (const c of levelCoords) {
+              if (x > c[0]*1600/1000 && x < (c[0]+200)*1600/1000 && y > c[1]*1000/653 && y < (c[1]+100)*1000/653) {
+                Menus.removeListeners();
+                PixelTanks.user.player = new Client(levelCoords.indexOf(c)+81, false, null);//rip the 0 lol
               }
             }
           }
