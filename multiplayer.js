@@ -653,7 +653,7 @@ const Commands = {
       for (const recycled of A[template]) for (const property of Object.keys(recycled)) properties.add(property);
       t.privateLogs.push({m: template+' -> '+A['_'+template]+' : '+A[template].length+' : '+Array.from(properties).join(' '), c: '#00ff00'});
     }
-    for (const [key, value] of Object.entries(process.memoryUsage())) t.privatelogs.push({m: `Memory usage by ${key}, ${value/1000000}MB `, c: '#00ff00');
+    for (const [key, value] of Object.entries(process.memoryUsage())) t.privatelogs.push({m: `Memory usage by ${key}, ${value/1000000}MB `, c: '#00ff00'});
   }],
   run: [Object, 1, -1, (data, socket, server, t, logs) => {
     exec(data.slice(1).join(' '), (e, o, er) => {
