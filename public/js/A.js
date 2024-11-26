@@ -12,6 +12,7 @@ class A {
         if (A.templates[n][1]) A.templates[n][1](e); else e.reset();
         A[n].push(e);
       };
+      A['_'+n] = A['_'+n]+1 || 1;
       return e;
     } else return A[n].shift();
   }
