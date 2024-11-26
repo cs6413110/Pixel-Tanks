@@ -88,6 +88,7 @@ class Shot {
       const c = cell.split('x');
       this.host.cells[c[0]][c[1]].delete(this);
     }
+    this.release();
     for (let i = 0; i < this.host.s.length; i++) if (this.host.s[i].id === this.id) return this.host.s.splice(i, 1);
   }
 }
