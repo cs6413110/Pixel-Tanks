@@ -48,6 +48,9 @@ class PixelTanks {
       input {
         font-size: 6vh;
       }
+      .expand:hover {
+        transform: scale(1.2);
+      }
     </style>`;
     GUI.canvas = document.createElement('CANVAS');
     Menus.scaler = document.createElement('CANVAS');
