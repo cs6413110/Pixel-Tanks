@@ -69,9 +69,10 @@ const joinMessages = [`{player} joined the game`, `{player} is now online`, `{pl
 const rageMessages = [`{player} left the game`, `{player} quit`, `{player} disconnected`, `{player} lost connection`];
 
 
-let tickspeed, getTickspeed = t => {
-  tickspeed = Date.now()-t;
-  setTimeout(() => getTickspeed(Date.now()));
+let tickspeed, old = Date.now(), getTickspeed = () => {
+  tickspeed = Date.now()-old;
+  old = Date.now()
+  setTimeout(() => getTickspeed());
 }
 getTickspeed(Date.now());
 
