@@ -387,7 +387,7 @@ class PixelTanks {
               [1336, 808],
             ];
             for (const c of levelCoords) {
-              if (x > c[0]*1600/1000 && x < (c[0]+200)*1600/1000 && y > c[1]*1000/653 && y < (c[1]+100)*1000/653) {
+              if (x > c[0] && x < (c[0]+200) && y > c[1] && y < (c[1]+100)) {
                 Menus.removeListeners();
                 PixelTanks.user.player = new Client(levelCoords.indexOf(c)+81, false, null);//rip the 0 lol
               }
