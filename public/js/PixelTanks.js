@@ -423,9 +423,9 @@ class PixelTanks {
         ],
         listeners: {},
         cdraw: function() {
-          GUI.drawText('Coins: '+Menus.menus.defeat.stats[coins], 800, 800, 50, '#ffffff', 0.5);
-          GUI.drawText('Crates: '+Menus.menus.defeat.stats[crates], 800, 900, 50, '#ffffff', 0.5);
-          GUI.drawText('Xp: '+Menus.menus.defeat.stats[xp], 800, 1000, 50, '#ffffff', 0.5);
+          //GUI.drawText('Coins: '+Menus.menus.defeat.stats[coins], 800, 800, 50, '#ffffff', 0.5);
+          //GUI.drawText('Crates: '+Menus.menus.defeat.stats[crates], 800, 900, 50, '#ffffff', 0.5);
+          //GUI.drawText('Xp: '+Menus.menus.defeat.stats[xp], 800, 1000, 50, '#ffffff', 0.5);
         },
       },
       multiplayer: {
@@ -1018,7 +1018,6 @@ class PixelTanks {
   static main() {
     Menus.removeListeners();
     if (PixelTanks.user.player) PixelTanks.user.player.implode();
-    alert('We are working on adding old menus back! Please be paitent! Cosmetics/Menus should be fixed within the week.');
     Menus.trigger('main');
     //Menus.removeListeners();
     //if (PixelTanks.user.player) PixelTanks.user.player.implode();
