@@ -20,7 +20,8 @@ class Menu {
       const leftOffset = (window.innerWidth-window.innerHeight*1.6)/2+(button.x = b[0])/1000*window.innerHeight;
       Menu.scaler.getContext('2d').drawImage(GUI.canvas, -b[0], -b[1], 1600, 1000);
       image.src = Menu.scaler.toDataURL();
-      button.style = 'position: absolute; left: '+leftOffset+'px; top: '+(window.innerHeight*(button.y = b[1])/1000)+'px; padding: 0; border: 0;';
+      button.style = 'position: absolute; left: '+leftOffset+'px; top: '+(window.innerHeight*(button.y = b[1])/1000)+'px; padding: 0; border: 0; ';
+      button.className = 'expand';
       button.appendChild(image);
       document.body.appendChild(button);
       this.elements.push(button);
