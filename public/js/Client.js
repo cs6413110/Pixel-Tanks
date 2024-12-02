@@ -61,7 +61,6 @@ class Client {
     this.ups = [];
     this.fps = [];
     this.pings = [];
-    this.drones = []; // [ox, oy, or, x, y, r, type, idle, scan, frame]
     this.joinData = {username: PixelTanks.user.username, token: PixelTanks.user.token, type: 'join', gamemode: this.gamemode, tank: {rank: PixelTanks.userData.stats[4], perk: PixelTanks.userData.perk, username: PixelTanks.user.username, class: PixelTanks.userData.class, cosmetic_hat: PixelTanks.userData.cosmetic_hat, cosmetic: PixelTanks.userData.cosmetic, cosmetic_body: PixelTanks.userData.cosmetic_body, deathEffect: PixelTanks.userData.deathEffect, color: PixelTanks.userData.color === "random" ? Engine.getRandomColor() : PixelTanks.userData.color}};
     this.reset();
     if (this.multiplayer) this.connect();
@@ -466,13 +465,6 @@ class Client {
       GUI.draw.fillRect(block.x, block.y+110, 100*block.hp/block.maxHp, 5);
     }
     for (const ex of e) this.drawExplosion(ex);
-    for (const drone of this.drones) {
-      GUI.draw.fillStyle = '#000000';
-      GUI.draw.fillRect(drone[3]-5, drone[4]-5, 10, 10);
-      const xd = drone[3]-this.tank.x-40, yd = drone[4]-this.tank.y-40, distance = Math.sqrt(xd**2+yd**2), a = Engine.toAngle(xd, yd)-90+360, ad = Math.abs(drone[5]-a);
-      GUI.drawImage(PixelTanks.images.menus[((ad < 10 || ad > 350) && distance < 100) ? 'drone_scan' : 'drone'], drone[3]-200, drone[4]-200, 400, 400, 1, 200, 200, 0, 0, drone[5], Math.floor(drone[11])*200, 0, 200, 200);
-    }
-    this.moveDrones();
 
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, 0, 0);
     if (this.menu) return Menus.menus[this.menu].draw();
@@ -737,8 +729,6 @@ class Client {
       this.b = {o: this.tank.baseFrame, t: Date.now()};
     }
     for (let i = 0; i < 4; i++) if (k === PixelTanks.userData.keybinds[`item${i+1}`]) this.useItem(PixelTanks.userData.items[i], i);
-    // [ox, oy, or, x, y, r, tx, ty, type, idle, scan, frame]
-    if (e.keyCode === 77) this.drones.push([null, null, null, this.tank.x, this.tank.y, this.tank.r, null, null, 0, false, false, 0]);
     if (k === PixelTanks.userData.keybinds.chat && this.socket) {
       Client.input.style.visibility = 'visible';
       for (const m of Client.messages.children) m.style.visibility = 'visible';
