@@ -8,6 +8,8 @@ class Tank {
     this.raw = {};
     this.msg = {u: [], d: [], event: 'update'};
     this.privateLogs = [];
+    this.eradar = [];
+    this.fradar = [];
   }
   init(data, host) {
     this.id = host.genId(0);
@@ -19,8 +21,6 @@ class Tank {
     this.hp = this.maxHp = this.rank*10+300;
     this.canShield = this.canBashed = this.canInvis = !(this.damage = false);
     this.team = data.username+':'+this.id;
-    this.eradar = [];
-    this.fradar = [];
     this.x = host.spawn.x;
     this.y = host.spawn.y;
     this.maxTurrets = 3;
