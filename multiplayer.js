@@ -165,7 +165,7 @@ class Multiplayer extends Engine {
       if (n && !o) this.load(t, e); else if (o && !n) this.unload(t, e); else continue;
       this.send(t);
     }
-    old.release();
+    if (old) old.release();
   }
   updateEntity(e, c) {
     for (const t of this.pt) {
