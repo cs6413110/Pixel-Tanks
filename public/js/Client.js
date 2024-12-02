@@ -85,32 +85,6 @@ class Client {
 
   getIdType = id => ['pt', 'b', 's', 'ai', 'd'][Math.floor(id)];
 
-  moveDrones() {                        // 0   1   2   3  4  5  6    7    8    9     10    11
-    try {
-    for (const drone of this.drones) { // [ox, oy, or, x, y, r, tx, ty, type, idle, scan, frame]
-      let xd = drone[3]-drone[6]-this.tank.x-40, yd = drone[4]-drone[7]-this.tank.y-40, tr = Engine.toAngle(xd, yd)-90, d = Math.sqrt(yd**2+xd**2), a = d/2;
-      if (drone[9] && d < 200) tr = Engine.toAngle(drone[3]-this.tank.x-40, drone[4]-this.tank.y-40)-90;
-      const diff = (tr-drone[5]+360)%360, dir = diff < 180 ? 1 : -1;
-      drone[5] = diff > 3 ? (drone[5]+dir*3+360)%360 : tr;
-      drone[11] = (drone[11]+.2)%3; 
-      if (Math.random() < (drone[9] ? .008 : .004) && (drone[8] === 1 || d < 200)) drone[9] = !drone[9]; // idling % chance
-      if ((!drone[6] && !drone[7]) || d < 20) {
-        drone[9] = true; // idle when reached destination
-        drone[6] = Math.random() < .5 ? 70 : -70;
-        drone[7] = Math.random()*140-70;
-        if (Math.random() < .5) { // % chance to swap
-          let temp = drone[6];
-          drone[6] = drone[7];
-          drone[7] = temp;
-        }
-      }
-      if (drone[9]) continue; // idling return
-      drone[3] -= xd/a;
-      drone[4] -= yd/a;
-    }
-    } catch(e) {alert(e)}
-  }
-
   interpret(data) {
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
@@ -119,7 +93,7 @@ class Client {
       for (const log of data.logs) {
         const msg = document.createElement('DIV'), a = Client.messages.scrollTop === Client.messages.scrollHeight-Client.messages.clientHeight;
         msg.id = 'message';
-        msg.innerHTML = log.m;
+        msg.innerText = log.m;
         msg.style.color = log.c;
         Client.messages.appendChild(msg);
         if (a) Client.messages.scrollTop = Client.messages.scrollHeight-Client.messages.clientHeight;
