@@ -143,7 +143,7 @@ class Multiplayer extends Engine {
         if (t.delayed) this.send(t);
       });
       t.lastSend = Date.now();
-      for (const update of t.msg.u) update.release();
+      for (const update of t.msg.u) if (update && update.release) update.release();
       t.msg.u.length = t.msg.d.length = 0;
       t.msg.global = t.msg.logs = undefined;
     }
