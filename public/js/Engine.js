@@ -124,6 +124,12 @@ class Engine {
         airstrike.init(Number(h[0])+i*Math.cos(Math.PI*rotation/180)*100, Number(h[1])+i*Math.sin(Math.PI*rotation/180)*100, 'airstrike', Engine.parseTeamExtras(t.team), this);
         this.b.push(airstrike);
       }
+    } else if (a.includes('crate')) {
+      const rotation = Math.floor(Math.random()*360), h = a.replace('crate', '').split('x');
+      const airstrike = A.template('Block');
+      airstrike.timer = -5;
+      airstrike.init(+h[0], +h[1], 'airstrike', undefined, this);
+      this.b.push(airstrike);
     } else if (a.includes('flashbang')) {
       const h = a.replace('flashbang', '').split('x');
       this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), 'smoke', Engine.parseTeamExtras(t.team), this));
