@@ -15,6 +15,8 @@ const {unpack} = require('msgpackr/unpack');
 const {WebSocketServer} = require('ws');
 const {dalle, gpt, bing} = require('gpti');
 
+Array.prototype.release = () => {}
+
 console.log('Starting Server');
 console.log('Compiling Engine');
 fs.writeFileSync('engine.js', [`const PF = require('pathfinding');`, fs.readFileSync('./public/js/Engine.js'), fs.readFileSync('./public/js/Tank.js'), fs.readFileSync('./public/js/Block.js'), fs.readFileSync('./public/js/Shot.js'), fs.readFileSync('./public/js/AI.js'), fs.readFileSync('./public/js/Damage.js'), fs.readFileSync('./public/js/A.js'), 'module.exports = {Engine, Tank, Block, Shot, AI, Damage, A}'].join(''));
