@@ -143,6 +143,7 @@ class Multiplayer extends Engine {
         if (t.delayed) this.send(t);
       });
       t.lastSend = Date.now();
+      for (const update of t.msg.u) update.release();
       t.msg.u.length = t.msg.d.length = 0;
       t.msg.global = t.msg.logs = undefined;
     }
@@ -164,6 +165,7 @@ class Multiplayer extends Engine {
       if (n && !o) this.load(t, e); else if (o && !n) this.unload(t, e); else continue;
       this.send(t);
     }
+    old.release();
   }
   updateEntity(e, c) {
     for (const t of this.pt) {
@@ -180,14 +182,20 @@ class Multiplayer extends Engine {
   static num = n => typeof n !== 'number' ? n : Math.round(n*10)/10;
   load(t, e) {
     let i = t.msg.u.findIndex(u => u[0] === e.id);
-    if (i !== -1) t.msg.u.splice(i, 1);
+    if (i !== -1) {
+      t.msg.u[i].release();
+      t.msg.u.splice(i, 1);
+    }
     i = t.msg.d.indexOf(e.id);
     if (i !== -1) t.msg.d.splice(i, 1);
     t.msg.u.push(e.constructor[e.type === 'barrier' || e.type === 'void' ? 'raw2' : 'raw'].reduce((a, c) => a.concat(c, Multiplayer.num(e[c])), A.template('arr').concat(e.id)));
   }
   unload(t, e) {
     let i = t.msg.u.findIndex(u => u[0] === e.id);
-    if (i !== -1) t.msg.u.splice(i, 1);
+    if (i !== -1) {
+      t.msg.u[i].release();
+      t.msg.u.splice(i, 1);
+    }
     t.msg.d.push(e.id);
   }
   merge(t, e, c) {
@@ -202,6 +210,7 @@ class Multiplayer extends Engine {
         }
       }
       for (const p of c) t.msg.u[i].push(p, Multiplayer.num(e[p]));
+      c.release();
     } else t.msg.u.push(c.reduce((a, p) => a.concat(p, e[p]), A.template('arr').concat(e.id)));
   }
   destroyEntity(e) {
