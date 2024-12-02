@@ -6,8 +6,8 @@ class Engine {
       A.createTemplate('Shot', Shot);
       A.createTemplate('Damage', Damage);
       A.createTemplate('AI', AI);
-      A.createTemplate('arr', Array, a => (a.length = 0)); // batch size of 100, will inc upon higher demand. Startup value may vary depending on use case.
-      A.createTemplate('set', Set, s => s.clear());
+      //A.createTemplate('arr', Array, a => (a.length = 0)); // batch size of 100, will inc upon higher demand. Startup value may vary depending on use case.
+      //A.createTemplate('set', Set, s => s.clear());
     }
     this.spawn = {x: 0, y: 0};
     this.spawns = [{x: 0, y: 0}, {x: 0, y: 0}];
