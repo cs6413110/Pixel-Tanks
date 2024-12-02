@@ -742,8 +742,9 @@ class Client {
     } else if (id === 'flashbang') {
       this.tank.use.push(`flashbang${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
     } else if (id === 'bomb') {
-      this.tank.use.push('bomb');
-      this.tank.use.push('break');
+      this.tank.use.push(`crate${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
+      //this.tank.use.push('bomb');
+      //this.tank.use.push('break');
     } else if (id === 'dynamite') {
       this.fire('dynamite');
     } else if (id === 'airstrike') {
