@@ -709,12 +709,12 @@ const Commands = {
     Storage.bans.splice(Storage.bans.indexOf(data[1]), 1);
     server.logs.push({m: data[1]+' was pardoned by '+t.username, c: '#0000FF'});
   }],
-  mute: [Object, 3, 2, (data, socket, server, t) => {
+  mute: [Object, 2, 2, (data, socket, server, t) => {
     if (Storage.mutes.includes(data[1])) return socket.send({status: 'error', message: 'They are already muted!'});
     Storage.mutes.push(data[1]);
     for (const s of Object.values(servers)) if (s.pt.some(t => t.username === data[1])) s.logs.push({m: data[1]+' was muted by '+t.username, c: '#FFFF22'});
   }],
-  unmute: [Object, 3, 2, (data, socket, server, t) => {
+  unmute: [Object, 2, 2, (data, socket, server, t) => {
     Storage.mutes.splice(Storage.mutes.indexOf(data[1]), 1);
     for (const s of Object.values(servers)) if (s.pt.some(t => t.username === data[1])) s.logs.push({m: data[1]+' was unmuted by '+t.username, c: '#0000FF'});
   }],
