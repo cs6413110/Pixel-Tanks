@@ -156,7 +156,9 @@ class Client {
         this.reset();
       } else if (data.event === 'sc') {
         // single cooldown
-        this.timers[data.timer].time -= (this.timers[data.timer].time+this.timers[data.timer].cooldown-Date.now())*data.percent;
+        if (data.timer !== '*') return this.timers[data.timer].time -= this.timers[data.timer].cooldown*data.percent;
+        for (const item of this.timers.items) item.time -= item.cooldown*data.percent;
+        for (const timer of ['class', 'boost', 'powermissle', 'grapple', 'toolkit']) this.timers[timer].time -= this.timers[timer].cooldown*data.percent;
       } else if (data.event === 'gameover') {
         this.implode();
         Menus.menus[data.type].stats = {};
