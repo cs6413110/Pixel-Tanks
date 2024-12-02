@@ -20,6 +20,7 @@ console.log('Compiling Engine');
 fs.writeFileSync('engine.js', [`const PF = require('pathfinding');`, fs.readFileSync('./public/js/Engine.js'), fs.readFileSync('./public/js/Tank.js'), fs.readFileSync('./public/js/Block.js'), fs.readFileSync('./public/js/Shot.js'), fs.readFileSync('./public/js/AI.js'), fs.readFileSync('./public/js/Damage.js'), fs.readFileSync('./public/js/A.js'), 'module.exports = {Engine, Tank, Block, Shot, AI, Damage, A}'].join(''));
 console.log('Compiled Engine');
 const {Engine, Tank, Block, Shot, AI, Damage, A} = require('./engine.js');
+A.createTemplate('arr', Array, a => (a.length = 0));
 console.log('Loading Server Properties');
 const Storage = {key: ['owners', 'admins', 'vips', 'mutes', 'bans', 'filter']};
 for (const p of Storage.key) Storage[p] = fs.existsSync(p+'.json') ? JSON.parse(fs.readFileSync(p+'.json')) : [];
