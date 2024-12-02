@@ -149,7 +149,7 @@ class Multiplayer extends Engine {
     }
   }
   loadCells(e, ex, ey, w, h) { // optimize
-    const old = e.cells ? A.template('arr').concat(...e.cells) : null;
+    const old = e.cells ? A.template('arr').concat(...e.cells) : undefined;
     super.loadCells(e, ex, ey, w, h);
     for (const t of this.pt) {
       const mx = Math.floor((t.x+40)/100)-10, my = Math.floor((t.y+40)/100)-7, w = 21, h = 15;
