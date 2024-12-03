@@ -510,7 +510,7 @@ class Client {
       GUI.draw.globalAlpha = 1;
       GUI.draw.fillStyle = PixelTanks.userData.color;
       GUI.draw.fillRect(c[i], 908+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*92, 92, 92);
-      if (Math.ceil((this.timers.items[i].cooldown-(Date.now()-this.timers.items[i].time))/100)/10 !== 0) GUI.drawText(Math.ceil((this.timers.items[i].cooldown-(Date.now()-this.timers.items[i].time))/100)/10, c[i]+90, 998, 30, '#FFFFFF', 1);
+      if (Math.ceil((this.timers.items[i].cooldown-(Date.now()-this.timers.items[i].time))/100)/10 > 0) GUI.drawText(Math.ceil((this.timers.items[i].cooldown-(Date.now()-this.timers.items[i].time))/100)/10, c[i]+90, 998, 30, '#FFFFFF', 1);
     }
     for (let i = 0; i < 5; i++) {
       let type = ['class', 'powermissle', 'toolkit', 'boost', 'grapple'][i];
