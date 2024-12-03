@@ -780,6 +780,7 @@ class Client {
     if (k === 70) {
       if (this.dedTime < Date.now()-10000) {
         this.dedTime = undefined;
+        this.tank.x = this.tank.y = undefined;
         return this.tank.use.push('respawn');
       }
     }
