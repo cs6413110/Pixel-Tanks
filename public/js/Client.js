@@ -205,7 +205,7 @@ class Client {
 
   reset() {
     let faster = Engine.hasPerk(PixelTanks.userData.perk, 4);
-    let m = faster ? 1-.05*faster : 1;
+    let m = faster ? [null, .9, .85, .75][faster] : 1;
     this.timers = {
       boost: {time: -1, cooldown: m*5000},
       powermissle: {time: -1, cooldown: m*10000},
