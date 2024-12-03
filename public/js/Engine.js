@@ -130,9 +130,7 @@ class Engine {
       airstrike.timer = -5;
       airstrike.init(+h[0], +h[1], 'airstrike', undefined, this);
       this.b.push(airstrike);
-    } else if (a.includes('flashbang')) {
-      const h = a.replace('flashbang', '').split('x');
-      this.b.push(A.template('Block').init(Number(h[0]), Number(h[1]), 'smoke', Engine.parseTeamExtras(t.team), this));
+    } else if (a === 'fortify') {
     }
   }
 
