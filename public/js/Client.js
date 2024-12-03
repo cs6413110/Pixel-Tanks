@@ -87,6 +87,7 @@ class Client {
   interpret(data) {
     this._ups++;
     if (data.global) this.hostupdate.global = data.global;
+    if (data.zone) this.zone = data.zone;
     if (data.tickspeed) this.hostupdate.tickspeed = data.tickspeed;
     if (data.logs) {
       for (const log of data.logs) {
@@ -585,7 +586,6 @@ class Client {
     if (this.menu) return Menus.menus[this.menu].listeners?.keydown(e);
     if (document.activeElement.tagName === 'INPUT') return this.chat(e);
     if (e.ctrlKey || e.metaKey) return;
-    if (e.keyCode === 77) return this.zone = prompt('input one: battlegrounds, cave, ice, deep');
     if (e.preventDefault) e.preventDefault();
     if (!this.key[e.keyCode]) {
       this.keyStart(e);
