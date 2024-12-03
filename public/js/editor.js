@@ -52,7 +52,7 @@ let x, y;
 canvas.addEventListener('mousemove', (e) => {
   x = e.offsetX;
   y = e.offsetY;
-  coords.innerHTML = x+', '+y;
+  coords.innerHTML = Math.ceil((x+1)/10)+', '+Math.ceil((y+1)/10);
 });
 
 let drawLoop;
