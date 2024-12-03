@@ -500,7 +500,6 @@ class Client {
         GUI.draw.globalAlpha = .5;
         GUI.draw.fillRect(c[i], 908, 92, 92);
         GUI.draw.globalAlpha = 1;
-        GUI.drawText(Math.ceil((this.timers.items[i].cooldown-(Date.now()-this.timers.items[i].time))/100)/10, c[i]+90, 998, 30, '#FFFFFF', 1);
       } else {
         GUI.draw.fillStyle = '#FFFFFF';
         const tank = t.find(tank => tank.username === PixelTanks.user.username), blockedOn = item === 'bomb' && !this.collision(tank.x, tank.y);
@@ -511,6 +510,7 @@ class Client {
       GUI.draw.globalAlpha = 1;
       GUI.draw.fillStyle = PixelTanks.userData.color;
       GUI.draw.fillRect(c[i], 908+Math.min((Date.now()-this.timers.items[i].time)/this.timers.items[i].cooldown, 1)*92, 92, 92);
+      if (Math.ceil((this.timers.items[i].cooldown-(Date.now()-this.timers.items[i].time))/100)/10 !== 0) GUI.drawText(Math.ceil((this.timers.items[i].cooldown-(Date.now()-this.timers.items[i].time))/100)/10, c[i]+90, 998, 30, '#FFFFFF', 1);
     }
     for (let i = 0; i < 5; i++) {
       let type = ['class', 'powermissle', 'toolkit', 'boost', 'grapple'][i];
