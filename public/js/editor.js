@@ -9,6 +9,7 @@ document.documentElement.appendChild(output);
 document.documentElement.appendChild(canvas);
 document.documentElement.appendChild(select);
 const zone = prompt('Enter zone: battlegrounds, cave, ice, deep');
+const type = +prompt('Enter level type(1-3 ONLY): 1 - Genocide, 2 - Extraction, 3 - Survival');
 const key = [
   ['X', 'Eraser', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAQAAAB0m0auAAAADElEQVR42mNkIBIAAABSAAI2VLqiAAAAAElFTkSuQmCC'],
   ['Q', 'Weak Block', 'blocks/'+zone+'/weak'],
@@ -24,6 +25,7 @@ const key = [
   ['S', 'Global Spawn', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAH0lEQVR42mNk+C/xn4GKgHHUwFEDRw0cNXDUwJFqIABtgCnNTYQqZgAAAABJRU5ErkJggg=='],
   ['A', 'Spawn A', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAHklEQVR42mP8z8AARNQDjKMGjho4auCogaMGjlQDAUwCJ+0NBcXlAAAAAElFTkSuQmCC'],
   ['B', 'Spawn B', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAH0lEQVR42mNkkPj/n4GKgHHUwFEDRw0cNXDUwJFqIABbdCnNVZ8NSQAAAABJRU5ErkJggg=='],
+  ['F', 'Finish', 'blocks/goal'],
 ];
 const images = {};
 
@@ -81,7 +83,7 @@ const ex = () => {
       }
     }
   }
-  return output;
+  return [type, zone, output];
 }
 
 const im = s => {
@@ -108,7 +110,10 @@ let importer = document.createElement('BUTTON');
 importer.innerHTML = 'Import';
 document.documentElement.appendChild(importer);
 importer.addEventListener('click', () => {
-  im(prompt('Input level code:'));
+  eval('sourced = '+prompt('Input level code:');
+  im(sourced[2]);
+  zone = sourced[1];
+  type = sourced[0];
   output.innerHTML = ex();
 });
 
