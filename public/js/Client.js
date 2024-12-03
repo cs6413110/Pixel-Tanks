@@ -843,7 +843,7 @@ class Client {
         if (PixelTanks.userData.class === 'stealth' && !preStealth) {
           this.mana = Math.min(this.mana+(Date.now()-this.timers.class.time)/this.timers.class.cooldown, 15);
           this.timers.class.time = Date.now();
-          if (this.mana >= .5) this.tank.invis = true;
+          if (this.mana >= 2.5) this.tank.invis = true;
         }
         clearTimeout(this.booster);
         this.booster = setTimeout(() => {
@@ -853,7 +853,7 @@ class Client {
             this.tank.use.push('break');
             if (!preStealth) {
               this.tank.invis = false;
-              this.mana -= .5;
+              this.mana -= 2.5;
               this.timers.class.time = Date.now();
             }
           }
