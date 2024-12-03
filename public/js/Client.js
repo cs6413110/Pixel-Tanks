@@ -498,7 +498,7 @@ class Client {
       if (Date.now() < this.timers.items[i].time+this.timers.items[i].cooldown) {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .5;
-        GUI.draw.fillRect(c[i], 908, 92, 92);
+        GUI.draw.fillRect(c[i]+90, 998, 92, 92);
         GUI.draw.globalAlpha = 1;
         GUI.drawText(Math.ceil((Date.now()-this.timers.items[i].time)/100)/10, c[i], 908, 30, '#FFFFFF', 1);
       } else {
