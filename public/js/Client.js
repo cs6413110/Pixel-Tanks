@@ -225,8 +225,7 @@ class Client {
   }
 
   drawBlock(b) {
-    if (b.type === 'smoke') return; // BREAD WHY IS THERE A SMOKE BLOCK >:(
-    const size = (b.type === 'airstrike' || b.type === 'smoke' || b.type === 'instastrike' || b.type === 'doom') ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
+    const size = (b.type === 'airstrike' || b.type === 'instastrike' || b.type === 'doom') ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
     GUI.drawImage(PixelTanks.images.blocks[this.zone][type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type.includes('fire') ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type.includes('fire') ? 50 : PixelTanks.images.blocks[this.zone][type].width, PixelTanks.images.blocks[this.zone][type].height);
   }
 
@@ -260,7 +259,6 @@ class Client {
   drawExplosion(e) {
     if (!e) return console.log(this.hostupdate.d);
     let frame = Math.floor((Date.now()-e.time)/18);
-    if (e.w === 200) GUI.drawImage(PixelTanks.images.animations['smoke'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*200, 0, 200, 200);
     if (e.w === 300) GUI.drawImage(PixelTanks.images.animations['healexplosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*300, 0, 300, 300); // temp remove?
     if (e.w !== 200 && e.w !== 300) GUI.drawImage(PixelTanks.images.animations['explosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*50, 0, 50, 50);
   }
@@ -706,7 +704,7 @@ class Client {
     } else if (id === 'usb') {
       this.fire('usb');
     } else if (id === 'flashbang') {
-      this.tank.use.push(`flashbang${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
+      this.tank.use.push('fortify');
     } else if (id === 'bomb') {
       this.tank.use.push(`crate${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
       //this.tank.use.push('bomb');
