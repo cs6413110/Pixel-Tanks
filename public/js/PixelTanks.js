@@ -61,9 +61,16 @@ class PixelTanks {
     GUI.canvas.width = 1600;
     GUI.drawText('Loading Font', 800, 500, 50, '#fffff', 0.5);
     window.oncontextmenu = () => false;
-    window.addEventListener('resize', () => { // TEMP move to GUI as static function
+    window.addEventListener('resize', e => { // TEMP move to GUI as static function
       for (const menu in Menus.menus) Menus.menus[menu].adapt();
       if (PixelTanks.user.player) PixelTanks.user.player.resize();
+    });
+    window.addEventListener('blur', e => {
+      PixelTanks.focused = false;
+    });
+    window.addEventListener('focus', e => {
+      if (!PixelTanks.focused && PixelTanks.user.player) PixelTanks.user.player.dx.t = PixelTanks.user.player.dy.t = Date.now();
+      PixelTanks.focused = true;
     });
     const ui = e => {
       if (Client.input.style.visibility === 'visible') return true;
