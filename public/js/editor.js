@@ -83,7 +83,7 @@ const ex = () => {
       }
     }
   }
-  return [type, zone, output];
+  return JSON.stringify([type, zone, output]).replace(/"/g, "'");
 }
 
 const im = s => {
