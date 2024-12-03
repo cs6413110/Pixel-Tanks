@@ -9,7 +9,7 @@ document.documentElement.appendChild(output);
 document.documentElement.appendChild(canvas);
 document.documentElement.appendChild(select);
 const zone = prompt('Enter zone: battlegrounds, cave, ice, deep');
-const type = Number(prompt('Enter level type(1-3 ONLY): 1 - Genocide, 2 - Extraction, 3 - Survival'));
+const type = +prompt('Enter level type(1-3 ONLY): 1 - Genocide, 2 - Extraction, 3 - Survival');
 const key = [
   ['X', 'Eraser', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAABCAQAAAB0m0auAAAADElEQVR42mNkIBIAAABSAAI2VLqiAAAAAElFTkSuQmCC'],
   ['Q', 'Weak Block', 'blocks/'+zone+'/weak'],
@@ -110,7 +110,7 @@ let importer = document.createElement('BUTTON');
 importer.innerHTML = 'Import';
 document.documentElement.appendChild(importer);
 importer.addEventListener('click', () => {
-  eval('sourced = '+prompt('Input level code:');
+  eval('sourced = '+prompt('Input level code:'));
   im(sourced[2]);
   zone = sourced[1];
   type = sourced[0];
