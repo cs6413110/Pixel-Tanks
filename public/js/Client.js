@@ -90,7 +90,7 @@ class Client {
     if (data.tickspeed) this.hostupdate.tickspeed = data.tickspeed;
     if (data.logs) {
       for (const log of data.logs) {
-        const msg = document.createElement('DIV'), a = Client.messages.scrollTop === Client.messages.scrollHeight-Client.messages.clientHeight;
+        const msg = document.createElement('DIV'), a = Math.abs(Client.messages.scrollTop-(Client.messages.scrollHeight-Client.messages.clientHeight)) < 10;
         msg.id = 'message';
         msg.innerText = log.m;
         msg.style.color = log.c;
