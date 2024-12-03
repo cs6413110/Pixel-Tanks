@@ -195,6 +195,8 @@ class Client {
       } else this.timers.class.time -= this.timers.class.cooldown*.25*scavenger;
       this.timers.toolkit.time -= this.timers.toolkit.cooldown*.25*scavenger;
       this.timers.powermissle.time -= this.timers.powermissle.cooldown*.25*scavenger;
+      this.timers.boost.time -= this.timers.boost.cooldown*.25*scavenger;
+      this.timers.grapple.time -= this.timers.grapple.cooldown*.25*scavenger;
     }
   }
   
