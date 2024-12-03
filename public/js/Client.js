@@ -499,7 +499,7 @@ class Client {
         GUI.draw.fillStyle = '#000000';
         GUI.draw.globalAlpha = .5;
         GUI.draw.fillRect(c[i], 908, 92, 92);
-        GUI.drawText(Math.ceil(this.timers.items[i].time/100)/10, c[i], 908, 30, '#FFFFFF', 1);
+        GUI.drawText(Math.ceil((this.timers.items[i].time-Date.now())/100)/10, c[i], 908, 30, '#FFFFFF', 1);
       } else {
         GUI.draw.fillStyle = '#FFFFFF';
         const tank = t.find(tank => tank.username === PixelTanks.user.username), blockedOn = item === 'bomb' && !this.collision(tank.x, tank.y);
