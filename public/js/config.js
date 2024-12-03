@@ -5,7 +5,7 @@ window.sourceMap = {
     {
       ref: 'bullets',
       path: 'bullets',
-      load: ['normal', 'shotgun', 'powermissle', 'megamissle', 'grapple', 'dynamite', 'fire', 'usb'],//DONT REMOVE. STOP BEING MEAN TO DMG :((. idc if its bad, let him have his fun, orelse all customs go away. also u broke game by keeping the comma stoopid idot
+      load: ['normal', 'shotgun', 'powermissle', 'megamissle', 'grapple', 'dynamite', 'fire', 'usb'],
     },
     {
       ref: 'tanks',
@@ -20,7 +20,7 @@ window.sourceMap = {
     {
       ref: 'animations',
       path: 'animations',
-      load: ['lightning', 'tape', 'glu', 'fire', 'detonate', 'explosion', 'healexplosion', 'smoke', 'shield_make', 'shield_break'],
+      load: ['lightning', 'tape', 'glu', 'fire', 'detonate', 'explosion', 'healexplosion', 'shield_make', 'shield_break'],
       meta: {
         tape_: { frames: 17, speed: 50 },
         toolkit_: { frames: 16, speed: 50 },
