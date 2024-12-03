@@ -79,11 +79,17 @@ getTickspeed(Date.now());
 class Multiplayer extends Engine {
   constructor(l) {
     super(l);
-    this.zone = ['battlegrounds', 'cave', 'ice', 'deep', 'gem'][Math.floor(Math.random()*5)];
     Object.defineProperty(this, 'global', {get: () => this.rawglobal, set: v => {
       this.rawglobal = v;
       for (const t of this.pt) {
         t.msg.global = v;
+        this.send(t);
+      }
+    }, configurable: true});
+    Object.defineProperty(this, 'zone', {get: () => this.rawzone, set: v => {
+      this.rawzone = v;
+      for (const t of this.pt) {
+        t.msg.zone = v;
         this.send(t);
       }
     }, configurable: true});
@@ -138,7 +144,7 @@ class Multiplayer extends Engine {
     t.msg.tickspeed = tickspeed;
     t.logs = this.logs.length;
     t.privateLogs.length = 0;
-    if (t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global) {
+    if (t.msg.logs.length || t.msg.u.length || t.msg.d.length || t.msg.global || t.msg.zone) {
       t.busy = true;
       t.delayed = false;
       t.socket._send(pack(t.msg), {}, () => {
@@ -148,7 +154,7 @@ class Multiplayer extends Engine {
       t.lastSend = Date.now();
       for (const update of t.msg.u) if (update && update.release) update.release();
       t.msg.u.length = t.msg.d.length = 0;
-      t.msg.global = t.msg.logs = undefined;
+      t.msg.global = t.msg.logs = t.msg.zone = undefined;
     }
   }
   loadCells(e, ex, ey, w, h) { // optimize
