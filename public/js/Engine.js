@@ -220,7 +220,9 @@ class Engine {
   levelReader(level) {
     for (let i = this.b.length-1; i >= 0; i--) this.b[i].destroy();
     const key = {Q: 'weak', Z: 'strong', G: 'gold', I: 'barrier', R: 'void', V: 'spike'};
-    let chars = level.split(''), a = [];
+    this.zone = level[1];
+    this.gametype = level[0];
+    let chars = level[2].split(''), a = [];
     main: for (let i = 0; i < chars.length; i++) {
       a.push(chars[i]);
       for (let q = 1, n = ''; true; q++) if (isNaN(chars[i+q])) {
