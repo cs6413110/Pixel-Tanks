@@ -31,7 +31,7 @@ class Block {
   destroy(username) {
     if (this.type === 'crate') {
       const t = this.host.pt.find(t => t.username === username);
-      if (t) t.socket.send({event: 'sc', timer: '*', percent: 1}); // give cooldowns
+      if (t) if (t.socket) t.socket.send({event: 'sc', timer: '*', percent: 1}); // give cooldowns
     }
     this.host.destroyEntity(this);
     for (const t of this.t) clearTimeout(t);
