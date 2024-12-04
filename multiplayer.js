@@ -671,7 +671,16 @@ const Commands = {
     let n = [0, 0, 0, 0, 0]; // blocks, bullets, explosions, ai, players
     t.privateLogs.push({m: 'Performance Stats: ', c: '#00ff00'});
     t.privateLogs.push({m: 'setTimeout delay: '+tickspeed, c: '#00ff00'});
-    for (const s of Object.values(servers)) n = [n[0]+s.b.length, n[1]+s.s.length, n[2]+s.d.length, n[3]+s.ai.length, n[4]+s.pt.length];
+    let cellTotal = 0, cells = 0, max = 0, min = Infinity;
+    for (const s of Object.values(servers)) {
+      for (const row of s.cells) for (const cell of row) {
+        if (cell.size > max) max = cell.size;
+        if (cell.size < min) min = cell.size;
+        cellTotal += cell.size;
+        cells++;
+      }
+      n = [n[0]+s.b.length, n[1]+s.s.length, n[2]+s.d.length, n[3]+s.ai.length, n[4]+s.pt.length];
+    }
     t.privateLogs.push({m: '[Blocks, Bullets, Explosions, AI, Players] => '+JSON.stringify(n), c: '#00ff00'});
     t.privateLogs.push({m: 'Object Pools:', c: '#00ff00'});
     for (const template of Object.keys(A.templates)) {
@@ -679,6 +688,12 @@ const Commands = {
       for (const recycled of A[template]) for (const property of Object.keys(recycled)) properties.add(property);
       t.privateLogs.push({m: template+' -> '+A['_'+template]+' : '+A[template].length+' : '+Array.from(properties).join(' '), c: '#00ff00'});
     }
+    t.privateLogs.push({m: 'Cells:', c: '#00ff00'});
+    t.privateLogs.push({m: 'Average Density: '+(cellTotal/cells), c: '#00ff00'});
+    t.privateLogs.push({m: 'Max: '+max, c: '#00ff00'});
+    t.privateLogs.push({m: 'Min: '+min, c: '#00ff00'});
+    t.privateLogs.push({m: '#: '+cells, c: '#00ff00'});
+    t.privateLogs.push({m: 'Registry: '+cellTotal, c: '#00ff00'});
     for (const [key, value] of Object.entries(process.memoryUsage())) t.privateLogs.push({m: `Memory usage by ${key}, ${value/1000000}MB `, c: '#00ff00'});
   }],
   run: [Object, 1, -1, (data, socket, server, t, logs) => {
