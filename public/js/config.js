@@ -62,6 +62,7 @@ window.sourceMap = {
     legendary: ['error', 'tombstone', 'pokeball'],
     mythic: ['clicked', 'cat'],
     meta: {
+      shatter_: {frames: 18, speed: 100, kill: 12, type: 2},
       pokeball_: {frames: 85, speed: 50, kill: 18, type: 2},
       explode_: {frames: 17, speed: 75, kill: 8, type: 1},
       clicked_: {frames: 29, speed: 75, kill: 28, type: 2},
