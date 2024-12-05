@@ -22,7 +22,7 @@ class Engine {
   }
 
   add(data) {
-    setTimeout(() => A.template('Tank').init(data, this));
+    setTimeout(() => A.template('Tank').init(data, this), 100);
   }
 
   useAbility(t, a) {
