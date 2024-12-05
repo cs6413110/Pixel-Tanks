@@ -17,12 +17,12 @@ class Engine {
       for (let x = 0; x < 60; x++) this.cells[y][x] = new Set();
     }
     this.map = new PF.Grid(60, 60);
-    this.levelReader(levels[Math.floor(Math.random()*levels.length)]);
+    setTimeout(() => this.levelReader(levels[Math.floor(Math.random()*levels.length)]));
     this.i.push(setInterval(() => this.tick(), 1000/60));
   }
 
   add(data) {
-    A.template('Tank').init(data, this);
+    setTimeout(() => A.template('Tank').init(data, this));
   }
 
   useAbility(t, a) {
