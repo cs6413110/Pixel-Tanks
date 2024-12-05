@@ -57,7 +57,7 @@ window.sourceMap = {
     path: 'animations',
     common: ['explode', 'nuke', 'insta', 'evan'],
     uncommon: ['anvil', 'gameover', 'minecraft'],
-    rare: ['darksouls', 'magic' /*'Cactus'*/],
+    rare: ['darksouls', 'magic', 'shatter'],
     epic: ['battery', 'skull', 'banhammer'],
     legendary: ['error', 'tombstone', 'pokeball'],
     mythic: ['clicked', 'cat'],
