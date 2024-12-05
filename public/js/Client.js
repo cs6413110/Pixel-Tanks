@@ -363,7 +363,13 @@ class Client {
     } else if (teamname === 'BLUE') {
       GUI.drawText(username, t.x+40, t.y-25, 50, '#0000ff', 0.5);
     } else if (teamname === 'GREEN') {
-      GUI.drawText(username, t.x+40, t.y-25, 50, '#008000	', 0.5);
+      GUI.drawText(username, t.x+40, t.y-25, 50, '#008000', 0.5);
+    } else if (teamname === 'LostArmy') {
+      GUI.drawText(username, t.x+40, t.y-25, 50, '#59039c', 0.5);
+    } else if (teamname === 'ORANGE') {
+      GUI.drawText(username, t.x+40, t.y-25, 50, '#ff8800', 0.5);
+    } else if (teamname === 'PURPLE') {
+      GUI.drawText(username, t.x+40, t.y-25, 50, '#59039c', 0.5);
     } else if (teamname === 'LOBBY') {
       if (t.color === '#FF0000') {
         GUI.drawText(username, t.x+40, t.y-25, 50, '#ff0000', 0.5);
