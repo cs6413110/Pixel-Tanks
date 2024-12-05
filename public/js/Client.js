@@ -364,6 +364,11 @@ class Client {
       GUI.drawText(username, t.x+40, t.y-25, 50, '#0000ff', 0.5);
     } else if (teamname === 'LOBBY') {
       if (t.color === '#FF0000') {
+        } else if (teamname === 'GREEN') {
+      GUI.drawText(username, t.x+40, t.y-25, 50, '##00ff00', 0.5);
+    } else if (teamname === 'LOBBY') {
+      if (t.color === '#FF0000') {
+        GUI.drawText(username, t.x+40, t.y-25, 50, '#ff0000', 0.5);
         GUI.drawText(username, t.x+40, t.y-25, 50, '#ff0000', 0.5);
       } else if (t.color === '#0000FF') GUI.drawText(username, t.x+40, t.y-25, 50, '#0000ff', 0.5);
     } else GUI.drawText(username, t.x+40, t.y-25, 50, '#ffffff', 0.5);
