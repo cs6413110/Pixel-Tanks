@@ -818,7 +818,7 @@ class Client {
       if (PixelTanks.userData.class === 'warrior') {
         this.tank.use.push('bash');
         clearTimeout(this.booster);
-        this.speed = 20;
+        this.speed = 16;
         this.tank.immune = true;
         this.booster = setTimeout(() => {
           this.speed = 4;
