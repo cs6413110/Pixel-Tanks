@@ -89,6 +89,7 @@ getTickspeed(Date.now());
 
 class Multiplayer extends Engine {
   constructor(l) {
+    super(l);
     Object.defineProperty(this, 'global', {get: () => this.rawglobal, set: v => {
       this.rawglobal = v;
       for (const t of this.pt) {
@@ -103,7 +104,6 @@ class Multiplayer extends Engine {
         this.send(t);
       }
     }, configurable: true});
-    super(l);
   }
   override(t, ox, oy) {
     this.updateEntity(t, Tank.u);
