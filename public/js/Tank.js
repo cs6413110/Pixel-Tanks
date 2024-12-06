@@ -120,6 +120,9 @@ class Tank {
     clearTimeout(this.damageTimeout);
     this.damageTimeout = setTimeout(() => {this.damage = false}, 1000);
     this.damage = {d: (this.damage ? this.damage.d : 0)+a, x, y};
+    clearTimeout(this.regenTimeout);
+    clearInterval(this.regenInterval);
+    this.regenTimeout = setTimeout(() => (this.regenInterval = setInterval(() => this.regen(), 15)), 10000);
     let core = Engine.hasPerk(this.perk, 9), shield = Engine.hasPerk(this.perk, 1);
     if (this.hp <= 0 && this.host.ondeath) if (!core || Math.random() > 0.50) return this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u)); else this.core = Date.now();
     if ((this.hp <= this.maxHp*.1 && shield === 1) || (this.hp <= this.maxHp*.2 && shield === 2)) {
@@ -129,6 +132,10 @@ class Tank {
         this.shields = this.hp;
       }
     }
+  }
+  regen() {
+    this.hp = Math.min(this.hp+.4*(this.rank/50+.6), this.maxHp);
+    if (this.hp === this.maxHp) clearInterval(this.regenInterval);
   }
   grappleCalc() { // direct setting of pos may cause chunkload issues
     if (this.stunned) return this.grapple.bullet.destroy() && (this.grapple = false);
