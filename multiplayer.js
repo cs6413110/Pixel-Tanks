@@ -314,12 +314,14 @@ class DUELS extends Multiplayer {
   }
 
   ontick() {
+    if (!this.pt.length) return;
     if ([0, 1].includes(this.mode)) {
       let ox = this.pt[0].x, oy = this.pt[0].y;
       this.pt[0].x = this.spawns[0].x;
       this.pt[0].y = this.spawns[0].y;
       this.override(this.pt[0], ox, oy);
     }
+    if (this.pt.length < 2) return;
     if (this.mode === 1) {
       let ox = this.pt[1].x, oy = this.pt[1].y;
       this.pt[1].x = this.spawns[1].x;
