@@ -305,7 +305,7 @@ class Engine {
     try {
       return s.replace('@leader', '').split('@requestor#')[0];
     } catch(e) {
-      if (!this.logs) return;
+      if (!this.logs) return 'ERRORED:ERRORED';
       this.logs.push({m: '[Debug][Error] Team Mismatch', c: '#ff0000'});
       this.logs.push({m: 's='+s, c: '#ff0000'});
       this.logs.push({m: 'trace='+e.stack, c: '#ff0000'});
