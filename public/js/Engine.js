@@ -242,6 +242,8 @@ class Engine {
           this.spawns[0] = {x, y};
         } else if (a[i] === 'B') {
           this.spawns[1] = {x, y};
+        } else if (a[i] === 'G') {
+          this.spawns.push({x, y});
         } else if (['T', 'W', 'P', 'D'].includes(a[i])) {
           A.template('AI').init(x+10, y+10, ['T', 'W', 'P', 'D'].indexOf(a[i]), 20, 'squad', this);
         } else if (key[a[i]]) this.b.push(A.template('Block').init(x, y, key[a[i]], ':', this));
