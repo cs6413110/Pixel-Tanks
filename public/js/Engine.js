@@ -212,6 +212,10 @@ class Engine {
   ondeath(t, m={}) {
     this.logs.push({m: this.deathMsg(t.username, m.username), c: (m.username === undefined ? '#FF8C00': (Engine.getTeam(m.team) === 'RED' ? '#FF0000' : (Engine.getTeam(m.team) === 'BLUE' ? '#0000FF' : '#FF8C00')))});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
+    if (!m.regenInterval) {
+      clearTimeout(this.regenTimeout);
+      m.regenTimeout = setTimeout(() => (m.regenInterval = setInterval(() => m.regen(), 15)), 1000);
+    }
     if (t.socket) t.ded = true;
     if (m.socket) m.socket.send({event: 'kill'});
     if (m.deathEffect) t.dedEffect = {x: t.x, y: t.y, r: t.r, id: m.deathEffect, start: Date.now(), time: 0};
