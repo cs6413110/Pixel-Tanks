@@ -213,7 +213,7 @@ class Engine {
     this.logs.push({m: this.deathMsg(t.username, m.username), c: (m.username === undefined ? '#FF8C00': (Engine.getTeam(m.team) === 'RED' ? '#FF0000' : (Engine.getTeam(m.team) === 'BLUE' ? '#0000FF' : '#FF8C00')))});
     for (let i = this.ai.length-1; i >= 0; i--) if (Engine.getUsername(this.ai[i].team) === t.username) this.ai[i].destroy();
     if (!m.regenInterval) {
-      clearTimeout(this.regenTimeout);
+      clearTimeout(m.regenTimeout);
       m.regenTimeout = setTimeout(() => (m.regenInterval = setInterval(() => m.regen(), 15)), 1000);
     }
     if (t.socket) t.ded = true;
