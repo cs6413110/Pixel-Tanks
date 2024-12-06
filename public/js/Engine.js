@@ -305,12 +305,10 @@ class Engine {
     try {
       return s.replace('@leader', '').split('@requestor#')[0];
     } catch(e) {
-      if (!this.logs) return 'ERRORED:ERRORED';
-      this.logs.push({m: '[Debug][Error] Team Mismatch', c: '#ff0000'});
-      this.logs.push({m: 's='+s, c: '#ff0000'});
-      this.logs.push({m: 'trace='+e.stack, c: '#ff0000'});
-      this.logs.push({m: 'readable='+e, c: '#ff0000'});
-      console.log('ERR: '+e+' parsed='+s+' Trace='+e.stack);
+      console.log('[Debug][Error] Team Mismatch');
+      console.log('s='+s);
+      console.log('trace='+e.stack);
+      console.log('readable='+e);
       return 'ERRORED:ERRORED';
     }
   }
