@@ -24,9 +24,20 @@ class Singleplayer extends Engine {
     if (level > levels.length || level < 1) level = 1;
     super([levels[level-1]]);
     this.debug = confirm('Enable Debug for this level?');
+    this.spawns = []; // end goals, reused variable from duels
   }
 
-  ontick() {
+  ontick() { // maybe code an onmove?
+    // add gamemode type if statmenets
+    for (const goal of this.spawns) if (Engine.collision(t.x, t.y, 80, 80, goal.x*100, goal.y*100, 100, 100)) this.victory();
+  }
+
+  victory() {
+    setTimeout(() => {
+      PixelTanks.user.player.implode();
+      Menus.menus.victory.stats = {kills: 'n/a', coins: 'n/a'};
+      Menus.trigger('victory');
+    }, 3000);
   }
 
   ondeath(t, m) {
@@ -34,13 +45,7 @@ class Singleplayer extends Engine {
     if (t.username !== PixelTanks.userData.username) {
       let e = 0;
       for (const ai of this.ai) if (Engine.getTeam(ai.team) === 'squad') e++;
-      if (e === 1) {
-        setTimeout(() => {
-          PixelTanks.user.player.implode();
-          Menus.menus.victory.stats = {kills: 'n/a', coins: 'n/a'};
-          Menus.trigger('victory');
-        }, 3000);
-      }
+      if (e === 1) this.victory();
       return PixelTanks.user.player.killRewards();
     }
     t.ded = true;
