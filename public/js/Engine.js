@@ -246,7 +246,7 @@ class Engine {
           this.spawns[0] = {x, y};
         } else if (a[i] === 'B') {
           this.spawns[1] = {x, y};
-        } else if (a[i] === 'G') {
+        } else if (a[i] === 'F') {
           this.spawns.push({x, y});
         } else if (['T', 'W', 'P', 'D'].includes(a[i])) {
           A.template('AI').init(x+10, y+10, ['T', 'W', 'P', 'D'].indexOf(a[i]), 20, 'squad', this);
