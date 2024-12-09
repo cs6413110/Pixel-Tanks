@@ -23,6 +23,7 @@ class Singleplayer extends Engine {
     ];
     if (level > levels.length || level < 1) level = 1;
     super([levels[level-1]]);
+    this.difficulty = Math.floor(level/20)*5;
     this.debug = confirm('Enable Debug for this level?');
     this.spawns = []; // end goals, reused variable from duels
   }
