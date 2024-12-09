@@ -276,6 +276,11 @@ class Multiplayer extends Engine {
     } else if (isLeader) for (const t of this.pt) if (Engine.getTeam(t.team) === team) return t.team += '@leader';
   }
 
+  ondeath(t, m) {
+    if (this.logs) this.logs.push({m: this.deathMsg(t.username, m.username), c: (m.username === undefined ? '#FF8C00': (Engine.getTeam(m.team) === 'RED' ? '#FF0000' : (Engine.getTeam(m.team) === 'BLUE' ? '#0000FF' : '#FF8C00')))});
+    super.ondeath(t, m);
+  }
+
   deathMsg(victim, killer) {
     log(`${killer} killed ${victim}`); // temp log file death
     return deathMessages[Math.floor(Math.random()*deathMessages.length)].replace('{victim}', victim).replace('{killer}', killer);
