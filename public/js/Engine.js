@@ -17,7 +17,8 @@ class Engine {
       for (let x = 0; x < 60; x++) this.cells[y][x] = new Set();
     }
     this.map = new PF.Grid(60, 60);
-    this.difficulty = difficulty || 20;
+    this.difficulty = difficulty;
+    if (isNaN(this.difficulty)) this.difficulty = 20;
     this.levelReader(levels[Math.floor(Math.random()*levels.length)]);
     this.i.push(setInterval(() => this.tick(), 1000/60));
   }
