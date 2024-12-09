@@ -429,7 +429,6 @@ class Client {
       this.team = player.team;
       if (!this.ded && player.ded && this.gamemode === 'ffa') this.dedTime = Date.now();
       this.ded = player.ded;
-      if (!this.socket) alert('ded='+player.ded);
     } else {
       GUI.draw.fillStyle = '#ffffff';
       GUI.draw.fillRect(0, 0, 1600, 1600);
