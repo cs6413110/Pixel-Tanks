@@ -55,6 +55,7 @@ class AI {
     this.host.ai.push(this);
   }
 
+  regen() {}
   giveAbilities() {
     const available = ['airstrike', 'super_glu', 'duck_tape', 'shield',/* 'flashbang',*/ 'bomb', 'dynamite', 'usb', 'weak', 'strong', 'spike', 'reflector'];
     const classes = ['tactical', 'stealth', 'warrior', 'builder', 'fire', 'medic'];
