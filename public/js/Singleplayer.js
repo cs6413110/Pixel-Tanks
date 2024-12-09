@@ -22,8 +22,7 @@ class Singleplayer extends Engine {
       [2,'battlegrounds','R1041X19R41XWX15WXR41X3IX11IX3R41X2IR6ZR6IX2R41X3RX2IX8RX3R41X3RXWX6IWXRX3R41X3RX2R7X2RX3R41I2XRX2RX3GWRX2RI2XR41X3RXIRXRGRXRXIRX3R40FXWXRX2ZXRSRXZX2RXWXFR40X3RIXRXRGRXRIXRX3R41XI2RX2RWGX3RX2RXI2R41X3RX2R7X2RX3R41X3RXWIX6WXRX3R41X3RX8IX2RX3R41X2IR6ZR6IX2R41X3IX11IX3R41XWX15WXR41X19R1460'],
     ];
     if (level > levels.length || level < 1) level = 1;
-    super([levels[level-1]]);
-    this.difficulty = Math.floor(level/20)*5;
+    super([levels[level-1]], Math.floor(level/20)*5);
     this.debug = confirm('Enable Debug for this level?');
     this.spawns = []; // end goals, reused variable from duels
   }
