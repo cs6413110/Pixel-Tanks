@@ -41,7 +41,7 @@ class Singleplayer extends Engine {
   }
 
   ondeath(t, m) {
-    if (t.username !== PixelTanks.userData.username) {
+    if (t.username !== PixelTanks.user.username) {
       let e = 0;
       for (const ai of this.ai) if (Engine.getTeam(ai.team) === 'squad') e++;
       if (e === 1) this.victory();
