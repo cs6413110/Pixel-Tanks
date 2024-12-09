@@ -1,5 +1,5 @@
 class Engine {
-  constructor(levels) {
+  constructor(levels, difficulty) {
     if (!A.templates.Block) {
       A.createTemplate('Tank', Tank);
       A.createTemplate('Block', Block);
@@ -17,6 +17,7 @@ class Engine {
       for (let x = 0; x < 60; x++) this.cells[y][x] = new Set();
     }
     this.map = new PF.Grid(60, 60);
+    this.difficulty = difficulty || 20;
     this.levelReader(levels[Math.floor(Math.random()*levels.length)]);
     this.i.push(setInterval(() => this.tick(), 1000/60));
   }
@@ -248,7 +249,7 @@ class Engine {
         } else if (a[i] === 'F') {
           this.spawns.push({x, y});
         } else if (['T', 'W', 'P', 'D'].includes(a[i])) {
-          A.template('AI').init(x+10, y+10, ['T', 'W', 'P', 'D'].indexOf(a[i]), this.difficulty || 20, 'squad', this);
+          A.template('AI').init(x+10, y+10, ['T', 'W', 'P', 'D'].indexOf(a[i]), this.difficulty, 'squad', this);
         } else if (key[a[i]]) this.b.push(A.template('Block').init(x, y, key[a[i]], ':', this));
         l++;
       }
