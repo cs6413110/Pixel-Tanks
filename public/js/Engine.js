@@ -248,7 +248,7 @@ class Engine {
         } else if (a[i] === 'F') {
           this.spawns.push({x, y});
         } else if (['T', 'W', 'P', 'D'].includes(a[i])) {
-          A.template('AI').init(x+10, y+10, ['T', 'W', 'P', 'D'].indexOf(a[i]), 20, 'squad', this);
+          A.template('AI').init(x+10, y+10, ['T', 'W', 'P', 'D'].indexOf(a[i]), this.difficulty || 20, 'squad', this);
         } else if (key[a[i]]) this.b.push(A.template('Block').init(x, y, key[a[i]], ':', this));
         l++;
       }
