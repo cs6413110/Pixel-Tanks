@@ -29,7 +29,7 @@ class Singleplayer extends Engine {
 
   ontick() { // maybe code an onmove?
     // add gamemode type if statmenets
-    for (const goal of this.spawns) if (Engine.collision(t.x, t.y, 80, 80, goal.x*100, goal.y*100, 100, 100)) this.victory();
+    for (const goal of this.spawns) if (Engine.collision(this.pt[0].x, this.pt[0].y, 80, 80, goal.x*100, goal.y*100, 100, 100)) this.victory();
   }
 
   victory() {
