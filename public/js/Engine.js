@@ -18,6 +18,7 @@ class Engine {
     }
     this.map = new PF.Grid(60, 60);
     this.difficulty = difficulty || 20;
+    if (alert) alert(this.difficulty);
     this.levelReader(levels[Math.floor(Math.random()*levels.length)]);
     this.i.push(setInterval(() => this.tick(), 1000/60));
   }
