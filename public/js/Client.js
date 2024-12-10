@@ -551,6 +551,12 @@ class Client {
     }
     GUI.drawText(this.dedTime < Date.now()-10000 ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
     GUI.drawText('TPS: '+(this.hostupdate?.tickspeed || ''), 200, 30, 30, '#ffffff', 0);
+    if (!this.multiplayer) {
+      const sample = {...this.world.pt[0]};
+      sample.host = undefined; // prevent loops
+      GUI.drawText('str='+JSON.stringify(sample), 800, 100, 60, '#ffffff', .5);
+    }
+    
     
     if (this.debugMode) {// 0 = disabled, 1 = ping, 2 = fps, 3 = ops, 4 = ups
       const infoset = [null, this.pings, this.fps, this.ops, this.ups][this.debugMode];
