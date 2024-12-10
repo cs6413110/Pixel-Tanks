@@ -4,7 +4,7 @@ const settings = {
   upsl: 120,
   port: 8080,
   chat: true,
-  joining: true,
+  whitelist: true,
 }
 
 const fs = require('fs'), fetch = require('node-fetch');
@@ -24,7 +24,7 @@ console.log('Compiled Engine');
 const {Engine, Tank, Block, Shot, AI, Damage, A} = require('./engine.js');
 A.createTemplate('arr', Array, a => (a.length = 0));
 console.log('Loading Server Properties');
-const Storage = {key: ['owners', 'admins', 'vips', 'mutes', 'bans', 'filter']};
+const Storage = {key: ['owners', 'admins', 'vips', 'mutes', 'bans', 'filter', 'whitelist']};
 for (const p of Storage.key) Storage[p] = fs.existsSync(p+'.json') ? JSON.parse(fs.readFileSync(p+'.json')) : [];
 console.log('Loaded Server Properties');
 process.stdin.resume();
@@ -832,11 +832,14 @@ const Commands = {
       for (const t of server.pt) server.send(t);
     }
   }],
+  whitelist: [Object, 2, 2, data => {
+    Storage.whitelist.push(data[1]);
+  }],
+  unwhitelist: [Object, 2, 2, data => {
+    Storage.whitelist.push(data[1]);
+  }],
   lockchat: [Object, 2, -1, () => {
     settings.chat = !settings.chat;
-  }],
-  lockdown: [Object, 2, -1, () => {
-    settings.joining = !settings.joining;
   }],
   swrite: [Object, 1, 3, (data, socket) => {
     eval(`try {
@@ -892,7 +895,10 @@ wss.on('connection', socket => {
     } else if (data.type === 'join') {
       if (Storage.bans.includes(data.username)) return socket.kick('You are banned!');
       if (clean(data.username) !== data.username) return socket.kick(`Your username didn't pass the profanity check.`);
-      if (!hasAccess(data.username, 3) && !settings.joining) return socket.kick('Joining is disabled!');
+      if (!Storage.whitelist.includes(data.username) && !hasAccess(data.username, 2) && !settings.whitelist) {
+        for (const s of servers) for (const t of s.pt) if (hasAccess(t.username, 2)) t.privateLogs.push({m: `${data.username} tried to join, but isn't whitelisted! (/whitelist)`, c: '#f70d1a'});
+        return socket.kick('You are not yet in the whitelist! A notification was sent to an admin to add you. Please be paitent.');
+      }
       /* else if (!auth(socket.username, data.token)) {
         socket.send({status: 'error', message: 'Token is invalid. Login with the correct authserver.'});
         return setTimeout(() => socket.close());
