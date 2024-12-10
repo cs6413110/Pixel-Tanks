@@ -836,7 +836,7 @@ const Commands = {
     Storage.whitelist.push(data[1]);
   }],
   unwhitelist: [Object, 2, 2, data => {
-    Storage.whitelist.push(data[1]);
+    Storage.whitelist = Storage.whitelist.filter(s => s !== data[1]);
   }],
   lockchat: [Object, 2, -1, () => {
     settings.chat = !settings.chat;
