@@ -554,8 +554,7 @@ class Client {
     if (!this.multiplayer) {
       const sample = {...this.world.pt[0]};
       sample.host = undefined; // prevent loops
-      document.getElementById('viewport').style.color = '#ffffff';
-      document.getElementById('viewport').innerHTML = JSON.stringify(sample);
+      if (JSON.stringify(sample).contains('"ded":true')) alert('s=ded p='+player.ded+' t.h='+t[0].ded+' h='+this.word.pt[0].ded);
     }
     
     
