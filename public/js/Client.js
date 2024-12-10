@@ -554,7 +554,7 @@ class Client {
     if (!this.multiplayer) {
       const sample = {...this.world.pt[0]};
       sample.host = undefined; // prevent loops
-      GUI.drawText('str='+JSON.stringify(sample), 800, 100, 20, '#ffffff', .5);
+      GUI.drawText('str='+JSON.stringify(sample.replace(/,/g, ',\n'), 800, 100, 20, '#ffffff', .5);
     }
     
     
