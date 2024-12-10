@@ -428,7 +428,7 @@ class Client {
       player.baseFrame = this.tank.baseFrame;
       this.team = player.team;
       if (!this.ded && player.ded && this.gamemode === 'ffa') this.dedTime = Date.now();
-      this.ded = player.ded;
+      this.ded = this.multiplayer ? player.ded : player.raw.ded;
     } else {
       GUI.draw.fillStyle = '#ffffff';
       GUI.draw.fillRect(0, 0, 1600, 1600);
@@ -551,12 +551,6 @@ class Client {
     }
     GUI.drawText(this.dedTime < Date.now()-10000 ? 'Hit F to Respawn' : this.hostupdate?.global || '', 800, 30, 60, '#ffffff', .5);
     GUI.drawText('TPS: '+(this.hostupdate?.tickspeed || ''), 200, 30, 30, '#ffffff', 0);
-    if (!this.multiplayer) {
-      const sample = {...this.world.pt[0]};
-      sample.host = undefined; // prevent loops
-      document.getElementById('viewport').innerHTML = 's='+sample.ded+' p='+player.ded+' t.h='+t[0].ded+' h='+this.world.pt[0].ded+' r='+player.raw.ded;
-      document.getElementById('viewport').style.color = '#ffffff';
-    }
     
     
     if (this.debugMode) {// 0 = disabled, 1 = ping, 2 = fps, 3 = ops, 4 = ups
