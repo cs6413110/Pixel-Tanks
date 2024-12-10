@@ -879,7 +879,7 @@ class Client {
         d: this.world.d,
         logs: this.world.logs.reverse(),
       }
-      if (this.world.pt[0].ded) alert(JSON.stringify(this.hostupdate.pt));
+      if (this.world.pt[0].ded) alert('FIX='+JSON.stringify(this.hostupdate.pt));
     }
     if (x === this.lastUpdate.x && y === this.lastUpdate.y && r === this.lastUpdate.r && use.length === 0 && fire.length === 0 && animation === this.lastUpdate.animation) return;
     this._ops++;
