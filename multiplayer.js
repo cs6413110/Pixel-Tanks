@@ -833,7 +833,7 @@ const Commands = {
     }
   }],
   whitelist: [Object, 2, 2, data => {
-    Storage.whitelist.push(data[1]);
+    if (!Storage.whitelist.includes(data[1])) Storage.whitelist.push(data[1]);
   }],
   unwhitelist: [Object, 2, 2, data => {
     Storage.whitelist = Storage.whitelist.filter(s => s !== data[1]);
