@@ -428,7 +428,7 @@ class Client {
       player.baseFrame = this.tank.baseFrame;
       this.team = player.team;
       if (!this.ded && player.ded && this.gamemode === 'ffa') this.dedTime = Date.now();
-      this.ded = this.multiplayer ? player.ded : player.raw.ded;
+      this.ded = player.ded;
     } else {
       GUI.draw.fillStyle = '#ffffff';
       GUI.draw.fillRect(0, 0, 1600, 1600);
@@ -880,6 +880,7 @@ class Client {
         d: this.world.d,
         logs: this.world.logs.reverse(),
       }
+      for (const property of Object.keys(this.hostupdate.pt[0].raw)) this.hostupdate.pt[0][property] = this.hostupdate.pt[0].raw[property];
       if (this.world.pt[0].ded) alert('FIX='+JSON.stringify(this.hostupdate.pt));
     }
     if (x === this.lastUpdate.x && y === this.lastUpdate.y && r === this.lastUpdate.r && use.length === 0 && fire.length === 0 && animation === this.lastUpdate.animation) return;
