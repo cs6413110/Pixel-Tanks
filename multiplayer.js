@@ -895,7 +895,7 @@ wss.on('connection', socket => {
     } else if (data.type === 'join') {
       if (Storage.bans.includes(data.username)) return socket.kick('You are banned!');
       if (clean(data.username) !== data.username) return socket.kick(`Your username didn't pass the profanity check.`);
-      if (!Storage.whitelist.includes(data.username) && !hasAccess(data.username, 2) && !settings.whitelist) {
+      if (!Storage.whitelist.includes(data.username) && !hasAccess(data.username, 2) && settings.whitelist) {
         for (const s of servers) for (const t of s.pt) if (hasAccess(t.username, 2)) t.privateLogs.push({m: `${data.username} tried to join, but isn't whitelisted! (/whitelist)`, c: '#f70d1a'});
         return socket.kick('You are not yet in the whitelist! A notification was sent to an admin to add you. Please be paitent.');
       }
