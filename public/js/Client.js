@@ -554,6 +554,7 @@ class Client {
     if (!this.multiplayer) {
       const sample = {...this.world.pt[0]};
       sample.host = undefined; // prevent loops
+      document.getElementById('viewport').style.color = '#ffffff';
       document.getElementById('viewport').innerHTML = JSON.stringify(sample);
     }
     
