@@ -10,7 +10,7 @@ class Engine {
       //A.createTemplate('set', Set, s => s.clear());
     }
     this.spawn = {x: 0, y: 0};
-    this.spawns = [{x: 0, y: 0}, {x: 0, y: 0}];
+    this.spawns = [];
     for (const property of ['ai', 's', 'pt', 'b', 'd', 'i', 'logs', 'cells', 'updates', 'deletions', 'ids']) this[property] = [];
     for (let y = 0; y < 60; y++) {
       this.cells[y] = [];
