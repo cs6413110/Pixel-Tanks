@@ -29,8 +29,7 @@ class Singleplayer extends Engine {
     ];
     if (level > levels.length || level < 1) level = 1;
     super([levels[level-1]], Math.floor((level-1)/20)*5);
-    this.debug = confirm('Enable Debug for this level?');
-    this.spawns = []; // end goals, reused variable from duels
+    if (levels[level-1][0] === 3) this.survivalTimeout = setTimeout(() => this.victory(), 60000);
   }
 
   ontick() { // maybe code an onmove?
