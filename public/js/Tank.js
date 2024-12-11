@@ -125,10 +125,7 @@ class Tank {
     this.regenInterval = clearInterval(this.regenInterval);
     this.regenTimeout = setTimeout(() => (this.regenInterval = setInterval(() => this.regen(), 15)), 10000);
     let core = Engine.hasPerk(this.perk, 9), shield = Engine.hasPerk(this.perk, 1);
-    if (this.hp <= 0 && this.host.ondeath) if (!core || Math.random() > 0.50) {
-      this.gamleCounter = 0;
-      return this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u));
-    } else {
+    if (this.hp <= 0 && this.host.ondeath) if (!core || Math.random() > 0.50) return this.host.ondeath(this, this.host.pt.concat(this.host.ai).find(t => t.username === u)); else {
       this.core = Date.now();
       this.gambleCounter++;
     }
