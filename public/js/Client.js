@@ -887,7 +887,7 @@ class Client {
       this.hostupdate = {
         pt: [{...this.world.pt[0]}],
         b: this.world.b.filter(b => Engine.collision(rx, ry, 2100, 1500, b.x, b.y, 100, 100)),
-        s: this.world.s.filter(s => Engine.collision(rx, ry, 2100, 1500, s.x, b.y, 10, 10)),
+        s: this.world.s.filter(s => Engine.collision(rx, ry, 2100, 1500, s.x, s.y, 10, 10)),
         ai: this.world.ai.filter(a => Engine.collision(rx, ry, 2100, 1500, a.x, a.y, 100, 100)),
         d: this.world.d.filter(d => Engine.collision(rx, ry, 2100, 1500, d.x, d.y, d.w, d.h)),
         logs: this.world.logs.reverse(),
