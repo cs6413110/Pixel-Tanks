@@ -881,6 +881,7 @@ class Client {
         d: this.world.d,
         logs: this.world.logs.reverse(),
         global: this.world.global,
+        tickspeed: PixelTanks.tickspeed,
       }
       this.zone = this.world.zone;
       for (const property of Object.keys(this.hostupdate.pt[0].raw)) this.hostupdate.pt[0][property] = this.hostupdate.pt[0].raw[property];
