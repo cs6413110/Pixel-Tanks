@@ -1,6 +1,6 @@
 class AI {
   static args = ['x', 'y', 'role', 'rank', 'team', 'host'];
-  static raw = ['role', 'rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'ammo', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect'];
+  static raw = ['role', 'rank', 'username', 'cosmetic', 'cosmetic_hat', 'cosmetic_body', 'color', 'damage', 'maxHp', 'hp', 'shields', 'team', 'ammo', 'x', 'y', 'r', 'ded', 'reflect', 'pushback', 'baseRotation', 'baseFrame', 'fire', 'damage', 'animation', 'buff', 'invis', 'class', 'flashbanged', 'dedEffect', 'gambleCounter'];
   static u = [];
   constructor() {
     this.cells = new Set();
@@ -19,6 +19,7 @@ class AI {
     this.r = this.tr = this.baseRotation = this.baseFrame = this.mode = this.pushback = this.immune = this.shields = 0;
     this.canFire = this.canPowermissle = this.canBoost = this.canBashed = true;
     this.fire = this.reloading = this.canClass = false;
+    this.gambleCounter = 0;
     this.fireTime = 0;
     for (let i = 0; i < 4; i++) if (Math.random() < rank/20) this['canItem'+i] = this.role !== 0;
     if (this.role !== 0) if (Math.random() < (rank/20)) this.canClass = true;
