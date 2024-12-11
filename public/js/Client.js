@@ -880,7 +880,9 @@ class Client {
         ai: this.world.ai,
         d: this.world.d,
         logs: this.world.logs.reverse(),
+        global: this.world.global,
       }
+      this.zone = this.world.zone;
       for (const property of Object.keys(this.hostupdate.pt[0].raw)) this.hostupdate.pt[0][property] = this.hostupdate.pt[0].raw[property];
       if (this.world.pt[0].ded) alert('FIX='+JSON.stringify(this.hostupdate.pt));
     }
