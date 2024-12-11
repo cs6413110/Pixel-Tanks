@@ -77,10 +77,10 @@ class PixelTanks {
       e.preventDefault();
       return false;
     };
-    const tickspeed, old = Date.now(), getTickspeed = () => {
+    let tickspeed, old = Date.now(), getTickspeed = () => {
       PixelTanks.tickspeed = tickspeed = Date.now()-old;
       old = Date.now();
-      setTimeout(() => getTickspeed(), 100);
+      setTimeout(() => getTickspeed());
     }
     getTickspeed();  
     window.addEventListener('selectstart', ui);
