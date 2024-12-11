@@ -35,11 +35,11 @@ class Singleplayer extends Engine {
 
   ontick() { // maybe code an onmove?
     // add gamemode type if statmenets
-    for (const goal of this.spawns) if (Engine.collision(this.pt[0].x, this.pt[0].y, 80, 80, goal.x*100, goal.y*100, 100, 100)) this.victory();
+    if (!this.victoryTimeout) for (const goal of this.spawns) if (Engine.collision(this.pt[0].x, this.pt[0].y, 80, 80, goal.x, goal.y, 100, 100)) this.victory();
   }
 
   victory() {
-    setTimeout(() => {
+    this.victoryTimeout = setTimeout(() => {
       PixelTanks.user.player.implode();
       Menus.menus.victory.stats = {kills: 'n/a', coins: 'n/a'};
       Menus.trigger('victory');
@@ -51,7 +51,7 @@ class Singleplayer extends Engine {
     if (t.username !== PixelTanks.user.username) {
       let e = 0;
       for (const ai of this.ai) if (Engine.getTeam(ai.team) === 'squad') e++;
-      if (e === 0) this.victory();
+      if (e === 0 && !this.victoryTimeout) this.victory();
       return PixelTanks.user.player.killRewards();
     }
     setTimeout(() => {
