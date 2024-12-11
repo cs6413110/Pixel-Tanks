@@ -396,6 +396,12 @@ class Client {
   }
 
   frame() {
+    if (this.nogui) {
+      GUI.draw.fillStyle = '#ffffff';
+      GUI.draw.fillRect(0, 0, 1600, 1600);
+      GUI.drawText('ST: '+(this.hostupdate?.tickspeed || '')+' CT: '+PixelTanks.tickspeed, 200, 30, 30, '#000000', 0);
+      return;
+    }
     GUI.draw.fillStyle = '#ffffff';
     GUI.clear();
     this._fps++;
@@ -789,6 +795,9 @@ class Client {
         this.tank.x = this.tank.y = undefined;
         return this.tank.use.push('respawn');
       }
+    }
+    if (k === 77) {
+      this.nogui = confirm('Disable GUI?');
     }
     if (k === PixelTanks.userData.keybinds.class) {
       if (Date.now() <= this.timers.class.cooldown+this.timers.class.time && PixelTanks.userData.class !== 'stealth') return;
