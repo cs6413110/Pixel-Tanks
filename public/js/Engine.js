@@ -155,6 +155,7 @@ class Engine {
       let ox = t.x, oy = t.y;
       t.x = this.spawn.x;
       t.y = this.spawn.y;
+      t.gambleCounter = 0;
       t.ded = false;
       t.hp = t.maxHp;
       this.override(t, ox, oy);
