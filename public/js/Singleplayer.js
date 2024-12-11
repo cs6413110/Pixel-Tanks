@@ -29,15 +29,20 @@ class Singleplayer extends Engine {
     ];
     if (level > levels.length || level < 1) level = 1;
     super([levels[level-1]], Math.floor((level-1)/20)*5);
-    if (levels[level-1][0] === 3) this.survivalTimeout = setTimeout(() => this.victory(), 60000);
+    if (levels[level-1][0] === 3) {
+      this.survivalTimeout = setTimeout(() => this.victory(), 60000);
+      this.startTime = Date.now();
+    }
   }
 
   ontick() { // maybe code an onmove?
     // add gamemode type if statmenets
+    this.global = 'Survive for '+Math.floor((Date.now()-this.startTime)/1000)+' seconds!';
     if (!this.victoryTimeout) for (const goal of this.spawns) if (Engine.collision(this.pt[0].x, this.pt[0].y, 80, 80, goal.x, goal.y, 100, 100)) this.victory();
   }
 
   victory() {
+    clearTimeout(this.survivalTimeout);
     this.victoryTimeout = setTimeout(() => {
       PixelTanks.user.player.implode();
       Menus.menus.victory.stats = {kills: 'n/a', coins: 'n/a'};
