@@ -80,9 +80,9 @@ class PixelTanks {
     const tickspeed, old = Date.now(), getTickspeed = () => {
       PixelTanks.tickspeed = tickspeed = Date.now()-old;
       old = Date.now();
-      setTimeout(() => getTickspeed(), 1);
+      setTimeout(() => getTickspeed(), 100);
     }
-    getTickspeed(Date.now());  
+    getTickspeed();  
     window.addEventListener('selectstart', ui);
     window.addEventListener('dragstart', ui);
     window.addEventListener('mousemove', Menus.mouseLog);
