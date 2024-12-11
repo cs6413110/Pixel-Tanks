@@ -883,12 +883,13 @@ class Client {
     const {x, y, r, use, fire, animation} = this.tank;
     const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank};
     if (!this.multiplayer) {
+      const rx = 100*(Math.floor((this.tank.x+40)/100)-10), ry = 100*(Math.floor((this.tank.y+40)/100)-7);
       this.hostupdate = {
         pt: [{...this.world.pt[0]}],
-        b: this.world.b,
-        s: this.world.s,
-        ai: this.world.ai,
-        d: this.world.d,
+        b: this.world.b.filter(b => Engine.collision(rx, ry, 2100, 1500, b.x, b.y, 100, 100)),
+        s: this.world.s.filter(s => Engine.collision(rx, ry, 2100, 1500, s.x, b.y, 10, 10)),
+        ai: this.world.ai.filter(a => Engine.collision(rx, ry, 2100, 1500, a.x, a.y, 100, 100)),
+        d: this.world.d.filter(d => Engine.collision(rx, ry, 2100, 1500, d.x, d.y, d.w, d.h)),
         logs: this.world.logs.reverse(),
         global: this.world.global,
         tickspeed: PixelTanks.tickspeed,
