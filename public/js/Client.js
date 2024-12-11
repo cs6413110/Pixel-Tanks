@@ -400,6 +400,7 @@ class Client {
       GUI.draw.fillStyle = '#ffffff';
       GUI.draw.fillRect(0, 0, 1600, 1600);
       GUI.drawText('ST: '+(this.hostupdate?.tickspeed || '')+' CT: '+PixelTanks.tickspeed, 200, 30, 30, '#000000', 0);
+      this.render = requestAnimationFrame(() => this.frame());
       return;
     }
     GUI.draw.fillStyle = '#ffffff';
