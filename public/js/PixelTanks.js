@@ -77,6 +77,12 @@ class PixelTanks {
       e.preventDefault();
       return false;
     };
+    const tickspeed, old = Date.now(), getTickspeed = () => {
+      PixelTanks.tickspeed = tickspeed = Date.now()-old;
+      old = Date.now()
+      setTimeout(() => getTickspeed());
+    }
+    getTickspeed(Date.now());  
     window.addEventListener('selectstart', ui);
     window.addEventListener('dragstart', ui);
     window.addEventListener('mousemove', Menus.mouseLog);
