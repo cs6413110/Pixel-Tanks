@@ -128,8 +128,8 @@ class Engine {
       airstrike.init(+h[0], +h[1], 'airstrike', undefined, this);
       this.b.push(airstrike);
     } else if (a === 'phase') {
+      if (t.grapple) t.grapple.bullet.destroy();
       t.fire = t.grapple = false;
-      t.grapple.bullet.destroy();
       t.phasing = true;
       clearTimeout(t.phaseTimeout);
       t.phaseTimeout = setTimeout(() => (t.phasing = false), 5000);
