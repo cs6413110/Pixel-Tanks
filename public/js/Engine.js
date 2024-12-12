@@ -126,7 +126,10 @@ class Engine {
       airstrike.timer = -5;
       airstrike.init(+h[0], +h[1], 'airstrike', undefined, this);
       this.b.push(airstrike);
-    } else if (a === 'fortify') {
+    } else if (a === 'phase') {
+      t.phasing = true;
+      clearTimeout(t.phaseTimeout);
+      t.phaseTimeout = setTimeout(() => (t.phasing = false), 5000);
     }
   }
 
