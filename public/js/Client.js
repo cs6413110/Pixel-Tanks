@@ -459,6 +459,7 @@ class Client {
       this.dy.o = this.tank.y;
     }
     GUI.draw.setTransform(PixelTanks.resizer, 0, 0, PixelTanks.resizer, (-player.x+760)*PixelTanks.resizer, (-player.y+460)*PixelTanks.resizer);
+    // create adaptive floor rendering
     GUI.drawImage(PixelTanks.images.blocks[this.zone].void, -5000, -5000, 10000, 10000, 1);
     GUI.drawImage(PixelTanks.images.blocks[this.zone].floor, 0, 0, 3000, 3000, 1);
     GUI.drawImage(PixelTanks.images.blocks[this.zone].floor, 0, 3000, 3000, 3000, 1);
