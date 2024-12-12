@@ -150,10 +150,12 @@ class Multiplayer extends Engine {
 
   send(t) {
     if (t.busy) return t.delayed = true;
-    if (t.lastSend) if (t.lastSend+1000/settings.upsl > Date.now()) {
-      clearTimeout(t.sendTimer);
-      t.sendTimer = setTimeout(() => this.send(t), (t.lastSend+1000/settings.upsl)-Date.now());
-    } else return t.delayed = true;
+    if (t.lastSend) {
+      if (t.lastSend+1000/settings.upsl > Date.now()) {
+        clearTimeout(t.sendTimer);
+        t.sendTimer = setTimeout(() => this.send(t), (t.lastSend+1000/settings.upsl)-Date.now());
+      } else return t.delayed = true;
+    }
     t.msg.logs = this.logs.slice(t.logs).concat(t.privateLogs);
     t.msg.tickspeed = tickspeed;
     t.logs = this.logs.length;
