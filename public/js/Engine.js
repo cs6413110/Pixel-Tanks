@@ -28,6 +28,7 @@ class Engine {
   }
 
   useAbility(t, a) {
+    if (t.phasing) return;
     if (a === 'dynamite') {
       for (let i = this.s.length-1; i >= 0; i--) {
         const s = this.s[i];
@@ -127,6 +128,8 @@ class Engine {
       airstrike.init(+h[0], +h[1], 'airstrike', undefined, this);
       this.b.push(airstrike);
     } else if (a === 'phase') {
+      t.fire = t.grapple = false;
+      t.grapple.bullet.destroy();
       t.phasing = true;
       clearTimeout(t.phaseTimeout);
       t.phaseTimeout = setTimeout(() => (t.phasing = false), 5000);
