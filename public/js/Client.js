@@ -202,6 +202,7 @@ class Client {
   }
   
   getPing() {
+    return;
     this.pingstart = Date.now();
     this.socket.send({type: 'ping'});
   }
