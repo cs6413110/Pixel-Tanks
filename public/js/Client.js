@@ -278,6 +278,7 @@ class Client {
     const p = t.username === PixelTanks.user.username;
     let a = 1;
     if (this.ded && t.invis && !p) return;
+    if (t.phasing) a = .75;
     if ((t.invis && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || t.ded) a = .5;
     if (t.invis && Engine.getTeam(this.team) !== Engine.getTeam(t.team) && !t.ded) a = Math.sqrt(Math.pow(t.x-this.tank.x, 2)+Math.pow(t.y-this.tank.y, 2)) > 200 && !this.ded ? 0 : .2;
     GUI.draw.globalAlpha = a;
@@ -348,7 +349,7 @@ class Client {
 
     let teamname = Engine.getTeam(t.team);
     
-    if (t.invis && Engine.getTeam(this.team) !== teamname) return;
+    if (t.invis && !t.ded && Engine.getTeam(this.team) !== teamname) return;
 
     let username = '['+['Turret ', 'Adv. ', 'Dis. ', 'Def. ', ''][t.role === undefined ? 4 : t.role]+t.rank+'] '+t.username;
     if (t.team.split(':')[1].includes('@leader')) {
