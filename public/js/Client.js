@@ -722,7 +722,7 @@ class Client {
     } else if (id === 'usb') {
       this.fire('usb');
     } else if (id === 'flashbang') {
-      this.tank.use.push('fortify');
+      this.tank.use.push('phase');
     } else if (id === 'bomb') {
       this.tank.use.push(`crate${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
       //this.tank.use.push('bomb');
