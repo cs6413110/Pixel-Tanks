@@ -165,7 +165,7 @@ class Engine {
       t.hp = t.maxHp;
       this.override(t, ox, oy);
     }
-    if (t.ded) return;
+    if (t.ded || t.phasing) return;
     if (t.immune && t.class === 'fire') {
       for (const cell of t.cells) {
         const [cx, cy] = cell.split('x');
