@@ -1,7 +1,7 @@
 const settings = {
   authserver: 'localhost',
   players_per_room: 20,
-  upsl: 120,
+  upsl: 60,
   port: 8080,
   chat: true,
   whitelist: true,
@@ -841,14 +841,17 @@ const Commands = {
   lockchat: [Object, 2, -1, () => {
     settings.chat = !settings.chat;
   }],
-  swrite: [Object, 1, 3, (data, socket) => {
+  upsl: [Object, 2, -1, data => {
+    settings.upsl = +data[1];
+  }],
+  swrite: [Object, 2, 3, (data, socket) => {
     eval(`try {
       servers['${socket.room}']['${data[1]}'] = ${data[2]};
     } catch(e) {
       servers['${socket.room}'].pt.find(t => t.username === '${socket.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
     }`);
   }],
-  twrite: [Object, 1, 4, (data, socket) => {
+  twrite: [Object, 2, 4, (data, socket) => {
     eval(`try {
       const server = servers['${socket.room}'], tank = server.pt.find(t => t.username === '${data[1]}');
       tank['${data[2]}'] = ${data[3]};
