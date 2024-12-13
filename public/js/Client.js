@@ -438,6 +438,7 @@ class Client {
       this.team = player.team;
       if (!this.ded && player.ded && this.gamemode === 'ffa') this.dedTime = Date.now();
       this.ded = player.ded;
+      this.phasing = player.phasing;
     } else {
       GUI.draw.fillStyle = '#ffffff';
       GUI.draw.fillRect(0, 0, 1600, 1600);
@@ -675,6 +676,8 @@ class Client {
       if ((x > b.x || x+80 > b.x) && (x < b.x+100 || x+80 < b.x+100) && (y > b.y || y+80 > b.y) && (y < b.y+100 || y+80 < b.y+100)) {
         if (this.tank.invis && this.tank.immune) {
           if (b.type === 'void') if (r) returns.push(p < 0 ? b[v]+100 : b[v]-80); else return false;
+        } else if (this.phasing) {
+          if (['void', 'barrier'].includes(b.type)) if (r) returns.push(p < 0 ? b[v]+100 : b[v]-80); else return false;
         } else if (['void', 'barrier', 'weak', 'strong', 'gold', 'crate'].includes(b.type)) if (r) returns.push(p < 0 ? b[v]+100 : b[v]-80); else return false;
       }
     }
