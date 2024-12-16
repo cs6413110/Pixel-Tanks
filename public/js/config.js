@@ -31,6 +31,14 @@ window.sourceMap = {
       },
     },
     {
+      ref: 'banners',
+      path: 'banners',
+      load: ['bigsister', 'blueprint', 'castle', 'cave', 'drg', 'fix', 'gems', 'ice', 'island', 'lazer', 'leviathan', 'peak', 'sculkwall', 'solar', 'sonc', 'turret', 'warden'],
+      meta: {
+        banners: ['bigsister', 'blueprint', 'castle', 'cave', 'drg', 'fix', 'gems', 'ice', 'island', 'lazer', 'leviathan', 'peak', 'sculkwall', 'solar', 'sonc', 'turret', 'warden'],
+      }
+    },
+    {
       ref: 'items',
       path: 'items',
       load: ['airstrike', 'duck_tape', 'super_glu', 'shield', 'flashbang', 'bomb', 'dynamite', 'weak', 'strong', 'spike', 'reflector', 'usb'],
