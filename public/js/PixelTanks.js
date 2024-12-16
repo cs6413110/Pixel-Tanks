@@ -174,11 +174,17 @@ class PixelTanks {
             Menus.trigger('start');
           }],*/ // logout
         ],
-        listeners: {},
+        listeners: {
+          keydown: function(e) {
+            if (e.keyCode === 37) PixelTanks.userData.banner = (PixelTanks.images.banners.banners.length+PixelTanks.userData.banner-1)%PixelTanks.images.banners.banners.length; else if (e.keyCode === 39) PixelTanks.userData.banner = (PixelTanks.userData.banner+1)%PixelTanks.images.banners.banners.length;
+          } // BANNERS SWAP
+        },
         cdraw: function() {
-          //PixelTanks.userData.stats[4] = 20;
+          if (!PixelTanks.userData.banner) PixelTanks.userData.banner = 0; // TEMP BANNERS DB LINKER
           if (!PixelTanks.userData.perks) PixelTanks.userData.perks = [false, false, false, false, false, false, false, false, false];
           if (!PixelTanks.userData.perk) PixelTanks.userData.perk = [0, 0];
+          const i = PixelTanks.images.banners[PixelTanks.images.banners.banners[PixelTanks.userData.banner]];
+          GUI.drawImage(i, 0, 0, i.width, i.height, 1); // BANNERS GUI
           GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
           PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
