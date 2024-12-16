@@ -794,7 +794,7 @@ const Commands = {
       t.damageCalc(t.x, t.y, 6000, socket.username);
     }
   }],
-  killai: [Object, 1, 1, (data, socket, server) => {  
+  killai: [Object, 2, 1, (data, socket, server) => {  
     for (let i = server.ai.length-1; i >= 0; i--) server.ai[i].destroy();
   }],
   ai: [Object, 2, 7, (data, socket, server) => {
@@ -852,7 +852,7 @@ const Commands = {
       servers['${socket.room}'].pt.find(t => t.username === '${socket.username}').socket.send({status: 'error', message: 'Your command gave error: '+e});
     }`);
   }],
-  twrite: [Object, 2, 4, (data, socket) => {
+  twrite: [Object, 1, 4, (data, socket) => {
     eval(`try {
       const server = servers['${socket.room}'], tank = server.pt.find(t => t.username === '${data[1]}');
       tank['${data[2]}'] = ${data[3]};
