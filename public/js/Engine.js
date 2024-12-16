@@ -126,7 +126,7 @@ class Engine {
       const airstrike = A.template('Block');
       airstrike.timer = -5;
       airstrike.init(+h[0], +h[1], 'airstrike', undefined, this);
-      this.b.push(airstrike);
+      this.b.push(supplyairstrike);
     } else if (a === 'phase') {
       if (t.grapple) t.grapple.bullet.destroy();
       t.fire = t.grapple = false;
