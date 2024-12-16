@@ -123,9 +123,9 @@ class Engine {
       }
     } else if (a.includes('crate')) {
       const rotation = Math.floor(Math.random()*360), h = a.replace('crate', '').split('x');
-      const airstrike = A.template('Block');
-      airstrike.timer = -5;
-      airstrike.init(+h[0], +h[1], 'airstrike', undefined, this);
+      const supplyairstrike = A.template('Block');
+      supplyairstrike.timer = -5;
+      supplyairstrike.init(+h[0], +h[1], 'supplyairstrike', undefined, this);
       this.b.push(supplyairstrike);
     } else if (a === 'phase') {
       if (t.grapple) t.grapple.bullet.destroy();
