@@ -184,7 +184,9 @@ class PixelTanks {
           if (!PixelTanks.userData.perks) PixelTanks.userData.perks = [false, false, false, false, false, false, false, false, false];
           if (!PixelTanks.userData.perk) PixelTanks.userData.perk = [0, 0];
           const i = PixelTanks.images.banners[PixelTanks.images.banners.banners[PixelTanks.userData.banner]];
+          GUI.draw.imageSmoothingEnabled = false;
           GUI.drawImage(i, 20, 500-i.height*2.5, i.width*5, i.height*5, 1); // BANNERS GUI
+          GUI.draw.imageSmoothingEnabled = true;
           GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
           PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
