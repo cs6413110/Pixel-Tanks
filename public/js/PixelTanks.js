@@ -187,6 +187,8 @@ class PixelTanks {
           GUI.draw.imageSmoothingEnabled = false;
           GUI.drawImage(i, 20, 500-i.height*2.5, i.width*5, i.height*5, 1); // BANNERS GUI
           GUI.draw.imageSmoothingEnabled = true;
+          GUI.drawText(PixelTanks.userData.banner, 20, 900, 100, '#ffffff', 0.5);
+          GUI.drawText(PixelTanks.images.banners.banners[PixelTanks.userData.banner], 20, 950, 50, '#ffffff', 0.5);
           GUI.drawText(PixelTanks.user.username, 1280, 800, 100, '#ffffff', 0.5);
           PixelTanks.renderBottom(1200, 600, 160, PixelTanks.userData.color);
           GUI.drawImage(PixelTanks.images.tanks.bottom, 1200, 600, 160, 160, 1);
