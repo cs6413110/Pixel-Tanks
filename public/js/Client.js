@@ -866,11 +866,11 @@ class Client {
         this.speed = 16;
         this.tank.immune = true;
         this.timers.boost.time = Date.now();
-        let preStealth = this.tank.invis;
+        let preStealth = this.tank.invis, boost = false;
         if (PixelTanks.userData.class === 'stealth' && !preStealth) {
           this.mana = Math.min(this.mana+(Date.now()-this.timers.class.time)/this.timers.class.cooldown, 15);
           this.timers.class.time = Date.now();
-          if (this.mana >= 2.5) this.tank.invis = true;
+          if (this.mana >= 2.5) boost = this.tank.invis = true;
         }
         clearTimeout(this.booster);
         this.booster = setTimeout(() => {
@@ -878,7 +878,7 @@ class Client {
           this.tank.immune = false;
           if (PixelTanks.userData.class === 'stealth') {
             this.tank.use.push('break');
-            if (!preStealth) {
+            if (!preStealth && boost) {
               this.tank.invis = false;
               this.mana -= 2.5;
               this.timers.class.time = Date.now();
