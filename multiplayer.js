@@ -619,7 +619,7 @@ const Commands = {
     if (!Storage.mutes.includes(socket.username)) return socket.send({status: 'error', message: `You aren't muted!`});
     if (socket.muteTimer && socket.muteTimer+100000 > Date.now()) return socket.send({status: 'error', message: `Wait 10 seconds before using this again!`});
     socket.muteTimer = Date.now();
-    for (const s of Object.values(servers)) for (const t of s.pt) if (Storage.admins.includes(t.username) || Storage.owners.includes(t.username)) t.privateLogs.push({m: this.username+' requested to be unmuted!', c: '#ffff00'});  }],
+    for (const s of Object.values(servers)) for (const t of s.pt) if (Storage.admins.includes(t.username) || Storage.owners.includes(t.username)) t.privateLogs.push({m: socket.username+' requested to be unmuted!', c: '#ffff00'});  }],
   msg: [Object, 4, -1, (data, socket, server, t, logs) => {
     if (Storage.mutes.includes(t.username)) return socket.send({status: 'error', message: 'You are muted!'});
     let m;
