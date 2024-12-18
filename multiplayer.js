@@ -735,7 +735,7 @@ const Commands = {
   }],
   tp: [FFA, 2, 4, (data, socket, server) => {
     for (const s of Object.values(servers)) {
-      let t = s.pt.find(t => t.username === (data[1] || socket.username));
+      let t = s.pt.find(t => t.username === (data[1]));
       if (!t) return;
       t.x = data[2];
       t.y = data[3];
