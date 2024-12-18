@@ -33,9 +33,9 @@ window.sourceMap = {
     {
       ref: 'banners',
       path: 'banners',
-      load: ['bigsister', 'mango', 'soviet', 'gateway', 'tower', 'blueprint', 'castle', 'cave', 'drg', 'fix', 'gems', 'ice', 'island', 'lazer', 'leviathan', 'peak', 'sculkwall', 'solar', 'sonc', 'turret', 'warden'],
+      load: ['bigsister', 'snow', 'mango', 'soviet', 'gateway', 'tower', 'blueprint', 'castle', 'cave', 'drg', 'fix', 'gems', 'ice', 'island', 'lazer', 'leviathan', 'peak', 'sculkwall', 'solar', 'sonc', 'turret', 'warden'],
       meta: {
-        banners: ['bigsister', 'mango', 'soviet', 'gateway', 'tower', 'blueprint', 'castle', 'cave', 'drg', 'fix', 'gems', 'ice', 'island', 'lazer', 'leviathan', 'peak', 'sculkwall', 'solar', 'sonc', 'turret', 'warden'],
+        banners: ['bigsister', 'snow', 'mango', 'soviet', 'gateway', 'tower', 'blueprint', 'castle', 'cave', 'drg', 'fix', 'gems', 'ice', 'island', 'lazer', 'leviathan', 'peak', 'sculkwall', 'solar', 'sonc', 'turret', 'warden'],
       }
     },
     {
