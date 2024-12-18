@@ -737,10 +737,8 @@ const Commands = {
     for (const s of Object.values(servers)) {
       let t = s.pt.find(t => t.username === (data[1] || socket.username));
       if (!t) return;
-      let ox = t.x, oy = t.y;
       t.x = data[2];
       t.y = data[3];
-      server.override(t, ox, oy);
     }
   }],
   ban: [Object, 2, -1, (data, socket, server, t) => {
