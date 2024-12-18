@@ -722,10 +722,6 @@ const Commands = {
       t.y = server.spawn.y;
       server.override(t, ox, oy);
     }
-    for (let i = server.ai.length-1; i >= 0; i--) {
-      server.ai[i].x = server.spawn.x;
-      server.ai[i].y = server.spawn.y;
-    }
   }],
   loadmap: [FFA, 2, 2, (data, socket, server) => {
     //if (isNaN(levelID) || levelID % 1 !== 0 || levelID >= ffaLevels.length) return socket.send({status: 'error', message: 'Out of range or invalid input.'});
@@ -736,9 +732,14 @@ const Commands = {
       t.y = server.spawn.y;
       server.override(t, ox, oy);
     }
-    for (let i = server.ai.length-1; i >= 0; i--) {
-      server.ai[i].x = server.spawn.x;
-      server.ai[i].y = server.spawn.y;
+  }],
+  tp: [FFA, 2, 4, (data, socket, server) => {
+    for (const s of Object.values(servers)) {
+      let t = s.pt.find(t => t.username === (data[1] || socket.username));
+      if (!t) return;
+      t.x = data[2];
+      t.y = data[3];
+      server.override(t, ox, oy);
     }
   }],
   ban: [Object, 2, -1, (data, socket, server, t) => {
