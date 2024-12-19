@@ -269,6 +269,7 @@ class Client {
   }
 
   drawExplosion(e) {
+    if (!e) return console.warn(this.hostupdate.d);
      if (!Engine.collision(100*(Math.floor((this.tank.x+40)/100)-10), 100*(Math.floor((this.tank.y+40)/100)-7), 2100, 1500, d.x, d.y, d.w, d.h)) return;
     let frame = Math.floor((Date.now()-e.time)/18);
     if (e.w === 300) GUI.drawImage(PixelTanks.images.animations['healexplosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*300, 0, 300, 300); // temp remove?
