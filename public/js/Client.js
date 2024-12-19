@@ -620,7 +620,7 @@ class Client {
 
   keyup(e) {
     if (this.menu) {
-      if (Menus.menus[this.menu].listeenrs.keyup) Menus.menus[this.menu].listeners.keyup(e);
+      if (Menus.menus[this.menu].listeners.keyup) Menus.menus[this.menu].listeners.keyup(e);
       return;
     }
     if (e.preventDefault) e.preventDefault();
