@@ -347,7 +347,7 @@ class Client {
       }
     }
 
-    let teamname = Engine.getTeam(t.team);
+    let teamname = (this.multiplayer ? Engine.getTeam(t.team) : '');
     
     if (t.invis && !t.ded && Engine.getTeam(this.team) !== teamname) return;
 
