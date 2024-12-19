@@ -352,7 +352,7 @@ class Client {
     if (t.invis && !t.ded && Engine.getTeam(this.team) !== teamname) return;
 
     let username = '['+['Turret ', 'Adv. ', 'Dis. ', 'Def. ', ''][t.role === undefined ? 4 : t.role]+t.rank+'] '+t.username;
-    if (t.team.split(':')[1].includes('@leader')) {
+    if (this.multiplayer) if (t.team.split(':')[1].includes('@leader')) {
       username += ' ['+t.team.split(':')[1].replace('@leader', '')+'] (Leader)'
     } else if (t.team.split(':')[1].includes('@requestor#')) {
       username += ' [Requesting...] ('+t.team.split(':')[1].split('@requestor#')[1]+')';
