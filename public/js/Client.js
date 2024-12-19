@@ -172,6 +172,12 @@ class Client {
 
   generateWorld() {
     this.world = new Singleplayer(this.ip);
+    this.hostupdate = {
+      b: this.world.b,
+      s: this.world.s,
+      ai: this.world.ai,
+      d: this.world.d,
+    }
     setTimeout(() => {
       this.world.add({...this.joinData.tank});
       setInterval(() => this.send(), 1000/60);
@@ -229,11 +235,13 @@ class Client {
   }
 
   drawBlock(b) {
+    if (!Engine.collision(100*(Math.floor((this.tank.x+40)/100)-10), 100*(Math.floor((this.tank.y+40)/100)-7), 2100, 1500, b.x, b.y, 100, 100)) return;
     const size = (b.type === 'airstrike' || b.type === 'supplyairstrike') ? 200 : 100, type = ['airstrike', 'fire'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
     GUI.drawImage(PixelTanks.images.blocks[this.zone][type], b.x, b.y, size, size, 1, 0, 0, 0, 0, undefined, type.includes('fire') ? Math.floor(((Date.now()-this.animate)%400)/100)*50 : 0, 0, type.includes('fire') ? 50 : PixelTanks.images.blocks[this.zone][type].width, PixelTanks.images.blocks[this.zone][type].height);
   }
 
   drawShot(s) {
+    if (!Engine.collision(100*(Math.floor((this.tank.x+40)/100)-10), 100*(Math.floor((this.tank.y+40)/100)-7), 2100, 1500, s.x, s.y, 10, 10)) return;
     if (s.type == 'bullet') {
       GUI.drawImage(PixelTanks.images.bullets.normal, s.x, s.y, 10, 10, .7, 5, 5, 0, 0, s.r+90);
     } else if (s.type === 'powermissle') {
@@ -261,7 +269,7 @@ class Client {
   }
 
   drawExplosion(e) {
-    if (!e) return console.log(this.hostupdate.d);
+     if (!Engine.collision(100*(Math.floor((this.tank.x+40)/100)-10), 100*(Math.floor((this.tank.y+40)/100)-7), 2100, 1500, d.x, d.y, d.w, d.h)) return;
     let frame = Math.floor((Date.now()-e.time)/18);
     if (e.w === 300) GUI.drawImage(PixelTanks.images.animations['healexplosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*300, 0, 300, 300); // temp remove?
     if (e.w !== 200 && e.w !== 300) GUI.drawImage(PixelTanks.images.animations['explosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*50, 0, 50, 50);
@@ -275,6 +283,7 @@ class Client {
   }
 
   drawTank(t) {
+    if (!Engine.collision(100*(Math.floor((this.tank.x+40)/100)-10), 100*(Math.floor((this.tank.y+40)/100)-7), 2100, 1500, t.x, t.y, t.role === 0 ? 100 : 80, t.role === 0 ? 100 : 80)) return;
     const p = t.username === PixelTanks.user.username;
     let a = 1;
     if (this.ded && t.invis && !p) return;
@@ -908,17 +917,10 @@ class Client {
     const {x, y, r, use, fire, animation} = this.tank;
     const updateData = {username: PixelTanks.user.username, type: 'update', data: this.tank};
     if (!this.multiplayer) {
-      const rx = 100*(Math.floor((this.tank.x+40)/100)-10), ry = 100*(Math.floor((this.tank.y+40)/100)-7);
-      this.hostupdate = {
-        pt: [{...this.world.pt[0]}],
-        b: this.world.b.filter(b => Engine.collision(rx, ry, 2100, 1500, b.x, b.y, 100, 100)),
-        s: this.world.s.filter(s => Engine.collision(rx, ry, 2100, 1500, s.x, s.y, 10, 10)),
-        ai: this.world.ai.filter(a => Engine.collision(rx, ry, 2100, 1500, a.x, a.y, 100, 100)),
-        d: this.world.d.filter(d => Engine.collision(rx, ry, 2100, 1500, d.x, d.y, d.w, d.h)),
-        logs: this.world.logs.reverse(),
-        global: this.world.global,
-        tickspeed: PixelTanks.tickspeed,
-      }
+      this.hostupdate.pt = [{...this.world.pt[0]}];
+      this.hostupdate.logs = this.world.logs.reverse();
+      this.hostupdate.global = this.world.global;
+      this.hostupdate.tickspeed = PixelTanks.tickspeed;
       this.zone = this.world.zone;
       for (const property of Object.keys(this.hostupdate.pt[0].raw)) this.hostupdate.pt[0][property] = this.hostupdate.pt[0].raw[property];
       if (this.world.pt[0].ded) alert('FIX='+JSON.stringify(this.hostupdate.pt));
