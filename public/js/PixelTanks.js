@@ -69,7 +69,10 @@ class PixelTanks {
       PixelTanks.focused = false;
     });
     window.addEventListener('focus', e => {
-      if (!PixelTanks.focused && PixelTanks.user.player) PixelTanks.user.player.dx.t = PixelTanks.user.player.dy.t = Date.now();
+      if (!PixelTanks.focused && PixelTanks.user.player) {
+        if (PixelTanks.user.player.dx) PixelTanks.user.player.dx.t = Date.now();
+        if (PixelTanks.user.player.dy) PixelTanks.user.player.dy.t = Date.now();
+      }
       PixelTanks.focused = true;
     });
     const ui = e => {
