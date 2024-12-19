@@ -173,6 +173,7 @@ class Client {
   generateWorld() {
     this.world = new Singleplayer(this.ip);
     this.hostupdate = {
+      pt: [{...this.pt[0]}],
       b: this.world.b,
       s: this.world.s,
       ai: this.world.ai,
