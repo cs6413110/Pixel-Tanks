@@ -76,7 +76,7 @@ class PixelTanks {
       PixelTanks.focused = true;
     });
     const ui = e => {
-      if (Client.input.style.visibility === 'visible') return true;
+      if (Client.input && Client.input.style.visibility === 'visible') return true;
       e.preventDefault();
       return false;
     };
