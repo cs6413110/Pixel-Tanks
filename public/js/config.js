@@ -5,7 +5,7 @@ window.sourceMap = {
     {
       ref: 'bullets',
       path: 'bullets',
-      load: ['normal', 'shotgun', 'powermissle', 'megamissle', 'grapple', 'dynamite', 'fire', 'usb'],
+      load: ['normal', 'shotgun', 'powermissle', 'torpedo', 'megamissle', 'grapple', 'dynamite', 'fire', 'usb'],
     },
     {
       ref: 'tanks',
