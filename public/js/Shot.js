@@ -10,7 +10,7 @@ class Shot {
   init(x, y, d, r, type, team, rank, host) {
     this.id = host.genId(2);
     for (let i = Shot.args.length-1; i >= 0; i--) this[Shot.args[i]] = arguments[i];
-    this.e = Date.now()-(type === 'torpedo' ? 1000 : 0);
+    this.e = Date.now()+(type === 'torpedo' ? 1000 : 0);
     this.md = this.damage = Shot.settings[this.type][0]*(rank*10+300)/500;
     this.xm = Math.cos(Math.PI*r/180)*Shot.settings[this.type][1];
     this.ym = Math.sin(Math.PI*r/180)*Shot.settings[this.type][1];
