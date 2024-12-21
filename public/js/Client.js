@@ -689,7 +689,7 @@ class Client {
       clearTimeout(this.fireTimeout);
       this.fireTimeout = setTimeout(() => {this.canFire = true}, this.fireType === 1 ? 200 : 600);
     } else if (!isNaN(type)) return;
-    var fireType = ['grapple', 'megamissle', 'dynamite', 'usb', 'healmissle', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? 'powermissle' : (!isNaN(type) ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
+    var fireType = ['grapple', 'megamissle', 'torpedo', 'dynamite', 'usb', 'healmissle', 2].includes(type) ? 1 : this.fireType, type = type === 2 ? 'powermissle' : (!isNaN(type) ? (this.fireType === 1 ? 'bullet' : 'shotgun') : type), l = fireType === 1 ? 0 : -10;
     while (l<(fireType === 1 ? 1 : 15)) {
       this.tank.fire.push({type: type, r: this.tank.r+90+l});
       l += 5;
@@ -754,7 +754,8 @@ class Client {
     } else if (id === 'usb') {
       this.fire('usb');
     } else if (id === 'flashbang') {
-      this.tank.use.push('phase');
+      this.fire('torpedo');
+      for (let i of [10, 20, 30, 40, 50, 60]) this.fire('torpedo');
     } else if (id === 'bomb') {
       this.tank.use.push(`crate${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
       //this.tank.use.push('bomb');
