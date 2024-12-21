@@ -266,6 +266,8 @@ class Client {
       GUI.drawImage(PixelTanks.images.bullets.usb, s.x, s.y, 10, 40, 1, 5, 5, 0, 0, s.r+90);
     } else if (s.type === 'fire') {
       GUI.drawImage(PixelTanks.images.bullets.fire, s.x, s.y, 10, 10, 1, 5, 5, 0, 0, s.r+90);
+    } else if (s.type === 'torpedo') {
+      GUI.drawImage(PixelTanks.images.bullets.torpedo, s.x, s.y, 20, 40, 1, 10, 20, 0, 0, s.r+90);
     }
   }
 
