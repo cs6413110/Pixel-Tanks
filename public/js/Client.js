@@ -757,7 +757,7 @@ class Client {
       this.fire('usb');
     } else if (id === 'flashbang') {
       this.fire('torpedo');
-      for (let i of [10, 20, 30, 40, 50, 60]) this.fire('torpedo');
+      for (let i of [10, 20, 30, 40, 50, 60]) setTimeout(() => this.fire('torpedo'), i);
     } else if (id === 'bomb') {
       this.tank.use.push(`crate${this.mouse.x+this.tank.x-850}x${this.mouse.y+this.tank.y-550}`);
       //this.tank.use.push('bomb');
