@@ -1,5 +1,5 @@
 class Shot {
-  static settings = {bullet: [20, 18], shotgun: [20, 14.4], grapple: [0, 36], fire: [0, 16.2], dynamite: [0, 14.4], usb: [0, 14.4], powermissle: [100, 27, 50], megamissle: [200, 27, 100]};
+  static settings = {bullet: [20, 18], shotgun: [20, 14.4], grapple: [0, 36], fire: [0, 16.2], dynamite: [0, 14.4], usb: [0, 14.4], torpedo: [20, 27, 50], powermissle: [100, 27, 50], megamissle: [200, 27, 100]};
   static args = ['x', 'y', 'd', 'r', 'type', 'team', 'rank', 'host'];
   static raw = ['team', 'r', 'type', 'x', 'y', 'sx', 'sy']; // make reflector update shot team?
   static u = ['x', 'y'];
@@ -10,7 +10,7 @@ class Shot {
   init(x, y, d, r, type, team, rank, host) {
     this.id = host.genId(2);
     for (let i = Shot.args.length-1; i >= 0; i--) this[Shot.args[i]] = arguments[i];
-    this.e = Date.now();
+    this.e = Date.now()-(type === 'torpedo' ? 1000 : 0);
     this.md = this.damage = Shot.settings[this.type][0]*(rank*10+300)/500;
     this.xm = Math.cos(Math.PI*r/180)*Shot.settings[this.type][1];
     this.ym = Math.sin(Math.PI*r/180)*Shot.settings[this.type][1];
@@ -63,6 +63,7 @@ class Shot {
     return false;
   }
   update() {
+    if (Date.now()-this.e < 0) return; 
     const time = Math.floor((Date.now()-this.e)/15), x = this.target ? this.target.x-this.offset[0] : time*this.xm+this.sx, y = this.target ? this.target.y-this.offset[1] : time*this.ym+this.sy, x1 = Math.floor(x/100), x2 = Math.floor((x+10)/100), y1 = Math.floor(y/100), y2 = Math.floor((y+10)/100);
     if (((x < 0 || y < 0 || x+10 >= 6000 || y+10 >= 6000) && !this.target && this.collide()) || (this.target && (this.target.x === undefined || this.target.y === undefined))) return this.destroy();
     if (this.target) if (this.target?.ded || this.host.pt.find(t => t.username === Engine.getUsername(this.team))?.ded) return this.destroy();
