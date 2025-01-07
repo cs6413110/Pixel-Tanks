@@ -8,7 +8,7 @@ class PixelTanks {
 
   static shortcut() {
     if (PixelTanks.user.player) PixelTanks.user.player.implode();
-    PixelTanks.user.player = new Client(prompt('ip:'), true, confirm('Ok for ffa, cancel for tdm') ? 'ffa' : 'tdm');
+    PixelTanks.user.player = new Client('129.146.45.71', true, confirm('Ok for ffa, cancel for tdm') ? 'ffa' : 'tdm');
     Menus.removeListeners();
   }
   
@@ -489,7 +489,7 @@ class PixelTanks {
           if (!this.gamemode) {
             this.gamemode = 'ffa';
             this.output = {FFA: '', DUELS: '', TDM: ''};
-            this.ip = 'pixeltanks.chickenkiller.com';
+            this.ip = '129.146.45.71';
             this.listeners.keydown({keyCode: -1, key: ''});
           }
           GUI.drawText(this.gamemode, 1200, 800, 50, '#FFFFFF', 0.5);
@@ -925,7 +925,7 @@ class PixelTanks {
     
       for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
     });
-    PixelTanks.socket = new MegaSocket(window.location.protocol === 'https:' ? 'wss://'+window.location.hostname : 'ws://pixeltanks.chickenkiller.com', {keepAlive: true, reconnect: true, autoconnect: true});
+    PixelTanks.socket = new MegaSocket(window.location.protocol === 'https:' ? 'wss://'+window.location.hostname : 'ws://129.146.45.71', {keepAlive: true, reconnect: true, autoconnect: true});
   }
 
   static launch() {  
