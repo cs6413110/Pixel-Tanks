@@ -209,7 +209,7 @@ class Client {
   }
   
   getPing() {
-    if (this.debugMode === 1) return;
+    if (this.debugMode !== 1) return;
     this.pingstart = Date.now();
     this.socket.send({type: 'ping'});
   }
