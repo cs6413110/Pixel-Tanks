@@ -1,7 +1,7 @@
 const settings = {
   authserver: 'localhost',
   players_per_room: 20,
-  upsl: 60,
+  upsl: 120,
   port: 8080,
   chat: true,
   whitelist: true,
