@@ -879,6 +879,7 @@ class Client {
     if (k === 27) Menus.softTrigger('pause');
     if (k === 18) {
       this.debugMode++;
+      if (this.debugMode === 1) this.getPing();
       if (this.debugMode >= 5) this.debugMode = 0; 
     }
   }
