@@ -131,7 +131,7 @@ class Client {
       } else if (data.event === 'sc') {
         // single cooldown
         if (data.timer !== '*') return this.timers[data.timer].time -= this.timers[data.timer].cooldown*data.percent;
-        for (const item of this.timers.items) item.time -= item.cooldown*data.percent;
+        for (const i in this.timers.items) if (PixelTanks.userData.items[i] != "crate") this.timers.items[i].time -= item.cooldown*data.percent;
         for (const timer of ['class', 'boost', 'powermissle', 'grapple', 'toolkit']) this.timers[timer].time -= this.timers[timer].cooldown*data.percent;
       } else if (data.event === 'gameover') {
         this.implode();
