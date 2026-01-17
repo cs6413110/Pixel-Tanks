@@ -23,7 +23,7 @@ class GUI {
       }
       @font-face {
         font-family: 'Font';
-        src: url('https://aaronmgodfrey.github.io/Pixel-Tanks/public/fonts/PixelOperator.ttf') format('truetype');
+        src: url('https://cs6413110.github.io/Pixel-Tanks/public/fonts/PixelOperator.ttf') format('truetype');
       }
       * {
         font-family: Font;
