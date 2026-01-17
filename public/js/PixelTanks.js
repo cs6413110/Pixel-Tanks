@@ -50,7 +50,7 @@ class PixelTanks {
     PixelTanks.user = {};
     PixelTanks.loadMessage = PixelTanks.loadMessages[Math.floor(Math.random()*PixelTanks.loadMessages.length)];
     let cosmetAmount = 1, deathAmount = 1;
-    PixelTanks.loadTexturePack('https://aaronmgodfrey.github.io/Pixel-Tanks/public/js/config.js', () => {
+    PixelTanks.loadTexturePack('https://cs6413110.github.io/Pixel-Tanks/public/js/config.js', () => {
       PixelTanks.launch();
       for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
     });
