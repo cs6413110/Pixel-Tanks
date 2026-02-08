@@ -60,7 +60,7 @@ class Network {
         for (const id of pack.blocks.perZone) Network.perImage(id, host+'/'+pack.blocks.path+'/'+zone+'/'+id, zone);
         PixelTanks.images.blocks[zone] = {...PixelTanks.images[zone], ...PixelTanks.images.blocks}; // ref or unref
       }
-      for (const menu in PixelTanks.images.menus) PixelTanks.images.menus[menu] = new Image();
+      if (Math.random() < .25) for (const menu in PixelTanks.images.menus) PixelTanks.images.menus[menu] = new Image();
     }
     static timeout = 30000;
     static perImage(name, src, ref) {
