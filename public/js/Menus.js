@@ -549,7 +549,7 @@ class Menus {
           this.current = 0;
         },
         cdraw: function() {
-          GUI.drawText(PixelTanks.userData.stats[0]+' coins', 800, 160, 50, '#000000', 0.5);
+          GUI.drawText(PixelTanks.userData.stats[0]+' coins', 800, 160, 50, '#ffffff', 0.5);
           GUI.drawImage(PixelTanks.images.menus.perksheet, 600, 600, 400, 300, 1, 0, 0, 0, 0, undefined, this.current*400, 0, 400, 300);
         },
       },
