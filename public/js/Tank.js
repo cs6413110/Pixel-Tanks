@@ -25,6 +25,7 @@ class Tank {
     this.x = host.spawn.x;
     this.y = host.spawn.y;
     this.maxTurrets = 3;
+    this.loafMode = false;
     this.grapple = false;
     this.shields = this.r = this.pushback = this.baseRotation = this.baseFrame = 0;
     this.msg.global = host.global;
