@@ -71,7 +71,8 @@ class Menus {
       buttons: [[416, 20, 108, 108, 'main', true], [1068, 20, 108, 108, 'world2', true]],
       listeners: {
         mousedown: function(e) {
-          for (const c of PixelTanks.levelCoords) if (Engine.collision(Menus.x, Menus.y, 0, 0, c[0], c[1], 200, 100)) {
+          let i = 0;
+          for (const c of PixelTanks.levelCoords) if (PixelTanks.userData.levelBeaten >= (++i)+0) if (Engine.collision(Menus.x, Menus.y, 0, 0, c[0], c[1], 200, 100)) {
             Menus.removeListeners();
             PixelTanks.user.player = new Client(PixelTanks.levelCoords.indexOf(c)+1, false, null);
           }
@@ -82,7 +83,7 @@ class Menus {
       buttons: [[416, 20, 108, 108, 'world1', true], [1068, 20, 108, 108, 'world3', true]],
       listeners: {
         mousedown: function(e) {
-          for (const c of PixelTanks.levelCoords) if (Engine.collision(Menus.x, Menus.y, 0, 0, c[0], c[1], 200, 100)) {
+          for (const c of PixelTanks.levelCoords) if (PixelTanks.userData.levelBeaten >= (++i)+20) if (Engine.collision(Menus.x, Menus.y, 0, 0, c[0], c[1], 200, 100)) {
             Menus.removeListeners();
             PixelTanks.user.player = new Client(PixelTanks.levelCoords.indexOf(c)+21, false, null);
           }
@@ -93,7 +94,7 @@ class Menus {
       buttons: [[416, 20, 108, 108, 'world2', true], [1068, 20, 108, 108, 'world4', true]],
       listeners: {
         mousedown: function(e) {
-          for (const c of PixelTanks.levelCoords) if (Engine.collision(Menus.x, Menus.y, 0, 0, c[0], c[1], 200, 100)) {
+          for (const c of PixelTanks.levelCoords) if (PixelTanks.userData.levelBeaten >= (++i)+40) if (Engine.collision(Menus.x, Menus.y, 0, 0, c[0], c[1], 200, 100)) {
             Menus.removeListeners();
             PixelTanks.user.player = new Client(PixelTanks.levelCoords.indexOf(c)+41, false, null);
           }
@@ -104,7 +105,7 @@ class Menus {
       buttons: [[416, 20, 108, 108, 'world3', true], [1068, 20, 108, 108, 'world5', true]],
       listeners: {
         mousedown: function(e) {
-          for (const c of PixelTanks.levelCoords) if (Engine.collision(Menus.x, Menus.y, 0, 0, c[0], c[1], 200, 100)) {
+          for (const c of PixelTanks.levelCoords) if (PixelTanks.userData.levelBeaten >= (++i)+60) if (Engine.collision(Menus.x, Menus.y, 0, 0, c[0], c[1], 200, 100)) {
             Menus.removeListeners();
             PixelTanks.user.player = new Client(PixelTanks.levelCoords.indexOf(c)+61, false, null);
           }
@@ -115,7 +116,7 @@ class Menus {
       buttons: [[416, 20, 108, 108, 'world4', true], [1068, 20, 108, 108, 'world1', true]],
       listeners: {
         mousedown: function(e) {
-          for (const c of PixelTanks.levelCoords) if (Engine.collision(Menus.x, Menus.y, 0, 0, c[0], c[1], 200, 100)) {
+          for (const c of PixelTanks.levelCoords) if (PixelTanks.userData.levelBeaten <= (++i)+80) if (Engine.collision(Menus.x, Menus.y, 0, 0, c[0], c[1], 200, 100)) {
             Menus.removeListeners();
             PixelTanks.user.player = new Client(PixelTanks.levelCoords.indexOf(c)+81, false, null);
           }
