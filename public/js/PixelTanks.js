@@ -52,7 +52,7 @@ class PixelTanks {
     let cosmetAmount = 1, deathAmount = 1;
     PixelTanks.loadTexturePack('https://cs6413110.github.io/Pixel-Tanks/public/js/config.js', () => {
       PixelTanks.launch();
-      //for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
+      for (const m in Menus.menus) Menus.menus[m] = new Menu(Menus.menus[m], m);
     });
     PixelTanks.socket = new MegaSocket(window.location.protocol === 'https:' ? 'wss://'+window.location.hostname : 'ws://129.146.45.71', {keepAlive: true, reconnect: true, autoconnect: true});
   }
