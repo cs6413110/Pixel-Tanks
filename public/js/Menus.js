@@ -182,7 +182,7 @@ class Menus {
           if (PixelTanks.user.player.ip == 100) return;
           Menus.removeListeners();
           PixelTanks.user.player = new Client(data[0]+1, data[1], data[2]);
-        }, PixelTanks.user.player.ip == 100 ? false : true],
+        }, true],
         [656, 680, 280, 104, 'main', true],
       ],
       ontrigger: function() {
