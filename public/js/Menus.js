@@ -179,9 +179,10 @@ class Menus {
       buttons: [
         [580, 556, 432, 104, () => {
           const data = Menus.menus.victory.data;
+          if (PixelTanks.user.player.ip == 100) return;
           Menus.removeListeners();
           PixelTanks.user.player = new Client(data[0]+1, data[1], data[2]);
-        }, true],
+        }, PixelTanks.user.player.ip == 100 ? false : true],
         [656, 680, 280, 104, 'main', true],
       ],
       ontrigger: function() {
@@ -191,7 +192,12 @@ class Menus {
         if (!PixelTanks.sounds.deep.paused) PixelTanks.stopSound('deep');
         if (!PixelTanks.sounds.gem.paused) PixelTanks.stopSound('gem'); // FIX make function between victory/defeat sharing this
         PixelTanks.playSound('victory');
-      }
+      },
+      cdraw: function(e) {
+        GUI.draw.fillStyle = '#000000';
+        GUI.draw.globalAlpha = 1;
+        if (PixelTanks.user.player.ip == 100) GUI.draw.fillRect(580, 556, 432, 104);
+      },
     },
     defeat: {
       buttons: [
