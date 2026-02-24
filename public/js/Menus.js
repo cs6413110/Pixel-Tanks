@@ -78,6 +78,9 @@ class Menus {
           }
         }
       },
+      cdraw: function(e) {
+        for (const c of PixelTanks.levelCoords) if (PixelTanks.userData.levelBeaten < (++i)+0) GUI.draw.strokeRect(c[0], c[1], 200, 100);
+      },
     },
     world2: {
       buttons: [[416, 20, 108, 108, 'world1', true], [1068, 20, 108, 108, 'world3', true]],
@@ -88,6 +91,9 @@ class Menus {
             PixelTanks.user.player = new Client(PixelTanks.levelCoords.indexOf(c)+21, false, null);
           }
         }
+      },
+      cdraw: function(e) {
+        for (const c of PixelTanks.levelCoords) if (PixelTanks.userData.levelBeaten < (++i)+20) GUI.draw.strokeRect(c[0], c[1], 200, 100);
       },
     },
     world3: {
@@ -100,6 +106,9 @@ class Menus {
           }
         }
       },
+      cdraw: function(e) {
+        for (const c of PixelTanks.levelCoords) if (PixelTanks.userData.levelBeaten < (++i)+40) GUI.draw.strokeRect(c[0], c[1], 200, 100);
+      },
     },
     world4: {
       buttons: [[416, 20, 108, 108, 'world3', true], [1068, 20, 108, 108, 'world5', true]],
@@ -111,6 +120,9 @@ class Menus {
           }
         }
       },
+      cdraw: function(e) {
+        for (const c of PixelTanks.levelCoords) if (PixelTanks.userData.levelBeaten < (++i)+60) GUI.draw.strokeRect(c[0], c[1], 200, 100);
+      },
     },
     world5: {
       buttons: [[416, 20, 108, 108, 'world4', true], [1068, 20, 108, 108, 'world1', true]],
@@ -121,6 +133,9 @@ class Menus {
             PixelTanks.user.player = new Client(PixelTanks.levelCoords.indexOf(c)+81, false, null);
           }
         }
+      },
+      cdraw: function(e) {
+        for (const c of PixelTanks.levelCoords) if (PixelTanks.userData.levelBeaten < (++i)+80) GUI.draw.strokeRect(c[0], c[1], 200, 100);
       },
     },
     victory: { // INCOMPLETE VICTORY/DEFEAT MENUS
