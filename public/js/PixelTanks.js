@@ -87,6 +87,7 @@ class PixelTanks {
           PixelTanks.playerData = data.playerdata;
         }
         PixelTanks.userData = PixelTanks.playerData['pixel-tanks'];
+        if (!PixelTanks.userData.levelBeaten) PixelTanks.userData.levelBeaten = 1;
         if (!PixelTanks.userData) {
           PixelTanks.userData = {
             class: '',
