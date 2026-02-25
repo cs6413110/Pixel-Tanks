@@ -193,11 +193,6 @@ class Menus {
         if (!PixelTanks.sounds.gem.paused) PixelTanks.stopSound('gem'); // FIX make function between victory/defeat sharing this
         PixelTanks.playSound('victory');
       },
-      cdraw: function(e) {
-        GUI.draw.fillStyle = '#000000';
-        GUI.draw.globalAlpha = 1;
-        if (PixelTanks.user.player.ip == 100) GUI.draw.fillRect(580, 556, 432, 104);
-      },
     },
     defeat: {
       buttons: [
