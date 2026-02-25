@@ -131,6 +131,7 @@ class Singleplayer extends Engine {
         PixelTanks.userData.stats[1] += 10+PixelTanks.user.player.ip
         PixelTanks.userData.stats[3] += 50+PixelTanks.user.player.ip*5
         PixelTanks.userData.levelBeaten++;
+        PixelTanks.save();
       }
       PixelTanks.user.player.implode();
       Menus.menus.victory.stats = {kills: 'n/a', coins: 'n/a'};
