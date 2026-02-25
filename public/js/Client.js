@@ -423,9 +423,9 @@ class Client {
       if (t.dedEffect.time/speed <= frames) { 
         if (t.dedEffect.time/speed < kill) {
           let a = 1;
-          if (t.role !== 0) PixelTanks.renderBottom(t.dedEffect.x, t.dedEffect.y, 80, '#423e42', t.baseRotation); else PixelTanks.renderBase(t.dedEffect.x, t.dedEffect.y, 80, '#423e42', t.baseRotation);
+          if (t.role !== 0) PixelTanks.renderBottom(t.dedEffect.x, t.dedEffect.y, 80, t.color, t.baseRotation); else PixelTanks.renderBase(t.dedEffect.x, t.dedEffect.y, 80, t.color, t.baseRotation);
           GUI.drawImage(PixelTanks.images.tanks[t.role === 0 ? 'base' : 'bottom3'], t.dedEffect.x, t.dedEffect.y, 80, 80, a, 40, 40, 0, 0, t.baseRotation, 80*(t.baseFrame || 0), 0, 80, 80);
-          GUI.drawImage(PixelTanks.images.tanks.destroyed, t.dedEffect.x, t.dedEffect.y, 80, 90, 1, 40, 40, 0, 0, t.dedEffect.r);
+          PixelTanks.renderTop(t.dedEffect.x, t.dedEffect.y, 80, t.color, t.r, t.pushback);
           if (t.cosmetic_body) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_body], t.dedEffect.x, t.dedEffect.y, t.dedEffect.r);
           if (t.cosmetic) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic], t.dedEffect.x, t.dedEffect.y, t.dedEffect.r);
           if (t.cosmetic_hat) this.renderCosmetic(t, PixelTanks.images.cosmetics[t.cosmetic_hat], t.dedEffect.x, t.dedEffect.y, t.dedEffect.r);
