@@ -126,7 +126,12 @@ class Singleplayer extends Engine {
   victory() {
     clearTimeout(this.survivalTimeout);
     this.victoryTimeout = setTimeout(() => {
-      if (PixelTanks.user.player.ip == PixelTanks.userData.levelBeaten) PixelTanks.userData.levelBeaten++;
+      if (PixelTanks.user.player.ip == PixelTanks.userData.levelBeaten) {
+        PixelTanks.userData.stats[0] += 2000+PixelTanks.user.player.ip*200
+        PixelTanks.userData.stats[1] += 10+PixelTanks.user.player.ip
+        PixelTanks.userData.stats[3] += 50+PixelTanks.user.player.ip*5
+        PixelTanks.userData.levelBeaten++;
+      }
       PixelTanks.user.player.implode();
       Menus.menus.victory.stats = {kills: 'n/a', coins: 'n/a'};
       Menus.trigger('victory2');
