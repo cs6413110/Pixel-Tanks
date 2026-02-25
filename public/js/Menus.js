@@ -179,7 +179,6 @@ class Menus {
       buttons: [
         [580, 556, 432, 104, () => {
           const data = Menus.menus.victory.data;
-          if (PixelTanks.user.player.ip == 100) return;
           Menus.removeListeners();
           PixelTanks.user.player = new Client(data[0]+1, data[1], data[2]);
         }, true],
