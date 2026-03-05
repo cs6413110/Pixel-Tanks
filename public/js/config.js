@@ -48,7 +48,7 @@ window.sourceMap = {
     uncommon: ['void_plate', 'tenna', 'hazard', 'redaction', '035', 'feesh', 'knight', 'mango', 'camo', 'ripped', 'scarred', 'block', 'chip', 'deep_scratch', 'evil_eye', 'inferno_eye', 'motherboard', 'blue_wings', 'blue_horns', 'white_wings', 'white_horns', 'gold_wings', 'gold_horns', 'devil_wings', 'devil_horns', 'hazard', 'angel_wings', 'bat_wings', 'locked', 'mini_tank', 'dust', 'pouch'],
     rare: ['fisch_crown', 'Chaosshade', 'spirits', 'grandmaster', 'lizard', 'iceage', 'firestarter', 'hybrid', 'brother', 'construct', 'baja_bubble', 'red', 'yellow', 'emp_armor', 'duckface', 'emp_king', 'goldance', 'suit', 'raging_eye', 'banana', 'jason', 'the_swift_crown', 'flowers', 'fives', 'fivehalf', 'nvg', 'cracked', 'blue_tint', 'glitch', 'blue_helmet', 'white_helmet', 'helmet', 'gold_helmet', 'hacker_hoodie', 'purple', 'visor', 'veins', 'cookie', 'splattered'],
     epic: ['Khaostitan', 'BuzzardFollower', 'hypno', 'smoke', 'christmas_hat', 'christmas_lights', 'dizzy', 'rage', 'toxic', 'error', 'supersight', 'crown', 'darkcrown', 'ghoul', 'assassin'],
-    legendary: ['sans', 'EMP_burst', 'thedark', 'lostcrown', 'dragon', 'chad_face', 'plasma', 'cry', 'missing', 'galaxy'],
+    legendary: ['sans', 'EMP_burst', 'thedark', 'lostcrown', 'dragon', 'chad_face', 'plasma', 'cry', 'babytankie', 'missing', 'galaxy'],
     admin: ["void's_edge", 'smooth', 'hoodie', 'smooth_suit', 'silence'],
     mythic: ['power_armor', 'lava_monster', 'terminator', 'mlg_glasses', 'corrupted', 'blood_rabbit', 'demon_goat', 'crystal_face'],
     meta: {},
