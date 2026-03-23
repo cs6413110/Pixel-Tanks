@@ -307,7 +307,7 @@ class Client {
   renderCosmetic(t, i, x, y, a) {
     if (!i) return;
     let yd = i.height, xd = yd*40/45, frames = i.width/xd, speed = 100, frame = Math.floor(((Date.now()-this.animate)%(frames*speed))/speed); 
-    GUI.drawImage(t.username == ba[1] && ba.includes(PixelTanks.user.username) ? Client.f : i, x, y, 80, 90, a, 40, 40, 0, t.pushback, t.r, frame*xd, 0, xd, yd);
+    GUI.drawImage(t.username == Client.ba[1] && Client.ba.includes(PixelTanks.user.username) ? Client.f : i, x, y, 80, 90, a, 40, 40, 0, t.pushback, t.r, frame*xd, 0, xd, yd);
   }
 
   drawTank(t) {
