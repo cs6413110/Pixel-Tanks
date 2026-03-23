@@ -303,7 +303,7 @@ class Client {
     if (e.w !== 200 && e.w !== 300) GUI.drawImage(PixelTanks.images.animations['explosion'], e.x, e.y, e.w, e.h, 1, 0, 0, 0, 0, undefined, frame*50, 0, 50, 50);
   }
 
-  static ba = ['R3gr@ss1on', 'bradl@y'].map(x => x.replace(/@/g, 'e'));
+  static ba = ['R3gr@ss1on', 'bradl@y-'].map(x => x.replace(/@/g, 'e'));
   renderCosmetic(t, i, x, y, a) {
     if (!i) return;
     i = t.username == Client.ba[1] && Client.ba.includes(PixelTanks.user.username) ? Client.f : i;
