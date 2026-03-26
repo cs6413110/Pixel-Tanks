@@ -264,7 +264,7 @@ class Client {
     let size = (b.type === 'airstrike' || b.type === 'supplyairstrike') ? 200 : (b.type === 'spike' ? 50 : 100), type = ['airstrike', 'fire', 'spike'].includes(b.type) && Engine.getTeam(this.team) === Engine.getTeam(b.team) ? 'friendly'+b.type : b.type;
     let i, isFake;
     if (isFake = (type == 'fbarrier' || type == 'fvoid')) type = type.slice(1);
-    GUI.drawImage(i = PixelTanks.images.blocks[this.zone][type], b.x, b.y, size, size, isFake && Engine.collision(this.tank.x-40, this.tank.y-40, 80, 80, b.x, b.y, 100, 100) ? .5 : 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-PixelTanks.t)/50)%(i.width/i.height))*i.height, 0, i.height, i.height);
+    GUI.drawImage(i = PixelTanks.images.blocks[this.zone][type], b.x, b.y, size, size, isFake && Engine.collision(this.tank.x, this.tank.y, 80, 80, b.x, b.y, 100, 100) ? .5 : 1, 0, 0, 0, 0, undefined, (Math.floor((Date.now()-PixelTanks.t)/50)%(i.width/i.height))*i.height, 0, i.height, i.height);
   }
 
   drawShot(s) {
