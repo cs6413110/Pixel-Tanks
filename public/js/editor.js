@@ -135,7 +135,7 @@ const render = () => {
     draw.stroke();
   }
   for (const y in world) for (const x in world[y]) {
-    if ('JK'.contains(world[y][x])) draw.globalAlpha = .5;
+    if (world[y][x] == 'J' || world[y][x] == 'K') draw.globalAlpha = .5;
     draw.drawImage(images[world[y][x]], x*10, y*10, 10, 10);
     draw.globalAlpha = 1;
   }
