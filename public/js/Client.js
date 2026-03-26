@@ -315,6 +315,7 @@ class Client {
   drawTank(t) {
     if (!Engine.collision(100*(Math.floor((this.tank.x+40)/100)-10), 100*(Math.floor((this.tank.y+40)/100)-7), 2100, 1500, t.x, t.y, t.role === 0 ? 100 : 80, t.role === 0 ? 100 : 80)) return;
     const p = t.username === PixelTanks.user.username;
+    if (!p && this.hostupdate.b.some(b => (b.type == 'fvoid' || b.type == 'fbarrier') && Engine.collision(b.x, b.y, 100, 100, t.x, t.y, 0, 0))) return;
     let a = 1;
     if (this.ded && t.invis && !p) return;
     if ((t.invis && Engine.getTeam(this.team) === Engine.getTeam(t.team)) || t.ded) a = .5;
