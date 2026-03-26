@@ -216,7 +216,7 @@ class Engine {
 
   levelReader(level) {
     for (let i = this.b.length-1; i >= 0; i--) this.b[i].destroy();
-    const key = {Q: 'weak', Z: 'strong', G: 'gold', I: 'barrier', R: 'void', V: 'spike'};
+    const key = {Q: 'weak', Z: 'strong', G: 'gold', I: 'barrier', R: 'void', V: 'spike', E: 'barrel', F: 'fbarrier', G: 'fvoid'};
     this.zone = level[1];
     this.gametype = level[0];
     let chars = level[2].split(''), a = [];
