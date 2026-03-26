@@ -17,6 +17,8 @@ const key = [
   ['G', 'Gold Block', 'blocks/'+zone+'/gold'],
   ['I', 'Barrier Block', 'blocks/'+zone+'/barrier'],
   ['R', 'Void Block', 'blocks/'+zone+'/void'],
+  ['X', 'Fake Barrier', 'blocks/'+zone+'/barrier'],
+  ['Y', 'Fake Void', 'blocks/'+zone+'/void'],
   ['V', 'Spike', 'blocks/spike'],
   ['E', 'Explosive Barrel', 'blocks/barrel'],
   ['T', 'Turret', 'cosmetics/hoodie'],
@@ -132,7 +134,11 @@ const render = () => {
     draw.lineTo(600, i*10);
     draw.stroke();
   }
-  for (const y in world) for (const x in world[y]) draw.drawImage(images[world[y][x]], x*10, y*10, 10, 10);
+  for (const y in world) for (const x in world[y]) {
+    if ('XY'.contains(world[y][x])) draw.globalAlpha = .5;
+    draw.drawImage(images[world[y][x]], x*10, y*10, 10, 10);
+    draw.globalAlpha = 1;
+  }
   requestAnimationFrame(render);
 }
 requestAnimationFrame(render);
